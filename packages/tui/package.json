@@ -1,0 +1,25 @@
+{
+  "name": "@zero2agent/tui",
+  "version": "0.0.0",
+  "description": "Terminal UI / CLI for zero2agent",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "zero2agent": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@zero2agent/core": "workspace:*",
+    "@zero2agent/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "typescript": "^5.4.0"
+  }
+}

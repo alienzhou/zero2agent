@@ -1,0 +1,18 @@
+version: 1
+config:
+  stale_threshold: 3
+discussions:
+  2026-03-10/zero2agent-repo-init:
+    outline:
+      mtime: 1773109349.1976147
+      change_count: 0
+    decisions:
+    - name: D01-repo-init-plan.md
+      mtime: 1773109367.0253272
+    notes: []
+  2026-03-10/readme-illustration-agent-modules:
+    outline:
+      mtime: 0.0
+      change_count: 1
+    decisions: []
+    notes: []

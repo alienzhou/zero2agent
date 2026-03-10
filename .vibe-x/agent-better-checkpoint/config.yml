@@ -1,0 +1,16 @@
+# Checkpoint commit trigger conditions
+#
+# Controls when stop hook (check_uncommitted) triggers commit reminder.
+# Affects only stop hook detection, not checkpoint.sh commit behavior.
+
+# Trigger reminder if ANY condition met (OR)
+# Empty/commented = condition disabled
+trigger_if_any:
+  # min_changed_files: 3   # At least N active files changed
+  min_changed_lines: 5      # At least N lines changed
+
+# Passive file patterns — matched files do not trigger reminder alone
+passive_patterns:
+  - ".discuss/**"
+  - ".vibe-x/**"
+  - ".DS_Store"

@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /Users/zhouhongxuan/program/works/zero2agent/.vibe-x/discuss-for-specs/hooks/stop/check_precipitation.py"
+          }
+        ]
+      }
+    ]
+  }
+}
