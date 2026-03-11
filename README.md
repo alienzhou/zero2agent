@@ -1,59 +1,80 @@
-# Zero2Agent
+<p align="center">
+  <img src="./assets/zero2agent-banner.png" alt="Zero2Agent Banner" />
+</p>
 
-> 跟着这个项目，从零经验到完全掌握如何开发一个生产级 AI Agent。
+<h1 align="center">Zero2Agent</h1>
 
-中文 | [English](./README.en.md)
+<p align="center">
+  <a href="https://github.com/alienzhou/zero2agent"><img src="https://img.shields.io/badge/language-TypeScript-blue" alt="Language" /></a>
+  <a href="https://github.com/alienzhou/zero2agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
+  <a href="https://github.com/alienzhou/zero2agent"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome" /></a>
+</p>
 
-![](./assets/zero2agent-banner.png)
+<p align="center">
+  <a href="./README.md">中文</a> | <a href="./README.en.md">English</a>
+</p>
 
-## 适合你吗？
+<h3 align="center">🚀 从零开始构建产品级智能体的跟练课程</h3>
+
+<p align="center">
+  <i>深入工程细节，动手实现你的第一个 Coding Agent</i>
+</p>
+
+---
+
+## 🎯 项目介绍
+
+> 市面上有很多 Agent 相关的内容——有论文、有教学、有产品、有开源项目——但很少有人教大家"从零开始做一个产品级 Agent"。这个仓库就是这么一个**教学案例项目**。
+
+- **从第一行代码开始**，一步步构建一个类似 Claude Code / Codex 的产品级 Coding Agent
+- **完全公开透明**，包括需求分析、设计决策、踩过的坑、走过的弯路
+- **记录和 AI 协作的真实过程**，Vibe Coding / Agentic Engineering 会应用在开发过程中
+
+---
+
+## ✨ 和其他学习资源有什么不同？
+
+| 维度               | 其他课程                    | 开源产品               | Zero2Agent                                    |
+| ------------------ | --------------------------- | ---------------------- | --------------------------------------------- |
+| **工程实践** | 概念讲解为主，代码多为 demo | 只有最终代码，缺少过程 | 深入真实工程问题，过往 Agent 开发实际经验沉淀 |
+| **产品级**   | 功能与案例问题较基础        | 完整但复杂，难以学习   | 从实际产品中筛选与整理的功能，作为跟练素材    |
+| **小步跟练** | 章节式学习，跨度大，不细致  | 代码与变更庞杂，难跟练 | 每个迭代都可独立跟练，大小适中，循序渐进      |
+
+---
+
+## 🎓 适合你吗？
 
 如果你：
 
 - 🌱 **想入门 LLM 应用开发**，但不知道从哪开始
-- 🤖 **想学习 AI Agent 开发**，但看论文太抽象、看框架又太黑盒
+- 🤖 **想学习 AI Agent 开发**，但看别人的博客太抽象、看框架又太黑盒
 - 🛠️ **想了解真实的 AI 辅助开发是什么样的**，而不是营销文里那种"10 分钟搞定"
 - 📚 **喜欢通过实战学习**，而不是只看理论
 
-那这个项目适合你。
+那这个教学项目适合你。
 
 ---
 
-## 这是什么？
+## 📦 你能获得什么
 
-**一个公开的 AI Agent 开发学习仓库。**
+### 📖 看到完整/真实的 AI Agent 构建过程
 
-市面上有很多 Agent 相关的内容——有论文、有框架、有开源产品——但很少有人记录"从零开始做一个 Agent"的完整过程。
+从生产项目中总结出来的内容，作为教学案例，不是完全的 Toy Project，而是基于真实的开发：
 
-这个仓库就是在做这件事：
-
-- **从第一行代码开始**，一步步构建一个类似 Claude Code / Codex 的 Coding Agent
-- **完全公开透明**，包括设计决策、踩过的坑、走过的弯路
-- **记录和 AI 协作的真实过程**，不是那种"最终正确答案"，而是包含试错和修正
-
-不需要你有 Agent 开发经验，跟着迭代走，你会逐步理解 Agent 是怎么从一个简单的循环演化成一个能用的工具。
-
----
-
-## 你能获得什么
-
-### 📖 看到完整的开发过程
-
-不是教程里那种"完美"的流程，而是真实的开发：
-
-- 需求讨论记录（为什么这么做，而不是那么做）
-- 设计文档（每次迭代的 spec）
+- 从实际问题/需求出发
+- 包括需求讨论记录（为什么这么做，而不是那么做）、设计文档（每次迭代的 spec）
+- 配套的代码实现
 - 复盘笔记（哪里做对了，哪里搞砸了）
 
 ### 🤖 学习和 AI 协作开发
 
-这个项目全程用 AI 辅助生成代码，你可以看到：
+同时，这个项目也会全程用 AI 协同开发，本身也是一次 Vibe Coding/Agentic Engineering 的旅程。你可以看到：
 
-- 实际用的 prompt 长什么样
-- AI 犯了什么错，怎么修正的
-- 哪些任务适合交给 AI，哪些不适合
+- 实际编码时和 AI 的对话和 prompt 长什么样
+- SSD 开发等模式的实践
+- 如何用 AI 来做更多的事情
 
-### 🔧 可以跟着做，也可以自己改
+### 🔧 无压力的跟练模式
 
 每个迭代都有 Git tag，你可以：
 
@@ -61,21 +82,21 @@
 git checkout E001-agent-loop  # 跳到任意迭代
 ```
 
-Fork 后自己动手，是最好的学习方式。
+Fork 后自己动手，是最好的学习方式。别担心，你可以在**任意时间、从任意进度**（git tag）进入来跟练，或者挑选你感兴趣的来了解。
 
 ---
 
 ## ⚠️ 这不是什么
 
-这**不是一个可以直接用的 Agent 产品**。
+这不是一个希望让你直接用于生产的 Agent 产品，更多还是作为“教具"。
 
-如果你想找一个开箱即用的 AI 编程助手，去试试 Claude Code、Cursor、Codex 这些产品。
+如果你想找一个开箱即用的 AI Agent，去试试 Claude Code、Cursor、Codex 这些产品，或者 Open Code、PI 这些项目。
 
-这里是**学习资源**，不是工具。跟着迭代走，你会逐步理解 Agent 是怎么从一个简单的循环演化成一个能用的工具。
+这里是**学习资源**，不是纯粹的工具。
 
 ---
 
-## 项目结构
+## 📁 项目结构
 
 ```
 zero2agent/
@@ -92,17 +113,17 @@ zero2agent/
 
 ---
 
-## 迭代进度
+## 📈 迭代进度
 
-| 迭代 | 内容 | 状态 |
-|------|------|------|
+| 迭代 | 内容            | 状态      |
+| ---- | --------------- | --------- |
 | E001 | 基础 Agent 循环 | 🔜 Coming |
 
 👉 查看完整迭代说明和学习指南：[CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
-## 跑起来
+## 🚀 快速开始
 
 ```bash
 git clone git@github.com:alienzhou/zero2agent.git
@@ -115,6 +136,6 @@ pnpm --filter @zero2agent/tui start
 
 ---
 
-## License
+## 📄 License
 
 MIT

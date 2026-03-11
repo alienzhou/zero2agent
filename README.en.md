@@ -1,59 +1,80 @@
-# Zero2Agent
+<p align="center">
+  <img src="./assets/zero2agent-banner.png" alt="Zero2Agent Banner" />
+</p>
 
-> From zero experience to fully mastering how to build a production-grade AI Agent.
+<h1 align="center">Zero2Agent</h1>
 
-[中文](./README.md) | English
+<p align="center">
+  <a href="https://github.com/alienzhou/zero2agent"><img src="https://img.shields.io/badge/language-TypeScript-blue" alt="Language" /></a>
+  <a href="https://github.com/alienzhou/zero2agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License" /></a>
+  <a href="https://github.com/alienzhou/zero2agent"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome" /></a>
+</p>
 
-![](./assets/zero2agent-banner.png)
+<p align="center">
+  <a href="./README.md">中文</a> | <a href="./README.en.md">English</a>
+</p>
 
-## Is This for You?
+<h3 align="center">🚀 A Hands-on Course for Building Production-Grade AI Agents from Scratch</h3>
+
+<p align="center">
+  <i>Dive into engineering details, build your first Coding Agent</i>
+</p>
+
+---
+
+## 🎯 About
+
+> There's plenty of Agent-related content out there—papers, tutorials, products, open-source projects—but few teach you how to "build a production-grade Agent from scratch." This repository is such a **teaching case project**.
+
+- **Starting from the first line of code**, step by step building a production-grade Coding Agent similar to Claude Code / Codex
+- **Completely open and transparent**, including requirements analysis, design decisions, pitfalls, and detours
+- **Recording the real process of collaborating with AI**, Vibe Coding / Agentic Engineering will be applied throughout development
+
+---
+
+## ✨ How Is This Different?
+
+| Dimension              | Other Courses                          | Open-Source Products                  | Zero2Agent                                                            |
+| ---------------------- | -------------------------------------- | ------------------------------------- | --------------------------------------------------------------------- |
+| **Engineering Practice** | Concept-focused, demo-level code       | Only final code, no process           | Deep dive into real engineering problems, distilled from actual Agent development experience |
+| **Production-Grade**   | Basic features and cases               | Complete but complex, hard to learn   | Features curated from real products, designed as hands-on material    |
+| **Step-by-Step**       | Chapter-based, large gaps, not detailed | Code changes too complex to follow    | Each iteration can be followed independently, right-sized, progressive |
+
+---
+
+## 🎓 Is This for You?
 
 If you:
 
 - 🌱 **Want to get started with LLM application development**, but don't know where to begin
-- 🤖 **Want to learn AI Agent development**, but find papers too abstract and frameworks too black-box
+- 🤖 **Want to learn AI Agent development**, but find blog posts too abstract and frameworks too black-box
 - 🛠️ **Want to see what real AI-assisted development looks like**, not the "done in 10 minutes" marketing stories
 - 📚 **Prefer learning by doing**, rather than just reading theory
 
-Then this project is for you.
+Then this teaching project is for you.
 
 ---
 
-## What Is This?
+## 📦 What You'll Get
 
-**A public learning repository for AI Agent development.**
+### 📖 See the Complete/Real AI Agent Building Process
 
-There's plenty of Agent-related content out there—papers, frameworks, open-source products—but few people document the complete process of "building an Agent from scratch."
+Content distilled from production projects as teaching cases, not purely a Toy Project, but based on real development:
 
-That's what this repository does:
-
-- **Starting from the first line of code**, step by step building a Coding Agent similar to Claude Code / Codex
-- **Completely open and transparent**, including design decisions, pitfalls, and detours
-- **Recording the real process of collaborating with AI**, not just the "final correct answer," but including trial and error
-
-You don't need Agent development experience. Follow along with the iterations, and you'll gradually understand how an Agent evolves from a simple loop into a usable tool.
-
----
-
-## What You'll Get
-
-### 📖 See the Complete Development Process
-
-Not the "perfect" flow from tutorials, but real development:
-
-- Requirements discussion records (why we did this, not that)
-- Design documents (spec for each iteration)
+- Starting from actual problems/requirements
+- Including requirements discussion records (why we did this, not that), design documents (spec for each iteration)
+- Accompanying code implementation
 - Retrospective notes (what went right, what went wrong)
 
 ### 🤖 Learn AI-Assisted Development
 
-This project uses AI to assist code generation throughout. You can see:
+This project also uses AI-assisted development throughout, itself a journey of Vibe Coding/Agentic Engineering. You can see:
 
-- What the actual prompts look like
-- What mistakes AI made and how they were corrected
-- Which tasks are suitable for AI, which are not
+- What actual coding conversations and prompts with AI look like
+- Practice of SSD development and other patterns
+- How to use AI to do more
 
-### 🔧 Follow Along or Make It Your Own
+### 🔧 Pressure-Free Follow-Along Mode
 
 Every iteration has a Git tag, you can:
 
@@ -61,21 +82,21 @@ Every iteration has a Git tag, you can:
 git checkout E001-agent-loop  # Jump to any iteration
 ```
 
-Fork it and get hands-on—that's the best way to learn.
+Fork it and get hands-on—that's the best way to learn. Don't worry, you can enter at **any time, from any progress point** (git tag) to follow along, or pick the topics that interest you.
 
 ---
 
 ## ⚠️ What This Is NOT
 
-This is **NOT a ready-to-use Agent product**.
+This is not an Agent product intended for direct production use, it's more of a "teaching tool."
 
-If you're looking for an out-of-the-box AI coding assistant, try Claude Code, Cursor, Codex, etc.
+If you're looking for an out-of-the-box AI Agent, try Claude Code, Cursor, Codex, or projects like Open Code, PI.
 
-This is a **learning resource**, not a tool. Follow the iterations, and you'll gradually understand how an Agent evolves from a simple loop into a usable tool.
+This is a **learning resource**, not a pure tool.
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 zero2agent/
@@ -92,17 +113,17 @@ zero2agent/
 
 ---
 
-## Iteration Progress
+## 📈 Iteration Progress
 
-| Iteration | Content | Status |
-|-----------|---------|--------|
-| E001 | Basic Agent Loop | 🔜 Coming |
+| Iteration | Content           | Status    |
+| --------- | ----------------- | --------- |
+| E001      | Basic Agent Loop  | 🔜 Coming |
 
 👉 See full iteration details and learning guide: [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
 git clone git@github.com:alienzhou/zero2agent.git
@@ -115,6 +136,6 @@ Requirements: Node.js >= 22.0.0, pnpm >= 9.0.0
 
 ---
 
-## License
+## 📄 License
 
 MIT

@@ -36,10 +36,11 @@ zero2agent/
 
 ### 通用原则
 
-1. **TypeScript 严格模式**：所有 package 使用 `strict: true`
-2. **显式类型**：避免隐式 `any`，导出函数必须有类型声明
-3. **ESM 优先**：使用 ES Module，`type: "module"`
-4. **命名约定**：
+1. **简洁高效**：设计与实现要简洁，不引入不必要的复杂度，不改动不必要的地方
+2. **TypeScript 严格模式**：所有 package 使用 `strict: true`
+3. **显式类型**：避免隐式 `any`，导出函数必须有类型声明
+4. **ESM 优先**：使用 ES Module，`type: "module"`
+5. **命名约定**：
    - 文件名：`kebab-case.ts`
    - 类名：`PascalCase`
    - 函数/变量：`camelCase`
