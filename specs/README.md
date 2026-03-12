@@ -16,6 +16,8 @@
 | N+1 | Verification Checklist | 验收时的检查项 |
 | N+2 | Backlog | 当前版本不做的事项 |
 
+每个迭代目录包含一个 `README.md` 作为入口，展示迭代目标、内容和成果。
+
 ---
 
 ## Stage 1: 基础 POC

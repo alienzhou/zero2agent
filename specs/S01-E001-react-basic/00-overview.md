@@ -66,6 +66,8 @@
 | 03 | [验收检查清单](./03-verification-checklist.md) | 验收时的检查项 |
 | 04 | [Backlog](./04-backlog.md) | 当前版本不做的事项 |
 
+> 💡 本目录的 [README.md](./README.md) 是迭代入口，包含目标、内容和成果展示。
+
 ---
 
 ## 关联文档
