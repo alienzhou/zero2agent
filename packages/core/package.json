@@ -18,6 +18,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
     "@zero2agent/shared": "workspace:*"
   },
   "devDependencies": {
