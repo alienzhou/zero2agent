@@ -36,6 +36,7 @@ git checkout main
 | 代码 | `packages/` | 实际实现 |
 | 复盘笔记 | `retros/S0x-E00x-name.md` | 反思和经验 |
 | 讨论记录 | `.discuss/` | 需求讨论过程 |
+| VibeCoding | `.vibecoding/S0x/E00x/` | AI 协作对话记录 |
 
 ---
 
@@ -47,13 +48,13 @@ git checkout main
 
 | 迭代 | 内容 | 状态 |
 |------|------|------|
-| S01-E001 | ReACT 基础版 | 🚧 进行中 |
+| S01-E001 | ReACT 基础版 | ✅ Done |
 
 ---
 
 ## [Unreleased]
 
-### S01-E001-react-basic (In Progress)
+### S01-E001-react-basic (Done)
 
 **目标**：实现最基础的 ReACT Agent 循环 + 工具调用
 
@@ -76,10 +77,11 @@ git checkout main
 **变更内容**：
 - [x] 项目基础设施（post-commit hook、版本编号规范）
 - [x] 设计文档完成（specs/S01-E001-react-basic/）
-- [ ] Anthropic SDK 集成
-- [ ] read_file / list_directory 工具实现
-- [ ] ReACT 循环实现
-- [ ] 端到端测试验证
+- [x] VibeCoding 对话记录（.vibecoding/S01/E001/）
+- [x] Anthropic SDK 集成
+- [x] read_file / list_directory 工具实现
+- [x] ReACT 循环实现
+- [x] 端到端测试验证
 
 ---
 

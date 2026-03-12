@@ -1,31 +1,67 @@
-# Vibe Coding Records
+# VibeCoding Records
 
-This directory contains AI interaction records (prompts, sessions, conversations).
+> 记录与 AI Agent 协作开发的完整过程：提示词、对话、决策、经验。
 
-## Structure
+---
 
-Organized by iteration:
+## 目录结构
+
+按 **Stage（阶段）+ Iteration（迭代）** 两层组织：
 
 ```
 .vibecoding/
-├── E001-agent-loop/
-│   ├── session-01.md
-│   ├── session-02.md
+├── README.md           # 本文件
+├── S01/                # Stage 1: 基础 POC
+│   ├── E001/           # 迭代 001: ReACT 基础版
+│   │   ├── README.md
+│   │   ├── 01-xxx.md
+│   │   └── ...
+│   ├── E002/           # 迭代 002: ...
 │   └── ...
-├── E002-xxx/
-│   └── ...
+├── S02/                # Stage 2: ...
+└── ...
 ```
 
-## What belongs here
+**编号规则：**
+- `S01` = Stage 01（阶段编号，2 位）
+- `E001` = Iteration 001（迭代编号，3 位，每个 Stage 内从 001 开始）
 
-- AI conversation exports
-- Prompt templates and strategies
-- Session transcripts
-- Notable AI interactions
+---
 
-## Purpose
+## 当前进度
 
-This is part of the "100% AI-generated code" experiment, documenting:
-- How prompts evolve
-- What works and what doesn't
-- The human-AI collaboration process
+| Stage | 定位 | 迭代范围 |
+|-------|------|----------|
+| **S01** | 基础 POC | E001 - E00x |
+| S02+ | 待定 | ... |
+
+---
+
+## 内容类型
+
+每个迭代目录下可能包含：
+
+| 文件 | 说明 |
+|------|------|
+| `README.md` | 迭代总览，关键决策摘要 |
+| `01-xxx.md` | 需求讨论对话 |
+| `02-xxx.md` | 规范/设计对话 |
+| `03-xxx.md` | 实现过程对话 |
+| `learnings.md` | 经验总结（可选） |
+
+---
+
+## 目的
+
+这是 "100% AI 生成代码" 实验的一部分，记录：
+
+- 如何与 AI 进行有效的需求讨论
+- Prompt 策略和技巧
+- 人机协作的最佳实践
+- 踩坑和解决方案
+
+---
+
+## 快速导航
+
+- [S01-E001: ReACT 基础版](./S01/E001/README.md)

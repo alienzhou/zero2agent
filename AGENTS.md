@@ -175,6 +175,44 @@ feat(core): implement basic ReAct loop
 
 **Scope**：使用 package 名（`core`, `tui`, `shared`），或省略表示全局变更
 
+### Tag 格式
+
+每个迭代完成后打 Tag，格式：
+
+```
+S01-E001-<slug>
+```
+
+**规则**：
+- 前缀：`S01-E001` 与版本编号一致
+- Slug：2-4 个单词，`kebab-case`，描述核心内容
+- 不需要 type（因为 Tag 标记的是迭代完成点）
+
+**示例**：
+```bash
+# ✅ 正确格式
+S01-E001-react-basic
+S01-E002-context-mgmt
+S02-E001-arch-refactor
+
+# ❌ 错误格式
+v1.0.0                    # 不使用语义化版本
+E001-react-basic          # 缺少 Stage 前缀
+S01-E001                  # 缺少 slug 描述
+```
+
+**打 Tag 命令**：
+```bash
+# 使用 tag-helper 脚本（推荐，会检查格式）
+.githooks/tag-helper.sh S01-E001-react-basic
+
+# 或直接创建（不检查格式）
+git tag S01-E001-react-basic
+
+# 推送 Tag
+git push origin S01-E001-react-basic
+```
+
 ### 分支策略
 
 - `main`: 稳定版本，每个迭代完成后合入

@@ -36,6 +36,27 @@
 
 ## 迭代成果
 
+### 环境配置
+
+运行前需要配置 API KEY：
+
+```bash
+# 方式 1：设置环境变量（推荐）
+export ANTHROPIC_API_KEY="your-api-key"
+
+# 方式 2：使用 .env 文件
+echo 'ANTHROPIC_API_KEY=your-api-key' > .env
+
+# 方式 3：使用兼容的 API 提供商（如 MiniMax）
+export ANTHROPIC_BASE_URL="https://api.minimaxi.com/v1"
+export ANTHROPIC_API_KEY="your-minimax-api-key"
+export MODEL_NAME="MiniMax-M1"
+```
+
+**获取 API KEY**：
+- Anthropic: https://console.anthropic.com/
+- MiniMax: https://platform.minimaxi.com/
+
 ### 快速启动
 
 ```bash
@@ -45,8 +66,14 @@ pnpm install
 # 2. 构建所有包
 pnpm build
 
-# 3. 启动 TUI
+# 3. 配置 API KEY（必须）
+export ANTHROPIC_API_KEY="your-api-key"
+
+# 4. 启动 TUI
 pnpm --filter @zero2agent/tui start
+
+# 或者使用示例脚本
+npx tsx examples/simple-agent.ts "帮我看看 package.json 的内容"
 ```
 
 ### 效果展示
