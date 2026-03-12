@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Zero2Agent Post-Commit Hook
+# 检查 commit message 格式 + 提示索引文件更新
+
+# 获取最新 commit message 的第一行
+COMMIT_MSG=$(git log -1 --pretty=%s)
+
+# 检查格式：[S0x-E0xx] 或 [E000]
+if [[ ! "$COMMIT_MSG" =~ ^\[S[0-9]{2}-E[0-9]{3}\]|^\[E000\] ]]; then
+    echo ""
+    echo "╔════════════════════════════════════════════════════════════════════╗"
+    echo "║  ⚠️  Commit Message 格式不符合规范！                                 ║"
+    echo "╠════════════════════════════════════════════════════════════════════╣"
+    echo "║                                                                    ║"
+    echo "║  当前 message: $COMMIT_MSG"
+    echo "║                                                                    ║"
+    echo "║  正确格式应为：                                                     ║"
+    echo "║    [S01-E001] type(scope): description                             ║"
+    echo "║                                                                    ║"
+    echo "║  示例：                                                             ║"
+    echo "║    [S01-E001] feat(core): implement basic ReAct loop               ║"
+    echo "║    [S01-E002] docs: update CHANGELOG                               ║"
+    echo "║                                                                    ║"
+    echo "╠════════════════════════════════════════════════════════════════════╣"
+    echo "║  修复方法：                                                         ║"
+    echo "║    git commit --amend -m \"[S01-Exxx] ...\"                          ║"
+    echo "╚════════════════════════════════════════════════════════════════════╝"
+    echo ""
+fi
+
+echo ""
+echo "╔════════════════════════════════════════════════════════════════════╗"
+echo "║  ✅ Commit 完成！请检查以下索引文件是否需要更新：                      ║"
+echo "╠════════════════════════════════════════════════════════════════════╣"
+echo "║                                                                    ║"
+echo "║  [ ] CHANGELOG.md      - 添加本次变更条目（必须）                    ║"
+echo "║  [ ] specs/README.md   - 新建 Spec 时更新                           ║"
+echo "║  [ ] retros/README.md  - 新建复盘时更新                              ║"
+echo "║                                                                    ║"
+echo "╠════════════════════════════════════════════════════════════════════╣"
+echo "║  如需补充更新，请执行：                                              ║"
+echo "║                                                                    ║"
+echo "║    1. 编辑需要更新的文件                                            ║"
+echo "║    2. git add <files>                                              ║"
+echo "║    3. git commit --amend --no-edit                                 ║"
+echo "║                                                                    ║"
+echo "╚════════════════════════════════════════════════════════════════════╝"
+echo ""

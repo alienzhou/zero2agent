@@ -17,6 +17,9 @@
     "test": "echo 'No tests yet'",
     "clean": "rm -rf dist"
   },
+  "dependencies": {
+    "@zero2agent/shared": "workspace:*"
+  },
   "devDependencies": {
     "@types/node": "^25.4.0",
     "typescript": "^5.4.0"

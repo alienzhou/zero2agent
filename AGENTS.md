@@ -124,16 +124,45 @@ AI 生成的代码需要人工审查，关注：
 
 ## Git 规范
 
-### Commit 格式
+### 版本编号
 
-遵循 [Conventional Commits](https://www.conventionalcommits.org/)：
+本项目使用 **两层版本结构**：
 
 ```
-<type>(<scope>): <description>
+S01-E001
+│   │
+│   └── 迭代编号（3位），每个 Stage 内从 001 开始
+└────── 阶段编号（2位）
+```
+
+| Stage | 定位 | 迭代范围 |
+|-------|------|----------|
+| S01 | 基础 POC | E001 - E00x |
+| S02+ | 待定 | ... |
+
+> **注意**：E000（仓库初始化）是特殊迭代，不带 Stage 前缀。
+
+### Commit 格式
+
+遵循 [Conventional Commits](https://www.conventionalcommits.org/)，**必须包含版本前缀**：
+
+```
+[S01-E001] <type>(<scope>): <description>
 
 [optional body]
 
 [optional footer(s)]
+```
+
+**示例**：
+```bash
+# ✅ 正确格式
+[S01-E001] feat(core): implement basic ReAct loop
+[S01-E001] fix(tui): fix CLI argument parsing
+[S01-E002] docs: update CHANGELOG for tool implementation
+
+# ❌ 错误格式（缺少版本前缀）
+feat(core): implement basic ReAct loop
 ```
 
 **类型**：
@@ -144,7 +173,7 @@ AI 生成的代码需要人工审查，关注：
 - `test`: 测试相关
 - `chore`: 构建/工具变更
 
-**Scope** 使用 package 名：`core`, `tui`, `shared`
+**Scope**：使用 package 名（`core`, `tui`, `shared`），或省略表示全局变更
 
 ### 分支策略
 
