@@ -46,6 +46,63 @@ pnpm --filter @zero2agent/tui start
 
 ---
 
+## API KEY 配置
+
+运行 Agent 需要配置 LLM API KEY：
+
+### 方式 1：Anthropic（默认）
+
+```bash
+# 设置环境变量
+export ANTHROPIC_API_KEY="your-api-key"
+
+# 然后运行
+pnpm --filter @zero2agent/tui start
+```
+
+**获取 API KEY**：https://console.anthropic.com/
+
+### 方式 2：兼容 API 提供商
+
+本项目支持通过 `baseURL` 切换到兼容 Anthropic 格式的 API 提供商（如 MiniMax）：
+
+```bash
+# 配置 MiniMax
+export ANTHROPIC_BASE_URL="https://api.minimaxi.com/v1"
+export ANTHROPIC_API_KEY="your-minimax-api-key"
+export MODEL_NAME="MiniMax-M1"
+
+# 然后运行
+pnpm --filter @zero2agent/tui start
+```
+
+**获取 MiniMax API KEY**：https://platform.minimaxi.com/
+
+### 方式 3：使用 .env 文件
+
+```bash
+# 创建 .env 文件
+cat > .env << EOF
+ANTHROPIC_API_KEY=your-api-key
+# 可选：使用兼容提供商
+# ANTHROPIC_BASE_URL=https://api.minimaxi.com/v1
+# MODEL_NAME=MiniMax-M1
+EOF
+
+# 然后运行（确保代码支持读取 .env）
+pnpm --filter @zero2agent/tui start
+```
+
+### 环境变量说明
+
+| 变量 | 必需 | 说明 |
+|------|------|------|
+| `ANTHROPIC_API_KEY` | ✅ | API 密钥 |
+| `ANTHROPIC_BASE_URL` | ❌ | API 地址，默认 Anthropic 官方 |
+| `MODEL_NAME` | ❌ | 模型名称，默认 `claude-sonnet-4-20250514` |
+
+---
+
 ## 项目结构速览
 
 ```
