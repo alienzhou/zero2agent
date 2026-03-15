@@ -6,8 +6,17 @@
 # 获取最新 commit message 的第一行
 COMMIT_MSG=$(git log -1 --pretty=%s)
 
-# 检查格式：[S0x-E0xx] 或 [E000]
-if [[ ! "$COMMIT_MSG" =~ ^\[S[0-9]{2}-E[0-9]{3}\]|^\[E000\] ]]; then
+# 检查格式：Story commit [Exx-Sxxx] 或 [S000]，或标准 Conventional Commit
+IS_STORY_COMMIT=false
+IS_CONVENTIONAL=false
+
+if [[ "$COMMIT_MSG" =~ ^\[E[0-9]{2}-S[0-9]{3}\] ]] || [[ "$COMMIT_MSG" =~ ^\[S000\] ]]; then
+    IS_STORY_COMMIT=true
+elif [[ "$COMMIT_MSG" =~ ^(feat|fix|docs|refactor|test|chore|style|perf|ci|build|revert)(\(.*\))?:\ .+ ]]; then
+    IS_CONVENTIONAL=true
+fi
+
+if [[ "$IS_STORY_COMMIT" == false ]] && [[ "$IS_CONVENTIONAL" == false ]]; then
     echo ""
     echo "╔════════════════════════════════════════════════════════════════════╗"
     echo "║  ⚠️  Commit Message 格式不符合规范！                                 ║"
@@ -15,16 +24,11 @@ if [[ ! "$COMMIT_MSG" =~ ^\[S[0-9]{2}-E[0-9]{3}\]|^\[E000\] ]]; then
     echo "║                                                                    ║"
     echo "║  当前 message: $COMMIT_MSG"
     echo "║                                                                    ║"
-    echo "║  正确格式应为：                                                     ║"
-    echo "║    [S01-E001] type(scope): description                             ║"
+    echo "║  Story Commit:                                                     ║"
+    echo "║    [E01-S001] type(scope): description                             ║"
     echo "║                                                                    ║"
-    echo "║  示例：                                                             ║"
-    echo "║    [S01-E001] feat(core): implement basic ReAct loop               ║"
-    echo "║    [S01-E002] docs: update CHANGELOG                               ║"
-    echo "║                                                                    ║"
-    echo "╠════════════════════════════════════════════════════════════════════╣"
-    echo "║  修复方法：                                                         ║"
-    echo "║    git commit --amend -m \"[S01-Exxx] ...\"                          ║"
+    echo "║  非 Story Commit:                                                  ║"
+    echo "║    type(scope): description                                        ║"
     echo "╚════════════════════════════════════════════════════════════════════╝"
     echo ""
 fi

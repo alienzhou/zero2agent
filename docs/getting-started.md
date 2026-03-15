@@ -177,10 +177,10 @@ pnpm build
 
 这个项目的核心价值是**透明的开发过程**。每个迭代都有：
 
-1. **设计文档**（`specs/Exxx-name.md`）- 开始前写，说明要做什么、为什么这么做
+1. **设计文档**（`specs/Exx-Sxxx-name/`）- 开始前写，说明要做什么、为什么这么做
 2. **代码实现**（`packages/`）- 实际代码
-3. **复盘笔记**（`retros/Exxx-name.md`）- 完成后写，反思哪里做得好/不好
-4. **Git Tag**（`Exxx-name`）- 可以 checkout 到任意迭代
+3. **复盘笔记**（`retros/Exx-Sxxx-name.md`）- 完成后写，反思哪里做得好/不好
+4. **Git Tag**（`Exx-Sxxx-name`）- 可以 checkout 到任意迭代
 
 ### 切换到某个迭代
 
@@ -189,7 +189,7 @@ pnpm build
 git tag -l "E*"
 
 # 切换到某个迭代
-git checkout E001-agent-loop
+git checkout E01-S001-react-basic
 
 # 回到最新
 git checkout main

@@ -7,7 +7,7 @@
 
 ## 背景
 
-基于前序讨论确定的技术方案和 Specs 文档，开始实现 S01-E001 ReACT 基础版。
+基于前序讨论确定的技术方案和 Specs 文档，开始实现 E01-S001 ReACT 基础版。
 
 ---
 
@@ -15,7 +15,7 @@
 
 **🧑 User:**
 
-> 参考 `specs/S01-E001-react-basic` 实现
+> 参考 `specs/E01-S001-react-basic` 实现
 > *(附带 specs 目录上下文)*
 
 **🤖 Agent:**
@@ -325,7 +325,7 @@ pnpm --filter @zero2agent/tui start "你的问题"
 
 ## VibeCoding 要点
 
-1. **引用 Spec 作为上下文**: 通过 `specs/S01-E001-react-basic` 目录引用，让 Agent 了解实现目标
+1. **引用 Spec 作为上下文**: 通过 `specs/E01-S001-react-basic` 目录引用，让 Agent 了解实现目标
 2. **Todo List 跟踪进度**: 使用 Todo List 分步实现，确保不遗漏
 3. **遇到问题及时修复**: 发现导出问题后立即修复，保持代码可运行
 4. **构建验证**: 每个步骤后运行构建，确保类型正确

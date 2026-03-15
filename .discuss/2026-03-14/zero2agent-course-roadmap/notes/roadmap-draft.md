@@ -2,58 +2,58 @@
 
 ## 总体结构
 
-| Stage | 核心目标 | 当前范围 |
+| Epic | 核心目标 | 当前范围 |
 |------|----------|----------|
-| Stage 1 | 能看 / 能查 | 最小只读闭环、内容搜索、文件集合搜索、Prompt 结构回看 |
-| Stage 2 | 能动 / 能改 / 能执行 | 文件修改、终端执行、特殊命令处理 |
-| Stage 3 | 基础能力与产品化 | TUI、会话、日志、Checkpoint、安全边界 |
-| Stage 4 | 健壮性与上下文管理 | 异常处理、长上下文、工具上下文管理 |
-| Stage 5 | 扩展能力 | AGENTS、md skills、MCP、Hooks |
+| Epic 1 | 能看 / 能查 | 最小只读闭环、内容搜索、文件集合搜索、Prompt 结构回看 |
+| Epic 2 | 能动 / 能改 / 能执行 | 文件修改、终端执行、特殊命令处理 |
+| Epic 3 | 基础能力与产品化 | TUI、会话、日志、Checkpoint、安全边界 |
+| Epic 4 | 健壮性与上下文管理 | 异常处理、长上下文、工具上下文管理 |
+| Epic 5 | 扩展能力 | AGENTS、md skills、MCP、Hooks |
 
-## Stage 1：能看 / 能查
+## Epic 1：能看 / 能查
 
-### Epic 1：让 Agent 跑起最小只读闭环
+### Story 1：让 Agent 跑起最小只读闭环
 
 - ReAct 循环
 - `read_file`
 - `list_files / list_directory`
 
-### Epic 2：让 Agent 能在内容里定位信息
+### Story 2：让 Agent 能在内容里定位信息
 
 - `grep search`
 
-### Epic 3：让 Agent 能在文件集合里定位目标
+### Story 3：让 Agent 能在文件集合里定位目标
 
 - `glob search`
 
-### Epic 4：回看 ReAct 模式并固定 Prompt 结构
+### Story 4：回看 ReAct 模式并固定 Prompt 结构
 
 - System Prompt 的工程结构
 - 工具描述如何组织
 - User Message 如何进入 Prompt 框架
 
-## Stage 2：能动 / 能改 / 能执行
+## Epic 2：能动 / 能改 / 能执行
 
-### Epic 1：让 Agent 能直接改动工作区
+### Story 1：让 Agent 能直接改动工作区
 
 - `Write to File`
 - `Delete`
 
-### Epic 2：让 Agent 能更高效地修改已有内容
+### Story 2：让 Agent 能更高效地修改已有内容
 
 - `Replace in File`
 
-### Epic 3：让 Agent 能主动驱动执行环境
+### Story 3：让 Agent 能主动驱动执行环境
 
 - `Terminal`（正常执行路径）
 
-### Epic 4：让 Agent 不会被特殊命令轻易拖住
+### Story 4：让 Agent 不会被特殊命令轻易拖住
 
 - 长时间不退出的命令
 - 前台阻塞进程
 - 交互式命令
 
-## Stage 3：基础能力与产品化
+## Epic 3：基础能力与产品化
 
 当前先预告以下方向：
 
@@ -66,7 +66,7 @@
   - 权限控制
   - 工作目录校验
 
-## Stage 4：健壮性与上下文管理
+## Epic 4：健壮性与上下文管理
 
 当前先预告以下方向：
 
@@ -75,7 +75,7 @@
 - 工具上下文管理
 - 速度、稳定性与 token 成本优化
 
-## Stage 5：扩展能力
+## Epic 5：扩展能力
 
 当前先预告以下方向：
 

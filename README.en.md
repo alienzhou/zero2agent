@@ -79,7 +79,7 @@ This project also uses AI-assisted development throughout, itself a journey of V
 Every iteration has a Git tag, you can:
 
 ```bash
-git checkout E001-agent-loop  # Jump to any iteration
+git checkout E01-S001-react-basic  # Jump to any iteration
 ```
 
 Fork it and get hands-on—that's the best way to learn. Don't worry, you can enter at **any time, from any progress point** (git tag) to follow along, or pick the topics that interest you.
@@ -117,7 +117,7 @@ zero2agent/
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
-| E001      | Basic Agent Loop  | 🔜 Coming |
+| E01-S001  | Basic Agent Loop  | ✅ Done |
 
 👉 See full iteration details and learning guide: [CHANGELOG.md](./CHANGELOG.md)
 

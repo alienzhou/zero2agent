@@ -10,12 +10,12 @@
 
 ### 版本与迭代管理
 
-- **D13**: 版本编号 - 采用两层结构：Stage（阶段）+ Iteration（迭代）
-  - 格式：`S01-E001`（Stage 2位 + E + 迭代3位）
-  - 每个 Stage 内迭代从 001 开始
-  - E000（仓库初始化）保留原样，不加 Stage 前缀
-- **D14**: Stage 1 定位 - 基础 POC，核心是跑通模式和流程，非完美工程化
-- **D15**: Commit Message 格式 - `[S01-E001] type(scope): description`
+- **D13**: 版本编号 - 采用两层结构：Epic（阶段）+ Story（迭代）
+  - 格式：`E01-S001`（Epic 2位 + S + 迭代3位）
+  - 每个 Epic 内迭代从 001 开始
+  - S000（仓库初始化）保留原样，不加 Epic 前缀
+- **D14**: Epic 1 定位 - 基础 POC，核心是跑通模式和流程，非完美工程化
+- **D15**: Commit Message 格式 - `[E01-S001] type(scope): description`
 - **D16**: 索引文件维护 - 每次 commit 检查更新：
   - CHANGELOG.md：必须更新
   - specs/README.md：新建 Spec 时更新
@@ -29,7 +29,7 @@
 - **D03**: LLM SDK - 使用 Anthropic TypeScript SDK（@anthropic-ai/sdk），支持通过 baseURL 配置切换模型提供商（如 MiniMax）
 - **D04**: 调用方式 - 使用 Anthropic Tool Use（stop_reason: tool_use）
 - **D05**: 抽象程度 - 初期少做抽象，后续阶段再拆分工程化
-- **D06**: 课程设计 - 分阶段迭代，S01-E001 为基础版，后续逐步完善
+- **D06**: 课程设计 - 分阶段迭代，E01-S001 为基础版，后续逐步完善
 - **D07**: read_file 工具 - 支持行号范围（start_line, end_line 参数）
 - **D08**: list_directory 工具 - 支持递归（recursive 参数）
 - **D09**: 输出格式 - 纯文本，对模型友好
@@ -46,7 +46,7 @@
 ## 📋 Current Status
 
 ### 已有基础
-- E001 已完成：基础 Agent 结构、LLM 调用、简化版 Loop
+- S001 已完成：基础 Agent 结构、LLM 调用、简化版 Loop
 - 架构决策已确认：Monorepo 三包结构
 - loop.ts 中已预留 tool_calls 处理位置
 

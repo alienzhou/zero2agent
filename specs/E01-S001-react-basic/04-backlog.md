@@ -1,4 +1,4 @@
-# S01-E001: Backlog
+# E01-S001: Backlog
 
 > 当前版本确定不做的事项，留待后续迭代。
 
@@ -79,7 +79,7 @@
 
 | 方案 | 拒绝原因 |
 |------|----------|
-| OpenAI SDK | 已有 E001 实现，想换个 SDK 体验 |
+| OpenAI SDK | 已有 S001 实现，想换个 SDK 体验 |
 | 自定义 Prompt 解析 | 依赖 LLM 原生 Tool Use 更可靠 |
 | LangChain 集成 | 过于复杂，不适合教学 |
 | 完整的 Tool Registry | MVP 阶段不需要这么多抽象 |

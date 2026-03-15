@@ -6,8 +6,8 @@ This directory contains retrospective notes and lessons learned.
 
 ```
 retros/
-├── E001-agent-loop.md
-├── E002-xxx.md
+├── E01-S001-react-basic.md
+├── E01-S002-xxx.md
 └── ...
 ```
 
@@ -21,7 +21,7 @@ retros/
 ## Template
 
 ```markdown
-# E00X-{slug} Retrospective
+# Exx-Sxxx-{slug} Retrospective
 
 ## Summary
 Brief description of the iteration.

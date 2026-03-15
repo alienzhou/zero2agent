@@ -109,15 +109,15 @@ AI 生成的代码需要人工审查，关注：
 
 ## 迭代流程
 
-每个迭代（Exxx）遵循以下流程：
+每个迭代（Sxxx）遵循以下流程：
 
 ```
 1. 需求讨论  →  .discuss/YYYY-MM-DD/<topic>/
-2. 设计 Spec →  specs/Exxx-<name>.md
+2. 设计 Spec →  specs/Sxxx-<name>.md
 3. 实现代码  →  packages/
-4. 复盘总结  →  retros/Exxx-<name>.md
+4. 复盘总结  →  retros/Sxxx-<name>.md
 5. 更新日志  →  CHANGELOG.md
-6. 打 Tag    →  git tag Exxx-<name>
+6. 打 Tag    →  git tag Sxxx-<name>
 ```
 
 ---
@@ -129,40 +129,53 @@ AI 生成的代码需要人工审查，关注：
 本项目使用 **两层版本结构**：
 
 ```
-S01-E001
+E01-S001
 │   │
-│   └── 迭代编号（3位），每个 Stage 内从 001 开始
+│   └── 迭代编号（3位），每个 Epic 内从 001 开始
 └────── 阶段编号（2位）
 ```
 
-| Stage | 定位 | 迭代范围 |
-|-------|------|----------|
-| S01 | 基础 POC | E001 - E00x |
-| S02+ | 待定 | ... |
+| Epic | 定位 | 迭代范围 |
+|------|------|----------|
+| E01 | 基础 POC | S001 - S00x |
+| E02+ | 待定 | ... |
 
-> **注意**：E000（仓库初始化）是特殊迭代，不带 Stage 前缀。
+> **注意**：S000（仓库初始化）是特殊迭代，不带 Epic 前缀。
 
 ### Commit 格式
 
-遵循 [Conventional Commits](https://www.conventionalcommits.org/)，**必须包含版本前缀**：
+遵循 [Conventional Commits](https://www.conventionalcommits.org/)。Commit 分为两类：
+
+#### Story Commit（属于某个迭代）
+
+必须包含版本前缀 `[Exx-Sxxx]`：
 
 ```
-[S01-E001] <type>(<scope>): <description>
+[E01-S001] <type>(<scope>): <description>
 
 [optional body]
 
 [optional footer(s)]
 ```
 
+#### 非 Story Commit（工程改动、讨论整理等）
+
+不加版本前缀，使用标准 Conventional Commit：
+
+```
+<type>(<scope>): <description>
+```
+
 **示例**：
 ```bash
-# ✅ 正确格式
-[S01-E001] feat(core): implement basic ReAct loop
-[S01-E001] fix(tui): fix CLI argument parsing
-[S01-E002] docs: update CHANGELOG for tool implementation
+# ✅ Story Commit
+[E01-S001] feat(core): implement basic ReAct loop
+[E01-S001] fix(tui): fix CLI argument parsing
+[E01-S002] docs: update CHANGELOG for tool implementation
 
-# ❌ 错误格式（缺少版本前缀）
-feat(core): implement basic ReAct loop
+# ✅ 非 Story Commit
+docs(roadmap): consolidate course roadmap discussion
+chore: update CI config
 ```
 
 **类型**：
@@ -180,37 +193,37 @@ feat(core): implement basic ReAct loop
 每个迭代完成后打 Tag，格式：
 
 ```
-S01-E001-<slug>
+E01-S001-<slug>
 ```
 
 **规则**：
-- 前缀：`S01-E001` 与版本编号一致
+- 前缀：`E01-S001` 与版本编号一致
 - Slug：2-4 个单词，`kebab-case`，描述核心内容
 - 不需要 type（因为 Tag 标记的是迭代完成点）
 
 **示例**：
 ```bash
 # ✅ 正确格式
-S01-E001-react-basic
-S01-E002-context-mgmt
-S02-E001-arch-refactor
+E01-S001-react-basic
+E01-S002-context-mgmt
+E02-S001-arch-refactor
 
 # ❌ 错误格式
 v1.0.0                    # 不使用语义化版本
-E001-react-basic          # 缺少 Stage 前缀
-S01-E001                  # 缺少 slug 描述
+S001-react-basic          # 缺少 Epic 前缀
+E01-S001                  # 缺少 slug 描述
 ```
 
 **打 Tag 命令**：
 ```bash
 # 使用 tag-helper 脚本（推荐，会检查格式）
-.githooks/tag-helper.sh S01-E001-react-basic
+.githooks/tag-helper.sh E01-S001-react-basic
 
 # 或直接创建（不检查格式）
-git tag S01-E001-react-basic
+git tag E01-S001-react-basic
 
 # 推送 Tag
-git push origin S01-E001-react-basic
+git push origin E01-S001-react-basic
 ```
 
 ### 分支策略

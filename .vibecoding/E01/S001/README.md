@@ -1,6 +1,6 @@
-# S01-E001 VibeCoding 记录
+# E01-S001 VibeCoding 记录
 
-> 记录 Stage 1 第 1 个迭代 (ReACT 基础版) 与 AI Agent 协作的完整过程。
+> 记录 Epic 1 第 1 个迭代 (ReACT 基础版) 与 AI Agent 协作的完整过程。
 
 ---
 
@@ -40,8 +40,8 @@
 **主题**: Commit 格式规范和 Specs 整理
 
 **关键决策**:
-- D13: 版本编号 - `S01-E001` 两层结构
-- D15: Commit 格式 - `[S01-E001] type(scope): description`
+- D13: 版本编号 - `E01-S001` 两层结构
+- D15: Commit 格式 - `[E01-S001] type(scope): description`
 - D16-D17: 索引维护和 Git Hook
 
 **VibeCoding 技巧**:

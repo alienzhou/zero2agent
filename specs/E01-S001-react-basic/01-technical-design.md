@@ -1,4 +1,4 @@
-# S01-E001: 技术设计
+# E01-S001: 技术设计
 
 > ReACT 基础版的详细技术设计方案。
 
@@ -268,7 +268,7 @@ async function executeToolCalls(content: ContentBlock[]): Promise<ToolResultBloc
 **决策**：使用 `@anthropic-ai/sdk`。
 
 **备选方案**：
-- OpenAI SDK：生态更广，但 E001 已有实现，想换个体验
+- OpenAI SDK：生态更广，但 S001 已有实现，想换个体验
 - 自己封装 fetch：灵活但工作量大
 
 **理由**：

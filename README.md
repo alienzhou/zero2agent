@@ -79,7 +79,7 @@
 每个迭代都有 Git tag，你可以：
 
 ```bash
-git checkout E001-agent-loop  # 跳到任意迭代
+git checkout E01-S001-react-basic  # 跳到任意迭代
 ```
 
 Fork 后自己动手，是最好的学习方式。别担心，你可以在**任意时间、从任意进度**（git tag）进入来跟练，或者挑选你感兴趣的来了解。
@@ -117,7 +117,7 @@ zero2agent/
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
-| E001 | 基础 Agent 循环 | 🔜 Coming |
+| E01-S001 | 基础 Agent 循环 | ✅ Done |
 
 👉 查看完整迭代说明和学习指南：[CHANGELOG.md](./CHANGELOG.md)
 

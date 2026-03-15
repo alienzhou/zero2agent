@@ -7,7 +7,7 @@
 
 ## 背景
 
-这是 S01-E001 迭代的起点，目标是通过讨论确定 ReACT 基础版的实现方案。
+这是 E01-S001 迭代的起点，目标是通过讨论确定 ReACT 基础版的实现方案。
 
 ---
 
@@ -29,7 +29,7 @@
 
 ```typescript
 if (response.finishReason === 'tool_calls') {
-  // TODO E002: 解析工具调用，执行工具，添加结果到消息
+  // TODO S002: 解析工具调用，执行工具，添加结果到消息
 }
 ```
 
@@ -45,7 +45,7 @@ if (response.finishReason === 'tool_calls') {
 5. 执行工具 - 调用实际函数
 6. 拼接结果 - 继续循环
 
-### Step 2: 可扩展版（E003+）
+### Step 2: 可扩展版（S003+）
 - Tool Registry 注册机制
 - 多工具支持
 - 错误处理和重试

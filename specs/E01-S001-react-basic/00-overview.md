@@ -1,6 +1,6 @@
-# S01-E001: ReACT 基础版 - 总览
+# E01-S001: ReACT 基础版 - 总览
 
-> Stage 1 第 1 个迭代：实现最基础的 ReACT Agent 循环 + 工具调用。
+> Epic 1 第 1 个迭代：实现最基础的 ReACT Agent 循环 + 工具调用。
 
 ---
 
@@ -74,4 +74,4 @@
 
 - 讨论记录：`.discuss/2026-03-12/react-basic-implementation/outline.md`
 - 迭代日志：`CHANGELOG.md`
-- 复盘笔记：`retros/S01-E001-react-basic.md`（迭代完成后创建）
+- 复盘笔记：`retros/E01-S001-react-basic.md`（迭代完成后创建）
