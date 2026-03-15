@@ -289,7 +289,7 @@ fi
 加载 tech-doc-organizer skill，创建了完整的 Specs 文档结构：
 
 ```
-specs/E01-S001-react-basic/
+specs/E01-read-and-search/S001-react-basic/
 ├── 00-overview.md           # 总览
 ├── 01-technical-design.md   # 技术设计
 ├── 02-task-list.md          # 任务清单
@@ -321,7 +321,7 @@ specs/E01-S001-react-basic/
 - `.githooks/post-commit` - Commit 后提示 hook
 - `AGENTS.md` - 更新版本编号和 Commit 格式规范
 - `CHANGELOG.md` - 更新版本格式和进度
-- `specs/E01-S001-react-basic/` - 完整的 Specs 文档
+- `specs/E01-read-and-search/S001-react-basic/` - 完整的 Specs 文档
 
 ---
 
