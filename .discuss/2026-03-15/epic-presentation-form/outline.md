@@ -1,10 +1,9 @@
 # Epic 课程结构呈现形式讨论
 
 ## 🔵 Current Focus
-- 已完成呈现层级、Epic 模板、Story 模板的主要收敛，当前以决策文档与落地草稿形式沉淀结果
+- 已确认 Roadmap 留在 `docs`、Epic / Story 导览进入 `specs`，当前正在把实际目录与链接迁移到新结构
 
 ## ⚪ Pending
-- README / Roadmap / Epic / Story 这些页面后续在仓库中的实际文件布局
 - Roadmap 总览页是否显示 Story 标题列表，还是只展示 Epic 卡片
 - Story 模板中的辅助区块（如前置状态、建议阅读顺序）未来是否需要按需加入
 
@@ -31,6 +30,10 @@
 - README 应保持轻量，只负责入口与一眼看懂，不承担完整 Roadmap 页职责
 - 已输出决策文档：D01 课程呈现层级、D02 Story 页面模板、D03 Epic 页面模板
 - 已输出落地草稿：notes/presentation-draft.md
+- 当前 Story README 已经天然承担了一部分 Story 入口页职责，只是内容过去更偏实现/运行导向
+- 已确认实际落点：Roadmap 总览页在 `docs/roadmap/README.md`，Epic / Story 导览页在 `specs/E0x-epic-slug/...`
+- 已确认 `specs` 采用带 slug 的分层目录：`E0x-epic-slug/S0xx-story-slug/`
+- 已新增决策文档：D04 课程导览文档的实际落点
 
 ## ❌ Rejected
 (Empty initially)

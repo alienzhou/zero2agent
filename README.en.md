@@ -86,6 +86,33 @@ Fork it and get hands-on—that's the best way to learn. Don't worry, you can en
 
 ---
 
+## 🗺️ Course Roadmap
+
+The course content is organized into four layers:
+
+- **README / Homepage**: quickly understand the project and where to start
+- **Roadmap Overview**: see the full learning map first
+- **Epic Page**: understand why a stage exists
+- **Story Page**: enter a concrete topic and learn how to read the implementation
+
+### Current Roadmap
+
+| Epic | Goal | Status |
+| ---- | ---- | ---- |
+| [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Build a safe, explainable minimal read-only loop for the Agent | 🚧 In Progress |
+| Epic 2: Act / Modify / Execute | Move the Agent from "can inspect" to "can take action" | 📝 Planned |
+| Epic 3: Core Capabilities and Productization | Move the Agent from a demo toward a usable product shape | 📝 Planned |
+| Epic 4: Robustness and Context Management | Handle failures, long context, and complex runtime situations | 📝 Planned |
+| Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | 📝 Planned |
+
+**Recommended starting points**:
+
+- Start with the [Course Roadmap Overview](./docs/roadmap/README.md)
+- Then go to [Epic 1: Read / Search](./specs/E01-read-and-search/README.md)
+- If you want to see a full Story example directly, start from [E1-S1: Bootstrapping the Minimal Read-Only Loop](./specs/E01-read-and-search/S001-react-basic/README.md)
+
+---
+
 ## ⚠️ What This Is NOT
 
 This is not an Agent product intended for direct production use, it's more of a "teaching tool."
@@ -119,7 +146,10 @@ zero2agent/
 | --------- | ----------------- | --------- |
 | E01-S001  | Basic Agent Loop  | ✅ Done |
 
-👉 See full iteration details and learning guide: [CHANGELOG.md](./CHANGELOG.md)
+👉 See full iteration details and learning guides:
+
+- [Course Roadmap](./docs/roadmap/README.md)
+- [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 

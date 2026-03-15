@@ -16,6 +16,13 @@
 - Epic：阶段导览
 - Story：具体课题
 
+当前建议的实际落点：
+
+- `docs/roadmap/README.md`：Roadmap 总览页
+- `specs/E0x-epic-slug/README.md`：Epic 导览页
+- `specs/E0x-epic-slug/S0xx-story-slug/README.md`：Story 导览页
+- `specs/E0x-epic-slug/S0xx-story-slug/00+`：Story 的技术文档
+
 ## 各层建议展示粒度
 
 ### README / 首页

@@ -23,7 +23,7 @@ git checkout main
 
 ### 学习建议
 
-1. **设计文档先行** - 先看 `specs/E0x-S00x-name/`，理解目标
+1. **设计文档先行** - 先看 `specs/E0x-epic-slug/S0xx-story-slug/`，理解目标
 2. **代码对照** - 边看设计边看代码
 3. **复盘收尾** - 看 `retros/E0x-S00x-name.md`，学习经验教训
 4. **动手实践** - Fork 后自己改代码
@@ -32,7 +32,7 @@ git checkout main
 
 | 资料 | 路径 | 说明 |
 |------|------|------|
-| 设计文档 | `specs/E0x-S00x-name/` | 要做什么、为什么 |
+| 设计文档 | `specs/E0x-epic-slug/S0xx-story-slug/` | 要做什么、为什么 |
 | 代码 | `packages/` | 实际实现 |
 | 复盘笔记 | `retros/E0x-S00x-name.md` | 反思和经验 |
 | 讨论记录 | `.discuss/` | 需求讨论过程 |
@@ -65,7 +65,7 @@ git checkout main
 - 如何实现 Tool Use（工具调用）
 
 **关键文件**：
-- `specs/E01-S001-react-basic/` - 设计文档
+- `specs/E01-read-and-search/S001-react-basic/` - 设计文档
 - `packages/core/src/` - 核心实现
 - `retros/E01-S001-react-basic.md` - 复盘笔记（迭代完成后）
 
@@ -76,7 +76,7 @@ git checkout main
 
 **变更内容**：
 - [x] 项目基础设施（post-commit hook、版本编号规范）
-- [x] 设计文档完成（specs/E01-S001-react-basic/）
+- [x] 设计文档完成（specs/E01-read-and-search/S001-react-basic/）
 - [x] VibeCoding 对话记录（.vibecoding/E01/S001/）
 - [x] Anthropic SDK 集成
 - [x] read_file / list_directory 工具实现
