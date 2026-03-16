@@ -97,6 +97,10 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 
 ### 当前 Roadmap
 
+<p align="center">
+  <img src="./assets/zero2agent-roadmap.png" alt="Zero2Agent Roadmap" />
+</p>
+
 | Epic | 目标 | 状态 |
 | ---- | ---- | ---- |
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 让 Agent 跑起安全、可解释的最小只读闭环 | 🚧 In Progress |

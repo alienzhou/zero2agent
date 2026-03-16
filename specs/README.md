@@ -45,6 +45,12 @@ specs/
 
 > 核心目标：先建立“能看 / 能查”的最小闭环，再逐步扩展搜索与 Prompt 结构。
 
+<p align="center">
+  <a href="./E01-read-and-search/README.md">
+    <img src="../assets/E01-read-search-banner.png" alt="Epic 1 Banner" width="600" />
+  </a>
+</p>
+
 | 层级 | 名称 | 状态 | 入口 |
 |------|------|------|------|
 | Epic | [E01：能看 / 能查](./E01-read-and-search/README.md) | 🚧 进行中 | 阶段导览 |

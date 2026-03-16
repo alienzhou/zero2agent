@@ -6,6 +6,10 @@
 
 ## 这次我们要解决的问题和目标
 
+<p align="center">
+  <img src="../../../assets/s001-react-loop.png" alt="ReAct Basic Loop" />
+</p>
+
 ### 问题
 
 如果 Agent 还只是“一次性调用模型然后返回结果”，那它就没有真正进入 Agent 的工作方式。
