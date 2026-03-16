@@ -11,7 +11,7 @@ const MAX_ITERATIONS = 20; // 防止无限循环
 /**
  * 从 response.content 中提取文本内容
  */
-function extractTextContent(content: Anthropic.ContentBlock[]): string {
+export function extractTextContent(content: Anthropic.ContentBlock[]): string {
   return content
     .filter((block): block is Anthropic.TextBlock => block.type === "text")
     .map((block) => block.text)
@@ -21,7 +21,7 @@ function extractTextContent(content: Anthropic.ContentBlock[]): string {
 /**
  * 执行工具调用并返回结果
  */
-async function executeToolCalls(
+export async function executeToolCalls(
   content: Anthropic.ContentBlock[],
   tools: Tool[]
 ): Promise<Anthropic.ToolResultBlockParam[]> {
