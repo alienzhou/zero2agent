@@ -382,6 +382,6 @@ description: `...truncated to ${DEFAULT_LIMIT} matches or ${DEFAULT_MAX_BYTES / 
 - [Pi Mono 仓库](https://github.com/badlogic/pi-mono)
 - [fd 项目](https://github.com/sharkdp/fd)
 - [ripgrep 项目](https://github.com/BurntSushi/ripgrep)
-- [OpenCode Grep 调研](/researches/opencode-grep-search/README.md)
-- [Codex Grep 调研](/researches/codex-grep-search/README.md)
+- [OpenCode Grep 调研](/researches/grep-search/opencode.md)
+- [Codex Grep 调研](/researches/grep-search/codex.md)
 - [E01-S002 讨论大纲](/.discuss/2026-03-16/e01-s002-content-search/outline.md)

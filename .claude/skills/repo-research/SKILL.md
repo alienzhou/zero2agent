@@ -62,25 +62,31 @@ NEAREST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "N/A")
 
 ### 4. 创建报告目录
 
-在**本项目根目录**下创建调研报告目录：
+在**本项目根目录**下创建调研报告目录。**按话题组织，话题内按产品拆分**：
 
 ```
 researches/
-└── <topic-slug>/
-    ├── README.md          # 调研报告（主文件）
-    └── notes/             # 补充笔记（可选）
+└── <topic-slug>/           # 话题目录（如 grep-search）
+    ├── <product-1>.md      # 产品调研报告（如 codex.md）
+    ├── <product-2>.md      # 产品调研报告（如 opencode.md）
+    └── notes/              # 补充笔记（可选）
         └── *.md
 ```
 
+**命名规则**：
+- `<topic-slug>`：话题的 `kebab-case` 标识（如 `grep-search`、`react-loop`）
+- `<product>.md`：产品/仓库名的简写（如 `codex.md`、`opencode.md`、`pi.md`）
+
 **目录复用规则**：
-- 如果 `researches/<topic-slug>/` 已存在，说明是同一话题的追加调研，在已有目录下补充
+- 如果 `researches/<topic-slug>/` 已存在，说明是同一话题的追加调研，在已有目录下补充新产品文件
 - 不同话题使用不同的 slug 目录
+- 同一话题的不同产品/仓库各自独立一个 `.md` 文件
 
 ---
 
 ## 📝 调研报告模板
 
-`README.md` 使用以下结构：
+每个产品的 `<product>.md` 使用以下结构：
 
 ```markdown
 # [调研话题标题]
@@ -179,7 +185,7 @@ export class Agent {
 
 ### 阶段三：整理报告
 
-1. 在 `researches/<topic-slug>/README.md` 中生成报告
+1. 在 `researches/<topic-slug>/<product>.md` 中生成报告
 2. 源码引用使用仓库相对路径
 3. 补充笔记放在 `notes/` 子目录
 4. 确保版本信息完整记录

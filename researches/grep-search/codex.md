@@ -324,5 +324,5 @@ Codex 的经验表明，成熟的 coding agent 更倾向让 agent 直接用 shel
 - [Codex CLI 仓库](https://github.com/openai/codex)
 - [ripgrep 项目](https://github.com/BurntSushi/ripgrep)
 - [DotSlash 项目](https://dotslash-cli.com/)
-- [OpenCode Grep 调研](/researches/opencode-grep-search/README.md)
+- [OpenCode Grep 调研](/researches/grep-search/opencode.md)
 - [E01-S002 讨论大纲](/.discuss/2026-03-16/e01-s002-content-search/outline.md)
