@@ -4,102 +4,92 @@
 
 ---
 
-## 讨论进度
-
-- [x] 确认讨论结构（对齐 Story 四段式模板 D02）
-- [x] 明确 S002 vs S003 边界
-- [x] 梳理问题场景
-- [x] 搜索能力初步框架（Pattern + Scope 两个维度）
-- [ ] **⏳ 竞品调研输入**（用户会调研其他 Coding Agent 的搜索工具设计，补充到讨论中）
-- [ ] 工具粒度决策：一个工具还是多个
-- [ ] 参数设计：必选/可选参数、默认行为
-- [ ] 结果格式与截断策略
-- [ ] 技术选型：Node.js 原生 vs 外部工具
-- [ ] 对现有代码的影响评估
-- [ ] 最终确认 → 输出 Spec
-
----
-
 ## 🔵 Current Focus
-- 等待用户补充竞品调研（其他 Coding Agent 的搜索工具设计），再推进工具设计决策
+
+- ✅ 讨论完成，所有设计决策已拍板，准备输出 Spec
 
 ## ⚪ Pending
 
-### 一、问题和目标（待最终定稿）
-- 问题场景已基本清楚（见 ✅ Confirmed），等竞品输入后最终确认措辞
-- 目标：S002 完成后 Agent 多出什么能力
-- 边界：S002 做什么、不做什么
-
-### 二、实现的关键点（等竞品调研后重点讨论）
-- 工具粒度：一个 `grep_search` 搞定，还是拆成多个工具
-- 参数设计：哪些必选、哪些可选，默认行为是什么
-- 结果格式：返回多少行上下文、对 LLM 最友好的格式
-- 截断策略：结果太多时怎么处理
-- 技术选型：Node.js 原生实现 vs 调用 ripgrep 等外部工具
-- 对现有 Tool 接口（`packages/core/src/tools/types.ts`）和注册方式的影响
-
-### 三、做完后的效果
-- Agent 能力变化：学习者可观察到的行为差异
-- 如何感知"这一步已经完成"
-
-### 四、扩展阅读
-- 设计取舍
-- 业界常见但当前未采用的方案
-- 后续可扩展方向
+（无）
 
 ---
 
 ## ✅ Confirmed
 
-### 讨论结构
-- 讨论按 Story 四段式模板（D02）推进，四段为：
-  1. 这次我们要解决的问题和目标
-  2. 这次实现的关键点
-  3. 做完后的效果
-  4. 扩展阅读
+### 决策索引
 
-### S002 vs S003 边界划分
-- **S002 = 内容搜索（Grep 维度）**：给定 pattern，在文件内容中搜索匹配行
-- **S003 = 文件集合搜索（Glob 维度）**：按文件名/路径模式查找文件
-- "跨文件"不是 S002 vs S003 的分界线；S002 的 grep 天然可以在多个文件中搜索内容
-- S003 解决的是"按文件名/路径找文件"的问题，不是"跨文件搜索内容"
+| 编号 | 决策 | 文档 |
+|------|------|------|
+| D01 | S002/S003 边界：S002=内容搜索，S003=文件名搜索 | `decisions/D01-s002-s003-boundary.md` |
+| D02 | 工具粒度：一个 `grep_search` 工具 | `decisions/D02-tool-granularity.md` |
+| D03 | 问题场景：大文件定位 + 多文件查找 | `decisions/D03-problem-scenarios.md` |
+| D04 | 工具设计方法论：四个核心问题 | `decisions/D04-tool-design-methodology.md` |
+| D05 | 边界情况推迟到扩展阅读 | `decisions/D05-edge-cases-deferred.md` |
+| D06 | 参数设计：pattern/path/include/exclude | `decisions/D06-parameter-design.md` |
+| D07 | 输出格式：Gemini CLI 风格 | `decisions/D07-output-format.md` |
+| D08 | context 参数：默认 0，LLM 按需指定 | `decisions/D08-context-parameter.md` |
+| D09 | 技术选型：ripgrep + @vscode/ripgrep | `decisions/D09-tech-selection.md` |
+| D10 | 排序（修改时间降序）、截断（100条）、描述（模板字符串） | `decisions/D10-sorting-truncation-description.md` |
 
-### 问题场景
-- **场景 1：文件很大** — 不知道信息在哪一行，只能通读浪费 token
-- **场景 2：文件数量多** — 不可能逐个 read_file 去找
-- **类比**：人类工程师在 IDE（如 VS Code）中用 Search（Ctrl+Shift+F）搜关键词定位代码
-- **典型需求**：找函数定义、找变量引用、找错误信息出处
-- 核心价值：从"只会通读"进化到"能搜着看"
+### 设计总览
 
-### 搜索能力初步框架（待竞品输入后最终确认）
-两个维度：
-- **Pattern（搜索模式）**：
-  - 关键词搜索（最基础）
-  - 正则表达式（更灵活，如前缀/后缀匹配）
-  - 复杂度渐进增强，MVP 可先只支持关键词或简单正则
-- **Scope（搜索范围）**：
-  - 排除三方依赖（如 node_modules）
-  - 指定特定目录或模块
-  - 框定特定文件集合
-  - 默认行为的设计很关键（不指定路径时搜什么？默认排除什么？）
+**工具定义**：一个 `grep_search` 工具，5 个参数
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `pattern` | string | 是 | — | 搜索模式（正则表达式） |
+| `path` | string | 否 | 项目根目录 | 搜索目录 |
+| `include` | string | 否 | — | 文件过滤 glob |
+| `exclude` | string | 否 | — | 文件排除 glob |
+| `context` | number | 否 | 0 | 匹配行前后各显示的上下文行数 |
+
+**技术方案**：ripgrep（`@vscode/ripgrep` npm 包），按修改时间降序排列，100 条匹配上限
+
+**输出格式**（Gemini CLI 风格）：
+```
+Found N matches for "pattern" in M files
+---
+File: src/path/to/file.ts
+L42: matched line content
+L43- context line (when context > 0)
+---
+```
+
+**方法论**（D04）：S002 的教学点是"如何从零设计 Agent 工具"
+- 核心原则：对人好用的工具对 AI 也好用
+- 四个设计问题：解决什么问题 → 控制什么/自动化什么 → 输出契约 → 边界兜底
+
+### 扩展阅读话题池
+
+- 边界情况：复杂截断（单行/总量）、输入校验、超时机制
+- 设计取舍：参数多 vs 少、绝对路径 vs 相对路径
+- 业界进阶：自动上下文丰富、降级策略、模型适配 schema
+- 后续扩展：`literal`/`case_sensitive` 参数、流式早停
+- 发布分发：ripgrep 打包策略切换
 
 ---
 
 ## ❌ Rejected
+
 （暂无）
 
 ---
 
 ## 📎 相关上下文
 
-### 现有代码结构（供接续讨论参考）
-- Tool 接口：`packages/core/src/tools/types.ts` — `{ name, description, input_schema, execute }`
-- 现有工具：`read_file`（读文件）、`list_directory`（列目录）
-- 工具注册：`packages/core/src/tools/index.ts` 的 `allTools` 数组，新增工具只需实现 Tool 接口并加入数组
-- Agent 循环：`packages/core/src/loop.ts` — `runLoop()` 中按 `stop_reason` 决定继续/结束
-- S001 Backlog 中提到的搜索相关：`grep_search`、`codebase_search`（中优先级）
+### 竞品调研
+
+详见 `researches/grep-search/`：OpenCode、Codex、Pi、Gemini CLI 四份报告
+
+### 现有代码结构
+
+- Tool 接口：`packages/core/src/tools/types.ts`
+- 现有工具：`read_file`、`list_directory`
+- 工具注册：`packages/core/src/tools/index.ts` 的 `allTools` 数组
+- Agent 循环：`packages/core/src/loop.ts`
 
 ### 相关讨论文档
-- Story 模板决策：`.discuss/2026-03-15/epic-presentation-form/decisions/D02-story-page-template.md`
+
+- Story 模板：`.discuss/2026-03-15/epic-presentation-form/decisions/D02-story-page-template.md`
 - Epic 1 规划：`specs/E01-read-and-search/README.md`
-- S001 Backlog：`specs/E01-read-and-search/S001-react-basic/04-backlog.md`
+- S001 Backlog：`specs/E01-read-and-search/S001-react-basic/details/04-backlog.md`
