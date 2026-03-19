@@ -56,7 +56,7 @@ Epic 页告诉你一个阶段要解决什么问题、为什么存在；Story 页
 
 ```bash
 git checkout E01-S001-react-basic  # 切到 S001 完成状态
-git checkout E01-S002-content-search  # 切到 S002 完成状态
+git checkout E01-S002-grep-search  # 切到 S002 完成状态
 ```
 
 每个迭代的 Commit 也遵循 [Conventional Commits](https://www.conventionalcommits.org/) 规范，带版本前缀（如 `[E01-S001]`），可以逐个 Commit 跟进实现过程。

@@ -57,7 +57,7 @@ git checkout main
 
 ## [Unreleased]
 
-### E01-S002-content-search (Done)
+### E01-S002-grep-search (Done)
 
 所属 Epic：[Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | Story 详情：[S002](./specs/E01-read-and-search/S002-content-search/README.md)
 

@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E01-S002 内容搜索（grep_search）已完成 — [查看详情](./CHANGELOG.md#e01-s002-content-search-done)
+**最新更新**：E01-S002 内容搜索（grep_search）已完成 — [查看详情](./CHANGELOG.md#e01-s002-grep-search-done)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |

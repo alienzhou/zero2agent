@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: E01-S002 Content Search (grep_search) is done — [see details](./CHANGELOG.md#e01-s002-content-search-done)
+**Latest update**: E01-S002 Content Search (grep_search) is done — [see details](./CHANGELOG.md#e01-s002-grep-search-done)
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |

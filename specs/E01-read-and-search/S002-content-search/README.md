@@ -2,7 +2,7 @@
 
 > 这是 Epic 1 的第二个 Story。目标不是让 Agent "读得更多"，而是让它学会更接近工程师真实工作的方式：先搜索定位，再精读上下文。
 
-[Epic 1：能看 / 能查](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md#e01-s002-content-search-done)
+[Epic 1：能看 / 能查](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md#e01-s002-grep-search-done)
 
 ---
 
@@ -197,7 +197,7 @@
    - `packages/core/src/tools/grep-search.ts` — 搜索工具实现
    - `packages/core/src/tools/index.ts` — 工具注册入口
 
-4. 最后回看 [CHANGELOG.md](../../../CHANGELOG.md#e01-s002-content-search-done)
+4. 最后回看 [CHANGELOG.md](../../../CHANGELOG.md#e01-s002-grep-search-done)
    - 把这一篇放回整个 Epic 的演进里看
 
 看代码时，重点留意三件事：
@@ -227,8 +227,8 @@
 - [任务清单](./details/02-task-list.md)
 - [验收检查清单](./details/03-verification-checklist.md)
 - [Backlog](./details/04-backlog.md)
-- [迭代日志](../../../CHANGELOG.md#e01-s002-content-search-done)
-- Git tag：`E01-S002-content-search`
+- [迭代日志](../../../CHANGELOG.md#e01-s002-grep-search-done)
+- Git tag：`E01-S002-grep-search`
 
 ---
 
