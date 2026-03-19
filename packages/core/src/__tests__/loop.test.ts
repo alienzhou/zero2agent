@@ -8,15 +8,15 @@ import type { Tool } from '../tools/types.js'
 describe('extractTextContent', () => {
   it('从 content 数组中提取文本', () => {
     const content: Anthropic.ContentBlock[] = [
-      { type: 'text', text: 'Hello' },
-      { type: 'text', text: 'World' },
+      { type: 'text', text: 'Hello', citations: null },
+      { type: 'text', text: 'World', citations: null },
     ]
     expect(extractTextContent(content)).toBe('Hello\nWorld')
   })
 
   it('跳过非文本 block', () => {
     const content: Anthropic.ContentBlock[] = [
-      { type: 'text', text: 'answer' },
+      { type: 'text', text: 'answer', citations: null },
       { type: 'tool_use', id: 'tool_1', name: 'read_file', input: {} },
     ]
     expect(extractTextContent(content)).toBe('answer')
@@ -74,16 +74,41 @@ describe('executeToolCalls', () => {
 
   it('跳过非 tool_use 类型的 block', async () => {
     const content: Anthropic.ContentBlock[] = [
-      { type: 'text', text: 'thinking...' },
+      { type: 'text', text: 'thinking...', citations: null },
     ]
     const results = await executeToolCalls(content, [mockTool])
     expect(results).toHaveLength(0)
+  })
+
+  it('触发 events 回调', async () => {
+    const onToolStart = vi.fn()
+    const onToolEnd = vi.fn()
+    const content: Anthropic.ContentBlock[] = [
+      { type: 'tool_use', id: 'call_4', name: 'echo', input: { msg: 'hi' } },
+    ]
+    await executeToolCalls(content, [mockTool], { onToolStart, onToolEnd })
+    expect(onToolStart).toHaveBeenCalledWith('echo', { msg: 'hi' })
+    expect(onToolEnd).toHaveBeenCalledWith('echo', 'echoed: hi', expect.any(Number))
+  })
+
+  it('工具出错时触发 onToolError', async () => {
+    const onToolError = vi.fn()
+    const failTool: Tool = {
+      name: 'fail',
+      description: '',
+      input_schema: { type: 'object', properties: {} },
+      execute: async () => { throw new Error('boom') },
+    }
+    const content: Anthropic.ContentBlock[] = [
+      { type: 'tool_use', id: 'call_5', name: 'fail', input: {} },
+    ]
+    await executeToolCalls(content, [failTool], { onToolError })
+    expect(onToolError).toHaveBeenCalledWith('fail', expect.stringContaining('boom'))
   })
 })
 
 // ---- runLoop ----
 
-// mock Anthropic 客户端
 vi.mock('../llm/index.js', () => ({
   createAnthropicClient: vi.fn(),
   getModelName: vi.fn(() => 'mock-model'),
@@ -92,14 +117,24 @@ vi.mock('../llm/index.js', () => ({
 import { createAnthropicClient } from '../llm/index.js'
 const mockCreate = vi.mocked(createAnthropicClient)
 
+/**
+ * 构建 mock 流对象，模拟 client.messages.stream() 的返回值
+ */
+function buildMockStream(response: Anthropic.Message) {
+  return {
+    on: vi.fn(function (this: unknown) { return this }),
+    finalMessage: vi.fn(async () => response),
+  }
+}
+
 function buildMockClient(responses: Anthropic.Message[]) {
   let callIdx = 0
   return {
     messages: {
-      create: vi.fn(async () => {
+      stream: vi.fn(() => {
         const resp = responses[callIdx]
         callIdx++
-        return resp
+        return buildMockStream(resp)
       }),
     },
   } as unknown as Anthropic
@@ -113,8 +148,8 @@ function makeEndTurnResponse(text: string): Anthropic.Message {
     model: 'mock-model',
     stop_reason: 'end_turn',
     stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 },
-    content: [{ type: 'text', text }],
+    usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
+    content: [{ type: 'text', text, citations: null }],
   }
 }
 
@@ -126,9 +161,9 @@ function makeToolUseResponse(toolName: string, toolInput: Record<string, unknown
     model: 'mock-model',
     stop_reason: 'tool_use',
     stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 },
+    usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
     content: [
-      { type: 'text', text: 'Let me check...' },
+      { type: 'text', text: 'Let me check...', citations: null },
       { type: 'tool_use', id: 'toolu_1', name: toolName, input: toolInput },
     ],
   }
@@ -142,8 +177,8 @@ function makeMaxTokensResponse(text: string): Anthropic.Message {
     model: 'mock-model',
     stop_reason: 'max_tokens',
     stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 4096, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 },
-    content: [{ type: 'text', text }],
+    usage: { input_tokens: 10, output_tokens: 4096, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
+    content: [{ type: 'text', text, citations: null }],
   }
 }
 
@@ -172,7 +207,7 @@ describe('runLoop', () => {
 
     const result = await runLoop('do something', { tools: [echoTool] })
     expect(result).toBe('final answer')
-    expect(client.messages.create).toHaveBeenCalledTimes(2)
+    expect(client.messages.stream).toHaveBeenCalledTimes(2)
   })
 
   it('max_tokens 时返回已有文本', async () => {
@@ -184,7 +219,6 @@ describe('runLoop', () => {
   })
 
   it('达到最大迭代次数时返回错误信息', async () => {
-    // 持续返回 tool_use 触发无限循环
     const noop: Tool = {
       name: 'noop',
       description: '',
@@ -200,5 +234,17 @@ describe('runLoop', () => {
 
     const result = await runLoop('loop forever', { tools: [noop] })
     expect(result).toMatch(/Maximum iterations/)
+  })
+
+  it('events.onText 通过 stream.on("text") 注册', async () => {
+    const client = buildMockClient([makeEndTurnResponse('hello')])
+    mockCreate.mockReturnValue(client)
+
+    const onText = vi.fn()
+    await runLoop('hi', { tools: [], events: { onText } })
+
+    // 验证 stream.on('text', ...) 被调用
+    const streamInstance = (client.messages.stream as ReturnType<typeof vi.fn>).mock.results[0].value
+    expect(streamInstance.on).toHaveBeenCalledWith('text', expect.any(Function))
   })
 })

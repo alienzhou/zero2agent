@@ -3,6 +3,7 @@
  * zero2agent CLI 入口
  */
 import { Agent } from "@zero2agent/core";
+import type { LoopEventHandlers } from "@zero2agent/core";
 import * as readline from "node:readline";
 
 const SYSTEM_PROMPT = `你是一个文件助手，可以帮助用户查看文件和目录内容。
@@ -10,11 +11,81 @@ const SYSTEM_PROMPT = `你是一个文件助手，可以帮助用户查看文件
 你有以下工具可以使用：
 - read_file: 读取文件内容
 - list_directory: 列出目录结构
+- grep_search: 搜索文件内容（支持正则表达式）
 
 请根据用户的需求使用这些工具，然后用中文回答。`;
 
+// ── ANSI 样式 ──────────────────────────────────────
+
+const DIM = "\x1b[2m";
+const RESET = "\x1b[0m";
+const GREEN = "\x1b[32m";
+const RED = "\x1b[31m";
+
+// ── 工具输出摘要 ──────────────────────────────────
+
+function summarizeToolOutput(toolName: string, output: string): string {
+  if (output.startsWith("Error:") || output.startsWith("No ")) {
+    return output.split("\n")[0];
+  }
+
+  const firstLine = output.split("\n")[0];
+
+  if (toolName === "grep_search" && firstLine.startsWith("Found ")) {
+    return firstLine;
+  }
+  if (toolName === "read_file") {
+    return `Read ${output.split("\n").length} lines`;
+  }
+  if (toolName === "list_directory") {
+    return `Listed ${output.split("\n").filter((l) => l.trim()).length} entries`;
+  }
+  return `${output.length} chars`;
+}
+
+function formatToolInput(input: Record<string, unknown>): string {
+  return Object.entries(input)
+    .filter(([, v]) => v !== undefined && v !== null)
+    .map(([k, v]) => (typeof v === "string" ? `${k}: "${v}"` : `${k}: ${v}`))
+    .join(", ");
+}
+
+// ── 事件处理 ───────────────────────────────────────
+
+let hasStreamedText = false;
+
+function resetStreamState() {
+  hasStreamedText = false;
+}
+
+const events: LoopEventHandlers = {
+  onText: (text) => {
+    if (!hasStreamedText) {
+      process.stdout.write("\n");
+      hasStreamedText = true;
+    }
+    process.stdout.write(text);
+  },
+  onToolStart: (name, input) => {
+    if (hasStreamedText) {
+      process.stdout.write("\n");
+      hasStreamedText = false;
+    }
+    const params = formatToolInput(input);
+    process.stdout.write(`${DIM}  ⚡ ${name}(${params})${RESET}\n`);
+  },
+  onToolEnd: (name, output, durationMs) => {
+    const summary = summarizeToolOutput(name, output);
+    process.stdout.write(`${DIM}  ${GREEN}✓${RESET}${DIM} ${summary} (${durationMs}ms)${RESET}\n`);
+  },
+  onToolError: (_name, error) => {
+    process.stdout.write(`${DIM}  ${RED}✗${RESET}${DIM} ${error}${RESET}\n`);
+  },
+};
+
+// ── 主流程 ─────────────────────────────────────────
+
 async function main() {
-  // 检查是否有命令行参数
   const messageArg = process.argv[2];
 
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -24,18 +95,16 @@ async function main() {
 
   const agent = new Agent({
     systemPrompt: SYSTEM_PROMPT,
+    events,
   });
 
-  // 如果有命令行参数，直接执行
   if (messageArg) {
     try {
-      const result = await agent.run(messageArg);
-      console.log("\n" + "=".repeat(60));
-      console.log("回答:");
-      console.log("=".repeat(60));
-      console.log(result);
+      resetStreamState();
+      await agent.run(messageArg);
+      console.log();
     } catch (error) {
-      console.error("执行出错:", (error as Error).message);
+      console.error("\n执行出错:", (error as Error).message);
       process.exit(1);
     }
     return;
@@ -66,10 +135,11 @@ async function main() {
       }
 
       try {
-        const result = await agent.run(trimmed);
-        console.log("\n助手:", result, "\n");
+        resetStreamState();
+        await agent.run(trimmed);
+        console.log("\n");
       } catch (error) {
-        console.error("错误:", (error as Error).message, "\n");
+        console.error("\n错误:", (error as Error).message, "\n");
       }
 
       prompt();

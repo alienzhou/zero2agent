@@ -17,4 +17,4 @@ export type { Tool } from "./tools/index.js";
 
 // ReACT 循环
 export { runLoop } from "./loop.js";
-export type { RunLoopOptions } from "./loop.js";
+export type { RunLoopOptions, LoopEventHandlers } from "./loop.js";

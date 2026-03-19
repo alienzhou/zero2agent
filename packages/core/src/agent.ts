@@ -2,6 +2,7 @@
  * Agent 类 - 封装 ReACT 循环的简化入口
  */
 import { runLoop } from "./loop.js";
+import type { LoopEventHandlers } from "./loop.js";
 import type { Tool } from "./tools/index.js";
 import type { LLMConfig } from "./llm/index.js";
 
@@ -9,6 +10,7 @@ export interface AgentOptions {
   config?: LLMConfig;
   tools?: Tool[];
   systemPrompt?: string;
+  events?: LoopEventHandlers;
 }
 
 /**

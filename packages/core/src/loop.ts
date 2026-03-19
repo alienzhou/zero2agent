@@ -1,12 +1,27 @@
 /**
  * ReACT 循环实现
- * Reasoning + Acting 的核心逻辑
+ * Reasoning + Acting 的核心逻辑，支持流式输出
  */
 import type Anthropic from "@anthropic-ai/sdk";
 import { createAnthropicClient, getModelName, type LLMConfig } from "./llm/index.js";
 import { allTools, toAnthropicTool, type Tool } from "./tools/index.js";
 
-const MAX_ITERATIONS = 20; // 防止无限循环
+const MAX_ITERATIONS = 20;
+
+/**
+ * 循环过程中的事件回调
+ * TUI/上层通过这些回调控制展示，core 层不直接输出
+ */
+export interface LoopEventHandlers {
+  /** 流式文本片段 */
+  onText?: (text: string) => void;
+  /** 工具开始执行 */
+  onToolStart?: (toolName: string, input: Record<string, unknown>) => void;
+  /** 工具执行完成 */
+  onToolEnd?: (toolName: string, output: string, durationMs: number) => void;
+  /** 工具执行出错 */
+  onToolError?: (toolName: string, error: string) => void;
+}
 
 /**
  * 从 response.content 中提取文本内容
@@ -23,7 +38,8 @@ export function extractTextContent(content: Anthropic.ContentBlock[]): string {
  */
 export async function executeToolCalls(
   content: Anthropic.ContentBlock[],
-  tools: Tool[]
+  tools: Tool[],
+  events?: LoopEventHandlers
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = [];
 
@@ -32,19 +48,21 @@ export async function executeToolCalls(
       const tool = tools.find((t) => t.name === block.name);
 
       if (!tool) {
+        const errorMsg = `Error: Unknown tool: ${block.name}`;
+        events?.onToolError?.(block.name, errorMsg);
         results.push({
           type: "tool_result",
           tool_use_id: block.id,
-          content: `Error: Unknown tool: ${block.name}`,
+          content: errorMsg,
         });
         continue;
       }
 
       try {
-        console.log(`[Tool] Executing: ${block.name}`);
-        console.log(`[Tool] Input:`, JSON.stringify(block.input, null, 2));
+        events?.onToolStart?.(block.name, block.input as Record<string, unknown>);
+        const start = Date.now();
         const output = await tool.execute(block.input as Record<string, unknown>);
-        console.log(`[Tool] Output (${output.length} chars)`);
+        events?.onToolEnd?.(block.name, output, Date.now() - start);
         results.push({
           type: "tool_result",
           tool_use_id: block.id,
@@ -52,7 +70,7 @@ export async function executeToolCalls(
         });
       } catch (error) {
         const errorMessage = `Error: ${(error as Error).message}`;
-        console.log(`[Tool] Error:`, errorMessage);
+        events?.onToolError?.(block.name, errorMessage);
         results.push({
           type: "tool_result",
           tool_use_id: block.id,
@@ -69,10 +87,11 @@ export interface RunLoopOptions {
   config?: LLMConfig;
   tools?: Tool[];
   systemPrompt?: string;
+  events?: LoopEventHandlers;
 }
 
 /**
- * 运行 ReACT 循环
+ * 运行 ReACT 循环（流式）
  * @param userMessage 用户输入的消息
  * @param options 配置选项
  * @returns 最终的文本响应
@@ -81,7 +100,7 @@ export async function runLoop(
   userMessage: string,
   options: RunLoopOptions = {}
 ): Promise<string> {
-  const { config = {}, tools = allTools, systemPrompt } = options;
+  const { config = {}, tools = allTools, systemPrompt, events } = options;
 
   const client = createAnthropicClient(config);
   const model = getModelName(config);
@@ -91,18 +110,13 @@ export async function runLoop(
     { role: "user", content: userMessage },
   ];
 
-  console.log(`\n[Loop] Starting with model: ${model}`);
-  console.log(`[Loop] User message: ${userMessage}`);
-  console.log(`[Loop] Tools available: ${tools.map((t) => t.name).join(", ")}`);
-
   let iterations = 0;
 
   while (iterations < MAX_ITERATIONS) {
     iterations++;
-    console.log(`\n[Loop] Iteration ${iterations}`);
 
-    // 1. 调用 LLM
-    const response = await client.messages.create({
+    // 流式调用 LLM
+    const stream = client.messages.stream({
       model,
       max_tokens: 4096,
       tools: toolDefinitions,
@@ -110,34 +124,26 @@ export async function runLoop(
       ...(systemPrompt && { system: systemPrompt }),
     });
 
-    console.log(`[Loop] Stop reason: ${response.stop_reason}`);
+    stream.on("text", (text) => {
+      events?.onText?.(text);
+    });
 
-    // 2. 检查结束条件
+    const response = await stream.finalMessage();
+
     if (response.stop_reason === "end_turn") {
-      const textContent = extractTextContent(response.content);
-      console.log(`[Loop] Final response received`);
-      return textContent;
-    }
-
-    // 3. 达到 token 上限
-    if (response.stop_reason === "max_tokens") {
-      console.log(`[Loop] Max tokens reached`);
       return extractTextContent(response.content);
     }
 
-    // 4. 处理工具调用
+    if (response.stop_reason === "max_tokens") {
+      return extractTextContent(response.content);
+    }
+
     if (response.stop_reason === "tool_use") {
-      // 添加助手消息
       messages.push({ role: "assistant", content: response.content });
-
-      // 执行工具并收集结果
-      const toolResults = await executeToolCalls(response.content, tools);
-
-      // 添加工具结果（作为 user 消息）
+      const toolResults = await executeToolCalls(response.content, tools, events);
       messages.push({ role: "user", content: toolResults });
     }
   }
 
-  console.log(`[Loop] Max iterations (${MAX_ITERATIONS}) reached`);
   return "Error: Maximum iterations reached. The task may be too complex.";
 }

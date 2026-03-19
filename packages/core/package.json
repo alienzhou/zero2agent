@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
+    "@vscode/ripgrep": "^1.17.1",
     "@zero2agent/shared": "workspace:*"
   },
   "devDependencies": {
