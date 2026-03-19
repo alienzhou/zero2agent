@@ -16,3 +16,63 @@ discussions:
       change_count: 1
     decisions: []
     notes: []
+  2026-03-16/e01-s002-content-search:
+    outline:
+      mtime: 1773947791.397349
+      change_count: 0
+    decisions:
+    - name: D10-sorting-truncation-description.md
+      mtime: 1773929906.137617
+    - name: D07-output-format.md
+      mtime: 1773924453.3018906
+    - name: D02-tool-granularity.md
+      mtime: 1773922173.7278657
+    - name: D01-s002-s003-boundary.md
+      mtime: 1773922168.7103617
+    - name: D05-edge-cases-deferred.md
+      mtime: 1773922809.1508498
+    - name: D08-context-parameter.md
+      mtime: 1773928666.4499238
+    - name: D03-problem-scenarios.md
+      mtime: 1773922177.64422
+    - name: D04-tool-design-methodology.md
+      mtime: 1773922804.0746627
+    - name: D09-tech-selection.md
+      mtime: 1773929719.5397134
+    - name: D11-code-impact-and-spec-structure.md
+      mtime: 1773949459.9520156
+    - name: D06-parameter-design.md
+      mtime: 1773923128.7040985
+    notes: []
+  2026-03-20/docs-reading-flow:
+    outline:
+      mtime: 1773938331.6715202
+      change_count: 1
+    decisions:
+    - name: D01-user-routes-first.md
+      mtime: 1773936607.9517705
+    - name: D02-returning-users-enter-by-progress.md
+      mtime: 1773936764.588159
+    - name: D04-rollout-by-user-path.md
+      mtime: 1773937629.8687587
+    - name: D03-markdown-navigation-relies-on-cross-links.md
+      mtime: 1773937346.8533227
+    notes:
+    - name: N01-minimal-cross-link-spec-draft.md
+      mtime: 1773937548.5791597
+  2026-03-15/epic-presentation-form:
+    outline:
+      mtime: 1773640409.8689642
+      change_count: 0
+    decisions:
+    - name: D01-presentation-layering.md
+      mtime: 1773640409.8682885
+    - name: D03-epic-page-template.md
+      mtime: 1773640409.868508
+    - name: D04-file-placement.md
+      mtime: 1773949459.5182507
+    - name: D02-story-page-template.md
+      mtime: 1773640409.8684
+    notes:
+    - name: presentation-draft.md
+      mtime: 1773640409.868825

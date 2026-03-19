@@ -6,7 +6,7 @@
 
 ## 文档结构
 
-当前 Specs 目录采用两层结构：
+当前 Specs 目录采用两层半结构：
 
 ```text
 specs/
@@ -14,18 +14,21 @@ specs/
 │   ├── README.md              # Epic 导览页
 │   └── S001-<story-slug>/
 │       ├── README.md          # Story 导览页
-│       ├── 00-overview.md
-│       ├── 01-technical-design.md
-│       ├── 02-task-list.md
-│       ├── 03-verification-checklist.md
-│       └── 04-backlog.md
+│       ├── details/           # Story 技术文档
+│       │   ├── 00-overview.md
+│       │   ├── 01-technical-design.md
+│       │   ├── 02-task-list.md
+│       │   ├── 03-verification-checklist.md
+│       │   └── 04-backlog.md
+│       └── deep-dive/         # 可选：深度延伸（方法论、对比、本版未实现方向）
 ```
 
 其中：
 
 - `E0x-.../README.md` 负责阶段导览
 - `S0xx-.../README.md` 负责具体 Story 的课程入口
-- `00+` 文档负责技术设计与实现细节
+- `details/00+` 文档负责技术设计与实现细节
+- `deep-dive/` 负责可选的深度讲解；**不等于本迭代交付范围**，详见 `.authoring/writing-style.md` 中「Deep Dive 与三层学习」
 
 每个 Story 的 Spec 包含以下文档：
 
@@ -37,7 +40,7 @@ specs/
 | 03 | Verification Checklist | 验收时的检查项 |
 | 04 | Backlog | 当前版本不做的事项 |
 
-> 说明：Story 的 `README.md` 偏课程导览；`00+` 文档偏设计与实现细节。
+> 说明：Story 的 `README.md` 偏课程导览；`details/00+` 偏设计与交付；`deep-dive/` 为可选纵深阅读，见 `.authoring/`。
 
 ---
 
@@ -54,7 +57,7 @@ specs/
 | 层级 | 名称 | 状态 | 入口 |
 |------|------|------|------|
 | Epic | [E01：能看 / 能查](./E01-read-and-search/README.md) | 🚧 进行中 | 阶段导览 |
-| Story | [E01-S001：让 Agent 跑起最小只读闭环](./E01-read-and-search/S001-react-basic/README.md) | ✅ 已完成 | Story 导览 + 技术文档 |
+| Story | [E01-S001：让 Agent 跑起最小只读闭环](./E01-read-and-search/S001-react-basic/README.md) | ✅ 已完成 | Story 入口 + `details/` + `deep-dive/` |
 
 ---
 

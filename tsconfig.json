@@ -20,6 +20,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [],
-  "exclude": ["node_modules", "dist", "packages", "examples"]
+  "files": [],
+  "exclude": ["node_modules", "dist", "packages", "examples"],
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/core" },
+    { "path": "./packages/tui" }
+  ]
 }

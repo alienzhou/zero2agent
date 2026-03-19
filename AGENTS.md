@@ -24,6 +24,8 @@ zero2agent/
 │   └── shared/         # 共享工具和类型
 ├── specs/              # 设计文档 (每个迭代的 spec)
 ├── retros/             # 复盘笔记 (每个迭代的反思)
+├── docs/               # 读者文档 (roadmap、架构、快速上手)
+├── .authoring/         # 作者书写规范 (写作风格、导航规范、页面模板)
 ├── .vibecoding/        # AI 协作记录 (prompt、对话、修正)
 ├── .discuss/           # 需求讨论记录
 ├── CHANGELOG.md        # 迭代日志
@@ -113,11 +115,11 @@ AI 生成的代码需要人工审查，关注：
 
 ```
 1. 需求讨论  →  .discuss/YYYY-MM-DD/<topic>/
-2. 设计 Spec →  specs/Sxxx-<name>.md
+2. 设计 Spec →  specs/.../README.md + details/（可选 deep-dive/ 延伸文）
 3. 实现代码  →  packages/
-4. 复盘总结  →  retros/Sxxx-<name>.md
+4. 复盘总结  →  retros/E0x-S0xx-<story-slug>.md
 5. 更新日志  →  CHANGELOG.md
-6. 打 Tag    →  git tag Sxxx-<name>
+6. 打 Tag    →  git tag E0x-S0xx-<slug>
 ```
 
 ---
@@ -272,5 +274,16 @@ pnpm --filter @zero2agent/tui start
 | `README.md` | 项目介绍、快速开始 | 重大变更时 |
 | `AGENTS.md` | AI 协作规范（本文件） | 规范调整时 |
 | `CHANGELOG.md` | 版本变更记录 | 每次迭代完成 |
-| `specs/*.md` | 设计文档 | 迭代开始前 |
+| `specs/**/README.md` + `specs/**/details/*.md`（及可选 `deep-dive/`） | 设计文档 | 迭代开始前 |
 | `retros/*.md` | 复盘笔记 | 迭代完成后 |
+
+### 文档书写规范（作者参考）
+
+新增或修改面向读者的文档时，遵循以下核心原则：
+
+1. **标题说人话**：用直述句（"做什么"），不用隐喻（"带到哪里"）
+2. **不重复上游信息**：每层文档只写本层新信息，Epic 不重复 Roadmap，Story 不重复 Epic
+3. **信息密度优先**：每段话要有实质新信息，不做排比堆砌
+4. **快速进入行动**：读完能开始做事，避免抽象铺垫
+
+详细规范和页面模板见 [`.authoring/`](./.authoring/README.md)（仅作者可见，不在读者路径上）。

@@ -10,7 +10,7 @@
 1. **Roadmap 总览页** 放在 `docs/roadmap/README.md`
 2. **Epic 导览页** 放在 `specs/E0x-epic-slug/README.md`
 3. **Story 导览页** 放在 `specs/E0x-epic-slug/S0xx-story-slug/README.md`
-4. **Story 的技术文档** 继续放在同一 Story 目录下的 `00+` 文件中
+4. **Story 的技术文档** 收敛到同一 Story 目录下的 `details/` 子目录中
 
 对应目录结构示例：
 
@@ -24,12 +24,13 @@ specs/
     ├── README.md
     └── S001-react-basic/
         ├── README.md
-        ├── 00-overview.md
-        ├── 01-technical-design.md
-        ├── 02-task-list.md
-        ├── 03-verification-checklist.md
-        ├── 04-backlog.md
-        └── learnings/
+        ├── details/
+        │   ├── 00-overview.md
+        │   ├── 01-technical-design.md
+        │   ├── 02-task-list.md
+        │   ├── 03-verification-checklist.md
+        │   └── 04-backlog.md
+        └── deep-dive/            # 可选：延伸阅读（与 .authoring 规范一致）
 ```
 
 此外：
