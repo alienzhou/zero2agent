@@ -290,11 +290,12 @@ fi
 
 ```
 specs/E01-read-and-search/S001-react-basic/
-├── 00-overview.md           # 总览
-├── 01-technical-design.md   # 技术设计
-├── 02-task-list.md          # 任务清单
-├── 03-verification-checklist.md  # 验收检查清单
-└── 04-backlog.md            # Backlog
+└── details/
+    ├── 00-overview.md           # 总览
+    ├── 01-technical-design.md   # 技术设计
+    ├── 02-task-list.md          # 任务清单
+    ├── 03-verification-checklist.md  # 验收检查清单
+    └── 04-backlog.md            # Backlog
 ```
 
 **文档内容：**
