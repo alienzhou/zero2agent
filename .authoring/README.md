@@ -19,6 +19,18 @@
 | [Deep Dive 页面模板](./templates/deep-dive-page.md) | 编写 `deep-dive/` 下的单篇延伸讲解 |
 | [复盘模板](./templates/retro.md) | 编写迭代复盘 |
 
+### details/ 模板
+
+每个 Story 的 `details/` 目录包含 5 份工程侧文档，对应以下模板：
+
+| 模板 | 对应文件 | 用途 |
+|------|----------|------|
+| [details/00-overview](./templates/details/00-overview.md) | `details/00-overview.md` | 迭代总览：目标、设计原则、核心功能、技术选型、文档导航 |
+| [details/01-technical-design](./templates/details/01-technical-design.md) | `details/01-technical-design.md` | 技术设计：各子系统设计判断 + ADR + 不做的事情 |
+| [details/02-task-list](./templates/details/02-task-list.md) | `details/02-task-list.md` | 开发任务拆解 + 进度跟踪 |
+| [details/03-verification-checklist](./templates/details/03-verification-checklist.md) | `details/03-verification-checklist.md` | 功能验收 + 边界场景 + 环境检查 + 已知限制 |
+| [details/04-backlog](./templates/details/04-backlog.md) | `details/04-backlog.md` | 不做清单 + 开放性问题 + 被拒方案 + Deep Dive 话题池 |
+
 ### AI Skill 模板
 
 以下模板嵌入在 AI Skill 中，由 Agent 执行时引用，此处仅索引。
