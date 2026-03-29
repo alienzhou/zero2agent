@@ -89,3 +89,4 @@
 
 - [E01-S001: ReACT 基础版](./E01/S001/README.md)
 - [E01-S002: 内容搜索 grep_search](./E01/S002/README.md)
+- [E01-S003: 文件搜索 find_files](./E01/S003/README.md)
