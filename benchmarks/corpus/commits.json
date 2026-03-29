@@ -1,0 +1,14 @@
+{
+  "medium": {
+    "repo": "https://github.com/vitejs/vite.git",
+    "tag": "v8.0.3",
+    "commit": "a248a410426a08916771ba82f37b3496375636b8",
+    "description": "Vite - 中型工具库"
+  },
+  "large": {
+    "repo": "https://github.com/vercel/next.js.git",
+    "tag": "v16.2.1",
+    "commit": "ed7d2cef246dcb3e2955c018fd8b2027e0ff8eed",
+    "description": "Next.js - 大型 monorepo"
+  }
+}

@@ -36,3 +36,7 @@ tmp/
 temp/
 
 .agentlens/
+
+# Benchmark results (regenerated each run)
+benchmarks/results/
+benchmarks/node_modules/

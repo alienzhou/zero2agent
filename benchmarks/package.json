@@ -1,0 +1,8 @@
+{
+  "name": "benchmarks",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "glob": "^11.0.0"
+  }
+}
