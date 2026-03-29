@@ -252,6 +252,7 @@
 | [搜索结果的上下文大小应该怎么控制？](./deep-dive/02-search-result-context-sizing.md) | 为什么"多给上下文"和"少占上下文窗口"天然冲突？ |
 | [内容搜索的技术选型：为什么选择 ripgrep](./deep-dive/03-content-search-implementation-options.md) | 工具能力、性能、生态、兼容性怎么比较？ |
 | [`grep search` 和 `codebase search` 到底有什么区别？](./deep-dive/04-grep-search-vs-codebase-search.md) | 什么时候该先做 grep search，什么时候才值得上 codebase search？ |
+| [当 `ripgrep` 还不够快：正则搜索为什么会走向索引化](./deep-dive/05-fast-regex-search-indexing.md) | 当全仓扫描开始成为瓶颈时，为什么 regex search 会继续演进到文本索引？ |
 
 ---
 
