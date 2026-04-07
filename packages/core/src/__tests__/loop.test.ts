@@ -1,7 +1,10 @@
 import { describe, it, expect, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
 import { extractTextContent, executeToolCalls, runLoop } from '../loop.js'
-import type { Tool } from '../tools/types.js'
+import type { Tool, ToolContext } from '../tools/types.js'
+
+// 测试用的 ToolContext
+const testCtx: ToolContext = { cwd: '/tmp/test' }
 
 // ---- extractTextContent ----
 
@@ -34,14 +37,14 @@ describe('executeToolCalls', () => {
     name: 'echo',
     description: 'echo tool',
     input_schema: { type: 'object', properties: {} },
-    execute: async (input) => `echoed: ${(input as { msg: string }).msg}`,
+    execute: async (input, _ctx) => `echoed: ${(input as { msg: string }).msg}`,
   }
 
   it('执行匹配的工具并返回结果', async () => {
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_1', name: 'echo', input: { msg: 'hi' } },
     ]
-    const results = await executeToolCalls(content, [mockTool])
+    const results = await executeToolCalls(content, [mockTool], testCtx)
     expect(results).toHaveLength(1)
     expect(results[0]).toMatchObject({
       type: 'tool_result',
@@ -54,7 +57,7 @@ describe('executeToolCalls', () => {
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_2', name: 'unknown', input: {} },
     ]
-    const results = await executeToolCalls(content, [mockTool])
+    const results = await executeToolCalls(content, [mockTool], testCtx)
     expect(results[0].content).toMatch(/Unknown tool/)
   })
 
@@ -63,12 +66,12 @@ describe('executeToolCalls', () => {
       name: 'fail',
       description: '',
       input_schema: { type: 'object', properties: {} },
-      execute: async () => { throw new Error('boom') },
+      execute: async (_input, _ctx) => { throw new Error('boom') },
     }
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_3', name: 'fail', input: {} },
     ]
-    const results = await executeToolCalls(content, [failTool])
+    const results = await executeToolCalls(content, [failTool], testCtx)
     expect(results[0].content).toMatch(/Error:.*boom/)
   })
 
@@ -76,7 +79,7 @@ describe('executeToolCalls', () => {
     const content: Anthropic.ContentBlock[] = [
       { type: 'text', text: 'thinking...', citations: null },
     ]
-    const results = await executeToolCalls(content, [mockTool])
+    const results = await executeToolCalls(content, [mockTool], testCtx)
     expect(results).toHaveLength(0)
   })
 
@@ -86,7 +89,7 @@ describe('executeToolCalls', () => {
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_4', name: 'echo', input: { msg: 'hi' } },
     ]
-    await executeToolCalls(content, [mockTool], { onToolStart, onToolEnd })
+    await executeToolCalls(content, [mockTool], testCtx, { onToolStart, onToolEnd })
     expect(onToolStart).toHaveBeenCalledWith('echo', { msg: 'hi' })
     expect(onToolEnd).toHaveBeenCalledWith('echo', 'echoed: hi', expect.any(Number))
   })
@@ -97,12 +100,12 @@ describe('executeToolCalls', () => {
       name: 'fail',
       description: '',
       input_schema: { type: 'object', properties: {} },
-      execute: async () => { throw new Error('boom') },
+      execute: async (_input, _ctx) => { throw new Error('boom') },
     }
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_5', name: 'fail', input: {} },
     ]
-    await executeToolCalls(content, [failTool], { onToolError })
+    await executeToolCalls(content, [failTool], testCtx, { onToolError })
     expect(onToolError).toHaveBeenCalledWith('fail', expect.stringContaining('boom'))
   })
 })
@@ -196,7 +199,7 @@ describe('runLoop', () => {
       name: 'echo',
       description: 'echo',
       input_schema: { type: 'object', properties: {} },
-      execute: async () => 'tool-output',
+      execute: async (_input, _ctx) => 'tool-output',
     }
 
     const client = buildMockClient([
@@ -223,7 +226,7 @@ describe('runLoop', () => {
       name: 'noop',
       description: '',
       input_schema: { type: 'object', properties: {} },
-      execute: async () => '',
+      execute: async (_input, _ctx) => '',
     }
 
     const infiniteResponses = Array.from({ length: 21 }, () =>

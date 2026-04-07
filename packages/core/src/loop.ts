@@ -4,7 +4,7 @@
  */
 import type Anthropic from "@anthropic-ai/sdk";
 import { createAnthropicClient, getModelName, type LLMConfig } from "./llm/index.js";
-import { allTools, toAnthropicTool, type Tool } from "./tools/index.js";
+import { allTools, toAnthropicTool, type Tool, type ToolContext } from "./tools/index.js";
 
 const MAX_ITERATIONS = 20;
 
@@ -39,6 +39,7 @@ export function extractTextContent(content: Anthropic.ContentBlock[]): string {
 export async function executeToolCalls(
   content: Anthropic.ContentBlock[],
   tools: Tool[],
+  ctx: ToolContext,
   events?: LoopEventHandlers
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = [];
@@ -61,7 +62,7 @@ export async function executeToolCalls(
       try {
         events?.onToolStart?.(block.name, block.input as Record<string, unknown>);
         const start = Date.now();
-        const output = await tool.execute(block.input as Record<string, unknown>);
+        const output = await tool.execute(block.input as Record<string, unknown>, ctx);
         events?.onToolEnd?.(block.name, output, Date.now() - start);
         results.push({
           type: "tool_result",
@@ -88,6 +89,8 @@ export interface RunLoopOptions {
   tools?: Tool[];
   systemPrompt?: string;
   events?: LoopEventHandlers;
+  /** Agent 工作目录，所有工具的相对路径基于此解析。默认 process.cwd() */
+  cwd?: string;
 }
 
 /**
@@ -100,7 +103,10 @@ export async function runLoop(
   userMessage: string,
   options: RunLoopOptions = {}
 ): Promise<string> {
-  const { config = {}, tools = allTools, systemPrompt, events } = options;
+  const { config = {}, tools = allTools, systemPrompt, events, cwd } = options;
+
+  // 构造工具执行上下文
+  const ctx: ToolContext = { cwd: cwd ?? process.cwd() };
 
   const client = createAnthropicClient(config);
   const model = getModelName(config);
@@ -140,7 +146,7 @@ export async function runLoop(
 
     if (response.stop_reason === "tool_use") {
       messages.push({ role: "assistant", content: response.content });
-      const toolResults = await executeToolCalls(response.content, tools, events);
+      const toolResults = await executeToolCalls(response.content, tools, ctx, events);
       messages.push({ role: "user", content: toolResults });
     }
   }

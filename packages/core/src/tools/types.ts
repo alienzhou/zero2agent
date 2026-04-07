@@ -1,6 +1,15 @@
 import type Anthropic from "@anthropic-ai/sdk";
 
 /**
+ * 工具执行上下文
+ * 框架注入给每次工具调用，包含 Agent 级别的配置
+ */
+export interface ToolContext {
+  /** Agent 工作目录的绝对路径，所有相对路径基于此解析 */
+  cwd: string;
+}
+
+/**
  * 工具接口定义
  */
 export interface Tool {
@@ -11,7 +20,7 @@ export interface Tool {
     properties: Record<string, unknown>;
     required?: string[];
   };
-  execute: (input: Record<string, unknown>) => Promise<string>;
+  execute: (input: Record<string, unknown>, ctx: ToolContext) => Promise<string>;
 }
 
 /**

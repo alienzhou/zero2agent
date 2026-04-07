@@ -11,7 +11,7 @@
 - **D02 Benchmark 已完成** ✅
 - **D03 find_files 工具契约** ✅
   - 工具名：`find_files`
-  - 参数：`pattern`、`path?`、`include?`、`exclude?`
+  - 参数：`pattern`、`path?`、`exclude?`（移除 include，详见 D03）
   - 输出格式：相对路径（POSIX）
   - 排序策略：mtime 降序
   - 截断：简单策略（默认 100 条）

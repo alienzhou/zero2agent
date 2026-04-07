@@ -52,10 +52,45 @@ git checkout main
 |------|------|------|
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | ReACT 基础版 | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | 内容搜索 (grep_search) | Done |
+| [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | 文件搜索 (find_files) | Done |
 
 ---
 
 ## [Unreleased]
+
+### E01-S003-file-search (Done)
+
+所属 Epic：[Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | Story 详情：[S003](./specs/E01-read-and-search/S003-file-search/README.md)
+
+**目标**：给 Agent 加上文件搜索能力，同时补上工具体系的工作目录基础设施
+
+**你会学到**：
+- 如何设计 ToolContext 统一工具的运行环境
+- 从隐式依赖（process.cwd）到显式注入的重构思路
+- ripgrep `--files` 模式与 `--json` 模式的差异
+- find_files 与 grep_search / list_directory 的分工
+
+**关键文件**：
+- `specs/E01-read-and-search/S003-file-search/` - 设计文档
+- `packages/core/src/tools/types.ts` - ToolContext 定义
+- `packages/core/src/tools/find-files.ts` - find_files 工具实现
+- `packages/core/src/loop.ts` - 上下文传递
+
+**学习要点**：
+1. 第三个工具到来时，前两个 Story 的隐式假设被暴露
+2. ToolContext 是扩展点——后续加字段不需要改签名
+3. 相对路径输出：省 token + 工具链衔接 + 一致性
+
+**变更内容**：
+- [x] `ToolContext` 基础设施（`types.ts`、`loop.ts`、`agent.ts`）
+- [x] 三个现有工具适配（`read-file.ts`、`list-directory.ts`、`grep-search.ts`）
+- [x] `find_files` 工具：3 参数（pattern/path/exclude）
+- [x] ripgrep `--files` 模式集成
+- [x] 结果处理：mtime 降序排序、100 条截断、相对路径输出
+- [x] 11 个测试用例（基本搜索/参数/排序/格式/.gitignore/错误处理）
+- [x] TUI 更新：system prompt 增加 find_files 说明
+
+---
 
 ### E01-S002-grep-search (Done)
 

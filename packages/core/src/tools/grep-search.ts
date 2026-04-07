@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import { rgPath } from '@vscode/ripgrep'
-import type { Tool } from './types.js'
+import type { Tool, ToolContext } from './types.js'
 
 // ── 常量 ──────────────────────────────────────────────
 
@@ -278,15 +278,15 @@ export const grepSearchTool: Tool = {
     required: ['pattern'],
   },
 
-  execute: async (input: Record<string, unknown>): Promise<string> => {
+  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
     const params = input as unknown as GrepSearchInput
-    const searchPath = params.path || '.'
+    const searchPath = path.resolve(ctx.cwd, params.path || '.')
 
     // 验证搜索路径是否存在
     try {
       await fs.access(searchPath)
     } catch {
-      return `Error: Search path not found: ${searchPath}`
+      return `Error: Search path not found: ${params.path || '.'}`
     }
 
     // 构造参数并调用 ripgrep
@@ -314,7 +314,7 @@ export const grepSearchTool: Tool = {
     const totalFileCount = groups.length
     const { groups: truncatedGroups, totalMatches, truncated } = truncateMatches(groups)
 
-    const basePath = path.resolve(searchPath)
-    return formatOutput(truncatedGroups, totalMatches, totalFileCount, params.pattern, truncated, basePath)
+    // 基于 ctx.cwd 计算相对路径
+    return formatOutput(truncatedGroups, totalMatches, totalFileCount, params.pattern, truncated, ctx.cwd)
   },
 }

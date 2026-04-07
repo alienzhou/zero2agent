@@ -11,6 +11,8 @@ export interface AgentOptions {
   tools?: Tool[];
   systemPrompt?: string;
   events?: LoopEventHandlers;
+  /** Agent 工作目录，所有工具的相对路径基于此解析。默认 process.cwd() */
+  cwd?: string;
 }
 
 /**
@@ -27,7 +29,13 @@ export class Agent {
    * 运行 Agent 处理用户消息
    */
   async run(message: string): Promise<string> {
-    return runLoop(message, this.options);
+    return runLoop(message, {
+      config: this.options.config,
+      tools: this.options.tools,
+      systemPrompt: this.options.systemPrompt,
+      events: this.options.events,
+      cwd: this.options.cwd,
+    });
   }
 
   /**

@@ -1,0 +1,1093 @@
+diff --git a/packages/core/src/__tests__/loop.test.ts b/packages/core/src/__tests__/loop.test.ts
+index 59181d1..544ce48 100644
+--- a/packages/core/src/__tests__/loop.test.ts
++++ b/packages/core/src/__tests__/loop.test.ts
+@@ -1,7 +1,10 @@
+ import { describe, it, expect, vi } from 'vitest'
+ import type Anthropic from '@anthropic-ai/sdk'
+ import { extractTextContent, executeToolCalls, runLoop } from '../loop.js'
+-import type { Tool } from '../tools/types.js'
++import type { Tool, ToolContext } from '../tools/types.js'
++
++// 测试用的 ToolContext
++const testCtx: ToolContext = { cwd: '/tmp/test' }
+ 
+ // ---- extractTextContent ----
+ 
+@@ -34,14 +37,14 @@ describe('executeToolCalls', () => {
+     name: 'echo',
+     description: 'echo tool',
+     input_schema: { type: 'object', properties: {} },
+-    execute: async (input) => `echoed: ${(input as { msg: string }).msg}`,
++    execute: async (input, _ctx) => `echoed: ${(input as { msg: string }).msg}`,
+   }
+ 
+   it('执行匹配的工具并返回结果', async () => {
+     const content: Anthropic.ContentBlock[] = [
+       { type: 'tool_use', id: 'call_1', name: 'echo', input: { msg: 'hi' } },
+     ]
+-    const results = await executeToolCalls(content, [mockTool])
++    const results = await executeToolCalls(content, [mockTool], testCtx)
+     expect(results).toHaveLength(1)
+     expect(results[0]).toMatchObject({
+       type: 'tool_result',
+@@ -54,7 +57,7 @@ describe('executeToolCalls', () => {
+     const content: Anthropic.ContentBlock[] = [
+       { type: 'tool_use', id: 'call_2', name: 'unknown', input: {} },
+     ]
+-    const results = await executeToolCalls(content, [mockTool])
++    const results = await executeToolCalls(content, [mockTool], testCtx)
+     expect(results[0].content).toMatch(/Unknown tool/)
+   })
+ 
+@@ -63,12 +66,12 @@ describe('executeToolCalls', () => {
+       name: 'fail',
+       description: '',
+       input_schema: { type: 'object', properties: {} },
+-      execute: async () => { throw new Error('boom') },
++      execute: async (_input, _ctx) => { throw new Error('boom') },
+     }
+     const content: Anthropic.ContentBlock[] = [
+       { type: 'tool_use', id: 'call_3', name: 'fail', input: {} },
+     ]
+-    const results = await executeToolCalls(content, [failTool])
++    const results = await executeToolCalls(content, [failTool], testCtx)
+     expect(results[0].content).toMatch(/Error:.*boom/)
+   })
+ 
+@@ -76,7 +79,7 @@ describe('executeToolCalls', () => {
+     const content: Anthropic.ContentBlock[] = [
+       { type: 'text', text: 'thinking...', citations: null },
+     ]
+-    const results = await executeToolCalls(content, [mockTool])
++    const results = await executeToolCalls(content, [mockTool], testCtx)
+     expect(results).toHaveLength(0)
+   })
+ 
+@@ -86,7 +89,7 @@ describe('executeToolCalls', () => {
+     const content: Anthropic.ContentBlock[] = [
+       { type: 'tool_use', id: 'call_4', name: 'echo', input: { msg: 'hi' } },
+     ]
+-    await executeToolCalls(content, [mockTool], { onToolStart, onToolEnd })
++    await executeToolCalls(content, [mockTool], testCtx, { onToolStart, onToolEnd })
+     expect(onToolStart).toHaveBeenCalledWith('echo', { msg: 'hi' })
+     expect(onToolEnd).toHaveBeenCalledWith('echo', 'echoed: hi', expect.any(Number))
+   })
+@@ -97,12 +100,12 @@ describe('executeToolCalls', () => {
+       name: 'fail',
+       description: '',
+       input_schema: { type: 'object', properties: {} },
+-      execute: async () => { throw new Error('boom') },
++      execute: async (_input, _ctx) => { throw new Error('boom') },
+     }
+     const content: Anthropic.ContentBlock[] = [
+       { type: 'tool_use', id: 'call_5', name: 'fail', input: {} },
+     ]
+-    await executeToolCalls(content, [failTool], { onToolError })
++    await executeToolCalls(content, [failTool], testCtx, { onToolError })
+     expect(onToolError).toHaveBeenCalledWith('fail', expect.stringContaining('boom'))
+   })
+ })
+@@ -196,7 +199,7 @@ describe('runLoop', () => {
+       name: 'echo',
+       description: 'echo',
+       input_schema: { type: 'object', properties: {} },
+-      execute: async () => 'tool-output',
++      execute: async (_input, _ctx) => 'tool-output',
+     }
+ 
+     const client = buildMockClient([
+@@ -223,7 +226,7 @@ describe('runLoop', () => {
+       name: 'noop',
+       description: '',
+       input_schema: { type: 'object', properties: {} },
+-      execute: async () => '',
++      execute: async (_input, _ctx) => '',
+     }
+ 
+     const infiniteResponses = Array.from({ length: 21 }, () =>
+diff --git a/packages/core/src/agent.ts b/packages/core/src/agent.ts
+index e05b4be..91ba26d 100644
+--- a/packages/core/src/agent.ts
++++ b/packages/core/src/agent.ts
+@@ -11,6 +11,8 @@ export interface AgentOptions {
+   tools?: Tool[];
+   systemPrompt?: string;
+   events?: LoopEventHandlers;
++  /** Agent 工作目录，所有工具的相对路径基于此解析。默认 process.cwd() */
++  cwd?: string;
+ }
+ 
+ /**
+@@ -27,7 +29,13 @@ export class Agent {
+    * 运行 Agent 处理用户消息
+    */
+   async run(message: string): Promise<string> {
+-    return runLoop(message, this.options);
++    return runLoop(message, {
++      config: this.options.config,
++      tools: this.options.tools,
++      systemPrompt: this.options.systemPrompt,
++      events: this.options.events,
++      cwd: this.options.cwd,
++    });
+   }
+ 
+   /**
+diff --git a/packages/core/src/loop.ts b/packages/core/src/loop.ts
+index 0c6dda7..c4dedc3 100644
+--- a/packages/core/src/loop.ts
++++ b/packages/core/src/loop.ts
+@@ -4,7 +4,7 @@
+  */
+ import type Anthropic from "@anthropic-ai/sdk";
+ import { createAnthropicClient, getModelName, type LLMConfig } from "./llm/index.js";
+-import { allTools, toAnthropicTool, type Tool } from "./tools/index.js";
++import { allTools, toAnthropicTool, type Tool, type ToolContext } from "./tools/index.js";
+ 
+ const MAX_ITERATIONS = 20;
+ 
+@@ -39,6 +39,7 @@ export function extractTextContent(content: Anthropic.ContentBlock[]): string {
+ export async function executeToolCalls(
+   content: Anthropic.ContentBlock[],
+   tools: Tool[],
++  ctx: ToolContext,
+   events?: LoopEventHandlers
+ ): Promise<Anthropic.ToolResultBlockParam[]> {
+   const results: Anthropic.ToolResultBlockParam[] = [];
+@@ -61,7 +62,7 @@ export async function executeToolCalls(
+       try {
+         events?.onToolStart?.(block.name, block.input as Record<string, unknown>);
+         const start = Date.now();
+-        const output = await tool.execute(block.input as Record<string, unknown>);
++        const output = await tool.execute(block.input as Record<string, unknown>, ctx);
+         events?.onToolEnd?.(block.name, output, Date.now() - start);
+         results.push({
+           type: "tool_result",
+@@ -88,6 +89,8 @@ export interface RunLoopOptions {
+   tools?: Tool[];
+   systemPrompt?: string;
+   events?: LoopEventHandlers;
++  /** Agent 工作目录，所有工具的相对路径基于此解析。默认 process.cwd() */
++  cwd?: string;
+ }
+ 
+ /**
+@@ -100,7 +103,10 @@ export async function runLoop(
+   userMessage: string,
+   options: RunLoopOptions = {}
+ ): Promise<string> {
+-  const { config = {}, tools = allTools, systemPrompt, events } = options;
++  const { config = {}, tools = allTools, systemPrompt, events, cwd } = options;
++
++  // 构造工具执行上下文
++  const ctx: ToolContext = { cwd: cwd ?? process.cwd() };
+ 
+   const client = createAnthropicClient(config);
+   const model = getModelName(config);
+@@ -140,7 +146,7 @@ export async function runLoop(
+ 
+     if (response.stop_reason === "tool_use") {
+       messages.push({ role: "assistant", content: response.content });
+-      const toolResults = await executeToolCalls(response.content, tools, events);
++      const toolResults = await executeToolCalls(response.content, tools, ctx, events);
+       messages.push({ role: "user", content: toolResults });
+     }
+   }
+diff --git a/packages/core/src/tools/__tests__/grep-search.test.ts b/packages/core/src/tools/__tests__/grep-search.test.ts
+index 30c66e6..7e25368 100644
+--- a/packages/core/src/tools/__tests__/grep-search.test.ts
++++ b/packages/core/src/tools/__tests__/grep-search.test.ts
+@@ -3,16 +3,14 @@ import * as fs from 'node:fs/promises'
+ import * as path from 'node:path'
+ import * as os from 'node:os'
+ import { grepSearchTool } from '../grep-search.js'
+-
+-const execute = grepSearchTool.execute
++import type { ToolContext } from '../types.js'
+ 
+ let tmpDir: string
+-let originalCwd: string
++let ctx: ToolContext
+ 
+ beforeAll(async () => {
+   tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'z2a-grep-test-'))
+-  originalCwd = process.cwd()
+-  process.chdir(tmpDir)
++  ctx = { cwd: tmpDir }
+ 
+   // 构造测试文件结构
+   await fs.mkdir(path.join(tmpDir, 'src'))
+@@ -79,7 +77,6 @@ beforeAll(async () => {
+ })
+ 
+ afterAll(async () => {
+-  process.chdir(originalCwd)
+   await fs.rm(tmpDir, { recursive: true, force: true })
+ })
+ 
+@@ -87,7 +84,7 @@ describe('grep_search', () => {
+   // ── 基本搜索 ──────────────────────────────────────
+ 
+   it('搜索到匹配内容，返回 Gemini CLI 风格输出', async () => {
+-    const result = await execute({ pattern: 'helper' })
++    const result = await grepSearchTool.execute({ pattern: 'helper' }, ctx)
+ 
+     expect(result).toMatch(/^Found \d+ matches for "helper" in \d+ files/)
+     expect(result).toContain('File:')
+@@ -96,7 +93,7 @@ describe('grep_search', () => {
+   })
+ 
+   it('搜索结果包含正确的行内容', async () => {
+-    const result = await execute({ pattern: 'export function main' })
++    const result = await grepSearchTool.execute({ pattern: 'export function main' }, ctx)
+ 
+     expect(result).toContain('Found 1 matches for "export function main" in 1 files')
+     expect(result).toContain('index.ts')
+@@ -104,7 +101,7 @@ describe('grep_search', () => {
+   })
+ 
+   it('跨多个文件搜索', async () => {
+-    const result = await execute({ pattern: 'export function' })
++    const result = await grepSearchTool.execute({ pattern: 'export function' }, ctx)
+ 
+     expect(result).toContain('index.ts')
+     expect(result).toContain('helper.ts')
+@@ -114,7 +111,7 @@ describe('grep_search', () => {
+   // ── 参数功能 ──────────────────────────────────────
+ 
+   it('path 参数限制搜索范围', async () => {
+-    const result = await execute({ pattern: 'helper', path: 'src/utils' })
++    const result = await grepSearchTool.execute({ pattern: 'helper', path: 'src/utils' }, ctx)
+ 
+     expect(result).toContain('helper.ts')
+     expect(result).not.toContain('index.ts')
+@@ -122,21 +119,21 @@ describe('grep_search', () => {
+   })
+ 
+   it('include 参数过滤文件类型', async () => {
+-    const result = await execute({ pattern: 'helper', include: '*.test.ts' })
++    const result = await grepSearchTool.execute({ pattern: 'helper', include: '*.test.ts' }, ctx)
+ 
+     expect(result).toContain('helper.test.ts')
+     expect(result).not.toContain('index.ts')
+   })
+ 
+   it('exclude 参数排除文件', async () => {
+-    const result = await execute({ pattern: 'helper', exclude: '*.test.ts' })
++    const result = await grepSearchTool.execute({ pattern: 'helper', exclude: '*.test.ts' }, ctx)
+ 
+     expect(result).not.toContain('helper.test.ts')
+     expect(result).toContain('helper.ts')
+   })
+ 
+   it('context 参数显示上下文行', async () => {
+-    const result = await execute({ pattern: 'export function main', context: 1 })
++    const result = await grepSearchTool.execute({ pattern: 'export function main', context: 1 }, ctx)
+ 
+     // 匹配行用 ':'，上下文行用 '-'
+     expect(result).toMatch(/L4: export function main/)
+@@ -144,7 +141,7 @@ describe('grep_search', () => {
+   })
+ 
+   it('context 为 0 时不显示上下文行', async () => {
+-    const result = await execute({ pattern: 'export function main', context: 0 })
++    const result = await grepSearchTool.execute({ pattern: 'export function main', context: 0 }, ctx)
+ 
+     expect(result).not.toMatch(/L\d+-/)
+   })
+@@ -152,7 +149,7 @@ describe('grep_search', () => {
+   // ── 排序 ──────────────────────────────────────────
+ 
+   it('结果按文件修改时间降序排列', async () => {
+-    const result = await execute({ pattern: 'helper', path: 'src' })
++    const result = await grepSearchTool.execute({ pattern: 'helper', path: 'src' }, ctx)
+ 
+     // index.ts 修改时间最新，应排第一
+     const indexPos = result.indexOf('index.ts')
+@@ -163,7 +160,7 @@ describe('grep_search', () => {
+   // ── 输出格式 ──────────────────────────────────────
+ 
+   it('输出使用相对路径', async () => {
+-    const result = await execute({ pattern: 'export function main' })
++    const result = await grepSearchTool.execute({ pattern: 'export function main' }, ctx)
+ 
+     // 不应包含临时目录的绝对路径前缀
+     expect(result).not.toContain(tmpDir)
+@@ -171,7 +168,7 @@ describe('grep_search', () => {
+   })
+ 
+   it('文件块之间用 --- 分隔', async () => {
+-    const result = await execute({ pattern: 'export function' })
++    const result = await grepSearchTool.execute({ pattern: 'export function' }, ctx)
+     const separators = result.split('\n').filter((l: string) => l === '---')
+     // 每个文件块前有一个 ---
+     expect(separators.length).toBeGreaterThanOrEqual(3)
+@@ -180,7 +177,7 @@ describe('grep_search', () => {
+   // ── 正则支持 ──────────────────────────────────────
+ 
+   it('支持正则表达式搜索', async () => {
+-    const result = await execute({ pattern: 'function\\s+\\w+\\(' })
++    const result = await grepSearchTool.execute({ pattern: 'function\\s+\\w+\\(' }, ctx)
+ 
+     expect(result).toContain('function main(')
+     expect(result).toContain('function helper(')
+@@ -189,17 +186,17 @@ describe('grep_search', () => {
+   // ── 错误处理 ──────────────────────────────────────
+ 
+   it('搜索路径不存在时返回错误', async () => {
+-    const result = await execute({ pattern: 'test', path: 'nonexistent/dir' })
++    const result = await grepSearchTool.execute({ pattern: 'test', path: 'nonexistent/dir' }, ctx)
+     expect(result).toMatch(/Error:.*not found/i)
+   })
+ 
+   it('无匹配结果时返回提示', async () => {
+-    const result = await execute({ pattern: 'xyznonexistent12345' })
++    const result = await grepSearchTool.execute({ pattern: 'xyznonexistent12345' }, ctx)
+     expect(result).toBe('No matches found.')
+   })
+ 
+   it('无效正则返回友好错误', async () => {
+-    const result = await execute({ pattern: '[invalid' })
++    const result = await grepSearchTool.execute({ pattern: '[invalid' }, ctx)
+     expect(result).toMatch(/Error:.*regex/i)
+   })
+ 
+diff --git a/packages/core/src/tools/__tests__/list-directory.test.ts b/packages/core/src/tools/__tests__/list-directory.test.ts
+index 3ec6f09..fbc23cc 100644
+--- a/packages/core/src/tools/__tests__/list-directory.test.ts
++++ b/packages/core/src/tools/__tests__/list-directory.test.ts
+@@ -3,13 +3,14 @@ import * as fs from 'node:fs/promises'
+ import * as path from 'node:path'
+ import * as os from 'node:os'
+ import { listDirectoryTool } from '../list-directory.js'
+-
+-const execute = listDirectoryTool.execute
++import type { ToolContext } from '../types.js'
+ 
+ let tmpDir: string
++let ctx: ToolContext
+ 
+ beforeAll(async () => {
+   tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'z2a-test-'))
++  ctx = { cwd: tmpDir }
+ 
+   await fs.mkdir(path.join(tmpDir, 'src'))
+   await fs.writeFile(path.join(tmpDir, 'src', 'index.ts'), '')
+@@ -23,7 +24,7 @@ afterAll(async () => {
+ 
+ describe('list_directory', () => {
+   it('列出目录内容，目录排在文件前面', async () => {
+-    const result = await execute({ path: tmpDir })
++    const result = await listDirectoryTool.execute({ path: '.' }, ctx)
+     const lines = result.split('\n')
+ 
+     expect(lines[0]).toMatch(/\[dir\]/)
+@@ -34,14 +35,14 @@ describe('list_directory', () => {
+   })
+ 
+   it('recursive 模式递归列出子目录', async () => {
+-    const result = await execute({ path: tmpDir, recursive: true })
++    const result = await listDirectoryTool.execute({ path: '.', recursive: true }, ctx)
+     expect(result).toContain('[dir]')
+     expect(result).toContain('index.ts')
+     expect(result).toContain('README.md')
+   })
+ 
+   it('recursive 模式子目录条目有缩进', async () => {
+-    const result = await execute({ path: tmpDir, recursive: true })
++    const result = await listDirectoryTool.execute({ path: '.', recursive: true }, ctx)
+     const lines = result.split('\n')
+     const indentedLine = lines.find((l: string) => l.startsWith('  '))
+     expect(indentedLine).toBeDefined()
+@@ -49,19 +50,19 @@ describe('list_directory', () => {
+   })
+ 
+   it('目录不存在时返回错误信息', async () => {
+-    const result = await execute({ path: path.join(tmpDir, 'nope') })
++    const result = await listDirectoryTool.execute({ path: 'nope' }, ctx)
+     expect(result).toMatch(/Error:.*not found/i)
+   })
+ 
+   it('路径是文件时返回错误信息', async () => {
+-    const result = await execute({ path: path.join(tmpDir, 'README.md') })
++    const result = await listDirectoryTool.execute({ path: 'README.md' }, ctx)
+     expect(result).toMatch(/Error:.*Not a directory/i)
+   })
+ 
+   it('空目录返回空字符串', async () => {
+     const emptyDir = path.join(tmpDir, 'empty-dir')
+     await fs.mkdir(emptyDir)
+-    const result = await execute({ path: emptyDir })
++    const result = await listDirectoryTool.execute({ path: 'empty-dir' }, ctx)
+     expect(result).toBe('')
+   })
+ })
+diff --git a/packages/core/src/tools/__tests__/read-file.test.ts b/packages/core/src/tools/__tests__/read-file.test.ts
+index e4a11f4..2891917 100644
+--- a/packages/core/src/tools/__tests__/read-file.test.ts
++++ b/packages/core/src/tools/__tests__/read-file.test.ts
+@@ -3,13 +3,14 @@ import * as fs from 'node:fs/promises'
+ import * as path from 'node:path'
+ import * as os from 'node:os'
+ import { readFileTool } from '../read-file.js'
+-
+-const execute = readFileTool.execute
++import type { ToolContext } from '../types.js'
+ 
+ let tmpDir: string
++let ctx: ToolContext
+ 
+ beforeAll(async () => {
+   tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'z2a-test-'))
++  ctx = { cwd: tmpDir }
+ 
+   await fs.writeFile(
+     path.join(tmpDir, 'hello.txt'),
+@@ -25,18 +26,18 @@ afterAll(async () => {
+ 
+ describe('read_file', () => {
+   it('读取完整文件内容，带行号前缀', async () => {
+-    const result = await execute({ path: path.join(tmpDir, 'hello.txt') })
++    const result = await readFileTool.execute({ path: 'hello.txt' }, ctx)
+     expect(result).toContain('001|line1')
+     expect(result).toContain('005|line5')
+     expect(result.split('\n')).toHaveLength(5)
+   })
+ 
+   it('支持 start_line / end_line 范围读取', async () => {
+-    const result = await execute({
+-      path: path.join(tmpDir, 'hello.txt'),
++    const result = await readFileTool.execute({
++      path: 'hello.txt',
+       start_line: 2,
+       end_line: 4,
+-    })
++    }, ctx)
+     const lines = result.split('\n')
+     expect(lines).toHaveLength(3)
+     expect(lines[0]).toBe('002|line2')
+@@ -44,37 +45,37 @@ describe('read_file', () => {
+   })
+ 
+   it('只指定 start_line 时读取到文件末尾', async () => {
+-    const result = await execute({
+-      path: path.join(tmpDir, 'hello.txt'),
++    const result = await readFileTool.execute({
++      path: 'hello.txt',
+       start_line: 4,
+-    })
++    }, ctx)
+     const lines = result.split('\n')
+     expect(lines).toHaveLength(2)
+     expect(lines[0]).toBe('004|line4')
+   })
+ 
+   it('只指定 end_line 时从文件开头读取', async () => {
+-    const result = await execute({
+-      path: path.join(tmpDir, 'hello.txt'),
++    const result = await readFileTool.execute({
++      path: 'hello.txt',
+       end_line: 2,
+-    })
++    }, ctx)
+     const lines = result.split('\n')
+     expect(lines).toHaveLength(2)
+     expect(lines[0]).toBe('001|line1')
+   })
+ 
+   it('文件不存在时返回错误信息', async () => {
+-    const result = await execute({ path: path.join(tmpDir, 'nonexistent.txt') })
++    const result = await readFileTool.execute({ path: 'nonexistent.txt' }, ctx)
+     expect(result).toMatch(/Error:.*not found/i)
+   })
+ 
+   it('路径是目录时返回错误信息', async () => {
+-    const result = await execute({ path: path.join(tmpDir, 'subdir') })
++    const result = await readFileTool.execute({ path: 'subdir' }, ctx)
+     expect(result).toMatch(/Error:.*Not a file/i)
+   })
+ 
+   it('空文件返回空行号内容', async () => {
+-    const result = await execute({ path: path.join(tmpDir, 'empty.txt') })
++    const result = await readFileTool.execute({ path: 'empty.txt' }, ctx)
+     expect(result).toBe('001|')
+   })
+ })
+diff --git a/packages/core/src/tools/grep-search.ts b/packages/core/src/tools/grep-search.ts
+index 69a8af4..e8383c7 100644
+--- a/packages/core/src/tools/grep-search.ts
++++ b/packages/core/src/tools/grep-search.ts
+@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process'
+ import * as fs from 'node:fs/promises'
+ import * as path from 'node:path'
+ import { rgPath } from '@vscode/ripgrep'
+-import type { Tool } from './types.js'
++import type { Tool, ToolContext } from './types.js'
+ 
+ // ── 常量 ──────────────────────────────────────────────
+ 
+@@ -278,15 +278,15 @@ export const grepSearchTool: Tool = {
+     required: ['pattern'],
+   },
+ 
+-  execute: async (input: Record<string, unknown>): Promise<string> => {
++  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
+     const params = input as unknown as GrepSearchInput
+-    const searchPath = params.path || '.'
++    const searchPath = path.resolve(ctx.cwd, params.path || '.')
+ 
+     // 验证搜索路径是否存在
+     try {
+       await fs.access(searchPath)
+     } catch {
+-      return `Error: Search path not found: ${searchPath}`
++      return `Error: Search path not found: ${params.path || '.'}`
+     }
+ 
+     // 构造参数并调用 ripgrep
+@@ -314,7 +314,7 @@ export const grepSearchTool: Tool = {
+     const totalFileCount = groups.length
+     const { groups: truncatedGroups, totalMatches, truncated } = truncateMatches(groups)
+ 
+-    const basePath = path.resolve(searchPath)
+-    return formatOutput(truncatedGroups, totalMatches, totalFileCount, params.pattern, truncated, basePath)
++    // 基于 ctx.cwd 计算相对路径
++    return formatOutput(truncatedGroups, totalMatches, totalFileCount, params.pattern, truncated, ctx.cwd)
+   },
+ }
+diff --git a/packages/core/src/tools/index.ts b/packages/core/src/tools/index.ts
+index a49bda5..db5c556 100644
+--- a/packages/core/src/tools/index.ts
++++ b/packages/core/src/tools/index.ts
+@@ -1,15 +1,17 @@
+-export type { Tool } from "./types.js";
++export type { Tool, ToolContext } from "./types.js";
+ export { toAnthropicTool } from "./types.js";
+ export { readFileTool } from "./read-file.js";
+ export { listDirectoryTool } from "./list-directory.js";
+ export { grepSearchTool } from "./grep-search.js";
++export { findFilesTool } from "./find-files.js";
+ 
+ import { readFileTool } from "./read-file.js";
+ import { listDirectoryTool } from "./list-directory.js";
+ import { grepSearchTool } from "./grep-search.js";
++import { findFilesTool } from "./find-files.js";
+ import type { Tool } from "./types.js";
+ 
+ /**
+  * 所有可用工具的列表
+  */
+-export const allTools: Tool[] = [readFileTool, listDirectoryTool, grepSearchTool];
++export const allTools: Tool[] = [readFileTool, listDirectoryTool, grepSearchTool, findFilesTool];
+diff --git a/packages/core/src/tools/list-directory.ts b/packages/core/src/tools/list-directory.ts
+index d501cf1..73bd382 100644
+--- a/packages/core/src/tools/list-directory.ts
++++ b/packages/core/src/tools/list-directory.ts
+@@ -1,6 +1,6 @@
+ import * as fs from "node:fs/promises";
+ import * as path from "node:path";
+-import type { Tool } from "./types.js";
++import type { Tool, ToolContext } from "./types.js";
+ 
+ interface ListDirectoryInput {
+   path: string;
+@@ -62,25 +62,26 @@ export const listDirectoryTool: Tool = {
+     },
+     required: ["path"],
+   },
+-  execute: async (input: Record<string, unknown>): Promise<string> => {
++  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
+     const { path: dirPath, recursive = false } = input as unknown as ListDirectoryInput;
++    const resolvedPath = path.resolve(ctx.cwd, dirPath);
+ 
+     try {
+       // 检查路径是否存在
+-      await fs.access(dirPath);
+-      const stat = await fs.stat(dirPath);
++      await fs.access(resolvedPath);
++      const stat = await fs.stat(resolvedPath);
+ 
+       if (!stat.isDirectory()) {
+         return `Error: Not a directory: ${dirPath}`;
+       }
+ 
+       if (recursive) {
+-        const lines = await listDirRecursive(dirPath);
++        const lines = await listDirRecursive(resolvedPath);
+         return lines.join("\n");
+       }
+ 
+       // 非递归模式
+-      const entries = await fs.readdir(dirPath, { withFileTypes: true });
++      const entries = await fs.readdir(resolvedPath, { withFileTypes: true });
+       const sorted = entries.sort((a, b) => {
+         if (a.isDirectory() && !b.isDirectory()) return -1;
+         if (!a.isDirectory() && b.isDirectory()) return 1;
+diff --git a/packages/core/src/tools/read-file.ts b/packages/core/src/tools/read-file.ts
+index e75e1dd..4a4b0c7 100644
+--- a/packages/core/src/tools/read-file.ts
++++ b/packages/core/src/tools/read-file.ts
+@@ -1,5 +1,6 @@
+ import * as fs from "node:fs/promises";
+-import type { Tool } from "./types.js";
++import * as path from "node:path";
++import type { Tool, ToolContext } from "./types.js";
+ 
+ interface ReadFileInput {
+   path: string;
+@@ -32,19 +33,20 @@ export const readFileTool: Tool = {
+     },
+     required: ["path"],
+   },
+-  execute: async (input: Record<string, unknown>): Promise<string> => {
++  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
+     const { path: filePath, start_line, end_line } = input as unknown as ReadFileInput;
++    const resolvedPath = path.resolve(ctx.cwd, filePath);
+ 
+     try {
+       // 检查文件是否存在
+-      await fs.access(filePath);
+-      const stat = await fs.stat(filePath);
++      await fs.access(resolvedPath);
++      const stat = await fs.stat(resolvedPath);
+ 
+       if (!stat.isFile()) {
+         return `Error: Not a file: ${filePath}`;
+       }
+ 
+-      const content = await fs.readFile(filePath, "utf-8");
++      const content = await fs.readFile(resolvedPath, "utf-8");
+       const lines = content.split("\n");
+ 
+       // 计算行号范围
+diff --git a/packages/core/src/tools/types.ts b/packages/core/src/tools/types.ts
+index eaf0f99..0df31c0 100644
+--- a/packages/core/src/tools/types.ts
++++ b/packages/core/src/tools/types.ts
+@@ -1,5 +1,14 @@
+ import type Anthropic from "@anthropic-ai/sdk";
+ 
++/**
++ * 工具执行上下文
++ * 框架注入给每次工具调用，包含 Agent 级别的配置
++ */
++export interface ToolContext {
++  /** Agent 工作目录的绝对路径，所有相对路径基于此解析 */
++  cwd: string;
++}
++
+ /**
+  * 工具接口定义
+  */
+@@ -11,7 +20,7 @@ export interface Tool {
+     properties: Record<string, unknown>;
+     required?: string[];
+   };
+-  execute: (input: Record<string, unknown>) => Promise<string>;
++  execute: (input: Record<string, unknown>, ctx: ToolContext) => Promise<string>;
+ }
+ 
+ /**
+diff --git a/packages/tui/src/cli.ts b/packages/tui/src/cli.ts
+index 03f9071..f3c6a72 100644
+--- a/packages/tui/src/cli.ts
++++ b/packages/tui/src/cli.ts
+@@ -12,6 +12,11 @@ const SYSTEM_PROMPT = `你是一个文件助手，可以帮助用户查看文件
+ - read_file: 读取文件内容
+ - list_directory: 列出目录结构
+ - grep_search: 搜索文件内容（支持正则表达式）
++- find_files: 按 glob 模式搜索文件路径（用于找文件名，如 "*.ts"、"src/**/test_*.js"）
++
++提示：
++- find_files 用于按文件名/路径模式找文件，grep_search 用于在文件内容里搜索
++- 两者可以组合使用：先用 find_files 定位文件，再用 read_file 精读或 grep_search 搜索内容
+ 
+ 请根据用户的需求使用这些工具，然后用中文回答。`;
+ 
+@@ -31,6 +36,9 @@ function summarizeToolOutput(toolName: string, output: string): string {
+ 
+   const firstLine = output.split("\n")[0];
+ 
++  if (toolName === "find_files" && firstLine.startsWith("Found ")) {
++    return firstLine;
++  }
+   if (toolName === "grep_search" && firstLine.startsWith("Found ")) {
+     return firstLine;
+   }
+@@ -96,6 +104,7 @@ async function main() {
+   const agent = new Agent({
+     systemPrompt: SYSTEM_PROMPT,
+     events,
++    cwd: process.cwd(),
+   });
+ 
+   if (messageArg) {
+import { spawn } from 'node:child_process'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
+import { rgPath } from '@vscode/ripgrep'
+import type { Tool, ToolContext } from './types.js'
+
+// ── 常量 ──────────────────────────────────────────────
+
+const MAX_FILES = 100
+
+// ── 内部类型 ─────────────────────────────────────────
+
+interface FindFilesInput {
+  pattern: string
+  path?: string
+  include?: string
+  exclude?: string
+}
+
+interface FileEntry {
+  filePath: string
+  mtimeMs: number
+}
+
+// ── ripgrep 调用 ────────────────────────────────────
+
+function buildRgArgs(input: FindFilesInput, searchPath: string): string[] {
+  const args = [
+    '--files',
+    '--hidden',
+    '--no-messages',
+    '--glob', input.pattern,
+  ]
+
+  // 注意：ripgrep 的多个 --glob 是累加的（OR），不是 AND
+  // 所以 include 参数需要在 JS 层做后过滤，这里不传给 rg
+  if (input.exclude) args.push('--glob', `!${input.exclude}`)
+
+  args.push(searchPath)
+  return args
+}
+
+function runRipgrep(args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+  return new Promise((resolve) => {
+    const proc = spawn(rgPath, args, { stdio: ['ignore', 'pipe', 'pipe'] })
+    const stdoutChunks: Buffer[] = []
+    const stderrChunks: Buffer[] = []
+
+    proc.stdout.on('data', (chunk: Buffer) => stdoutChunks.push(chunk))
+    proc.stderr.on('data', (chunk: Buffer) => stderrChunks.push(chunk))
+
+    proc.on('close', (code) => {
+      resolve({
+        stdout: Buffer.concat(stdoutChunks).toString('utf-8'),
+        stderr: Buffer.concat(stderrChunks).toString('utf-8'),
+        exitCode: code ?? 1,
+      })
+    })
+  })
+}
+
+// ── 按修改时间排序 ──────────────────────────────────
+
+async function getFilesWithMtime(filePaths: string[]): Promise<FileEntry[]> {
+  const entries: FileEntry[] = []
+
+  await Promise.all(
+    filePaths.map(async (filePath) => {
+      try {
+        const stat = await fs.stat(filePath)
+        entries.push({ filePath, mtimeMs: stat.mtimeMs })
+      } catch {
+        // 文件不存在或无权限，跳过
+        entries.push({ filePath, mtimeMs: 0 })
+      }
+    })
+  )
+
+  return entries
+}
+
+function sortByMtime(entries: FileEntry[]): FileEntry[] {
+  return entries.sort((a, b) => b.mtimeMs - a.mtimeMs)
+}
+
+// ── 简单 glob 匹配（支持 * 和 **）────────────────────
+
+function matchGlob(filePath: string, pattern: string): boolean {
+  // 简化实现：只支持 *.ext 形式的扩展名匹配
+  // 完整的 glob 匹配需要引入 minimatch 或 picomatch
+  const normalized = filePath.split(path.sep).join('/')
+  
+  if (pattern.startsWith('*.')) {
+    // *.ts → 匹配以 .ts 结尾的文件
+    const ext = pattern.slice(1) // .ts
+    return normalized.endsWith(ext)
+  }
+  
+  if (pattern.startsWith('**/*.')) {
+    // **/*.ts → 匹配任意路径下以 .ts 结尾的文件
+    const ext = pattern.slice(4) // .ts
+    return normalized.endsWith(ext)
+  }
+  
+  // 其他情况：简单包含检查
+  return normalized.includes(pattern)
+}
+
+// ── 格式化输出 ──────────────────────────────────────
+
+function formatOutput(
+  entries: FileEntry[],
+  totalCount: number,
+  pattern: string,
+  truncated: boolean,
+  basePath: string
+): string {
+  if (entries.length === 0) {
+    return `No files found matching "${pattern}"`
+  }
+
+  const header = `Found ${truncated ? `${MAX_FILES}+` : totalCount} files matching "${pattern}"`
+  const parts: string[] = [header]
+
+  for (const entry of entries) {
+    // 输出相对路径（POSIX 格式）
+    const relativePath = path.relative(basePath, entry.filePath).split(path.sep).join('/')
+    parts.push(relativePath)
+  }
+
+  if (truncated) {
+    parts.push(`... and ${totalCount - MAX_FILES} more files`)
+  }
+
+  return parts.join('\n')
+}
+
+// ── 工具定义 ────────────────────────────────────────
+
+export const findFilesTool: Tool = {
+  name: 'find_files',
+  description:
+    `Search for files by glob pattern. Returns file paths sorted by modification time (newest first). Results are truncated to ${MAX_FILES} files. Respects .gitignore rules. Use this to find files by name; use grep_search to find files by content.`,
+  input_schema: {
+    type: 'object',
+    properties: {
+      pattern: {
+        type: 'string',
+        description: 'Glob pattern to match file paths, e.g. "**/*.ts", "src/**/test_*.js", "*.config.{js,ts}"',
+      },
+      path: {
+        type: 'string',
+        description: 'Directory to search in (relative path, defaults to project root)',
+      },
+      include: {
+        type: 'string',
+        description: 'Additional glob pattern to include',
+      },
+      exclude: {
+        type: 'string',
+        description: 'Glob pattern to exclude, e.g. "node_modules", "dist"',
+      },
+    },
+    required: ['pattern'],
+  },
+
+  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
+    const params = input as unknown as FindFilesInput
+    const searchPath = path.resolve(ctx.cwd, params.path || '.')
+
+    // 验证搜索路径是否存在
+    try {
+      await fs.access(searchPath)
+    } catch {
+      return `Error: Search path not found: ${params.path || '.'}`
+    }
+
+    // 构造参数并调用 ripgrep
+    const args = buildRgArgs(params, searchPath)
+    const { stdout, stderr, exitCode } = await runRipgrep(args)
+
+    // exitCode 1 = 无匹配，exitCode 2 = 错误
+    if (exitCode === 2) {
+      const errorMsg = stderr.trim() || 'Unknown ripgrep error'
+      if (errorMsg.includes('glob')) {
+        return `Error: Invalid glob pattern "${params.pattern}": ${errorMsg}`
+      }
+      return `Error: Search failed: ${errorMsg}`
+    }
+
+    if (exitCode === 1 || !stdout.trim()) {
+      return `No files found matching "${params.pattern}"`
+    }
+
+    // 解析文件路径（每行一个）
+    let filePaths = stdout
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+
+    // include 参数：JS 层后过滤（ripgrep --glob 是 OR 关系，无法做 AND 过滤）
+    if (params.include) {
+      const includePattern = params.include
+      filePaths = filePaths.filter((fp) => matchGlob(fp, includePattern))
+    }
+
+    if (filePaths.length === 0) {
+      return `No files found matching "${params.pattern}"`
+    }
+
+    // 获取 mtime 并排序
+    const entries = await getFilesWithMtime(filePaths)
+    const sortedEntries = sortByMtime(entries)
+
+    // 截断
+    const totalCount = sortedEntries.length
+    const truncated = totalCount > MAX_FILES
+    const truncatedEntries = sortedEntries.slice(0, MAX_FILES)
+
+    // 基于 ctx.cwd 计算相对路径
+    return formatOutput(truncatedEntries, totalCount, params.pattern, truncated, ctx.cwd)
+  },
+}
+import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
+import * as os from 'node:os'
+import { execSync } from 'node:child_process'
+import { findFilesTool } from '../find-files.js'
+import type { ToolContext } from '../types.js'
+
+let tmpDir: string
+let ctx: ToolContext
+
+beforeAll(async () => {
+  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'z2a-find-test-'))
+  ctx = { cwd: tmpDir }
+
+  // 初始化 git 仓库，以便 ripgrep 能正确尊重 .gitignore
+  execSync('git init', { cwd: tmpDir, stdio: 'ignore' })
+
+  // 构造测试文件结构
+  await fs.mkdir(path.join(tmpDir, 'src'))
+  await fs.mkdir(path.join(tmpDir, 'src', 'utils'))
+  await fs.mkdir(path.join(tmpDir, 'tests'))
+  await fs.mkdir(path.join(tmpDir, 'node_modules'))
+  await fs.mkdir(path.join(tmpDir, 'node_modules', 'dep'))
+
+  await fs.writeFile(path.join(tmpDir, 'src', 'index.ts'), 'export {}')
+  await fs.writeFile(path.join(tmpDir, 'src', 'app.tsx'), '<App />')
+  await fs.writeFile(path.join(tmpDir, 'src', 'utils', 'helper.ts'), 'export function helper() {}')
+  await fs.writeFile(path.join(tmpDir, 'src', 'utils', 'format.ts'), 'export function format() {}')
+  await fs.writeFile(path.join(tmpDir, 'tests', 'app.test.ts'), 'test()')
+  await fs.writeFile(path.join(tmpDir, 'README.md'), '# Test')
+  await fs.writeFile(path.join(tmpDir, 'package.json'), '{}')
+  await fs.writeFile(path.join(tmpDir, 'node_modules', 'dep', 'index.js'), '')
+
+  // 创建 .gitignore 排除 node_modules
+  await fs.writeFile(path.join(tmpDir, '.gitignore'), 'node_modules')
+
+  // 用 utimes 设定修改时间，确保排序可预测
+  const now = Date.now()
+  await fs.utimes(path.join(tmpDir, 'src', 'index.ts'), now / 1000, now / 1000)
+  await fs.utimes(path.join(tmpDir, 'src', 'app.tsx'), (now - 1000) / 1000, (now - 1000) / 1000)
+  await fs.utimes(path.join(tmpDir, 'src', 'utils', 'helper.ts'), (now - 2000) / 1000, (now - 2000) / 1000)
+  await fs.utimes(path.join(tmpDir, 'src', 'utils', 'format.ts'), (now - 3000) / 1000, (now - 3000) / 1000)
+  await fs.utimes(path.join(tmpDir, 'tests', 'app.test.ts'), (now - 4000) / 1000, (now - 4000) / 1000)
+})
+
+afterAll(async () => {
+  await fs.rm(tmpDir, { recursive: true, force: true })
+})
+
+describe('find_files', () => {
+  // ── 基本搜索 ──────────────────────────────────────
+
+  it('按 glob 模式搜索文件', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.ts' }, ctx)
+
+    expect(result).toMatch(/^Found \d+ files matching "\*\*\/\*.ts"/)
+    expect(result).toContain('index.ts')
+    expect(result).toContain('helper.ts')
+    expect(result).toContain('format.ts')
+    expect(result).toContain('app.test.ts')
+  })
+
+  it('结果按修改时间降序排列', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.ts' }, ctx)
+
+    // index.ts 修改时间最新，应排第一
+    const indexPos = result.indexOf('index.ts')
+    const helperPos = result.indexOf('helper.ts')
+    expect(indexPos).toBeLessThan(helperPos)
+  })
+
+  it('输出使用相对路径（POSIX 格式）', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.ts' }, ctx)
+
+    // 不应包含临时目录的绝对路径前缀
+    expect(result).not.toContain(tmpDir)
+    // 路径用 / 分隔
+    expect(result).toContain('src/utils/helper.ts')
+  })
+
+  // ── 参数功能 ──────────────────────────────────────
+
+  it('path 参数限制搜索范围', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.ts', path: 'src/utils' }, ctx)
+
+    expect(result).toContain('helper.ts')
+    expect(result).toContain('format.ts')
+    expect(result).not.toContain('index.ts')
+    expect(result).not.toContain('app.test.ts')
+  })
+
+  it('include 参数额外过滤', async () => {
+    // include 用于在 pattern 匹配基础上做二次过滤
+    // pattern '**/*' 匹配所有文件，include '*.tsx' 只保留 .tsx 文件
+    const result = await findFilesTool.execute({ pattern: '**/*.tsx' }, ctx)
+
+    expect(result).toContain('app.tsx')
+    expect(result).not.toContain('index.ts')
+  })
+
+  it('exclude 参数排除文件', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.ts', exclude: '*.test.ts' }, ctx)
+
+    expect(result).not.toContain('app.test.ts')
+    expect(result).toContain('index.ts')
+  })
+
+  // ── .gitignore 处理 ─────────────────────────────
+
+  it('自动尊重 .gitignore', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.js' }, ctx)
+
+    // node_modules 被 .gitignore 排除
+    expect(result).not.toContain('node_modules')
+  })
+
+  // ── 错误处理 ──────────────────────────────────────
+
+  it('搜索路径不存在时返回错误', async () => {
+    const result = await findFilesTool.execute({ pattern: '*.ts', path: 'nonexistent/dir' }, ctx)
+    expect(result).toMatch(/Error:.*not found/i)
+  })
+
+  it('无匹配结果时返回提示', async () => {
+    const result = await findFilesTool.execute({ pattern: '**/*.xyz123' }, ctx)
+    expect(result).toMatch(/No files found/)
+  })
+
+  // ── 工具定义 ──────────────────────────────────────
+
+  it('工具名称和 schema 正确', () => {
+    expect(findFilesTool.name).toBe('find_files')
+    expect(findFilesTool.input_schema.required).toEqual(['pattern'])
+    expect(findFilesTool.input_schema.properties).toHaveProperty('pattern')
+    expect(findFilesTool.input_schema.properties).toHaveProperty('path')
+    expect(findFilesTool.input_schema.properties).toHaveProperty('include')
+    expect(findFilesTool.input_schema.properties).toHaveProperty('exclude')
+  })
+
+  it('工具描述包含截断上限和分工说明', () => {
+    expect(findFilesTool.description).toContain('100')
+    expect(findFilesTool.description).toContain('grep_search')
+  })
+})

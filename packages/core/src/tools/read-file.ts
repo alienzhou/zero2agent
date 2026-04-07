@@ -1,5 +1,6 @@
 import * as fs from "node:fs/promises";
-import type { Tool } from "./types.js";
+import * as path from "node:path";
+import type { Tool, ToolContext } from "./types.js";
 
 interface ReadFileInput {
   path: string;
@@ -32,19 +33,20 @@ export const readFileTool: Tool = {
     },
     required: ["path"],
   },
-  execute: async (input: Record<string, unknown>): Promise<string> => {
+  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
     const { path: filePath, start_line, end_line } = input as unknown as ReadFileInput;
+    const resolvedPath = path.resolve(ctx.cwd, filePath);
 
     try {
       // 检查文件是否存在
-      await fs.access(filePath);
-      const stat = await fs.stat(filePath);
+      await fs.access(resolvedPath);
+      const stat = await fs.stat(resolvedPath);
 
       if (!stat.isFile()) {
         return `Error: Not a file: ${filePath}`;
       }
 
-      const content = await fs.readFile(filePath, "utf-8");
+      const content = await fs.readFile(resolvedPath, "utf-8");
       const lines = content.split("\n");
 
       // 计算行号范围

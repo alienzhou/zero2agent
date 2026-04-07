@@ -40,13 +40,14 @@ E01-S003 要给 Agent 加上「按 glob 模式搜索文件」的能力。底层�
 |------|------|------|--------|------|
 | `pattern` | string | ✅ | — | glob 模式，如 `**/*.ts`、`src/**/test_*.js` |
 | `path` | string | ❌ | `cwd`（工作目录） | 搜索根目录，相对于 Agent 工作目录解析 |
-| `include` | string | ❌ | — | 额外的 glob 包含过滤（传给 rg `--glob`） |
 | `exclude` | string | ❌ | — | 额外的 glob 排除过滤（传给 rg `--glob=!xxx`） |
 
 **对比：**
 - OpenCode 只有 `pattern` + `path`——最简但缺灵活性
 - Gemini CLI 有 5 个参数（含 `case_sensitive`、两个 ignore 控制）——过于复杂
-- 我们取中间路线：`pattern` + `path` + `include` + `exclude`，模型可以组合使用
+- 我们选择简洁路线：`pattern` + `path` + `exclude`
+
+> **2026-03-30 更新**：移除 `include` 参数。原因是 `include` 与 `pattern` 功能重叠——用户可以直接在 `pattern` 中表达包含逻辑（如 `**/*.test.ts`）。保留该参数会导致：(1) ripgrep 多个 `--glob` 是 OR 关系，无法做 AND 过滤，需要 JS 层后处理；(2) JS 后处理需要引入 glob 匹配库或简化实现，增加复杂度和边界 case；(3) 与 `grep_search` 的 `include` 语义不一致（后者用于文件类型过滤，这里用于路径模式匹配）。简化为 3 参数符合「教学项目，简洁优先」的约束。
 
 ### 输出格式
 
@@ -105,7 +106,7 @@ tests/unit/api.test.ts
 |------|-----------------|-------------|
 | **定位** | 目录浏览器 | 项目级文件搜索 |
 | **典型问题** | "这个目录下有什么？" | "项目里所有 `*.test.ts` 在哪？" |
-| **输入** | `path`（目录）、`recursive?` | `pattern`（glob）、`path?`、`include?`、`exclude?` |
+| **输入** | `path`（目录）、`recursive?` | `pattern`（glob）、`path?`、`exclude?` |
 | **输出** | 缩进目录树（`[dir]`/`[file]` 标记） | 扁平路径列表 |
 | **底层** | `fs.readdir` | `rg --files --glob` |
 | **排序** | 字母序（目录在前） | mtime 降序 |

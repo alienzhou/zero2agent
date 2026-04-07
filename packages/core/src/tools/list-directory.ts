@@ -1,6 +1,6 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import type { Tool } from "./types.js";
+import type { Tool, ToolContext } from "./types.js";
 
 interface ListDirectoryInput {
   path: string;
@@ -9,12 +9,16 @@ interface ListDirectoryInput {
 
 /**
  * 递归列出目录内容
+ * @param fsPath 文件系统绝对路径（用于 readdir 等操作）
+ * @param displayBasePath 展示用的基础路径（用于输出相对路径）
+ * @param depth 当前递归深度（用于缩进）
  */
 async function listDirRecursive(
-  dirPath: string,
+  fsPath: string,
+  displayBasePath: string,
   depth: number = 0
 ): Promise<string[]> {
-  const entries = await fs.readdir(dirPath, { withFileTypes: true });
+  const entries = await fs.readdir(fsPath, { withFileTypes: true });
   const results: string[] = [];
 
   // 按名称排序，目录在前
@@ -25,15 +29,16 @@ async function listDirRecursive(
   });
 
   for (const entry of sorted) {
-    const fullPath = path.join(dirPath, entry.name);
+    const entryFsPath = path.join(fsPath, entry.name);
+    const entryDisplayPath = path.join(displayBasePath, entry.name);
     const indent = "  ".repeat(depth);
     const type = entry.isDirectory() ? "[dir]" : "[file]";
-    const displayPath = entry.isDirectory() ? `${fullPath}/` : fullPath;
+    const displayPath = entry.isDirectory() ? `${entryDisplayPath}/` : entryDisplayPath;
 
     results.push(`${indent}${type} ${displayPath}`);
 
     if (entry.isDirectory()) {
-      const subEntries = await listDirRecursive(fullPath, depth + 1);
+      const subEntries = await listDirRecursive(entryFsPath, entryDisplayPath, depth + 1);
       results.push(...subEntries);
     }
   }
@@ -62,25 +67,27 @@ export const listDirectoryTool: Tool = {
     },
     required: ["path"],
   },
-  execute: async (input: Record<string, unknown>): Promise<string> => {
+  execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
     const { path: dirPath, recursive = false } = input as unknown as ListDirectoryInput;
+    const resolvedPath = path.resolve(ctx.cwd, dirPath);
 
     try {
       // 检查路径是否存在
-      await fs.access(dirPath);
-      const stat = await fs.stat(dirPath);
+      await fs.access(resolvedPath);
+      const stat = await fs.stat(resolvedPath);
 
       if (!stat.isDirectory()) {
         return `Error: Not a directory: ${dirPath}`;
       }
 
       if (recursive) {
-        const lines = await listDirRecursive(dirPath);
+        // fsPath 用于文件系统操作，dirPath 用于展示相对路径
+        const lines = await listDirRecursive(resolvedPath, dirPath);
         return lines.join("\n");
       }
 
       // 非递归模式
-      const entries = await fs.readdir(dirPath, { withFileTypes: true });
+      const entries = await fs.readdir(resolvedPath, { withFileTypes: true });
       const sorted = entries.sort((a, b) => {
         if (a.isDirectory() && !b.isDirectory()) return -1;
         if (!a.isDirectory() && b.isDirectory()) return 1;

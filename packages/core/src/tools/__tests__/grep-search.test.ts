@@ -3,16 +3,14 @@ import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import * as os from 'node:os'
 import { grepSearchTool } from '../grep-search.js'
-
-const execute = grepSearchTool.execute
+import type { ToolContext } from '../types.js'
 
 let tmpDir: string
-let originalCwd: string
+let ctx: ToolContext
 
 beforeAll(async () => {
   tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'z2a-grep-test-'))
-  originalCwd = process.cwd()
-  process.chdir(tmpDir)
+  ctx = { cwd: tmpDir }
 
   // 构造测试文件结构
   await fs.mkdir(path.join(tmpDir, 'src'))
@@ -79,7 +77,6 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  process.chdir(originalCwd)
   await fs.rm(tmpDir, { recursive: true, force: true })
 })
 
@@ -87,7 +84,7 @@ describe('grep_search', () => {
   // ── 基本搜索 ──────────────────────────────────────
 
   it('搜索到匹配内容，返回 Gemini CLI 风格输出', async () => {
-    const result = await execute({ pattern: 'helper' })
+    const result = await grepSearchTool.execute({ pattern: 'helper' }, ctx)
 
     expect(result).toMatch(/^Found \d+ matches for "helper" in \d+ files/)
     expect(result).toContain('File:')
@@ -96,7 +93,7 @@ describe('grep_search', () => {
   })
 
   it('搜索结果包含正确的行内容', async () => {
-    const result = await execute({ pattern: 'export function main' })
+    const result = await grepSearchTool.execute({ pattern: 'export function main' }, ctx)
 
     expect(result).toContain('Found 1 matches for "export function main" in 1 files')
     expect(result).toContain('index.ts')
@@ -104,7 +101,7 @@ describe('grep_search', () => {
   })
 
   it('跨多个文件搜索', async () => {
-    const result = await execute({ pattern: 'export function' })
+    const result = await grepSearchTool.execute({ pattern: 'export function' }, ctx)
 
     expect(result).toContain('index.ts')
     expect(result).toContain('helper.ts')
@@ -114,7 +111,7 @@ describe('grep_search', () => {
   // ── 参数功能 ──────────────────────────────────────
 
   it('path 参数限制搜索范围', async () => {
-    const result = await execute({ pattern: 'helper', path: 'src/utils' })
+    const result = await grepSearchTool.execute({ pattern: 'helper', path: 'src/utils' }, ctx)
 
     expect(result).toContain('helper.ts')
     expect(result).not.toContain('index.ts')
@@ -122,21 +119,21 @@ describe('grep_search', () => {
   })
 
   it('include 参数过滤文件类型', async () => {
-    const result = await execute({ pattern: 'helper', include: '*.test.ts' })
+    const result = await grepSearchTool.execute({ pattern: 'helper', include: '*.test.ts' }, ctx)
 
     expect(result).toContain('helper.test.ts')
     expect(result).not.toContain('index.ts')
   })
 
   it('exclude 参数排除文件', async () => {
-    const result = await execute({ pattern: 'helper', exclude: '*.test.ts' })
+    const result = await grepSearchTool.execute({ pattern: 'helper', exclude: '*.test.ts' }, ctx)
 
     expect(result).not.toContain('helper.test.ts')
     expect(result).toContain('helper.ts')
   })
 
   it('context 参数显示上下文行', async () => {
-    const result = await execute({ pattern: 'export function main', context: 1 })
+    const result = await grepSearchTool.execute({ pattern: 'export function main', context: 1 }, ctx)
 
     // 匹配行用 ':'，上下文行用 '-'
     expect(result).toMatch(/L4: export function main/)
@@ -144,7 +141,7 @@ describe('grep_search', () => {
   })
 
   it('context 为 0 时不显示上下文行', async () => {
-    const result = await execute({ pattern: 'export function main', context: 0 })
+    const result = await grepSearchTool.execute({ pattern: 'export function main', context: 0 }, ctx)
 
     expect(result).not.toMatch(/L\d+-/)
   })
@@ -152,7 +149,7 @@ describe('grep_search', () => {
   // ── 排序 ──────────────────────────────────────────
 
   it('结果按文件修改时间降序排列', async () => {
-    const result = await execute({ pattern: 'helper', path: 'src' })
+    const result = await grepSearchTool.execute({ pattern: 'helper', path: 'src' }, ctx)
 
     // index.ts 修改时间最新，应排第一
     const indexPos = result.indexOf('index.ts')
@@ -163,7 +160,7 @@ describe('grep_search', () => {
   // ── 输出格式 ──────────────────────────────────────
 
   it('输出使用相对路径', async () => {
-    const result = await execute({ pattern: 'export function main' })
+    const result = await grepSearchTool.execute({ pattern: 'export function main' }, ctx)
 
     // 不应包含临时目录的绝对路径前缀
     expect(result).not.toContain(tmpDir)
@@ -171,7 +168,7 @@ describe('grep_search', () => {
   })
 
   it('文件块之间用 --- 分隔', async () => {
-    const result = await execute({ pattern: 'export function' })
+    const result = await grepSearchTool.execute({ pattern: 'export function' }, ctx)
     const separators = result.split('\n').filter((l: string) => l === '---')
     // 每个文件块前有一个 ---
     expect(separators.length).toBeGreaterThanOrEqual(3)
@@ -180,7 +177,7 @@ describe('grep_search', () => {
   // ── 正则支持 ──────────────────────────────────────
 
   it('支持正则表达式搜索', async () => {
-    const result = await execute({ pattern: 'function\\s+\\w+\\(' })
+    const result = await grepSearchTool.execute({ pattern: 'function\\s+\\w+\\(' }, ctx)
 
     expect(result).toContain('function main(')
     expect(result).toContain('function helper(')
@@ -189,17 +186,17 @@ describe('grep_search', () => {
   // ── 错误处理 ──────────────────────────────────────
 
   it('搜索路径不存在时返回错误', async () => {
-    const result = await execute({ pattern: 'test', path: 'nonexistent/dir' })
+    const result = await grepSearchTool.execute({ pattern: 'test', path: 'nonexistent/dir' }, ctx)
     expect(result).toMatch(/Error:.*not found/i)
   })
 
   it('无匹配结果时返回提示', async () => {
-    const result = await execute({ pattern: 'xyznonexistent12345' })
+    const result = await grepSearchTool.execute({ pattern: 'xyznonexistent12345' }, ctx)
     expect(result).toBe('No matches found.')
   })
 
   it('无效正则返回友好错误', async () => {
-    const result = await execute({ pattern: '[invalid' })
+    const result = await grepSearchTool.execute({ pattern: '[invalid' }, ctx)
     expect(result).toMatch(/Error:.*regex/i)
   })
 

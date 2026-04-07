@@ -12,6 +12,11 @@ const SYSTEM_PROMPT = `你是一个文件助手，可以帮助用户查看文件
 - read_file: 读取文件内容
 - list_directory: 列出目录结构
 - grep_search: 搜索文件内容（支持正则表达式）
+- find_files: 按 glob 模式搜索文件路径（用于找文件名，如 "*.ts"、"src/**/test_*.js"）
+
+提示：
+- find_files 用于按文件名/路径模式找文件，grep_search 用于在文件内容里搜索
+- 两者可以组合使用：先用 find_files 定位文件，再用 read_file 精读或 grep_search 搜索内容
 
 请根据用户的需求使用这些工具，然后用中文回答。`;
 
@@ -31,6 +36,9 @@ function summarizeToolOutput(toolName: string, output: string): string {
 
   const firstLine = output.split("\n")[0];
 
+  if (toolName === "find_files" && firstLine.startsWith("Found ")) {
+    return firstLine;
+  }
   if (toolName === "grep_search" && firstLine.startsWith("Found ")) {
     return firstLine;
   }
@@ -96,6 +104,7 @@ async function main() {
   const agent = new Agent({
     systemPrompt: SYSTEM_PROMPT,
     events,
+    cwd: process.cwd(),
   });
 
   if (messageArg) {
