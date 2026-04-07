@@ -161,12 +161,13 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E01-S002 内容搜索（grep_search）已完成 — [查看详情](./CHANGELOG.md#e01-s002-grep-search-done)
+**最新更新**：E01-S003 文件搜索（find_files）已完成 — [查看详情](./CHANGELOG.md#e01-s003-file-search-done)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | 基础 Agent 循环 | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | 内容搜索 (grep_search) | Done |
+| [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | 文件搜索 (find_files) | Done |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 
@@ -178,7 +179,13 @@ zero2agent/
 git clone git@github.com:alienzhou/zero2agent.git
 cd zero2agent
 pnpm install && pnpm build
-pnpm --filter @zero2agent/tui start
+
+# 设置 API Key（支持 Anthropic 官方或兼容 API）
+export ANTHROPIC_API_KEY="your-api-key"
+# export ANTHROPIC_BASE_URL="https://api.example.com"  # 可选：代理地址
+
+# 运行 Agent（在项目根目录执行）
+node packages/tui/dist/cli.js "你的提示词"
 ```
 
 环境要求：Node.js >= 22.0.0, pnpm >= 9.0.0
