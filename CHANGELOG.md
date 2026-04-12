@@ -1,6 +1,6 @@
 # Changelog
 
-> 跟着迭代走，逐步理解 Agent 是如何从一个简单循环演化成完整工具的。
+> 跟着迭代走，逐步理解 **Agent Harness** 是如何从一个简单循环演化成完整工具体系的。
 
 [首页](./README.md) | [Roadmap](./docs/roadmap/README.md) | [Epic 1](./specs/E01-read-and-search/README.md)
 
@@ -133,7 +133,7 @@ git checkout main
 
 所属 Epic：[Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | Story 详情：[S001](./specs/E01-read-and-search/S001-react-basic/README.md)
 
-**目标**：实现最基础的 ReACT Agent 循环 + 工具调用
+**目标**：实现最基础的 ReACT Agent Harness 循环 + 工具调用
 
 **你会学到**：
 - 什么是 ReACT 模式（Reasoning + Acting）

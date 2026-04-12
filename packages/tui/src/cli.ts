@@ -6,7 +6,7 @@ import { Agent } from "@zero2agent/core";
 import type { LoopEventHandlers } from "@zero2agent/core";
 import * as readline from "node:readline";
 
-const SYSTEM_PROMPT = `你是一个文件助手，可以帮助用户查看文件和目录内容。
+const SYSTEM_PROMPT = `你是 Zero2Agent 课程配套的一个只读文件 Agent Harness 演示：在宿主进程里驱动模型与工具协作，帮助用户查看文件和目录内容。
 
 你有以下工具可以使用：
 - read_file: 读取文件内容
@@ -120,7 +120,7 @@ async function main() {
   }
 
   // 交互模式
-  console.log("zero2agent - 文件助手");
+  console.log("zero2agent - Agent Harness（只读文件演示）");
   console.log("输入你的问题，输入 exit 退出\n");
 
   const rl = readline.createInterface({

@@ -1,4 +1,4 @@
-# E01-S002：让 Agent 能在内容里定位信息
+# E01-S002：让 Agent Harness 能在内容里定位信息
 
 > 这是 Epic 1 的第二个 Story。目标不是让 Agent "读得更多"，而是让它学会更接近工程师真实工作的方式：先搜索定位，再精读上下文。
 
@@ -257,4 +257,4 @@
 
 ---
 
-上一篇：[E01-S001：让 Agent 跑起最小只读闭环](../S001-react-basic/README.md)
+上一篇：[E01-S001：为 Agent Harness 跑通最小只读闭环](../S001-react-basic/README.md)

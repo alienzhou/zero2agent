@@ -12,7 +12,7 @@
 
 **第一次来？** 往下看「学习地图」建立全局感，然后直接进入 [Epic 1](../../specs/E01-read-and-search/README.md) → [E1-S1](../../specs/E01-read-and-search/S001-react-basic/README.md)，Story 页会告诉你先看什么、再看什么。
 
-**想直接动手？** 跳过本页，从 [E1-S1：让 Agent 跑起最小只读闭环](../../specs/E01-read-and-search/S001-react-basic/README.md) 开始。每个 Story 都是独立的跟练单元。
+**想直接动手？** 跳过本页，从 [E1-S1：为 Agent Harness 跑通最小只读闭环](../../specs/E01-read-and-search/S001-react-basic/README.md) 开始。每个 Story 都是独立的跟练单元。
 
 **回来看最新进展？** 去 [CHANGELOG](../../CHANGELOG.md) 找到最新迭代，顺着链接进入对应 Story。
 
@@ -22,9 +22,9 @@
 
 | Epic | 阶段目标 | 完成后你会得到什么 | 状态 | 入口 |
 |------|----------|--------------------|------|------|
-| Epic 1：能看 / 能查 | 让 Agent 跑起安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | 🚧 In Progress | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
-| Epic 2：能动 / 能改 / 能执行 | 让 Agent 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 📝 Planned | Coming soon |
-| Epic 3：基础能力与产品化 | 让 Agent 从 demo 走向可使用的产品形态 | 理解 TUI、会话、日志、Checkpoint 与安全边界 | 📝 Planned | Coming soon |
+| Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | 🚧 In Progress | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
+| Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 📝 Planned | Coming soon |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解 TUI、会话、日志、Checkpoint 与安全边界 | 📝 Planned | Coming soon |
 | Epic 4：健壮性与上下文管理 | 处理复杂异常与长上下文问题 | 理解异常处理、上下文管理与稳定性优化 | 📝 Planned | Coming soon |
 | Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解 AGENTS、Skills、MCP、Hooks 等扩展能力 | 📝 Planned | Coming soon |
 
@@ -40,12 +40,12 @@
 
 只看 **Epic 页**和 **Story 页**就够了。
 
-Epic 页告诉你一个阶段要解决什么问题、为什么存在；Story 页告诉你一个具体课题的目标、边界、实现轮廓和学习重点。不看代码也能建立起对 Agent 开发过程的整体理解。
+Epic 页告诉你一个阶段要解决什么问题、为什么存在；Story 页告诉你一个具体课题的目标、边界、实现轮廓和学习重点。不看代码也能建立起对 **Agent Harness** 实现过程的整体理解。
 
 - [Epic 1：能看 / 能查](../../specs/E01-read-and-search/README.md)
-- [E1-S1：让 Agent 跑起最小只读闭环](../../specs/E01-read-and-search/S001-react-basic/README.md)
-- [E1-S2：让 Agent 能在内容里定位信息](../../specs/E01-read-and-search/S002-content-search/README.md)
-- [E1-S3：让 Agent 能在项目里找到该看的文件](../../specs/E01-read-and-search/S003-file-search/README.md)
+- [E1-S1：为 Agent Harness 跑通最小只读闭环](../../specs/E01-read-and-search/S001-react-basic/README.md)
+- [E1-S2：让 Agent Harness 能在内容里定位信息](../../specs/E01-read-and-search/S002-content-search/README.md)
+- [E1-S3：让 Agent Harness 能在项目里找到该看的文件](../../specs/E01-read-and-search/S003-file-search/README.md)
 
 ---
 
@@ -114,6 +114,7 @@ git checkout E01-S003-file-search   # 切到 S003 完成状态
 | **Spec** | 设计文档，Specification 的缩写。当前放在 Story 下的 `details/` 目录里，描述一个 Story 要做什么、怎么做、边界在哪 |
 | **Retro** | 复盘笔记，Retrospective 的缩写。记录迭代完成后的反思——什么做对了、什么搞砸了 |
 | **Tag** | Git 标签，标记某个迭代完成时的代码快照。用 `git checkout <tag>` 可以切到那个状态 |
-| **ReAct** | 一种 Agent 运行模式：先推理（Reasoning）再行动（Acting），循环往复直到完成任务 |
+| **ReAct** | Agent Harness 内常见的一种运行模式：先推理（Reasoning）再行动（Acting），循环往复直到完成任务 |
+| **Agent Harness** | 宿主层：把模型、循环（如 ReAct）、工具调用与运行上下文（如 `ToolContext`）组合起来，让 Agent 能稳定执行任务 |
 
 </details>

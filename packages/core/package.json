@@ -1,7 +1,7 @@
 {
   "name": "@zero2agent/core",
   "version": "0.0.0",
-  "description": "Core agent logic for zero2agent",
+  "description": "Agent Harness core (loop, tools, context) for zero2agent",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

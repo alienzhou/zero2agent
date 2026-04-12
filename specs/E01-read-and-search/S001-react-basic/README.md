@@ -1,4 +1,4 @@
-# E01-S001：让 Agent 跑起最小只读闭环
+# E01-S001：为 Agent Harness 跑通最小只读闭环
 
 > 这是 Zero2Agent 的第一个 Story。在动手写代码之前，先理解一个核心问题：Agent 和你熟悉的"对话问答"到底有什么不同。
 
@@ -196,4 +196,4 @@ Agent（回答）：项目有两个入口——CLI 入口是 packages/tui/src/cl
 
 ---
 
-下一篇：[E01-S002：让 Agent 能在内容里定位信息](../S002-content-search/README.md)
+下一篇：[E01-S002：让 Agent Harness 能在内容里定位信息](../S002-content-search/README.md)

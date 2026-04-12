@@ -6,9 +6,9 @@
 
 ## 项目概述
 
-**Zero2Agent** 是一个公开的 AI Agent 开发教学项目，从零构建一个类似 Claude Code / Codex 的 Coding Agent。
+**Zero2Agent** 是一个公开的教学项目，带你从零**实现**类似 Claude Code / Codex 的 Coding Agent 所需的 **Agent Harness**（循环、工具、上下文与宿主能力）。
 
-- **目标用户**：想学习 AI Agent 开发的开发者
+- **目标用户**：想学习如何实现 Agent Harness 的开发者
 - **核心价值**：完整透明的开发过程，包括设计决策、踩坑记录、AI 协作实录
 - **技术栈**：TypeScript, Node.js, pnpm monorepo
 
@@ -19,7 +19,7 @@
 ```
 zero2agent/
 ├── packages/           # 代码
-│   ├── core/           # Agent 核心逻辑
+│   ├── core/           # Agent Harness 核心逻辑
 │   ├── tui/            # CLI 界面
 │   └── shared/         # 共享工具和类型
 ├── specs/              # 设计文档 (每个迭代的 spec)

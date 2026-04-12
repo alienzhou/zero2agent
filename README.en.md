@@ -14,19 +14,19 @@
   <a href="./README.md">中文</a> | <a href="./README.en.md">English</a>
 </p>
 
-<h3 align="center">🚀 Build Production-Grade AI Agents from Scratch, Hands-on</h3>
+<h3 align="center">🚀 Build a Production-Grade Agent Harness from Scratch, Hands-on</h3>
 
 <p align="center">
-  <i>Dive into engineering details, build your first Coding Agent</i>
+  <i>Dive into engineering details, implement your first Agent Harness (Coding Agent–class capabilities)</i>
 </p>
 
 ---
 
 ## 🎯 About
 
-> There's plenty of Agent-related content out there—papers, tutorials, products, open-source projects—but few teach you how to "build a production-grade Agent from scratch." This repository is such a **teaching case project**.
+> There's plenty of Agent-related content out there—papers, tutorials, products, open-source projects—but few teach you how to "implement a production-grade Agent Harness from scratch." This repository is such a **teaching case project**.
 
-- **Starting from the first line of code**, step by step building a production-grade Coding Agent similar to Claude Code / Codex
+- **Starting from the first line of code**, step by step implementing the **Agent Harness** behind a Coding Agent like Claude Code / Codex (loop orchestration, tool use, context, and host integration)
 - **Completely open and transparent**, including requirements analysis, design decisions, pitfalls, and detours
 - **Recording the real process of collaborating with AI**, Vibe Coding / Agentic Engineering will be applied throughout development
 
@@ -36,7 +36,7 @@
 
 | Dimension              | Other Courses                          | Open-Source Products                  | Zero2Agent                                                            |
 | ---------------------- | -------------------------------------- | ------------------------------------- | --------------------------------------------------------------------- |
-| **Engineering Practice** | Concept-focused, demo-level code       | Only final code, no process           | Deep dive into real engineering problems, distilled from actual Agent development experience |
+| **Engineering Practice** | Concept-focused, demo-level code       | Only final code, no process           | Deep dive into real engineering problems, distilled from actual Agent Harness / Agent development experience |
 | **Production-Grade**   | Basic features and cases               | Complete but complex, hard to learn   | Features curated from real products, designed as hands-on material    |
 | **Step-by-Step**       | Chapter-based, large gaps, not detailed | Code changes too complex to follow    | Each iteration can be followed independently, right-sized, progressive |
 
@@ -51,7 +51,7 @@
 If you:
 
 - **Want to get started with LLM application development**, but don't know where to begin
-- **Want to learn AI Agent development**, but find blog posts too abstract and frameworks too black-box
+- **Want to learn how to implement an Agent Harness**, but find blog posts too abstract and frameworks too black-box
 - **Want to see what real AI-assisted development looks like**, not the "done in 10 minutes" marketing stories
 - **Prefer learning by doing**, rather than just reading theory
 
@@ -61,7 +61,7 @@ Then this teaching project is for you.
 
 ## 📦 What You'll Get
 
-### See the Complete/Real AI Agent Building Process
+### See the Complete/Real Agent Harness Building Process
 
 Content distilled from production projects as teaching cases, not purely a Toy Project, but based on real development.
 
@@ -105,9 +105,9 @@ The course content is organized into four layers:
 
 | Epic | Goal | Status |
 | ---- | ---- | ---- |
-| [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Build a safe, explainable minimal read-only loop for the Agent | In Progress |
-| Epic 2: Act / Modify / Execute | Move the Agent from "can inspect" to "can take action" | Planned |
-| Epic 3: Core Capabilities and Productization | Move the Agent from a demo toward a usable product shape | Planned |
+| [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
+| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | Planned |
+| Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | Planned |
 | Epic 4: Robustness and Context Management | Handle failures, long context, and complex runtime situations | Planned |
 | Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
 
@@ -115,7 +115,7 @@ The course content is organized into four layers:
 
 - If this is your first time here, start with the [Course Roadmap Overview](./docs/roadmap/README.md)
   - It gives you the full learning map before you enter a specific Epic or Story
-- If you want to jump straight into the first full example, start from [E1-S1: Bootstrapping the Minimal Read-Only Loop](./specs/E01-read-and-search/S001-react-basic/README.md)
+- If you want to jump straight into the first full example, start from [E1-S1: Bootstrapping the Minimal Read-Only Loop for the Agent Harness](./specs/E01-read-and-search/S001-react-basic/README.md)
   - It first tells you what problem this Story solves; when you want the implementation details, continue into the Story's `details/` docs
 - If you want to see what changed recently, go to [CHANGELOG.md](./CHANGELOG.md)
   - You can then enter the related Epic or Story from the iteration record
@@ -124,15 +124,15 @@ The course content is organized into four layers:
 
 1. [Course Roadmap Overview](./docs/roadmap/README.md)
 2. [Epic 1: Read / Search](./specs/E01-read-and-search/README.md)
-3. [E1-S1: Bootstrapping the Minimal Read-Only Loop](./specs/E01-read-and-search/S001-react-basic/README.md)
+3. [E1-S1: Bootstrapping the Minimal Read-Only Loop for the Agent Harness](./specs/E01-read-and-search/S001-react-basic/README.md)
 
 ---
 
 ## What This Is NOT
 
-This is not an Agent product intended for direct production use, it's more of a "teaching tool."
+This is not an Agent product intended for direct production use—it's more of a "teaching tool" focused on **implementing an Agent Harness**, not shipping a turnkey product.
 
-If you're looking for an out-of-the-box AI Agent, try Claude Code, Cursor, Codex, or projects like Open Code, PI.
+If you're looking for an out-of-the-box Coding Agent or assistant, try Claude Code, Cursor, Codex, or projects like Open Code, PI.
 
 This is a **learning resource**, not a pure tool.
 
@@ -143,7 +143,7 @@ This is a **learning resource**, not a pure tool.
 ```
 zero2agent/
 ├── packages/           # Code
-│   ├── core/           # Agent core logic
+│   ├── core/           # Agent Harness core logic
 │   ├── tui/            # CLI interface
 │   └── shared/         # Shared code
 ├── specs/              # Course entry pages and Story technical docs
@@ -161,7 +161,7 @@ zero2agent/
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
-| [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | Basic Agent Loop | Done |
+| [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | Basic Agent Harness loop | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | Content Search (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | File Search (find_files) | Done |
 

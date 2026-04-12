@@ -14,19 +14,19 @@
   <a href="./README.md">中文</a> | <a href="./README.en.md">English</a>
 </p>
 
-<h3 align="center">🚀 从零开始，构建产品级智能体，边学边练</h3>
+<h3 align="center">🚀 从零开始，实现产品级 Agent Harness，边学边练</h3>
 
 <p align="center">
-  <i>深入工程细节，动手实现你的第一个 Coding Agent</i>
+  <i>深入工程细节，动手实现你的第一个 Agent Harness</i>
 </p>
 
 ---
 
 ## 🎯 项目介绍
 
-> 市面上有很多 Agent 相关的内容——有论文、有教学、有产品、有开源项目——但很少有人教大家"从零开始做一个产品级 Agent"。这个仓库就是这么一个**教学案例项目**。
+> 市面上有很多 Agent 相关的内容——有论文、有教学、有产品、有开源项目——但很少有人教大家"从零开始实现一个产品级 Agent Harness"。这个仓库就是这么一个**教学案例项目**。
 
-- **从第一行代码开始**，一步步构建一个类似 Claude Code / Codex 的产品级 Coding Agent
+- **从第一行代码开始**，一步步实现类似 Claude Code / Codex 的 Coding Agent 所需的 **Agent Harness**（循环调度、工具调用、上下文与宿主能力）
 - **完全公开透明**，包括需求分析、设计决策、踩过的坑、走过的弯路
 - **记录和 AI 协作的真实过程**，Vibe Coding / Agentic Engineering 会应用在开发过程中
 
@@ -36,7 +36,7 @@
 
 | 维度               | 其他课程                    | 开源产品               | Zero2Agent                                    |
 | ------------------ | --------------------------- | ---------------------- | --------------------------------------------- |
-| **工程实践** | 概念讲解为主，代码多为 demo | 只有最终代码，缺少过程 | 深入真实工程问题，基于过往 Agent 开发实际经验沉淀 |
+| **工程实践** | 概念讲解为主，代码多为 demo | 只有最终代码，缺少过程 | 深入真实工程问题，基于过往 Agent Harness / Agent 开发实际经验沉淀 |
 | **产品级**   | 功能与案例问题较基础        | 完整但复杂，难以学习   | 从实际产品中筛选与整理的功能，作为跟练素材    |
 | **小步跟练** | 章节式学习，跨度大，不细致  | 代码与变更庞杂，难跟练 | 每个迭代都可独立跟练，大小适中，循序渐进      |
 
@@ -51,7 +51,7 @@
 如果你：
 
 - **想入门 LLM 应用开发**，但不知道从哪开始
-- **想学习 AI Agent 开发**，但看别人的博客太抽象、看框架又太黑盒
+- **想学习如何实现 Agent Harness**，但看别人的博客太抽象、看框架又太黑盒
 - **想了解真实的 AI 辅助开发是什么样的**，而不是营销文里那种"10 分钟搞定"
 - **喜欢通过实战学习**，而不是只看理论
 
@@ -61,7 +61,7 @@
 
 ## 📦 你能获得什么
 
-### 看到完整/真实的 AI Agent 构建过程
+### 看到完整/真实的 Agent Harness 构建过程
 
 从生产项目中总结出来的内容，作为教学案例，不是完全的 Toy Project，而是基于真实的开发。
 
@@ -109,9 +109,9 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 
 | Epic | 目标 | 状态 |
 | ---- | ---- | ---- |
-| [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 让 Agent 跑起安全、可解释的最小只读闭环 | In Progress |
-| Epic 2：能动 / 能改 / 能执行 | 让 Agent 从“会看”走向“能动手做事” | Planned |
-| Epic 3：基础能力与产品化 | 让 Agent 从 demo 走向可使用的产品形态 | Planned |
+| [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | In Progress |
+| Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | Planned |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | Planned |
 | Epic 4：健壮性与上下文管理 | 处理异常、长上下文和复杂运行情况 | Planned |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
 
@@ -119,7 +119,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 
 - 如果你是第一次了解这个项目，先看 [课程 Roadmap 总览](./docs/roadmap/README.md)
   - 先建立完整学习地图，再进入具体 Epic 和 Story
-- 如果你想直接开始第一个完整样例，可以从 [E1-S1：让 Agent 跑起最小只读闭环](./specs/E01-read-and-search/S001-react-basic/README.md) 开始
+- 如果你想直接开始第一个完整样例，可以从 [E1-S1：为 Agent Harness 跑通最小只读闭环](./specs/E01-read-and-search/S001-react-basic/README.md) 开始
   - 这里会先告诉你这次要解决什么；想继续深入时，再进入 Story 下的 `details/` 看设计文档
 - 如果你想先看最近做了什么，去看 [CHANGELOG.md](./CHANGELOG.md)
   - 可以顺着迭代记录，再进入对应的 Epic 或 Story
@@ -128,15 +128,15 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 
 1. [课程 Roadmap 总览](./docs/roadmap/README.md)
 2. [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md)
-3. [E1-S1：让 Agent 跑起最小只读闭环](./specs/E01-read-and-search/S001-react-basic/README.md)
+3. [E1-S1：为 Agent Harness 跑通最小只读闭环](./specs/E01-read-and-search/S001-react-basic/README.md)
 
 ---
 
 ## 这不是什么
 
-这不是一个希望让你直接用于生产的 Agent 产品，更多还是作为“教具"。
+这不是一个希望让你直接用于生产的 Agent 产品，更多还是作为“教具"——教的是如何实现 **Agent Harness**，而不是给你一个现成产品。
 
-如果你想找一个开箱即用的 AI Agent，去试试 Claude Code、Cursor、Codex 这些产品，或者 Open Code、PI 这些项目。
+如果你想找一个开箱即用的 Coding Agent 或助手产品，去试试 Claude Code、Cursor、Codex 这些产品，或者 Open Code、PI 这些项目。
 
 这里是**学习资源**，不是纯粹的工具。
 
@@ -147,7 +147,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 ```
 zero2agent/
 ├── packages/           # 代码
-│   ├── core/           # Agent 核心逻辑
+│   ├── core/           # Agent Harness 核心逻辑
 │   ├── tui/            # CLI 界面
 │   └── shared/         # 共享代码
 ├── specs/              # 课程入口 + Story 技术文档
@@ -165,7 +165,7 @@ zero2agent/
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
-| [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | 基础 Agent 循环 | Done |
+| [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | 基础 Agent Harness 循环 | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | 内容搜索 (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | 文件搜索 (find_files) | Done |
 
@@ -184,7 +184,7 @@ pnpm install && pnpm build
 export ANTHROPIC_API_KEY="your-api-key"
 # export ANTHROPIC_BASE_URL="https://api.example.com"  # 可选：代理地址
 
-# 运行 Agent（在项目根目录执行）
+# 运行 CLI 演示（Agent Harness，在项目根目录执行）
 node packages/tui/dist/cli.js "你的提示词"
 ```
 

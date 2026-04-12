@@ -57,7 +57,7 @@ specs/
 | 层级 | 名称 | 状态 | 入口 |
 |------|------|------|------|
 | Epic | [E01：能看 / 能查](./E01-read-and-search/README.md) | 🚧 进行中 | 阶段导览 |
-| Story | [E01-S001：让 Agent 跑起最小只读闭环](./E01-read-and-search/S001-react-basic/README.md) | ✅ 已完成 | Story 入口 + `details/` + `deep-dive/` |
+| Story | [E01-S001：为 Agent Harness 跑通最小只读闭环](./E01-read-and-search/S001-react-basic/README.md) | ✅ 已完成 | Story 入口 + `details/` + `deep-dive/` |
 
 ---
 

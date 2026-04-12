@@ -1,7 +1,7 @@
 {
   "name": "@zero2agent/tui",
   "version": "0.0.0",
-  "description": "Terminal UI / CLI for zero2agent",
+  "description": "Terminal UI / CLI for the zero2agent Agent Harness",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

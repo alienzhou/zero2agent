@@ -1,6 +1,6 @@
-# E01-S003：让 Agent 能在项目里找到该看的文件
+# E01-S003：让 Agent Harness 能在项目里找到该看的文件
 
-> 这是 Epic 1 的第三个 Story。目标是让 Agent 从"逐个试文件"进化为"按模式精准定位文件"，同时补上工具体系缺失的工作目录基础设施。
+> 这是 Epic 1 的第三个 Story。目标是让 Agent Harness 从"逐个试文件"进化为"按模式精准定位文件"，同时补上工具体系缺失的工作目录基础设施。
 
 [Epic 1：能看 / 能查](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md#e01-s003-file-search-done)
 
@@ -220,4 +220,4 @@
 
 ---
 
-上一篇：[E01-S002：让 Agent 能在内容里定位信息](../S002-content-search/README.md)
+上一篇：[E01-S002：让 Agent Harness 能在内容里定位信息](../S002-content-search/README.md)
