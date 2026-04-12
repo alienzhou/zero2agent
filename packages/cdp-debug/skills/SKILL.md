@@ -1,6 +1,7 @@
 ---
 
 ## name: cdp-debug-node
+
 description: >
   Programmatic Node.js debugging via CDP using the cdp-debug HTTP server and CLI.
   Use when debugging a Node project with breakpoints, call stacks, and scope variables;
@@ -33,6 +34,7 @@ description: >
 4. **向用户展示计划**——将以上分析、假设、断点计划一起告知用户，等用户确认后再启动调试。
 
 > 输出格式示例：
+>
 > ```
 > 📋 调试计划
 >
@@ -57,8 +59,8 @@ description: >
 用户确认后：
 
 1. 启动调试会话：
-   - `cdp-debug start <entry> --brk`（用 `--brk` 在第一行暂停，确保有时间设断点），或
-   - `cdp-debug connect`（目标已用 `--inspect` 启动时）。
+  - `cdp-debug start <entry> --brk`（用 `--brk` 在第一行暂停，确保有时间设断点），或
+  - `cdp-debug connect`（目标已用 `--inspect` 启动时）。
 2. 按断点计划一次性设好所有断点：`cdp-debug bp set file:line`
 3. 设好后 `cdp-debug resume`（从 `--brk` 暂停中放行）。
 4. **明确要求用户操作**——告诉用户需要做什么来触发问题（例如："请在浏览器中点击提交按钮"），然后等待用户回复 `done`。
@@ -71,9 +73,9 @@ description: >
 
 1. `cdp-debug status` — 确认是否命中断点（`paused: true`）。
 2. 若已暂停：
-   - `cdp-debug stack` — 查看调用栈
-   - `cdp-debug vars` — 查看作用域变量
-   - `cdp-debug eval "<expr>"` — 对特定表达式求值
+  - `cdp-debug stack` — 查看调用栈
+  - `cdp-debug vars` — 查看作用域变量
+  - `cdp-debug eval "<expr>"` — 对特定表达式求值
 3. 若未暂停：说明断点未命中，分析原因（路径不对？条件未满足？），调整断点计划。
 
 ### Phase 4: 分析 → 决策
@@ -82,11 +84,11 @@ description: >
 
 1. **将证据与假设对照**：哪个假设被证实？哪个被排除？
 2. **决策分支**：
-   - **根因已确认** → 向用户报告根因、证据、修复建议，然后 `cdp-debug stop` 结束。
-   - **当前假设被排除** → 更新假设列表，给出新的断点计划，向用户说明推理过程。
-   - **需要更多数据** → 在当前暂停状态下用 `eval` 补充信息，或添加新断点后 `resume`。
+  - **根因已确认** → 向用户报告根因、证据、修复建议，然后 `cdp-debug stop` 结束。
+  - **当前假设被排除** → 更新假设列表，给出新的断点计划，向用户说明推理过程。
+  - **需要更多数据** → 在当前暂停状态下用 `eval` 补充信息，或添加新断点后 `resume`。
 3. 如果需要继续，**回到 Phase 3**：
-   - 添加/调整断点 → `cdp-debug resume` → 要求用户再次复现 → 等 `done` → 收集证据。
+  - 添加/调整断点 → `cdp-debug resume` → 要求用户再次复现 → 等 `done` → 收集证据。
 
 > **关键约束：每次 `resume` 后都必须等用户反馈，不要连续 `resume` → `status` → `resume` 盲目循环。**
 
@@ -126,21 +128,23 @@ description: >
 
 ## CLI 速查
 
+
 | 命令                                   | 说明                                                   |
 | ------------------------------------ | ---------------------------------------------------- |
 | `cdp-debug start <entry> [extra...]` | `--inspect` 启动目标 + HTTP Server + 写 `.cdp-debug.json` |
-| `cdp-debug start <entry> --brk`      | 同上，但在第一行暂停（推荐，确保有时间设断点）                            |
+| `cdp-debug start <entry> --brk`      | 同上，但在第一行暂停（推荐，确保有时间设断点）                              |
 | `cdp-debug connect`                  | 仅连接已有 `--inspect` 进程（不 spawn）                        |
 | `cdp-debug status`                   | 连接/暂停状态                                              |
 | `cdp-debug bp set file:line`         | 设断点（`file:line` 最后一段为 1-based 行号）                    |
 | `cdp-debug bp list`                  | 列出断点                                                 |
 | `cdp-debug bp remove <id>`           | 按 id 删除                                              |
 | `cdp-debug resume` / `pause`         | 继续 / 暂停                                              |
-| `cdp-debug wait [--timeout ms]`      | 阻塞等待直到命中断点（默认 10s 超时）                               |
+| `cdp-debug wait [--timeout ms]`      | 阻塞等待直到命中断点（默认 10s 超时）                                |
 | `cdp-debug vars [--depth n]`         | 当前作用域变量（需已暂停）                                        |
 | `cdp-debug stack`                    | 调用栈                                                  |
-| `cdp-debug eval "<expr>"`            | 在当前栈帧上下文中求值（暂停时为局部作用域）                              |
+| `cdp-debug eval "<expr>"`            | 在当前栈帧上下文中求值（暂停时为局部作用域）                               |
 | `cdp-debug stop`                     | 结束会话                                                 |
+
 
 公共选项：`--cwd <dir>`（默认当前目录，session 文件写在 `<dir>/.cdp-debug.json`）。
 
@@ -164,12 +168,14 @@ CLI 走 `http://127.0.0.1:<serverPort>`：
 
 ## 对话约定
 
-| 用户回复              | Agent 行为                               |
-| ------------------- | ---------------------------------------- |
-| `done`              | 用户已完成复现操作，Agent 开始收集断点数据    |
-| `confirmed` / `ok`  | 用户确认调试计划，Agent 启动会话             |
-| `stop` / `exit`     | 结束调试，执行 `cdp-debug stop`             |
-| `skip`              | 跳过当前假设，Agent 切换到下一个假设          |
+
+| 用户回复               | Agent 行为                 |
+| ------------------ | ------------------------ |
+| `done`             | 用户已完成复现操作，Agent 开始收集断点数据 |
+| `confirmed` / `ok` | 用户确认调试计划，Agent 启动会话      |
+| `stop` / `exit`    | 结束调试，执行 `cdp-debug stop` |
+| `skip`             | 跳过当前假设，Agent 切换到下一个假设    |
+
 
 ## 约束
 
