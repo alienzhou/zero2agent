@@ -25,6 +25,7 @@
   "exclude": ["node_modules", "dist", "packages", "examples"],
   "references": [
     { "path": "./packages/shared" },
+    { "path": "./packages/cdp-debug" },
     { "path": "./packages/core" },
     { "path": "./packages/tui" }
   ]

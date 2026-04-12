@@ -39,6 +39,8 @@ export default tseslint.config(
       '**/*.js',
       '**/*.mjs',
       '!eslint.config.js',
+      'packages/**/vitest.config.ts',
+      'packages/**/__tests__/**',
     ],
   }
 )

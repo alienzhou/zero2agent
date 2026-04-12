@@ -1,0 +1,32 @@
+{
+  "name": "@zero2agent/cdp-debug",
+  "version": "0.0.0",
+  "description": "CDP-based Node.js debugger with HTTP server and CLI for AI agents",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "cdp-debug": "dist/cli/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "chrome-remote-interface": "^0.33.3",
+    "commander": "^13.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.0"
+  }
+}
