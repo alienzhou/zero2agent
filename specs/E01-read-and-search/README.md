@@ -32,7 +32,7 @@
 |-------|--------|------|
 | [S001：跑通最小只读闭环](./S001-react-basic/README.md) | 搭建 ReAct 循环，接入 `read_file` / `list_directory` 两个只读工具 | ✅ Done |
 | [S002：在内容里搜索定位](./S002-content-search/README.md) | 引入内容搜索能力（grep），让 Agent 能在文本中找到目标 | ✅ Done |
-| [S003：在文件集合里定位目标](./S003-file-search/README.md) | 引入文件搜索能力（glob）+ ToolContext 基础设施，让 Agent 更快找到该看的文件 | 🚧 In Progress |
+| [S003：在文件集合里定位目标](./S003-file-search/README.md) | 引入文件搜索能力（glob）+ ToolContext 基础设施，让 Agent 更快找到该看的文件 | ✅ Done |
 | S004：固定 Prompt 结构 | 工具和循环都跑通后，回头整理 Prompt 的组织方式 | 📝 Planned |
 
 ---

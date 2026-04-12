@@ -3,6 +3,7 @@ import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import { rgPath } from '@vscode/ripgrep'
 import type { Tool, ToolContext } from './types.js'
+import { Buffer } from 'node:buffer'
 
 // ── 常量 ──────────────────────────────────────────────
 
@@ -163,7 +164,7 @@ export const findFilesTool: Tool = {
     }
 
     // 解析文件路径（每行一个）
-    let filePaths = stdout
+    const filePaths = stdout
       .split('\n')
       .map((line) => line.trim())
       .filter((line) => line.length > 0)
