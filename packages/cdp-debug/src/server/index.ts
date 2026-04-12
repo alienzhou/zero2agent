@@ -19,6 +19,8 @@ export interface StartServerOptions {
   entryArgs?: string[]
   /** connect 模式：不 spawn 子进程 */
   connectOnly: boolean
+  /** 使用 --inspect-brk（在脚本第一行暂停），默认 false */
+  inspectBrk?: boolean
 }
 
 /**
@@ -71,9 +73,12 @@ export async function startDebugServer(options: StartServerOptions): Promise<Run
     if (!options.entry) {
       throw new Error('entry is required when connectOnly is false')
     }
+    const inspectFlag = options.inspectBrk
+      ? `--inspect-brk=${options.inspectPort}`
+      : `--inspect=${options.inspectPort}`
     child = spawn(
       process.execPath,
-      [`--inspect=${options.inspectPort}`, options.entry, ...(options.entryArgs ?? [])],
+      [inspectFlag, options.entry, ...(options.entryArgs ?? [])],
       {
         cwd: options.cwd,
         stdio: 'inherit',

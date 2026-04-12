@@ -92,6 +92,13 @@ export async function handleRoute(
       return true
     }
 
+    if (req.method === 'POST' && pathname === '/wait-for-pause') {
+      const timeoutMs = Number(url.searchParams.get('timeout') ?? '10000')
+      const hit = await ctx.cdp.waitForPause(timeoutMs)
+      json(res, 200, { paused: hit, reason: ctx.cdp.lastPauseState?.reason })
+      return true
+    }
+
     if (req.method === 'POST' && pathname === '/pause') {
       await ctx.cdp.pause()
       json(res, 200, { ok: true })

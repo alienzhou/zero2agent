@@ -1,15 +1,15 @@
 ---
-name: cdp-debug-node
+
+## name: cdp-debug-node
 description: >
   Programmatic Node.js debugging via CDP using the cdp-debug HTTP server and CLI.
   Use when debugging a Node project with breakpoints, call stacks, and scope variables;
   when the user mentions CDP, Chrome DevTools Protocol, --inspect, breakpoints, or
   wants an AI agent to drive a debugger like VS Code.
----
 
 # CDP Debug（Node.js）— AI Agent 使用说明
 
-本 Skill 配合 monorepo 包 `@zero2agent/cdp-debug`：常驻 **HTTP Server** 持有 **CDP WebSocket**，CLI 通过 **`.cdp-debug.json`** 找到 Server 端口，从而在无状态下反复调用调试能力。
+本 Skill 配合 monorepo 包 `@zero2agent/cdp-debug`：常驻 **HTTP Server** 持有 **CDP WebSocket**，CLI 通过 `**.cdp-debug.json`** 找到 Server 端口，从而在无状态下反复调用调试能力。
 
 ## 前置
 
@@ -30,19 +30,21 @@ description: >
 
 ## CLI 速查
 
-| 命令 | 说明 |
-|------|------|
+
+| 命令                                   | 说明                                                   |
+| ------------------------------------ | ---------------------------------------------------- |
 | `cdp-debug start <entry> [extra...]` | `--inspect` 启动目标 + HTTP Server + 写 `.cdp-debug.json` |
-| `cdp-debug connect` | 仅连接已有 `--inspect` 进程（不 spawn） |
-| `cdp-debug status` | 连接/暂停状态 |
-| `cdp-debug bp set file:line` | 设断点（`file:line` 最后一段为行号） |
-| `cdp-debug bp list` | 列出断点 |
-| `cdp-debug bp remove <id>` | 按 id 删除 |
-| `cdp-debug resume` / `pause` | 继续 / 暂停 |
-| `cdp-debug vars [--depth n]` | 当前作用域变量（需已暂停） |
-| `cdp-debug stack` | 调用栈 |
-| `cdp-debug eval "<expr>"` | 表达式求值 |
-| `cdp-debug stop` | 结束会话 |
+| `cdp-debug connect`                  | 仅连接已有 `--inspect` 进程（不 spawn）                        |
+| `cdp-debug status`                   | 连接/暂停状态                                              |
+| `cdp-debug bp set file:line`         | 设断点（`file:line` 最后一段为行号）                             |
+| `cdp-debug bp list`                  | 列出断点                                                 |
+| `cdp-debug bp remove <id>`           | 按 id 删除                                              |
+| `cdp-debug resume` / `pause`         | 继续 / 暂停                                              |
+| `cdp-debug vars [--depth n]`         | 当前作用域变量（需已暂停）                                        |
+| `cdp-debug stack`                    | 调用栈                                                  |
+| `cdp-debug eval "<expr>"`            | 表达式求值                                                |
+| `cdp-debug stop`                     | 结束会话                                                 |
+
 
 公共选项：`--cwd <dir>`（默认当前目录，session 文件写在 `<dir>/.cdp-debug.json`）。
 
@@ -65,10 +67,12 @@ CLI 走 `http://127.0.0.1:<serverPort>`：
 
 ## 对话约定
 
-| 用户回复 | 含义 |
-|----------|------|
-| `done` | 已按步骤复现 / 已触发断点相关路径 |
+
+| 用户回复            | 含义                       |
+| --------------- | ------------------------ |
+| `done`          | 已按步骤复现 / 已触发断点相关路径       |
 | `stop` / `exit` | 结束调试并执行 `cdp-debug stop` |
+
 
 ## 约束
 
@@ -82,3 +86,4 @@ CLI 走 `http://127.0.0.1:<serverPort>`：
 ```bash
 ln -sf /path/to/packages/cdp-debug/skills /path/to/project/.cursor/skills/cdp-debug
 ```
+

@@ -21,11 +21,12 @@ program
   .option('--cwd <dir>', 'Project root (session file + path resolve)', process.cwd())
   .option('--inspect-port <n>', 'Node inspector port', (v) => Number(v), 9229)
   .option('--server-port <n>', 'HTTP API port', (v) => Number(v), 7492)
+  .option('--brk', 'Use --inspect-brk (pause on first line)', false)
   .action(
     async (
       entry: string,
       extra: string[],
-      opts: { cwd: string; inspectPort: number; serverPort: number }
+      opts: { cwd: string; inspectPort: number; serverPort: number; brk: boolean }
     ) => {
       const entryArgs = extra ?? []
       const { shutdown } = await startDebugServer({
@@ -35,6 +36,7 @@ program
         entry,
         entryArgs,
         connectOnly: false,
+        inspectBrk: opts.brk,
       })
       const onStop = async (): Promise<void> => {
         await shutdown().catch(() => {})
@@ -208,6 +210,16 @@ program
   .option('--cwd <dir>', 'Project root', process.cwd())
   .action(async (expression: string, opts: { cwd: string }) => {
     const data = await apiRequest(opts.cwd, 'POST', '/evaluate', { expression })
+    printJson(data)
+  })
+
+program
+  .command('wait')
+  .description('Block until target pauses at a breakpoint')
+  .option('--cwd <dir>', 'Project root', process.cwd())
+  .option('--timeout <ms>', 'Max wait time in ms', (v) => Number(v), 10000)
+  .action(async (opts: { cwd: string; timeout: number }) => {
+    const data = await apiRequest(opts.cwd, 'POST', `/wait-for-pause?timeout=${opts.timeout}`)
     printJson(data)
   })
 

@@ -13,6 +13,14 @@ declare module 'chrome-remote-interface' {
     close(): Promise<void>
     Debugger: {
       enable(): Promise<void>
+      evaluateOnCallFrame(params: {
+        callFrameId: string
+        expression: string
+        returnByValue?: boolean
+      }): Promise<{
+        result: { type: string; value?: unknown; description?: string; objectId?: string }
+        exceptionDetails?: unknown
+      }>
       setBreakpointByUrl(params: {
         lineNumber: number
         url?: string
@@ -34,6 +42,7 @@ declare module 'chrome-remote-interface' {
     }
     Runtime: {
       enable(): Promise<void>
+      runIfWaitingForDebugger(): Promise<void>
       getProperties(params: {
         objectId: string
         ownProperties?: boolean
@@ -57,10 +66,14 @@ declare module 'chrome-remote-interface' {
   }
 
   interface CdpCallFrame {
+    callFrameId: string
     functionName: string
     url: string
-    lineNumber: number
-    columnNumber: number
+    location: {
+      scriptId: string
+      lineNumber: number
+      columnNumber: number
+    }
     scopeChain: Array<{
       type: string
       object: { objectId: string }

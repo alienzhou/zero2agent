@@ -11,10 +11,10 @@ import type {
 export interface CdpPausedState {
   reason: string
   callFrames: Array<{
+    callFrameId: string
     functionName: string
     url: string
-    lineNumber: number
-    columnNumber: number
+    location: { scriptId: string; lineNumber: number; columnNumber: number }
     scopeChain: Array<{
       type: string
       object: { objectId: string }
@@ -79,6 +79,25 @@ export class CdpDebugClient {
 
     await Debugger.enable()
     await Runtime.enable()
+
+    // --inspect-brk：Node 在等 runIfWaitingForDebugger 后才开始执行
+    // 调用后 Node 立即命中第一行的断点，触发 Debugger.paused
+    await Runtime.runIfWaitingForDebugger()
+
+    // 让事件循环处理可能到达的 Debugger.paused 事件
+    await new Promise((r) => setTimeout(r, 200))
+  }
+
+  /**
+   * 等待直到命中断点暂停（轮询），超时返回 false
+   */
+  async waitForPause(timeoutMs = 10000): Promise<boolean> {
+    const start = Date.now()
+    while (Date.now() - start < timeoutMs) {
+      if (this.paused) return true
+      await new Promise((r) => setTimeout(r, 100))
+    }
+    return false
   }
 
   async disconnect(): Promise<void> {
@@ -135,8 +154,10 @@ export class CdpDebugClient {
     if (!this.client) {
       throw new Error('CDP not connected')
     }
+    if (!this.paused) {
+      return
+    }
     await this.client.Debugger.resume()
-    // 部分 Node 版本不触发 resumed 事件，乐观更新状态
     this.paused = false
   }
 
@@ -153,8 +174,8 @@ export class CdpDebugClient {
       index,
       functionName: f.functionName || '(anonymous)',
       url: f.url,
-      lineNumber: f.lineNumber + 1,
-      columnNumber: f.columnNumber,
+      lineNumber: f.location.lineNumber + 1,
+      columnNumber: f.location.columnNumber,
     }))
   }
 
@@ -209,16 +230,34 @@ export class CdpDebugClient {
     return out
   }
 
+  /**
+   * 求值：暂停时在当前栈帧上下文执行，否则在全局执行
+   */
   async evaluate(expression: string): Promise<string> {
     if (!this.client) {
       throw new Error('CDP not connected')
     }
-    const { Runtime } = this.client
-    const r = await Runtime.evaluate({
-      expression,
-      awaitPromise: true,
-      returnByValue: true,
-    })
+
+    let r: {
+      result: { type: string; value?: unknown; description?: string; objectId?: string }
+      exceptionDetails?: unknown
+    }
+
+    if (this.paused && this.lastPaused?.callFrames.length) {
+      const frameId = this.lastPaused.callFrames[0].callFrameId
+      r = await this.client.Debugger.evaluateOnCallFrame({
+        callFrameId: frameId,
+        expression,
+        returnByValue: true,
+      })
+    } else {
+      r = await this.client.Runtime.evaluate({
+        expression,
+        awaitPromise: true,
+        returnByValue: true,
+      })
+    }
+
     if (r.exceptionDetails) {
       throw new Error(`Evaluate failed: ${JSON.stringify(r.exceptionDetails)}`)
     }
