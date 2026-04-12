@@ -76,3 +76,9 @@ discussions:
     notes:
     - name: presentation-draft.md
       mtime: 1773640409.868825
+  2026-04-07/e2e-testing-strategy:
+    outline:
+      mtime: 1775999095.3767798
+      change_count: 1
+    decisions: []
+    notes: []

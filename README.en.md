@@ -157,12 +157,13 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: E01-S002 Content Search (grep_search) is done — [see details](./CHANGELOG.md#e01-s002-grep-search-done)
+**Latest update**: E01-S003 File Search (find_files) is done — [see details](./CHANGELOG.md#e01-s003-file-search-done)
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | Basic Agent Loop | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | Content Search (grep_search) | Done |
+| [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | File Search (find_files) | Done |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

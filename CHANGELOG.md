@@ -16,18 +16,22 @@
 # 查看所有迭代
 git tag -l "E*" "S*"
 
-# 切换到某个迭代
+# 切换到某个迭代（示例）
 git checkout E01-S001-react-basic
+git checkout E01-S002-grep-search
+git checkout E01-S003-file-search
 
 # 回到最新
 git checkout main
 ```
 
+若本地尚未列出某个 Tag，可用 `main` 最新提交对照下方迭代小节；Tag 与提交历史的整理以仓库实际为准。
+
 ### 学习建议
 
 1. **设计文档先行** - 先看 `specs/E0x-epic-slug/S0xx-story-slug/README.md`，再按需进入 `details/`，理解目标
 2. **代码对照** - 边看设计边看代码
-3. **复盘收尾** - 看 `retros/E0x-S00x-name.md`，学习经验教训
+3. **复盘收尾** - 看 `retros/README.md` 与各 Story 对应的 `E0x-S0xx-<slug>.md`（正文陆续补充）
 4. **动手实践** - Fork 后自己改代码
 
 ### 每个迭代的完整资料
@@ -36,7 +40,7 @@ git checkout main
 |------|------|------|
 | 设计文档 | `specs/E0x-epic-slug/S0xx-story-slug/README.md` + `details/` | Story 入口与技术细节 |
 | 代码 | `packages/` | 实际实现 |
-| 复盘笔记 | `retros/E0x-S00x-name.md` | 反思和经验 |
+| 复盘笔记 | `retros/`（见 `retros/README.md`） | 反思和经验 |
 | 讨论记录 | `.discuss/` | 需求讨论过程 |
 | VibeCoding | `.vibecoding/E0x/S00x/` | AI 协作对话记录 |
 
@@ -140,7 +144,7 @@ git checkout main
 **关键文件**：
 - `specs/E01-read-and-search/S001-react-basic/` - 设计文档
 - `packages/core/src/` - 核心实现
-- `retros/E01-S001-react-basic.md` - 复盘笔记（迭代完成后）
+- `retros/` - 复盘笔记（规划路径见 `retros/README.md`，正文陆续补充）
 
 **学习要点**：
 1. Agent 不是一次性调用 LLM，而是循环

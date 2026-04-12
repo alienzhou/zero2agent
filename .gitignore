@@ -36,6 +36,7 @@ tmp/
 temp/
 
 .agentlens/
+.obsidian/
 
 # Benchmark results (regenerated each run)
 benchmarks/results/

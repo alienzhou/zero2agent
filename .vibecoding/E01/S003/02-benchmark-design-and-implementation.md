@@ -132,7 +132,7 @@ Review 发现的问题：
 - P1: `node-fs-glob.mjs` 缺 `dot` 选项（遍历文件集不公平）
 - P1: S-P04 Node pattern 缺 `\b` 词边界
 
-同时在 S003 Spec 的 `deep-dive/` 目录创建了 `03-benchmark-driven-tech-selection.md`，叙事线：
+同时在 S003 Spec 的 `deep-dive/` 目录创建了 `01-benchmark-driven-tech-selection.md`，叙事线：
 
 1. 为什么定性分析不够 → 引出 benchmark 价值
 2. 完整路径（讨论 → 实现 → 运行 → 解读）→ 展开每步的 AI 协作方式
