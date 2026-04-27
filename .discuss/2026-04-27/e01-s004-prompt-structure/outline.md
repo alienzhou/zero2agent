@@ -156,7 +156,10 @@
 
 ### 调研报告（已完成）
 
-详见 `researches/prompt-structure/`：codex / gemini-cli / opencode / pi 四份报告，commit `95b1743`。
+详见 `researches/prompt-structure/`：
+
+- 首轮四家：codex / gemini-cli / opencode / pi（commit `95b1743`）
+- 补充：**Aider**（Python / `aider.md`，commit `f46f6c1`）、**Claude Code** 内网 sourcemap 场景的方法说明（`claude-code.md`，无源码引用；背景见子任务 ALI-13）
 
 ### 现有代码
 
