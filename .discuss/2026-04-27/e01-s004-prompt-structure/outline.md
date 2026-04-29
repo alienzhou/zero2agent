@@ -8,7 +8,7 @@
 
 ## 🔵 Current Focus
 
-本轮确认 **Mode 与 System Prompt 的关系**：mode-specific 内容属于 System Prompt Fragment/Profile，但不进入 Default System 常驻段；S004 只预留这个扩展点，未来再实现具体模式。
+本轮做 **进入 Spec 前的收敛检查**：区分已经确认的决策、仍需拍板的阻塞项、以及已经进入 backlog 的非阻塞项。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
@@ -21,6 +21,8 @@ System 设计框架：`notes/system-prompt-design-framework.md`
 Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 
 13 点覆盖矩阵：`notes/original-question-coverage.md`
+
+收敛检查点：`notes/remaining-decisions-checkpoint.md`
 
 ## ⚪ Pending（待用户决策）
 
@@ -69,6 +71,9 @@ Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 | D07 | Runtime Context 放在 System 末尾，还是 User Task 中 | 待讨论 | 用户建议放在 User Task，避免污染 System |
 | D08 | User 与 Task 是否在 S004 合并为 User Task | 待讨论 | 用户建议 User Task 等同于 User Message |
 | D09 | mode-specific 内容以 System Prompt Fragment/Profile 表达，但不进入 Default System | ✅ 已确认 | S004 只预留扩展点，不实现具体模式 |
+| D10 | System 固定为 5 个静态 section | 待讨论 | Role / Scope / Tool Policy / Workflow / Output |
+| D11 | S004 只预留 skills 位置，不实现 skills 加载 | 待讨论 | skills 属于 Instruction / Skills layer |
+| D12 | Prompt builder 的代码归属 | 待讨论 | 倾向 core 拥有 builder，TUI 只传 User Task |
 
 ## ✅ Confirmed
 
