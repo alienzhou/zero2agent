@@ -8,11 +8,24 @@
 
 ## 🔵 Current Focus
 
-本轮讨论从「5 个候选决策」升级为「Prompt Structure 的问题体系」：先把用户提出的 13 个交叉问题归并为 8 个问题域，再决定 zero2agent 的产品边界与实现节奏。
+本轮讨论进一步收敛：完整设计范围应覆盖 **System / Instruction / User / Task / Tool / Response** 六类消息与上下文，而不是只讨论 system prompt。推进方式改为「完整地图先建立、每轮只深入一层」。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
+消息层级地图：`notes/message-layer-map.md`
+
 ## ⚪ Pending（待用户决策）
+
+### 消息层级（本轮收敛）
+
+| 层级 | 解决的问题 | 当前状态 |
+|------|------------|----------|
+| System | Agent 长期身份、能力边界、全局行为约束 | 下一轮优先讨论 |
+| Instruction | 项目/用户/组织级指令，含 AGENTS.md、skills、配置 | 待讨论 |
+| User | 用户原始输入及其保真策略 | 待讨论 |
+| Task | 从 user message 中抽出的可执行任务、模式、计划入口 | 待讨论 |
+| Tool | 工具 schema、工具调用策略、tool response、失败 hint | 待讨论 |
+| Response | 最终回答的格式、语言、引用、摘要策略 | 待讨论 |
 
 ### 问题体系（本轮新增）
 
