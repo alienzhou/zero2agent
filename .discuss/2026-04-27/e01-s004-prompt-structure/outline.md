@@ -8,7 +8,7 @@
 
 ## 🔵 Current Focus
 
-本轮进入 **覆盖完整性检查与扩展位设计**：在 System Section 顺序基础上，检查最初 13 个问题是否都已纳入，并为尚未实现的模式、skills、自定义、压缩/review/debug 等能力预留位置。
+本轮 уточ清 **Mode 与 System Prompt 的关系**：调研显示很多产品的 mode 确实会落成 system prompt / system fragment / prompt profile，但它们通常不是 default System 的常驻内容，而是在 mode 激活时 replace / append / switch。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
@@ -68,6 +68,7 @@ Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 | D05 | 是否实现 `customPrompt` 整段替换的逃生口 | **C：本次不做，写进 04-backlog** | YAGNI；当前没有需求驱动 |
 | D07 | Runtime Context 放在 System 末尾，还是 User Task 中 | 待讨论 | 用户建议放在 User Task，避免污染 System |
 | D08 | User 与 Task 是否在 S004 合并为 User Task | 待讨论 | 用户建议 User Task 等同于 User Message |
+| D09 | mode-specific 内容是否以 System Prompt Fragment/Profile 表达 | 待讨论 | 竞品多如此，但不进入 default System 常驻段 |
 
 ## ✅ Confirmed
 
