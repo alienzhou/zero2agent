@@ -2,23 +2,9 @@
 /**
  * zero2agent CLI 入口
  */
-import { Agent } from "@zero2agent/core";
+import { Agent, buildSystemPrompt } from "@zero2agent/core";
 import type { LoopEventHandlers } from "@zero2agent/core";
 import * as readline from "node:readline";
-
-const SYSTEM_PROMPT = `你是 Zero2Agent 课程配套的一个只读文件 Agent Harness 演示：在宿主进程里驱动模型与工具协作，帮助用户查看文件和目录内容。
-
-你有以下工具可以使用：
-- read_file: 读取文件内容
-- list_directory: 列出目录结构
-- grep_search: 搜索文件内容（支持正则表达式）
-- find_files: 按 glob 模式搜索文件路径（用于找文件名，如 "*.ts"、"src/**/test_*.js"）
-
-提示：
-- find_files 用于按文件名/路径模式找文件，grep_search 用于在文件内容里搜索
-- 两者可以组合使用：先用 find_files 定位文件，再用 read_file 精读或 grep_search 搜索内容
-
-请根据用户的需求使用这些工具，然后用中文回答。`;
 
 // ── ANSI 样式 ──────────────────────────────────────
 
@@ -102,7 +88,7 @@ async function main() {
   }
 
   const agent = new Agent({
-    systemPrompt: SYSTEM_PROMPT,
+    systemPrompt: buildSystemPrompt(),
     events,
     cwd: process.cwd(),
   });
