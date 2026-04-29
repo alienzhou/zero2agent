@@ -22,7 +22,7 @@ System Prompt 设计不要只看「应该写哪些段」，还要同时看两张
 | Tool Policy | 如何选择和组合工具？ | 列工具说明 / 只写工具策略 / 完全依赖 schema | system 写工具策略，schema 写工具说明 |
 | Workflow | 面对任务时默认怎么推进？ | 先搜索后阅读 / 先计划 / 先复现 / 先审查 | 先定位文件，再精读，再中文回答 |
 | Output Contract | 最终回答怎么写？ | 语言 / 文件引用 / 简洁度 / 是否总结过程 | 中文、简洁、必要时引用路径 |
-| Runtime Context | 哪些运行时事实要给模型？ | cwd / date / platform / git / repo root | 先考虑 cwd + date，放末尾 |
+| Runtime Context | 哪些运行时事实要给模型？ | cwd / date / platform / git / repo root | 放入 UserTaskContext，不进 Default System |
 | Safety / Boundaries | 哪些行为禁止或需要谨慎？ | 不编辑 / 不执行危险命令 / 不泄露 secrets | 当前强调只读边界即可 |
 | Extensibility | 未来如何接入 mode / instruction / skills？ | options / section registry / template | 先用 options 预留，不实现加载 |
 
@@ -30,7 +30,7 @@ System Prompt 设计不要只看「应该写哪些段」，还要同时看两张
 
 ## 3. System Section Map（建议顺序）
 
-结合竞品 Section 顺序对照与用户建议，System Prompt 更适合先固定为 **5 段静态内容**，Runtime Context 单独作为 D07 讨论，不默认归入 System。
+结合竞品 Section 顺序对照与用户建议，System Prompt 先固定为 **5 段静态内容**。Runtime Context 已确认放入 UserTaskContext，不默认归入 System。
 
 | 顺序 | Section | 作用 | 静态/动态 | S004 是否实现 |
 |------|---------|------|-----------|--------------|
@@ -39,7 +39,7 @@ System Prompt 设计不要只看「应该写哪些段」，还要同时看两张
 | 3 | Tool Policy | 说明工具组合策略，不重复参数说明 | 静态为主 | ✅ |
 | 4 | Workflow | 说明默认工作流：定位 → 阅读 → 回答 | 静态 | ✅ |
 | 5 | Output Contract | 说明回答语言、简洁度、路径引用 | 静态 | ✅ |
-| ? | Runtime Context | cwd / date / platform / git 等易变事实 | 动态 | ⚪ D07 待拍板 |
+| - | Runtime Context | cwd / date / platform / git 等易变事实 | 动态 | ✅ 放入 UserTaskContext |
 
 Runtime Context 的候选位置：
 
@@ -49,7 +49,9 @@ Runtime Context 的候选位置：
 | B | 独立 dynamic system/env 段 | OpenCode / Claude Code |
 | C | User Task context | 用户建议；可保持 System 更静态 |
 
-当前更值得认真考虑 **C：User Task context**，因为 S004 早期 User Task 基本等同于 User Message，cwd/date 这类动态事实跟本轮任务绑定更自然，也不会污染静态 System。
+已确认采用 **C：UserTaskContext**，因为 S004 早期 UserTask 基本等同于 UserMessage，cwd/date 这类动态事实跟本轮任务绑定更自然，也不会污染静态 System。
+
+UserTaskContext 的具体格式见 `notes/user-task-context-format.md`。当前推荐采用 XML-like tags，因为它比 Markdown section 更能清晰分隔机器注入上下文和用户原文。
 
 ## 4. 什么不应该放进 System
 
@@ -81,7 +83,7 @@ type BuildSystemPromptOptions = {
 };
 ```
 
-现阶段可以更简单：不做太抽象的用户配置，只在 core 内部提供固定 builder。Runtime Context 是否进入该 options 取决于 D07；如果采用 User Task context，则不放入 `BuildSystemPromptOptions`。
+现阶段可以更简单：不做太抽象的用户配置，只在 core 内部提供固定 builder。Runtime Context 不放入 `BuildSystemPromptOptions`，而是进入未来的 `buildUserTaskMessage()` / UserTaskContext 构造。
 
 ## 6. 面向其它层的同一套检查表
 
@@ -117,6 +119,6 @@ System 的设计维度可以推广到其它消息层，但每层问法不同：
 
 ## 8. 下一轮建议讨论的问题
 
-1. 上面的 5 段静态 System Section 顺序是否合理？
-2. Tool Policy 是否只写组合策略，不列完整工具说明？
-3. Runtime Context 是否放入 User Task context，而不是 System？
+1. UserTaskContext 是否采用 XML-like tags 作为标准格式？
+2. S004 是否需要同步实现 `buildUserTaskMessage()`，还是只在 spec 中固定格式？
+3. Tool response hint 是否进入 S005/S006 backlog，还是独立成一个后续 story？

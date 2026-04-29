@@ -2,13 +2,13 @@
 
 > 讨论始于 2026-04-27，目标是把当前 `cli.ts` 里的 21 行内联 SYSTEM_PROMPT 重构成可演化、可组合、可解释的结构化 prompt。
 >
-> 调研已在前置步骤完成：`researches/prompt-structure/{codex,gemini-cli,opencode,pi}.md`。
+> 调研已在前置步骤完成：`researches/prompt-structure/{codex,gemini-cli,opencode,pi,aider,claude-code}.md`。
 
 ---
 
 ## 🔵 Current Focus
 
-本轮做 **进入 Spec 前的收敛检查**：区分已经确认的决策、仍需拍板的阻塞项、以及已经进入 backlog 的非阻塞项。
+本轮把进入 Spec 前的阻塞项沉淀为决策：确认 Default System section 顺序、Tool 策略、Runtime Context 归属、UserTask/UserMessage 关系、Prompt builder 归属、System message 类型预留；同时把 UserTaskContext 的具体格式作为下一步设计点。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
@@ -24,16 +24,18 @@ Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 
 收敛检查点：`notes/remaining-decisions-checkpoint.md`
 
+UserTaskContext 格式设计：`notes/user-task-context-format.md`
+
 ## ⚪ Pending（待用户决策）
 
 ### 消息层级（本轮收敛）
 
 | 层级 | 解决的问题 | 当前状态 |
 |------|------------|----------|
-| System | Agent 长期身份、能力边界、全局行为约束 | 🔵 当前讨论：Section 顺序 |
+| System | Agent 长期身份、能力边界、全局行为约束 | ✅ 已确认：Default System 5 段顺序 |
 | Instruction | 项目/用户/组织级指令，含 AGENTS.md、skills、配置 | ✅ 已确认：S004 只预留位置和优先级，不实现加载 |
-| User Task | 用户原始输入及当前任务上下文；早期设计中 User Message 与 Task 等价 | 🔵 当前讨论：Runtime Context 是否放这里 |
-| Tool | 工具 schema、工具调用策略、tool response、失败 hint | 待讨论 |
+| User Task | 用户原始输入及当前任务上下文；早期设计中 UserMessage 与 UserTask 等价 | ✅ 已确认：Runtime Context 放入 UserTaskContext；格式待确认 |
+| Tool | 工具 schema、工具调用策略、tool response、失败 hint | ✅ 已确认：工具描述走 schema，System 写 Tool Policy；tool response hint 入 backlog |
 | Response | 最终回答的格式、语言、引用、摘要策略 | 待讨论 |
 
 ### 问题体系（本轮新增）
@@ -66,14 +68,17 @@ Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 | D01 | Prompt 存储形态：内联字符串 / `.md` 文件 / TS 段渲染 / 单函数 + Options | **D：单函数 + Options（pi-mono 风格）** | 教学项目优先可读，避免 over-engineering |
 | D02 | 工具描述放哪：prompt 内 / tool schema 内 / 两者并存 | **B：仅 schema，prompt 只写"工具组合提示"** | 消除当前 SYSTEM_PROMPT 与 tool schema description 的重复 |
 | D03 | System message 是 `string` 还是 `string[]` | **A：当前继续用 `string`，但给 host 抽象 `system: string \| string[]` 入口** | 为未来的多段 cache / plan 模式预留口子，但不立刻拆 |
-| D04 | 是否在 prompt 里注入运行时上下文（cwd / date / platform / git） | **B：注入 cwd + date 两项，放 prompt 末尾** | 与 pi-mono 保持一致；放末尾对 prompt cache 命中影响最小 |
+| D04 | 是否在 prompt 里注入运行时上下文（cwd / date / platform / git） | ✅ 已被 D12 修正 | Runtime Context 放入 UserTaskContext，不放 Default System 末尾 |
 | D05 | 是否实现 `customPrompt` 整段替换的逃生口 | **C：本次不做，写进 04-backlog** | YAGNI；当前没有需求驱动 |
-| D07 | Runtime Context 放在 System 末尾，还是 User Task 中 | 待讨论 | 用户建议放在 User Task，避免污染 System |
-| D08 | User 与 Task 是否在 S004 合并为 User Task | 待讨论 | 用户建议 User Task 等同于 User Message |
+| D07 | Runtime Context 放在 System 末尾，还是 User Task 中 | ✅ 已归并到 D12 | Runtime Context 放入 UserTaskContext |
+| D08 | User 与 Task 是否在 S004 合并为 User Task | ✅ 已归并到 D13 | UserTask 等同于 UserMessage |
 | D09 | mode-specific 内容以 System Prompt Fragment/Profile 表达，但不进入 Default System | ✅ 已确认 | S004 只预留扩展点，不实现具体模式 |
-| D10 | System 固定为 5 个静态 section | 待讨论 | Role / Scope / Tool Policy / Workflow / Output |
-| D11 | S004 只预留 skills 位置，不实现 skills 加载 | 待讨论 | skills 属于 Instruction / Skills layer |
-| D12 | Prompt builder 的代码归属 | 待讨论 | 倾向 core 拥有 builder，TUI 只传 User Task |
+| D10 | Default System 固定为 5 个静态 section | ✅ 已确认 | Role / Scope / Tool Policy / Workflow / Output |
+| D11 | Tool 描述策略：schema 写完整 description，Default System 只写 Tool Policy | ✅ 已确认 | 不重复工具说明 |
+| D12 | Runtime Context 放入 UserTaskContext，而不是 Default System | ✅ 已确认 | 具体格式另行设计 |
+| D13 | S004 阶段 UserTask = UserMessage，但可包含独立 Task Context section | ✅ 已确认 | 不做 task extraction |
+| D14 | Prompt builder 归属 core，TUI 只传 UserTask | ✅ 已确认 | Runtime Context 可由 core 与外部输入共同提供 |
+| D15 | S004 实现仍返回 string，设计预留 SystemFragment/string[] | ✅ 已确认 | 后续 mode/cache 再扩展 |
 
 ## ✅ Confirmed
 
@@ -81,6 +86,12 @@ Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 |------|------|------|
 | D06 | Instruction / AGENTS.md：S004 只定义优先级和位置，不实现加载 | `decisions/D06-instruction-position-without-loading.md` |
 | D09 | Mode-specific 内容属于 System Prompt Fragment/Profile，但不进入 Default System | `decisions/D09-mode-system-fragment.md` |
+| D10 | Default System 固定为 5 个静态 section | `decisions/D10-default-system-section-order.md` |
+| D11 | Tool 描述策略：schema 写完整 description，Default System 只写 Tool Policy | `decisions/D11-tool-description-strategy.md` |
+| D12 | Runtime Context 放入 UserTaskContext | `decisions/D12-runtime-context-in-user-task.md` |
+| D13 | S004 阶段 UserTask = UserMessage | `decisions/D13-user-task-equals-user-message.md` |
+| D14 | Prompt builder 归属 core | `decisions/D14-prompt-builder-owned-by-core.md` |
+| D15 | S004 返回 string，预留 SystemFragment/string[] | `decisions/D15-system-string-with-fragment-reservation.md` |
 
 ## ❌ Rejected
 
