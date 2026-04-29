@@ -15,6 +15,10 @@ export type { LLMConfig } from "./llm/index.js";
 export { allTools, readFileTool, listDirectoryTool, toAnthropicTool } from "./tools/index.js";
 export type { Tool } from "./tools/index.js";
 
+// Prompt 构建
+export { buildSystemPrompt, buildUserTaskMessage } from "./prompt/index.js";
+export type { SystemPromptOptions, UserTaskOptions } from "./prompt/index.js";
+
 // ReACT 循环
 export { runLoop } from "./loop.js";
 export type { RunLoopOptions, LoopEventHandlers } from "./loop.js";
