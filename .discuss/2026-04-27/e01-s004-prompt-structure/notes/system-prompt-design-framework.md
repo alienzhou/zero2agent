@@ -78,14 +78,10 @@ type BuildSystemPromptOptions = {
   toolPolicy: string[];
   workflow: string[];
   outputContract: string[];
-  runtimeContext?: {
-    cwd?: string;
-    date?: string;
-  };
 };
 ```
 
-现阶段可以更简单：不做太抽象的用户配置，只在 core 内部提供固定 builder。
+现阶段可以更简单：不做太抽象的用户配置，只在 core 内部提供固定 builder。Runtime Context 是否进入该 options 取决于 D07；如果采用 User Task context，则不放入 `BuildSystemPromptOptions`。
 
 ## 6. 面向其它层的同一套检查表
 

@@ -8,7 +8,7 @@
 
 ## 🔵 Current Focus
 
-本轮进入 **System Section 顺序对照与 User Task 边界**：先从六份调研报告中提取各家 section 顺序，再讨论 zero2agent 的 System 顺序，以及 Runtime Context 是否应放入 User Task。
+本轮进入 **覆盖完整性检查与扩展位设计**：在 System Section 顺序基础上，检查最初 13 个问题是否都已纳入，并为尚未实现的模式、skills、自定义、压缩/review/debug 等能力预留位置。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
@@ -17,6 +17,10 @@
 System 设计框架：`notes/system-prompt-design-framework.md`
 
 竞品 Section 顺序对照：`notes/system-section-order-research.md`
+
+Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
+
+13 点覆盖矩阵：`notes/original-question-coverage.md`
 
 ## ⚪ Pending（待用户决策）
 
@@ -42,6 +46,16 @@ System 设计框架：`notes/system-prompt-design-framework.md`
 | P06 | Mode / Scenario 扩展 | plan / debug / review / context compression / 普通 agent | 区分 S004 必做与未来模式扩展 |
 | P07 | Customization / Skills / Subagents | 自定义 prompt、自代理配置、skills、subagents | 定义扩展点，不在 S004 一次做完 |
 | P08 | Code Ownership 与文件结构 | core / TUI / 配置文件归属、文件结构 | 确定 prompt builder 应归属 core 还是 TUI |
+
+### 尚未实现但必须预留的位置
+
+| 能力 | 所属层级 | S004 处理方式 |
+|------|----------|--------------|
+| plan / debug / review / compact / promotion 等模式 | Task Mode | 只定义 mode extension point，不实现具体模式 |
+| skills | Instruction / Skills layer | 只定义位置与候选注入方式，不实现加载 |
+| 自定义 agent / subagent prompt | Instruction / Customization | 只定义 `append/replace` 的未来方向 |
+| prompt cache | Prompt 生命周期 | 只把静态/动态边界写清楚，不实现 cache |
+| tool response hint | Tool | 只记录为未来工具输出契约，不改现有工具 |
 
 ### 旧版 5 个设计决策（待映射到问题体系）
 
