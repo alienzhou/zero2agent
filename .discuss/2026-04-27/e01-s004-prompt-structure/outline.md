@@ -8,11 +8,13 @@
 
 ## 🔵 Current Focus
 
-本轮讨论进一步收敛：完整设计范围应覆盖 **System / Instruction / User / Task / Tool / Response** 六类消息与上下文，而不是只讨论 system prompt。推进方式改为「完整地图先建立、每轮只深入一层」。
+本轮进入 **System Prompt 设计框架**：在完整覆盖 **System / Instruction / User / Task / Tool / Response** 六类消息层的前提下，先为 System 层设计一套可复用的维度表/地图，再逐层推进。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
 消息层级地图：`notes/message-layer-map.md`
+
+System 设计框架：`notes/system-prompt-design-framework.md`
 
 ## ⚪ Pending（待用户决策）
 
@@ -20,8 +22,8 @@
 
 | 层级 | 解决的问题 | 当前状态 |
 |------|------------|----------|
-| System | Agent 长期身份、能力边界、全局行为约束 | 下一轮优先讨论 |
-| Instruction | 项目/用户/组织级指令，含 AGENTS.md、skills、配置 | 待讨论 |
+| System | Agent 长期身份、能力边界、全局行为约束 | 🔵 当前讨论 |
+| Instruction | 项目/用户/组织级指令，含 AGENTS.md、skills、配置 | ✅ 已确认：S004 只预留位置和优先级，不实现加载 |
 | User | 用户原始输入及其保真策略 | 待讨论 |
 | Task | 从 user message 中抽出的可执行任务、模式、计划入口 | 待讨论 |
 | Tool | 工具 schema、工具调用策略、tool response、失败 hint | 待讨论 |
@@ -52,7 +54,9 @@
 
 ## ✅ Confirmed
 
-（暂无；等待 D01-D05 决策）
+| 编号 | 决策 | 文档 |
+|------|------|------|
+| D06 | Instruction / AGENTS.md：S004 只定义优先级和位置，不实现加载 | `decisions/D06-instruction-position-without-loading.md` |
 
 ## ❌ Rejected
 
