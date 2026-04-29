@@ -8,9 +8,26 @@
 
 ## 🔵 Current Focus
 
-5 个核心设计决策都还在 Pending，等用户拍板后写决策文档进入 Spec 阶段。
+本轮讨论从「5 个候选决策」升级为「Prompt Structure 的问题体系」：先把用户提出的 13 个交叉问题归并为 8 个问题域，再决定 zero2agent 的产品边界与实现节奏。
+
+参考笔记：`notes/prompt-structure-problem-system.md`
 
 ## ⚪ Pending（待用户决策）
+
+### 问题体系（本轮新增）
+
+| 编号 | 问题域 | 覆盖用户提出的问题 | 当前讨论目标 |
+|------|--------|------------------|--------------|
+| P01 | Prompt 资产与生命周期 | 多模型差异、存储形态、运行时加载/编译期生成、prompt cache | 确定 prompt 是「静态资产」还是「运行时可组合产物」 |
+| P02 | Message Channel 设计 | system / user / tool response / instruction 独立通道 | 确定哪些信息属于 system，哪些应作为 task/user/tool feedback |
+| P03 | Section 架构与顺序 | 分段、工具装配、环境信息、整体结构与顺序约定 | 定义最小稳定 section 顺序 |
+| P04 | Tool Surface 与工具描述 | 工具描述如何注入 prompt、schema、工具失败后的 hint | 消除 prompt 与 tool schema 双写，同时保留模型可用性 |
+| P05 | Runtime Context 与项目指令 | cwd / platform / git / AGENTS.md / 用户指令 Instruction | 定义动态上下文如何注入、优先级与作用域 |
+| P06 | Mode / Scenario 扩展 | plan / debug / review / context compression / 普通 agent | 区分 S004 必做与未来模式扩展 |
+| P07 | Customization / Skills / Subagents | 自定义 prompt、自代理配置、skills、subagents | 定义扩展点，不在 S004 一次做完 |
+| P08 | Code Ownership 与文件结构 | core / TUI / 配置文件归属、文件结构 | 确定 prompt builder 应归属 core 还是 TUI |
+
+### 旧版 5 个设计决策（待映射到问题体系）
 
 | 编号 | 主题 | Atlas 推荐 | 备注 |
 |------|------|-----------|------|
