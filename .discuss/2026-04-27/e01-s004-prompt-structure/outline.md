@@ -8,7 +8,7 @@
 
 ## 🔵 Current Focus
 
-本轮 уточ清 **Mode 与 System Prompt 的关系**：调研显示很多产品的 mode 确实会落成 system prompt / system fragment / prompt profile，但它们通常不是 default System 的常驻内容，而是在 mode 激活时 replace / append / switch。
+本轮确认 **Mode 与 System Prompt 的关系**：mode-specific 内容属于 System Prompt Fragment/Profile，但不进入 Default System 常驻段；S004 只预留这个扩展点，未来再实现具体模式。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
@@ -68,13 +68,14 @@ Modes / Skills 扩展位：`notes/modes-and-skills-extension-map.md`
 | D05 | 是否实现 `customPrompt` 整段替换的逃生口 | **C：本次不做，写进 04-backlog** | YAGNI；当前没有需求驱动 |
 | D07 | Runtime Context 放在 System 末尾，还是 User Task 中 | 待讨论 | 用户建议放在 User Task，避免污染 System |
 | D08 | User 与 Task 是否在 S004 合并为 User Task | 待讨论 | 用户建议 User Task 等同于 User Message |
-| D09 | mode-specific 内容是否以 System Prompt Fragment/Profile 表达 | 待讨论 | 竞品多如此，但不进入 default System 常驻段 |
+| D09 | mode-specific 内容以 System Prompt Fragment/Profile 表达，但不进入 Default System | ✅ 已确认 | S004 只预留扩展点，不实现具体模式 |
 
 ## ✅ Confirmed
 
 | 编号 | 决策 | 文档 |
 |------|------|------|
 | D06 | Instruction / AGENTS.md：S004 只定义优先级和位置，不实现加载 | `decisions/D06-instruction-position-without-loading.md` |
+| D09 | Mode-specific 内容属于 System Prompt Fragment/Profile，但不进入 Default System | `decisions/D09-mode-system-fragment.md` |
 
 ## ❌ Rejected
 

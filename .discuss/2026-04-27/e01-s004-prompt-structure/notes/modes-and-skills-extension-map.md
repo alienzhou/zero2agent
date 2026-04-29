@@ -117,8 +117,10 @@ type MessageAssemblyInput = {
 S004 的设计文档应该明确：
 
 1. **Default System 不包含 mode-specific 内容**。
-2. **Mode-specific 内容可以是 System Prompt Fragment/Profile，但只在 mode 激活时 append/replace/switch**。
+2. **Mode-specific 内容属于 System Prompt Fragment/Profile，但只在 mode 激活时 append/replace/switch**。
 3. **Skills 是 Instruction 层的动态子类，不是 System 常量**。
 4. **自定义 prompt 需要 future API 支持 replace / append，但当前不实现**。
 
 这可以防止一个常见问题：为了“预留未来能力”，把未来所有模式和 skills 都提前塞进默认 system prompt，导致默认 agent 变重、变混乱。
+
+其中第 1、2 点已沉淀为 D09：S004 只预留 Mode System Fragment/Profile，不实现具体模式。
