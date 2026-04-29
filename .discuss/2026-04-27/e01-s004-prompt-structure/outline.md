@@ -8,7 +8,7 @@
 
 ## 🔵 Current Focus
 
-本轮进入 **System Prompt 设计框架**：在完整覆盖 **System / Instruction / User / Task / Tool / Response** 六类消息层的前提下，先为 System 层设计一套可复用的维度表/地图，再逐层推进。
+本轮进入 **System Section 顺序对照与 User Task 边界**：先从六份调研报告中提取各家 section 顺序，再讨论 zero2agent 的 System 顺序，以及 Runtime Context 是否应放入 User Task。
 
 参考笔记：`notes/prompt-structure-problem-system.md`
 
@@ -16,16 +16,17 @@
 
 System 设计框架：`notes/system-prompt-design-framework.md`
 
+竞品 Section 顺序对照：`notes/system-section-order-research.md`
+
 ## ⚪ Pending（待用户决策）
 
 ### 消息层级（本轮收敛）
 
 | 层级 | 解决的问题 | 当前状态 |
 |------|------------|----------|
-| System | Agent 长期身份、能力边界、全局行为约束 | 🔵 当前讨论 |
+| System | Agent 长期身份、能力边界、全局行为约束 | 🔵 当前讨论：Section 顺序 |
 | Instruction | 项目/用户/组织级指令，含 AGENTS.md、skills、配置 | ✅ 已确认：S004 只预留位置和优先级，不实现加载 |
-| User | 用户原始输入及其保真策略 | 待讨论 |
-| Task | 从 user message 中抽出的可执行任务、模式、计划入口 | 待讨论 |
+| User Task | 用户原始输入及当前任务上下文；早期设计中 User Message 与 Task 等价 | 🔵 当前讨论：Runtime Context 是否放这里 |
 | Tool | 工具 schema、工具调用策略、tool response、失败 hint | 待讨论 |
 | Response | 最终回答的格式、语言、引用、摘要策略 | 待讨论 |
 
@@ -51,6 +52,8 @@ System 设计框架：`notes/system-prompt-design-framework.md`
 | D03 | System message 是 `string` 还是 `string[]` | **A：当前继续用 `string`，但给 host 抽象 `system: string \| string[]` 入口** | 为未来的多段 cache / plan 模式预留口子，但不立刻拆 |
 | D04 | 是否在 prompt 里注入运行时上下文（cwd / date / platform / git） | **B：注入 cwd + date 两项，放 prompt 末尾** | 与 pi-mono 保持一致；放末尾对 prompt cache 命中影响最小 |
 | D05 | 是否实现 `customPrompt` 整段替换的逃生口 | **C：本次不做，写进 04-backlog** | YAGNI；当前没有需求驱动 |
+| D07 | Runtime Context 放在 System 末尾，还是 User Task 中 | 待讨论 | 用户建议放在 User Task，避免污染 System |
+| D08 | User 与 Task 是否在 S004 合并为 User Task | 待讨论 | 用户建议 User Task 等同于 User Message |
 
 ## ✅ Confirmed
 

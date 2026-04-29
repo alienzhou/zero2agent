@@ -30,7 +30,7 @@ System Prompt 设计不要只看「应该写哪些段」，还要同时看两张
 
 ## 3. System Section Map（建议顺序）
 
-建议把 System Prompt 固定为 6 段，顺序如下：
+结合竞品 Section 顺序对照与用户建议，System Prompt 更适合先固定为 **5 段静态内容**，Runtime Context 单独作为 D07 讨论，不默认归入 System。
 
 | 顺序 | Section | 作用 | 静态/动态 | S004 是否实现 |
 |------|---------|------|-----------|--------------|
@@ -39,13 +39,17 @@ System Prompt 设计不要只看「应该写哪些段」，还要同时看两张
 | 3 | Tool Policy | 说明工具组合策略，不重复参数说明 | 静态为主 | ✅ |
 | 4 | Workflow | 说明默认工作流：定位 → 阅读 → 回答 | 静态 | ✅ |
 | 5 | Output Contract | 说明回答语言、简洁度、路径引用 | 静态 | ✅ |
-| 6 | Runtime Context | 注入 cwd / date 等易变事实 | 动态 | ⚪ 待拍板 |
+| ? | Runtime Context | cwd / date / platform / git 等易变事实 | 动态 | ⚪ D07 待拍板 |
 
-为什么 Runtime Context 放最后：
+Runtime Context 的候选位置：
 
-- 易变内容放末尾，未来更利于 prompt cache。
-- 静态 section 不会因为 cwd/date 改变而整体失效。
-- Pi Mono 也采用 date/cwd 末尾追加。
+| 方案 | 描述 | 参考 |
+|------|------|------|
+| A | System 末尾 | Pi Mono |
+| B | 独立 dynamic system/env 段 | OpenCode / Claude Code |
+| C | User Task context | 用户建议；可保持 System 更静态 |
+
+当前更值得认真考虑 **C：User Task context**，因为 S004 早期 User Task 基本等同于 User Message，cwd/date 这类动态事实跟本轮任务绑定更自然，也不会污染静态 System。
 
 ## 4. 什么不应该放进 System
 
@@ -117,6 +121,6 @@ System 的设计维度可以推广到其它消息层，但每层问法不同：
 
 ## 8. 下一轮建议讨论的问题
 
-1. 上面的 6 段 System Section 顺序是否合理？
+1. 上面的 5 段静态 System Section 顺序是否合理？
 2. Tool Policy 是否只写组合策略，不列完整工具说明？
-3. Runtime Context 是否在 S004 就放入 cwd + date？
+3. Runtime Context 是否放入 User Task context，而不是 System？

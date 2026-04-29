@@ -6,12 +6,12 @@
 
 Prompt structure 不是一段文本的排版问题，而是 **模型调用前后消息如何被构造、注入、排序、缓存、解释** 的协议问题。
 
-因此我们先把信息分成六层：
+因此我们先把信息分成六层。经过 2026-04-29 的讨论，**User 与 Task 在 S004 早期可以合并理解为 User Task**：用户原始输入就是当前任务消息，不做独立 task extraction。
 
 1. **System**：长期稳定的 agent 身份与硬约束。
 2. **Instruction**：来自项目、组织、用户偏好的外部指令。
-3. **User**：用户原始输入，强调保真。
-4. **Task**：从用户输入中抽象出的当前任务与模式。
+3. **User Task**：用户原始输入及当前任务上下文，强调保真；S004 不做独立 task extraction。
+4. **Task Mode（未来）**：从用户输入中抽象出的模式，如 plan / debug / review。
 5. **Tool**：工具 schema、工具调用策略与 tool response。
 6. **Response**：最终回答给用户的呈现契约。
 
@@ -81,11 +81,12 @@ S004 建议：
 S004 建议：
 
 - 不改当前 user message 传递方式。
+- 在 S004 语境下，将 User Message 视为 **User Task**：它既是用户原文，也是当前任务入口。
 - 在 spec 中说明：未来若引入 task extraction，不应替代原始 user message。
 
-## 4. Task
+## 4. Task / Mode（未来）
 
-**定义**：从用户输入和会话状态中抽象出的当前执行任务。
+**定义**：从用户输入和会话状态中抽象出的任务模式或执行框架。S004 不把它作为独立消息层实现。
 
 例子：
 
@@ -104,6 +105,7 @@ S004 建议：
 S004 建议：
 
 - 只保留普通只读任务，不实现 mode。
+- User Task 等同于当前 user message，不做额外 task message。
 - 但在设计中预留 `taskMode?: "default"` 这样的概念空间，避免后续 plan/debug/review 都来改 system 字符串。
 
 ## 5. Tool
