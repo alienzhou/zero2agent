@@ -8,7 +8,14 @@
 export type { SystemPromptOptions, UserTaskOptions } from "./types.js";
 
 // System Prompt Builder 导出
-export { buildSystemPrompt } from "./system.js";
+export {
+  buildRoleSection,
+  buildScopeSection,
+  buildToolPolicySection,
+  buildWorkflowSection,
+  buildOutputSection,
+  buildSystemPrompt,
+} from "./system.js";
 
 // UserTask Builder 导出
 export { buildUserTaskMessage } from "./user-task.js";

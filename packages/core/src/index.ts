@@ -15,13 +15,18 @@ export type { LLMConfig } from "./llm/index.js";
 export { allTools, readFileTool, listDirectoryTool, toAnthropicTool } from "./tools/index.js";
 export type { Tool } from "./tools/index.js";
 
-// Prompt 构建
-export { buildSystemPrompt, buildUserTaskMessage } from "./prompt/index.js";
+// Prompt 构建器
+export {
+  buildSystemPrompt,
+  buildUserTaskMessage,
+  buildRoleSection,
+  buildScopeSection,
+  buildToolPolicySection,
+  buildWorkflowSection,
+  buildOutputSection,
+} from "./prompt/index.js";
 export type { SystemPromptOptions, UserTaskOptions } from "./prompt/index.js";
 
 // ReACT 循环
 export { runLoop } from "./loop.js";
 export type { RunLoopOptions, LoopEventHandlers } from "./loop.js";
-
-// Prompt 构建
-export type { SystemPromptOptions, UserTaskOptions } from "./prompt/index.js";
