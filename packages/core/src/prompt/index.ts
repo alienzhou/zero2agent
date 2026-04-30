@@ -6,3 +6,13 @@
 
 // 类型导出
 export type { SystemPromptOptions, UserTaskOptions } from "./types.js";
+
+// System Prompt Builder 导出
+export {
+  buildRoleSection,
+  buildScopeSection,
+  buildToolPolicySection,
+  buildWorkflowSection,
+  buildOutputSection,
+  buildSystemPrompt,
+} from "./system.js";
