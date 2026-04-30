@@ -16,3 +16,6 @@ export {
   buildOutputSection,
   buildSystemPrompt,
 } from "./system.js";
+
+// UserTask Builder 导出
+export { buildUserTaskMessage } from "./user-task.js";

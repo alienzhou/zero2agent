@@ -16,12 +16,17 @@ export { allTools, readFileTool, listDirectoryTool, toAnthropicTool } from "./to
 export type { Tool } from "./tools/index.js";
 
 // Prompt 构建器
-export { buildSystemPrompt } from "./prompt/index.js";
-export type { SystemPromptOptions } from "./prompt/index.js";
+export {
+  buildSystemPrompt,
+  buildUserTaskMessage,
+  buildRoleSection,
+  buildScopeSection,
+  buildToolPolicySection,
+  buildWorkflowSection,
+  buildOutputSection,
+} from "./prompt/index.js";
+export type { SystemPromptOptions, UserTaskOptions } from "./prompt/index.js";
 
 // ReACT 循环
 export { runLoop } from "./loop.js";
 export type { RunLoopOptions, LoopEventHandlers } from "./loop.js";
-
-// Prompt 构建
-export type { SystemPromptOptions, UserTaskOptions } from "./prompt/index.js";
