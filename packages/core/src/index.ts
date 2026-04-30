@@ -22,3 +22,6 @@ export type { SystemPromptOptions } from "./prompt/index.js";
 // ReACT 循环
 export { runLoop } from "./loop.js";
 export type { RunLoopOptions, LoopEventHandlers } from "./loop.js";
+
+// Prompt 构建
+export type { SystemPromptOptions, UserTaskOptions } from "./prompt/index.js";
