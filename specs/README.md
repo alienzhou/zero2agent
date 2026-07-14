@@ -56,8 +56,11 @@ specs/
 
 | 层级 | 名称 | 状态 | 入口 |
 |------|------|------|------|
-| Epic | [E01：能看 / 能查](./E01-read-and-search/README.md) | 🚧 进行中 | 阶段导览 |
+| Epic | [E01：能看 / 能查](./E01-read-and-search/README.md) | ✅ 已完成 | 阶段导览 |
 | Story | [E01-S001：为 Agent Harness 跑通最小只读闭环](./E01-read-and-search/S001-react-basic/README.md) | ✅ 已完成 | Story 入口 + `details/` + `deep-dive/` |
+| Story | [E01-S002：让 Agent Harness 能在内容里定位信息](./E01-read-and-search/S002-content-search/README.md) | ✅ 已完成 | Story 入口 + `details/` + `deep-dive/` |
+| Story | [E01-S003：让 Agent Harness 能在项目里找到该看的文件](./E01-read-and-search/S003-file-search/README.md) | ✅ 已完成 | Story 入口 + `details/` + `deep-dive/` |
+| Story | [E01-S004：固定 Prompt 结构](./E01-read-and-search/S004-prompt-structure/README.md) | ✅ 已完成 | Story 入口 + `details/` |
 
 ---
 

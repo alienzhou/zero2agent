@@ -57,10 +57,46 @@ git checkout main
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | ReACT 基础版 | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | 内容搜索 (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | 文件搜索 (find_files) | Done |
+| [E01-S004](./specs/E01-read-and-search/S004-prompt-structure/README.md) | Prompt 结构化 (buildSystemPrompt) | Done |
 
 ---
 
 ## [Unreleased]
+
+### E01-S004-prompt-structure (Done)
+
+所属 Epic：[Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | Story 详情：[S004](./specs/E01-read-and-search/S004-prompt-structure/README.md)
+
+**目标**：把内联在 `cli.ts` 里的 System Prompt 重构成可维护、可扩展的 Prompt Builder
+
+**你会学到**：
+- 为什么 System Prompt 需要结构化，而不能只是一段字符串
+- 5 段式 System Prompt 的组织方式（Role / Scope / Tool Policy / Workflow / Output）
+- Tool Schema 和 System Prompt 的职责分工，消除双写问题
+- Runtime Context（cwd、date）为什么应该放在 UserTaskContext 而不是 System Prompt
+
+**关键文件**：
+- `specs/E01-read-and-search/S004-prompt-structure/` - 设计文档
+- `packages/core/src/prompt/system.ts` - System Prompt Builder
+- `packages/core/src/prompt/user-task.ts` - UserTask Builder
+- `packages/core/src/prompt/types.ts` - 类型定义
+- `packages/tui/src/cli.ts` - TUI 集成入口
+
+**学习要点**：
+1. Prompt 结构化的核心动机：当前能用，但不可扩展
+2. 5 段式分工：身份 → 能力边界 → 工具策略 → 工作流 → 输出约束
+3. Tool Schema 写"工具能做什么"，System Prompt 写"什么时候用工具"
+4. Dynamic Runtime Context 与 Static System Prompt 分离，为未来 prompt cache 铺路
+
+**变更内容**：
+- [x] `packages/core/src/prompt/` 模块（`system.ts` / `user-task.ts` / `types.ts` / `index.ts`）
+- [x] `buildSystemPrompt()` 函数：组装 5 段式 Default System
+- [x] `buildUserTaskMessage()` 函数：将用户输入包装为 UserTaskContext + UserTask
+- [x] Core `index.ts` 导出新的 prompt 模块
+- [x] TUI `cli.ts` 移除内联 SYSTEM_PROMPT，改用 `buildSystemPrompt()`
+- [x] 9 个测试用例（System Prompt / UserTask Builder 各段内容 + 格式验证）
+
+---
 
 ### E01-S003-file-search (Done)
 

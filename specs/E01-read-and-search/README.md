@@ -33,7 +33,7 @@
 | [S001：跑通最小只读闭环](./S001-react-basic/README.md) | 搭建 ReAct 循环，接入 `read_file` / `list_directory` 两个只读工具 | ✅ Done |
 | [S002：在内容里搜索定位](./S002-content-search/README.md) | 引入内容搜索（grep），在文本中定位目标 | ✅ Done |
 | [S003：在文件集合里定位目标](./S003-file-search/README.md) | 引入文件搜索（glob）+ ToolContext 基础设施，更快定位目标文件 | ✅ Done |
-| S004：固定 Prompt 结构 | 工具和循环都跑通后，回头整理 Prompt 的组织方式 | 📝 Planned |
+| [S004：固定 Prompt 结构](./S004-prompt-structure/README.md) | 把 System Prompt 从内联字符串重构为可演化的结构化协议 | ✅ Done |
 
 ---
 

@@ -109,7 +109,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 
 | Epic | 目标 | 状态 |
 | ---- | ---- | ---- |
-| [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | In Progress |
+| [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | Planned |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | Planned |
 | Epic 4：健壮性与上下文管理 | 处理异常、长上下文和复杂运行情况 | Planned |
@@ -161,13 +161,14 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E01-S003 文件搜索（find_files）已完成 — [查看详情](./CHANGELOG.md#e01-s003-file-search-done)
+**最新更新**：E01-S004 固定 Prompt 结构已完成 — [查看详情](./CHANGELOG.md#e01-s004-prompt-structure-done)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | 基础 Agent Harness 循环 | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | 内容搜索 (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | 文件搜索 (find_files) | Done |
+| [E01-S004](./specs/E01-read-and-search/S004-prompt-structure/README.md) | Prompt 结构化 (buildSystemPrompt) | Done |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 
