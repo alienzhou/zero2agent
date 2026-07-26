@@ -34,6 +34,9 @@ function summarizeToolOutput(toolName: string, output: string): string {
   if (toolName === "list_directory") {
     return `Listed ${output.split("\n").filter((l) => l.trim()).length} entries`;
   }
+  if (toolName === "write_file" || toolName === "delete") {
+    return firstLine;
+  }
   return `${output.length} chars`;
 }
 
@@ -106,7 +109,7 @@ async function main() {
   }
 
   // 交互模式
-  console.log("zero2agent - Agent Harness（只读文件演示）");
+  console.log("zero2agent - Agent Harness（文件读写演示）");
   console.log("输入你的问题，输入 exit 退出\n");
 
   const rl = readline.createInterface({

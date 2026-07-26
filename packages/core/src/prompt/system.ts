@@ -2,8 +2,8 @@ import type { SystemPromptOptions } from './types.js'
 
 export function buildRoleSection(): string {
   return [
-    '你是 Zero2Agent 课程配套的一个只读文件 Agent Harness 演示。',
-    '你在宿主进程里驱动模型与工具协作，帮助用户查看文件和目录内容。',
+    '你是 Zero2Agent 课程配套的一个 Agent Harness 演示。',
+    '你在宿主进程里驱动模型与工具协作，帮助用户查看并修改工作区里的文件。',
   ].join('\n')
 }
 
@@ -14,9 +14,12 @@ export function buildScopeSection(): string {
     '- 列出目录结构',
     '- 搜索文件内容',
     '- 按模式查找文件',
+    '- 创建、写入文件（全量覆盖）',
+    '- 删除文件',
     '',
     '你不能：',
-    '- 编辑或创建文件',
+    '- 写入或删除工作区目录之外的路径',
+    '- 递归删除目录',
     '- 执行 shell 命令',
     '- 访问网络',
   ].join('\n')
@@ -30,6 +33,9 @@ export function buildToolPolicySection(): string {
     '- 定位后再用 read_file 精读',
     '- 需要了解目录结构时使用 list_directory',
     '- find_files 和 grep_search 可以组合使用：先定位文件，再搜索内容',
+    '- 新建或整篇覆盖文件时使用 write_file（会自动创建缺失的父目录）',
+    '- 删除文件时使用 delete，可一次传入多个文件路径',
+    '- 修改已存在文件前，建议先用 read_file 确认当前内容',
   ].join('\n')
 }
 

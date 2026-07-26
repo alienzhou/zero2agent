@@ -41,10 +41,12 @@ describe('system prompt builder', () => {
   })
 
   it('各 section 内容符合默认 System Prompt 约定', () => {
-    expect(buildRoleSection()).toContain('只读文件 Agent Harness 演示')
+    expect(buildRoleSection()).toContain('Agent Harness 演示')
     expect(buildScopeSection()).toContain('- 读取文件内容')
+    expect(buildScopeSection()).toContain('- 创建、写入文件（全量覆盖）')
     expect(buildScopeSection()).toContain('- 执行 shell 命令')
     expect(buildToolPolicySection()).toContain('优先使用 find_files')
+    expect(buildToolPolicySection()).toContain('write_file')
     expect(buildWorkflowSection()).toContain('1. 先理解用户想要什么')
     expect(buildOutputSection()).toContain('- 使用中文回答')
   })
