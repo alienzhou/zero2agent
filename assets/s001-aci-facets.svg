@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="900" height="340" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">工具接口的三个作用面</text>
+
+  <!-- 连线 -->
+  <g stroke="#aaaaaa" stroke-width="1.5" fill="none">
+    <line x1="220" y1="175" x2="350" y2="72"/>
+    <line x1="220" y1="175" x2="350" y2="142"/>
+    <line x1="220" y1="175" x2="350" y2="212"/>
+    <line x1="220" y1="175" x2="350" y2="282"/>
+    <line x1="510" y1="72" x2="690" y2="76"/>
+    <line x1="510" y1="142" x2="690" y2="76"/>
+    <line x1="510" y1="212" x2="690" y2="170"/>
+    <line x1="510" y1="282" x2="690" y2="264"/>
+  </g>
+
+  <!-- 左：工具接口 -->
+  <rect x="40" y="110" width="180" height="130" rx="10" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="130" y="152" text-anchor="middle" font-size="18" font-weight="700" fill="#1a1a1a">工具接口</text>
+  <text x="130" y="182" text-anchor="middle" font-size="15" font-family="Menlo,Consolas,monospace" fill="#555555">write_file</text>
+  <text x="130" y="208" text-anchor="middle" font-size="15" font-family="Menlo,Consolas,monospace" fill="#555555">delete</text>
+
+  <!-- 中：四要素 -->
+  <g>
+    <rect x="350" y="48" width="160" height="48" rx="8" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+    <text x="430" y="78" text-anchor="middle" font-size="16" fill="#1a1a1a">粒度</text>
+    <rect x="350" y="118" width="160" height="48" rx="8" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+    <text x="430" y="148" text-anchor="middle" font-size="16" fill="#1a1a1a">参数格式</text>
+    <rect x="350" y="188" width="160" height="48" rx="8" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+    <text x="430" y="218" text-anchor="middle" font-size="16" fill="#1a1a1a">能力边界</text>
+    <rect x="350" y="258" width="160" height="48" rx="8" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+    <text x="430" y="288" text-anchor="middle" font-size="16" fill="#1a1a1a">回执</text>
+  </g>
+
+  <!-- 右：三个作用面 -->
+  <g>
+    <rect x="690" y="44" width="180" height="64" rx="8" fill="#ffffff" stroke="#D32F2F" stroke-width="2"/>
+    <text x="780" y="82" text-anchor="middle" font-size="15" fill="#1a1a1a">模型能表达的动作</text>
+    <rect x="690" y="138" width="180" height="64" rx="8" fill="#ffffff" stroke="#D32F2F" stroke-width="2"/>
+    <text x="780" y="176" text-anchor="middle" font-size="15" fill="#1a1a1a">Harness 能约束的范围</text>
+    <rect x="690" y="232" width="180" height="64" rx="8" fill="#ffffff" stroke="#D32F2F" stroke-width="2"/>
+    <text x="780" y="270" text-anchor="middle" font-size="15" fill="#1a1a1a">模型对状态变化的观测</text>
+  </g>
+</svg>

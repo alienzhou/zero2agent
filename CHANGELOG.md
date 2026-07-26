@@ -61,7 +61,56 @@ git checkout main
 
 ---
 
+### Epic 2: 能动 / 能改 / 能执行
+
+> 核心目标：跨过"只读"边界，让 Agent 具备改动工作区和执行命令的行动力。
+
+| 迭代 | 内容 | 状态 |
+|------|------|------|
+| [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
+
+---
+
 ## [Unreleased]
+
+### E02-S001-write-file (Done)
+
+所属 Epic：[Epic 2：能动 / 能改 / 能执行](./specs/E02-act-and-execute/README.md) | Story 详情：[S001](./specs/E02-act-and-execute/S001-write-file/README.md)
+
+**目标**：给 Agent 装上第一批写工具 `write_file` 和 `delete`，让它跨过"只读"边界，第一次能改动工作区
+
+**你会学到**：
+- 为什么工具接口的设计比工具实现更重要（粒度 / 参数格式 / 能力边界 / 回执）
+- 单一职责：全量写与局部改为什么拆成两个工具（write_file vs 后续 replace_in_file）
+- 物理边界 vs 意图边界：cwd 硬校验为什么放在工具层，破坏性确认为什么留到 Epic 3
+- 批量操作的部分失败语义：delete 为什么选"尽力删 + 逐条汇总"
+- 回执如何充当模型观测世界状态变化的唯一窗口
+
+**关键文件**：
+- `specs/E02-act-and-execute/S001-write-file/` - 设计文档与 deep-dive
+- `packages/core/src/tools/write-file.ts` - write_file 工具实现
+- `packages/core/src/tools/delete.ts` - delete 工具实现
+- `packages/core/src/tools/path-guard.ts` - cwd 边界校验
+- `packages/core/src/tools/index.ts` - 工具注册入口
+- `packages/core/src/prompt/system.ts` - System Prompt 从只读扩展为读写
+
+**学习要点**：
+1. 工具接口就是 Agent 的行动语言：给什么工具、什么参数格式，决定模型能表达什么
+2. 独立 delete 是教学向选择（竞品都没做），换来工具层的可控与结构化回执
+3. write_file 用回执区分新建 / 覆盖，delete 逐条汇总——都是零成本却对模型有用的观测信息
+4. 接口是当前模型阶段的快照，会随模型能力演进而调整
+
+**变更内容**：
+- [x] `write_file` 工具：2 参数（path / content），不存在建 / 存在覆盖，自动建父目录
+- [x] `delete` 工具：接收路径数组，批量删除，部分失败尽力删 + 逐条汇总
+- [x] `path-guard.ts`：cwd 边界硬校验，越界（`..` 逃逸 / 绝对路径逃逸）一律拒绝
+- [x] 工具注册到 `packages/core/src/tools/index.ts`
+- [x] System Prompt 从 read-only 扩展为 read-write（role / scope / toolPolicy）
+- [x] TUI `cli.ts` 更新工具摘要与提示文案
+- [x] 25 个测试用例（write-file 10 / delete 10 / path-guard 5，全部通过）
+- [x] deep-dive：[工具接口就是 Agent 的行动语言](./specs/E02-act-and-execute/S001-write-file/deep-dive/01-agent-computer-interface.md)
+
+---
 
 ### E01-S004-prompt-structure (Done)
 

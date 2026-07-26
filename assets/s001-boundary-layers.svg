@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="900" height="320" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">能力边界画在哪一层</text>
+
+  <!-- 列1：工具层 -->
+  <rect x="45" y="60" width="250" height="200" rx="10" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+  <rect x="45" y="60" width="250" height="52" rx="10" fill="#D32F2F"/>
+  <text x="170" y="93" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">工具层</text>
+  <text x="65" y="142" font-size="14" font-family="Menlo,Consolas,monospace" fill="#D32F2F">代表：zero2agent</text>
+  <text x="65" y="176" font-size="14" fill="#333333">工具内部解析路径</text>
+  <text x="65" y="202" font-size="14" fill="#333333">校验是否越出 cwd</text>
+  <text x="65" y="228" font-size="14" fill="#333333">越界直接返回 Error</text>
+
+  <!-- 列2：Harness 层 -->
+  <rect x="325" y="60" width="250" height="200" rx="10" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+  <rect x="325" y="60" width="250" height="52" rx="10" fill="#666666"/>
+  <text x="450" y="93" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Harness 层</text>
+  <text x="345" y="142" font-size="14" font-family="Menlo,Consolas,monospace" fill="#666666">代表：OpenCode</text>
+  <text x="345" y="176" font-size="14" fill="#333333">敏感操作升级为</text>
+  <text x="345" y="202" font-size="14" fill="#333333">向用户询问</text>
+  <text x="345" y="228" font-size="14" fill="#333333">由 permission 框架裁决</text>
+
+  <!-- 列3：运行时层 -->
+  <rect x="605" y="60" width="250" height="200" rx="10" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+  <rect x="605" y="60" width="250" height="52" rx="10" fill="#666666"/>
+  <text x="730" y="93" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">运行时层</text>
+  <text x="625" y="142" font-size="14" font-family="Menlo,Consolas,monospace" fill="#666666">代表：Pi Agent Harness</text>
+  <text x="625" y="176" font-size="14" fill="#333333">默认不内建权限</text>
+  <text x="625" y="202" font-size="14" fill="#333333">把 Agent 放进</text>
+  <text x="625" y="228" font-size="14" fill="#333333">容器或 sandbox 隔离</text>
+
+  <text x="450" y="298" text-anchor="middle" font-size="13" fill="#888888">三种位置没有绝对优劣，取决于项目定位。zero2agent 是教学项目，选工具层因为它最直观。</text>
+</svg>

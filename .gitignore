@@ -41,3 +41,5 @@ temp/
 # Benchmark results (regenerated each run)
 benchmarks/results/
 benchmarks/node_modules/
+.myflicker
+.codeflicker/
