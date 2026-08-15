@@ -183,4 +183,4 @@ S001 **不扩展 `ToolContext`**，维持只有 `cwd`。唯一会驱使我们扩
 
 ---
 
-下一篇：[E02-S002：让 Agent Harness 能高效修改已有内容](../S002-replace-in-file/README.md)（Planned）
+下一篇：[E02-S002：让 Agent Harness 能高效修改已有内容](../S002-replace-in-file/README.md)

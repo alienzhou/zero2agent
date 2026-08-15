@@ -68,6 +68,7 @@ git checkout main
 | 迭代 | 内容 | 状态 |
 |------|------|------|
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
+| [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改已有内容 (replace_in_file) | Done |
 
 ---
 
@@ -109,6 +110,43 @@ git checkout main
 - [x] TUI `cli.ts` 更新工具摘要与提示文案
 - [x] 25 个测试用例（write-file 10 / delete 10 / path-guard 5，全部通过）
 - [x] deep-dive：[工具接口就是 Agent 的行动语言](./specs/E02-act-and-execute/S001-write-file/deep-dive/01-agent-computer-interface.md)
+
+---
+
+### E02-S002-replace-in-file (Done)
+
+所属 Epic：[Epic 2：能动 / 能改 / 能执行](./specs/E02-act-and-execute/README.md) | Story 详情：[S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md)
+
+**目标**：给 Agent 装上局部修改工具 `replace_in_file`，让它在「整篇重写」之外能对已有文件做外科手术式的精确替换
+
+**你会学到**：
+- 为什么「整篇重写」在真实编码里 token 昂贵、易出错、易污染格式
+- 唯一性约束如何倒逼模型提供足够上下文、从根上防止改错位置
+- `replace_all` 开关如何平衡「安全默认」与「批量重命名的效率」
+- 字符串精确替换为何是局部改的主流范式（对比补丁 / 块语法）
+
+**关键文件**：
+- `specs/E02-act-and-execute/S002-replace-in-file/` - 设计文档
+- `packages/core/src/tools/replace-in-file.ts` - replace_in_file 工具实现
+- `packages/core/src/tools/path-guard.ts` - 复用的 cwd 边界校验
+- `packages/core/src/tools/index.ts` - 工具注册入口
+- `packages/core/src/prompt/system.ts` - System Prompt 工具策略增加 replace_in_file
+
+**学习要点**：
+1. 局部修改的本质是「定位 + 替换」，唯一性约束解决的是「定位」，比「替换」本身更关键
+2. 唯一性约束是行业共识：OpenCode / pi-mono / Gemini 的 edit 都要求 old_string 唯一
+3. replace_all 是低成本、高价值的偏离——五家竞品都没有，却覆盖了「批量重命名」的真实场景
+4. 用 split/join 而非 String.replace，规避 `$` 等替换占位符的隐蔽陷阱
+5. 吸取 S001 复盘教训：回执统一英文，doc 与 code 不再漂移
+
+**变更内容**：
+- [x] `replace_in_file` 工具：4 参数（path / old_string / new_string / replace_all），精确匹配 + 唯一约束
+- [x] `replace_all` 开关：默认 false 要求唯一，true 替换全部并报告处数
+- [x] 复用 `path-guard.ts`：cwd 边界硬校验，越界拒绝
+- [x] 工具注册到 `packages/core/src/tools/index.ts`
+- [x] System Prompt 增加 replace_in_file 能力与工具策略
+- [x] TUI `cli.ts` 更新工具摘要分支
+- [x] 14 个测试用例（唯一替换 / replace_all / 未找到 / 不唯一 / 越界 / 特殊字符 / 删片段，全部通过）
 
 ---
 

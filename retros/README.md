@@ -7,6 +7,7 @@ This directory contains retrospective notes and lessons learned.
 | Retro | Iteration | Notes |
 |-------|-----------|-------|
 | [E02-S001-write-file.md](./E02-S001-write-file.md) | E02-S001 写文件 + 删文件 | 第一个写工具迭代的复盘（回执语言 doc/code 漂移的教训） |
+| [E02-S002-replace-in-file.md](./E02-S002-replace-in-file.md) | E02-S002 局部修改 | 唯一性约束 + replace_all，教训落地到下一个迭代 |
 
 ## Structure
 
