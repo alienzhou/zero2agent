@@ -15,6 +15,7 @@ export function buildScopeSection(): string {
     '- 搜索文件内容',
     '- 按模式查找文件',
     '- 创建、写入文件（全量覆盖）',
+    '- 局部修改文件（字符串替换）',
     '- 删除文件',
     '',
     '你不能：',
@@ -34,6 +35,7 @@ export function buildToolPolicySection(): string {
     '- 需要了解目录结构时使用 list_directory',
     '- find_files 和 grep_search 可以组合使用：先定位文件，再搜索内容',
     '- 新建或整篇覆盖文件时使用 write_file（会自动创建缺失的父目录）',
+    '- 局部修改已存在文件时使用 replace_in_file（整篇重写才用 write_file）',
     '- 删除文件时使用 delete，可一次传入多个文件路径',
     '- 修改已存在文件前，建议先用 read_file 确认当前内容',
   ].join('\n')

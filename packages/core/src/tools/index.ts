@@ -6,6 +6,7 @@ export { grepSearchTool } from "./grep-search.js";
 export { findFilesTool } from "./find-files.js";
 export { writeFileTool } from "./write-file.js";
 export { deleteTool } from "./delete.js";
+export { replaceInFileTool } from "./replace-in-file.js";
 export { resolveInsideCwd } from "./path-guard.js";
 
 import { readFileTool } from "./read-file.js";
@@ -14,6 +15,7 @@ import { grepSearchTool } from "./grep-search.js";
 import { findFilesTool } from "./find-files.js";
 import { writeFileTool } from "./write-file.js";
 import { deleteTool } from "./delete.js";
+import { replaceInFileTool } from "./replace-in-file.js";
 import type { Tool } from "./types.js";
 
 /**
@@ -26,4 +28,5 @@ export const allTools: Tool[] = [
   findFilesTool,
   writeFileTool,
   deleteTool,
+  replaceInFileTool,
 ];

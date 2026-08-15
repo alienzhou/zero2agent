@@ -34,7 +34,7 @@ function summarizeToolOutput(toolName: string, output: string): string {
   if (toolName === "list_directory") {
     return `Listed ${output.split("\n").filter((l) => l.trim()).length} entries`;
   }
-  if (toolName === "write_file" || toolName === "delete") {
+  if (toolName === "write_file" || toolName === "delete" || toolName === "replace_in_file") {
     return firstLine;
   }
   return `${output.length} chars`;
