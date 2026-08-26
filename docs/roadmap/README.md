@@ -101,7 +101,7 @@ git checkout E01-S004-prompt-structure  # 切到 S004 完成状态
 - 位置：[`.vibecoding/`](../../.vibecoding/)，按 Epic / Story 组织
 - 每个 Story 对应一组对话记录，按阶段编号：`01-需求讨论` → `02-设计` → `03-Spec 输出` → `04-实现`
 - 还有 `learnings.md` 总结协作过程中的经验和踩坑
-- 示例：[E01-S001 VibeCoding 记录](../../.vibecoding/E01/S001/)、[E01-S002 VibeCoding 记录](../../.vibecoding/E01/S002/)、[E01-S003 VibeCoding 记录](../../.vibecoding/E01/S003/)、[E01-S004 VibeCoding 记录](../../.vibecoding/E01/S004/)
+- 示例：[E01-S001 VibeCoding 记录](../../.vibecoding/E01/S001/)、[E01-S002 VibeCoding 记录](../../.vibecoding/E01/S002/)、[E01-S003 VibeCoding 记录](../../.vibecoding/E01/S003/)
 
 ---
 
