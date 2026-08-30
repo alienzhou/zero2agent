@@ -143,4 +143,4 @@ S001 的复盘记过一条教训：spec 写中文回执、代码落英文，doc/
 
 ---
 
-下一篇：E02-S003：让 Agent Harness 能驱动执行环境（📝 Planned，尚未开始）
+下一篇：[E02-S003：让 Agent Harness 能驱动执行环境（terminal）](../S003-terminal/README.md)
