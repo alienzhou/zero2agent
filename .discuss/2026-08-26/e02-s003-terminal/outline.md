@@ -69,6 +69,15 @@
 
 （暂无）
 
+## 🗒️ 讨论笔记索引
+
+| 笔记 | 覆盖议题 | 一句话 |
+|------|---------|--------|
+| [non-interactive-execution-env.md](./notes/non-interactive-execution-env.md) | T06 / T07 / T08 | 非交互执行的四通道防线；「一致性」必须拆成能力与呈现两类 |
+| [production-agent-lessons.md](./notes/production-agent-lessons.md) | 全局（第六样本） | 一个生产级桌面 Agent 产品的踩坑归因：哪些是分发环境特有、哪些 zero2agent 必然触发 |
+| [t01-t14-verdicts.md](./notes/t01-t14-verdicts.md) | T01–T14 | 全部议题的裁决建议 + 理由（待逐条确认后迁入 Confirmed） |
+| [article-topics.md](./notes/article-topics.md) | — | 本章可独立成文的选题池（A/B/C 分级 + 写作顺序） |
+
 ## 📚 调研要点速查
 
 供讨论时引用，完整内容见 [researches/terminal/](../../../researches/terminal/README.md)：
