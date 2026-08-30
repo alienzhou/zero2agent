@@ -12,17 +12,14 @@ pnpm --filter @zero2agent/core test
 
 ### 端到端测试
 
-端到端测试使用真实 LLM API，需要在项目根目录配置 `.env.local`：
-
-```
-ANTHROPIC_API_KEY=your-api-key
-ANTHROPIC_BASE_URL=https://api.example.com  # 可选
-```
-
-运行 E2E 测试：
+E2E 测试已迁移到仓库根目录的 [`e2e/`](../../e2e/README.md) 包，被测对象是真实 CLI 进程而非本包的导出。
 
 ```bash
-pnpm --filter @zero2agent/core test src/__tests__/e2e.test.ts
+# 契约层，不调 LLM
+pnpm test:e2e
+
+# 含真实 LLM 层，需要 API KEY
+pnpm test:e2e:live
 ```
 
-> **注意**：E2E 测试会产生 API 调用费用，建议手动触发。
+配置方式见 [`e2e/README.md`](../../e2e/README.md)。

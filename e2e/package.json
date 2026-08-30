@@ -1,0 +1,17 @@
+{
+  "name": "@zero2agent/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end tests driving the zero2agent CLI as a real process",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:live": "E2E_LIVE=1 vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "@zero2agent/tui": "workspace:*",
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.0"
+  }
+}

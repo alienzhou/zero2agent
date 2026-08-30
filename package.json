@@ -19,10 +19,12 @@
     "build": "pnpm -r build",
     "dev": "pnpm -r --parallel dev",
     "test": "pnpm -r test",
-    "lint": "eslint packages --ext .ts,.tsx",
-    "lint:fix": "eslint packages --ext .ts,.tsx --fix",
-    "format": "prettier --write 'packages/**/*.ts'",
-    "format:check": "prettier --check 'packages/**/*.ts'",
+    "test:e2e": "pnpm --filter @zero2agent/e2e test",
+    "test:e2e:live": "pnpm --filter @zero2agent/e2e test:live",
+    "lint": "eslint packages e2e --ext .ts,.tsx",
+    "lint:fix": "eslint packages e2e --ext .ts,.tsx --fix",
+    "format": "prettier --write 'packages/**/*.ts' 'e2e/**/*.ts'",
+    "format:check": "prettier --check 'packages/**/*.ts' 'e2e/**/*.ts'",
     "clean": "pnpm -r clean"
   },
   "devDependencies": {

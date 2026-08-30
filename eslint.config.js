@@ -41,6 +41,8 @@ export default tseslint.config(
       '!eslint.config.js',
       'packages/**/vitest.config.ts',
       'packages/**/__tests__/**',
+      'e2e/vitest.config.ts',
+      'e2e/**/*.test.ts',
     ],
   }
 )
