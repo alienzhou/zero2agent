@@ -83,6 +83,6 @@ aider/coders/
 
 4. **Python 栈读者** 会更容易顺藤摸到 Aider 仓库，可作为课外扩展阅读链接。
 
-## 与 ALI-13 的衔接
+## 调研范围衔接
 
-子任务 ALI-13 中建议「四家之外值得补 **Aider + Claude Code**」。本文覆盖 **Aider（OSS）**；**Claude Code 本体 / sourcemap 内网仓** 见同目录 `claude-code.md`（方法说明，非源码级引用）。
+调研规划中建议「四家之外值得补 **Aider + Claude Code**」。本文覆盖 **Aider（OSS）**；**Claude Code 本体 / sourcemap 还原树** 见同目录 `claude-code.md`（方法说明，非源码级引用）。

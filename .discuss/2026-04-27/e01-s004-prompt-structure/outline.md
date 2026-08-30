@@ -228,7 +228,7 @@ UserTaskContext 格式设计：`notes/user-task-context-format.md`
 详见 `researches/prompt-structure/`：
 
 - 首轮四家：codex / gemini-cli / opencode / pi（commit `95b1743`）
-- 补充：**Aider**（Python / `aider.md`，commit `f46f6c1`）、**Claude Code** 内网 sourcemap 场景的方法说明（`claude-code.md`，无源码引用；背景见子任务 ALI-13）
+- 补充：**Aider**（Python / `aider.md`，commit `f46f6c1`）、**Claude Code** sourcemap 还原场景的方法说明（`claude-code.md`，无源码引用）
 
 ### 现有代码
 

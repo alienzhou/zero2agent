@@ -9,7 +9,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| 来源 | 内网仓 `claude-code-sourcemap`（README 说明：自 npm `@anthropic-ai/claude-code` 包内 `cli.js.map` 的 `sourcesContent` 无损还原；本调研以该还原树为准） |
+| 来源 | 自 npm `@anthropic-ai/claude-code` 包内 `cli.js.map` 的 `sourcesContent` 无损还原得到的源码树；本调研以该还原树为准 |
 | 调研 Commit | `b3006ae0b5ff0d59c18a54cabbf3a46eba46ea0b` |
 | 还原包版本（README） | `2.1.88` |
 | 调研日期 | `2026-04-28` |
@@ -52,12 +52,12 @@
 | 动态段与 cache | section 显式标注 cacheBreak | 段函数 + `\n{3,}` 收敛 | 多段注入 | 可借鉴「易变段」单独标 DANGEROUS |
 | 工具名同源 | 各 tool `prompt.js` export 名字 | `tool-names.ts` | 常量 | 应对齐 D02：避免 prompt 与 schema 手抄两份 |
 
-## 与 ALI-13 的衔接
+## 还原树的获取方式
 
-- 先前在仅沙箱环境不可达内网时，只能写「方法占位」。**2026-04-28 起**在可达网络下已能 `git clone` 上述仓并完成文件级导航；本文即基于该次拉取。
-- 若后续 **Multica 云端** 再次不可达内网，读者仍可按该仓 README 的 **npm pack + 解析 cli.js.map** 流程在本地再生相同树。
+- 早期只在受限环境下能写「方法占位」。**2026-04-28 起**已能完整还原并完成文件级导航；本文即基于该次还原结果。
+- 读者可自行按 **npm pack + 解析 `cli.js.map` 的 `sourcesContent`** 流程在本地再生相同的源码树。
 
 ## 状态
 
-- ✅ 结构层调研可独立使用（不依赖内网：亦可用 npm 包 + sourcemap 自行还原）。
+- ✅ 结构层调研可独立复现（npm 包 + sourcemap 自行还原即可）。
 - ⛔ 不在 `zero2agent` 仓库提交任何完整默认 system prompt 文本或大体量原文 diff。
