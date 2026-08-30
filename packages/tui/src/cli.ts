@@ -5,6 +5,22 @@
 import { Agent, buildSystemPrompt } from "@zero2agent/core";
 import type { LoopEventHandlers } from "@zero2agent/core";
 import * as readline from "node:readline";
+import path from "node:path";
+
+// ── 环境变量 ───────────────────────────────────────
+
+/**
+ * 加载仓库根目录的 .env.local（若存在）
+ * 用 Node 22 内置的 loadEnvFile，避免为此引入 dotenv 依赖
+ */
+function loadLocalEnv() {
+  const envPath = path.resolve(import.meta.dirname, "../../..", ".env.local");
+  try {
+    process.loadEnvFile(envPath);
+  } catch {
+    // 文件不存在时忽略，仍可通过 export 配置
+  }
+}
 
 // ── ANSI 样式 ──────────────────────────────────────
 
@@ -83,6 +99,8 @@ const events: LoopEventHandlers = {
 // ── 主流程 ─────────────────────────────────────────
 
 async function main() {
+  loadLocalEnv();
+
   const messageArg = process.argv[2];
 
   if (!process.env.ANTHROPIC_API_KEY) {

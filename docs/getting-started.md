@@ -62,15 +62,15 @@ pnpm --filter @zero2agent/tui start
 
 **获取 API KEY**：https://console.anthropic.com/
 
-### 方式 2：兼容 API 提供商
+### 方式 2：兼容 API 提供商（如 MiniMax）
 
-本项目支持通过 `baseURL` 切换到兼容 Anthropic 格式的 API 提供商（如 MiniMax）：
+本项目只使用 Anthropic 官方 SDK，因此**任何提供 Anthropic 兼容端点的厂商都能直接接入**，改一个 `baseURL` 即可：
 
 ```bash
 # 配置 MiniMax
-export ANTHROPIC_BASE_URL="https://api.minimaxi.com/v1"
+export ANTHROPIC_BASE_URL="https://api.minimaxi.com/anthropic"
 export ANTHROPIC_API_KEY="your-minimax-api-key"
-export MODEL_NAME="MiniMax-M1"
+export MODEL_NAME="MiniMax-M2.7"
 
 # 然后运行
 pnpm --filter @zero2agent/tui start
@@ -78,18 +78,24 @@ pnpm --filter @zero2agent/tui start
 
 **获取 MiniMax API KEY**：https://platform.minimaxi.com/
 
-### 方式 3：使用 .env 文件
+> ⚠️ 注意区分两个端点：`/anthropic` 是 Anthropic 兼容端点，`/v1` 是 OpenAI 兼容端点。
+> 本项目用的是 Anthropic SDK，必须填 `/anthropic`，填 `/v1` 会直接 404。
+>
+> 国内站点用 `https://api.minimaxi.com/anthropic`，
+> Global 站点用 `https://api.minimax.io/anthropic`。
+
+### 方式 3：使用 .env.local 文件（推荐）
+
+反复调试时不必每次 export，把配置写进 `.env.local` 即可。该文件已在 `.gitignore` 中，不会误提交 API KEY：
 
 ```bash
-# 创建 .env 文件
-cat > .env << EOF
-ANTHROPIC_API_KEY=your-api-key
-# 可选：使用兼容提供商
-# ANTHROPIC_BASE_URL=https://api.minimaxi.com/v1
-# MODEL_NAME=MiniMax-M1
-EOF
+# 从模板复制一份，然后填入自己的 KEY
+cp .env.example .env.local
+```
 
-# 然后运行（确保代码支持读取 .env）
+仓库根目录的 `.env.local` 会被自动加载，改完直接运行：
+
+```bash
 pnpm --filter @zero2agent/tui start
 ```
 
@@ -98,7 +104,7 @@ pnpm --filter @zero2agent/tui start
 | 变量 | 必需 | 说明 |
 |------|------|------|
 | `ANTHROPIC_API_KEY` | ✅ | API 密钥 |
-| `ANTHROPIC_BASE_URL` | ❌ | API 地址，默认 Anthropic 官方 |
+| `ANTHROPIC_BASE_URL` | ❌ | API 地址，默认 Anthropic 官方；换厂商时填其 Anthropic 兼容端点 |
 | `MODEL_NAME` | ❌ | 模型名称，默认 `claude-sonnet-4-20250514` |
 
 ---
