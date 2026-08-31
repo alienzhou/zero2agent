@@ -28,21 +28,24 @@ afterEach(async () => {
 })
 
 describe('resolveWorkdir', () => {
-  it('省略 workdir 时使用 ctx.cwd', () => {
-    expect(resolveWorkdir(ctx)).toEqual({ path: tmpDir })
+  it('省略 workdir 时使用 ctx.cwd（realpath）', async () => {
+    const { path: p } = await resolveWorkdir(ctx)
+    expect(p).toBe(await fs.realpath(tmpDir))
   })
 
   it('子目录合法', async () => {
     await fs.mkdir(path.join(tmpDir, 'src'))
-    expect(resolveWorkdir(ctx, 'src')).toEqual({ path: path.join(tmpDir, 'src') })
+    const { path: p } = await resolveWorkdir(ctx, 'src')
+    expect(p).toBe(await fs.realpath(path.join(tmpDir, 'src')))
   })
 
-  it('"." 合法（与 resolveInsideCwd 不同）', () => {
-    expect(resolveWorkdir(ctx, '.')).toEqual({ path: tmpDir })
+  it('"." 合法（与 resolveInsideCwd 不同）', async () => {
+    const { path: p } = await resolveWorkdir(ctx, '.')
+    expect(p).toBe(await fs.realpath(tmpDir))
   })
 
-  it('越界 workdir 拒绝', () => {
-    const result = resolveWorkdir(ctx, '../outside')
+  it('越界 workdir 拒绝', async () => {
+    const result = await resolveWorkdir(ctx, '../outside')
     expect(result).toEqual({
       error: 'Error: ../outside is outside the workspace, operation refused',
     })

@@ -73,6 +73,13 @@ export function buildSpawnEnv(): NodeJS.ProcessEnv {
   return applyShellOverrides(getBaseShellEnv())
 }
 
+/** 测试用：模拟 login shell 采集失败 */
+export function injectShellEnvFailureForTests(): void {
+  cachedEnv = { ...process.env }
+  loadFailed = true
+  failureNoticePending = true
+}
+
 /** 测试用：重置模块缓存 */
 export function resetShellEnvCacheForTests(): void {
   cachedEnv = null

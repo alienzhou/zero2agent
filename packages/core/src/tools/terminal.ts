@@ -3,6 +3,7 @@ import * as crypto from 'node:crypto'
 import * as fs from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
+import { realpath } from 'node:fs/promises'
 import {
   drainCompletionNotices,
   queueCompletionNotice,
@@ -44,20 +45,39 @@ interface RunResult {
 
 // ── workdir 解析（不复用 resolveInsideCwd） ─────────
 
-export function resolveWorkdir(
+export async function resolveWorkdir(
   ctx: ToolContext,
   workdir?: string
-): { path: string } | { error: string } {
-  if (!workdir) return { path: ctx.cwd }
+): Promise<{ path: string } | { error: string }> {
+  let cwdReal: string
+  try {
+    cwdReal = await realpath(ctx.cwd)
+  } catch {
+    return { error: `Error: workspace path not found: ${ctx.cwd}` }
+  }
+
+  if (!workdir) return { path: cwdReal }
 
   const resolved = path.resolve(ctx.cwd, workdir)
-  const rel = path.relative(ctx.cwd, resolved)
+  let targetReal: string
+  try {
+    targetReal = await realpath(resolved)
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code
+    if (code === 'ENOENT') {
+      // 目录尚不存在时用语义路径，但仍须落在工作区内
+      targetReal = resolved
+    } else {
+      return { error: `Error: workdir not accessible: ${workdir}` }
+    }
+  }
 
+  const rel = path.relative(cwdReal, targetReal)
   if (rel.startsWith('..') || path.isAbsolute(rel)) {
     return { error: `Error: ${workdir} is outside the workspace, operation refused` }
   }
 
-  return { path: resolved }
+  return { path: targetReal }
 }
 
 // ── watcher 包装（防线②） ───────────────────────────
@@ -156,10 +176,11 @@ export class OutputSink {
   }
 
   async closeStream(): Promise<void> {
-    if (!this.writeStream) return
+    if (!this.writeStream || this.writeStream.writableEnded) return
+    const stream = this.writeStream
     await new Promise<void>((resolve, reject) => {
-      this.writeStream!.end(() => resolve())
-      this.writeStream!.on('error', reject)
+      stream.end(() => resolve())
+      stream.on('error', reject)
     })
   }
 
@@ -214,6 +235,7 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
   let incompleteNote = false
   let cancelled = false
   let skipped = false
+  let drainTimedOut = false
   let spawnError: string | null = null
 
   const child = spawn(SHELL, ['-c', wrapped], {
@@ -285,17 +307,21 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       signalSkip: () => {
         if (!skipAvailable || cancelled || skipped) return
         skipped = true
+        detachInterrupts?.()
         finish()
       },
     }
 
     const detachInterrupts = runtime.attachInterrupts?.(interruptController)
 
-    child.on('exit', () => {
+    child.on('exit', (code, sig) => {
+      exitCode = code ?? exitCode
+      signal = sig ?? signal
       // 防线③：进程已退出但管道未关闭（setsid 曾孙攥着 fd）
       drainTimer = setTimeout(() => {
         if (!settled) {
           incompleteNote = true
+          drainTimedOut = true
           outcome = 'drain-timeout'
           finish()
         }
@@ -329,6 +355,7 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
     child.on('close', () => {
       unregisterBackgroundProcess(pid)
       queueCompletionNotice(userCommand, pid)
+      void sink.closeStream()
     })
     registerBackgroundProcess({
       pid,
@@ -347,6 +374,11 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       exitCode = raced.code ?? 124
       signal = raced.signal ?? undefined
     }
+    await sink.closeStream()
+  } else if (drainTimedOut) {
+    outcome = 'drain-timeout'
+    // drain 超时后不再等待 close，避免被逃逸后代挂死
+    await sink.closeStream()
   } else {
     const closeResult = await closePromise
     exitCode = closeResult.code ?? 1
@@ -354,9 +386,8 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
     if (incompleteNote) {
       outcome = 'drain-timeout'
     }
+    await sink.closeStream()
   }
-
-  await sink.closeStream()
 
   return {
     outcome,
@@ -372,8 +403,14 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
 
 // ── 回执组装 ───────────────────────────────────────
 
+function sanitizeUntrustedBody(body: string): string {
+  // 防止命令输出伪造闭合边界（即使无 id 属性也会干扰解析）
+  return body.replace(/<\/untrusted_command_output\b/gi, '<\\/untrusted_command_output')
+}
+
 function formatUntrustedBody(body: string, nonce: string): string {
-  return `<untrusted_command_output id="${nonce}">\n${body}\n</untrusted_command_output id="${nonce}">`
+  const safe = sanitizeUntrustedBody(body)
+  return `<untrusted_command_output id="${nonce}">\n${safe}\n</untrusted_command_output id="${nonce}">`
 }
 
 export function formatReceipt(
@@ -500,7 +537,7 @@ export const terminalTool: Tool = {
       return 'Error: command must not be empty'
     }
 
-    const workdirResult = resolveWorkdir(ctx, workdir)
+    const workdirResult = await resolveWorkdir(ctx, workdir)
     if ('error' in workdirResult) {
       return workdirResult.error
     }
@@ -511,6 +548,8 @@ export const terminalTool: Tool = {
       return `Error: workdir not found: ${workdir ?? '.'}`
     }
 
+    // 先触发 env 采集，再消费失败提示（P1：首次回执即告知）
+    buildSpawnEnv()
     const completionNotices = drainCompletionNotices()
     const envFailureNotice = consumeShellEnvFailureNotice()
 

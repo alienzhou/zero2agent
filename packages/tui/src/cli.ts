@@ -131,6 +131,13 @@ function setupTerminalRuntime(rl?: readline.Interface): void {
         if (!key) return
         if (key.ctrl && key.name === 'x') controller.signalCancel()
         if (key.ctrl && key.name === 's') controller.signalSkip()
+        // Ctrl-C 保持默认语义，不吞掉
+        if (key.ctrl && key.name === 'c') {
+          process.stdin.removeListener('keypress', onKeypress)
+          if (process.stdin.isTTY) process.stdin.setRawMode(wasRaw ?? false)
+          rl?.resume()
+          process.kill(process.pid, 'SIGINT')
+        }
       }
       process.stdin.on('keypress', onKeypress)
 
