@@ -12,7 +12,15 @@ export { createAnthropicClient, getModelName } from "./llm/index.js";
 export type { LLMConfig } from "./llm/index.js";
 
 // 工具定义
-export { allTools, readFileTool, listDirectoryTool, toAnthropicTool } from "./tools/index.js";
+export {
+  allTools,
+  readFileTool,
+  listDirectoryTool,
+  toAnthropicTool,
+  setTerminalRuntimeHooks,
+  getTerminalRuntimeHooks,
+  listBackgroundProcesses,
+} from "./tools/index.js";
 export type { Tool } from "./tools/index.js";
 
 // Prompt 构建器

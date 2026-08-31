@@ -2,7 +2,13 @@
 /**
  * zero2agent CLI 入口
  */
-import { Agent, buildSystemPrompt } from '@zero2agent/core'
+import {
+  Agent,
+  buildSystemPrompt,
+  getTerminalRuntimeHooks,
+  listBackgroundProcesses,
+  setTerminalRuntimeHooks,
+} from '@zero2agent/core'
 import type { LoopEventHandlers } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import path from 'node:path'
@@ -53,6 +59,11 @@ function summarizeToolOutput(toolName: string, output: string): string {
   if (toolName === 'write_file' || toolName === 'delete' || toolName === 'replace_in_file') {
     return firstLine
   }
+  if (toolName === 'terminal') {
+    const statusLine = output.split('\n').find(l => l.startsWith('Status:'))
+    const exitLine = output.split('\n').find(l => l.startsWith('Exit code:'))
+    return statusLine ?? exitLine ?? firstLine
+  }
   return `${output.length} chars`
 }
 
@@ -96,7 +107,75 @@ const events: LoopEventHandlers = {
   },
 }
 
-// ── 主流程 ─────────────────────────────────────────
+// ── terminal 运行时（按键接管 / 运行中提示） ────────
+
+function setupTerminalRuntime(rl?: readline.Interface): void {
+  const isTTY = process.stdin.isTTY === true && process.stdout.isTTY === true
+
+  setTerminalRuntimeHooks({
+    isTTY,
+    onStatus: line => {
+      process.stdout.write(`${DIM}${line}${RESET}\n`)
+    },
+    attachInterrupts: controller => {
+      if (!isTTY) return () => {}
+
+      readline.emitKeypressEvents(process.stdin)
+      const wasRaw = process.stdin.isRaw
+      if (process.stdin.isTTY) process.stdin.setRawMode(true)
+      rl?.pause()
+
+      const onKeypress = (_str: string, key: readline.Key) => {
+        if (!key) return
+        if (key.ctrl && key.name === 'x') controller.signalCancel()
+        if (key.ctrl && key.name === 's') controller.signalSkip()
+      }
+      process.stdin.on('keypress', onKeypress)
+
+      return () => {
+        process.stdin.removeListener('keypress', onKeypress)
+        if (process.stdin.isTTY) process.stdin.setRawMode(wasRaw ?? false)
+        rl?.resume()
+      }
+    },
+    promptBackgroundCleanup: async entries => {
+      if (!isTTY || entries.length === 0) return false
+      console.log(`\n还有 ${entries.length} 个后台命令在运行：`)
+      for (const e of entries) {
+        const elapsed = Math.round((Date.now() - e.startAt) / 1000)
+        console.log(`  [${e.pid}] ${e.command} （已运行 ${elapsed}s）`)
+      }
+      return new Promise(resolve => {
+        const cleanupRl = readline.createInterface({ input: process.stdin, output: process.stdout })
+        cleanupRl.question('要一并结束吗？(y/N) ', answer => {
+          cleanupRl.close()
+          resolve(answer.trim().toLowerCase() === 'y')
+        })
+      })
+    },
+  })
+}
+
+async function cleanupBackgroundOnExit(): Promise<void> {
+  const entries = listBackgroundProcesses()
+  if (entries.length === 0) return
+
+  const runtime = getTerminalRuntimeHooks()
+  const shouldKill = await runtime.promptBackgroundCleanup?.(entries)
+  if (!shouldKill) return
+
+  for (const entry of entries) {
+    try {
+      process.kill(-entry.pid, 'SIGTERM')
+    } catch {
+      try {
+        process.kill(entry.pid, 'SIGTERM')
+      } catch {
+        // ignore
+      }
+    }
+  }
+}
 
 async function main() {
   loadLocalEnv()
@@ -107,6 +186,8 @@ async function main() {
     console.error('错误: 请设置 ANTHROPIC_API_KEY 环境变量')
     process.exit(1)
   }
+
+  setupTerminalRuntime()
 
   const agent = new Agent({
     systemPrompt: buildSystemPrompt(),
@@ -135,10 +216,13 @@ async function main() {
     output: process.stdout,
   })
 
+  setupTerminalRuntime(rl)
+
   // stdin 结束（EOF / 管道输入耗尽）后不能再 question，否则抛 ERR_USE_AFTER_CLOSE
   let closed = false
   rl.on('close', () => {
     closed = true
+    void cleanupBackgroundOnExit()
   })
 
   const prompt = () => {

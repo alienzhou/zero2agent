@@ -7,7 +7,14 @@ export { findFilesTool } from "./find-files.js";
 export { writeFileTool } from "./write-file.js";
 export { deleteTool } from "./delete.js";
 export { replaceInFileTool } from "./replace-in-file.js";
+export { terminalTool } from "./terminal.js";
 export { resolveInsideCwd } from "./path-guard.js";
+export {
+  setTerminalRuntimeHooks,
+  resetTerminalRuntimeHooksForTests,
+  getTerminalRuntimeHooks,
+} from "./terminal-runtime.js";
+export { listBackgroundProcesses } from "./process-registry.js";
 
 import { readFileTool } from "./read-file.js";
 import { listDirectoryTool } from "./list-directory.js";
@@ -16,6 +23,7 @@ import { findFilesTool } from "./find-files.js";
 import { writeFileTool } from "./write-file.js";
 import { deleteTool } from "./delete.js";
 import { replaceInFileTool } from "./replace-in-file.js";
+import { terminalTool } from "./terminal.js";
 import type { Tool } from "./types.js";
 
 /**
@@ -29,4 +37,5 @@ export const allTools: Tool[] = [
   writeFileTool,
   deleteTool,
   replaceInFileTool,
+  terminalTool,
 ];
