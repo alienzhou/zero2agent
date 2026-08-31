@@ -40,7 +40,7 @@ afterEach(async () => {
 
 function extractNonceBody(receipt: string): string {
   const m = receipt.match(
-    /<untrusted_command_output id="[a-f0-9]+">\n([\s\S]*?)\n<\/untrusted_command_output id="[a-f0-9]+">/,
+    /<untrusted_command_output id="[a-f0-9]+">\n([\s\S]*?)\n<\/untrusted_command_output>/,
   )
   return m?.[1] ?? ''
 }
@@ -100,7 +100,7 @@ describe('E02-S003 验收：安全边界 [checklist §安全]', () => {
     )
     const body = extractNonceBody(result)
     expect(body).toContain('ESCAPED')
-    const lastClose = result.lastIndexOf('</untrusted_command_output id="')
+    const lastClose = result.lastIndexOf('</untrusted_command_output>')
     expect(result.indexOf('ESCAPED')).toBeLessThan(lastClose)
   })
 

@@ -298,6 +298,14 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       resolve()
     }
 
+    let detached = false
+    let detachRaw: (() => void) | undefined
+    const detachOnce = () => {
+      if (detached) return
+      detached = true
+      detachRaw?.()
+    }
+
     const interruptController = {
       signalCancel: () => {
         if (cancelled || skipped) return
@@ -307,12 +315,12 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       signalSkip: () => {
         if (!skipAvailable || cancelled || skipped) return
         skipped = true
-        detachInterrupts?.()
+        detachOnce()
         finish()
       },
     }
 
-    const detachInterrupts = runtime.attachInterrupts?.(interruptController)
+    detachRaw = runtime.attachInterrupts?.(interruptController)
 
     child.on('exit', (code, sig) => {
       exitCode = code ?? exitCode
@@ -329,12 +337,12 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
     })
 
     child.on('close', () => {
-      detachInterrupts?.()
+      detachOnce()
       finish()
     })
 
     child.on('error', () => {
-      detachInterrupts?.()
+      detachOnce()
       finish()
     })
   })
@@ -410,7 +418,7 @@ function sanitizeUntrustedBody(body: string): string {
 
 function formatUntrustedBody(body: string, nonce: string): string {
   const safe = sanitizeUntrustedBody(body)
-  return `<untrusted_command_output id="${nonce}">\n${safe}\n</untrusted_command_output id="${nonce}">`
+  return `<untrusted_command_output id="${nonce}">\n${safe}\n</untrusted_command_output>`
 }
 
 export function formatReceipt(

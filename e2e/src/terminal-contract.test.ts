@@ -27,10 +27,7 @@ describe('E02-S003 terminal 契约：工具链集成', () => {
     cleanup = ws.cleanup
     const ctx = { cwd: ws.dir }
 
-    const run = await terminalTool.execute(
-      { command: 'echo e2e-ok > created.txt' },
-      ctx,
-    )
+    const run = await terminalTool.execute({ command: 'echo e2e-ok > created.txt' }, ctx)
     expect(run).toContain('Exit code: 0')
 
     const content = await fs.readFile(path.join(ws.dir, 'created.txt'), 'utf-8')
@@ -45,10 +42,7 @@ describe('E02-S003 terminal 契约：工具链集成', () => {
     cleanup = ws.cleanup
     const ctx = { cwd: ws.dir }
 
-    const result = await terminalTool.execute(
-      { command: 'pwd | tail -1', workdir: 'sub' },
-      ctx,
-    )
+    const result = await terminalTool.execute({ command: 'pwd | tail -1', workdir: 'sub' }, ctx)
     expect(result).toContain('Exit code: 0')
     expect(result).toContain('sub')
   })
@@ -60,7 +54,7 @@ describe('E02-S003 terminal 契约：工具链集成', () => {
 
     const result = await terminalTool.execute(
       { command: 'for i in $(seq 1 900); do echo spill_$i; done' },
-      ctx,
+      ctx
     )
 
     expect(result).toContain('Saved to:')
@@ -79,7 +73,7 @@ describe('E02-S003 terminal 契约：工具链集成', () => {
 
     const result = await terminalTool.execute(
       { command: 'echo x', workdir: '/etc' },
-      { cwd: ws.dir },
+      { cwd: ws.dir }
     )
     expect(result).toContain('outside the workspace')
   })
