@@ -30,6 +30,7 @@ pnpm-debug.log*
 
 # Test coverage
 coverage/
+reports/
 
 # Temporary files
 tmp/

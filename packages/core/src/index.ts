@@ -16,6 +16,7 @@ export {
   allTools,
   readFileTool,
   listDirectoryTool,
+  terminalTool,
   toAnthropicTool,
   setTerminalRuntimeHooks,
   getTerminalRuntimeHooks,

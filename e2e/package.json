@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.4.0",
+    "@zero2agent/core": "workspace:*",
     "@zero2agent/tui": "workspace:*",
     "typescript": "^5.4.0",
     "vitest": "^4.1.0"

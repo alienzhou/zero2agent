@@ -373,7 +373,7 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
 // ── 回执组装 ───────────────────────────────────────
 
 function formatUntrustedBody(body: string, nonce: string): string {
-  return `<untrusted_command_output id="${nonce}">\n${body}\n</untrusted_command_output>`
+  return `<untrusted_command_output id="${nonce}">\n${body}\n</untrusted_command_output id="${nonce}">`
 }
 
 export function formatReceipt(
