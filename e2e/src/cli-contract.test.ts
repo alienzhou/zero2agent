@@ -16,8 +16,12 @@ import { runCli, stripAnsi } from './helpers/cli.js'
 /** 一个必然连不通的地址：端口 9 是 discard 协议，本地不会有服务监听 */
 const DEAD_BASE_URL = 'http://127.0.0.1:9'
 
+/** 契约层 E2E 需跳过 CLI 自动加载 .env.local，否则无法模拟缺 KEY 场景 */
+const CONTRACT_ENV = { ZERO2AGENT_SKIP_LOCAL_ENV: '1' } as const
+
 /** 让 CLI 能通过 KEY 校验、但任何请求都会失败的环境 */
 const OFFLINE_ENV = {
+  ...CONTRACT_ENV,
   ANTHROPIC_API_KEY: 'sk-e2e-placeholder',
   ANTHROPIC_BASE_URL: DEAD_BASE_URL,
 }
@@ -26,7 +30,7 @@ describe('CLI 契约：环境变量校验', () => {
   it('缺少 ANTHROPIC_API_KEY 时应报错并以退出码 1 退出', async () => {
     const result = await runCli({
       args: ['读取 package.json'],
-      env: { ANTHROPIC_API_KEY: undefined, ANTHROPIC_BASE_URL: undefined },
+      env: { ...CONTRACT_ENV, ANTHROPIC_API_KEY: undefined, ANTHROPIC_BASE_URL: undefined },
     })
 
     expect(result.code).toBe(1)
@@ -36,7 +40,7 @@ describe('CLI 契约：环境变量校验', () => {
   it('缺少 KEY 时错误信息应走 stderr 而非 stdout', async () => {
     const result = await runCli({
       args: ['读取 package.json'],
-      env: { ANTHROPIC_API_KEY: undefined, ANTHROPIC_BASE_URL: undefined },
+      env: { ...CONTRACT_ENV, ANTHROPIC_API_KEY: undefined, ANTHROPIC_BASE_URL: undefined },
     })
 
     expect(result.stderr.trim()).not.toBe('')

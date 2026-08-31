@@ -20,6 +20,8 @@ import path from 'node:path'
  * 用 Node 22 内置的 loadEnvFile，避免为此引入 dotenv 依赖
  */
 function loadLocalEnv() {
+  // E2E 契约层需要可控环境，跳过自动加载本地密钥
+  if (process.env.ZERO2AGENT_SKIP_LOCAL_ENV === '1') return
   const envPath = path.resolve(import.meta.dirname, '../../..', '.env.local')
   try {
     process.loadEnvFile(envPath)
