@@ -1,9 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import {
-  applyShellOverrides,
-  getBaseShellEnv,
-  resetShellEnvCacheForTests,
-} from '../shell-env.js'
+import { applyShellOverrides, getBaseShellEnv, resetShellEnvCacheForTests } from '../shell-env.js'
 
 beforeEach(() => {
   resetShellEnvCacheForTests()

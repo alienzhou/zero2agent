@@ -299,8 +299,8 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
     }
 
     let detached = false
-    let detachRaw: (() => void) | undefined
-    const detachOnce = () => {
+
+    function detachOnce(): void {
       if (detached) return
       detached = true
       detachRaw?.()
@@ -320,7 +320,7 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       },
     }
 
-    detachRaw = runtime.attachInterrupts?.(interruptController)
+    const detachRaw = runtime.attachInterrupts?.(interruptController)
 
     child.on('exit', (code, sig) => {
       exitCode = code ?? exitCode

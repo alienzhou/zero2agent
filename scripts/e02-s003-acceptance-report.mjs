@@ -82,8 +82,11 @@ console.log(r);`,
     fs.writeFileSync(path.join(ws, 'pkg.json'), '{"name":"e2e-demo"}\n')
     const cli = run(
       process.execPath,
-      [path.join(ROOT, 'packages/tui/dist/cli.js'), '用 terminal 执行 cat pkg.json，告诉我 name 字段的值'],
-      ws,
+      [
+        path.join(ROOT, 'packages/tui/dist/cli.js'),
+        '用 terminal 执行 cat pkg.json，告诉我 name 字段的值',
+      ],
+      ws
     )
     const out = stripAnsi(cli.stdout + cli.stderr).trim()
     log(out.slice(0, 4000))
@@ -134,8 +137,11 @@ console.log(r);`,
     fs.writeFileSync(path.join(ws, 'pkg.json'), '{"name":"e2e-demo"}\n')
     const cli = run(
       process.execPath,
-      [path.join(ROOT, 'packages/tui/dist/cli.js'), '用 terminal 执行 cat pkg.json，告诉我 name 字段的值'],
-      ws,
+      [
+        path.join(ROOT, 'packages/tui/dist/cli.js'),
+        '用 terminal 执行 cat pkg.json，告诉我 name 字段的值',
+      ],
+      ws
     )
     const out = stripAnsi(cli.stdout + cli.stderr)
     for (const line of out.split('\n').slice(0, 60)) {
@@ -163,9 +169,16 @@ console.log(r);`,
   }
 
   const mp4 = run('ffmpeg', [
-    '-y', '-i', GIF_OUT,
-    '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-    '-movflags', 'faststart', '-pix_fmt', 'yuv420p', VIDEO_OUT,
+    '-y',
+    '-i',
+    GIF_OUT,
+    '-vf',
+    'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+    '-movflags',
+    'faststart',
+    '-pix_fmt',
+    'yuv420p',
+    VIDEO_OUT,
   ])
   if (mp4.code !== 0 || !fs.existsSync(VIDEO_OUT)) {
     console.warn('⚠ MP4 转码失败，交付 GIF 录屏')
@@ -210,7 +223,7 @@ function buildHtml({ env, stats, demo, gitSha, hasVideo }) {
         <td><code>${escapeHtml(s.file)}</code></td>
         <td>${escapeHtml(s.name)}</td>
         <td>${s.duration ?? '-'}ms</td>
-      </tr>`,
+      </tr>`
     )
     .join('\n')
 
@@ -275,10 +288,7 @@ function buildHtml({ env, stats, demo, gitSha, hasVideo }) {
 }
 
 function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 function main() {
@@ -298,15 +308,27 @@ function main() {
 
   console.log('→ core tests (json reporter)')
   const coreRun = run('pnpm', [
-    '--filter', '@zero2agent/core', 'exec', 'vitest', 'run',
-    '--reporter=json', `--outputFile=${coreJson}`,
+    '--filter',
+    '@zero2agent/core',
+    'exec',
+    'vitest',
+    'run',
+    '--reporter=json',
+    `--outputFile=${coreJson}`,
   ])
   if (coreRun.code !== 0) console.error(coreRun.stderr)
 
-  console.log(env.live ? '→ e2e full tests incl. live LLM (json reporter)' : '→ e2e tests (json reporter)')
+  console.log(
+    env.live ? '→ e2e full tests incl. live LLM (json reporter)' : '→ e2e tests (json reporter)'
+  )
   const e2eRun = run('pnpm', [
-    '--filter', '@zero2agent/e2e', 'exec', 'vitest', 'run',
-    '--reporter=json', `--outputFile=${e2eJson}`,
+    '--filter',
+    '@zero2agent/e2e',
+    'exec',
+    'vitest',
+    'run',
+    '--reporter=json',
+    `--outputFile=${e2eJson}`,
   ])
   if (e2eRun.code !== 0) console.error(e2eRun.stderr)
 
