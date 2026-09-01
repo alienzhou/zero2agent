@@ -1,6 +1,6 @@
 /**
  * 定稿 P0 可自动化证据 — 阈值两侧、exit 矩阵、description 契约、
- * drain 计时、真实进程行为（禁止 mock 冒充进程结果）
+ * drain 计时、真实进程 / PTY 按键（禁止 mock 冒充）
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { spawn } from 'node:child_process'
@@ -10,8 +10,14 @@ import * as os from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { terminalTool } from '../terminal.js'
 import { clearProcessRegistryForTests } from '../process-registry.js'
-import { resetTerminalRuntimeHooksForTests, setTerminalRuntimeHooks } from '../terminal-runtime.js'
+import { resetTerminalRuntimeHooksForTests } from '../terminal-runtime.js'
 import type { ToolContext } from '../types.js'
+import {
+  CTRL_S,
+  CTRL_X,
+  runTerminalInPty,
+  waitForReady,
+} from './helpers/terminal-pty-evidence.js'
 
 const TERMINAL_DIST = fileURLToPath(new URL('../../../dist/tools/terminal.js', import.meta.url))
 
@@ -103,28 +109,38 @@ describe('P0 证据：watcher 退出码矩阵', () => {
 
 describe('P0 证据：Wall time 阈值两侧', () => {
   it('[P0] 2.9s 无 Wall time', async () => {
-    const result = await terminalTool.execute(
-      { command: 'sleep 2.9' },
-      ctx
-    )
+    const result = await terminalTool.execute({ command: 'sleep 2.9' }, ctx)
     expect(result).toContain('Exit code: 0')
     expect(result).not.toContain('Wall time:')
   }, 15_000)
 
   it('[P0] 3.1s 有 Wall time', async () => {
-    const result = await terminalTool.execute(
-      { command: 'sleep 3.1' },
-      ctx
-    )
+    const result = await terminalTool.execute({ command: 'sleep 3.1' }, ctx)
     expect(result).toContain('Exit code: 0')
     expect(result).toMatch(/Wall time: [34]s/)
   }, 15_000)
 })
 
-describe('P0 证据：读取侧 drain（真实进程，非 setsid killpg）', () => {
+describe('P0 证据：读取侧 drain', () => {
   it('[P0] 后台 job 持有 pipe：约 2s drain 返回，不等 5s close', async () => {
     const start = Date.now()
     const result = await terminalTool.execute({ command: '(sleep 5) & exit 0' }, ctx)
+    const elapsed = Date.now() - start
+
+    expect(elapsed).toBeGreaterThanOrEqual(1800)
+    expect(elapsed).toBeLessThan(3500)
+    expect(result).toContain('descendant process may still be holding the output pipe')
+  }, 15_000)
+
+  it('[P0] detached 子进程继承 stdout：约 2s drain 返回', async () => {
+    const start = Date.now()
+    const result = await terminalTool.execute(
+      {
+        command:
+          "node -e \"import{spawn}from'node:child_process';const c=spawn('sleep',['5'],{detached:true,stdio:['ignore','inherit','inherit']});c.unref();process.exit(0)\"",
+      },
+      ctx
+    )
     const elapsed = Date.now() - start
 
     expect(elapsed).toBeGreaterThanOrEqual(1800)
@@ -142,64 +158,82 @@ describe('P0 证据：非 TTY 降级（默认 runtime，无 mock）', () => {
   }, 15_000)
 })
 
-describe('P0 证据：真实进程 — 取消收掉 nohup / 后台 sleep', () => {
-  it('[P0] Ctrl-X 取消后 nohup sleep 不再存活', async () => {
-    const pidFile = path.join(tmpDir, 'nohup.pid')
-    setTerminalRuntimeHooks({
-      isTTY: true,
-      attachInterrupts: controller => {
-        setTimeout(() => controller.signalCancel(), 400)
-        return () => {}
-      },
+describe('P0 证据：PTY 真按键（script PTY + TUI 同款 keypress）', () => {
+  it('[P0] 首秒内 Ctrl-X 取消长命令', async () => {
+    const { result, statusLines } = await runTerminalInPty({
+      cwd: tmpDir,
+      command: 'sleep 20',
+      keys: [{ delayMs: 400, data: CTRL_X }],
+      timeoutMs: 15_000,
     })
 
-    const result = await terminalTool.execute(
-      {
-        command: `nohup sleep 60 > /dev/null 2>&1 & echo $! > ${JSON.stringify(pidFile)}; sleep 30`,
-      },
-      ctx
-    )
+    expect(result).toMatch(/^Status: cancelled/m)
+    expect(statusLines.some(s => s.line.includes('Ctrl-X 取消'))).toBe(true)
+    expect(statusLines.some(s => s.line.includes('Ctrl-S'))).toBe(false)
+  }, 20_000)
+
+  it('[P0] 10s 后出现 Ctrl-S 提示，按键可跳过', async () => {
+    const { result, statusLines } = await runTerminalInPty({
+      cwd: tmpDir,
+      command: 'sleep 20',
+      keys: [{ delayMs: 10_500, data: CTRL_S }],
+      timeoutMs: 25_000,
+    })
+
+    expect(result).toMatch(/^Status: skipped/m)
+    const skipHints = statusLines.filter(s => s.line.includes('Ctrl-S 跳过'))
+    expect(skipHints.length).toBeGreaterThan(0)
+    const first = skipHints[0]
+    const t0 = statusLines[0]?.at ?? first.at
+    expect(first.at - t0).toBeGreaterThanOrEqual(9500)
+  }, 30_000)
+
+  it('[P0] PTY Ctrl-X 取消后 nohup sleep 不再存活', async () => {
+    const pidFile = path.join(tmpDir, 'nohup.pid')
+    const { result } = await runTerminalInPty({
+      cwd: tmpDir,
+      command: `nohup sleep 60 > /dev/null 2>&1 & echo $! > ${JSON.stringify(pidFile)}; sleep 30`,
+      keys: [{ delayMs: 500, data: CTRL_X }],
+      timeoutMs: 20_000,
+    })
 
     expect(result).toMatch(/^Status: cancelled/m)
     const pid = Number((await fs.readFile(pidFile, 'utf8')).trim())
     expect(Number.isFinite(pid)).toBe(true)
     await new Promise(r => setTimeout(r, 800))
     expect(await pidAlive(pid)).toBe(false)
-  }, 20_000)
+  }, 25_000)
 
-  it('[P0] Ctrl-X 取消后 disown 的 sleep 不再存活', async () => {
+  it('[P0] PTY Ctrl-X 取消后 disown sleep 不再存活', async () => {
     const pidFile = path.join(tmpDir, 'disown.pid')
-    setTerminalRuntimeHooks({
-      isTTY: true,
-      attachInterrupts: controller => {
-        setTimeout(() => controller.signalCancel(), 400)
-        return () => {}
-      },
+    const { result } = await runTerminalInPty({
+      cwd: tmpDir,
+      command: `sleep 60 & echo $! > ${JSON.stringify(pidFile)}; disown; sleep 30`,
+      keys: [{ delayMs: 500, data: CTRL_X }],
+      timeoutMs: 20_000,
     })
-
-    const result = await terminalTool.execute(
-      {
-        command: `sleep 60 & echo $! > ${JSON.stringify(pidFile)}; disown; sleep 30`,
-      },
-      ctx
-    )
 
     expect(result).toMatch(/^Status: cancelled/m)
     const pid = Number((await fs.readFile(pidFile, 'utf8')).trim())
     await new Promise(r => setTimeout(r, 800))
     expect(await pidAlive(pid)).toBe(false)
-  }, 20_000)
+  }, 25_000)
 })
 
 describe('P0 证据：watcher 防线② — Agent 子进程 SIGKILL', () => {
-  it('[P0] 承载 terminal 的 Node 被 SIGKILL 后，sleep 孙进程约 2s 内退出', async () => {
-    const marker = path.join(tmpDir, 'watcher-marker.txt')
+  it('[P0] SIGKILL harness 后 sleep 孙进程在约 2s 内死亡', async () => {
+    const grandchildPidFile = path.join(tmpDir, 'grandchild.pid')
     const harnessPath = path.join(tmpDir, 'watcher-kill9-harness.mjs')
+    const readyPath = path.join(tmpDir, 'harness-ready.pid')
+
     await fs.writeFile(
       harnessPath,
       `import { terminalTool } from ${JSON.stringify(TERMINAL_DIST)};
+const grandchildPidFile = ${JSON.stringify(grandchildPidFile)};
+import * as fs from 'node:fs';
+fs.writeFileSync(${JSON.stringify(readyPath)}, String(process.pid));
 await terminalTool.execute(
-  { command: 'sleep 25; touch ${marker.replace(/'/g, "'\\''")}' },
+  { command: 'sleep 60 & echo $! > ' + JSON.stringify(grandchildPidFile) + '; wait' },
   { cwd: ${JSON.stringify(tmpDir)} }
 );
 `
@@ -209,26 +243,32 @@ await terminalTool.execute(
     const childPid = child.pid!
     child.unref()
 
-    await new Promise(r => setTimeout(r, 700))
-    expect(await pidAlive(childPid)).toBe(true)
+    await waitForReady(readyPath, 5000)
+
+    let grandchildPid = 0
+    const pidDeadline = Date.now() + 5000
+    while (Date.now() < pidDeadline) {
+      try {
+        grandchildPid = Number((await fs.readFile(grandchildPidFile, 'utf8')).trim())
+        if (Number.isFinite(grandchildPid) && grandchildPid > 0) break
+      } catch {
+        await new Promise(r => setTimeout(r, 50))
+      }
+    }
+    expect(Number.isFinite(grandchildPid)).toBe(true)
+    expect(await pidAlive(grandchildPid)).toBe(true)
+
     process.kill(childPid, 'SIGKILL')
 
-    await new Promise(r => setTimeout(r, 2500))
-    await expect(fs.access(marker)).rejects.toThrow()
-    expect(await pidAlive(childPid)).toBe(false)
+    const deadline = Date.now() + 2000
+    let dead = false
+    while (Date.now() < deadline) {
+      if (!(await pidAlive(grandchildPid))) {
+        dead = true
+        break
+      }
+      await new Promise(r => setTimeout(r, 100))
+    }
+    expect(dead).toBe(true)
   }, 35_000)
-})
-
-describe('P0 证据：blocker 登记（不可自动化项，非 skip 冒充通过）', () => {
-  it('[blocker] 真实 TTY 按键时序（首秒 Ctrl-X / 10s Ctrl-S 提示）', () => {
-    // vitest 进程 stdin.isTTY === false，无法注入真实 keypress/raw mode；
-    // 需 pty 驱动或人工录屏，不在此用 mock runtime 冒充。
-    expect(process.stdin.isTTY).not.toBe(true)
-  })
-
-  it('[blocker] setsid 逃出 killpg 后的进程回收', () => {
-    // 定稿 D04-2 明确不做 killpg 追猎；setsid 场景与「pipe drain」是不同防线。
-    // macOS 上 `setsid sleep 5 & exit 0` 往往不持有父进程 stdout，无法稳定复现 pipe drain。
-    expect(true).toBe(true)
-  })
 })
