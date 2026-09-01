@@ -53,12 +53,13 @@ function waitForFile(filePath: string, timeoutMs: number): Promise<void> {
 }
 
 describe('P0 复审：读取侧 drain 防线', () => {
-  it('[P0] setsid 后代攥住 stdout 时 2s 内返回，不等 5s', async () => {
+  it('[P0] 后台 job 持有 pipe 时约 2s drain 返回（非 setsid killpg）', async () => {
     const start = Date.now()
     const result = await terminalTool.execute({ command: '(sleep 5) & exit 0' }, ctx)
     const elapsed = Date.now() - start
 
-    expect(elapsed).toBeLessThan(4500)
+    expect(elapsed).toBeGreaterThanOrEqual(1800)
+    expect(elapsed).toBeLessThan(3500)
     expect(result).toContain('descendant process may still be holding the output pipe')
   }, 15_000)
 })
