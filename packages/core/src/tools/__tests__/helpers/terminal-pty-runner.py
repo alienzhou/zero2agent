@@ -64,6 +64,8 @@ def main() -> int:
             break
 
     os.close(master_fd)
+    if os.WIFSIGNALED(status):
+        return 128 + os.WTERMSIG(status)
     return os.WEXITSTATUS(status) if os.WIFEXITED(status) else 1
 
 

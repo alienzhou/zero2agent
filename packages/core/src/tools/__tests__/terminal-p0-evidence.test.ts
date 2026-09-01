@@ -2,7 +2,7 @@
  * 定稿 P0 可自动化证据 — 阈值两侧、exit 矩阵、description 契约、
  * drain 计时、真实进程 / PTY 按键（禁止 mock 冒充）
  */
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, beforeAll } from 'vitest'
 import { spawn } from 'node:child_process'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
@@ -13,8 +13,10 @@ import { clearProcessRegistryForTests } from '../process-registry.js'
 import { resetTerminalRuntimeHooksForTests } from '../terminal-runtime.js'
 import type { ToolContext } from '../types.js'
 import {
+  CTRL_C,
   CTRL_S,
   CTRL_X,
+  ensureTuiBuiltForPty,
   runTerminalInPty,
   waitForReady,
 } from './helpers/terminal-pty-evidence.js'
@@ -79,14 +81,14 @@ describe('P0 证据：超长输出阈值两侧', () => {
 
   it('[P0] 20KB 以内不越界，略超 20KB 越界', async () => {
     const under = await terminalTool.execute(
-      { command: "node -e \"process.stdout.write('x'.repeat(20400))\"" },
+      { command: 'node -e "process.stdout.write(\'x\'.repeat(20400))"' },
       ctx
     )
     expect(under).toContain('<untrusted_command_output')
     expect(under).not.toContain('Saved to:')
 
     const over = await terminalTool.execute(
-      { command: "node -e \"process.stdout.write('y'.repeat(21000))\"" },
+      { command: 'node -e "process.stdout.write(\'y\'.repeat(21000))"' },
       ctx
     )
     expect(over).toContain('Saved to:')
@@ -158,7 +160,29 @@ describe('P0 证据：非 TTY 降级（默认 runtime，无 mock）', () => {
   }, 15_000)
 })
 
-describe('P0 证据：PTY 真按键（script PTY + TUI 同款 keypress）', () => {
+describe('P0 证据：PTY 真按键（生产 setupTerminalRuntime + readline）', () => {
+  beforeAll(async () => {
+    await ensureTuiBuiltForPty()
+  })
+
+  it('[P0] 命令启动时立即出现首屏 Ctrl-X 提示（0s）', async () => {
+    const { statusLines, rlTrace } = await runTerminalInPty({
+      cwd: tmpDir,
+      command: 'sleep 20',
+      keys: [{ delayMs: 800, data: CTRL_X }],
+      timeoutMs: 15_000,
+    })
+
+    expect(rlTrace).toContain('pause')
+    expect(rlTrace).toContain('resume')
+
+    const firstHint = statusLines.find(s => s.line.includes('Ctrl-X 取消'))
+    expect(firstHint).toBeDefined()
+    expect(firstHint!.sinceStartMs).toBeLessThan(500)
+    expect(firstHint!.line).toMatch(/0s/)
+    expect(firstHint!.line).not.toContain('Ctrl-S')
+  }, 20_000)
+
   it('[P0] 首秒内 Ctrl-X 取消长命令', async () => {
     const { result, statusLines } = await runTerminalInPty({
       cwd: tmpDir,
@@ -172,6 +196,21 @@ describe('P0 证据：PTY 真按键（script PTY + TUI 同款 keypress）', () =
     expect(statusLines.some(s => s.line.includes('Ctrl-S'))).toBe(false)
   }, 20_000)
 
+  it('[P0] Ctrl-C 向 Agent 发 SIGINT，不是 cancelled 回执', async () => {
+    const { result, exitCode } = await runTerminalInPty({
+      cwd: tmpDir,
+      command: 'sleep 20',
+      keys: [{ delayMs: 500, data: CTRL_C }],
+      timeoutMs: 10_000,
+      expectSignalExit: true,
+    })
+
+    expect(exitCode).toBe(130)
+    if (result) {
+      expect(result).not.toMatch(/^Status: cancelled/m)
+    }
+  }, 15_000)
+
   it('[P0] 10s 后出现 Ctrl-S 提示，按键可跳过', async () => {
     const { result, statusLines } = await runTerminalInPty({
       cwd: tmpDir,
@@ -183,9 +222,7 @@ describe('P0 证据：PTY 真按键（script PTY + TUI 同款 keypress）', () =
     expect(result).toMatch(/^Status: skipped/m)
     const skipHints = statusLines.filter(s => s.line.includes('Ctrl-S 跳过'))
     expect(skipHints.length).toBeGreaterThan(0)
-    const first = skipHints[0]
-    const t0 = statusLines[0]?.at ?? first.at
-    expect(first.at - t0).toBeGreaterThanOrEqual(9500)
+    expect(skipHints[0].sinceStartMs).toBeGreaterThanOrEqual(9500)
   }, 30_000)
 
   it('[P0] PTY Ctrl-X 取消后 nohup sleep 不再存活', async () => {
