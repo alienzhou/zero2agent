@@ -1,6 +1,6 @@
 /**
  * D04 三道防线 — CLI + 真实 LLM live E2E
- * ① killpg：落 pid 后杀进程组，CLI 返回后 kill -0 须死
+ * ① nohup/disown：只 spawn 落 pid，CLI 秒返且孙进程仍存活（killpg 由 PTY 单测覆盖）
  * ③ (sleep N) & exit 0：读取侧约 2s drain resolve
  */
 import { describe, it, expect, afterEach } from 'vitest'
@@ -11,55 +11,78 @@ import {
   extractTerminalExecMs,
   hasDrainPipeNote,
   isPidAlive,
+  killPidBestEffort,
   readPidFile,
 } from '../helpers/terminal-live.js'
 
+const NOHUP_CMD =
+  'nohup sleep 120 > /dev/null 2>&1 & echo $! > orphan-nohup.pid'
+const DISOWN_CMD =
+  "nohup bash -c 'sleep 120 & echo $! > orphan-disown.pid; disown' > /dev/null 2>&1 &"
+
 describe.skipIf(!live)('D04 三道防线', () => {
   let cleanup: (() => Promise<void>) | undefined
+  let orphanPid: number | undefined
 
   afterEach(async () => {
+    if (orphanPid !== undefined && isPidAlive(orphanPid)) {
+      killPidBestEffort(orphanPid)
+    }
+    orphanPid = undefined
     await cleanup?.()
     cleanup = undefined
   })
 
-  it('killpg：nohup 孙进程落 pid 后应能被杀死', async () => {
+  it('后台存活：nohup 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true', async () => {
     const ws = await makeTempWorkspace()
     cleanup = ws.cleanup
 
+    const started = Date.now()
     const result = await runCli({
       args: [
-        '严格按顺序：1) terminal 执行 nohup sleep 120 > /dev/null 2>&1 & echo $! > orphan-nohup.pid ；2) terminal 执行 kill -TERM -$(cat orphan-nohup.pid) 2>/dev/null || kill -TERM $(cat orphan-nohup.pid)',
+        `只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${NOHUP_CMD}`,
       ],
       cwd: ws.dir,
     })
+    const wallMs = Date.now() - started
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
     expect(output).toContain('terminal')
-    expect(output).toMatch(/orphan-nohup\.pid|nohup/)
+    expectTerminalCommand(output, NOHUP_CMD)
 
     const pid = await readPidFile(ws.dir, 'orphan-nohup.pid')
-    expect(isPidAlive(pid)).toBe(false)
+    orphanPid = pid
+    expect(wallMs).toBeLessThan(30_000)
+    expect(isPidAlive(pid)).toBe(true)
+    const execMs = extractTerminalExecMs(output)
+    if (execMs !== null) expect(execMs).toBeLessThan(15_000)
   }, 90_000)
 
-  it('killpg：disown 孙进程落 pid 后应能被杀死', async () => {
+  it('后台存活：disown 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true', async () => {
     const ws = await makeTempWorkspace()
     cleanup = ws.cleanup
 
+    const started = Date.now()
     const result = await runCli({
       args: [
-        "严格按顺序：1) terminal 执行 bash -c 'sleep 120 & echo $! > orphan-disown.pid; disown' ；2) terminal 执行 kill -TERM -$(cat orphan-disown.pid) 2>/dev/null || kill -TERM $(cat orphan-disown.pid)",
+        `只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${DISOWN_CMD}`,
       ],
       cwd: ws.dir,
     })
+    const wallMs = Date.now() - started
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
     expect(output).toContain('terminal')
-    expect(output).toMatch(/orphan-disown\.pid|disown/)
+    expectTerminalCommand(output, DISOWN_CMD)
 
     const pid = await readPidFile(ws.dir, 'orphan-disown.pid')
-    expect(isPidAlive(pid)).toBe(false)
+    orphanPid = pid
+    expect(wallMs).toBeLessThan(30_000)
+    expect(isPidAlive(pid)).toBe(true)
+    const execMs = extractTerminalExecMs(output)
+    if (execMs !== null) expect(execMs).toBeLessThan(15_000)
   }, 90_000)
 
   it('防线③：command 须为 (sleep 8) & exit 0，约 2s drain', async () => {

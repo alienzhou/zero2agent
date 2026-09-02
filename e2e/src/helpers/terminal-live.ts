@@ -12,6 +12,14 @@ export function isPidAlive(pid: number): boolean {
   return r.status === 0
 }
 
+/** 夹具回收：尽力终止孤儿进程（先进程组再单 pid） */
+export function killPidBestEffort(pid: number): void {
+  if (!Number.isInteger(pid) || pid <= 0) return
+  spawnSync('kill', ['-TERM', `-${pid}`], { encoding: 'utf-8' })
+  if (isPidAlive(pid)) spawnSync('kill', ['-TERM', String(pid)], { encoding: 'utf-8' })
+  if (isPidAlive(pid)) spawnSync('kill', ['-KILL', String(pid)], { encoding: 'utf-8' })
+}
+
 /** 读取工作区内的 pid 文件 */
 export async function readPidFile(wsDir: string, rel = 'orphan.pid'): Promise<number> {
   const raw = (await fs.readFile(path.join(wsDir, rel), 'utf8')).trim()
