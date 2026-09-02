@@ -77,4 +77,24 @@ describe('E02-S003 terminal 契约：工具链集成', () => {
     )
     expect(result).toContain('outside the workspace')
   })
+
+  it('[P0] 非零退出码写入回执', async () => {
+    const ws = await makeTempWorkspace()
+    cleanup = ws.cleanup
+
+    const result = await terminalTool.execute({ command: 'exit 7' }, { cwd: ws.dir })
+    expect(result).toContain('Exit code: 7')
+  })
+
+  it('[P0] stdout 与 stderr 合流', async () => {
+    const ws = await makeTempWorkspace()
+    cleanup = ws.cleanup
+
+    const result = await terminalTool.execute(
+      { command: 'echo out-line; echo err-line >&2' },
+      { cwd: ws.dir }
+    )
+    expect(result).toContain('out-line')
+    expect(result).toContain('err-line')
+  })
 })
