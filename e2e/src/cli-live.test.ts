@@ -234,3 +234,29 @@ describe.skipIf(!live)('CLI 真实行为：交互模式', () => {
     expect(output).toContain('待办')
   })
 })
+
+describe.skipIf(!live)('CLI 真实行为：terminal（E02-S003）', () => {
+  let cleanup: (() => Promise<void>) | undefined
+
+  afterEach(async () => {
+    await cleanup?.()
+    cleanup = undefined
+  })
+
+  it('应能用 terminal 执行命令并读回结果', async () => {
+    const ws = await makeTempWorkspace({
+      'pkg.json': '{"name":"demo"}\n',
+    })
+    cleanup = ws.cleanup
+
+    const result = await runCli({
+      args: ['用 terminal 执行 cat pkg.json，告诉我 name 字段的值'],
+      cwd: ws.dir,
+    })
+
+    expect(result.code).toBe(0)
+    const output = stripAnsi(result.output)
+    expect(output).toContain('terminal')
+    expect(output).toMatch(/demo|"demo"/)
+  })
+})

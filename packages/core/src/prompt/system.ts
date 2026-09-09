@@ -17,11 +17,11 @@ export function buildScopeSection(): string {
     '- 创建、写入文件（全量覆盖）',
     '- 局部修改文件（字符串替换）',
     '- 删除文件',
+    '- 执行 shell 命令（terminal）',
     '',
     '你不能：',
     '- 写入或删除工作区目录之外的路径',
     '- 递归删除目录',
-    '- 执行 shell 命令',
     '- 访问网络',
   ].join('\n')
 }
@@ -38,6 +38,10 @@ export function buildToolPolicySection(): string {
     '- 局部修改已存在文件时使用 replace_in_file（整篇重写才用 write_file）',
     '- 删除文件时使用 delete，可一次传入多个文件路径',
     '- 修改已存在文件前，建议先用 read_file 确认当前内容',
+    '- 运行 git、npm、测试等命令时使用 terminal；文件读写搜索仍用专用工具',
+    '- terminal 是非交互环境，需要输入的命令会失败，请用 -y / --no-input 等无交互标志',
+    '- 切换执行目录用 terminal 的 workdir，不要写 cd（每次调用是新进程）',
+    '- terminal 超长输出会落盘到 /tmp，用 read_file 或 grep_search 回读保存路径',
   ].join('\n')
 }
 

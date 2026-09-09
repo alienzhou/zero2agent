@@ -21,6 +21,7 @@
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @zero2agent/e2e test",
     "test:e2e:live": "pnpm --filter @zero2agent/e2e test:live",
+    "test:acceptance": "node scripts/e02-s003-acceptance-report.mjs",
     "lint": "eslint packages e2e --ext .ts,.tsx",
     "lint:fix": "eslint packages e2e --ext .ts,.tsx --fix",
     "format": "prettier --write 'packages/**/*.ts' 'e2e/**/*.ts'",

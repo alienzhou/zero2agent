@@ -6,6 +6,7 @@ import { Agent, buildSystemPrompt } from '@zero2agent/core'
 import type { LoopEventHandlers } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import path from 'node:path'
+import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 
 // ── 环境变量 ───────────────────────────────────────
 
@@ -14,6 +15,8 @@ import path from 'node:path'
  * 用 Node 22 内置的 loadEnvFile，避免为此引入 dotenv 依赖
  */
 function loadLocalEnv() {
+  // E2E 契约层需要可控环境，跳过自动加载本地密钥
+  if (process.env.ZERO2AGENT_SKIP_LOCAL_ENV === '1') return
   const envPath = path.resolve(import.meta.dirname, '../../..', '.env.local')
   try {
     process.loadEnvFile(envPath)
@@ -52,6 +55,11 @@ function summarizeToolOutput(toolName: string, output: string): string {
   }
   if (toolName === 'write_file' || toolName === 'delete' || toolName === 'replace_in_file') {
     return firstLine
+  }
+  if (toolName === 'terminal') {
+    const statusLine = output.split('\n').find(l => l.startsWith('Status:'))
+    const exitLine = output.split('\n').find(l => l.startsWith('Exit code:'))
+    return statusLine ?? exitLine ?? firstLine
   }
   return `${output.length} chars`
 }
@@ -96,8 +104,6 @@ const events: LoopEventHandlers = {
   },
 }
 
-// ── 主流程 ─────────────────────────────────────────
-
 async function main() {
   loadLocalEnv()
 
@@ -107,6 +113,8 @@ async function main() {
     console.error('错误: 请设置 ANTHROPIC_API_KEY 环境变量')
     process.exit(1)
   }
+
+  setupTerminalRuntime()
 
   const agent = new Agent({
     systemPrompt: buildSystemPrompt(),
@@ -135,10 +143,13 @@ async function main() {
     output: process.stdout,
   })
 
+  setupTerminalRuntime(rl)
+
   // stdin 结束（EOF / 管道输入耗尽）后不能再 question，否则抛 ERR_USE_AFTER_CLOSE
   let closed = false
   rl.on('close', () => {
     closed = true
+    void cleanupBackgroundOnExit()
   })
 
   const prompt = () => {
