@@ -56,7 +56,7 @@
 - Spec 产物：`specs/E02-act-and-execute/S003-terminal/`（README + details/ 五份）
 - 实现产物：`packages/core/src/tools/terminal.ts` 及 runtime / registry / shell-env；PR #11
 - 收口产物：[CHANGELOG](../../../CHANGELOG.md#e02-s003-terminal-done) · [复盘](../../../retros/E02-S003-terminal.md) · Tag `E02-S003-terminal`
-- **下一步**：E02-S004 交互式命令（`stdin` 续写 / pty），尚未开始讨论
+- **下一步**：E02-S004 交互式命令（`stdin` 续写 / pty）—— 讨论已启动，见 [2026-09-18/e02-s004-interactive-commands](../../2026-09-18/e02-s004-interactive-commands/outline.md)（D01–D05 初稿，初步收敛待评审）
 
 ## ⚪ Pending
 
