@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E01-S004 固定 Prompt 结构已完成 — [查看详情](./CHANGELOG.md#e01-s004-prompt-structure-done)
+**最新更新**：E02-S003 驱动执行环境（terminal）已完成 — [查看详情](./CHANGELOG.md#e02-s003-terminal-done)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -169,6 +169,9 @@ zero2agent/
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | 内容搜索 (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | 文件搜索 (find_files) | Done |
 | [E01-S004](./specs/E01-read-and-search/S004-prompt-structure/README.md) | Prompt 结构化 (buildSystemPrompt) | Done |
+| [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
+| [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改 (replace_in_file) | Done |
+| [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

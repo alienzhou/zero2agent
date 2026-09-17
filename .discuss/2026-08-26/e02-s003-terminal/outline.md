@@ -50,11 +50,13 @@
 
 ## 🔵 Current Focus
 
-**五个核心议题已全部收敛，结论已迁入 Confirmed / Rejected，spec 已定稿。**
+**五个核心议题已全部收敛，实现已合入，Story 已收口。**
 
 - 讨论产物：`decisions/D01–D05`（81 项决策）+ 本文件的 Confirmed / Rejected 表
-- Spec 产物：`specs/E02-act-and-execute/S003-terminal/`（README + details/ 五份，任务顺序 = 教学顺序）
-- **下一步**：按 [02-task-list](../../../specs/E02-act-and-execute/S003-terminal/details/02-task-list.md) 实现 `packages/core/src/tools/terminal.ts`（从 30 行的 `runCommand()` 开始）
+- Spec 产物：`specs/E02-act-and-execute/S003-terminal/`（README + details/ 五份）
+- 实现产物：`packages/core/src/tools/terminal.ts` 及 runtime / registry / shell-env；PR #11
+- 收口产物：[CHANGELOG](../../../CHANGELOG.md#e02-s003-terminal-done) · [复盘](../../../retros/E02-S003-terminal.md) · Tag `E02-S003-terminal`
+- **下一步**：E02-S004 交互式命令（`stdin` 续写 / pty），尚未开始讨论
 
 ## ⚪ Pending
 

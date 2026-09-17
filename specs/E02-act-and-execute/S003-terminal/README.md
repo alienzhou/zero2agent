@@ -198,6 +198,7 @@ S003 的立场是把它整体推给审批层，而不是在这里写一个注定
 |------|------|
 | [讨论记录](../../../.discuss/2026-08-26/e02-s003-terminal/outline.md) | 五个议题的收敛过程（D01–D05，共 81 项决策） |
 | [竞品调研](../../../researches/terminal/README.md) | opencode / codex / pi-mono / gemini-cli / aider 五家执行机制 |
+| [复盘笔记](../../../retros/E02-S003-terminal.md) | 迭代完成后的反思 |
 | [Epic 2 总览](../README.md) | 本 Story 所属 Epic |
 
 ---

@@ -2,7 +2,7 @@
 
 > 这个项目不只有代码——还有设计文档、讨论记录、AI 协作对话、复盘笔记等。不用全看，这页帮你按学习深度找到适合自己的路径。
 
-[首页](../../README.md) | [Epic 1](../../specs/E01-read-and-search/README.md) | 入门：[E1-S1](../../specs/E01-read-and-search/S001-react-basic/README.md) | 已完成：[E1-S2](../../specs/E01-read-and-search/S002-content-search/README.md) · [E1-S3](../../specs/E01-read-and-search/S003-file-search/README.md) · [E1-S4](../../specs/E01-read-and-search/S004-prompt-structure/README.md)
+[首页](../../README.md) | [Epic 1](../../specs/E01-read-and-search/README.md) | 入门：[E1-S1](../../specs/E01-read-and-search/S001-react-basic/README.md) | 已完成：[E1-S2](../../specs/E01-read-and-search/S002-content-search/README.md) · [E1-S3](../../specs/E01-read-and-search/S003-file-search/README.md) · [E1-S4](../../specs/E01-read-and-search/S004-prompt-structure/README.md) · [E2-S1](../../specs/E02-act-and-execute/S001-write-file/README.md) · [E2-S2](../../specs/E02-act-and-execute/S002-replace-in-file/README.md) · [E2-S3](../../specs/E02-act-and-execute/S003-terminal/README.md)
 
 ---
 
@@ -61,6 +61,7 @@ git checkout E01-S001-react-basic   # 切到 S001 完成状态
 git checkout E01-S002-grep-search   # 切到 S002 完成状态
 git checkout E01-S003-file-search   # 切到 S003 完成状态
 git checkout E01-S004-prompt-structure  # 切到 S004 完成状态
+git checkout E02-S003-terminal      # 切到 E02-S003 完成状态
 ```
 
 若本地尚未看到 `E01-S003-file-search`等 Tag，可用 `main` 最新提交对照 [CHANGELOG](../../CHANGELOG.md) 中的对应迭代说明。

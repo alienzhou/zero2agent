@@ -20,6 +20,7 @@ git tag -l "E*" "S*"
 git checkout E01-S001-react-basic
 git checkout E01-S002-grep-search
 git checkout E01-S003-file-search
+git checkout E02-S003-terminal
 
 # 回到最新
 git checkout main
@@ -69,6 +70,7 @@ git checkout main
 |------|------|------|
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改已有内容 (replace_in_file) | Done |
+| [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 
 ---
 
@@ -147,6 +149,47 @@ git checkout main
 - [x] System Prompt 增加 replace_in_file 能力与工具策略
 - [x] TUI `cli.ts` 更新工具摘要分支
 - [x] 14 个测试用例（唯一替换 / replace_all / 未找到 / 不唯一 / 越界 / 特殊字符 / 删片段，全部通过）
+
+---
+
+### E02-S003-terminal (Done)
+
+所属 Epic：[Epic 2：能动 / 能改 / 能执行](./specs/E02-act-and-execute/README.md) | Story 详情：[S003](./specs/E02-act-and-execute/S003-terminal/README.md)
+
+**目标**：给 Agent 装上执行工具 `terminal`，让它能跑 shell 命令并拿到真实结果；真正的交付物是围绕「一个我们不控制的程序」的五套机制
+
+**你会学到**：
+- 起进程只要 20 行，重量全在「什么信息进上下文」以及进程活过回执之后怎么办
+- 为什么「截断输出」是在解错误的问题，渐进式披露（落盘 + 回读）怎么做
+- 为什么「超时杀死」应该换成「取消 / 跳过」——不可逆动作只能交给人
+- 三种 Agent 死法为什么需要三道不同的防线，以及「进程杀了 ≠ 管道关了」
+- 「和用户终端保持一致」为什么必须拆成能力继承与呈现覆盖两个相反方向
+
+**关键文件**：
+- `specs/E02-act-and-execute/S003-terminal/` - 设计文档
+- `packages/core/src/tools/terminal.ts` - terminal 工具与回执 / 落盘 / 取消跳过
+- `packages/core/src/tools/terminal-runtime.ts` - TTY 按键与运行时钩子
+- `packages/core/src/tools/process-registry.ts` - 被跳过后台进程登记
+- `packages/core/src/tools/shell-env.ts` - login shell 环境采集与呈现覆盖
+- `packages/tui/src/setup-terminal-runtime.ts` - CLI 绑定 Ctrl-X / Ctrl-S
+- `packages/core/src/tools/index.ts` - 工具注册入口
+- `packages/core/src/prompt/system.ts` - System Prompt 增加执行能力与非交互策略
+
+**学习要点**：
+1. `terminal` 是第一个会在自己返回之后仍留下活物的工具；教学重心不是 spawn，而是边界
+2. 不截断、不默认杀死，是对五家竞品共识的有意偏离，前提是「无人在环不能照抄有人兜底的设计」
+3. S003/S004 的线按耦合度重画：自己制造的长命令 / 生命周期问题不能留给下一章
+4. 回执结构本身可被命令输出伪造，隔离标签必须带随机 nonce
+5. `ToolContext` 第四次不扩展；workdir / 超时 / 流式都不进公共上下文对象
+
+**变更内容**：
+- [x] `terminal` 工具：`command` 必填、`workdir` 可选，走 `bash -c`，stdout/stderr 合流，exit code 无条件进回执
+- [x] 超长输出越 800 行 / 20KB 落盘，回执只给规模和路径，模型用既有读工具回读
+- [x] 不设执行上限：Ctrl-X 全程取消，10 秒后 Ctrl-S 跳过转后台；非 TTY 跑到底
+- [x] 三道防线：退出询问、watcher 收孤儿、读取侧 2s drain 超时
+- [x] 启动时采集 login shell env，覆盖 `TERM=dumb` / 分页器 / 凭据弹窗，不加 `NO_COLOR`
+- [x] System Prompt 写明非交互、用 `workdir` 不用 `cd`、超长输出可回读
+- [x] 单测 + P0 evidence + D01–D05 live E2E（含 PTY 真按键）
 
 ---
 

@@ -8,7 +8,7 @@
 
 **核心目标**：让学习者理解「Agent 与一个它不写、不控制、可能永不返回的程序之间，边界该怎么划」。
 
-**定位**：Epic 2 的收官环节。S001/S002 让 Agent 能写、能改，S003 让它**能验证自己写的东西**——Agent 第一次闭环。
+**定位**：S001/S002 让 Agent 能写、能改，S003 让它**能验证自己写的东西**——Agent 第一次闭环。交互式命令（`stdin` / pty）留给 S004。
 
 **你将学到**：
 
@@ -124,4 +124,5 @@ Error: bash not found; S003 assumes a POSIX environment with bash available
 - 讨论记录：`.discuss/2026-08-26/e02-s003-terminal/outline.md`
 - 决策文档：`.discuss/2026-08-26/e02-s003-terminal/decisions/D01–D05`（81 项决策）
 - 竞品调研：`researches/terminal/`（opencode / codex / pi-mono / gemini-cli / aider）
+- 复盘笔记：`retros/E02-S003-terminal.md`
 - 迭代日志：`CHANGELOG.md`

@@ -10,12 +10,6 @@ discussions:
     - name: D01-repo-init-plan.md
       mtime: 1773109367.0253272
     notes: []
-  2026-03-10/readme-illustration-agent-modules:
-    outline:
-      mtime: 0.0
-      change_count: 1
-    decisions: []
-    notes: []
   2026-03-16/e01-s002-content-search:
     outline:
       mtime: 1773947791.397349
@@ -82,3 +76,27 @@ discussions:
       change_count: 2
     decisions: []
     notes: []
+  2026-08-26/e02-s003-terminal:
+    outline:
+      mtime: 1789662471.3403256
+      change_count: 0
+    decisions:
+    - name: D05-execution-environment.md
+      mtime: 1789662471.3384454
+    - name: D04-process-lifecycle.md
+      mtime: 1789662471.3382225
+    - name: D03-long-running-skip-and-background.md
+      mtime: 1789662471.3379543
+    - name: D02-oversized-output.md
+      mtime: 1789662471.337697
+    - name: D01-tool-baseline.md
+      mtime: 1789662471.337386
+    notes:
+    - name: t01-t14-verdicts.md
+      mtime: 1789662471.3400114
+    - name: non-interactive-execution-env.md
+      mtime: 1789662471.3395367
+    - name: article-topics.md
+      mtime: 1789662471.339183
+    - name: production-agent-lessons.md
+      mtime: 1789662471.339796
