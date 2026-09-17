@@ -1,0 +1,44 @@
+specs/E02-act-and-execute/README.md
+  s_0c3940c7a7a688::t_ff889fb1b14bd2 34
+.discuss/2026-08-26/e02-s003-terminal/outline.md
+  s_0c3940c7a7a688::t_b05756b07ec019 53,56-59
+specs/E02-act-and-execute/S003-terminal/details/02-task-list.md
+  s_0c3940c7a7a688::t_a184b94458a167 4
+  s_0c3940c7a7a688::t_cf8c3d2d031737 112-118
+specs/E02-act-and-execute/S003-terminal/README.md
+  s_0c3940c7a7a688::t_6b820333725836 201
+README.md
+  s_0c3940c7a7a688::t_1c4b285cf9e97f 164,172-174
+CHANGELOG.md
+  s_0c3940c7a7a688::t_b9163b17cd0ac6 155-195
+  s_0c3940c7a7a688::t_bf322ea00c2cbd 73
+  s_0c3940c7a7a688::t_f4d369ce2f191b 23
+docs/roadmap/README.md
+  s_0c3940c7a7a688::t_9a8d2d9968c84c 5
+  s_0c3940c7a7a688::t_0aa0dc9ad46c83 64
+retros/README.md
+  s_0c3940c7a7a688::t_622c9832d86b1f 11
+specs/E02-act-and-execute/S003-terminal/details/00-overview.md
+  s_0c3940c7a7a688::t_8a7f6f3a9b64e9 127
+  s_0c3940c7a7a688::t_e580867e46f5b2 11
+retros/E02-S003-terminal.md
+  s_0c3940c7a7a688::t_b596f4b2657550 1-40
+.discuss/.snapshot.yaml
+  s_0c3940c7a7a688::t_090bcc40561eaa 79-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1b84fa2cbb151af2d3c9b5d4c683e532c976280c",
+  "prompts": {},
+  "sessions": {
+    "s_0c3940c7a7a688": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "8c2c896a-2ee2-4817-ac24-e496d96900b9",
+        "model": "grok-4.6"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
