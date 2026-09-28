@@ -1,0 +1,16 @@
+researches/interactive-commands/experiments/real-repls-results.json
+  h_afc6b161d429e0 2,12,14-15,26-29,34,36-37,47-50,53
+researches/interactive-commands/experiments/results.json
+  h_afc6b161d429e0 2,48-72,81-89,148,152,155,190
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b6e075c8edc33766868e738d7fae156a8ecd8093",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
