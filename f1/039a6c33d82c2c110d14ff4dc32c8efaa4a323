@@ -1,0 +1,16 @@
+researches/interactive-commands/README.md
+  h_afc6b161d429e0 3,7-33,37-39,50-157,162
+researches/interactive-commands/notes/decision-inputs.md
+  h_afc6b161d429e0 1-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f1039a6c33d82c2c110d14ff4dc32c8efaa4a323",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
