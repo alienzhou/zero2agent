@@ -1,0 +1,14 @@
+researches/interactive-commands/notes/verification.md
+  h_afc6b161d429e0 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "790513f86582052eb1f970878380b6b1510710fe",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
