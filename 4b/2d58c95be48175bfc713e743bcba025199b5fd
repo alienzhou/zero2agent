@@ -1,0 +1,16 @@
+researches/interactive-commands/experiments/repeat-runs.json
+  h_afc6b161d429e0 1-46
+researches/interactive-commands/notes/verification.md
+  h_afc6b161d429e0 9,31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4b2d58c95be48175bfc713e743bcba025199b5fd",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
