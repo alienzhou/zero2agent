@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-09-28T23:56:30.291221+08:00",
+  "observed_at": "2026-09-29T00:01:24.176668+08:00",
   "platform": "macOS-14.7.8-arm64-arm-64bit",
   "python": "3.9.6",
   "node": "v22.15.1",
@@ -115,14 +115,14 @@
         "events": [
           {
             "event": "exit",
-            "ms": 20
+            "ms": 25
           },
           {
             "event": "close",
-            "ms": 392
+            "ms": 400
           }
         ],
-        "gap_ms": 372
+        "gap_ms": 375
       }
     },
     {
@@ -157,5 +157,5 @@
   ],
   "passed": 12,
   "total": 12,
-  "script_commit": "2d36623"
+  "script_commit": "02e17f7"
 }
