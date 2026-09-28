@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-09-29T00:01:11.678956+08:00",
+  "observed_at": "2026-09-29T00:15:51.797238+08:00",
   "python": "3.9.6",
   "node": "v22.15.1",
   "scope": "real language executables over pipes; deterministic controller, not product E2E",
@@ -9,8 +9,10 @@
     {
       "program": "python",
       "mode": "default-pipe",
+      "pre_eof_observation_seconds": 0.2,
       "before_eof": "",
-      "after_eof": "VALUE=42\n"
+      "after_eof": "VALUE=42\n",
+      "exit_code": 0
     },
     {
       "program": "python",
@@ -21,14 +23,18 @@
       ],
       "banner": ">>> ",
       "round1": "VALUE=42\n>>> ",
-      "round2": "NEXT=43\n>>> ",
-      "tail": "\n"
+      "round2": "NEXT=84\n>>> ",
+      "tail": "\n",
+      "interpreter_state_preserved": true,
+      "exit_code": 0
     },
     {
       "program": "node",
       "mode": "default-pipe",
+      "pre_eof_observation_seconds": 0.2,
       "before_eof": "",
-      "after_eof": "VALUE=42\n"
+      "after_eof": "VALUE=42\n",
+      "exit_code": 0
     },
     {
       "program": "node",
@@ -38,9 +44,11 @@
       ],
       "banner": "Welcome to Node.js v22.15.1.\nType \".help\" for more information.\n> ",
       "round1": "VALUE=42\nundefined\n> ",
-      "round2": "NEXT=43\nundefined\n> ",
-      "tail": ""
+      "round2": "NEXT=84\nundefined\n> ",
+      "tail": "",
+      "interpreter_state_preserved": true,
+      "exit_code": 0
     }
   ],
-  "script_commit": "02e17f7"
+  "script_commit": "e03ea7c"
 }
