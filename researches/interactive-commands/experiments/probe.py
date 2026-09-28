@@ -84,6 +84,11 @@ class Child:
         return self.status is None
 
     def close(self):
+        # Give naturally exiting children time to be reaped before signaling a
+        # process group whose leader may already be disappearing.
+        if self.process is not None:
+            with contextlib.suppress(subprocess.TimeoutExpired):
+                self.process.wait(timeout=0.2)
         # These PIDs are created above, never discovered by name or broad matching.
         if self.alive():
             with contextlib.suppress(ProcessLookupError):
