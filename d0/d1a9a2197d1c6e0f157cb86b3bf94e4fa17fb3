@@ -1,0 +1,14 @@
+researches/interactive-commands/pi-mono.md
+  h_afc6b161d429e0 1-245
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d0d1a9a2197d1c6e0f157cb86b3bf94e4fa17fb3",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
