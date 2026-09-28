@@ -305,7 +305,7 @@ Ctrl+F 用来切换 shell focus，不向 PTY 透传。
 不升级为第八个全面主样本：本轮增量优先于重复深挖同源 PTY 结构。
 发行配置是否默认使用 PTY，以及完整工具集是否另有模型续写，保留 U。
 
-- [官方血缘和独立演进声明](https://github.com/QwenLM/qwen-code/blob/a765229c0affd0642973412a3480b992935e2eff/README.md#L210-L216)
+- [官方血缘和独立演进声明](https://github.com/QwenLM/qwen-code/blob/a765229c0affd0642973412a3480b992935e2eff/README.md#L212-L214)
 - [shell schema](https://github.com/QwenLM/qwen-code/blob/a765229c0affd0642973412a3480b992935e2eff/packages/core/src/tools/shell.ts#L5720-L5773)
 - [PTY 输入服务](https://github.com/QwenLM/qwen-code/blob/a765229c0affd0642973412a3480b992935e2eff/packages/core/src/services/shellExecutionService.ts#L2949-L2975)
 - [人类 ShellInputPrompt](https://github.com/QwenLM/qwen-code/blob/a765229c0affd0642973412a3480b992935e2eff/packages/cli/src/ui/components/ShellInputPrompt.tsx)
@@ -403,4 +403,3 @@ client-side tools 默认可用与审批不是一回事。
 - 人机并发输入的排他所有权、断线重连、跨宿主重启恢复均未全链路确认。
 - 官方在线文档不是版本快照；后续引用应保留本页观测日，不当成永久契约。
 - 本页没有修改 S003 历史调研，也没有把任何候选方案确认为 S004 实现决策。
-
