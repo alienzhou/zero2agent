@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 /Users/zhouhongxuan/program/works/zero2agent/.vibe-x/discuss-for-specs/hooks/stop/check_precipitation.py"
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/.vibe-x/discuss-for-specs/hooks/stop/check_precipitation.py"
           }
         ]
       }
