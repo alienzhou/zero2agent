@@ -1,0 +1,14 @@
+researches/interactive-commands/sources.json
+  h_afc6b161d429e0 1-163
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7fa0ad393893cec7c837db32dbb4e874c5f95174",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
