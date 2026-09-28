@@ -6,13 +6,13 @@
 
 2026-09-28 启动、2026-09-29 凌晨复测，在 macOS 14.7.8 arm64、Node.js v22.15.1、Python 3.9.6 上 **12/12 机制实验通过**，另有 **4/4 真实 REPL 对照通过**。这不是七款产品的端到端测试，也没有调用模型 API。每项通过仅表示该项断言成立。
 
-脚本只启动自己编写的短进程，除读取运行环境版本外不访问用户数据；不联网，不安装依赖，不使用真实密码，不执行实际提交、删除或部署。普通子进程独立创建进程组，实验退出时回收；E10 的短命后代自行退出。
+脚本只启动自己编写的短进程及已有 Python/Node REPL，除读取运行环境版本外不访问用户数据；不联网，不安装依赖，不使用真实密码，不执行实际提交、删除或部署。Child 管理的夹具不创建后代，回收只对直接子进程负责，不能作为通用进程树管理器；E10 的短命后代在正常路径自行退出，异常超时只保证处理 Node runner。
 
 ```bash
 python3 researches/interactive-commands/experiments/probe.py
 ```
 
-脚本把 JSON 输出到 stdout，失败退出码为 1。当前结果对应 Git `02e17f7`；首次结果对应 `fde8ec9`。probe.py 在最终复测时的 SHA-256 为 `bab71f4c9a6b2fa99994005073a3013126642be7b09759c3cd0da75dd16907ab`。后续若修订实验，应生成新结果，不能沿用本轮通过记录。
+脚本把 JSON 输出到 stdout，失败退出码为 1。审查后补强结果对应 Git `e03ea7c`；首次结果对应 `fde8ec9`。probe.py 的 SHA-256 为 `d83acc95b83ef2ae24225a8ed8c600489940e2ae23c29c8150763264ab08688b`。先前 `02e17f7` 的成功快照可从 Git 历史读取；补强没有将旧断言冒称已覆盖新边界。后续若修订实验，应生成新结果，不能沿用本轮通过记录。
 
 ## 实验矩阵
 
@@ -21,13 +21,13 @@ python3 researches/interactive-commands/experiments/probe.py
 | E01 | pipe 能否做两轮依赖输出的输入？ | `number=7 → confirm=15 → accepted=True` | 可以，但程序显式 flush；不是证明所有 REPL 都可以 |
 | E02 | 同一程序在 pipe/PTY 下提示是否一样及时？ | pipe 输入前仅有 `BOOT`；PTY 已有 `PROMPT` | “进程没输出”可能是用户态缓冲，不是无进展 |
 | E03 | 向 pipe 写 Ctrl-C 会不会中断？ | 进程读到 `hex=030a` | 数据字节与发信号必须分开 |
-| E04 | PTY 中 Ctrl-C 一定是信号吗？ | canonical 下触发 `SIGINT`；raw 下读到 `03`；显式 killpg 触发 `SIGINT` | PTY 的终端模式也属于输入语义 |
-| E05 | Ctrl-D 和 EOF 一样吗？ | pipe 读到 `04`，直到 close 才 EOF；PTY 空行 VEOF 使 read 返回空 | `close_stdin` 不是传一个特殊字符 |
+| E04 | PTY 中 Ctrl-C 一定是信号吗？ | 已记录 ISIG/VINTR/前台组；设定模式触发 SIGINT，raw 下读到 03；三者均直接子进程退出码 0 | 信号效果依赖终端配置，不是仅看 canonical |
+| E05 | Ctrl-D 和 EOF 一样吗？ | pipe close 才 EOF；PTY 空行返回空后可再读，非空行返回缓存，raw 下读到 04 | VEOF 不是永久关闭会话 |
 | E06 | 无 PTY 能否接收模拟凭据？ | 普通 pipe 收到 15 字节的假 token | 无 PTY 不是凭据隔离机制 |
 | E07 | 无 PTY 和 `/dev/tty` 是什么关系？ | 新 session 的 pipe 无控制终端；pty.fork 子进程可打开 `/dev/tty` | 必须看控制终端归属，不能只看 stdio 参数 |
 | E08 | 活着且静默能否判断等输入？ | 等 stdin、sleep、计算三者均为活着且零输出 | 不应把启发式提示写成可靠状态 |
 | E09 | detached/unref 后 stdin 是否断开？ | 仍收到 `echo=still-writable` | fd 连通性与宿主存活引用是不同问题 |
-| E10 | 进程 exit 是否意味着输出 close？ | 最终复测 exit 25ms、close 400ms，相隔 375ms | 已退出但输出未排尽，需要独立 drain 状态 |
+| E10 | 进程 exit 是否意味着输出 close？ | 补强后观测 exit 18ms、close 388ms，相隔 370ms | 已退出但输出未排尽，需要独立 drain 状态 |
 | E11 | 分块输出能否逐块转字符串、反复全量回读？ | 逐块解码乱码；StringDecoder 正确；cursor 第二轮为空、第三轮仅新增项 | 增量消费与跨块解码是会话读侧责任 |
 | E12 | EOF 是比 kill 更安全的取消吗？ | 关闭输入后打印 `WOULD_COMMIT bytes=5` | EOF 可能触发处理缓存/提交阶段，不能当撤销 |
 
@@ -41,7 +41,7 @@ python3 researches/interactive-commands/experiments/probe.py
 
 ### 真实 Python/Node：默认 pipe 与显式交互模式
 
-[real_repls.py](./real_repls.py) 用同一受控进程管理器启动系统已有的 Python 与 Node 可执行程序，记录 [4 组原始结果](./real-repls-results.json)。脚本 SHA-256 为 `4991cb849d83b80b3820b111527706f455df0d98894fb97ea02f6cedca4528e6`。
+[real_repls.py](./real_repls.py) 用同一受控进程管理器启动系统已有的 Python 与 Node 可执行程序，记录 [4 组原始结果](./real-repls-results.json)。脚本 SHA-256 为 `045217c1bb31c183e886322971b75feb0741931d3aca0b728fb3f25b633e470e`。
 
 ```bash
 python3 -B researches/interactive-commands/experiments/real_repls.py
@@ -49,12 +49,14 @@ python3 -B researches/interactive-commands/experiments/real_repls.py
 
 | 程序与启动方式 | 关闭 stdin 前 | 观察到输出后第二轮输入 |
 |---|---|---|
-| Python 默认模式 + pipe | 观测窗口无结果；EOF 后才执行脚本 | 不提供本实验所需的 REPL 回路 |
-| Python `-i -q` + pipe | 提示符和 `VALUE=42` 及时返回 | 控制器提取 42，发新表达式，得到 `NEXT=43` |
-| Node 默认模式 + pipe | 观测窗口无结果；EOF 后才执行脚本 | 不提供本实验所需的 REPL 回路 |
-| Node `--interactive` + pipe | 提示符和 `VALUE=42` 及时返回 | 控制器提取 42，发新表达式，得到 `NEXT=43` |
+| Python 默认模式 + pipe | 200ms 窗口无结果；关闭输入后观察到 VALUE=42、退出码 0 | 本次观察未建立可用的 REPL 回路 |
+| Python `-i -q` + pipe | 保留变量 value=42，返回提示符和 VALUE=42 | 控制器解析 42，再在解释器内 value += 42，得到 NEXT=84；EOF 后退出码 0 |
+| Node 默认模式 + pipe | 200ms 窗口无结果；关闭输入后观察到 VALUE=42、退出码 0 | 本次观察未建立可用的 REPL 回路 |
+| Node `--interactive` + pipe | 保留变量 value=42，返回提示符和 VALUE=42 | 控制器解析 42，再在解释器内 value += 42，得到 NEXT=84；EOF 后退出码 0 |
 
-关键修正：不能把“Python/Node 读 stdin”直接写成“默认就是可多轮交互的 REPL”，也不能把“没有 TTY”写成“语言 REPL 一概不可用”。启动模式、提示刷新和程序协议共同决定能力。这里验证的是表达式往返，不覆盖行编辑、全屏应用、复杂异常恢复或 LLM 的使用质量。
+关键修正：不能把“Python/Node 读 stdin”直接写成“默认就是可多轮交互的 REPL”，也不能把“没有 TTY”写成“语言 REPL 一概不可用”。200ms 无结果本身不足以证明内部正在等待 EOF，也可能受到启动延迟或缓冲影响；此处只报告实际观察顺序。
+
+旧版第二轮使用控制器内的数值，没有验证解释器变量保留。补强版真正读取第一轮建立的 value，因此跨轮状态和按输出构造输入分别有证据。四组在清理信号发出前均通过有界 wait 检查退出码 0；tail 采集本身不承担退出证明。仍不覆盖行编辑、全屏应用、复杂异常恢复、后代回收或 LLM 的使用质量。
 
 真实 REPL 第一次运行成功；重复运行时曾在清理阶段出现 `PermissionError: [Errno 1] Operation not permitted`（killpg），并非表达式断言失败。先等待自然退出再发清理信号后重跑成功。确切内核拒绝原因未证实，不把推测当成已定位的产品问题；最终记录只对应修正后的运行。
 
@@ -78,13 +80,13 @@ python3 -B researches/interactive-commands/experiments/real_repls.py
 | 结束输入 | 关闭写端，读完缓存后 EOF | Ctrl-D 是 VEOF，行为受行缓冲状态影响；不是 fd half-close |
 | 终止会话 | 独立的进程/进程组清理 | 仍需独立清理，关闭 master 可能引发挂断但不是统一取消契约 |
 
-E04 的 canonical/raw 对照很重要：不能把“PTY 支持 Ctrl-C”写成“往任何 PTY 写 `\u0003` 都一定 SIGINT”。应用可能改变终端模式，也可能捕获或忽略信号。
+E04 的补强版显式配置 ICANON、ISIG、VINTR=0x03，记录这些值并验证当前进程组是前台组；raw 路径验证 ICANON/ISIG 为 false。不能把“PTY 支持 Ctrl-C”写成“往任何 PTY 写 `\u0003` 都一定 SIGINT”，也不能只凭 canonical 一项解释信号。应用可能改变模式、捕获或忽略信号。三种路径另行等待并检查直接子进程退出码 0。
 
-E05 只验证 canonical 模式空输入行上的 Ctrl-D；有待提交字符时的 VEOF 行为、连续 VEOF、Windows ConPTY 都不在本轮断言内。
+E05 的补强版显式设定 ICANON 与 VEOF=0x04：空输入行的 read 返回空后，继续向同一 PTY 写入 again 并成功读取；有 partial 缓冲时 VEOF 返回该缓存；raw 模式读取到普通 04 字节。各夹具正常退出也单独检查。它证明一次零字节 read 不等于 PTY 永久关闭，但连续 VEOF、更复杂前台组切换和 Windows ConPTY 仍未验证。
 
 ## E06–E07：兼容性与秘密保护不是同一层
 
-E06 的输入是固定字符串 `FAKE-ONLY-TOKEN`。进程只打印长度，不回显内容；实验没有实际认证。它已足以反证“无 PTY 让模型物理上写不了密码”。接受 stdin 的凭据程序并不需要 TTY。
+E06 的输入是固定字符串 `FAKE-ONLY-TOKEN`。进程只打印长度，补强断言还检查捕获输出不含完整假 token；实验没有实际认证，也不证明外部日志没有记录。它已足以反证“无 PTY 让模型物理上写不了密码”。接受 stdin 的凭据程序并不需要 TTY。
 
 E07 的 pipe 子进程用了 `start_new_session=True`，因此失去控制终端；PTY 子进程由 `pty.fork()` 建立控制终端。观测到的 `/dev/tty` 差异依赖这个前提。
 
@@ -110,9 +112,9 @@ Linux 的系统调用跟踪、特定运行时状态、程序自己的结构化�
 
 ## E10–E12：会话协议还欠读侧和收尾语义
 
-E10 由直接子进程启动继承 stdout/stderr 的短命后代，直接子进程立即退出，后代约 350ms 后自行退出。Node 的 `exit` 先到，`close` 要等 fd 被释放；375ms 是最终复测观测值，不是产品阈值。
+E10 由直接子进程启动继承 stdout/stderr 的短命后代，直接子进程立即退出，后代约 350ms 后自行退出。Node 的 `exit` 先到，`close` 要等 fd 被释放；370ms 是此轮观测值，不是产品阈值。脚本中的 gap>=200ms 是受调度影响的时序断言，极端抖动可能误失败，不是稳定协议或进程树回收保证。
 
-E11 是算法夹具：刻意在 UTF-8 字符中间切块，并演示已消费 cursor。它不是并发、安全或性能证明。生产实现还需定义 cursor 属于谁、两个并行轮询是否争抢输出、输出被截断后如何补读、进程退出后的残余输出保留多久。
+E11 是算法夹具：刻意在 UTF-8 字符中间切块，并对完整 polls=[[first,second],[],[third]] 作精确断言。它不是并发、安全或性能证明。生产实现还需定义 cursor 属于谁、两个并行轮询是否争抢输出、输出被截断后如何补读、进程退出后的残余输出保留多久。
 
 E12 只打印 `WOULD_COMMIT`，没有实际副作用。它说明读到 EOF 后处理积累输入是合法且常见的协议行为。是否自动 EOF 必须由会话契约授权，不能把它包装成无副作用的空闲回收。
 
