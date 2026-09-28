@@ -15,7 +15,7 @@ from datetime import datetime
 
 
 class Child:
-    """Own only the process group created by this probe; always reap it."""
+    """Own a probe-created child; these Python fixtures spawn no descendants."""
 
     def __init__(self, source, terminal=False):
         self.process = None
@@ -83,12 +83,22 @@ class Child:
                 self.status = status
         return self.status is None
 
+    def wait(self, timeout=3):
+        """Observe direct-child exit without sending a cleanup signal."""
+        if self.process is not None:
+            return self.process.wait(timeout=timeout)
+        deadline = time.monotonic() + timeout
+        while self.alive():
+            if time.monotonic() >= deadline:
+                raise TimeoutError("PTY child did not exit within observation window")
+            time.sleep(0.01)
+        return os.waitstatus_to_exitcode(self.status)
+
     def close(self):
         # Give naturally exiting children time to be reaped before signaling a
         # process group whose leader may already be disappearing.
-        if self.process is not None:
-            with contextlib.suppress(subprocess.TimeoutExpired):
-                self.process.wait(timeout=0.2)
+        with contextlib.suppress(subprocess.TimeoutExpired, TimeoutError):
+            self.wait(timeout=0.2)
         # These PIDs are created above, never discovered by name or broad matching.
         if self.alive():
             with contextlib.suppress(ProcessLookupError):
@@ -99,9 +109,10 @@ class Child:
                 self.process.stdin.close()
             self.process.stdout.close()
         else:
-            if self.status is None:
-                os.waitpid(self.pid, 0)
-            os.close(self.fd)
+            try:
+                self.wait(timeout=3)
+            finally:
+                os.close(self.fd)
 
     def __enter__(self):
         return self
@@ -156,27 +167,51 @@ def pipe_control_byte():
 
 
 def signal_and_terminal_modes():
-    source = """import os, signal, sys, tty
+    source = """import json, os, signal, sys, termios, tty
 def interrupted(*_):
     print('SIGINT', flush=True)
     sys.exit(0)
 signal.signal(signal.SIGINT, interrupted)
 MODE
+if os.isatty(0):
+    attrs = termios.tcgetattr(0)
+    intr = attrs[6][termios.VINTR]
+    print('CONFIG=' + json.dumps({
+        'canonical': bool(attrs[3] & termios.ICANON),
+        'isig': bool(attrs[3] & termios.ISIG),
+        'vintr_hex': bytes([intr]).hex() if isinstance(intr, int) else intr.hex(),
+        'foreground_is_self': os.tcgetpgrp(0) == os.getpgrp(),
+    }), flush=True)
 print('READY', flush=True)
 data = os.read(0, 1)
 print('byte=' + data.hex(), flush=True)
 """
     result = {}
     for mode in ("pipe-signal", "pty-canonical", "pty-raw"):
-        setup = "tty.setraw(0)" if mode == "pty-raw" else "pass"
+        setup = "pass"
+        if mode == "pty-raw":
+            setup = "tty.setraw(0)"
+        elif mode == "pty-canonical":
+            setup = "attrs = termios.tcgetattr(0); attrs[3] |= termios.ICANON | termios.ISIG; attrs[6][termios.VINTR] = b'\\x03'; termios.tcsetattr(0, termios.TCSANOW, attrs)"
         with Child(source.replace("MODE", setup), mode != "pipe-signal") as child:
-            child.expect(b"READY")
+            ready = child.expect(b"READY")
+            config = None
+            if mode != "pipe-signal":
+                config = json.loads(next(line[7:] for line in ready.decode().splitlines() if line.startswith("CONFIG=")))
+                assert config["foreground_is_self"]
+                assert config["isig"] == (mode == "pty-canonical")
+                assert config["canonical"] == (mode == "pty-canonical")
+                assert config["vintr_hex"] == "03"
             if mode == "pipe-signal":
                 os.killpg(child.pid, signal.SIGINT)
             else:
+                # VINTR generates SIGINT only with ISIG, targeting the foreground group.
                 child.write(b"\x03")
             expected = b"byte=03" if mode == "pty-raw" else b"SIGINT"
-            result[mode] = child.expect(expected).decode()
+            output = child.expect(expected).decode()
+            exit_code = child.wait()
+            assert exit_code == 0
+            result[mode] = {"terminal_config": config, "output": output, "exit_code": exit_code}
     return result
 
 
@@ -189,12 +224,36 @@ def eof():
         assert child.alive() and b"EOF" not in before
         child.close_input()
         pipe_result = child.expect(b"EOF hex=04")
-    canonical = "import os; print('READY', flush=True); print('read=' + repr(os.read(0, 10)), flush=True)"
+        assert child.wait() == 0
+    canonical = """import os, termios
+attrs = termios.tcgetattr(0)
+attrs[3] |= termios.ICANON
+attrs[6][termios.VEOF] = b'\\x04'
+termios.tcsetattr(0, termios.TCSANOW, attrs)
+assert os.tcgetpgrp(0) == os.getpgrp()
+print('READY', flush=True)
+print('first=' + repr(os.read(0, 10)), flush=True)
+print('second=' + os.read(0, 10).hex(), flush=True)
+print('third=' + os.read(0, 10).hex(), flush=True)
+"""
     with Child(canonical, True) as child:
         child.expect(b"READY")
+        # Empty-buffer VEOF ends this read, not the terminal session.
         child.write(b"\x04")
-        terminal_result = child.expect(b"read=b''")
-    return {"pipe_after_close": pipe_result.decode(), "pty_empty_line_veof": terminal_result.decode()}
+        first = child.expect(b"first=b''")
+        child.write(b"again\n")
+        second = child.expect(b"second=616761696e0a")
+        child.write(b"partial\x04")
+        third = child.expect(b"third=7061727469616c")
+        assert child.wait() == 0
+    with Child("import os,tty; tty.setraw(0); print('READY',flush=True); print('raw='+os.read(0,1).hex(),flush=True)", True) as child:
+        child.expect(b"READY")
+        child.write(b"\x04")
+        raw = child.expect(b"raw=04")
+        assert child.wait() == 0
+    return {"pipe_after_close": pipe_result.decode(), "pty_empty_line_veof": first.decode(),
+            "pty_read_after_veof": second.decode(), "pty_partial_line_veof": third.decode(),
+            "pty_raw_byte": raw.decode(), "direct_child_exit_codes": [0, 0, 0]}
 
 
 def secrets_without_pty():
@@ -203,6 +262,9 @@ def secrets_without_pty():
         child.expect(b"credential?")
         child.write(b"FAKE-ONLY-TOKEN\n")
         output = child.expect(b"received_length=15")
+        assert child.wait() == 0
+        output += child.read()
+        assert b"FAKE-ONLY-TOKEN" not in output
     return {"synthetic_only": True, "output": output.decode()}
 
 
@@ -259,12 +321,13 @@ const observer = setTimeout(() => { child.kill('SIGKILL'); process.exitCode=1; }
 let output=''; child.stdout.on('data', b => output += b);
 child.stderr.resume();
 child.stdin.end('still-writable\\n');
-child.on('close', code => { clearTimeout(observer); if (!output.includes('echo=still-writable')) process.exitCode=1; console.log(JSON.stringify({code, output, detached:true, unref:true})); });
+child.on('close', code => { clearTimeout(observer); if (code!==0 || !output.includes('echo=still-writable')) process.exitCode=1; console.log(JSON.stringify({code, output, detached:true, unref:true})); });
 """)
 
 
 def exit_before_close():
-    # The fixture's descendant self-exits; it cannot become a persistent orphan.
+    # The descendant normally self-exits after 350 ms; timeout cleanup covers
+    # only the Node runner. The gap assertion is timing-sensitive, not a protocol guarantee.
     return node_probe("""
 import {spawn} from 'node:child_process';
 const program = "require('node:child_process').spawn(process.execPath,['-e','setTimeout(()=>process.exit(0),350)'],{stdio:['ignore',1,2]}).unref(); process.exit(0)";
@@ -282,7 +345,7 @@ import {StringDecoder} from 'node:string_decoder';
 const bytes=Buffer.from('你好'); const chunks=[bytes.subarray(0,1),bytes.subarray(1,4),bytes.subarray(4)];
 const naive=chunks.map(b=>b.toString('utf8')).join('');const decoder=new StringDecoder('utf8');const decoded=chunks.map(b=>decoder.write(b)).join('')+decoder.end();
 const records=['first','second'];let cursor=0;const poll=()=>{const out=records.slice(cursor);cursor=records.length;return out;};const polls=[poll(),poll()]; records.push('third');polls.push(poll());
-if(decoded!=='你好'||naive===decoded||polls[1].length)process.exitCode=1;
+if(decoded!=='你好'||naive===decoded||JSON.stringify(polls)!==JSON.stringify([['first','second'],[],['third']]))process.exitCode=1;
 console.log(JSON.stringify({naive,decoded,polls,kind:'controller algorithm fixture, not product code'}));
 """)
 

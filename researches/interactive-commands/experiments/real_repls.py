@@ -20,14 +20,18 @@ def launch_source(program, flags):
 def run():
     records = []
     for program in ("python", "node"):
-        expression = b"print('VALUE='+str(6*7))\n" if program == "python" else b"console.log('VALUE='+(6*7));\n"
+        expression = b"value=6*7; print('VALUE='+str(value))\n" if program == "python" else b"var value=6*7; console.log('VALUE='+value);\n"
         with Child(launch_source(program, [])) as child:
             child.write(expression)
+            # No output in this window alone cannot distinguish EOF wait from startup/buffering.
             before = child.read(0.2)
             assert b"VALUE=42" not in before, before
             child.close_input()
             after = child.expect(b"VALUE=42")
-            records.append({"program": program, "mode": "default-pipe", "before_eof": before.decode(), "after_eof": after.decode()})
+            exit_code = child.wait()
+            assert exit_code == 0
+            records.append({"program": program, "mode": "default-pipe", "pre_eof_observation_seconds": 0.2,
+                            "before_eof": before.decode(), "after_eof": after.decode(), "exit_code": exit_code})
 
         flags = ["-i", "-q"] if program == "python" else ["--interactive"]
         prompt = b">>> " if program == "python" else b"> "
@@ -36,13 +40,19 @@ def run():
             child.write(expression)
             first = child.expect(prompt)
             number = int(re.search(rb"VALUE=(\d+)", first).group(1))
-            next_expression = ("print('NEXT='+str(" + str(number) + "+1))\n") if program == "python" else ("console.log('NEXT='+(" + str(number) + "+1));\n")
+            # Use the parsed output AND the interpreter's prior variable: a new REPL would fail.
+            next_expression = ("value += " + str(number) + "; print('NEXT='+str(value))\n") if program == "python" else ("value += " + str(number) + "; console.log('NEXT='+value);\n")
             child.write(next_expression.encode())
             second = child.expect(prompt)
-            assert b"NEXT=43" in second, second
+            assert b"NEXT=84" in second, second
             child.close_input()
+            # Tail capture is not exit proof; wait below separately checks direct-child exit.
             tail = child.read(0.2)
-            records.append({"program": program, "mode": "forced-interactive-pipe", "flags": flags, "banner": banner.decode(), "round1": first.decode(), "round2": second.decode(), "tail": tail.decode()})
+            exit_code = child.wait()
+            assert exit_code == 0
+            records.append({"program": program, "mode": "forced-interactive-pipe", "flags": flags,
+                            "banner": banner.decode(), "round1": first.decode(), "round2": second.decode(),
+                            "tail": tail.decode(), "interpreter_state_preserved": True, "exit_code": exit_code})
     return {
         "observed_at": datetime.now().astimezone().isoformat(),
         "python": sys.version.split()[0],
