@@ -1,0 +1,16 @@
+researches/interactive-commands/experiments/probe.py
+  h_afc6b161d429e0 18,86-96,100-101,112-115,170,176-184,191-195,197-204,208,211-214,227-238,240-249,252-256,265-267,324,329-330,348
+researches/interactive-commands/experiments/real_repls.py
+  h_afc6b161d429e0 23,26,31-34,43-44,47,49,51-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eeb9fc29e66d215b0a5f122573db5cae400a7a70",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
