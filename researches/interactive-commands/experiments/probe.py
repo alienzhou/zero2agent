@@ -249,9 +249,12 @@ def detached_unref():
 import {spawn} from 'node:child_process';
 const child = spawn(process.execPath, ['-e', "process.stdin.on('data', b => { console.log('echo='+b.toString().trim()); process.exit(0) })"], {detached:true, stdio:['pipe','pipe','pipe']});
 child.unref();
+// unref changes host liveness, so the observer must stay alive until close.
+const observer = setTimeout(() => { child.kill('SIGKILL'); process.exitCode=1; }, 3000);
 let output=''; child.stdout.on('data', b => output += b);
+child.stderr.resume();
 child.stdin.end('still-writable\\n');
-child.on('close', code => { if (!output.includes('echo=still-writable')) process.exitCode=1; console.log(JSON.stringify({code, output, detached:true, unref:true})); });
+child.on('close', code => { clearTimeout(observer); if (!output.includes('echo=still-writable')) process.exitCode=1; console.log(JSON.stringify({code, output, detached:true, unref:true})); });
 """)
 
 
