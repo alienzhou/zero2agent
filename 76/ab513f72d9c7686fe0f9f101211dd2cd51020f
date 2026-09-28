@@ -1,0 +1,14 @@
+researches/interactive-commands/deepseek-harness.md
+  h_afc6b161d429e0 1-292
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76ab513f72d9c7686fe0f9f101211dd2cd51020f",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
