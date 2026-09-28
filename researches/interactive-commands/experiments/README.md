@@ -4,7 +4,7 @@
 
 ## 结论与验证范围
 
-2026-09-28 在 macOS 14.7.8 arm64、Node.js v22.15.1、Python 3.9.6 上运行，复测 **12/12 通过**。这是 POSIX/Node 机制实验，不是七款产品的端到端测试，也没有调用模型 API。每项通过仅表示该项断言成立。
+2026-09-28 启动、2026-09-29 凌晨复测，在 macOS 14.7.8 arm64、Node.js v22.15.1、Python 3.9.6 上 **12/12 机制实验通过**，另有 **4/4 真实 REPL 对照通过**。这不是七款产品的端到端测试，也没有调用模型 API。每项通过仅表示该项断言成立。
 
 脚本只启动自己编写的短进程，除读取运行环境版本外不访问用户数据；不联网，不安装依赖，不使用真实密码，不执行实际提交、删除或部署。普通子进程独立创建进程组，实验退出时回收；E10 的短命后代自行退出。
 
@@ -12,7 +12,7 @@
 python3 researches/interactive-commands/experiments/probe.py
 ```
 
-脚本把 JSON 输出到 stdout，失败退出码为 1。当前结果对应 Git `2d36623`；首次结果对应 `fde8ec9`。脚本在本轮复测时的 SHA-256 为 `39fa78d9c3e3fd3196cc19814c866d35bfab8ff7a15d9353c758c9def236d0f2`。后续若修订实验，应生成新结果，不能沿用本轮通过记录。
+脚本把 JSON 输出到 stdout，失败退出码为 1。当前结果对应 Git `02e17f7`；首次结果对应 `fde8ec9`。probe.py 在最终复测时的 SHA-256 为 `bab71f4c9a6b2fa99994005073a3013126642be7b09759c3cd0da75dd16907ab`。后续若修订实验，应生成新结果，不能沿用本轮通过记录。
 
 ## 实验矩阵
 
@@ -27,7 +27,7 @@ python3 researches/interactive-commands/experiments/probe.py
 | E07 | 无 PTY 和 `/dev/tty` 是什么关系？ | 新 session 的 pipe 无控制终端；pty.fork 子进程可打开 `/dev/tty` | 必须看控制终端归属，不能只看 stdio 参数 |
 | E08 | 活着且静默能否判断等输入？ | 等 stdin、sleep、计算三者均为活着且零输出 | 不应把启发式提示写成可靠状态 |
 | E09 | detached/unref 后 stdin 是否断开？ | 仍收到 `echo=still-writable` | fd 连通性与宿主存活引用是不同问题 |
-| E10 | 进程 exit 是否意味着输出 close？ | 本轮 exit 20ms、close 392ms，相隔 372ms | 已退出但输出未排尽，需要独立 drain 状态 |
+| E10 | 进程 exit 是否意味着输出 close？ | 最终复测 exit 25ms、close 400ms，相隔 375ms | 已退出但输出未排尽，需要独立 drain 状态 |
 | E11 | 分块输出能否逐块转字符串、反复全量回读？ | 逐块解码乱码；StringDecoder 正确；cursor 第二轮为空、第三轮仅新增项 | 增量消费与跨块解码是会话读侧责任 |
 | E12 | EOF 是比 kill 更安全的取消吗？ | 关闭输入后打印 `WOULD_COMMIT bytes=5` | EOF 可能触发处理缓存/提交阶段，不能当撤销 |
 
@@ -37,7 +37,26 @@ python3 researches/interactive-commands/experiments/probe.py
 
 这里的“决定”是确定性控制器，不是 LLM 推理。实验验证底层通道和两轮往返，不验证模型能否理解真实工具提示。程序显式刷新 stdout，所以也不受 E02 的默认缓冲干扰。
 
-这一案例适合做最小协议验收，但课程还需要真实 REPL/CLI 案例：只用人为设计的提示程序，不能证明新增工具的使用价值。
+这一案例适合做最小协议验收，但只用人为设计的提示程序，不能证明新增工具的使用价值。下面补充真实 Python/Node REPL；实际课程任务的模型表现仍需后续验证。
+
+### 真实 Python/Node：默认 pipe 与显式交互模式
+
+[real_repls.py](./real_repls.py) 用同一受控进程管理器启动系统已有的 Python 与 Node 可执行程序，记录 [4 组原始结果](./real-repls-results.json)。脚本 SHA-256 为 `4991cb849d83b80b3820b111527706f455df0d98894fb97ea02f6cedca4528e6`。
+
+```bash
+python3 -B researches/interactive-commands/experiments/real_repls.py
+```
+
+| 程序与启动方式 | 关闭 stdin 前 | 观察到输出后第二轮输入 |
+|---|---|---|
+| Python 默认模式 + pipe | 观测窗口无结果；EOF 后才执行脚本 | 不提供本实验所需的 REPL 回路 |
+| Python `-i -q` + pipe | 提示符和 `VALUE=42` 及时返回 | 控制器提取 42，发新表达式，得到 `NEXT=43` |
+| Node 默认模式 + pipe | 观测窗口无结果；EOF 后才执行脚本 | 不提供本实验所需的 REPL 回路 |
+| Node `--interactive` + pipe | 提示符和 `VALUE=42` 及时返回 | 控制器提取 42，发新表达式，得到 `NEXT=43` |
+
+关键修正：不能把“Python/Node 读 stdin”直接写成“默认就是可多轮交互的 REPL”，也不能把“没有 TTY”写成“语言 REPL 一概不可用”。启动模式、提示刷新和程序协议共同决定能力。这里验证的是表达式往返，不覆盖行编辑、全屏应用、复杂异常恢复或 LLM 的使用质量。
+
+真实 REPL 第一次运行成功；重复运行时曾在清理阶段出现 `PermissionError: [Errno 1] Operation not permitted`（killpg），并非表达式断言失败。先等待自然退出再发清理信号后重跑成功。确切内核拒绝原因未证实，不把推测当成已定位的产品问题；最终记录只对应修正后的运行。
 
 ## E02：有输入通道，不代表能观察到提示
 
@@ -91,7 +110,7 @@ Linux 的系统调用跟踪、特定运行时状态、程序自己的结构化�
 
 ## E10–E12：会话协议还欠读侧和收尾语义
 
-E10 由直接子进程启动继承 stdout/stderr 的短命后代，直接子进程立即退出，后代约 350ms 后自行退出。Node 的 `exit` 先到，`close` 要等 fd 被释放；372ms 是本轮观测值，不是产品阈值。
+E10 由直接子进程启动继承 stdout/stderr 的短命后代，直接子进程立即退出，后代约 350ms 后自行退出。Node 的 `exit` 先到，`close` 要等 fd 被释放；375ms 是最终复测观测值，不是产品阈值。
 
 E11 是算法夹具：刻意在 UTF-8 字符中间切块，并演示已消费 cursor。它不是并发、安全或性能证明。生产实现还需定义 cursor 属于谁、两个并行轮询是否争抢输出、输出被截断后如何补读、进程退出后的残余输出保留多久。
 
