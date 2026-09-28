@@ -1,0 +1,20 @@
+.discuss/2026-09-28/e02-s004-interactive-research/outline.md
+  h_afc6b161d429e0 1-64
+.vibecoding/2026-09-28/e02-s004-interactive-research/learnings.md
+  h_afc6b161d429e0 1-43
+.vibecoding/2026-09-28/e02-s004-interactive-research/prompt.md
+  h_afc6b161d429e0 1-26
+researches/interactive-commands/README.md
+  h_afc6b161d429e0 108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "604a59bb35757fa8d03b599361f99e12d7a32ef6",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
