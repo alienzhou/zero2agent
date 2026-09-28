@@ -1,0 +1,14 @@
+researches/interactive-commands/experiments/README.md
+  h_afc6b161d429e0 7,15,30,40-59,113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cf2393a6fde880fcac3581d6585e5b9c4d13a173",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
