@@ -1,0 +1,18 @@
+.vibecoding/2026-09-28/e02-s004-interactive-research/dialogue.md
+  h_afc6b161d429e0 1-53
+researches/interactive-commands/landscape.md
+  h_afc6b161d429e0 308
+researches/interactive-commands/notes/verification.md
+  h_afc6b161d429e0 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e959ba14866163e3e96611f9ae7c30f34650de94",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
