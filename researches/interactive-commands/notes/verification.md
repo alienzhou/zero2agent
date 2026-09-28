@@ -6,7 +6,7 @@
 
 ## 文档与来源检查
 
-最终状态：待终检结果回填。
+完整终检通过：17 份 Markdown、70 个本地链接、317 个固定 SHA 源码引用（覆盖 181 个不同版本文件）均无未解决问题。该次结构检查执行于 2026-09-29 00:10（Asia/Shanghai）；补入下方重复运行记录后再次检查。
 
 检查遍历本调研、对应讨论记录与协作记录：
 
@@ -28,6 +28,7 @@
 |---|---|---|
 | 本地机制 probe | 12/12，通过 | experiments/results.json，脚本版本 02e17f7 |
 | 真实 Python/Node REPL 对照 | 4/4，通过 | experiments/real-repls-results.json，脚本版本 02e17f7 |
+| 修正后稳定性复跑 | 连续 3 轮，各轮 12/12 + 4/4 通过 | [6 次执行摘要](../experiments/repeat-runs.json)，2026-09-29 00:10 |
 | 首轮机制 probe | 11/12，保留失败 | experiments/first-run.json，observer 未等到 close |
 | REPL 清理重复运行 | 曾遇 killpg EPERM；先自然回收后复测成功 | 实验说明保留异常与原因未完全证实的边界 |
 | 七个 Agent 产品 E2E | 未执行 | 不安装产品、不使用模型账户或真实凭据 |
