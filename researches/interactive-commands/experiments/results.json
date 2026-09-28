@@ -1,0 +1,161 @@
+{
+  "observed_at": "2026-09-28T23:56:30.291221+08:00",
+  "platform": "macOS-14.7.8-arm64-arm-64bit",
+  "python": "3.9.6",
+  "node": "v22.15.1",
+  "scope": "POSIX mechanism fixtures; no products or model API calls executed",
+  "results": [
+    {
+      "id": "E01",
+      "name": "multi_turn",
+      "passed": true,
+      "details": {
+        "rounds": 2,
+        "output": "number=7\nconfirm=15\naccepted=True\n"
+      }
+    },
+    {
+      "id": "E02",
+      "name": "buffering",
+      "passed": true,
+      "details": {
+        "pipe": {
+          "prompt_before_input": false,
+          "before": "BOOT\n",
+          "after": "PROMPT\nDONE\n"
+        },
+        "pty": {
+          "prompt_before_input": true,
+          "before": "PROMPT\r\nBOOT\r\n",
+          "after": "answer\r\nDONE\r\n"
+        }
+      }
+    },
+    {
+      "id": "E03",
+      "name": "pipe_control_byte",
+      "passed": true,
+      "details": {
+        "output": "hex=030a\n",
+        "ctrl_c_is_signal": false
+      }
+    },
+    {
+      "id": "E04",
+      "name": "signal_and_terminal_modes",
+      "passed": true,
+      "details": {
+        "pipe-signal": "SIGINT\n",
+        "pty-canonical": "^CSIGINT\r\n",
+        "pty-raw": "byte=03\n"
+      }
+    },
+    {
+      "id": "E05",
+      "name": "eof",
+      "passed": true,
+      "details": {
+        "pipe_after_close": "EOF hex=04\n",
+        "pty_empty_line_veof": "^D\b\bread=b''\r\n"
+      }
+    },
+    {
+      "id": "E06",
+      "name": "secrets_without_pty",
+      "passed": true,
+      "details": {
+        "synthetic_only": true,
+        "output": "received_length=15\n"
+      }
+    },
+    {
+      "id": "E07",
+      "name": "controlling_terminal",
+      "passed": true,
+      "details": {
+        "pipe_new_session": "isatty=False\ndevtty=error:6\n",
+        "pty": "isatty=True\r\ndevtty=open\r\n"
+      }
+    },
+    {
+      "id": "E08",
+      "name": "silence_is_not_state",
+      "passed": true,
+      "details": {
+        "waiting_for_input": {
+          "new_bytes": 0,
+          "alive": true
+        },
+        "sleeping": {
+          "new_bytes": 0,
+          "alive": true
+        },
+        "computing": {
+          "new_bytes": 0,
+          "alive": true
+        }
+      }
+    },
+    {
+      "id": "E09",
+      "name": "detached_unref",
+      "passed": true,
+      "details": {
+        "code": 0,
+        "output": "echo=still-writable\n",
+        "detached": true,
+        "unref": true
+      }
+    },
+    {
+      "id": "E10",
+      "name": "exit_before_close",
+      "passed": true,
+      "details": {
+        "events": [
+          {
+            "event": "exit",
+            "ms": 20
+          },
+          {
+            "event": "close",
+            "ms": 392
+          }
+        ],
+        "gap_ms": 372
+      }
+    },
+    {
+      "id": "E11",
+      "name": "incremental_and_decode",
+      "passed": true,
+      "details": {
+        "naive": "������",
+        "decoded": "你好",
+        "polls": [
+          [
+            "first",
+            "second"
+          ],
+          [],
+          [
+            "third"
+          ]
+        ],
+        "kind": "controller algorithm fixture, not product code"
+      }
+    },
+    {
+      "id": "E12",
+      "name": "eof_is_not_cancel",
+      "passed": true,
+      "details": {
+        "output": "WOULD_COMMIT bytes=5\n",
+        "real_side_effects": false
+      }
+    }
+  ],
+  "passed": 12,
+  "total": 12,
+  "script_commit": "2d36623"
+}
