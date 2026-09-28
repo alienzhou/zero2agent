@@ -1,0 +1,14 @@
+researches/interactive-commands/experiments/probe.py
+  h_afc6b161d429e0 1-319
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c4dd9b82d5d92538d911993cf13b71fa62126615",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
