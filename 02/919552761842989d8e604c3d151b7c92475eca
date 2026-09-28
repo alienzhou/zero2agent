@@ -1,0 +1,14 @@
+researches/interactive-commands/experiments/real_repls.py
+  h_afc6b161d429e0 1-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "02919552761842989d8e604c3d151b7c92475eca",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
