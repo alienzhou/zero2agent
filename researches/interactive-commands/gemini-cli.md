@@ -138,11 +138,11 @@ ignore 不等于程序一定等待：标准输入读取可立刻收到 EOF。
 
 ShellInputPrompt 只有 focus 且 activeShellPtyId 存在时处理按键。
 后台切换和 Shift+Tab 放行给上层；滚动键改变视图，其余 keyToAnsi 后提交。
-见 [packages/cli/src/ui/components/ShellInputPrompt.tsx#L23-L101](https://github.com/google-gemini/gemini-cli/blob/2fe7c2d3f065dc40ad573d50b2091116f8a4aa18/packages/cli/src/ui/components/ShellInputPrompt.tsx#L23-L101)。
+见 [packages/cli/src/ui/components/ShellInputPrompt.tsx#L23-L90](https://github.com/google-gemini/gemini-cli/blob/2fe7c2d3f065dc40ad573d50b2091116f8a4aa18/packages/cli/src/ui/components/ShellInputPrompt.tsx#L23-L90)。
 
 keyToAnsi 将 Enter 映射为 CR、Backspace 映射 DEL、方向键映射 ANSI 序列。
 Ctrl+A–Z 转为 1–26 控制字符，所以 Ctrl+C→0x03、Ctrl+D→0x04。
-见 [packages/cli/src/ui/key/keyToAnsi.ts#L11-L62](https://github.com/google-gemini/gemini-cli/blob/2fe7c2d3f065dc40ad573d50b2091116f8a4aa18/packages/cli/src/ui/key/keyToAnsi.ts#L11-L62)。
+见 [packages/cli/src/ui/key/keyToAnsi.ts#L11-L55](https://github.com/google-gemini/gemini-cli/blob/2fe7c2d3f065dc40ad573d50b2091116f8a4aa18/packages/cli/src/ui/key/keyToAnsi.ts#L11-L55)。
 
 实际路径：
 
@@ -368,4 +368,3 @@ git -C <checkout> diff d76d2d07422176eefbc90676d8d77a7d912a6970 2fe7c2d3f065dc40
 ```
 
 复核必须使用固定 SHA；当前远端 HEAD 可能在本报告完成后继续变化。
-

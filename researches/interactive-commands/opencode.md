@@ -257,7 +257,7 @@ bash 本身的 command 与输出会进入工具记录。
 - shell：已有 timeout、非零退出、metadata、截断测试文本，但没有把 UI PTY 变成模型输入的测试。
 - PTY live 测试在 Windows 跳过；不能从 POSIX 测试推出 ConPTY 行为。
 
-测试入口：[packages/core/test/pty/pty-session.test.ts#L25-L28](https://github.com/anomalyco/opencode/blob/ad6c72c7068812d43b31f3cfb9e413356a19d850/packages/core/test/pty/pty-session.test.ts#L25-L28)、[packages/core/test/pty/pty-session.test.ts#L94-L205](https://github.com/anomalyco/opencode/blob/ad6c72c7068812d43b31f3cfb9e413356a19d850/packages/core/test/pty/pty-session.test.ts#L94-L205)、[packages/core/test/pty/ticket.test.ts#L16-L70](https://github.com/anomalyco/opencode/blob/ad6c72c7068812d43b31f3cfb9e413356a19d850/packages/core/test/pty/ticket.test.ts#L16-L70)。
+测试入口：[packages/core/test/pty/pty-session.test.ts#L25-L28](https://github.com/anomalyco/opencode/blob/ad6c72c7068812d43b31f3cfb9e413356a19d850/packages/core/test/pty/pty-session.test.ts#L25-L28)、[packages/core/test/pty/pty-session.test.ts#L94-L205](https://github.com/anomalyco/opencode/blob/ad6c72c7068812d43b31f3cfb9e413356a19d850/packages/core/test/pty/pty-session.test.ts#L94-L205)、[packages/core/test/pty/ticket.test.ts#L16-L62](https://github.com/anomalyco/opencode/blob/ad6c72c7068812d43b31f3cfb9e413356a19d850/packages/core/test/pty/ticket.test.ts#L16-L62)。
 
 仍未验证：多浏览器同时输入、慢订阅持续积压、极大单 chunk、退出瞬间最终输出 drain、POSIX 孙进程逃组、宿主 SIGKILL、Windows 终端退出、密码/原始模式 EOF。
 本轮没有产品端到端结果，所有正向能力仍为 S。
@@ -300,4 +300,3 @@ git -C <checkout> diff 743f6410f2e5002723fc5e893039ac49fbfe0de8 ad6c72c7068812d4
 ```
 
 当前远端可能继续前进；复核本文必须读取上述固定 SHA，而不是把新 HEAD 当作同一版本。
-
