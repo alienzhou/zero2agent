@@ -4,6 +4,8 @@
 
 [完整调研](../../../researches/interactive-commands/README.md) | [决策输入](../../../researches/interactive-commands/notes/decision-inputs.md) | [原讨论 PR #12](https://github.com/alienzhou/zero2agent/pull/12)
 
+> 后续进展（2026-09-29 晚间）：用户确认按五个顶层问题推进，并要求原理介绍前置。[继续讨论入口](../../2026-09-29/e02-s004-interactive-commands/outline.md)与[原理开篇](../../2026-09-29/e02-s004-interactive-commands/notes/00-core-principles.md)已建立；以下内容保留为调研交接时的记录。
+
 ## 用户要求和边界
 
 用户要求一次详细、全面、参考既有格式的调研，并沉淀文档、开独立分支。此前讨论提醒需要刷新社区样本，特别加入 DeepSeek Harness、Grok Build。
