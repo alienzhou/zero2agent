@@ -1,0 +1,40 @@
+.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md
+  h_afc6b161d429e0 3,32,34-38
+.discuss/2026-09-29/e02-s004-interactive-commands/notes/00-core-principles.md
+  h_afc6b161d429e0 3
+.discuss/2026-09-29/e02-s004-interactive-commands/outline.md
+  h_afc6b161d429e0 3,11-12,47
+.vibecoding/2026-09-29/e02-s004-human-terminal/dialogue.md
+  h_afc6b161d429e0 1-32
+.vibecoding/2026-09-29/e02-s004-human-terminal/learnings.md
+  h_afc6b161d429e0 1-11
+.vibecoding/2026-09-29/e02-s004-human-terminal/prompt.md
+  h_afc6b161d429e0 1-17
+CHANGELOG.md
+  h_afc6b161d429e0 74,80-106
+README.en.md
+  h_afc6b161d429e0 109,160,167-171,188-189
+README.md
+  h_afc6b161d429e0 164,175,198-199
+docs/roadmap/README.md
+  h_afc6b161d429e0 19-20
+retros/E02-S004-human-terminal.md
+  h_afc6b161d429e0 1-51
+retros/README.md
+  h_afc6b161d429e0 15-22
+specs/E02-act-and-execute/README.md
+  h_afc6b161d429e0 35
+specs/E02-act-and-execute/S003-terminal/README.md
+  h_afc6b161d429e0 206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9b2bf5353b9d7330435ce78e2e9d83be33b30076",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
