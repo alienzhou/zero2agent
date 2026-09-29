@@ -23,6 +23,7 @@ S004 值得继续，但不能沿用“只把 stdin 从 ignore 改成 pipe，再�
 
 | 要回答的问题 | 文档 |
 |---|---|
+| 从哪里开始继续讨论？ | [先读核心原理，再讨论五问](../../.discuss/2026-09-29/e02-s004-interactive-commands/outline.md) |
 | 当前七家到底怎么做？ | 下方能力矩阵及各产品报告 |
 | 还有哪些新方案或反例？ | [补充样本广筛](./landscape.md) |
 | 初稿哪些前提已被本项目代码反驳？ | [S003 基线核对](./notes/zero2agent-baseline.md) |
