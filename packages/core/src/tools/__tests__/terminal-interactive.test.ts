@@ -4,14 +4,20 @@ import * as os from 'node:os'
 import * as path from 'node:path'
 import { spawn } from 'node:child_process'
 import { allTools, getBaseShellEnv, terminalTool } from '../../index.js'
-import type { HumanTerminalRequest, HumanTerminalResult, TerminalRuntimeHooks } from '../../index.js'
+import type {
+  HumanTerminalRequest,
+  HumanTerminalResult,
+  TerminalRuntimeHooks,
+} from '../../index.js'
 import { buildSpawnEnv, consumeShellEnvFailureNotice } from '../shell-env.js'
 import { resetTerminalRuntimeHooksForTests, setTerminalRuntimeHooks } from '../terminal-runtime.js'
 
 // Fail closed if the interactive branch accidentally reaches process creation.
 vi.mock('node:child_process', async importOriginal => ({
   ...(await importOriginal<typeof import('node:child_process')>()),
-  spawn: vi.fn(() => { throw new Error('Unexpected process creation') }),
+  spawn: vi.fn(() => {
+    throw new Error('Unexpected process creation')
+  }),
 }))
 
 vi.mock('../shell-env.js', () => ({
@@ -55,13 +61,16 @@ describe('human-controlled terminal', () => {
     await fs.mkdir(path.join(cwd, 'subdir'))
     // Even if the host has extra runtime fields, none are serialized into the receipt.
     runInteractive.mockResolvedValue({
-      status: 'completed', exitCode: 0, output: 'private transcript',
+      status: 'completed',
+      exitCode: 0,
+      output: 'private transcript',
     } as HumanTerminalResult)
     expect(await execute({ workdir: 'subdir', text: 'private input' })).toBe(
       'Status: human-controlled completed\nExit code: 0\nInteractive content was not recorded or sent to the model.'
     )
     expect(runInteractive).toHaveBeenCalledExactlyOnceWith({
-      command, cwd: await fs.realpath(path.join(cwd, 'subdir')),
+      command,
+      cwd: await fs.realpath(path.join(cwd, 'subdir')),
     })
   })
 

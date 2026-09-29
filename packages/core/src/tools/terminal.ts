@@ -540,7 +540,8 @@ export const terminalTool: Tool = {
       },
       interactive: {
         type: 'boolean',
-        description: 'Human-controlled terminal requiring a real TTY and user confirmation (default: false)',
+        description:
+          'Human-controlled terminal requiring a real TTY and user confirmation (default: false)',
       },
     },
     required: ['command'],
