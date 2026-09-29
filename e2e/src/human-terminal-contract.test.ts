@@ -118,7 +118,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     expect(session.output).toContain(`TOKEN_LENGTH:${SECRET.length}`)
   })
 
-  it('restores the original readline after native spawn failure', async () => {
+  it('restores real readline after an injected native spawn failure', async () => {
     const cwd = await workspace()
     const entry = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-failure.mjs')
     const session = start(cwd, [], false, entry)
