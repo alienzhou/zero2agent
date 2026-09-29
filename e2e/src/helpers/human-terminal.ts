@@ -11,13 +11,17 @@ interface PtyProcess {
 }
 
 interface PtyModule {
-  spawn(file: string, args: string[], options: {
-    name: string
-    cols: number
-    rows: number
-    cwd: string
-    env: Record<string, string>
-  }): PtyProcess
+  spawn(
+    file: string,
+    args: string[],
+    options: {
+      name: string
+      cols: number
+      rows: number
+      cwd: string
+      env: Record<string, string>
+    }
+  ): PtyProcess
 }
 
 /** Load the production dependency, not a second copy or a mocked terminal. */
@@ -26,11 +30,19 @@ export function startHumanTerminal(entry: string, args: string[], cwd: string, r
   const pty = require('@lydell/node-pty') as PtyModule
   // Deliberately do not inherit API keys, shell startup configuration, or local credentials.
   const child = pty.spawn(process.execPath, [entry, ...args], {
-    name: 'xterm-256color', cols: 80, rows: 24, cwd,
+    name: 'xterm-256color',
+    cols: 80,
+    rows: 24,
+    cwd,
     env: {
-      PATH: '/usr/bin:/bin:/usr/sbin:/sbin', HOME: cwd, TMPDIR: cwd,
-      TERM: 'xterm-256color', ZERO2AGENT_SKIP_LOCAL_ENV: '1',
-      ...(repl ? { ANTHROPIC_API_KEY: 'fake-contract-key', ANTHROPIC_BASE_URL: 'http://127.0.0.1:1' } : {}),
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
+      HOME: cwd,
+      TMPDIR: cwd,
+      TERM: 'xterm-256color',
+      ZERO2AGENT_SKIP_LOCAL_ENV: '1',
+      ...(repl
+        ? { ANTHROPIC_API_KEY: 'fake-contract-key', ANTHROPIC_BASE_URL: 'http://127.0.0.1:1' }
+        : {}),
     },
   })
   let output = ''
@@ -50,7 +62,10 @@ export function startHumanTerminal(entry: string, args: string[], cwd: string, r
 
   async function waitFor(marker: string | RegExp, from = 0): Promise<string> {
     return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => finish(new Error(`Timed out waiting for ${marker}\n${output.slice(-4000)}`)), 12_000)
+      const timeout = setTimeout(
+        () => finish(new Error(`Timed out waiting for ${marker}\n${output.slice(-4000)}`)),
+        12_000
+      )
       const finish = (error?: Error) => {
         clearTimeout(timeout)
         changed.delete(check)
@@ -70,19 +85,28 @@ export function startHumanTerminal(entry: string, args: string[], cwd: string, r
   async function waitExit(): Promise<number> {
     let timeout: ReturnType<typeof setTimeout> | undefined
     try {
-      return await Promise.race([exit, new Promise<never>((_, reject) => {
-        timeout = setTimeout(() => reject(new Error(`CLI did not exit\n${output.slice(-4000)}`)), 12_000)
-      })])
+      return await Promise.race([
+        exit,
+        new Promise<never>((_, reject) => {
+          timeout = setTimeout(
+            () => reject(new Error(`CLI did not exit\n${output.slice(-4000)}`)),
+            12_000
+          )
+        }),
+      ])
     } finally {
       clearTimeout(timeout)
     }
   }
 
   return {
-    get output() { return output },
+    get output() {
+      return output
+    },
     write: (data: string) => child.write(data),
     resize: (columns: number, rows: number) => child.resize(columns, rows),
-    waitFor, waitExit,
+    waitFor,
+    waitExit,
     async close() {
       if (!ended) child.kill('SIGKILL')
       await waitExit()
