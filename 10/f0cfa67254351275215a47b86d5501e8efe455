@@ -1,0 +1,16 @@
+packages/core/src/tools/__tests__/helpers/terminal-pty-harness.mjs
+  h_afc6b161d429e0 9,49-50,61-71
+packages/core/src/tools/__tests__/helpers/terminal-pty-runner.py
+  h_afc6b161d429e0 34,37-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "10f0cfa67254351275215a47b86d5501e8efe455",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
