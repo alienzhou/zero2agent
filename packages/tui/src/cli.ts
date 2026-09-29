@@ -112,7 +112,7 @@ async function main() {
       { command, interactive: true },
       { cwd: process.cwd() }
     )
-    console.log(result)
+    process.stdout.write(result + '\n')
     const code = result.match(/^Exit code: (\d+)$/m)
     process.exitCode = result.startsWith('Error:')
       ? 1
@@ -192,8 +192,9 @@ async function main() {
         if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
           const command =
             trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
-          console.log(
-            await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })
+          process.stdout.write(
+            (await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })) +
+              '\n'
           )
         } else {
           await agent.run(trimmed)

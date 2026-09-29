@@ -38,7 +38,11 @@ export class HumanProcessTree {
   private readonly known = new Map<number, string>()
   private scanned = false
 
-  constructor(private readonly root: number) {}
+  constructor(private readonly root: number) {
+    if (!Number.isSafeInteger(root) || root <= 1 || root === process.pid) {
+      throw new Error('Invalid owned PTY process')
+    }
+  }
 
   capture(): ProcessIdentity[] {
     const rows = snapshot()

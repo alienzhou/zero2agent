@@ -14,7 +14,7 @@ let leased = false
 /** Exclusive ownership prevents readline/history from consuming private terminal keys. */
 function acquireInput(rl?: Interface): () => void {
   const input = process.stdin
-  const stty = (...args: string[]) =>
+  const stty = (...args: string[]): string =>
     execFileSync('/bin/stty', args, {
       encoding: 'utf8',
       stdio: ['inherit', 'pipe', 'ignore'],
@@ -28,7 +28,7 @@ function acquireInput(rl?: Interface): () => void {
   input.pause()
   for (const event of events) input.removeAllListeners(event)
   let released = false
-  const restore = () => {
+  const restore = (): void => {
     if (released) return
     released = true
     input.pause()
@@ -59,8 +59,11 @@ function acquireInput(rl?: Interface): () => void {
 function confirm(signal: AbortSignal): Promise<boolean> {
   return new Promise(resolve => {
     let line = ''
+    let settled = false
     const input = process.stdin
-    const finish = (allowed: boolean) => {
+    const finish = (allowed: boolean): void => {
+      if (settled) return
+      settled = true
       input.pause()
       input.off('data', onData)
       input.off('end', onEnd)
@@ -70,8 +73,8 @@ function confirm(signal: AbortSignal): Promise<boolean> {
       process.stdout.write('\r\n')
       resolve(allowed)
     }
-    const onEnd = () => finish(false)
-    const onData = (chunk: Buffer | string) => {
+    const onEnd = (): void => finish(false)
+    const onData = (chunk: Buffer | string): void => {
       for (const char of chunk.toString()) {
         if (char === '\r' || char === '\n') {
           // Never forward the remainder of a pasted confirmation into the child.
@@ -144,7 +147,7 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     resolveExit = resolve
   })
 
-  const stop = () => {
+  const stop = (): Promise<void> => {
     cancelled = true
     if (!stopping) {
       stopping = tree.terminate().catch(() => {
@@ -158,7 +161,7 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     }
     return stopping
   }
-  const onInput = (chunk: Buffer | string) => {
+  const onInput = (chunk: Buffer | string): void => {
     if (finished || cancelled) return
     const text = typeof chunk === 'string' ? chunk : decoder.write(chunk)
     if (text.includes('\x1d') || Buffer.byteLength(text) > MAX_INPUT_BYTES) {
@@ -172,17 +175,17 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
       void stop()
     }
   }
-  const onInputEnd = () => {
+  const onInputEnd = (): void => {
     void stop()
   }
-  const onOutputError = () => {
+  const onOutputError = (): void => {
     failure = true
     void stop()
   }
-  const onDrain = () => {
+  const onDrain = (): void => {
     if (!finished && !exited) pty.resume()
   }
-  const onResize = () => {
+  const onResize = (): void => {
     if (finished || exited) return
     try {
       const { cols, rows } = dimensions()
@@ -243,7 +246,7 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     await new Promise(resolve => setTimeout(resolve, 20))
     if (output.writableLength) {
       await new Promise<void>(resolve => {
-        const done = () => {
+        const done = (): void => {
           clearTimeout(timer)
           output.off('drain', done)
           resolve()
@@ -298,14 +301,14 @@ export async function runHumanTerminal(
   const controller = new AbortController()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
   const handlers = signals.map(signal => {
-    const handler = () => {
+    const handler = (): void => {
       externalSignal = signal
       controller.abort()
     }
     process.once(signal, handler)
     return [signal, handler] as const
   })
-  const onExit = () => {
+  const onExit = (): void => {
     if (pty) {
       try {
         new HumanProcessTree(pty.pid).signal('SIGKILL')
@@ -346,11 +349,14 @@ export async function runHumanTerminal(
     process.off('exit', onExit)
     for (const [signal, handler] of handlers) process.off(signal, handler)
     try {
-      process.stdout.write(RESET_TERMINAL + '\r\n')
-      restore?.()
+      try {
+        process.stdout.write(RESET_TERMINAL + '\r\n')
+      } finally {
+        restore?.()
+      }
     } finally {
       leased = false
+      if (externalSignal) process.kill(process.pid, externalSignal)
     }
-    if (externalSignal) process.kill(process.pid, externalSignal)
   }
 }

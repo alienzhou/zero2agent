@@ -25,8 +25,24 @@ interface PtyModule {
   ): PtyProcess
 }
 
+interface HumanTerminalSession {
+  readonly pid: number
+  readonly output: string
+  write(data: string): void
+  resize(columns: number, rows: number): void
+  signal(signal: NodeJS.Signals): void
+  waitFor(marker: string | RegExp, from?: number): Promise<string>
+  waitExit(): Promise<number>
+  close(): Promise<void>
+}
+
 /** Load the production dependency, not a second copy or a mocked terminal. */
-export function startHumanTerminal(entry: string, args: string[], cwd: string, repl = false) {
+export function startHumanTerminal(
+  entry: string,
+  args: string[],
+  cwd: string,
+  repl = false
+): HumanTerminalSession {
   const require = createRequire(path.join(REPO_ROOT, 'packages/tui/package.json'))
   const pty = require('@lydell/node-pty') as PtyModule
   // Deliberately do not inherit API keys, shell startup configuration, or local credentials.
@@ -67,13 +83,13 @@ export function startHumanTerminal(entry: string, args: string[], cwd: string, r
         () => finish(new Error(`Timed out waiting for ${marker}\n${output.slice(-4000)}`)),
         12_000
       )
-      const finish = (error?: Error) => {
+      const finish = (error?: Error): void => {
         clearTimeout(timeout)
         changed.delete(check)
         if (error) reject(error)
         else resolve(output.slice(from))
       }
-      const check = () => {
+      const check = (): void => {
         const tail = output.slice(from)
         if (typeof marker === 'string' ? tail.includes(marker) : marker.test(tail)) finish()
         else if (ended) finish(new Error(`Process exited before ${marker}\n${output.slice(-4000)}`))
