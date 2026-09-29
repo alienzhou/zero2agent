@@ -1,0 +1,14 @@
+e2e/src/helpers/human-terminal-readline.mjs
+  h_afc6b161d429e0 2,9-12,27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "94a1f840350a1e1e9b8b1544380d9099fdf74ccd",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
