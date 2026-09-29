@@ -105,6 +105,100 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     expect(await fs.readdir(cwd)).toEqual(['secret.sh'])
   })
 
+  it('accepts explicit yes and discards the rest of the confirmation chunk', async () => {
+    const cwd = await workspace({ 'secret.sh': secretScript })
+    const session = start(cwd, ['--terminal', 'bash ./secret.sh'])
+    await session.waitFor(CONFIRM)
+    session.write('yes\rSHOULD_NOT_FORWARD\r')
+    await session.waitFor('SECRET_READY')
+    expect(session.output).not.toContain('SHOULD_NOT_FORWARD')
+    expect(session.output).not.toContain('TOKEN_LENGTH:')
+    session.write(`${SECRET}\r`)
+    expect(await session.waitExit()).toBe(0)
+    expect(session.output).toContain(`TOKEN_LENGTH:${SECRET.length}`)
+  })
+
+  it('restores the original readline after native spawn failure', async () => {
+    const cwd = await workspace()
+    const entry = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-failure.mjs')
+    const session = start(cwd, [], false, entry)
+    await session.waitFor(CONFIRM)
+    session.write('y\r')
+    await session.waitFor('FAILURE_RESTORED:true')
+    await session.waitFor('AFTER_FAILURE:')
+    session.write('still usable\r')
+    expect(await session.waitExit()).toBe(0)
+    expect(session.output).toContain('ANSWER:still usable')
+    expect(session.output).not.toContain('Human terminal active')
+  })
+
+  it('terminates during confirmation without executing the proposed command', async () => {
+    const cwd = await workspace()
+    const session = start(cwd, ['--terminal', 'touch forbidden'])
+    await session.waitFor(CONFIRM)
+    session.signal('SIGTERM')
+    await session.waitExit()
+    expect(session.output).not.toContain('Human terminal active')
+    await expect(fs.access(path.join(cwd, 'forbidden'))).rejects.toThrow()
+  })
+
+  it('cleans the child before relaying an external host SIGTERM', async () => {
+    const cwd = await workspace({ 'long.sh': 'echo SIGNAL_PID:$$\nsleep 300\n' })
+    const session = start(cwd, ['--terminal', 'bash ./long.sh'])
+    await approve(session)
+    await session.waitFor(/SIGNAL_PID:\d+/)
+    const pid = Number(session.output.match(/SIGNAL_PID:(\d+)/)?.[1])
+    pids.push(pid)
+    session.signal('SIGTERM')
+    await session.waitExit()
+    await expect
+      .poll(() => {
+        try {
+          process.kill(pid, 0)
+          return false
+        } catch {
+          return true
+        }
+      })
+      .toBe(true)
+    pids.length = 0
+  })
+
+  it('cleans an ordinary background descendant after normal command exit', async () => {
+    const cwd = await workspace({
+      'background.sh': 'sleep 300 &\necho BACKGROUND_PID:$!\nexit 0\n',
+    })
+    const session = start(cwd, ['--terminal', 'bash ./background.sh'])
+    await approve(session)
+    await session.waitFor(/BACKGROUND_PID:\d+/)
+    const pid = Number(session.output.match(/BACKGROUND_PID:(\d+)/)?.[1])
+    pids.push(pid)
+    expect(await session.waitExit()).toBe(0)
+    await expect
+      .poll(() => {
+        try {
+          process.kill(pid, 0)
+          return false
+        } catch {
+          return true
+        }
+      })
+      .toBe(true)
+    pids.length = 0
+  })
+
+  it('returns from a real pager and preserves its final displayed output', async () => {
+    const cwd = await workspace({
+      'page.txt': Array.from({ length: 120 }, (_, i) => `PAGER-LINE-${i + 1}`).join('\n'),
+    })
+    const session = start(cwd, ['--terminal', 'LESSHISTFILE=- /usr/bin/less page.txt'])
+    await approve(session)
+    await session.waitFor('PAGER-LINE-1')
+    session.write('q')
+    expect(await session.waitExit()).toBe(0)
+    expect(session.output).toContain('human-controlled completed')
+  })
+
   it('forwards Ctrl-C to the foreground program', async () => {
     const cwd = await workspace({
       'interrupt.sh':

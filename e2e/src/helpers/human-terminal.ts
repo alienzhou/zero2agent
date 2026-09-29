@@ -3,6 +3,7 @@ import path from 'node:path'
 import { REPO_ROOT } from './cli.js'
 
 interface PtyProcess {
+  pid: number
   write(data: string): void
   resize(columns: number, rows: number): void
   kill(signal?: string): void
@@ -100,11 +101,15 @@ export function startHumanTerminal(entry: string, args: string[], cwd: string, r
   }
 
   return {
+    get pid() {
+      return child.pid
+    },
     get output() {
       return output
     },
     write: (data: string) => child.write(data),
     resize: (columns: number, rows: number) => child.resize(columns, rows),
+    signal: (signal: NodeJS.Signals) => child.kill(signal),
     waitFor,
     waitExit,
     async close() {
