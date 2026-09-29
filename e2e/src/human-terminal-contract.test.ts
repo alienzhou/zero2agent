@@ -198,8 +198,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
         'trap "" HUP\nsleep 300 &\nprintf "%s" "$!" > disconnected.pid\necho READY_TO_DISCONNECT\nwait\n',
     })
     const runner = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-disconnect.py')
-    const host = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-disconnect-host.mjs')
-    const result = await promisify(execFile)('python3', [runner, process.execPath, host], {
+    const result = await promisify(execFile)('python3', [runner, process.execPath, CLI_ENTRY], {
       cwd,
       env: { PATH: '/usr/bin:/bin', HOME: cwd, TMPDIR: cwd, TERM: 'xterm-256color' },
       timeout: 15_000,

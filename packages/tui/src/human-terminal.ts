@@ -313,6 +313,7 @@ export async function runHumanTerminal(
   let pty: IPty | undefined
   let tree: HumanProcessTree | undefined
   let exitCleaned = false
+  let terminalVanished = false
   let externalSignal: 'SIGINT' | 'SIGTERM' | 'SIGHUP' | undefined
   const controller = new AbortController()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
@@ -341,7 +342,7 @@ export async function runHumanTerminal(
       }
     }
     try {
-      if (!process.stdin.readableEnded && !process.stdin.destroyed) {
+      if (!terminalVanished && !process.stdin.readableEnded && !process.stdin.destroyed) {
         restore?.()
         process.stdin.setRawMode(false)
       }
@@ -353,6 +354,7 @@ export async function runHumanTerminal(
     // A vanished terminal cannot participate in asynchronous drain/restore.
     // Kill the owned execution synchronously, without writing to the dead device.
     externalSignal = 'SIGHUP'
+    terminalVanished = true
     onExit()
     process.exit(129)
   }
