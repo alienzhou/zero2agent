@@ -271,8 +271,8 @@ async function bridge(
     if (failure) throw new Error('Human terminal I/O or process cleanup failed')
     return {
       status: cancelled || exited?.signal ? 'cancelled' : 'completed',
-      ...(exited ? { exitCode: exited.exitCode } : {}),
-      ...(exited?.signal ? { signal: exited.signal } : {}),
+      // Native PTY backends may supply exitCode=0 alongside a terminating signal.
+      ...(exited?.signal ? { signal: exited.signal } : exited ? { exitCode: exited.exitCode } : {}),
     }
   } finally {
     finished = true

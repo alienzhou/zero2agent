@@ -114,13 +114,17 @@ async function main() {
     )
     process.stdout.write(result + '\n')
     const code = result.match(/^Exit code: (\d+)$/m)
-    process.exitCode = result.startsWith('Error:')
-      ? 1
-      : code
-        ? Number(code[1])
-        : result.includes('cancelled')
-          ? 130
-          : 0
+    const signal = result.match(/^Signal: (\d+)$/m)
+    process.exitCode =
+      result.startsWith('Error:') || result.includes('human-controlled declined')
+        ? 1
+        : signal
+          ? 128 + Number(signal[1])
+          : code
+            ? Number(code[1])
+            : result.includes('cancelled')
+              ? 130
+              : 0
     return
   }
   loadLocalEnv()

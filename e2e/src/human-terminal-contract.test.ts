@@ -357,7 +357,18 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     await session.waitFor('INTERRUPT_READY')
     session.write('\x03')
     await session.waitFor('INTERRUPTED')
-    await session.waitExit()
+    expect(await session.waitExit()).toBe(23)
+  })
+
+  it('does not report a successful exit when Ctrl-C terminates the child by signal', async () => {
+    const cwd = await workspace({ 'signal.sh': 'echo SIGNAL_READY\nexec sleep 300\n' })
+    const session = start(cwd, ['--terminal', 'bash ./signal.sh'])
+    await approve(session)
+    await session.waitFor('SIGNAL_READY')
+    session.write('\x03')
+    expect(await session.waitExit()).toBe(130)
+    expect(session.output).toContain('Signal: 2')
+    expect(session.output).not.toContain('Exit code: 0')
   })
 
   it('forwards Ctrl-D to read as EOF', async () => {
