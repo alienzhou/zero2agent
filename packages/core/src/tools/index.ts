@@ -15,6 +15,12 @@ export {
   getTerminalRuntimeHooks,
 } from './terminal-runtime.js'
 export { listBackgroundProcesses } from './process-registry.js'
+export { getBaseShellEnv } from './shell-env.js'
+export type {
+  HumanTerminalRequest,
+  HumanTerminalResult,
+  TerminalRuntimeHooks,
+} from './terminal-runtime.js'
 
 import { readFileTool } from './read-file.js'
 import { listDirectoryTool } from './list-directory.js'
