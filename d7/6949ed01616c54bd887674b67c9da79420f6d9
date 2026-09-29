@@ -1,0 +1,22 @@
+packages/core/src/prompt/system.ts
+  h_afc6b161d429e0 42-43
+packages/tui/src/cli.ts
+  h_afc6b161d429e0 5,108-116,148,183-188
+packages/tui/src/human-terminal-process.ts
+  h_afc6b161d429e0 1-77
+packages/tui/src/human-terminal.ts
+  h_afc6b161d429e0 1-259
+packages/tui/src/setup-terminal-runtime.ts
+  h_afc6b161d429e0 7,29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d76949ed01616c54bd887674b67c9da79420f6d9",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
