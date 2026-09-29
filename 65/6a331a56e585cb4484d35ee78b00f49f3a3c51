@@ -1,0 +1,14 @@
+packages/tui/src/human-terminal.ts
+  h_afc6b161d429e0 38-40,334-337,361,371,374-375,381,385-388,392
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "656a331a56e585cb4484d35ee78b00f49f3a3c51",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
