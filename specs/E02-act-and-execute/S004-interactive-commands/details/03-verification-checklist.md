@@ -1,6 +1,6 @@
 # E02-S004：验收检查清单
 
-> 待执行并回填。无运行证据的项目不标通过；源码阅读和 mock 不代替真实 PTY。
+> 实现与本机自动验证完成，待人工验收与合入。验证日期：2026-09-29；实现基线：`2c7bd96`。下面区分真实 PTY、故障注入和未验证范围。
 
 [Story](../README.md) | [总览](./00-overview.md)
 
@@ -8,35 +8,54 @@
 
 | 检查项 | 优先级 | 证据要求 | 状态 |
 |---|---|---|---|
-| interactive 进宿主，缺省/false 走旧路径 | P0 | core 分支测试 | 待验证 |
-| 无 LLM key 可用 --terminal，空命令进 bash | P0 | 真实 CLI/PTY | 待验证 |
-| /terminal 返回后 Agent 可收完整新输入 | P0 | 真实 REPL/PTY | 待验证 |
-| y/yes+Enter 批准，空/EOF/其他拒绝且无子进程 | P0 | 确认测试与进程观测 | 待验证 |
-| read 读取人工输入，解释器能连续交互 | P0 | 真实 PTY | 待验证 |
-| Ctrl-C/Ctrl-D 到程序，Ctrl-] 中止会话 | P0 | 控制程序与进程检查 | 待验证 |
-| 各出口恢复 raw/listener/paused | P0 | 前后状态比较 | 待验证 |
-| 虚构输入/输出不进模型回执、OutputSink、输出日志 | P0 | 路径断言与回执检查 | 待验证 |
-| status/exitCode/signal 区分完成、非零、取消 | P0 | 真实退出与单测 | 待验证 |
-| 退出接管后普通子孙及进程组不存活 | P0 | 真实进程树检查 | 待验证 |
-| resize 后 stty size 与尺寸一致 | P1 | 真实 PTY resize | 待验证 |
-| 方向键、退格、中文、粘贴不污染 Agent | P1 | 真实终端 | 待验证 |
+| interactive 进宿主，缺省/false 走旧路径 | P0 | core 契约单测 + 两项真实命令回归 | 通过 |
+| 无 LLM key 可用 --terminal，空命令进 bash | P0 | 独立 CLI/PTY；空命令工具驱动演示 | 通过，非用户人工验收 |
+| /terminal 返回后 Agent 可收完整新输入 | P0 | 真实 CLI REPL 连续两次接管后 exit；readline fixture 接收 AFTER | 通过 |
+| y/yes+Enter 批准，空/n/其他/Ctrl-D 拒绝且不执行 | P0 | 检查活动提示与工作区无副作用文件 | 通过；Ctrl-D 是控制键，不冒充物理 EOF |
+| read 多轮输入、bash 持续接受命令 | P0 | 两轮 read、isatty、/dev/tty；交互 bash 后退出 | 通过 |
+| Ctrl-C/Ctrl-D 到程序，Ctrl-] 中止会话 | P0 | SIGINT trap、信号退出、read EOF、忽略 SIGINT 的进程树 | 通过 |
+| 正常结束、spawn 失败后恢复终端 | P0 | 两次接管前后 stty、raw、paused、data/keypress 监听身份比较；故障恢复后新输入 | 通过；不声称穷尽所有异常组合 |
+| 虚构输入/输出不进模型回执、OutputSink、输出日志 | P0 | core 白名单回执与不走普通执行断言；真实 read -s、history、文件检查 | 通过，限 Zero2Agent 交互路径 |
+| status/exitCode/signal 区分完成、非零、取消 | P0 | core 元信息断言；真实退出 23、信号退出 130，不能附带 Exit code: 0 | 通过 |
+| 退出接管后受管进程不存活 | P0 | 普通后台后代、扫描间创建的 HUP-ignoring 后代、取消与物理断连 | 通过，限原组和已观察后代 |
+| resize 后 stty size 与尺寸一致 | P1 | 从 24×80 改为 37×101 | 通过 |
+| 行编辑、中文、批量输入 | P1 | 方向键/删除键得到 AB，中文原样返回；确认同批尾部被丢弃 | 已测场景通过；未穷尽 IME/粘贴协议 |
 
 ## 边界场景
 
 | 检查项 | 优先级 | 说明 | 状态 |
 |---|---|---|---|
-| stdin 或 stdout 非 TTY | P0 | 明确拒绝、不降级、不消费后续输入 | 待验证 |
-| Windows、宿主缺失、PTY 不可用 | P0 | 能力错误，不假报完成 | 待验证 |
-| 无效/越界 workdir | P0 | 保持校验，不创建子进程 | 待验证 |
-| 确认与命令输入同批到达 | P0 | 确认不混入命令，额外字节不误送 Agent | 待验证 |
-| 反复接管、重复退出事件 | P0 | 无监听累积或状态漂移 | 待验证 |
-| 输入断开、宿主正常退出/取消 | P0 | 清理并恢复；不以 SIGKILL 作可恢复案例 | 待验证 |
-| 高速输出、慢 stdout、Unicode 分段 | P1 | 检查背压/内存/乱码 | 待验证 |
-| pager 或全屏程序退出 | P1 | 检查画面与后续输入恢复 | 待验证 |
+| 非 TTY 入口 | P0 | 真实 pipe CLI 拒绝且不执行；源码分别检查 stdin/stdout | 通过；未单独穷举仅一端重定向组合 |
+| Windows、宿主缺失、PTY 启动失败 | P0 | 平台 guard 模拟、core 缺失钩子测试、native spawn 故障注入 | 通过；不是 Windows 或 native 安装矩阵实测 |
+| 无效/越界 workdir | P0 | core 拒绝且宿主钩子未调用 | 通过 |
+| 确认与命令输入同批到达 | P0 | yes 后尾部不送子进程；后续独立 token 才被读取 | 通过 |
+| 反复接管 | P0 | 两次接管无监听累积或 stty 漂移 | 通过；退出事件的所有排列未穷举 |
+| 清理期间私人输入 | P0 | 在 teardown 窗口送入假 token，恢复后只接收新输入 | 通过 |
+| 外部终止与实际断连 | P0 | 确认期 SIGTERM 不执行；运行期 SIGTERM 清理；关闭外层 PTY 后 CLI 和后代退出 | 通过；断连时退出，不声称恢复消失的设备 |
+| ps 扫描失败 | P0 | 真实 spawn 后注入扫描故障，原组仍清理，结果报告失败 | 通过 |
+| 高速输出尾部 | P1 | 4000 行与末尾 marker 全部出现 | 通过；不证明所有队列内存有界 |
+| 慢 stdout、UTF-8 任意分段、极限粘贴 | P1 | 专门的压力和分段测试 | 未完成，保留缺口 |
+| pager 或全屏程序退出 | P1 | 真实 less 退出与最终输出；readline 恢复另测 | 已测场景通过；未做跨终端画面/鼠标协议验收 |
 
 ## 环境与证据记录
 
-回填 OS、Node/pnpm 版本、PTY 精确版本、命令、实际断言和是否人工操作。区分模拟宿主单测、真实 PTY 自动测试与用户终端演示。文档链接检查不能代表功能通过。
+环境：macOS 14.7.8 arm64、Node.js 22.15.1、pnpm 9.15.9、`@lydell/node-pty@1.2.0-beta.15`。PTY 测试依赖 Python 3、bash、ps、stty 与 less。
+
+| 命令 | 结果 |
+|---|---|
+| `pnpm build` | 通过 |
+| `E2E_LIVE=0 pnpm -r --workspace-concurrency=1 run test --no-file-parallelism` | cdp-debug 1、core 198、E2E 46 通过；E2E 25 跳过 |
+| `E2E_LIVE=0 pnpm --filter @zero2agent/e2e exec vitest run --no-file-parallelism` | 46 通过、25 跳过；其中本章人工终端 28 项 |
+| `pnpm lint` | 0 errors、15 warnings；并非零告警 |
+| 本轮变更 TS/MJS 的定向 Prettier 检查 | 通过 |
+| `pnpm format:check` | 未通过：27 个本轮未改动文件存在历史格式问题，未进行无关格式重写 |
+| `pnpm install --frozen-lockfile --ignore-scripts` | 通过；只证明锁与依赖解析，不代替 native 运行验证 |
+
+测试入口：[人工终端契约](../../../../e2e/src/human-terminal-contract.test.ts)、[core 交互隔离](../../../../packages/core/src/tools/__tests__/terminal-interactive.test.ts)、[默认路由回归](../../../../packages/core/src/tools/__tests__/terminal-routing.test.ts)。S003 取消、跳过和输出契约包含在 core 回归中。此次未运行付费模型或原有 live suites；实际 REPL 测试仅运行本地斜杠命令，无模型请求。
+
+独立入口另由工具驱动真实 PTY 演示：不带 API key 启动 `node packages/tui/dist/cli.js --terminal`，确认后输入 `printf 'manual-ok\n'; exit`，输出 marker 并以 0 退出。这不是用户在常用终端里的人工签收。
+
+用户验收建议：在常用终端执行 Story 的 read 示例，再在 Agent REPL 用 `/terminal` 进入 bash、退出并继续输入；确认显示、按键与个人环境符合预期。Linux、Windows、真实认证流程及其他终端应用矩阵未实测。
 
 ## 已知限制
 
