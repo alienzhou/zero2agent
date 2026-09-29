@@ -18,9 +18,14 @@ for (let round = 1; round <= 2; round++) {
     { cwd: process.cwd() }
   )
   const after = snapshot()
-  const restored = after.raw === baseline.raw && after.paused === baseline.paused &&
-    ['data', 'keypress'].every(event => after[event].length === baseline[event].length &&
-      after[event].every((listener, index) => listener === baseline[event][index]))
+  const restored =
+    after.raw === baseline.raw &&
+    after.paused === baseline.paused &&
+    ['data', 'keypress'].every(
+      event =>
+        after[event].length === baseline[event].length &&
+        after[event].every((listener, index) => listener === baseline[event][index])
+    )
   console.log(`RESTORED_${round}:${restored}`)
   console.log(`RECEIPT_${round}:${JSON.stringify(receipt)}`)
 }
