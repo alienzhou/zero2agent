@@ -1,0 +1,18 @@
+e2e/src/helpers/human-terminal-failure.mjs
+  h_afc6b161d429e0 1-32
+e2e/src/helpers/human-terminal.ts
+  h_afc6b161d429e0 6,104-106,112
+e2e/src/human-terminal-contract.test.ts
+  h_afc6b161d429e0 108-201
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "788d898bce2c2aa459045b3e7af36a9cf0be7048",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
