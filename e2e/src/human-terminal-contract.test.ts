@@ -57,7 +57,17 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     })
     expect(result.output).toMatch(/TTY/i)
     expect(result.output).not.toContain('请设置 ANTHROPIC_API_KEY')
+    expect(result.code).not.toBe(0)
     await expect(fs.access(path.join(cwd, 'forbidden'))).rejects.toThrow()
+  })
+
+  it('rejects the simulated unsupported platform before confirmation', async () => {
+    const cwd = await workspace()
+    const entry = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-platform.mjs')
+    const session = start(cwd, [], false, entry)
+    expect(await session.waitExit()).toBe(0)
+    expect(session.output).toContain('GUARD:Human terminal requires a POSIX CLI/TTY')
+    expect(session.output).not.toContain(CONFIRM)
   })
 
   it.each(['n\r', '\r', 'other\r', '\x04'])(
@@ -91,6 +101,22 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     expect(await session.waitExit()).toBe(0)
     for (const marker of ['ISATTY_OK', 'DEVTTY_OK', 'ONE:alpha', 'TWO:beta'])
       expect(session.output).toContain(marker)
+  })
+
+  it('forwards readline editing keys and UTF-8 human input', async () => {
+    const cwd = await workspace({
+      'editing.sh':
+        'read -e -r -p "EDIT_READY" value\nprintf "\\nEDIT:%s\\n" "$value"\nread -r -p "UNICODE_READY" value\nprintf "\\nUNICODE:%s\\n" "$value"\n',
+    })
+    const session = start(cwd, ['--terminal', 'bash ./editing.sh'])
+    await approve(session)
+    await session.waitFor('EDIT_READY')
+    session.write('AX\x1b[DB\x1b[3~\r')
+    await session.waitFor('UNICODE_READY')
+    session.write('你好\r')
+    expect(await session.waitExit()).toBe(0)
+    expect(session.output).toContain('EDIT:AB')
+    expect(session.output).toContain('UNICODE:你好')
   })
 
   it('does not echo a read -s token or create an output artifact', async () => {
