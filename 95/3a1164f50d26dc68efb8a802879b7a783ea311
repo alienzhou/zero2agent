@@ -1,0 +1,14 @@
+packages/core/src/tools/__tests__/terminal-interactive.test.ts
+  h_afc6b161d429e0 1-134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "953a1164f50d26dc68efb8a802879b7a783ea311",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
