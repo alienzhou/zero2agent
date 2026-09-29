@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 import { CLI_ENTRY, REPO_ROOT, makeTempWorkspace, runCli } from './helpers/cli.js'
 import { startHumanTerminal } from './helpers/human-terminal.js'
 
@@ -186,6 +188,36 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
           return true
         }
       })
+      .toBe(true)
+    pids.length = 0
+  })
+
+  it('cleans the real process tree when the outer terminal disconnects', async () => {
+    const cwd = await workspace({
+      'disconnect.sh':
+        'trap "" HUP\nsleep 300 &\nprintf "%s" "$!" > disconnected.pid\necho READY_TO_DISCONNECT\nwait\n',
+    })
+    const runner = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-disconnect.py')
+    const { stdout } = await promisify(execFile)('python3', [runner, process.execPath, CLI_ENTRY], {
+      cwd,
+      env: { PATH: '/usr/bin:/bin', HOME: cwd, TMPDIR: cwd, TERM: 'xterm-256color' },
+      timeout: 15_000,
+    })
+    const pid = Number(await fs.readFile(path.join(cwd, 'disconnected.pid'), 'utf8'))
+    pids.push(pid)
+    expect(JSON.parse(stdout)).toEqual({ approved: true, disconnected: true, host_exited: true })
+    await expect
+      .poll(
+        () => {
+          try {
+            process.kill(pid, 0)
+            return false
+          } catch {
+            return true
+          }
+        },
+        { timeout: 5000 }
+      )
       .toBe(true)
     pids.length = 0
   })
