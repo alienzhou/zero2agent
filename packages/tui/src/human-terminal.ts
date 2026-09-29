@@ -353,11 +353,13 @@ export async function runHumanTerminal(
   } finally {
     // Consume pending private bytes before handing listeners back to readline.
     // Keep draining for an event-loop turn while the old owner's lease is intact.
-    process.stdin.resume()
-    await new Promise<void>(resolve => setImmediate(resolve))
-    process.stdin.pause()
-    while (process.stdin.read() !== null) {
-      /* Discard terminal-era typeahead. */
+    if (restore) {
+      process.stdin.resume()
+      await new Promise<void>(resolve => setImmediate(resolve))
+      process.stdin.pause()
+      while (process.stdin.read() !== null) {
+        /* Discard terminal-era typeahead. */
+      }
     }
     process.off('exit', onExit)
     for (const [signal, handler] of handlers) process.off(signal, handler)

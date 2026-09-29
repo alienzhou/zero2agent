@@ -187,6 +187,88 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     pids.length = 0
   })
 
+  it('cleans a HUP-ignoring child created between two ownership scans', async () => {
+    const cwd = await workspace({
+      'late.sh': 'sleep 0.1\ntrap "" HUP\nsleep 300 &\necho LATE_PID:$!\nexit 0\n',
+    })
+    const session = start(cwd, ['--terminal', 'bash ./late.sh'])
+    await approve(session)
+    await session.waitFor(/LATE_PID:\d+/)
+    const pid = Number(session.output.match(/LATE_PID:(\d+)/)?.[1])
+    pids.push(pid)
+    expect(await session.waitExit()).toBe(0)
+    await expect
+      .poll(() => {
+        try {
+          process.kill(pid, 0)
+          return false
+        } catch {
+          return true
+        }
+      })
+      .toBe(true)
+    pids.length = 0
+  })
+
+  it('discards private input typed during terminal teardown, before readline recovery', async () => {
+    const cwd = await workspace({
+      'exit.sh': 'stty -echo\necho EXIT_PID:$$\necho EXITING\nexit 0\n',
+    })
+    const entry = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-teardown.mjs')
+    const session = start(cwd, [], false, entry)
+    await approve(session)
+    await session.waitFor('EXITING')
+    const pid = Number(session.output.match(/EXIT_PID:(\d+)/)?.[1])
+    await expect
+      .poll(
+        () => {
+          try {
+            process.kill(pid, 0)
+            return false
+          } catch {
+            return true
+          }
+        },
+        { interval: 5 }
+      )
+      .toBe(true)
+    expect(session.output).not.toContain('AFTER_TEARDOWN:')
+    session.write(`${SECRET}\r`)
+    await session.waitFor('AFTER_TEARDOWN:')
+    session.write('AFTER\r')
+    expect(await session.waitExit()).toBe(0)
+    expect(session.output).toContain('ANSWER:AFTER')
+    expect(session.output).not.toContain(SECRET)
+  })
+
+  it('uses owned-group cleanup when process inspection fails after real spawn', async () => {
+    const cwd = await workspace({
+      'scan.sh': 'trap "" HUP TERM\nsleep 300 &\nprintf "%s" "$!" > child.pid\nwait\n',
+    })
+    const entry = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-scan-failure.mjs')
+    const session = start(cwd, [], false, entry)
+    await session.waitFor(CONFIRM)
+    session.write('y\r')
+    await expect
+      .poll(async () => fs.readFile(path.join(cwd, 'child.pid'), 'utf8').catch(() => ''))
+      .not.toBe('')
+    const pid = Number(await fs.readFile(path.join(cwd, 'child.pid'), 'utf8'))
+    pids.push(pid)
+    await session.waitExit()
+    expect(session.output).toContain('Error: human-controlled terminal failed')
+    await expect
+      .poll(() => {
+        try {
+          process.kill(pid, 0)
+          return false
+        } catch {
+          return true
+        }
+      })
+      .toBe(true)
+    pids.length = 0
+  })
+
   it('returns from a real pager and preserves its final displayed output', async () => {
     const cwd = await workspace({
       'page.txt': Array.from({ length: 120 }, (_, i) => `PAGER-LINE-${i + 1}`).join('\n'),
