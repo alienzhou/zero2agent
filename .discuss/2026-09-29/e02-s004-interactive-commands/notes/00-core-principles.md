@@ -1,6 +1,6 @@
 # 核心原理：把人的终端接到 bash，再还给 Agent
 
-> 2026-09-29 21:55 用户纠偏后替换旧“模型持续决策”导读。旧稿请查 Git 历史；本页改讲人工终端，S004 实施中，验收未完成。
+> 2026-09-29 21:55 用户纠偏后替换旧“模型持续决策”导读。旧稿请查 Git 历史；人工终端实现与自动验证已完成，待人工验收与合入。
 
 [讨论大纲](../outline.md) | [实施决策](../decisions/D02-human-terminal-implementation.md) | [Story](../../../../specs/E02-act-and-execute/S004-interactive-commands/README.md)
 

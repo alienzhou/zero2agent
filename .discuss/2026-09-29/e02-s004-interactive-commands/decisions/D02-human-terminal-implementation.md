@@ -1,6 +1,6 @@
 # D02：按人工接管终端推进实现
 
-> 2026-09-29 21:55｜用户方向已明确，实施中，验证待回填。
+> 2026-09-29 21:55 用户授权｜实现与自动验证完成，待人工验收与合入。
 
 [讨论大纲](../outline.md) | [核心原理](../notes/00-core-principles.md) | [Story](../../../../specs/E02-act-and-execute/S004-interactive-commands/README.md)
 
@@ -29,6 +29,10 @@
 
 旧“程序还在运行，Agent 也能继续决策”导读已替换，旧稿查 Git。D01 的组织方式属于历史确认，旧 Q1–Q5 范围及 01-problem-value 候选不再是实施前提；保留历史，不删除其他候选笔记。
 
-## 待回填
+## 实施与验证结果
 
-实现提交、真实 PTY/REPL 验收、默认非交互回归、终端恢复与进程清理证据。验证未完成前保持实施中。
+实现分支为 `feat/e02-s004-human-terminal`。core 宿主协议始于 `a14fd1c`，TUI 主实现始于 `6b35bde`；收尾输入隔离和组清理修正见 `d09a87e`，真实断连处理见 `716563c`，信号与退出摘要见 `11898d9`、`2c7bd96`。
+
+构建通过；core 198、E2E 46、cdp-debug 1 项通过，25 项 E2E 跳过。其中 28 项是本章人工终端契约场景，包含真实 PTY、CLI REPL、控制键、终端恢复、秘密输入隔离、故障注入与物理断连。精确覆盖和缺口见[验收清单](../../../../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)。
+
+已补[复盘](../../../../retros/E02-S004-human-terminal.md)与[协作记录](../../../../.vibecoding/2026-09-29/e02-s004-human-terminal/dialogue.md)。未运行付费模型或外部产品；未推送、合入或打 Tag，不把自动验证写成人工批准。

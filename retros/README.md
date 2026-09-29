@@ -12,6 +12,14 @@ This directory contains retrospective notes and lessons learned.
 
 ## Structure
 
+## Implemented, pending human review
+
+| Retro | Iteration | Notes |
+|-------|-----------|-------|
+| [E02-S004-human-terminal.md](./E02-S004-human-terminal.md) | E02-S004 人工交互终端 | 输入所有权、PTY 恢复、进程组清理和真实断连；待人工验收与合入 |
+
+## Directory structure
+
 ```
 retros/
 ├── E01-S001-react-basic.md

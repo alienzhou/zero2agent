@@ -1,6 +1,6 @@
 # S004 交互式命令：人工接管终端，推进实现
 
-> 状态：实施中｜2026-09-29 21:55 用户纠偏并授权方案与实现。旧模型持续交互范围已被人工终端主线取代。
+> 状态：实现与自动验证完成，待人工验收与合入｜2026-09-29 21:55 用户纠偏并授权方案与实现。旧模型持续交互范围已被人工终端主线取代。
 
 [先读核心原理](./notes/00-core-principles.md) | [调研总览](../../../researches/interactive-commands/README.md) | [调研交接](../../2026-09-28/e02-s004-interactive-research/outline.md)
 
@@ -8,8 +8,8 @@
 
 - 用户明确核心是“让人能进行 bash 命令交互”，要求参考成熟实现提出方案和技术实现、直接推进实施。
 - 先读[人工终端核心原理](./notes/00-core-principles.md)，再看 [D02](./decisions/D02-human-terminal-implementation.md) 与 [S004 spec](../../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。
-- 正在实施人工确认、PTY 接管和恢复；模型等待结束，不新增模型 stdin 工具。依赖、按键和边界是本轮实现选择，不冒充用户逐项批准。
-- 验证待回填，Story 保持实施中；旧五问不再作为推进前提。
+- 已实现人工确认、PTY 接管和恢复；模型等待结束，不新增模型 stdin 工具。依赖、按键和边界是本轮实现选择，不冒充用户逐项批准。
+- [验收证据](../../../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)已回填；旧五问不再作为推进前提。代码在 `feat/e02-s004-human-terminal`，未推送、未合入、未打 Tag。
 
 ## Archive：21:05 五个顶层问题（旧范围已取代）
 
@@ -44,4 +44,4 @@ Q1 的候选定位已获得继续讨论的回应，但不把“好的”扩展�
 
 - [上一阶段调研及假设核对](../../2026-09-28/e02-s004-interactive-research/outline.md)保留为历史交接；本目录是 2026-09-29 晚间起继续讨论的入口。
 - [旧讨论 PR #12](https://github.com/alienzhou/zero2agent/pull/12)的 D01–D05 是之前的技术初稿，不与本页 Q1–Q5 一一对应。本目录 D01 只记录组织方式，不是对旧 D01 的覆盖或追认。
-- [本轮协作记录](../../../.vibecoding/2026-09-29/e02-s004-discussion/prompt.md)记录用户确认、原理前置要求和后续修正。
+- [讨论协作记录](../../../.vibecoding/2026-09-29/e02-s004-discussion/prompt.md)记录用户确认与原理前置要求；[实施记录](../../../.vibecoding/2026-09-29/e02-s004-human-terminal/dialogue.md)接续 21:55 的纠偏与实现过程。

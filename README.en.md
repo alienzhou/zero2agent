@@ -106,7 +106,7 @@ The course content is organized into four layers:
 | Epic | Goal | Status |
 | ---- | ---- | ---- |
 | [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
-| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | Planned |
+| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
 | Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | Planned |
 | Epic 4: Robustness and Context Management | Handle failures, long context, and complex runtime situations | Planned |
 | Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
@@ -157,13 +157,18 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: E01-S003 File Search (find_files) is done — [see details](./CHANGELOG.md#e01-s003-file-search-done)
+**Latest update**: E02-S004 human terminal handoff is implemented, pending human review and merge — [principles and usage](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | Basic Agent Harness loop | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | Content Search (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | File Search (find_files) | Done |
+| [E01-S004](./specs/E01-read-and-search/S004-prompt-structure/README.md) | Structured System Prompt | Done |
+| [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | Write and Delete Files | Done |
+| [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | Targeted File Replacement | Done |
+| [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | Command Execution | Done |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Implemented; pending human review |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 
@@ -179,6 +184,8 @@ pnpm --filter @zero2agent/tui start
 ```
 
 Requirements: Node.js >= 22.0.0, pnpm >= 9.0.0
+
+To try the human terminal without an API key, build and run `node packages/tui/dist/cli.js --terminal` in a real POSIX terminal. Confirm to enter bash; use `exit` to return or `Ctrl-]` to stop the handoff. An existing Agent REPL also accepts `/terminal [command]`. This version was verified on macOS; see [S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) for platform and privacy boundaries.
 
 ---
 
