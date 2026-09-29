@@ -39,6 +39,11 @@ finally:
         os.close(master)
     if status is None:
         diagnostic = subprocess.check_output(['ps', '-p', str(pid), '-o', 'stat=,wchan=,command='], text=True).strip()
+        try:
+            with open('disconnect-state.json', encoding='utf-8') as state:
+                diagnostic += ' ' + state.read()
+        except FileNotFoundError:
+            pass
         os.kill(pid, signal.SIGKILL)
         os.waitpid(pid, 0)
 
