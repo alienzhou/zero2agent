@@ -1,0 +1,22 @@
+.discuss/2026-09-29/e02-s004-interactive-commands/notes/00-core-principles.md
+  h_afc6b161d429e0 13
+.vibecoding/2026-09-29/e02-s004-discussion/dialogue.md
+  h_afc6b161d429e0 1-48
+.vibecoding/2026-09-29/e02-s004-discussion/learnings.md
+  h_afc6b161d429e0 1-25
+.vibecoding/2026-09-29/e02-s004-discussion/prompt.md
+  h_afc6b161d429e0 1-24
+researches/interactive-commands/README.md
+  h_afc6b161d429e0 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "510e6d8fc748fe046a8a2e2af6ac6bdd4a8e7878",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
