@@ -3,6 +3,7 @@ import type { HumanTerminalRequest, HumanTerminalResult } from '@zero2agent/core
 import type { IPty } from '@lydell/node-pty'
 import type { Interface } from 'node:readline'
 import { StringDecoder } from 'node:string_decoder'
+import { execFileSync } from 'node:child_process'
 import { HumanProcessTree } from './human-terminal-process.js'
 
 const MAX_INPUT_BYTES = 64 * 1024
@@ -13,25 +14,41 @@ let leased = false
 /** Exclusive ownership prevents readline/history from consuming private terminal keys. */
 function acquireInput(rl?: Interface): () => void {
   const input = process.stdin
+  const stty = (...args: string[]) =>
+    execFileSync('/bin/stty', args, {
+      encoding: 'utf8',
+      stdio: ['inherit', 'pipe', 'ignore'],
+      timeout: 1000,
+    }).trim()
+  const terminalMode = stty('-g')
   const wasRaw = input.isRaw
   const wasFlowing = input.readableFlowing
   const events = ['data', 'keypress', 'end', 'error'] as const
   const saved = events.map(event => [event, input.rawListeners(event)] as const)
   input.pause()
   for (const event of events) input.removeAllListeners(event)
+  let released = false
   const restore = () => {
+    if (released) return
+    released = true
     input.pause()
     for (const event of events) input.removeAllListeners(event)
-    input.setRawMode(wasRaw ?? false)
-    for (const [event, listeners] of saved) {
-      for (const listener of listeners) input.on(event, listener as (...args: unknown[]) => void)
+    try {
+      input.setRawMode(wasRaw ?? false)
+      stty(terminalMode)
+    } finally {
+      for (const [event, listeners] of saved) {
+        for (const listener of listeners) input.on(event, listener as (...args: unknown[]) => void)
+      }
+      if (input.readableEnded || input.destroyed) rl?.close()
+      // A previously untouched stdin must not keep a one-shot CLI alive after handoff.
+      else if (wasFlowing === true) input.resume()
     }
-    if (input.readableEnded || input.destroyed) rl?.close()
-    // A previously untouched stdin must not keep a one-shot CLI alive after handoff.
-    else if (wasFlowing === true) input.resume()
   }
   try {
     input.setRawMode(true)
+    // The inner PTY already applies CR/LF translation; don't translate a second time.
+    stty('-opost')
   } catch (error) {
     restore()
     throw error
@@ -302,6 +319,7 @@ export async function runHumanTerminal(
       }
     }
     try {
+      restore?.()
       process.stdin.setRawMode(false)
     } catch {
       /* Terminal can have disconnected. */
