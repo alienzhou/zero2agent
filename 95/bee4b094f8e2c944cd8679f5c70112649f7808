@@ -1,0 +1,24 @@
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 1-66
+specs/E02-act-and-execute/S004-interactive-commands/details/00-overview.md
+  h_afc6b161d429e0 1-44
+specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md
+  h_afc6b161d429e0 1-76
+specs/E02-act-and-execute/S004-interactive-commands/details/02-task-list.md
+  h_afc6b161d429e0 1-33
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  h_afc6b161d429e0 1-49
+specs/E02-act-and-execute/S004-interactive-commands/details/04-backlog.md
+  h_afc6b161d429e0 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "95bee4b094f8e2c944cd8679f5c70112649f7808",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
