@@ -1,0 +1,18 @@
+.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md
+  h_afc6b161d429e0 1-34
+.discuss/2026-09-29/e02-s004-interactive-commands/notes/00-core-principles.md
+  h_afc6b161d429e0 1,3,5,7,9,11-12,14-15,17,19,21,23,25,27,29,31,33,35,37,39,41-43,45
+.discuss/2026-09-29/e02-s004-interactive-commands/outline.md
+  h_afc6b161d429e0 1,3,9-12,14-16,26,35,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a81bd6c7ede58e54d834937abeb2b7fde0454065",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
