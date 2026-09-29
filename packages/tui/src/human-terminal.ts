@@ -35,6 +35,9 @@ function acquireInput(rl?: Interface): () => void {
     released = true
     input.pause()
     for (const event of events) input.removeAllListeners(event)
+    // tcsetattr/drain and terminal writes may block after the PTY master disappears.
+    // There is no live terminal to restore; the owning CLI will exit below.
+    if (input.readableEnded || input.destroyed) return
     try {
       input.setRawMode(wasRaw ?? false)
       stty(terminalMode)
@@ -328,8 +331,10 @@ export async function runHumanTerminal(
       }
     }
     try {
-      restore?.()
-      process.stdin.setRawMode(false)
+      if (!process.stdin.readableEnded && !process.stdin.destroyed) {
+        restore?.()
+        process.stdin.setRawMode(false)
+      }
     } catch {
       /* Terminal can have disconnected. */
     }
@@ -353,7 +358,7 @@ export async function runHumanTerminal(
   } finally {
     // Consume pending private bytes before handing listeners back to readline.
     // Keep draining for an event-loop turn while the old owner's lease is intact.
-    if (restore) {
+    if (restore && !process.stdin.readableEnded && !process.stdin.destroyed) {
       process.stdin.resume()
       await new Promise<void>(resolve => setImmediate(resolve))
       process.stdin.pause()
@@ -363,24 +368,28 @@ export async function runHumanTerminal(
     }
     process.off('exit', onExit)
     for (const [signal, handler] of handlers) process.off(signal, handler)
+    const disconnected = process.stdin.readableEnded || process.stdin.destroyed
     try {
       try {
-        process.stdout.write(RESET_TERMINAL + '\r\nHuman terminal ended; returning control.\r\n')
+        if (!disconnected)
+          process.stdout.write(RESET_TERMINAL + '\r\nHuman terminal ended; returning control.\r\n')
       } finally {
         restore?.()
       }
     } finally {
       leased = false
-      if (externalSignal) {
+      if (externalSignal || disconnected) {
         // Re-raising SIGHUP after removing its watcher can be ignored on macOS.
         // This CLI owns shutdown: restore the terminal, then use the conventional code.
         try {
-          rl?.close()
-          process.stdin.setRawMode(false)
+          if (!disconnected) {
+            rl?.close()
+            process.stdin.setRawMode(false)
+          }
         } catch {
           /* Terminal disconnected. */
         }
-        process.exit({ SIGINT: 130, SIGTERM: 143, SIGHUP: 129 }[externalSignal])
+        process.exit({ SIGINT: 130, SIGTERM: 143, SIGHUP: 129 }[externalSignal ?? 'SIGHUP'])
       }
     }
   }
