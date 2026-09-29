@@ -14,7 +14,7 @@ let leased = false
 function acquireInput(rl?: Interface): () => void {
   const input = process.stdin
   const wasRaw = input.isRaw
-  const wasPaused = input.isPaused()
+  const wasFlowing = input.readableFlowing
   const events = ['data', 'keypress', 'end', 'error'] as const
   const saved = events.map(event => [event, input.rawListeners(event)] as const)
   input.pause()
@@ -27,7 +27,8 @@ function acquireInput(rl?: Interface): () => void {
       for (const listener of listeners) input.on(event, listener as (...args: unknown[]) => void)
     }
     if (input.readableEnded || input.destroyed) rl?.close()
-    else if (!wasPaused) input.resume()
+    // A previously untouched stdin must not keep a one-shot CLI alive after handoff.
+    else if (wasFlowing === true) input.resume()
   }
   try {
     input.setRawMode(true)
@@ -237,7 +238,8 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     if (failure) throw new Error('Human terminal I/O or process cleanup failed')
     return {
       status: cancelled || exited?.signal ? 'cancelled' : 'completed',
-      ...(exited ? { exitCode: exited.exitCode, signal: exited.signal } : {}),
+      ...(exited ? { exitCode: exited.exitCode } : {}),
+      ...(exited?.signal ? { signal: exited.signal } : {}),
     }
   } finally {
     finished = true

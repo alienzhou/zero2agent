@@ -59,7 +59,7 @@ export async function resolveWorkdir(
 
   if (!workdir) return { path: cwdReal }
 
-  const resolved = path.resolve(ctx.cwd, workdir)
+  const resolved = path.resolve(cwdReal, workdir)
   let targetReal: string
   try {
     targetReal = await realpath(resolved)
