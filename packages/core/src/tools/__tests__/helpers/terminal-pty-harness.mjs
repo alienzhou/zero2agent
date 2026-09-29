@@ -6,6 +6,7 @@ import * as fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { setupTerminalRuntime } from '../../../../../tui/dist/setup-terminal-runtime.js'
 import { terminalTool } from '../../../../dist/tools/terminal.js'
+import { getTerminalRuntimeHooks, setTerminalRuntimeHooks } from '../../../../dist/index.js'
 
 const TUI_SETUP = fileURLToPath(
   new URL('../../../../../tui/dist/setup-terminal-runtime.js', import.meta.url)
@@ -45,7 +46,8 @@ const rl = {
 
 setupTerminalRuntime(rl, {
   onStatusLine: line => {
-    if (!statusStream || !commandStartAt) return
+    if (!statusStream) return
+    if (!commandStartAt) commandStartAt = Date.now()
     statusStream.write(
       `${JSON.stringify({
         at: Date.now(),
@@ -56,15 +58,22 @@ setupTerminalRuntime(rl, {
   },
 })
 
+// Schedule test keys from the production listener becoming ready, not Python/Node startup.
+const runtime = getTerminalRuntimeHooks()
+setTerminalRuntimeHooks({
+  ...runtime,
+  attachInterrupts(controller) {
+    const detach = runtime.attachInterrupts(controller)
+    if (commandStartPath) fs.writeFileSync(commandStartPath, String(Date.now()))
+    return detach
+  },
+})
+
 if (readyPath) {
   fs.writeFileSync(readyPath, String(process.pid))
 }
 
 try {
-  commandStartAt = Date.now()
-  if (commandStartPath) {
-    fs.writeFileSync(commandStartPath, String(commandStartAt))
-  }
   const result = await terminalTool.execute({ command }, { cwd })
   fs.writeFileSync(resultPath, result)
   if (rlTracePath) {
