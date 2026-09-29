@@ -137,11 +137,15 @@ function interactiveEnvironment(): Record<string, string> {
   return env
 }
 
-async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResult> {
+async function bridge(
+  pty: IPty,
+  signal: AbortSignal,
+  tree: HumanProcessTree,
+  disconnected: () => never
+): Promise<HumanTerminalResult> {
   const input = process.stdin
   const output = process.stdout
   const decoder = new StringDecoder('utf8')
-  const tree = new HumanProcessTree(pty.pid)
   let stopping: Promise<void> | undefined
   let exited: { exitCode: number; signal?: number } | undefined
   let cancelled = false
@@ -185,6 +189,7 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     }
   }
   const onInputEnd = (): void => {
+    if (input.readableEnded || input.destroyed) disconnected()
     void stop()
   }
   const onOutputError = (): void => {
@@ -204,7 +209,7 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     }
   }
   const dataSubscription = pty.onData(data => {
-    if (finished) return
+    if (finished || input.readableEnded || input.destroyed || signal.aborted) return
     if (output.writableLength + Buffer.byteLength(data) > MAX_PENDING_OUTPUT) {
       failure = true
       void stop()
@@ -306,21 +311,26 @@ export async function runHumanTerminal(
   leased = true
   let restore: (() => void) | undefined
   let pty: IPty | undefined
+  let tree: HumanProcessTree | undefined
+  let exitCleaned = false
   let externalSignal: 'SIGINT' | 'SIGTERM' | 'SIGHUP' | undefined
   const controller = new AbortController()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
   const handlers = signals.map(signal => {
     const handler = (): void => {
       externalSignal = signal
+      if (signal === 'SIGHUP') disconnect()
       controller.abort()
     }
     process.once(signal, handler)
     return [signal, handler] as const
   })
   const onExit = (): void => {
+    if (exitCleaned) return
+    exitCleaned = true
     if (pty) {
       try {
-        new HumanProcessTree(pty.pid).signal('SIGKILL')
+        ;(tree ?? new HumanProcessTree(pty.pid)).signal('SIGKILL')
       } catch {
         /* Best effort on synchronous exit. */
       }
@@ -339,6 +349,13 @@ export async function runHumanTerminal(
       /* Terminal can have disconnected. */
     }
   }
+  const disconnect = (): never => {
+    // A vanished terminal cannot participate in asynchronous drain/restore.
+    // Kill the owned execution synchronously, without writing to the dead device.
+    externalSignal = 'SIGHUP'
+    onExit()
+    process.exit(129)
+  }
   process.once('exit', onExit)
   try {
     restore = acquireInput(rl)
@@ -354,7 +371,8 @@ export async function runHumanTerminal(
       name: 'xterm-256color',
       ...dimensions(),
     })
-    return await bridge(pty, controller.signal)
+    tree = new HumanProcessTree(pty.pid)
+    return await bridge(pty, controller.signal, tree, disconnect)
   } finally {
     // Consume pending private bytes before handing listeners back to readline.
     // Keep draining for an event-loop turn while the old owner's lease is intact.
