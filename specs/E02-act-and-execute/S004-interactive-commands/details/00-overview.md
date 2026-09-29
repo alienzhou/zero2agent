@@ -1,6 +1,6 @@
 # E02-S004：人工交互终端总览
 
-> 实施中；技术细节是本轮实现选择，不代表用户逐项批准。
+> 实现已落地，待人工验收；技术细节是本轮实现选择，不代表用户逐项批准。
 
 [Story](../README.md) | [Epic 2](../../README.md)
 
@@ -41,4 +41,4 @@
 
 - [纠偏与实施决策](../../../../.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md)
 - [调研总览](../../../../researches/interactive-commands/README.md)
-- [迭代日志](../../../../CHANGELOG.md)；本 Story 日志与复盘在集成交付时回填。
+- [迭代日志](../../../../CHANGELOG.md)与[实现复盘](../../../../retros/E02-S004-human-terminal.md)。

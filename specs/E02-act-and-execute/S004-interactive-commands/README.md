@@ -1,6 +1,6 @@
 # E02-S004：让人接管交互式终端
 
-> 实施中：让人操作 bash 命令，结束后回到 Agent；验收结果尚待回填。
+> 实现已落地，待人工验收与合入：让人操作 bash 命令，结束后回到 Agent。自动验证和边界见验收清单。
 
 [Epic 2：行动与执行](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
@@ -41,19 +41,24 @@ S003 适合构建、测试等一次性命令，但不能把运行中的程序直
 
 ### 退出程序与退出接管不同
 
-Ctrl-C/Ctrl-D 交给 PTY 程序，效果取决于终端模式。Ctrl-] 是宿主保留键，用于结束整个交互会话并清理受管进程，不是后台化。所有出口都要恢复原 raw mode、输入监听和 paused 状态。
+Ctrl-C/Ctrl-D 交给 PTY 程序，效果取决于终端模式。Ctrl-] 是宿主保留键，用于结束整个交互会话并清理原进程组与已跟踪后代，不是后台化。终端仍可用时恢复原设备状态与输入监听；物理断连时同步清理并退出，不再向消失的终端写提示。
 
-先读[技术设计](./details/01-technical-design.md)，再看 [core terminal](../../../packages/core/src/tools/terminal.ts) 的分流与 [TUI runtime 绑定](../../../packages/tui/src/setup-terminal-runtime.ts) 的宿主职责。
+接管覆盖确认、运行和收尾三个阶段。程序退出后的输入仍属于私人窗口，会被丢弃而不是落入 Agent 的输入历史。
+
+先读[技术设计](./details/01-technical-design.md)，再看 [core terminal](../../../packages/core/src/tools/terminal.ts) 的分流、[人工终端](../../../packages/tui/src/human-terminal.ts)的接管与恢复，以及[进程清理](../../../packages/tui/src/human-terminal-process.ts)的所有权边界。
 
 ## 做完后的效果
 
-以下是验收目标，不是已通过的演示。构建后在真实终端执行：
+在仓库根目录构建后，用真实终端执行下面的独立入口，无需 API key：
 
 ```sh
-pnpm --filter @zero2agent/tui start --terminal 'read -r -p "Name: " name; printf "Hello %s\n" "$name"'
+pnpm build
+node packages/tui/dist/cli.js --terminal 'read -r -p "Name: " name; printf "Hello %s\n" "$name"'
 ```
 
 输入 y 回车后应看到 `Human terminal active` 与 `Ctrl-]` 提示。名字由 bash 读取并显示，完成后返回入口。REPL 中 `/terminal` 应能打开 bash，再通过 exit 返回 Agent，后续文字不残留为 bash 输入。
+
+直接进入 bash：`node packages/tui/dist/cli.js --terminal`。已有 Agent REPL 中用 `/terminal [command]`；Agent REPL 本身仍沿用模型配置要求。真实 PTY 测试覆盖对应路径，但不代替你在常用终端和实际程序里的人工验收。
 
 ## 实现与验收资料
 

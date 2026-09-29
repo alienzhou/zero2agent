@@ -1,6 +1,6 @@
 # E02-S004：人工交互终端技术设计
 
-> 实施中；以下为实现约束，运行证据待回填。
+> 已实现的方案与取舍；运行证据见 03-verification-checklist，人工验收与合入仍待完成。
 
 [Story](../README.md) | [总览](./00-overview.md)
 
@@ -13,6 +13,8 @@
 | [terminal.ts](../../../../packages/core/src/tools/terminal.ts) | 校验 command/workdir，按 interactive 分流 |
 | [terminal-runtime.ts](../../../../packages/core/src/tools/terminal-runtime.ts) | runInteractive 请求与摘要结果 |
 | [setup-terminal-runtime.ts](../../../../packages/tui/src/setup-terminal-runtime.ts) | 绑定人工确认与终端接管 |
+| [human-terminal.ts](../../../../packages/tui/src/human-terminal.ts) | 输入租约、确认、PTY 桥接、恢复与挂断 |
+| [human-terminal-process.ts](../../../../packages/tui/src/human-terminal-process.ts) | 原进程组和已跟踪后代的清理 |
 | [cli.ts](../../../../packages/tui/src/cli.ts) | --terminal 与 /terminal 入口 |
 
 interactive 缺省或 false 走旧路径；true 不创建 OutputSink，不走普通后台跳过流程。宿主缺失、平台不支持、TTY 不满足时明确失败，不能静默降级成 pipe 或继承输入执行。
@@ -29,6 +31,8 @@ stdin/stdout 都必须为 TTY；CLI 独立入口在 LLM 配置检查前分流。
 
 接管前保存 stdin 的 raw mode、paused 状态及原 readline/输入监听。临时隔离旧监听，不能仅调用 readline.pause() 就假定 Agent 不再收到按键。确认与活动阶段之间也须明确交接。
 
+实际保存 readableFlowing，区分未开始读取与正在流动的 stdin；未曾读取的流不能在结束后被 resume 留住宿主。用 stty -g 保存设备属性，接管时关闭外层 OPOST，避免内层 PTY 已转换的换行被再次转换；归还可用终端时还原属性。
+
 活动阶段设置 raw mode，将原始字节送 PTY；旧 data/keypress 监听不能同时消费。stdout resize 更新 PTY columns/rows。提示必须含 `Human terminal active` 和 `Ctrl-]`。
 
 | 输入或事件 | 行为 |
@@ -41,11 +45,17 @@ stdin/stdout 都必须为 TTY；CLI 独立入口在 LLM 配置检查前分流。
 
 恢复应幂等：移除本次输入/resize/退出监听，清理 PTY 与受管子进程，恢复原 raw mode、监听和 paused 状态，最后结算结果。重复退出事件不能重复注册监听或回传结果。自然结束后也不能留下占用终端的普通后代。
 
+私有输入消费者覆盖启动空隙与退出清理期。子进程结束后不再转发输入，但继续消费并丢弃，归还 readline 前经过一轮事件循环并排空已到达缓冲，避免收尾时键入的秘密进入 Agent 历史。归还时明确显示结束提示。
+
 ## 控制字符与清理边界
 
 Ctrl-C 在 ISIG 等条件下可能转为 SIGINT，raw 程序也可能自行处理。Ctrl-D 通常在 canonical 空行触发读取 EOF，不是通用关闭 PTY。二者不保证结束整个会话。
 
-Ctrl-] 是宿主中止，清理普通子孙和进程组；不提供 detach/重连。不承诺复杂 setsid/守护化逃逸、PID 竞争或宿主 SIGKILL 后的全部清理。测试必须检查进程存活，不能仅检查 promise 返回。
+Ctrl-] 是宿主中止，清理原进程组和已跟踪子孙；不提供 detach/重连。按 PID 与启动时间复核已观察后代，不在根进程消失时立刻撤销仍存续的组所有权；组已空或组长身份冲突后不再重用。扫描失败仍执行拥有的组级 TERM→KILL 兜底，并把故障作为错误报告。
+
+普通停止的宽限期为 150ms；真正的 stdin 断连或 SIGHUP 则同步强制清理并退出 129。当前 macOS/Node 实验中，挂断后依赖异步计时器/终端恢复不能可靠推进；因此此路径不写死终端、不等输出排空，也不尝试恢复已消失的设备。外部 SIGINT/SIGTERM 清理后以 130/143 退出；键盘 Ctrl-C 仍是给子程序的数据，两者不是同一路径。
+
+不承诺主动脱离原进程组且在采样前重挂父进程的后代、复杂守护化/namespace 逃逸、PID 竞争或宿主 SIGKILL 后的全部清理。测试必须检查进程存活，不能仅检查 promise 返回。
 
 ## 输出与结果契约
 
@@ -54,6 +64,8 @@ PTY 正文直接写宿主 stdout，不写 OutputSink、临时输出文件、对�
 结束后仅返回 status、可用的 exitCode/signal 等元信息。拒绝、失败、取消、成功不可混同；退出码不证明登录或业务操作成功。模型需要内容时由人主动描述，不能假装已读终端。
 
 此约束只限 Zero2Agent 交互采集路径。command 参数可能已记录，shell history、程序写文件、录屏和环境继承不受控制。测试用虚构标记，不用真实凭据。直写并不等于自动脱敏或无限输出内存有界，背压另行验证。
+
+当前单批输入超过 64KiB 会中止；待写 stdout 超过 1MiB 会中止，stdout 需要 drain 时暂停 PTY 读取。它们不是所有 native/kernel 队列的总内存证明，慢终端压力测试仍列为 P1 缺口。入口使用 getBaseShellEnv，不套 S003 的非交互覆盖；移除 BASH_ENV，设置 TERM，并让本层 bash 的 HISTFILE 指向 /dev/null，不保证嵌套程序无历史。
 
 ## 设计决策记录
 
