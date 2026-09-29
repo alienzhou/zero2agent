@@ -59,7 +59,8 @@ function summarizeToolOutput(toolName: string, output: string): string {
   if (toolName === 'terminal') {
     const statusLine = output.split('\n').find(l => l.startsWith('Status:'))
     const exitLine = output.split('\n').find(l => l.startsWith('Exit code:'))
-    return statusLine ?? exitLine ?? firstLine
+    const signalLine = output.split('\n').find(l => l.startsWith('Signal:'))
+    return [statusLine, exitLine, signalLine].filter(Boolean).join(' · ') || firstLine
   }
   return `${output.length} chars`
 }

@@ -134,6 +134,7 @@ function interactiveEnvironment(): Record<string, string> {
   delete env.BASH_ENV
   env.TERM = process.env.TERM && process.env.TERM !== 'dumb' ? process.env.TERM : 'xterm-256color'
   env.HISTFILE = '/dev/null'
+  env.BASH_SILENCE_DEPRECATION_WARNING = '1'
   return env
 }
 
