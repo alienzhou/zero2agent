@@ -1,0 +1,18 @@
+e2e/src/helpers/human-terminal-disconnect-host.mjs
+  h_afc6b161d429e0 1-18
+e2e/src/helpers/human-terminal-disconnect.py
+  h_afc6b161d429e0 42-46
+e2e/src/human-terminal-contract.test.ts
+  h_afc6b161d429e0 201-202
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "874959b9c403842e01c935f7c6e79b0352f2d00e",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
