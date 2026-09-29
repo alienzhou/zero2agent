@@ -10,8 +10,6 @@ This directory contains retrospective notes and lessons learned.
 | [E02-S002-replace-in-file.md](./E02-S002-replace-in-file.md) | E02-S002 局部修改 | 唯一性约束 + replace_all，教训落地到下一个迭代 |
 | [E02-S003-terminal.md](./E02-S003-terminal.md) | E02-S003 驱动执行环境 | 不截断 / 不杀死 / 三道防线；代码合并不等于 Story 收口 |
 
-## Structure
-
 ## Implemented, pending human review
 
 | Retro | Iteration | Notes |
