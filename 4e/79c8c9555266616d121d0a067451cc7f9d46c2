@@ -1,0 +1,16 @@
+specs/E02-act-and-execute/S004-interactive-commands/details/02-task-list.md
+  h_afc6b161d429e0 3,15-17,21-25,29-32,34-39
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  h_afc6b161d429e0 3,11-22,28-38,42-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4e79c8c9555266616d121d0a067451cc7f9d46c2",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
