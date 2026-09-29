@@ -1,0 +1,16 @@
+e2e/src/human-terminal-contract.test.ts
+  h_afc6b161d429e0 173
+packages/tui/src/human-terminal.ts
+  h_afc6b161d429e0 306,374-384
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "02293f47a5491e8651f685e7b423ee6dbea2ec19",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
