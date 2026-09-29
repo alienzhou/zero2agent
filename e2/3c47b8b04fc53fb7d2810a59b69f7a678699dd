@@ -1,0 +1,14 @@
+specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md
+  h_afc6b161d429e0 44-45,67-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e23c47b8b04fc53fb7d2810a59b69f7a678699dd",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
