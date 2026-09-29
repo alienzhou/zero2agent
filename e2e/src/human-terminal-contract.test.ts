@@ -198,14 +198,22 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
         'trap "" HUP\nsleep 300 &\nprintf "%s" "$!" > disconnected.pid\necho READY_TO_DISCONNECT\nwait\n',
     })
     const runner = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-disconnect.py')
-    const { stdout } = await promisify(execFile)('python3', [runner, process.execPath, CLI_ENTRY], {
+    const result = await promisify(execFile)('python3', [runner, process.execPath, CLI_ENTRY], {
       cwd,
       env: { PATH: '/usr/bin:/bin', HOME: cwd, TMPDIR: cwd, TERM: 'xterm-256color' },
       timeout: 15_000,
-    })
+    }).catch(error => ({
+      stdout: String(error.stdout),
+      stderr: String(error.stderr),
+      failed: true,
+    }))
     const pid = Number(await fs.readFile(path.join(cwd, 'disconnected.pid'), 'utf8'))
     pids.push(pid)
-    expect(JSON.parse(stdout)).toEqual({ approved: true, disconnected: true, host_exited: true })
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      approved: true,
+      disconnected: true,
+      host_exited: true,
+    })
     await expect
       .poll(
         () => {

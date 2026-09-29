@@ -4,6 +4,7 @@ import os
 import pty
 import select
 import signal
+import subprocess
 import sys
 import time
 
@@ -15,6 +16,7 @@ data = b''
 approved = False
 closed = False
 status = None
+diagnostic = ''
 deadline = time.monotonic() + 10
 try:
     while time.monotonic() < deadline:
@@ -36,8 +38,9 @@ finally:
     if not closed:
         os.close(master)
     if status is None:
+        diagnostic = subprocess.check_output(['ps', '-p', str(pid), '-o', 'stat=,wchan=,command='], text=True).strip()
         os.kill(pid, signal.SIGKILL)
         os.waitpid(pid, 0)
 
-print(json.dumps({'approved': approved, 'disconnected': closed, 'host_exited': status is not None}))
+print(json.dumps({'approved': approved, 'disconnected': closed, 'host_exited': status is not None, 'diagnostic': diagnostic}))
 sys.exit(0 if approved and closed and status is not None else 1)
