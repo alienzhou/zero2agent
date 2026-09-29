@@ -209,7 +209,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     }))
     const pid = Number(await fs.readFile(path.join(cwd, 'disconnected.pid'), 'utf8'))
     pids.push(pid)
-    expect(JSON.parse(result.stdout)).toMatchObject({
+    expect(JSON.parse(result.stdout), result.stdout).toMatchObject({
       approved: true,
       disconnected: true,
       host_exited: true,
