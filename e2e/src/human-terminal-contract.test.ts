@@ -170,7 +170,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     await expect(fs.access(path.join(cwd, 'forbidden'))).rejects.toThrow()
   })
 
-  it('cleans the child before relaying an external host SIGTERM', async () => {
+  it('cleans the child before exiting on an external host SIGTERM', async () => {
     const cwd = await workspace({ 'long.sh': 'echo SIGNAL_PID:$$\nsleep 300\n' })
     const session = start(cwd, ['--terminal', 'bash ./long.sh'])
     await approve(session)

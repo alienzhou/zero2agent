@@ -303,7 +303,7 @@ export async function runHumanTerminal(
   leased = true
   let restore: (() => void) | undefined
   let pty: IPty | undefined
-  let externalSignal: NodeJS.Signals | undefined
+  let externalSignal: 'SIGINT' | 'SIGTERM' | 'SIGHUP' | undefined
   const controller = new AbortController()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
   const handlers = signals.map(signal => {
@@ -371,7 +371,17 @@ export async function runHumanTerminal(
       }
     } finally {
       leased = false
-      if (externalSignal) process.kill(process.pid, externalSignal)
+      if (externalSignal) {
+        // Re-raising SIGHUP after removing its watcher can be ignored on macOS.
+        // This CLI owns shutdown: restore the terminal, then use the conventional code.
+        try {
+          rl?.close()
+          process.stdin.setRawMode(false)
+        } catch {
+          /* Terminal disconnected. */
+        }
+        process.exit({ SIGINT: 130, SIGTERM: 143, SIGHUP: 129 }[externalSignal])
+      }
     }
   }
 }
