@@ -37,6 +37,7 @@ function snapshot(): ProcessIdentity[] {
 export class HumanProcessTree {
   private readonly known = new Map<number, string>()
   private scanned = false
+  private groupRetired = false
 
   constructor(private readonly root: number) {
     if (!Number.isSafeInteger(root) || root <= 1 || root === process.pid) {
@@ -47,13 +48,16 @@ export class HumanProcessTree {
   capture(): ProcessIdentity[] {
     const rows = snapshot()
     const owned = new Set<number>()
-    const groupStillOwned =
-      !this.scanned ||
-      rows.some(row => row.group === this.root && this.known.get(row.pid) === row.started)
+    const leader = rows.find(row => row.pid === this.root)
+    const expectedLeader = this.known.get(this.root)
+    if (this.scanned && leader && expectedLeader && leader.started !== expectedLeader) {
+      this.groupRetired = true
+    }
+    if (this.scanned && !rows.some(row => row.group === this.root)) this.groupRetired = true
     for (const row of rows) {
       if (
         (!this.scanned && row.pid === this.root) ||
-        (groupStillOwned && row.group === this.root) ||
+        (!this.groupRetired && row.group === this.root) ||
         this.known.get(row.pid) === row.started
       ) {
         owned.add(row.pid)
@@ -76,8 +80,18 @@ export class HumanProcessTree {
   }
 
   signal(signal: NodeJS.Signals): void {
-    // Re-read identities immediately before signaling to reduce PID reuse risk.
-    const owned = this.capture()
+    let owned: ProcessIdentity[] = []
+    let scanFailed = false
+    try {
+      owned = this.capture()
+    } catch {
+      scanFailed = true
+    }
+    // forkpty creates this process group. A lost parent is not a lost group;
+    // it can still contain children created since the previous observation.
+    this.signalGroup(signal)
+    if (scanFailed) throw new Error('Could not inspect terminal descendants')
+    // Re-read identities before addressing descendants outside the original group.
     const current = new Map(snapshot().map(row => [row.pid, row.started]))
     for (const row of owned.reverse()) {
       if (current.get(row.pid) !== row.started) continue
@@ -89,9 +103,29 @@ export class HumanProcessTree {
     }
   }
 
+  signalGroup(signal: NodeJS.Signals): void {
+    if (this.groupRetired) return
+    try {
+      process.kill(-this.root, signal)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ESRCH') this.groupRetired = true
+      else throw error
+    }
+  }
+
   async terminate(): Promise<void> {
-    this.signal('SIGTERM')
+    let failed = false
+    try {
+      this.signal('SIGTERM')
+    } catch {
+      failed = true
+    }
     await new Promise(resolve => setTimeout(resolve, 150))
-    this.signal('SIGKILL')
+    try {
+      this.signal('SIGKILL')
+    } catch {
+      failed = true
+    }
+    if (failed) throw new Error('Terminal cleanup required group-only fallback')
   }
 }

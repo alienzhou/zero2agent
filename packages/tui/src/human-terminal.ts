@@ -27,6 +27,8 @@ function acquireInput(rl?: Interface): () => void {
   const saved = events.map(event => [event, input.rawListeners(event)] as const)
   input.pause()
   for (const event of events) input.removeAllListeners(event)
+  // Startup and teardown gaps still belong to the private input lease.
+  input.on('data', () => {})
   let released = false
   const restore = (): void => {
     if (released) return
@@ -64,7 +66,7 @@ function confirm(signal: AbortSignal): Promise<boolean> {
     const finish = (allowed: boolean): void => {
       if (settled) return
       settled = true
-      input.pause()
+      input.resume()
       input.off('data', onData)
       input.off('end', onEnd)
       input.off('error', onEnd)
@@ -147,12 +149,12 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     resolveExit = resolve
   })
 
-  const stop = (): Promise<void> => {
-    cancelled = true
+  const clean = (): Promise<void> => {
     if (!stopping) {
       stopping = tree.terminate().catch(() => {
         failure = true
         try {
+          tree.signalGroup('SIGKILL')
           pty.kill('SIGKILL')
         } catch {
           /* Process may have already exited. */
@@ -161,8 +163,12 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     }
     return stopping
   }
+  const stop = (): Promise<void> => {
+    cancelled = true
+    return clean()
+  }
   const onInput = (chunk: Buffer | string): void => {
-    if (finished || cancelled) return
+    if (finished || cancelled || exited) return
     const text = typeof chunk === 'string' ? chunk : decoder.write(chunk)
     if (text.includes('\x1d') || Buffer.byteLength(text) > MAX_INPUT_BYTES) {
       void stop()
@@ -239,10 +245,9 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
       'Human terminal active — Ctrl-C/Ctrl-D go to the program; Ctrl-] stops this session.\r\n'
     )
     await exit
-    input.pause()
     clearInterval(tracker)
     // Clean ordinary background descendants even when the original command exited normally.
-    await (stopping ?? tree.terminate())
+    await clean()
     await new Promise(resolve => setTimeout(resolve, 20))
     if (output.writableLength) {
       await new Promise<void>(resolve => {
@@ -263,10 +268,11 @@ async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResu
     }
   } finally {
     finished = true
-    input.pause()
     clearInterval(tracker)
     clearInterval(pollStop)
     if (stopTimer) clearTimeout(stopTimer)
+    // All paths, including the very first scan failing, reach the same cleanup.
+    await clean()
     input.off('data', onInput)
     input.off('end', onInputEnd)
     input.off('close', onInputEnd)
@@ -345,12 +351,19 @@ export async function runHumanTerminal(
     })
     return await bridge(pty, controller.signal)
   } finally {
+    // Consume pending private bytes before handing listeners back to readline.
+    // Keep draining for an event-loop turn while the old owner's lease is intact.
+    process.stdin.resume()
+    await new Promise<void>(resolve => setImmediate(resolve))
     process.stdin.pause()
+    while (process.stdin.read() !== null) {
+      /* Discard terminal-era typeahead. */
+    }
     process.off('exit', onExit)
     for (const [signal, handler] of handlers) process.off(signal, handler)
     try {
       try {
-        process.stdout.write(RESET_TERMINAL + '\r\n')
+        process.stdout.write(RESET_TERMINAL + '\r\nHuman terminal ended; returning control.\r\n')
       } finally {
         restore?.()
       }
