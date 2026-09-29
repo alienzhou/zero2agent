@@ -1,0 +1,22 @@
+.discuss/2026-09-28/e02-s004-interactive-research/outline.md
+  h_afc6b161d429e0 7-8
+.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D01-discussion-structure.md
+  h_afc6b161d429e0 1-32
+.discuss/2026-09-29/e02-s004-interactive-commands/notes/00-core-principles.md
+  h_afc6b161d429e0 1-82
+.discuss/2026-09-29/e02-s004-interactive-commands/notes/01-problem-value.md
+  h_afc6b161d429e0 1-30
+.discuss/2026-09-29/e02-s004-interactive-commands/outline.md
+  h_afc6b161d429e0 1-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "69dad8ef254bda3caa98e2b44961f5c86ddf7e6b",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
