@@ -8,16 +8,27 @@ interface ProcessIdentity {
 }
 
 function snapshot(): ProcessIdentity[] {
-  const output = execFileSync('/bin/ps', ['-ax', '-o', 'pid=', '-o', 'ppid=', '-o', 'pgid=', '-o', 'lstart='], {
-    encoding: 'utf8',
-    timeout: 1000,
-    maxBuffer: 2 * 1024 * 1024,
-    stdio: ['ignore', 'pipe', 'ignore'],
-  })
+  const output = execFileSync(
+    '/bin/ps',
+    ['-ax', '-o', 'pid=', '-o', 'ppid=', '-o', 'pgid=', '-o', 'lstart='],
+    {
+      encoding: 'utf8',
+      timeout: 1000,
+      maxBuffer: 2 * 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }
+  )
   return output.split('\n').flatMap(line => {
     const match = line.trim().match(/^(\d+)\s+(\d+)\s+(\d+)\s+(.+)$/)
     return match
-      ? [{ pid: Number(match[1]), parent: Number(match[2]), group: Number(match[3]), started: match[4] }]
+      ? [
+          {
+            pid: Number(match[1]),
+            parent: Number(match[2]),
+            group: Number(match[3]),
+            started: match[4],
+          },
+        ]
       : []
   })
 }
@@ -25,16 +36,20 @@ function snapshot(): ProcessIdentity[] {
 /** Tracks this PTY's ordinary descendants, not arbitrary daemon/namespace escape. */
 export class HumanProcessTree {
   private readonly known = new Map<number, string>()
+  private scanned = false
 
   constructor(private readonly root: number) {}
 
   capture(): ProcessIdentity[] {
     const rows = snapshot()
     const owned = new Set<number>()
+    const groupStillOwned =
+      !this.scanned ||
+      rows.some(row => row.group === this.root && this.known.get(row.pid) === row.started)
     for (const row of rows) {
       if (
-        row.pid === this.root ||
-        row.group === this.root ||
+        (!this.scanned && row.pid === this.root) ||
+        (groupStillOwned && row.group === this.root) ||
         this.known.get(row.pid) === row.started
       ) {
         owned.add(row.pid)
@@ -52,6 +67,7 @@ export class HumanProcessTree {
     }
     const result = rows.filter(row => owned.has(row.pid) && row.pid !== process.pid)
     for (const row of result) this.known.set(row.pid, row.started)
+    this.scanned = true
     return result
   }
 

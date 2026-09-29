@@ -108,10 +108,19 @@ async function main() {
   if (process.argv[2] === '--terminal') {
     setupTerminalRuntime()
     const command = process.argv.slice(3).join(' ') || 'exec /bin/bash --noprofile --norc -i'
-    const result = await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })
+    const result = await terminalTool.execute(
+      { command, interactive: true },
+      { cwd: process.cwd() }
+    )
     console.log(result)
     const code = result.match(/^Exit code: (\d+)$/m)
-    process.exitCode = result.startsWith('Error:') ? 1 : code ? Number(code[1]) : result.includes('cancelled') ? 130 : 0
+    process.exitCode = result.startsWith('Error:')
+      ? 1
+      : code
+        ? Number(code[1])
+        : result.includes('cancelled')
+          ? 130
+          : 0
     return
   }
   loadLocalEnv()
@@ -181,8 +190,11 @@ async function main() {
       try {
         resetStreamState()
         if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
-          const command = trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
-          console.log(await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() }))
+          const command =
+            trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
+          console.log(
+            await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })
+          )
         } else {
           await agent.run(trimmed)
         }

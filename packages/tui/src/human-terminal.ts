@@ -19,8 +19,7 @@ function acquireInput(rl?: Interface): () => void {
   const saved = events.map(event => [event, input.rawListeners(event)] as const)
   input.pause()
   for (const event of events) input.removeAllListeners(event)
-  input.setRawMode(true)
-  return () => {
+  const restore = () => {
     input.pause()
     for (const event of events) input.removeAllListeners(event)
     input.setRawMode(wasRaw ?? false)
@@ -30,9 +29,16 @@ function acquireInput(rl?: Interface): () => void {
     if (input.readableEnded || input.destroyed) rl?.close()
     else if (!wasPaused) input.resume()
   }
+  try {
+    input.setRawMode(true)
+  } catch (error) {
+    restore()
+    throw error
+  }
+  return restore
 }
 
-function confirm(): Promise<boolean> {
+function confirm(signal: AbortSignal): Promise<boolean> {
   return new Promise(resolve => {
     let line = ''
     const input = process.stdin
@@ -42,6 +48,7 @@ function confirm(): Promise<boolean> {
       input.off('end', onEnd)
       input.off('error', onEnd)
       input.off('close', onEnd)
+      signal.removeEventListener('abort', onEnd)
       process.stdout.write('\r\n')
       resolve(allowed)
     }
@@ -75,6 +82,11 @@ function confirm(): Promise<boolean> {
     input.once('end', onEnd)
     input.once('error', onEnd)
     input.once('close', onEnd)
+    signal.addEventListener('abort', onEnd, { once: true })
+    if (signal.aborted) {
+      finish(false)
+      return
+    }
     process.stdout.write('Allow human terminal? [y/N] ')
     input.resume()
   })
@@ -99,7 +111,7 @@ function interactiveEnvironment(): Record<string, string> {
   return env
 }
 
-async function bridge(pty: IPty): Promise<HumanTerminalResult> {
+async function bridge(pty: IPty, signal: AbortSignal): Promise<HumanTerminalResult> {
   const input = process.stdin
   const output = process.stdout
   const decoder = new StringDecoder('utf8')
@@ -110,14 +122,20 @@ async function bridge(pty: IPty): Promise<HumanTerminalResult> {
   let failure = false
   let finished = false
   let resolveExit: () => void = () => {}
-  const exit = new Promise<void>(resolve => { resolveExit = resolve })
+  const exit = new Promise<void>(resolve => {
+    resolveExit = resolve
+  })
 
   const stop = () => {
     cancelled = true
     if (!stopping) {
       stopping = tree.terminate().catch(() => {
         failure = true
-        try { pty.kill('SIGKILL') } catch { /* Process may have already exited. */ }
+        try {
+          pty.kill('SIGKILL')
+        } catch {
+          /* Process may have already exited. */
+        }
       })
     }
     return stopping
@@ -129,13 +147,31 @@ async function bridge(pty: IPty): Promise<HumanTerminalResult> {
       void stop()
       return
     }
-    try { pty.write(text) } catch { failure = true; void stop() }
+    try {
+      pty.write(text)
+    } catch {
+      failure = true
+      void stop()
+    }
   }
-  const onInputEnd = () => { void stop() }
-  const onDrain = () => { if (!finished && !exited) pty.resume() }
+  const onInputEnd = () => {
+    void stop()
+  }
+  const onOutputError = () => {
+    failure = true
+    void stop()
+  }
+  const onDrain = () => {
+    if (!finished && !exited) pty.resume()
+  }
   const onResize = () => {
     if (finished || exited) return
-    try { const { cols, rows } = dimensions(); pty.resize(cols, rows) } catch { /* Exit can race resize. */ }
+    try {
+      const { cols, rows } = dimensions()
+      pty.resize(cols, rows)
+    } catch {
+      /* Exit can race resize. */
+    }
   }
   const dataSubscription = pty.onData(data => {
     if (finished) return
@@ -144,11 +180,23 @@ async function bridge(pty: IPty): Promise<HumanTerminalResult> {
       void stop()
       return
     }
-    if (!output.write(data)) pty.pause()
+    try {
+      if (!output.write(data)) pty.pause()
+    } catch {
+      onOutputError()
+    }
   })
-  const exitSubscription = pty.onExit(event => { exited = event; resolveExit() })
+  const exitSubscription = pty.onExit(event => {
+    exited = event
+    resolveExit()
+  })
   const tracker = setInterval(() => {
-    try { tree.capture() } catch { failure = true; void stop() }
+    try {
+      tree.capture()
+    } catch {
+      failure = true
+      void stop()
+    }
   }, 500)
   let stopTimer: NodeJS.Timeout | undefined
   const pollStop = setInterval(() => {
@@ -160,10 +208,15 @@ async function bridge(pty: IPty): Promise<HumanTerminalResult> {
   input.once('error', onInputEnd)
   output.on('drain', onDrain)
   output.on('resize', onResize)
+  output.on('error', onOutputError)
+  signal.addEventListener('abort', onInputEnd, { once: true })
+  if (signal.aborted) void stop()
   input.resume()
   try {
     tree.capture()
-    output.write('Human terminal active — Ctrl-C/Ctrl-D go to the program; Ctrl-] stops this session.\r\n')
+    output.write(
+      'Human terminal active — Ctrl-C/Ctrl-D go to the program; Ctrl-] stops this session.\r\n'
+    )
     await exit
     input.pause()
     clearInterval(tracker)
@@ -172,7 +225,11 @@ async function bridge(pty: IPty): Promise<HumanTerminalResult> {
     await new Promise(resolve => setTimeout(resolve, 20))
     if (output.writableLength) {
       await new Promise<void>(resolve => {
-        const done = () => { clearTimeout(timer); output.off('drain', done); resolve() }
+        const done = () => {
+          clearTimeout(timer)
+          output.off('drain', done)
+          resolve()
+        }
         const timer = setTimeout(done, 2000)
         output.once('drain', done)
       })
@@ -194,9 +251,15 @@ async function bridge(pty: IPty): Promise<HumanTerminalResult> {
     input.off('error', onInputEnd)
     output.off('drain', onDrain)
     output.off('resize', onResize)
+    output.off('error', onOutputError)
+    signal.removeEventListener('abort', onInputEnd)
     dataSubscription.dispose()
     exitSubscription.dispose()
-    try { pty.kill() } catch { /* Native backend may already be disposed. */ }
+    try {
+      pty.kill()
+    } catch {
+      /* Native backend may already be disposed. */
+    }
   }
 }
 
@@ -213,37 +276,51 @@ export async function runHumanTerminal(
   let restore: (() => void) | undefined
   let pty: IPty | undefined
   let externalSignal: NodeJS.Signals | undefined
+  const controller = new AbortController()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
   const handlers = signals.map(signal => {
     const handler = () => {
       externalSignal = signal
-      // EOF-like stream handling cannot cancel a confirmation; injecting no input
-      // is not approval. A separate event ends the current owner safely.
-      process.stdin.emit('end')
+      controller.abort()
     }
     process.once(signal, handler)
     return [signal, handler] as const
   })
   const onExit = () => {
     if (pty) {
-      try { new HumanProcessTree(pty.pid).signal('SIGKILL') } catch { /* Best effort on synchronous exit. */ }
-      try { pty.kill('SIGKILL') } catch { /* Already gone. */ }
+      try {
+        new HumanProcessTree(pty.pid).signal('SIGKILL')
+      } catch {
+        /* Best effort on synchronous exit. */
+      }
+      try {
+        pty.kill('SIGKILL')
+      } catch {
+        /* Already gone. */
+      }
     }
-    try { process.stdin.setRawMode(false) } catch { /* Terminal can have disconnected. */ }
+    try {
+      process.stdin.setRawMode(false)
+    } catch {
+      /* Terminal can have disconnected. */
+    }
   }
   process.once('exit', onExit)
   try {
     restore = acquireInput(rl)
-    process.stdout.write(`\r\nHuman terminal request\r\nCommand: ${JSON.stringify(request.command)}\r\nDirectory: ${JSON.stringify(request.cwd)}\r\n`)
-    if (!await confirm() || externalSignal) return { status: 'declined' }
+    process.stdout.write(
+      `\r\nHuman terminal request\r\nCommand: ${JSON.stringify(request.command)}\r\nDirectory: ${JSON.stringify(request.cwd)}\r\n`
+    )
+    if (!(await confirm(controller.signal)) || externalSignal) return { status: 'declined' }
     const { spawn } = await import('@lydell/node-pty')
+    if (controller.signal.aborted) return { status: 'declined' }
     pty = spawn('/bin/bash', ['--noprofile', '--norc', '-c', request.command], {
       cwd: request.cwd,
       env: interactiveEnvironment(),
       name: 'xterm-256color',
       ...dimensions(),
     })
-    return await bridge(pty)
+    return await bridge(pty, controller.signal)
   } finally {
     process.stdin.pause()
     process.off('exit', onExit)
