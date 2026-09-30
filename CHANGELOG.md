@@ -77,6 +77,12 @@ git checkout main
 
 ## [Unreleased]
 
+### 2026-10-01：确认 Epic 3 课程计划
+
+- 新增 [Epic 3 阶段入口](./specs/E03-product-foundations/README.md)，确认六节课：多轮会话、权限与 Approval、基础 TUI、会话恢复、运行日志、文件 Checkpoint。
+- 同步首页、Roadmap 和 Specs 导航；E02 内容已完成并合入 main，S004 尚未打课程 Tag。
+- 本次仅更新规划文档，不代表 E03 功能已实现；顺序与边界见[课程决策](./.discuss/2026-10-01/e03-course-plan/decisions/D01-course-sequence.md)。
+
 ### E02-S004-human-terminal (Done, merged into main; untagged)
 
 所属 Epic：[Epic 2：能动 / 能改 / 能执行](./specs/E02-act-and-execute/README.md) | Story 详情：[S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
