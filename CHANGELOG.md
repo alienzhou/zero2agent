@@ -102,7 +102,9 @@ git checkout main
 - 保存并恢复输入监听、raw mode、完整 stty 属性，转发 resize。
 - 清理原进程组及已观察后代，物理断连同步清理并退出。
 - 正文与按键不进 OutputSink、应用输出日志或模型回执；不保证外部程序无记录。
-- 最新复验：构建通过；core 199、E2E 48、cdp-debug 1 项通过，25 项 E2E 跳过。人工终端契约占 30 项。
+- 最新脱敏发布复验：固定实现 `b200c9f`，构建和 E2E 类型检查通过；core 199、E2E 49、cdp-debug 1，共 249 项通过，25 项 E2E 跳过。人工终端契约占 31 项。
+- 修复 CLI 宿主取消被子程序 exit 0 掩盖的问题；Node 测试改用 process.execPath，受控无 Node PATH 环境下先红后绿。
+- `release/e02-s004-human-terminal` 保留逐提交脱敏历史，补齐架构与上手文档。用户授权验收后推送，不包含自动合入 main 或打 Tag。
 - lint 为 0 errors / 15 warnings；变更文件格式检查通过，全仓仍有 27 个未改动文件的格式问题。
 - 仅 macOS arm64 实测；Windows 不支持，Linux、慢终端压力与真实模型流程未实测。
 

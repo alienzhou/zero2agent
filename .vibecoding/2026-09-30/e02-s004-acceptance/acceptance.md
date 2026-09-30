@@ -4,6 +4,21 @@
 
 [跟练步骤](../../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md) | [验收清单](../../../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md) | [可见对话原文](./visible-dialogue.md)
 
+## 6. 脱敏发布复验
+
+2026-09-30 用户授权验收后提交、推送，并选择保留逐提交历史。仅重建尚未公开的提交；既有远端 main 不重写，原本地分支保留。个人路径、服务端会话/消息标识、本机 Git 邮箱已脱敏，生成的 Python 字节码不随新分支发布；源脚本、代码、测试、设计与对话正文保留。
+
+当前实现固定为 `b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770`，发布分支为 `release/e02-s004-human-terminal`。上方章节是早前候选的历史记录，不表示当前仍无推送授权，也不表示最新实现只有 30 项人工终端测试。
+
+- 三个旧测试在 PATH 无 Node 的环境中失败；临时 HOME、SHELL=/bin/bash、PATH=/usr/bin:/bin 受控复现原版 3 失败，改用 process.execPath 后 3 通过。没有修改生产 PATH，也未放宽阈值；额外断言退出成功及实际输出。
+- 独立 CLI 取消时，子程序 TERM trap 的 exit 0 曾掩盖宿主取消。真实 PTY 红测得到 0 而非 130；修复优先级后通过。保留子程序回执 Exit code: 0，但 CLI 返回 130；有 signal 时仍按 128+signal 返回。
+- 干净工作区锁文件安装通过。首次 --ignore-scripts 安装未生成 ripgrep 二进制，搜索测试失败；执行该依赖自带 postinstall 后定向 28 项及最终完整回归通过，不省略这次安装失败。
+- 最终一次完整离线回归：cdp-debug 1、core 199、E2E 49，共 249 通过、25 个真实模型用例跳过；人工终端契约为 31 项。构建、E2E 类型检查通过；lint 0 error / 15 warnings。
+- 全仓格式检查仍有 27 个既有文件不符合 Prettier；本次修改文件定向格式通过，不把已知格式债务说成全部检查通过。
+- 架构、上手、固定版本获取与回执去向已同步。推送不等于合入 main、打 Tag 或发布社交平台内容。远端是否已存在以 fetch 结果为准。
+
+
+
 ## 1. P0 计时问题：受控红绿验证
 
 9 月 30 日审查时，旧测试全量运行曾得到 5844ms，违反 `<3500ms`；单独复跑通过。旧测试从 `terminalTool.execute` 前起表，包含了同步加载 shell 环境的时间，而生产 drain 计时器是在子进程 exit 后才启动。
