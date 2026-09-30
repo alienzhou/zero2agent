@@ -1,0 +1,16 @@
+.discuss/2026-09-29/e02-s004-interactive-commands/outline.md
+  h_afc6b161d429e0 3
+specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md
+  h_afc6b161d429e0 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0b7ddc0eb1985fee3ef0534461258665521ac7f5",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
