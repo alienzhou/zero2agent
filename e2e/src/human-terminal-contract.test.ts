@@ -170,27 +170,38 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     await expect(fs.access(path.join(cwd, 'forbidden'))).rejects.toThrow()
   })
 
-  it('cleans the child before exiting on an external host SIGTERM', async () => {
-    const cwd = await workspace({ 'long.sh': 'echo SIGNAL_PID:$$\nsleep 300\n' })
-    const session = start(cwd, ['--terminal', 'bash ./long.sh'])
-    await approve(session)
-    await session.waitFor(/SIGNAL_PID:\d+/)
-    const pid = Number(session.output.match(/SIGNAL_PID:(\d+)/)?.[1])
-    pids.push(pid)
-    session.signal('SIGTERM')
-    await session.waitExit()
-    await expect
-      .poll(() => {
-        try {
-          process.kill(pid, 0)
-          return false
-        } catch {
-          return true
-        }
+  it.each([
+    ['SIGINT', 130],
+    ['SIGTERM', 143],
+    ['SIGHUP', 129],
+  ])(
+    'restores the connected terminal and cleans descendants on external %s',
+    async (signal, code) => {
+      const cwd = await workspace({
+        'signal.sh':
+          'sleep 300 &\nprintf "%s %s" "$$" "$!" > signal-pids.txt\nprintf "\\033[?1049h\\033[?25lREADY_TO_SIGNAL\\n"\nwait\n',
       })
-      .toBe(true)
-    pids.length = 0
-  })
+      const runner = path.join(REPO_ROOT, 'e2e/src/helpers/human-terminal-signal.py')
+      const result = await promisify(execFile)(
+        'python3',
+        [runner, process.execPath, CLI_ENTRY, String(signal)],
+        {
+          cwd,
+          env: { PATH: '/usr/bin:/bin', HOME: cwd, TMPDIR: cwd, TERM: 'xterm-256color' },
+          timeout: 15_000,
+        }
+      )
+      expect(JSON.parse(result.stdout), result.stdout).toMatchObject({
+        approved: true,
+        signal_sent: true,
+        exit_code: code,
+        terminal_restored: true,
+        display_reset: true,
+        remaining_children: [],
+        error: '',
+      })
+    }
+  )
 
   it('cleans the real process tree when the outer terminal disconnects', async () => {
     const cwd = await workspace({
@@ -213,6 +224,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
       approved: true,
       disconnected: true,
       host_exited: true,
+      exit_code: 129,
     })
     await expect
       .poll(

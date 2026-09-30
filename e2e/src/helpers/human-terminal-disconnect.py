@@ -47,5 +47,5 @@ finally:
         os.kill(pid, signal.SIGKILL)
         os.waitpid(pid, 0)
 
-print(json.dumps({'approved': approved, 'disconnected': closed, 'host_exited': status is not None, 'diagnostic': diagnostic}))
+print(json.dumps({'approved': approved, 'disconnected': closed, 'host_exited': status is not None, 'exit_code': os.waitstatus_to_exitcode(status) if status is not None else None, 'diagnostic': diagnostic}))
 sys.exit(0 if approved and closed and status is not None else 1)

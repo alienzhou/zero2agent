@@ -69,8 +69,9 @@ describe('P0 复审：读取侧 drain 防线', () => {
         await fs.chmod(shell, 0o700)
         vi.stubEnv('SHELL', shell)
       }
-      // The drain budget starts after child exit, not during unrelated profile loading.
-      // Warm the real cache explicitly; this is not a cold-start latency guarantee.
+      // Warm the real cache to exclude cold profile loading from execution timing.
+      // The interval includes execute setup and drain, not only time after child exit;
+      // these bounds are not a cold-start end-to-end latency guarantee.
       const envStart = performance.now()
       const env = getBaseShellEnv()
       if (environment === 'slow') {
