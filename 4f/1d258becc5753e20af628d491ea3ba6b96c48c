@@ -1,0 +1,14 @@
+packages/core/src/tools/__tests__/terminal-p0-review.test.ts
+  h_afc6b161d429e0 4,26,57-66,74-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4f1d258becc5753e20af628d491ea3ba6b96c48c",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
