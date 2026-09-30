@@ -1,7 +1,7 @@
 /**
  * GPT 复审 P0 定向测试 — drain / skip / nonce / symlink / env 首次提示
  */
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import * as os from 'node:os'
@@ -23,6 +23,7 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
+  vi.unstubAllEnvs()
   await fs.rm(tmpDir, { recursive: true, force: true })
 })
 
@@ -53,7 +54,16 @@ function waitForFile(filePath: string, timeoutMs: number): Promise<void> {
 }
 
 describe('P0 复审：读取侧 drain 防线', () => {
-  it('[P0] 后台 job 持有 pipe 时约 2s drain 返回（非 setsid killpg）', async () => {
+  it.each(['current', 'slow'])(
+    '[P0] 后台 job 持有 pipe 时约 2s drain 返回（%s shell environment）',
+    async environment => {
+    if (environment === 'slow') {
+      // Only the temporary copy is executable; never alter the user's shell/profile.
+      const shell = path.join(tmpDir, 'slow-env-shell')
+      await fs.copyFile(new URL('./helpers/slow-env-shell.sh', import.meta.url), shell)
+      await fs.chmod(shell, 0o700)
+      vi.stubEnv('SHELL', shell)
+    }
     const start = Date.now()
     const result = await terminalTool.execute({ command: '(sleep 5) & exit 0' }, ctx)
     const elapsed = Date.now() - start
@@ -61,7 +71,9 @@ describe('P0 复审：读取侧 drain 防线', () => {
     expect(elapsed).toBeGreaterThanOrEqual(1800)
     expect(elapsed).toBeLessThan(3500)
     expect(result).toContain('descendant process may still be holding the output pipe')
-  }, 15_000)
+    },
+    15_000
+  )
 })
 
 describe('P0 复审：Ctrl-S 跳过', () => {
