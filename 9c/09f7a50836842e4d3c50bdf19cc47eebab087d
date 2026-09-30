@@ -1,0 +1,30 @@
+README.en.md
+  h_afc6b161d429e0 160,171,182-191,194,196
+README.md
+  h_afc6b161d429e0 164,198
+docs/roadmap/README.md
+  h_afc6b161d429e0 19
+retros/E02-S004-human-terminal.md
+  h_afc6b161d429e0 3,53-55
+retros/README.md
+  h_afc6b161d429e0 13,17
+specs/E02-act-and-execute/README.md
+  h_afc6b161d429e0 35
+specs/E02-act-and-execute/S004-interactive-commands/details/00-overview.md
+  h_afc6b161d429e0 3
+specs/E02-act-and-execute/S004-interactive-commands/details/02-task-list.md
+  h_afc6b161d429e0 3,41-43
+specs/README.md
+  h_afc6b161d429e0 67-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c09f7a50836842e4d3c50bdf19cc47eebab087d",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
