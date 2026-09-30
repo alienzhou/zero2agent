@@ -89,6 +89,8 @@ PTY 正文直接写宿主 stdout，不写 OutputSink、临时输出文件、对�
 
 来源为已有固定源码调研，没有联网刷新或产品 E2E。依赖版本、入口名称、保留键、隐私边界均为本轮实现选择，不声称用户逐项审定。
 
+2026-09-30 已做[人工交互追加复核](../../../../researches/interactive-commands/notes/human-ux-verification-2026-09-30.md)：刷新四家源码与官方资料，并运行 Aider 原始执行模块。Aider 用户 /run 和 pi 示例扩展不会重复确认执行；Gemini 以 Tab/Shift+Tab 切换焦点，普通前台输出会进入模型。本课统一 y/N、正文不分享和退出才归还输入均为自选简化，不应在教学中表述为「大家都这样做」。追加复核仍不是完整产品 E2E。
+
 ## 当前不做的事情
 
 Windows/ConPTY、headless 回退、模型输入、交互后台化、自动检测、多终端并行和重连。理由见 [Backlog](./04-backlog.md)。

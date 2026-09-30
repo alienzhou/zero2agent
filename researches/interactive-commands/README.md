@@ -2,6 +2,8 @@
 
 > 源码取证：2026-09-28；实验复测与汇总：2026-09-29 凌晨（Asia/Shanghai）。服务 E02-S004，只做调研，不把候选方案升级为已确认决策。
 
+> **2026-09-30 追加**：[人工交互方式复核](./notes/human-ux-verification-2026-09-30.md)已按当前需求刷新 Aider、pi、Gemini、Codex 证据，并区分成熟先例与本课自选交互。S004 已明确改为人操作 bash；下文「把控制权交回模型」等表述保留为当时的研究范围，不能当作当前实施契约。
+
 [S003 调研](../terminal/README.md) | [Epic 2](../../specs/E02-act-and-execute/README.md) | [S004 讨论 PR #12](https://github.com/alienzhou/zero2agent/pull/12)
 
 ## 结论先行

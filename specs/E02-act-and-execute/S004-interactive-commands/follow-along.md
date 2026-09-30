@@ -4,6 +4,8 @@
 
 [Story](./README.md) | [验收证据](./details/03-verification-checklist.md) | [本轮复核记录](../../../.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md)
 
+只想先试 1–2 个实际功能，直接看[Node REPL 与 less 试用](./try-two-features.md)，不用先走完本页所有检查。
+
 ## 准备固定版本
 
 已持有本地提交的作者，可以从 Zero2Agent 仓库创建独立跟练目录，避免影响原有未提交改动：

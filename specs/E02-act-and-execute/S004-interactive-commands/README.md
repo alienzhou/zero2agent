@@ -62,6 +62,8 @@ node packages/tui/dist/cli.js --terminal 'read -r -p "Name: " name; printf "Hell
 
 需要固定版本和分步练习时，使用[跟练与人工验收](./follow-along.md)。它区分已验证的本地候选提交、工具驱动操作和仍需用户签收的项目；尚未提供公开发布版本。
 
+想先体验功能，可以只试[Node REPL 与 less](./try-two-features.md)。关于其他产品是否同样交互，见[人工交互对标](../../../researches/interactive-commands/notes/human-ux-verification-2026-09-30.md)：交接有成熟先例，重复确认、输出分享和焦点切换各有取舍，并非行业统一界面。
+
 ## 实现与验收资料
 
 - [总览](./details/00-overview.md)：范围与选型。
