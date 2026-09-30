@@ -1,0 +1,24 @@
+e2e/src/multi-turn-contract.test.ts
+  h_afc6b161d429e0 96-99
+packages/core/src/__tests__/session.test.ts
+  h_afc6b161d429e0 193-230
+packages/core/src/agent.ts
+  h_afc6b161d429e0 10,52
+packages/core/src/loop.ts
+  h_afc6b161d429e0 13,15-16,76,79-82,164,186-188
+packages/core/src/session.ts
+  h_afc6b161d429e0 37-42
+packages/tui/src/cli.ts
+  h_afc6b161d429e0 199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "87aadb56f38a5447caf2f7862a8d60a3f9e1adbc",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
