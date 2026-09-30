@@ -1,0 +1,22 @@
+.discuss/2026-10-01/e03-s001-multi-turn/outline.md
+  h_afc6b161d429e0 3,7-8,12-14
+specs/E03-product-foundations/S001-multi-turn/README.md
+  h_afc6b161d429e0 3,26-27,30-33,36-47,55-56,65-68
+specs/E03-product-foundations/S001-multi-turn/deep-dive/01-history-is-not-rollback.md
+  h_afc6b161d429e0 1-33
+specs/E03-product-foundations/S001-multi-turn/details/04-backlog.md
+  h_afc6b161d429e0 20-23
+specs/E03-product-foundations/S001-multi-turn/follow-along.md
+  h_afc6b161d429e0 1-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ce898a4c495112bb2bff8e6e5c5b846e1acecc84",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
