@@ -198,11 +198,15 @@ async function runTurnLoop(
         })),
       })
     }
-    if (notice) messages.push({ role: 'assistant', content: notice })
+    if (notice) {
+      messages.push({ role: 'assistant', content: notice })
+      notifyObserver(() => events?.onText?.(`\n${notice}\n`))
+    }
     return text || notice
   }
 
   const limit = 'Error: Maximum iterations reached. The task may be too complex.'
   messages.push({ role: 'assistant', content: `[Harness] ${limit}` })
+  notifyObserver(() => events?.onText?.(`\n[Harness] ${limit}\n`))
   return limit
 }

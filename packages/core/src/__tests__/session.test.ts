@@ -192,8 +192,9 @@ describe('in-memory sessions', () => {
 describe('failed and incomplete turns', () => {
   it('isolates input mutations by observers and tools from both execution and history', async () => {
     transport(reply([call()], 'tool_use'), answer('done'))
+    let observed: unknown
     const execute = vi.fn(async (input: Record<string, unknown>) => {
-      expect(input.message).toBe('value')
+      observed = input.message
       input.message = 'tool mutation'
       return 'ok'
     })
@@ -208,6 +209,7 @@ describe('failed and incomplete turns', () => {
     await agent.run('inspect')
     const block = (agent.getHistory()[1].content as Anthropic.ToolUseBlock[])[0]
     expect(block.input).toEqual({ message: 'value' })
+    expect(observed).toBe('value')
     expect(execute).toHaveBeenCalledTimes(1)
   })
 
@@ -254,6 +256,24 @@ describe('failed and incomplete turns', () => {
     agent.reset()
     await agent.run('b')
     expect(agent.getHistory()).toHaveLength(2)
+  })
+
+  it('shows streamed fragments to the UI without committing them after a stream failure', async () => {
+    const onText = vi.fn()
+    vi.mocked(createAnthropicClient).mockReturnValue({
+      messages: {
+        stream: () => ({
+          on: (_event: string, callback: (text: string) => void) => callback('unfinished-fragment'),
+          finalMessage: async () => {
+            throw new Error('connection lost')
+          },
+        }),
+      },
+    } as unknown as Anthropic)
+    const agent = new Agent({ tools: [], events: { onText } })
+    await expect(agent.run('inspect')).rejects.toThrow('connection lost')
+    expect(onText).toHaveBeenCalledWith('unfinished-fragment')
+    expect(JSON.stringify(agent.getHistory())).not.toContain('unfinished-fragment')
   })
 
   it('matches unknown and throwing tools with is_error results even if observers throw', async () => {
@@ -311,10 +331,12 @@ describe('failed and incomplete turns', () => {
 
   it('keeps partial text with a Harness truncation notice', async () => {
     transport(reply([text('partial')], 'max_tokens'))
-    const agent = new Agent({ tools: [] })
+    const onText = vi.fn()
+    const agent = new Agent({ tools: [], events: { onText } })
     expect(await agent.run('long')).toBe('partial')
     expect(agent.getHistory()[1].content).toEqual([text('partial')])
     expect(agent.getHistory().at(-1)?.content).toContain('truncated')
+    expect(onText).toHaveBeenCalledWith(expect.stringContaining('[Harness]'))
   })
 
   it('ends the iteration limit with paired tool results and accepts a new turn', async () => {
