@@ -4,12 +4,29 @@ import type { IPty } from '@lydell/node-pty'
 import type { Interface } from 'node:readline'
 import { StringDecoder } from 'node:string_decoder'
 import { execFileSync } from 'node:child_process'
+import { closeSync, constants, openSync, readSync } from 'node:fs'
 import { HumanProcessTree } from './human-terminal-process.js'
 
 const MAX_INPUT_BYTES = 64 * 1024
 const MAX_PENDING_OUTPUT = 1024 * 1024
 const RESET_TERMINAL = '\x1b[0m\x1b[?25h\x1b[?1049l\x1b[?2004l'
 let leased = false
+
+function hasLiveControllingTerminal(): boolean {
+  if (process.stdin.readableEnded || process.stdin.destroyed) return false
+  let fd: number | undefined
+  try {
+    fd = openSync('/dev/tty', constants.O_RDONLY | constants.O_NONBLOCK | constants.O_NOCTTY)
+    // A signal can arrive before stdin's EOF event. Probe without waiting or writing;
+    // any pending byte still belongs to the private lease and is discarded on shutdown.
+    return readSync(fd, Buffer.alloc(1), 0, 1, null) !== 0
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code
+    return code === 'EAGAIN' || code === 'EWOULDBLOCK'
+  } finally {
+    if (fd !== undefined) closeSync(fd)
+  }
+}
 
 /** Exclusive ownership prevents readline/history from consuming private terminal keys. */
 function acquireInput(rl?: Interface): () => void {
@@ -321,7 +338,8 @@ export async function runHumanTerminal(
   const handlers = signals.map(signal => {
     const handler = (): void => {
       externalSignal = signal
-      if (signal === 'SIGHUP') disconnect()
+      // An externally sent SIGHUP need not mean the physical terminal disappeared.
+      if (signal === 'SIGHUP' && !hasLiveControllingTerminal()) disconnect()
       controller.abort()
     }
     process.once(signal, handler)
