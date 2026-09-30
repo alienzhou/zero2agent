@@ -34,8 +34,12 @@ export class Session {
       messages.push({ role: 'assistant', content: INTERRUPTED })
       throw error
     } finally {
-      this.messages = messages
-      this.running = false
+      try {
+        // Detach even from the loop's working copy before handing ownership back to the session.
+        this.messages = structuredClone(messages)
+      } finally {
+        this.running = false
+      }
     }
   }
 

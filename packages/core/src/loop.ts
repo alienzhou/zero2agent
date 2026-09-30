@@ -10,9 +10,10 @@ import { Session } from './session.js'
 const MAX_ITERATIONS = 20
 
 /** Display observers cannot change execution results or leave unmatched tool calls. */
-function notifyObserver(notify: () => void): void {
+function notifyObserver(notify: () => unknown): void {
   try {
-    notify()
+    // TypeScript also permits async functions for void callbacks. Observe rejection without waiting.
+    void Promise.resolve(notify()).catch(() => {})
   } catch {
     /* The host owns presentation failures. */
   }
@@ -72,10 +73,13 @@ export async function executeToolCalls(
 
       try {
         notifyObserver(() =>
-          events?.onToolStart?.(block.name, block.input as Record<string, unknown>)
+          events?.onToolStart?.(block.name, structuredClone(block.input) as Record<string, unknown>)
         )
         const start = Date.now()
-        const output = await tool.execute(block.input as Record<string, unknown>, ctx)
+        const output = await tool.execute(
+          structuredClone(block.input) as Record<string, unknown>,
+          ctx
+        )
         notifyObserver(() => events?.onToolEnd?.(block.name, output, Date.now() - start))
         results.push({
           type: 'tool_result',
@@ -157,7 +161,7 @@ async function runTurnLoop(
       if (!response.content.some(block => block.type === 'tool_use')) {
         throw new Error('Model stopped for tool_use without any tool calls.')
       }
-      messages.push({ role: 'assistant', content: response.content })
+      messages.push({ role: 'assistant', content: structuredClone(response.content) })
       const toolResults = await executeToolCalls(response.content, tools, ctx, events)
       messages.push({ role: 'user', content: toolResults })
       continue
@@ -179,7 +183,9 @@ async function runTurnLoop(
           : ''
     messages.push({
       role: 'assistant',
-      content: response.content.length ? response.content : '[Harness] Model returned no content.',
+      content: response.content.length
+        ? structuredClone(response.content)
+        : '[Harness] Model returned no content.',
     })
     if (calls.length) {
       messages.push({

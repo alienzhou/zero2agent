@@ -190,6 +190,44 @@ describe('in-memory sessions', () => {
 })
 
 describe('failed and incomplete turns', () => {
+  it('isolates input mutations by observers and tools from both execution and history', async () => {
+    transport(reply([call()], 'tool_use'), answer('done'))
+    const execute = vi.fn(async (input: Record<string, unknown>) => {
+      expect(input.message).toBe('value')
+      input.message = 'tool mutation'
+      return 'ok'
+    })
+    const agent = new Agent({
+      tools: [{ ...echo, execute }],
+      events: {
+        onToolStart: (_name, input) => {
+          input.message = 'observer mutation'
+        },
+      },
+    })
+    await agent.run('inspect')
+    const block = (agent.getHistory()[1].content as Anthropic.ToolUseBlock[])[0]
+    expect(block.input).toEqual({ message: 'value' })
+    expect(execute).toHaveBeenCalledTimes(1)
+  })
+
+  it('consumes rejected async observer promises without changing tool results', async () => {
+    transport(reply([call()], 'tool_use'), answer('done'))
+    const agent = new Agent({
+      tools: [echo],
+      events: {
+        onToolEnd: async () => {
+          throw new Error('async UI failure')
+        },
+      },
+    })
+    await agent.run('inspect')
+    await new Promise(resolve => setImmediate(resolve))
+    expect(agent.getHistory()[2].content).toEqual([
+      { type: 'tool_result', tool_use_id: 'call-1', content: 'observed-result' },
+    ])
+  })
+
   it('retains completed side-effect evidence when the next model stream fails', async () => {
     const execute = vi.fn(async () => 'file changed')
     const requests = transport(

@@ -196,7 +196,7 @@ async function main() {
         resetStreamState()
         if (trimmed === '/new') {
           agent.reset()
-          console.log('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。')
+          process.stdout.write('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。\n')
         } else if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
           const command =
             trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'

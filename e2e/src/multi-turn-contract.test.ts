@@ -93,7 +93,10 @@ async function exercise(inputs: string[], respond: (res: ServerResponse, index: 
         stdout += chunk
         // Send one line only after the next prompt; bulk piped input can be consumed during a turn.
         const prompts = stdout.split('你: ').length - 1
-        if (sent < prompts && sent < inputs.length) child.stdin.write(inputs[sent++] + '\n')
+        if (sent < prompts && sent < inputs.length) {
+          child.stdin.write(inputs[sent++] + '\n')
+          if (sent === inputs.length) child.stdin.end()
+        }
       })
       child.stderr.on('data', (chunk: string) => {
         stderr += chunk

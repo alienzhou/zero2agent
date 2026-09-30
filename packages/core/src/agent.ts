@@ -7,6 +7,7 @@ import type { Tool } from './tools/index.js'
 import type { LLMConfig } from './llm/index.js'
 import { resolve } from 'node:path'
 import { Session } from './session.js'
+import type Anthropic from '@anthropic-ai/sdk'
 
 export interface AgentOptions {
   config?: LLMConfig
@@ -48,7 +49,7 @@ export class Agent {
   }
 
   /** Inspect a detached snapshot, never the writable session history. */
-  getHistory() {
+  getHistory(): Anthropic.MessageParam[] {
     return this.session.getHistory()
   }
 
