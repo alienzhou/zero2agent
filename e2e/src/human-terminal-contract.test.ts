@@ -428,6 +428,20 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
     pids.length = 0
   })
 
+  it('reports host cancellation when the child handles TERM with exit zero', async () => {
+    const cwd = await workspace({
+      'cancel.sh': "trap 'exit 0' TERM\necho CANCEL_READY\nwhile :; do read -r line; done\n",
+    })
+    const session = start(cwd, ['--terminal', 'bash ./cancel.sh'])
+    await approve(session)
+    await session.waitFor('CANCEL_READY')
+    session.write('\x1d')
+    const code = await session.waitExit()
+    expect(session.output).toContain('human-controlled cancelled')
+    expect(session.output).toContain('Exit code: 0')
+    expect(code).toBe(130)
+  })
+
   it('propagates resize to the real inner terminal', async () => {
     const cwd = await workspace({
       'resize.sh':

@@ -121,10 +121,10 @@ async function main() {
         ? 1
         : signal
           ? 128 + Number(signal[1])
-          : code
-            ? Number(code[1])
-            : result.includes('cancelled')
-              ? 130
+          : result.includes('human-controlled cancelled')
+            ? 130
+            : code
+              ? Number(code[1])
               : 0
     return
   }
