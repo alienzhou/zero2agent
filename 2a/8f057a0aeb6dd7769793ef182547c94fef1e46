@@ -1,0 +1,32 @@
+CHANGELOG.md
+  h_afc6b161d429e0 80-91
+README.md
+  h_afc6b161d429e0 114,164,176
+docs/roadmap/README.md
+  h_afc6b161d429e0 21-22,31
+packages/core/README.md
+  h_afc6b161d429e0 5-17
+retros/E03-S001-multi-turn.md
+  h_afc6b161d429e0 1-27
+retros/README.md
+  h_afc6b161d429e0 21-28
+specs/E02-act-and-execute/README.md
+  h_afc6b161d429e0 53
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 75
+specs/E03-product-foundations/README.md
+  h_afc6b161d429e0 9,15,33,35
+specs/README.md
+  h_afc6b161d429e0 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2a8f057a0aeb6dd7769793ef182547c94fef1e46",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
