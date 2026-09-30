@@ -5,8 +5,13 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import * as os from 'node:os'
+import { performance } from 'node:perf_hooks'
 import { terminalTool, resolveWorkdir } from '../terminal.js'
-import { resetShellEnvCacheForTests, injectShellEnvFailureForTests } from '../shell-env.js'
+import {
+  getBaseShellEnv,
+  resetShellEnvCacheForTests,
+  injectShellEnvFailureForTests,
+} from '../shell-env.js'
 import { clearProcessRegistryForTests } from '../process-registry.js'
 import { resetTerminalRuntimeHooksForTests, setTerminalRuntimeHooks } from '../terminal-runtime.js'
 import type { ToolContext } from '../types.js'
@@ -57,20 +62,29 @@ describe('P0 复审：读取侧 drain 防线', () => {
   it.each(['current', 'slow'])(
     '[P0] 后台 job 持有 pipe 时约 2s drain 返回（%s shell environment）',
     async environment => {
-    if (environment === 'slow') {
-      // Only the temporary copy is executable; never alter the user's shell/profile.
-      const shell = path.join(tmpDir, 'slow-env-shell')
-      await fs.copyFile(new URL('./helpers/slow-env-shell.sh', import.meta.url), shell)
-      await fs.chmod(shell, 0o700)
-      vi.stubEnv('SHELL', shell)
-    }
-    const start = Date.now()
-    const result = await terminalTool.execute({ command: '(sleep 5) & exit 0' }, ctx)
-    const elapsed = Date.now() - start
+      if (environment === 'slow') {
+        // Only the temporary copy is executable; never alter the user's shell/profile.
+        const shell = path.join(tmpDir, 'slow-env-shell')
+        await fs.copyFile(new URL('./helpers/slow-env-shell.sh', import.meta.url), shell)
+        await fs.chmod(shell, 0o700)
+        vi.stubEnv('SHELL', shell)
+      }
+      // The drain budget starts after child exit, not during unrelated profile loading.
+      // Warm the real cache explicitly; this is not a cold-start latency guarantee.
+      const envStart = performance.now()
+      const env = getBaseShellEnv()
+      if (environment === 'slow') {
+        expect(env.Z2A_TEST_SLOW_ENV).toBe('ready')
+        expect(performance.now() - envStart).toBeGreaterThanOrEqual(2800)
+      }
+      const start = performance.now()
+      const result = await terminalTool.execute({ command: '(sleep 5) & exit 0' }, ctx)
+      const elapsed = performance.now() - start
 
-    expect(elapsed).toBeGreaterThanOrEqual(1800)
-    expect(elapsed).toBeLessThan(3500)
-    expect(result).toContain('descendant process may still be holding the output pipe')
+      expect(elapsed).toBeGreaterThanOrEqual(1800)
+      expect(elapsed).toBeLessThan(3500)
+      expect(result).toContain('Exit code: 0')
+      expect(result).toContain('descendant process may still be holding the output pipe')
     },
     15_000
   )
