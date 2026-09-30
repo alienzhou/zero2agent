@@ -1,0 +1,16 @@
+docs/getting-started.md
+  h_afc6b161d429e0 40,44,73,89,112,168
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "68e2c876be83f857cfc4696078be61f48d65b33a",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
