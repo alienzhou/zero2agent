@@ -28,6 +28,7 @@ sent = False
 status = None
 restored = False
 remaining = []
+tracked_children = 0
 error = ''
 
 def collect():
@@ -63,14 +64,20 @@ finally:
     try:
         with open('signal-pids.txt', encoding='utf-8') as source:
             fixture_pids = [int(value) for value in source.read().split()]
+        if len(fixture_pids) != 2 or len(set(fixture_pids)) != 2 or any(
+            child <= 1 or child in (pid, os.getpid()) for child in fixture_pids
+        ):
+            raise ValueError('Expected two distinct owned fixture PIDs')
+        tracked_children = len(fixture_pids)
         for child in fixture_pids:
             try:
                 os.kill(child, 0)
                 remaining.append(child)
             except ProcessLookupError:
                 pass
-    except FileNotFoundError:
-        pass
+    except (OSError, ValueError) as exc:
+        # Missing/invalid PID evidence must not look like successful process cleanup.
+        error = error or str(exc)
     for child in remaining:
         try:
             os.kill(child, signal.SIGKILL)
@@ -91,6 +98,7 @@ result = {
     'exit_code': os.waitstatus_to_exitcode(status) if status is not None else None,
     'terminal_restored': restored,
     'display_reset': reset in data,
+    'tracked_children': tracked_children,
     'remaining_children': remaining,
     'error': error,
 }

@@ -197,6 +197,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
         exit_code: code,
         terminal_restored: true,
         display_reset: true,
+        tracked_children: 2,
         remaining_children: [],
         error: '',
       })
