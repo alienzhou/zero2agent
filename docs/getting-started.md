@@ -42,7 +42,21 @@ pnpm build
 pnpm --filter @zero2agent/tui start
 ```
 
-如果一切正常，你应该能看到 CLI 界面启动。
+普通 Agent 对话需要先完成下方 API key 配置；没有密钥也可用 S004 的独立人工终端。
+
+### 不调用模型，先试人工终端
+
+在包含 S004 的版本构建后，用真实终端运行：
+
+```sh
+node packages/tui/dist/cli.js --terminal
+```
+
+单独输入 `y` 并回车，等 bash 提示符出现后再逐行输入命令。可启动 `NODE_REPL_HISTORY= node`，计算后输入 `.exit` 回到 bash，最后 `exit` 回到原命令行。`Ctrl-]` 中止整场接管；Ctrl-C/D 的效果由当前程序决定。
+
+独立入口不要求 API key，也不加载 `.env.local`。已配置的 Agent REPL 中可用 `/terminal`，结束后返回对话；直接入口的回执只在本地显示，不自动加入模型上下文。当前限 POSIX 真实 TTY，macOS 已实测、Linux 未实测、Windows 不支持。
+
+版本获取、依赖与两项完整练习见 [S004 跟练](../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)和 [Node / less 试用](../specs/E02-act-and-execute/S004-interactive-commands/try-two-features.md)。不要假定 `main` 已包含尚未合入的功能分支。
 
 ---
 

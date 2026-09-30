@@ -65,7 +65,7 @@ Ctrl-] 是宿主中止，清理原进程组和已跟踪子孙；不提供 detach
 
 PTY 正文直接写宿主 stdout，不写 OutputSink、临时输出文件、对话历史或模型工具正文，不提供后续回读。PTY 合流输出不能标成独立 stderr。
 
-结束后仅返回 status、可用的 exitCode/signal 等元信息。拒绝、失败、取消、成功不可混同；退出码不证明登录或业务操作成功。模型需要内容时由人主动描述，不能假装已读终端。
+结束后仅返回 status、可用的 exitCode/signal 等元信息。模型发起工具调用时才将此回执交给模型；用户直接使用 `--terminal` 或 `/terminal` 时只在本地显示，不调用 `agent.run`，不自动追加模型上下文。拒绝、失败、取消、成功不可混同；退出码不证明登录或业务操作成功。模型需要内容时由人主动描述，不能假装已读终端。
 
 宿主请求是 `{ command, cwd }`，结果是 `{ status: 'completed' | 'declined' | 'cancelled', exitCode?, signal? }`。`completed` 表示进程结束，不表示业务成功，非零退出码仍保留；native 同时给出信号和零退出码时只返回信号，避免误报成功。基础设施故障抛错，由 core 转成固定错误摘要，不透传可能含正文的异常消息。独立 CLI 拒绝或错误退出 1，信号终止按 `128 + signal` 映射。
 

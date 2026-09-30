@@ -6,6 +6,8 @@ node_modules/
 # Build outputs
 dist/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
 
 # IDE
 .idea/

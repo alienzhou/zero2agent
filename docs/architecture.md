@@ -6,30 +6,16 @@
 
 ## 整体架构
 
+```text
+CLI（tui） → Agent / ReAct loop ↔ Anthropic SDK ↔ LLM
+                    │
+                    └→ 工具执行 → 工具结果回到 loop
+
+人工交互分支：
+人的键盘 ↔ CLI 宿主 ↔ PTY master/slave ↔ bash / 子程序
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         CLI (tui)                           │
-│                    用户交互、输入输出                         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                       Agent Core                            │
-│              ReAct 循环、Tool 调用、上下文管理                │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                         Tools                               │
-│            文件操作、代码执行、搜索等具体能力                  │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                        LLM API                              │
-│               OpenAI / Anthropic / 其他模型                  │
-└─────────────────────────────────────────────────────────────┘
-```
+
+CLI 的 `--terminal` 和 `/terminal` 直接调用人工工具路径，不调用模型；模型也可以通过 `terminal({ command, interactive: true })` 请求人工接管。三种入口都先由人确认。终端正文只显示给人，只有模型发起的工具调用会把结束元信息返回模型。
 
 ---
 
@@ -39,55 +25,56 @@
 
 Agent 的核心逻辑，包含：
 
-```
+```text
 packages/core/src/
-├── index.ts           # 包入口，导出公共 API
-├── agent.ts           # Agent 类定义
-├── loop.ts            # ReAct 循环实现
-├── tools/             # 工具定义和实现
-│   ├── index.ts       # 工具注册表
-│   ├── file.ts        # 文件操作工具
-│   └── shell.ts       # 命令执行工具
-├── llm/               # LLM 客户端
-│   ├── index.ts       # 客户端工厂
-│   └── openai.ts      # OpenAI 实现
-└── types.ts           # 类型定义
+├── index.ts                  # 公共 API
+├── agent.ts                  # Agent 入口与会话
+├── loop.ts                   # ReAct 循环
+├── prompt/                   # 系统指令与任务上下文
+├── tools/
+│   ├── index.ts              # 八个工具的注册表
+│   ├── types.ts              # Tool / ToolContext
+│   ├── read-file.ts          # 读取文件
+│   ├── grep-search.ts        # 搜索内容
+│   ├── find-files.ts         # 匹配文件名
+│   ├── list-directory.ts     # 列目录
+│   ├── write-file.ts         # 写文件
+│   ├── delete.ts             # 删文件
+│   ├── replace-in-file.ts    # 局部替换
+│   ├── terminal.ts           # 普通执行与人工分流
+│   ├── terminal-runtime.ts   # 宿主交互契约
+│   ├── process-registry.ts   # 普通后台进程登记
+│   └── shell-env.ts          # shell 环境采集
+└── llm/
+    ├── index.ts
+    └── anthropic.ts          # Anthropic 及兼容端点
 ```
 
 **核心概念：**
 
-- **Agent**：主入口，协调各组件
-- **Loop**：ReAct 循环（Thought → Action → Observation）
-- **Tool**：可执行的能力单元
-- **LLM**：模型调用抽象
+- **Agent**：会话入口，协调指令、模型与工具。
+- **Loop**：模型请求工具、执行工具、返回结果的循环。
+- **Tool**：可执行的能力单元；`ToolContext.cwd` 定义工作区。
+- **Runtime hooks**：core 声明交互契约，CLI 宿主实现终端相关行为。
 
 ### @zero2agent/tui
 
-终端用户界面，包含：
+终端入口及人工交互实现：
 
-```
+```text
 packages/tui/src/
-├── index.ts           # 包入口
-├── cli.ts             # CLI 入口
-├── ui/                # UI 组件
-│   ├── input.ts       # 输入处理
-│   ├── output.ts      # 输出渲染
-│   └── spinner.ts     # 加载动画
-└── commands/          # CLI 命令
-    └── chat.ts        # 对话命令
+├── index.ts
+├── cli.ts                    # 参数、REPL 与 /terminal 分流
+├── setup-terminal-runtime.ts # 绑定宿主 hooks
+├── human-terminal.ts         # 确认、PTY、输入独占与恢复
+└── human-terminal-process.ts # 原进程组及已观察后代的清理
 ```
+
+人工路径要求 POSIX 真实 TTY，目前 macOS 已实测，Linux 未实测，Windows 不支持。键盘 Ctrl-C/D 转给程序，Ctrl-] 由宿主中止；正常退出和中止都清理受管进程。详见 [S004 技术设计](../specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md)。
 
 ### @zero2agent/shared
 
-共享工具，包含：
-
-```
-packages/shared/src/
-├── index.ts           # 包入口
-├── logger.ts          # 日志工具
-├── config.ts          # 配置管理
-└── types.ts           # 公共类型
-```
+当前只有 `src/index.ts` 的 `VERSION` 占位导出，尚未实现通用 logger/config 模块。另有独立的 `cdp-debug` 调试包和 `e2e` 验收工作区，不属于八个 Agent 工具。
 
 ---
 
@@ -147,9 +134,9 @@ packages/shared/src/
 
 | Package | 职责 | 可以独立使用吗？ |
 |---------|------|------------------|
-| `core` | Agent 逻辑 | ✅ 可以，嵌入到其他应用 |
-| `tui` | CLI 界面 | ❌ 依赖 core |
-| `shared` | 共享工具 | ✅ 可以，纯工具函数 |
+| `core` | Agent 逻辑 | 可以嵌入其他应用；交互工具需宿主 hooks |
+| `tui` | CLI 界面 | 依赖 core，实现真实终端接管 |
+| `shared` | 共享包预留 | 当前只有 VERSION 占位导出 |
 
 这样设计，未来可以轻松添加 Web 界面、API Server 等，只需要依赖 `core`。
 
