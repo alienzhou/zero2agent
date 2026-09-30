@@ -7,6 +7,8 @@ Agent 核心逻辑包。
 一个 Agent 实例拥有一个进程内 Session，重复调用 `agent.run()` 会携带此前完整历史。`agent.reset()` 清空对话，`agent.getHistory()` 返回上次已提交历史的深拷贝；运行中 reset 或再次 run 会被拒绝。
 
 ```ts
+import { Agent } from '@zero2agent/core'
+
 const agent = new Agent({ cwd: process.cwd() })
 await agent.run('先分析测试结构')
 await agent.run('按刚才的建议补测试')

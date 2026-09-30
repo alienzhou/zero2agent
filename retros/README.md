@@ -16,8 +16,6 @@ This directory contains retrospective notes and lessons learned.
 |-------|-----------|-------|
 | [E02-S004-human-terminal.md](./E02-S004-human-terminal.md) | E02-S004 人工交互终端 | 输入所有权、PTY 恢复、进程组清理和真实断连；两项试用通过，脱敏历史已合入 main，未打 Tag |
 
-## Directory structure
-
 ## Local implementation, not released
 
 | Retro | Iteration | Notes |
