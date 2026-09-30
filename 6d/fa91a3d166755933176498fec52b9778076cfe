@@ -1,0 +1,24 @@
+.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md
+  h_afc6b161d429e0 36
+.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md
+  h_afc6b161d429e0 56
+CHANGELOG.md
+  h_afc6b161d429e0 86-87,103
+retros/E02-S004-human-terminal.md
+  h_afc6b161d429e0 49-50
+specs/E02-act-and-execute/S004-interactive-commands/details/02-task-list.md
+  h_afc6b161d429e0 29,33-36
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  h_afc6b161d429e0 3,34,47-49,59-62,67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6dfa91a3d166755933176498fec52b9778076cfe",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
