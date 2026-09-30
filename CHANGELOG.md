@@ -71,7 +71,7 @@ git checkout main
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改已有内容 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
-| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，待人工验收 |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，用户试用通过 |
 
 ---
 
@@ -84,6 +84,8 @@ git checkout main
 2026-09-29：在 `feat/e02-s004-human-terminal` 实现并完成本机自动验证，待人工审查、验收与合入；未发布或打 Tag。
 
 2026-09-30 复验：修正 drain 测试的冷环境计时干扰、补慢环境反回归；修复活终端收到外部 SIGHUP 时漏显示恢复。最终代码连续两轮均为 248 项通过、25 跳过。已补[固定候选与跟练](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)，用户签收与发布仍未代办。
+
+2026-09-30 19:36：用户对 Node REPL 与 less 两项试用回复「正常」，已登记[功能试用通过](./.vibecoding/2026-09-30/e02-s004-acceptance/user-feedback.md)。未据此修改确认策略，也未推送、合入、打 Tag 或发布。
 
 **能力**：`terminal` 增加 `interactive: true`；人工确认后接管真实 PTY，模型等待结束。独立 `--terminal [command]` 不要求 API key，REPL 支持 `/terminal [command]`。默认非交互路径和八工具集合不变。
 

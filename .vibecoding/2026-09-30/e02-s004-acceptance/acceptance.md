@@ -1,6 +1,6 @@
 # S004 工程复验记录 · 2026-09-30
 
-> 功能候选提交：`7438fa892a9887595d91070731dab6eba6237370`。本文件记录自动测试、独立源码复核与工具驱动的真实 PTY 操作；用户人工签收与公开发布尚未发生。
+> 功能候选提交：`7438fa892a9887595d91070731dab6eba6237370`。本文件记录工程验证；2026-09-30 19:36 已补登记用户两项试用正常的反馈，公开发布尚未发生。
 
 [跟练步骤](../../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md) | [验收清单](../../../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md) | [可见对话原文](./visible-dialogue.md)
 
@@ -59,6 +59,6 @@ E2E_LIVE=0 pnpm -r --workspace-concurrency=1 run test --no-file-parallelism
 
 ## 5. 交付与未授权动作
 
-候选提交可供作者本地创建独立 worktree 跟练。没有创建新 worktree 覆盖用户目录，没有推送、合入或打 Tag。用户在常用终端的视觉体验、代码审查和发布签收仍保留为待确认。
+候选提交可供作者本地创建独立 worktree 跟练。没有创建新 worktree 覆盖用户目录，没有推送、合入或打 Tag。用户对 Node REPL 与 less 两项试用已回复「正常」，详见[原文与范围](./user-feedback.md)；不将其扩展为人工源码审查、交互策略调整或发布授权。
 
 课程制作另在 content-generator 的 `feat/zero2agent-e02-s004-course` 分支启动，只交大纲、逐页正文、发布文案草稿与来源，不声称 HTML/PNG 已完成。

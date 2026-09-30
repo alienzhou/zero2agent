@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E02-S004 人工交互终端已实现，待人工验收与合入 — [原理与使用方式](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
+**最新更新**：E02-S004 人工交互终端已实现，两项用户试用通过，待审查与合入 — [原理与使用方式](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -172,7 +172,7 @@ zero2agent/
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
-| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，待人工验收 |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，用户试用通过 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

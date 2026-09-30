@@ -1,6 +1,6 @@
 # 用两个功能试一下人工终端
 
-> 已由工具驱动在本机跑通；请你在常用终端确认实际画面和按键。固定代码候选仍为 `7438fa892a9887595d91070731dab6eba6237370`，尚未公开发布。
+> 工具驱动验证已通过；2026-09-30 19:36 用户回复「正常」，两项试用通过。固定代码候选仍为 `7438fa892a9887595d91070731dab6eba6237370`，尚未公开发布。
 
 [Story](./README.md) | [完整跟练与版本准备](./follow-along.md) | [其他产品怎么做](../../../researches/interactive-commands/notes/human-ux-verification-2026-09-30.md)
 
@@ -33,6 +33,8 @@ node packages/tui/dist/cli.js --terminal 'LESSCHARSET=utf-8 LESSHISTFILE=/dev/nu
 首次验证未显式指定字符集时，当前环境的 less 曾将中文显示为 `<E4>...` 字节码；因此示例显式设置 LESSCHARSET=utf-8。它是 pager 的字符集配置，不是 PTY 自动转码。
 
 ## 只需要告诉我这几个结果
+
+已收到[本次用户反馈](../../../.vibecoding/2026-09-30/e02-s004-acceptance/user-feedback.md)。以下问题保留供后续跟练；不把简短反馈扩展为逐项日志或交互改动授权。
 
 - Node 是否得到 6，并正常退出？
 - less 是否能正常显示中文、翻页、搜索和退出？

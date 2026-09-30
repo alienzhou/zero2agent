@@ -168,7 +168,7 @@ zero2agent/
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | Write and Delete Files | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | Targeted File Replacement | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | Command Execution | Done |
-| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Implemented; pending human review |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Implemented; two user trials passed; code review pending |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 
