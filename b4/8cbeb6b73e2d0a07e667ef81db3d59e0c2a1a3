@@ -1,0 +1,26 @@
+.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md
+  h_afc6b161d429e0 1-64
+.vibecoding/2026-09-30/e02-s004-acceptance/learnings.md
+  h_afc6b161d429e0 1-10
+.vibecoding/2026-09-30/e02-s004-acceptance/prompt.md
+  h_afc6b161d429e0 1-15
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 63-64
+specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md
+  h_afc6b161d429e0 45-46,58-60
+specs/E02-act-and-execute/S004-interactive-commands/details/04-backlog.md
+  h_afc6b161d429e0 25
+specs/E02-act-and-execute/S004-interactive-commands/follow-along.md
+  h_afc6b161d429e0 1-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b48cbeb6b73e2d0a07e667ef81db3d59e0c2a1a3",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
