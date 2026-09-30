@@ -1,0 +1,20 @@
+.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md
+  h_afc6b161d429e0 7-21
+CHANGELOG.md
+  h_afc6b161d429e0 105-107
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  h_afc6b161d429e0 3-5
+specs/E02-act-and-execute/S004-interactive-commands/follow-along.md
+  h_afc6b161d429e0 3,11,14-15,21,86-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d2c01849490bf4cf6a8046c5921f8b280619ae68",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
