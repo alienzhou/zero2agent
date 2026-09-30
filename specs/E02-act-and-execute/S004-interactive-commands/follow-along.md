@@ -1,6 +1,6 @@
 # S004 跟练与人工验收
 
-> 当前跟练实现：`b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770`，位于 `release/e02-s004-human-terminal`。保留逐提交脱敏历史；此分支不等于已合入 main 或已打课程 Tag。
+> 当前跟练实现：`b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770`，已随 PR #13 合入 main。保留逐提交脱敏历史，未打课程 Tag。
 
 [Story](./README.md) | [验收证据](./details/03-verification-checklist.md) | [本轮复核记录](../../../.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md)
 
@@ -8,17 +8,17 @@
 
 ## 准备固定版本
 
-在已克隆的 Zero2Agent 仓库获取发布分支，再创建独立跟练目录，避免影响原有未提交改动：
+在已克隆的 Zero2Agent 仓库获取 main，再创建独立跟练目录，避免影响原有未提交改动：
 
 ```sh
-git fetch origin release/e02-s004-human-terminal
+git fetch origin main
 git worktree add --detach ../zero2agent-s004-practice b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770
 cd ../zero2agent-s004-practice
 pnpm install --frozen-lockfile
 pnpm build
 ```
 
-不要仅 clone main 后就假定已有本课实现。若远端分支尚不存在，应先等待作者完成推送。环境要求为 Node.js ≥22、pnpm ≥9、POSIX 真实终端；本次实测是 macOS arm64，不代表 Linux 已验收，Windows 不支持。
+远端 main 已包含本课实现；这里仍固定 b200c9f，以免后续迭代改变跟练行为。环境要求为 Node.js ≥22、pnpm ≥9、POSIX 真实终端；本次实测是 macOS arm64，不代表 Linux 已验收，Windows 不支持。
 
 ## 练习一：让程序读取你的输入
 
@@ -85,6 +85,8 @@ PTY 自动测试还依赖 Python 3、bash、ps、stty、less。根目录的 `pnp
 - [x] Node REPL 与 less 两项功能试用：2026-09-30 19:36 用户反馈「正常」。
 - [x] 源码专项复核未发现确定的 P0 阻断，支持范围仍限已声明的 macOS 验证；不是另一次用户逐行源码签收。
 - [x] 用户授权验收后提交并推送脱敏发布分支。
-- [ ] 合入 main 与课程 Tag：不在本次推送授权范围。
+- [x] 用户明确授权后通过 PR #13 合入 main。
+
+课程 Tag 未发布；这不阻止从 main 获取或按上述固定提交跟练。
 
 反馈原文与范围见[用户试用记录](../../../.vibecoding/2026-09-30/e02-s004-acceptance/user-feedback.md)。没有将「正常」扩展为所有终端属性、输入法、异常组合或代码审查逐项通过；用户也未要求调整重复确认，现有交互保持不变。

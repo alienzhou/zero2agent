@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: E02-S004 is available on the published `release/e02-s004-human-terminal` branch. Two user trials and scoped code review are complete; it is not merged into main or tagged — [principles and usage](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
+**Latest update**: E02-S004 is complete and merged into `main`, preserving sanitized per-commit history. Two user trials and scoped code review are complete; no course tag has been published — [principles and usage](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -168,7 +168,7 @@ zero2agent/
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | Write and Delete Files | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | Targeted File Replacement | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | Command Execution | Done |
-| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Implemented; release branch published; main merge pending |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Done; merged into main |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 
@@ -179,8 +179,6 @@ See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) |
 ```bash
 git clone git@github.com:alienzhou/zero2agent.git
 cd zero2agent
-git fetch origin release/e02-s004-human-terminal
-git switch --track origin/release/e02-s004-human-terminal
 pnpm install --frozen-lockfile && pnpm build
 
 # Human terminal only: no API key needed
@@ -191,7 +189,7 @@ export ANTHROPIC_API_KEY="your-api-key"
 node packages/tui/dist/cli.js
 ```
 
-Requirements: Node.js >= 22.0.0, pnpm >= 9.0.0. Run from the repository root so commands use that workspace. The release branch is not yet merged into main.
+Requirements: Node.js >= 22.0.0, pnpm >= 9.0.0. Run from the repository root so commands use that workspace. The main branch includes S004; pinned practice remains available for reproducibility.
 
 The human terminal requires a real POSIX TTY. Confirm to enter bash; use `exit` to return or `Ctrl-]` to stop the handoff. An existing Agent REPL also accepts `/terminal [command]`. macOS is tested, Linux is untested, and Windows is unsupported. See [pinned practice instructions](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md) and [S004 boundaries](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
 

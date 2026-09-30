@@ -66,7 +66,7 @@ specs/
 
 ## Epic 2：能动 / 能改 / 能执行
 
-[进入 Epic 2](./E02-act-and-execute/README.md)。S001–S003 已完成；S004 的脱敏发布分支已推送，尚未合入 main 或打课程 Tag。
+[进入 Epic 2](./E02-act-and-execute/README.md)。S001–S004 均已合入 main；S004 保留脱敏逐提交历史，尚未打课程 Tag。
 
 | Story | 内容 | 入口 |
 |---|---|---|

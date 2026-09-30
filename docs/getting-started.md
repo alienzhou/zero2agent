@@ -41,7 +41,7 @@ pnpm install
 pnpm build
 ```
 
-普通 Agent 对话需要先完成下方 API key 配置，再从仓库根目录运行 `node packages/tui/dist/cli.js`；没有密钥也可先获取 S004 发布分支并使用独立人工终端。
+普通 Agent 对话需要先完成下方 API key 配置，再从仓库根目录运行 `node packages/tui/dist/cli.js`；没有密钥也可使用 main 中的 S004 独立人工终端。
 
 ### 不调用模型，先试人工终端
 
@@ -55,7 +55,7 @@ node packages/tui/dist/cli.js --terminal
 
 独立入口不要求 API key，也不加载 `.env.local`。已配置的 Agent REPL 中可用 `/terminal`，结束后返回对话；直接入口的回执只在本地显示，不自动加入模型上下文。当前限 POSIX 真实 TTY，macOS 已实测、Linux 未实测、Windows 不支持。
 
-版本获取、依赖与两项完整练习见 [S004 跟练](../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)和 [Node / less 试用](../specs/E02-act-and-execute/S004-interactive-commands/try-two-features.md)。不要假定 `main` 已包含尚未合入的功能分支。
+版本获取、依赖与两项完整练习见 [S004 跟练](../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)和 [Node / less 试用](../specs/E02-act-and-execute/S004-interactive-commands/try-two-features.md)。S004 已合入 `main`；固定提交方式仍可复现本课版本。
 
 ---
 

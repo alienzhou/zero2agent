@@ -71,13 +71,13 @@ git checkout main
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改已有内容 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
-| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，用户试用通过 |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
 
 ---
 
 ## [Unreleased]
 
-### E02-S004-human-terminal (Implemented)
+### E02-S004-human-terminal (Done, merged into main; untagged)
 
 所属 Epic：[Epic 2：能动 / 能改 / 能执行](./specs/E02-act-and-execute/README.md) | Story 详情：[S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
 
@@ -104,7 +104,7 @@ git checkout main
 - 正文与按键不进 OutputSink、应用输出日志或模型回执；不保证外部程序无记录。
 - 最新脱敏发布复验：固定实现 `b200c9f`，构建和 E2E 类型检查通过；core 199、E2E 49、cdp-debug 1，共 249 项通过，25 项 E2E 跳过。人工终端契约占 31 项。
 - 修复 CLI 宿主取消被子程序 exit 0 掩盖的问题；Node 测试改用 process.execPath，受控无 Node PATH 环境下先红后绿。
-- `release/e02-s004-human-terminal` 保留逐提交脱敏历史，补齐架构与上手文档。用户授权验收后推送，不包含自动合入 main 或打 Tag。
+- `release/e02-s004-human-terminal` 保留逐提交脱敏历史，补齐架构与上手文档。用户随后明确授权合入，已通过 [PR #13](https://github.com/alienzhou/zero2agent/pull/13) 合入 main（060c644）；没有打课程 Tag。
 - lint 为 0 errors / 15 warnings；变更文件格式检查通过，全仓仍有 27 个未改动文件的格式问题。
 - 仅 macOS arm64 实测；Windows 不支持，Linux、慢终端压力与真实模型流程未实测。
 
