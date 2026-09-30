@@ -1,0 +1,14 @@
+e2e/src/multi-turn-contract.test.ts
+  h_afc6b161d429e0 1-190
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "af194f37bdcbdf9e497de4a0fe395cf42a3b399f",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
