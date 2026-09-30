@@ -1,0 +1,40 @@
+.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md
+  h_afc6b161d429e0 3,62
+.vibecoding/2026-09-30/e02-s004-acceptance/user-feedback.md
+  h_afc6b161d429e0 1-15
+CHANGELOG.md
+  h_afc6b161d429e0 74,88-89
+README.en.md
+  h_afc6b161d429e0 171
+README.md
+  h_afc6b161d429e0 164,175
+docs/roadmap/README.md
+  h_afc6b161d429e0 19
+specs/E02-act-and-execute/README.md
+  h_afc6b161d429e0 35
+specs/E02-act-and-execute/S003-terminal/README.md
+  h_afc6b161d429e0 206
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 3,63
+specs/E02-act-and-execute/S004-interactive-commands/details/00-overview.md
+  h_afc6b161d429e0 3
+specs/E02-act-and-execute/S004-interactive-commands/details/02-task-list.md
+  h_afc6b161d429e0 3,40-41
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  h_afc6b161d429e0 3,63,67
+specs/E02-act-and-execute/S004-interactive-commands/follow-along.md
+  h_afc6b161d429e0 3,82,84-86,88
+specs/E02-act-and-execute/S004-interactive-commands/try-two-features.md
+  h_afc6b161d429e0 3,37-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2dbcf4d63c2f23e209ab8757ad38f7dbd25fbf09",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
