@@ -184,6 +184,7 @@ async function runTurnLoop(
     }
 
     const text = extractTextContent(response.content)
+    const emptyNotice = response.content.length ? '' : '[Harness] Model returned no content.'
     const calls = response.content.filter(block => block.type === 'tool_use')
     const notice =
       response.stop_reason === 'max_tokens'
@@ -193,9 +194,7 @@ async function runTurnLoop(
           : ''
     messages.push({
       role: 'assistant',
-      content: response.content.length
-        ? structuredClone(response.content)
-        : '[Harness] Model returned no content.',
+      content: response.content.length ? structuredClone(response.content) : emptyNotice,
     })
     if (calls.length) {
       // Even skipped calls need a matching result before a later user turn can be sent.
@@ -212,8 +211,10 @@ async function runTurnLoop(
     if (notice) {
       messages.push({ role: 'assistant', content: notice })
       notifyObserver(() => events?.onText?.(`\n${notice}\n`))
+    } else if (emptyNotice) {
+      notifyObserver(() => events?.onText?.(`\n${emptyNotice}\n`))
     }
-    return text || notice
+    return text || notice || emptyNotice
   }
 
   const limit = 'Error: Maximum iterations reached. The task may be too complex.'

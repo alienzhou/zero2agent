@@ -173,6 +173,15 @@ async function main() {
   rl.on('close', () => {
     closed = true
     void cleanupBackgroundOnExit()
+      .catch(error => {
+        console.error('退出清理失败:', error instanceof Error ? error.message : String(error))
+        process.exitCode = 1
+      })
+      .finally(() => {
+        // readline.close() only pauses a pipe; release it after cleanup so exit needs no EOF.
+        // Keep TTY handling intact: background cleanup may need a final interactive answer.
+        if (!process.stdin.isTTY) process.stdin.destroy()
+      })
   })
 
   const prompt = () => {
