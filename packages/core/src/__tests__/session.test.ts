@@ -5,10 +5,19 @@ import { runLoop } from '../loop.js'
 import { Session } from '../session.js'
 import type { Tool } from '../tools/types.js'
 import { createAnthropicClient } from '../llm/index.js'
+import { spawn } from 'node:child_process'
+import { mkdtemp, writeFile, readFile, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import {
+  registerBackgroundProcess,
+  unregisterBackgroundProcess,
+  listBackgroundProcesses,
+} from '../tools/process-registry.js'
 
 vi.mock('../llm/index.js', () => ({
   createAnthropicClient: vi.fn(),
-  getModelName: () => 'test-model',
+  getModelName: (config: { model?: string }) => config.model ?? 'test-model',
 }))
 
 type Message = Anthropic.MessageParam
@@ -71,6 +80,95 @@ function expectPaired(history: Message[]) {
 afterEach(() => vi.restoreAllMocks())
 
 describe('in-memory sessions', () => {
+  it('keeps the previously committed snapshot while a later turn is running', async () => {
+    let finish!: (value: Reply) => void
+    transport(
+      answer('first answer'),
+      () =>
+        new Promise(resolve => {
+          finish = resolve
+        })
+    )
+    const agent = new Agent({ tools: [] })
+    await agent.run('first')
+    const committed = agent.getHistory()
+    const pending = agent.run('second')
+    expect(agent.getHistory()).toEqual(committed)
+    const snapshot = agent.getHistory()
+    snapshot[0].content = 'tampered'
+    expect(agent.getHistory()).toEqual(committed)
+    finish(answer('second answer'))
+    await pending
+    expect(agent.getHistory()).toHaveLength(4)
+  })
+
+  it('preserves model config, system prompt and events after reset', async () => {
+    transport(answer('old'), reply([call()], 'tool_use'), answer('new'))
+    const config = {
+      apiKey: 'test-placeholder',
+      baseURL: 'http://127.0.0.1:9',
+      model: 'custom-model',
+    }
+    const onToolEnd = vi.fn()
+    const agent = new Agent({
+      config,
+      systemPrompt: 'Keep this instruction',
+      tools: [echo],
+      events: { onToolEnd },
+    })
+    await agent.run('first')
+    agent.reset()
+    await agent.run('second')
+    expect(createAnthropicClient).toHaveBeenLastCalledWith(config)
+    const client = vi.mocked(createAnthropicClient).mock.results.at(-1)!.value
+    expect(client.messages.stream).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        model: 'custom-model',
+        system: 'Keep this instruction',
+      })
+    )
+    expect(onToolEnd).toHaveBeenCalledWith('echo', 'observed-result', expect.any(Number))
+  })
+
+  it('does not stop a registered background process or delete its log on reset', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'z2a-session-reset-'))
+    const logPath = join(dir, 'background.log')
+    const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
+      stdio: 'ignore',
+    })
+    const exited = new Promise<void>(resolve => child.once('exit', () => resolve()))
+    try {
+      await new Promise<void>((resolve, reject) => {
+        child.once('spawn', resolve)
+        child.once('error', reject)
+      })
+      await writeFile(logPath, 'existing output')
+      const entry = {
+        pid: child.pid!,
+        command: 'test background',
+        logPath,
+        startAt: 1,
+        skippedAt: 2,
+      }
+      registerBackgroundProcess(entry)
+      transport(answer('old'))
+      const agent = new Agent({ tools: [] })
+      await agent.run('first')
+      agent.reset()
+      expect(agent.getHistory()).toEqual([])
+      expect(listBackgroundProcesses()).toContainEqual(entry)
+      expect(() => process.kill(child.pid!, 0)).not.toThrow()
+      expect(await readFile(logPath, 'utf8')).toBe('existing output')
+    } finally {
+      if (child.pid) unregisterBackgroundProcess(child.pid)
+      if (child.pid && child.exitCode === null) {
+        child.kill('SIGTERM')
+        await exited
+      }
+      await rm(dir, { recursive: true, force: true })
+    }
+  })
+
   it('carries the entire prior user and assistant turn into the next request', async () => {
     const requests = transport(answer('first answer'), answer('second answer'))
     const agent = new Agent({ tools: [] })
@@ -190,6 +288,45 @@ describe('in-memory sessions', () => {
 })
 
 describe('failed and incomplete turns', () => {
+  it('continues after two failed turns without replaying tools or losing completed messages', async () => {
+    const execute = vi.fn(async () => 'saved once')
+    const requests = transport(
+      reply([call()], 'tool_use'),
+      new Error('first failure'),
+      new Error('second failure'),
+      answer('recovered')
+    )
+    const agent = new Agent({ tools: [{ ...echo, execute }] })
+    await expect(agent.run('change')).rejects.toThrow('first failure')
+    await expect(agent.run('retry the conversation')).rejects.toThrow('second failure')
+    expect(await agent.run('inspect current state')).toBe('recovered')
+    expect(execute).toHaveBeenCalledTimes(1)
+    expectPaired(agent.getHistory())
+    expect(requests[3]).toHaveLength(7)
+    expect(requests[3][0].content).toBe('change')
+    expect(requests[3][4].content).toBe('retry the conversation')
+    expect(requests[3][6].content).toBe('inspect current state')
+  })
+
+  it('rejects a tool_use stop without calls and keeps the next turn usable', async () => {
+    transport(reply([text('incomplete protocol')], 'tool_use'), answer('recovered'))
+    const agent = new Agent({ tools: [] })
+    await expect(agent.run('first')).rejects.toThrow('without any tool calls')
+    expect(JSON.stringify(agent.getHistory())).not.toContain('incomplete protocol')
+    expect(await agent.run('second')).toBe('recovered')
+    expectPaired(agent.getHistory())
+  })
+
+  it('records a visible host notice when the model returns no content', async () => {
+    transport(reply([]), answer('next'))
+    const onText = vi.fn()
+    const agent = new Agent({ tools: [], events: { onText } })
+    expect(await agent.run('first')).toContain('[Harness] Model returned no content.')
+    expect(onText).toHaveBeenCalledWith(expect.stringContaining('Model returned no content'))
+    expect(await agent.run('second')).toBe('next')
+    expect(agent.getHistory()[1].content).toContain('Model returned no content')
+  })
+
   it.each([
     Object.create(null),
     {

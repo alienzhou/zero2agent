@@ -51,7 +51,11 @@ function sendReply(res: ServerResponse, blocks: Block[], stopReason = 'end_turn'
   res.end()
 }
 
-async function exercise(inputs: string[], respond: (res: ServerResponse, index: number) => void) {
+async function exercise(
+  inputs: string[],
+  respond: (res: ServerResponse, index: number) => void,
+  closeInput = true
+) {
   const workspace = await makeTempWorkspace()
   const requests: Request[] = []
   const server = createServer(async (req, res) => {
@@ -95,7 +99,7 @@ async function exercise(inputs: string[], respond: (res: ServerResponse, index: 
         const prompts = stdout.split('你: ').length - 1
         if (sent < prompts && sent < inputs.length) {
           child.stdin.write(inputs[sent++] + '\n')
-          if (sent === inputs.length) child.stdin.end()
+          if (closeInput && sent === inputs.length) child.stdin.end()
         }
       })
       child.stderr.on('data', (chunk: string) => {
@@ -134,6 +138,23 @@ const writeFile = {
 }
 
 describe('CLI multi-turn contract (local SSE, no live model)', () => {
+  it('exits normally on exit even when its input pipe remains open', async () => {
+    const result = await exercise(['exit'], res => sendReply(res, []), false)
+    expect(result.requests).toHaveLength(0)
+    expect(result.stdout).toContain('再见')
+    expect(result.stderr).toBe('')
+  })
+
+  it('treats /new with extra text as a user message, not a reset', async () => {
+    const result = await exercise(['first', '/new extra', '/newish', 'exit'], (res, index) =>
+      sendReply(res, [{ type: 'text', text: `answer-${index}` }])
+    )
+    expect(result.requests.map(request => request.messages.length)).toEqual([1, 3, 5])
+    expect(result.requests[1].messages.at(-1)?.content).toBe('/new extra')
+    expect(result.requests[2].messages.at(-1)?.content).toBe('/newish')
+    expect(result.stdout).not.toContain('已开始新对话')
+  })
+
   it('discards an unfinished SSE response while retaining completed tool effects', async () => {
     const result = await exercise(['write draft', 'recover', 'exit'], (res, index) => {
       if (index === 0) sendReply(res, [writeFile], 'tool_use')
