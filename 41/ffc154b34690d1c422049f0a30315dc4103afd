@@ -1,0 +1,20 @@
+e2e/src/helpers/human-terminal-disconnect.py
+  h_afc6b161d429e0 50
+e2e/src/helpers/human-terminal-signal.py
+  h_afc6b161d429e0 1-98
+e2e/src/human-terminal-contract.test.ts
+  h_afc6b161d429e0 173-191,193-201,203-204,227
+packages/core/src/tools/__tests__/terminal-p0-review.test.ts
+  h_afc6b161d429e0 72-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "41ffc154b34690d1c422049f0a30315dc4103afd",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
