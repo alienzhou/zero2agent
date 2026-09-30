@@ -1,0 +1,40 @@
+CHANGELOG.md
+  h_afc6b161d429e0 74,80,107
+README.en.md
+  h_afc6b161d429e0 160,171,192
+README.md
+  h_afc6b161d429e0 164,175,198
+docs/getting-started.md
+  h_afc6b161d429e0 44,58
+docs/roadmap/README.md
+  h_afc6b161d429e0 19
+retros/E02-S004-human-terminal.md
+  h_afc6b161d429e0 3,55
+retros/README.md
+  h_afc6b161d429e0 13,17
+specs/E02-act-and-execute/README.md
+  h_afc6b161d429e0 35
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 3
+specs/E02-act-and-execute/S004-interactive-commands/details/00-overview.md
+  h_afc6b161d429e0 3
+specs/E02-act-and-execute/S004-interactive-commands/details/02-task-list.md
+  h_afc6b161d429e0 3,43,45-47
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  h_afc6b161d429e0 3
+specs/E02-act-and-execute/S004-interactive-commands/follow-along.md
+  h_afc6b161d429e0 3,11,14,21,88-90
+specs/README.md
+  h_afc6b161d429e0 69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "30bf92d37a34e30dbf7001d3b720edcddc0abfc2",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
