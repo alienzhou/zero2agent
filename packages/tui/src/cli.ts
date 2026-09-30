@@ -159,7 +159,7 @@ async function main() {
 
   // 交互模式
   console.log('zero2agent - Agent Harness（文件读写演示）')
-  console.log('输入你的问题；/terminal [bash命令] 交给人操作；exit 退出\n')
+  console.log('输入你的问题；/new 新建对话；/terminal [bash命令] 交给人操作；exit 退出\n')
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -194,7 +194,10 @@ async function main() {
 
       try {
         resetStreamState()
-        if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
+        if (trimmed === '/new') {
+          agent.reset()
+          console.log('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。')
+        } else if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
           const command =
             trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
           process.stdout.write(

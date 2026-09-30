@@ -1,28 +1,31 @@
 /**
  * Agent 类 - 封装 ReACT 循环的简化入口
  */
-import { runLoop } from "./loop.js";
-import type { LoopEventHandlers } from "./loop.js";
-import type { Tool } from "./tools/index.js";
-import type { LLMConfig } from "./llm/index.js";
+import { runLoop } from './loop.js'
+import type { LoopEventHandlers } from './loop.js'
+import type { Tool } from './tools/index.js'
+import type { LLMConfig } from './llm/index.js'
+import { resolve } from 'node:path'
+import { Session } from './session.js'
 
 export interface AgentOptions {
-  config?: LLMConfig;
-  tools?: Tool[];
-  systemPrompt?: string;
-  events?: LoopEventHandlers;
+  config?: LLMConfig
+  tools?: Tool[]
+  systemPrompt?: string
+  events?: LoopEventHandlers
   /** Agent 工作目录，所有工具的相对路径基于此解析。默认 process.cwd() */
-  cwd?: string;
+  cwd?: string
 }
 
 /**
  * Agent 类，提供简洁的 API 来运行 ReACT 循环
  */
 export class Agent {
-  private options: AgentOptions;
+  private options: AgentOptions
+  private session = new Session()
 
   constructor(options: AgentOptions = {}) {
-    this.options = options;
+    this.options = { ...options, cwd: resolve(options.cwd ?? process.cwd()) }
   }
 
   /**
@@ -35,14 +38,25 @@ export class Agent {
       systemPrompt: this.options.systemPrompt,
       events: this.options.events,
       cwd: this.options.cwd,
-    });
+      session: this.session,
+    })
+  }
+
+  /** Start a new conversation without undoing files or stopping background processes. */
+  reset(): void {
+    this.session.reset()
+  }
+
+  /** Inspect a detached snapshot, never the writable session history. */
+  getHistory() {
+    return this.session.getHistory()
   }
 
   /**
    * 静态方法：快速运行一次
    */
   static async run(message: string, options?: AgentOptions): Promise<string> {
-    const agent = new Agent(options);
-    return agent.run(message);
+    const agent = new Agent(options)
+    return agent.run(message)
   }
 }

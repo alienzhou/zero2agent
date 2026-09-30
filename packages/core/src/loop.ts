@@ -2,11 +2,21 @@
  * ReACT 循环实现
  * Reasoning + Acting 的核心逻辑，支持流式输出
  */
-import type Anthropic from "@anthropic-ai/sdk";
-import { createAnthropicClient, getModelName, type LLMConfig } from "./llm/index.js";
-import { allTools, toAnthropicTool, type Tool, type ToolContext } from "./tools/index.js";
+import type Anthropic from '@anthropic-ai/sdk'
+import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
+import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
+import { Session } from './session.js'
 
-const MAX_ITERATIONS = 20;
+const MAX_ITERATIONS = 20
+
+/** Display observers cannot change execution results or leave unmatched tool calls. */
+function notifyObserver(notify: () => void): void {
+  try {
+    notify()
+  } catch {
+    /* The host owns presentation failures. */
+  }
+}
 
 /**
  * 循环过程中的事件回调
@@ -14,13 +24,13 @@ const MAX_ITERATIONS = 20;
  */
 export interface LoopEventHandlers {
   /** 流式文本片段 */
-  onText?: (text: string) => void;
+  onText?: (text: string) => void
   /** 工具开始执行 */
-  onToolStart?: (toolName: string, input: Record<string, unknown>) => void;
+  onToolStart?: (toolName: string, input: Record<string, unknown>) => void
   /** 工具执行完成 */
-  onToolEnd?: (toolName: string, output: string, durationMs: number) => void;
+  onToolEnd?: (toolName: string, output: string, durationMs: number) => void
   /** 工具执行出错 */
-  onToolError?: (toolName: string, error: string) => void;
+  onToolError?: (toolName: string, error: string) => void
 }
 
 /**
@@ -28,9 +38,9 @@ export interface LoopEventHandlers {
  */
 export function extractTextContent(content: Anthropic.ContentBlock[]): string {
   return content
-    .filter((block): block is Anthropic.TextBlock => block.type === "text")
-    .map((block) => block.text)
-    .join("\n");
+    .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+    .map(block => block.text)
+    .join('\n')
 }
 
 /**
@@ -42,55 +52,61 @@ export async function executeToolCalls(
   ctx: ToolContext,
   events?: LoopEventHandlers
 ): Promise<Anthropic.ToolResultBlockParam[]> {
-  const results: Anthropic.ToolResultBlockParam[] = [];
+  const results: Anthropic.ToolResultBlockParam[] = []
 
   for (const block of content) {
-    if (block.type === "tool_use") {
-      const tool = tools.find((t) => t.name === block.name);
+    if (block.type === 'tool_use') {
+      const tool = tools.find(t => t.name === block.name)
 
       if (!tool) {
-        const errorMsg = `Error: Unknown tool: ${block.name}`;
-        events?.onToolError?.(block.name, errorMsg);
+        const errorMsg = `Error: Unknown tool: ${block.name}`
+        notifyObserver(() => events?.onToolError?.(block.name, errorMsg))
         results.push({
-          type: "tool_result",
+          type: 'tool_result',
           tool_use_id: block.id,
           content: errorMsg,
-        });
-        continue;
+          is_error: true,
+        })
+        continue
       }
 
       try {
-        events?.onToolStart?.(block.name, block.input as Record<string, unknown>);
-        const start = Date.now();
-        const output = await tool.execute(block.input as Record<string, unknown>, ctx);
-        events?.onToolEnd?.(block.name, output, Date.now() - start);
+        notifyObserver(() =>
+          events?.onToolStart?.(block.name, block.input as Record<string, unknown>)
+        )
+        const start = Date.now()
+        const output = await tool.execute(block.input as Record<string, unknown>, ctx)
+        notifyObserver(() => events?.onToolEnd?.(block.name, output, Date.now() - start))
         results.push({
-          type: "tool_result",
+          type: 'tool_result',
           tool_use_id: block.id,
           content: output,
-        });
+        })
       } catch (error) {
-        const errorMessage = `Error: ${(error as Error).message}`;
-        events?.onToolError?.(block.name, errorMessage);
+        const errorMessage = `Error: ${error instanceof Error ? error.message : String(error)}`
+        notifyObserver(() => events?.onToolError?.(block.name, errorMessage))
         results.push({
-          type: "tool_result",
+          type: 'tool_result',
           tool_use_id: block.id,
           content: errorMessage,
-        });
+          is_error: true,
+        })
       }
     }
   }
 
-  return results;
+  return results
 }
 
 export interface RunLoopOptions {
-  config?: LLMConfig;
-  tools?: Tool[];
-  systemPrompt?: string;
-  events?: LoopEventHandlers;
+  /** Omit for a one-shot run; reuse explicitly for a multi-turn conversation. */
+  session?: Session
+  config?: LLMConfig
+  tools?: Tool[]
+  systemPrompt?: string
+  events?: LoopEventHandlers
   /** Agent 工作目录，所有工具的相对路径基于此解析。默认 process.cwd() */
-  cwd?: string;
+  cwd?: string
 }
 
 /**
@@ -99,57 +115,88 @@ export interface RunLoopOptions {
  * @param options 配置选项
  * @returns 最终的文本响应
  */
-export async function runLoop(
-  userMessage: string,
-  options: RunLoopOptions = {}
+export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
+  const session = options.session ?? new Session()
+  return session.runTurn(userMessage, messages => runTurnLoop(messages, options))
+}
+
+async function runTurnLoop(
+  messages: Anthropic.MessageParam[],
+  options: RunLoopOptions
 ): Promise<string> {
-  const { config = {}, tools = allTools, systemPrompt, events, cwd } = options;
+  const { config = {}, tools = allTools, systemPrompt, events, cwd } = options
 
   // 构造工具执行上下文
-  const ctx: ToolContext = { cwd: cwd ?? process.cwd() };
+  const ctx: ToolContext = { cwd: cwd ?? process.cwd() }
 
-  const client = createAnthropicClient(config);
-  const model = getModelName(config);
-  const toolDefinitions = tools.map(toAnthropicTool);
+  const client = createAnthropicClient(config)
+  const model = getModelName(config)
+  const toolDefinitions = tools.map(toAnthropicTool)
 
-  const messages: Anthropic.MessageParam[] = [
-    { role: "user", content: userMessage },
-  ];
-
-  let iterations = 0;
+  let iterations = 0
 
   while (iterations < MAX_ITERATIONS) {
-    iterations++;
+    iterations++
 
     // 流式调用 LLM
     const stream = client.messages.stream({
       model,
       max_tokens: 4096,
       tools: toolDefinitions,
-      messages,
+      messages: structuredClone(messages),
       ...(systemPrompt && { system: systemPrompt }),
-    });
+    })
 
-    stream.on("text", (text) => {
-      events?.onText?.(text);
-    });
+    stream.on('text', text => {
+      notifyObserver(() => events?.onText?.(text))
+    })
 
-    const response = await stream.finalMessage();
+    const response = await stream.finalMessage()
 
-    if (response.stop_reason === "end_turn") {
-      return extractTextContent(response.content);
+    if (response.stop_reason === 'tool_use') {
+      if (!response.content.some(block => block.type === 'tool_use')) {
+        throw new Error('Model stopped for tool_use without any tool calls.')
+      }
+      messages.push({ role: 'assistant', content: response.content })
+      const toolResults = await executeToolCalls(response.content, tools, ctx, events)
+      messages.push({ role: 'user', content: toolResults })
+      continue
     }
 
-    if (response.stop_reason === "max_tokens") {
-      return extractTextContent(response.content);
+    if (
+      !['end_turn', 'max_tokens', 'stop_sequence', 'refusal'].includes(response.stop_reason ?? '')
+    ) {
+      throw new Error(`Unsupported model stop reason: ${response.stop_reason}`)
     }
 
-    if (response.stop_reason === "tool_use") {
-      messages.push({ role: "assistant", content: response.content });
-      const toolResults = await executeToolCalls(response.content, tools, ctx, events);
-      messages.push({ role: "user", content: toolResults });
+    const text = extractTextContent(response.content)
+    const calls = response.content.filter(block => block.type === 'tool_use')
+    const notice =
+      response.stop_reason === 'max_tokens'
+        ? '[Harness] Model output was truncated by max_tokens. Any tool calls in this response were not executed.'
+        : calls.length > 0
+          ? '[Harness] Tool calls were not executed because the response did not stop for tool_use.'
+          : ''
+    messages.push({
+      role: 'assistant',
+      content: response.content.length ? response.content : '[Harness] Model returned no content.',
+    })
+    if (calls.length) {
+      messages.push({
+        role: 'user',
+        content: calls.map(call => ({
+          type: 'tool_result' as const,
+          tool_use_id: call.id,
+          is_error: true,
+          content: notice,
+        })),
+      })
     }
+    if (notice) messages.push({ role: 'assistant', content: notice })
+    return text || notice
   }
 
-  return "Error: Maximum iterations reached. The task may be too complex.";
+  const limit = 'Error: Maximum iterations reached. The task may be too complex.'
+  messages.push({ role: 'assistant', content: `[Harness] ${limit}` })
+  return limit
 }
