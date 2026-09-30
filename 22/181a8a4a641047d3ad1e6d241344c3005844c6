@@ -1,0 +1,16 @@
+specs/E03-product-foundations/S001-multi-turn/details/01-technical-design.md
+  h_afc6b161d429e0 16,36-41
+specs/E03-product-foundations/S001-multi-turn/follow-along.md
+  h_afc6b161d429e0 9,39-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "22181a8a4a641047d3ad1e6d241344c3005844c6",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
