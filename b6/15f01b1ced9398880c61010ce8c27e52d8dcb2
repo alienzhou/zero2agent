@@ -1,0 +1,16 @@
+packages/core/src/loop.ts
+  h_afc6b161d429e0 187,197,214-215,217
+packages/tui/src/cli.ts
+  h_afc6b161d429e0 176-184
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b615f01b1ced9398880c61010ce8c27e52d8dcb2",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
