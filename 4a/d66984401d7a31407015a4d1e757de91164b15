@@ -1,0 +1,22 @@
+packages/core/src/agent.ts
+  h_afc6b161d429e0 4-9,12-15,17,24-25,28,41-52,59-60
+packages/core/src/index.ts
+  h_afc6b161d429e0 9
+packages/core/src/loop.ts
+  h_afc6b161d429e0 5-19,27,29,31,33,41-43,55,58-59,62-63,65,68-70,74-79,81,84,86-87,89,92-93,98,102-107,109,118-125,127,130,132-134,136,139,146,148,150-152,154,156-163,166-169,172-193,195-196,199-201
+packages/core/src/session.ts
+  h_afc6b161d429e0 1-46
+packages/tui/src/cli.ts
+  h_afc6b161d429e0 162,197-200
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4ad66984401d7a31407015a4d1e757de91164b15",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
