@@ -53,7 +53,7 @@ E2E_LIVE=0 pnpm -r --workspace-concurrency=1 run test --no-file-parallelism
 ```
 
 - drain 修复后、信号扩展前：连续两轮均为 core 199、E2E 46、cdp-debug 1 通过，25 项 E2E 跳过。
-- 信号修复与证据加强后：第一轮 core 199、E2E 48、cdp-debug 1 通过，25 项 E2E 跳过；第二轮正在复验，完成后回填。
+- 信号修复与证据加强后：连续两轮均为 core 199、E2E 48、cdp-debug 1 通过，即每轮 248 通过、25 项 E2E 跳过。人工终端场景增至 30 项。第二轮退出码为 0，候选提交之后没有生产代码或测试文件差异。
 - 构建通过；本轮变更 TS 格式通过；lint 为 0 errors / 15 warnings。
 - 全仓既有 27 个其他文件的格式问题未重写，不宣称全仓格式全绿。
 

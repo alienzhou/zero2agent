@@ -83,6 +83,8 @@ git checkout main
 
 2026-09-29：在 `feat/e02-s004-human-terminal` 实现并完成本机自动验证，待人工审查、验收与合入；未发布或打 Tag。
 
+2026-09-30 复验：修正 drain 测试的冷环境计时干扰、补慢环境反回归；修复活终端收到外部 SIGHUP 时漏显示恢复。最终代码连续两轮均为 248 项通过、25 跳过。已补[固定候选与跟练](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)，用户签收与发布仍未代办。
+
 **能力**：`terminal` 增加 `interactive: true`；人工确认后接管真实 PTY，模型等待结束。独立 `--terminal [command]` 不要求 API key，REPL 支持 `/terminal [command]`。默认非交互路径和八工具集合不变。
 
 **你会学到**：
@@ -98,7 +100,7 @@ git checkout main
 - 保存并恢复输入监听、raw mode、完整 stty 属性，转发 resize。
 - 清理原进程组及已观察后代，物理断连同步清理并退出。
 - 正文与按键不进 OutputSink、应用输出日志或模型回执；不保证外部程序无记录。
-- 构建通过；core 198、E2E 46、cdp-debug 1 项通过，25 项 E2E 跳过。人工终端契约占 28 项。
+- 最新复验：构建通过；core 199、E2E 48、cdp-debug 1 项通过，25 项 E2E 跳过。人工终端契约占 30 项。
 - lint 为 0 errors / 15 warnings；变更文件格式检查通过，全仓仍有 27 个未改动文件的格式问题。
 - 仅 macOS arm64 实测；Windows 不支持，Linux、慢终端压力与真实模型流程未实测。
 

@@ -1,6 +1,6 @@
 # E02-S004：验收检查清单
 
-> 实现与本机自动验证完成，待人工验收与合入。验证日期：2026-09-29；实现基线：`2c7bd96`。下面区分真实 PTY、故障注入和未验证范围。
+> 实现与本机工程复验完成，待用户人工签收与合入。复验日期：2026-09-30；固定候选：`7438fa892a9887595d91070731dab6eba6237370`。下面区分真实 PTY、故障注入、工具驱动操作和未验证范围。
 
 [Story](../README.md) | [总览](./00-overview.md)
 
@@ -31,7 +31,7 @@
 | 确认与命令输入同批到达 | P0 | yes 后尾部不送子进程；后续独立 token 才被读取 | 通过 |
 | 反复接管 | P0 | 两次接管无监听累积或 stty 漂移 | 通过；退出事件的所有排列未穷举 |
 | 清理期间私人输入 | P0 | 在 teardown 窗口送入假 token，恢复后只接收新输入 | 通过 |
-| 外部终止与实际断连 | P0 | 确认期 SIGTERM 不执行；运行期 SIGTERM 清理；关闭外层 PTY 后 CLI 和后代退出 | 通过；断连时退出，不声称恢复消失的设备 |
+| 外部终止与实际断连 | P0 | 活端 SIGINT/TERM/HUP 检查 130/143/129、完整 termios、RESET、两个有效 fixture PID 消失；物理关闭外层 PTY 检查 129 | 通过；断连时退出，不声称恢复消失的设备 |
 | ps 扫描失败 | P0 | 真实 spawn 后注入扫描故障，原组仍清理，结果报告失败 | 通过 |
 | 高速输出尾部 | P1 | 4000 行与末尾 marker 全部出现 | 通过；不证明所有队列内存有界 |
 | 慢 stdout、UTF-8 任意分段、极限粘贴 | P1 | 专门的压力和分段测试 | 未完成，保留缺口 |
@@ -44,8 +44,9 @@
 | 命令 | 结果 |
 |---|---|
 | `pnpm build` | 通过 |
-| `E2E_LIVE=0 pnpm -r --workspace-concurrency=1 run test --no-file-parallelism` | cdp-debug 1、core 198、E2E 46 通过；E2E 25 跳过 |
-| `E2E_LIVE=0 pnpm --filter @zero2agent/e2e exec vitest run --no-file-parallelism` | 46 通过、25 跳过；其中本章人工终端 28 项 |
+| `E2E_LIVE=0 pnpm -r --workspace-concurrency=1 run test --no-file-parallelism` | 最终代码连续两轮：cdp-debug 1、core 199、E2E 48 通过；每轮 E2E 25 跳过 |
+| 人工终端契约套件（包含在 E2E 中） | 30 项通过，包含新增活端信号与物理断连退出码断言 |
+| drain 定向参数化回归 | 普通/固定慢环境 2 项通过；先预热真实环境缓存，原 ≥1800ms / <3500ms 阈值不变 |
 | `pnpm lint` | 0 errors、15 warnings；并非零告警 |
 | 本轮变更 TS/MJS 的定向 Prettier 检查 | 通过 |
 | `pnpm format:check` | 未通过：27 个本轮未改动文件存在历史格式问题，未进行无关格式重写 |
@@ -55,11 +56,15 @@
 
 独立入口另由工具驱动真实 PTY 演示：不带 API key 启动 `node packages/tui/dist/cli.js --terminal`，确认后输入 `printf 'manual-ok\n'; exit`，输出 marker 并以 0 退出。这不是用户在常用终端里的人工签收。
 
+9 月 30 日另完成姓名输入、同一 bash 状态 42→84、第二次接管 read -rs 只显示虚构 token 长度 15、返回 Agent 后 exit，以及 Ctrl-] 中止 sleep 的实际操作。独立源码复核发现并关闭了「活终端外部 SIGHUP 漏显示恢复」；新用例先复现失败，再验证修复。详细红绿证据、命令与范围见[本轮复验记录](../../../../.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md)。
+
+此前一次全量 Core 曾因冷环境加载混入 drain 计时而失败，不能删去该历史后只报告重跑成功。受控慢 shell 复现与修复已经入库。固定版本及可直接操作的用户签收步骤见[跟练与人工验收](../follow-along.md)。
+
 用户验收建议：在常用终端执行 Story 的 read 示例，再在 Agent REPL 用 `/terminal` 进入 bash、退出并继续输入；确认显示、按键与个人环境符合预期。Linux、Windows、真实认证流程及其他终端应用矩阵未实测。
 
 ## 已知限制
 
-只支持 POSIX 真实 TTY；不保证复杂守护化逃逸、宿主 SIGKILL 或断电后的清理。控制字节语义由程序模式决定。不采集正文不等于外部程序不记录；command 仍可能在上下文中。
+只支持 POSIX 真实 TTY；不保证复杂守护化逃逸、宿主 SIGKILL 或断电后的清理。控制字节语义由程序模式决定。不采集正文不等于外部程序不记录；command 仍可能在上下文中。控制终端读探测遇到资源耗尽等错误会保守跳过恢复，不是所有 stdin/stdout 状态的健康证明；仍需用户在常用终端确认画面和按键体验。
 
 ## 优先级定义
 

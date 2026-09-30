@@ -33,6 +33,6 @@
 
 实现分支为 `feat/e02-s004-human-terminal`。core 宿主协议始于 `a14fd1c`，TUI 主实现始于 `6b35bde`；收尾输入隔离和组清理修正见 `d09a87e`，真实断连处理见 `716563c`，信号与退出摘要见 `11898d9`、`2c7bd96`。
 
-构建通过；core 198、E2E 46、cdp-debug 1 项通过，25 项 E2E 跳过。其中 28 项是本章人工终端契约场景，包含真实 PTY、CLI REPL、控制键、终端恢复、秘密输入隔离、故障注入与物理断连。精确覆盖和缺口见[验收清单](../../../../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)。
+9 月 29 日初次交付：构建通过；core 198、E2E 46、cdp-debug 1 项通过，25 项 E2E 跳过，其中 28 项人工终端场景。9 月 30 日复核补修 drain 计时测试与活终端 SIGHUP 恢复；固定候选 `7438fa8` 连续两轮全量回归每轮 248 通过、25 跳过，人工终端增至 30 项。精确覆盖和缺口见[验收清单](../../../../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)。
 
 已补[复盘](../../../../retros/E02-S004-human-terminal.md)与[协作记录](../../../../.vibecoding/2026-09-29/e02-s004-human-terminal/dialogue.md)。未运行付费模型或外部产品；未推送、合入或打 Tag，不把自动验证写成人工批准。
