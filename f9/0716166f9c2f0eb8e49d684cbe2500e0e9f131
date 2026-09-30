@@ -1,0 +1,24 @@
+.vibecoding/2026-10-01/e03-s001-full-review/dialogue.md
+  h_afc6b161d429e0 1-20
+.vibecoding/2026-10-01/e03-s001-full-review/learnings.md
+  h_afc6b161d429e0 1-5
+.vibecoding/2026-10-01/e03-s001-full-review/prompt.md
+  h_afc6b161d429e0 1-7
+CHANGELOG.md
+  h_afc6b161d429e0 87-88
+retros/E03-S001-multi-turn.md
+  h_afc6b161d429e0 21-26
+specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md
+  h_afc6b161d429e0 3,16-20,28-30,41-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f90716166f9c2f0eb8e49d684cbe2500e0e9f131",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
