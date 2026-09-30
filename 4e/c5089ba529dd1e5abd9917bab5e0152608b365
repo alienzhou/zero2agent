@@ -1,0 +1,16 @@
+e2e/src/helpers/human-terminal-signal.py
+  h_afc6b161d429e0 31,67-71,78-80,101
+e2e/src/human-terminal-contract.test.ts
+  h_afc6b161d429e0 200
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4ec5089ba529dd1e5abd9917bab5e0152608b365",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
