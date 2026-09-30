@@ -1,6 +1,6 @@
 # E02-S004：人工交互终端技术设计
 
-> 已实现的方案与取舍；运行证据见 03-verification-checklist，人工验收与合入仍待完成。
+> 已实现的方案与取舍；运行证据见 03-verification-checklist，两项用户试用已反馈正常，发布前代码审查与合入仍待完成。
 
 [Story](../README.md) | [总览](./00-overview.md)
 
