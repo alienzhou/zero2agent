@@ -1,0 +1,32 @@
+.discuss/2026-10-01/e03-s001-multi-turn/decisions/D01-session-contract.md
+  h_afc6b161d429e0 1-33
+researches/multi-turn/README.md
+  h_afc6b161d429e0 1-17
+researches/multi-turn/gemini-cli.md
+  h_afc6b161d429e0 1-28
+researches/multi-turn/pi-mono.md
+  h_afc6b161d429e0 1-29
+specs/E03-product-foundations/S001-multi-turn/README.md
+  h_afc6b161d429e0 1-46
+specs/E03-product-foundations/S001-multi-turn/details/00-overview.md
+  h_afc6b161d429e0 1-29
+specs/E03-product-foundations/S001-multi-turn/details/01-technical-design.md
+  h_afc6b161d429e0 1-42
+specs/E03-product-foundations/S001-multi-turn/details/02-task-list.md
+  h_afc6b161d429e0 1-23
+specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md
+  h_afc6b161d429e0 1-20
+specs/E03-product-foundations/S001-multi-turn/details/04-backlog.md
+  h_afc6b161d429e0 1-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a657476b754718192af8fbf46b012582614d017",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
