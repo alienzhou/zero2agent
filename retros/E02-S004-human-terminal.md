@@ -1,6 +1,6 @@
 # E02-S004-human-terminal Retrospective
 
-> 2026-09-30 更新｜两项用户试用与源码专项复核完成，脱敏分支已推送；未合入 main、未打 Tag，不代表全部平台或社交内容已发布。
+> 2026-09-30 更新｜两项用户试用与源码专项复核完成，脱敏分支已合入 main，未打 Tag，不代表全部平台或社交内容已发布。
 
 [Story](../specs/E02-act-and-execute/S004-interactive-commands/README.md) | [实施决策](../.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md) | [验收证据](../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)
 
@@ -52,4 +52,4 @@
 
 9 月 30 日 Node/less 两项用户试用已通过。后续源码专项复核补出 CLI 取消被子程序 exit 0 掩盖的问题，真实 PTY 先红后绿，当前固定实现为 `b200c9f`；完整离线回归 249 通过、25 项真实模型测试跳过，人工终端契约增至 31 项。用户另行授权逐提交脱敏后推送，`release/e02-s004-human-terminal` 已公开，main 和 Tag 保持不动。原本地分支及用户未提交改动保留。
 
-仍待单独决定是否合入与打 Tag；平台矩阵、压力测试和逐行人工源码签收不能由两项功能反馈替代。全仓历史格式告警未顺手重写。
+随后用户明确授权合入，已通过 PR #13 合入 main（060c644）；课程 Tag 仍未发布。平台矩阵、压力测试和逐行人工源码签收不能由两项功能反馈替代。全仓历史格式告警未顺手重写。

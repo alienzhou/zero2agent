@@ -10,11 +10,11 @@ This directory contains retrospective notes and lessons learned.
 | [E02-S002-replace-in-file.md](./E02-S002-replace-in-file.md) | E02-S002 局部修改 | 唯一性约束 + replace_all，教训落地到下一个迭代 |
 | [E02-S003-terminal.md](./E02-S003-terminal.md) | E02-S003 驱动执行环境 | 不截断 / 不杀死 / 三道防线；代码合并不等于 Story 收口 |
 
-## Published branch, pending main merge
+## Latest merged Story
 
 | Retro | Iteration | Notes |
 |-------|-----------|-------|
-| [E02-S004-human-terminal.md](./E02-S004-human-terminal.md) | E02-S004 人工交互终端 | 输入所有权、PTY 恢复、进程组清理和真实断连；两项试用通过，脱敏分支已推送，未合入或打 Tag |
+| [E02-S004-human-terminal.md](./E02-S004-human-terminal.md) | E02-S004 人工交互终端 | 输入所有权、PTY 恢复、进程组清理和真实断连；两项试用通过，脱敏历史已合入 main，未打 Tag |
 
 ## Directory structure
 

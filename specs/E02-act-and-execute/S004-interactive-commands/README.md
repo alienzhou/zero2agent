@@ -1,6 +1,6 @@
 # E02-S004：让人接管交互式终端
 
-> 实现、工程复验、Node/less 用户试用与源码专项复核已完成。脱敏分支 `release/e02-s004-human-terminal` 已公开，尚未合入 main 或打 Tag。让人操作 bash 命令，结束后回到 Agent；证据与边界见验收清单。
+> 实现、工程复验、Node/less 用户试用与源码专项复核已完成。脱敏分支已通过 PR #13 合入 main（060c644），尚未打课程 Tag。让人操作 bash 命令，结束后回到 Agent；证据与边界见验收清单。
 
 [Epic 2：行动与执行](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
