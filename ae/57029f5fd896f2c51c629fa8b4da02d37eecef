@@ -1,0 +1,14 @@
+packages/core/src/tools/__tests__/helpers/slow-env-shell.sh
+  h_afc6b161d429e0 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae57029f5fd896f2c51c629fa8b4da02d37eecef",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
