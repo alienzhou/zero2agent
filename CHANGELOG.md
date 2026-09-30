@@ -84,7 +84,8 @@ git checkout main
 - Session 持有进程内历史；同一 Agent 跨轮延续，静态 Agent.run 与未传 session 的 runLoop 保持一次性。
 - 最终回答、完整工具调用与结果进入历史；支持 reset / `/new`、深拷贝快照及运行互斥，固定 Agent 创建时 cwd。
 - 流式失败保留已完成工具证据，截断调用不执行且补错误回执；不可打印的工具异常也不会打断整批结果。展示回调与执行数据隔离。
-- 新增 27 项 Core 单测与 4 项本地 SSE + 真实 CLI 契约测试，涵盖跨轮、新对话、失败后恢复和半截 SSE；完整结果见[验收记录](./specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。
+- 共新增 33 项 Core 单测与 6 项本地 SSE + 真实 CLI 契约测试，涵盖跨轮、新对话、连续失败、半截 SSE、非空快照与配置保留；完整结果见[验收记录](./specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。
+- 完整复核修复输入管道保持打开时 `exit` 不退出，以及空响应不向用户提示的问题。最终代码 `b615f01`，全仓 288 通过、25 跳过。
 - 仅在本地功能分支实施；无持久化／压缩／全局取消 UI，未进行真实模型试用、推送、合入或打 Tag。
 
 学习重点是消息所有权与副作用证据，而非把字符串拼成聊天记录。过程见[调研](./researches/multi-turn/README.md)、[设计决策](./.discuss/2026-10-01/e03-s001-multi-turn/decisions/D01-session-contract.md)和[复盘](./retros/E03-S001-multi-turn.md)。
