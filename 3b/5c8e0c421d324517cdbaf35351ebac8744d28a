@@ -1,0 +1,14 @@
+specs/E02-act-and-execute/S004-interactive-commands/try-two-features.md
+  h_afc6b161d429e0 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3b5c8e0c421d324517cdbaf35351ebac8744d28a",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
