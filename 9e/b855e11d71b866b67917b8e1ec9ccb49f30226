@@ -1,0 +1,24 @@
+researches/interactive-commands/README.md
+  h_afc6b161d429e0 5-6
+researches/interactive-commands/notes/human-ux-verification-2026-09-30.md
+  h_afc6b161d429e0 1-99
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 65-66
+specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md
+  h_afc6b161d429e0 92-93
+specs/E02-act-and-execute/S004-interactive-commands/follow-along.md
+  h_afc6b161d429e0 7-8
+specs/E02-act-and-execute/S004-interactive-commands/try-two-features.md
+  h_afc6b161d429e0 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9eb855e11d71b866b67917b8e1ec9ccb49f30226",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
