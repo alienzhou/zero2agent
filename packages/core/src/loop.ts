@@ -9,6 +9,14 @@ import { Session } from './session.js'
 
 const MAX_ITERATIONS = 20
 
+function describeToolError(error: unknown): string {
+  try {
+    return String(error instanceof Error ? error.message : error)
+  } catch {
+    return 'Unknown tool error (unprintable thrown value)'
+  }
+}
+
 /** Display observers cannot change execution results or leave unmatched tool calls. */
 function notifyObserver(notify: () => unknown): void {
   try {
@@ -22,9 +30,10 @@ function notifyObserver(notify: () => unknown): void {
 /**
  * 循环过程中的事件回调
  * TUI/上层通过这些回调控制展示，core 层不直接输出
+ * 通知不参与控制：忽略同步异常和异步拒绝，不等待异步回调完成。
  */
 export interface LoopEventHandlers {
-  /** 流式文本片段 */
+  /** 模型文本片段及 Harness 状态提示 */
   onText?: (text: string) => void
   /** 工具开始执行 */
   onToolStart?: (toolName: string, input: Record<string, unknown>) => void
@@ -87,7 +96,7 @@ export async function executeToolCalls(
           content: output,
         })
       } catch (error) {
-        const errorMessage = `Error: ${error instanceof Error ? error.message : String(error)}`
+        const errorMessage = `Error: ${describeToolError(error)}`
         notifyObserver(() => events?.onToolError?.(block.name, errorMessage))
         results.push({
           type: 'tool_result',
@@ -155,6 +164,7 @@ async function runTurnLoop(
       notifyObserver(() => events?.onText?.(text))
     })
 
+    // Partial stream events belong to the display, not to the committed transcript.
     const response = await stream.finalMessage()
 
     if (response.stop_reason === 'tool_use') {
@@ -188,6 +198,7 @@ async function runTurnLoop(
         : '[Harness] Model returned no content.',
     })
     if (calls.length) {
+      // Even skipped calls need a matching result before a later user turn can be sent.
       messages.push({
         role: 'user',
         content: calls.map(call => ({

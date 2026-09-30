@@ -190,6 +190,36 @@ describe('in-memory sessions', () => {
 })
 
 describe('failed and incomplete turns', () => {
+  it.each([
+    Object.create(null),
+    {
+      toString: () => {
+        throw new Error('broken formatter')
+      },
+    },
+    Object.defineProperty(new Error(), 'message', {
+      get: () => {
+        throw new Error('broken getter')
+      },
+    }),
+  ])('keeps all batch results when a thrown value cannot be formatted (%#)', async thrown => {
+    const execute = vi.fn(async () => {
+      throw thrown
+    })
+    transport(reply([call('a'), call('b', 'fail'), call('c')], 'tool_use'), answer('done'))
+    const agent = new Agent({ tools: [echo, { ...echo, name: 'fail', execute }] })
+    await agent.run('try batch')
+    expectPaired(agent.getHistory())
+    const results = agent.getHistory()[2].content as Anthropic.ToolResultBlockParam[]
+    expect(results).toHaveLength(3)
+    expect(results[0].content).toBe('observed-result')
+    expect(results[1]).toMatchObject({
+      is_error: true,
+      content: expect.stringContaining('unprintable'),
+    })
+    expect(results[2].content).toBe('observed-result')
+  })
+
   it('isolates input mutations by observers and tools from both execution and history', async () => {
     transport(reply([call()], 'tool_use'), answer('done'))
     let observed: unknown

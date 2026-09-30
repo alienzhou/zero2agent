@@ -112,7 +112,8 @@ async function exercise(inputs: string[], respond: (res: ServerResponse, index: 
       })
     })
     const file = await readFile(`${workspace.dir}/draft.txt`, 'utf8').catch(() => null)
-    return { requests, stdout, stderr, file, sent }
+    const partialFile = await readFile(`${workspace.dir}/partial.txt`, 'utf8').catch(() => null)
+    return { requests, stdout, stderr, file, partialFile, sent }
   } finally {
     if (child.exitCode === null && child.signalCode === null) {
       const closed = new Promise<void>(resolve => child.once('close', () => resolve()))
@@ -133,6 +134,72 @@ const writeFile = {
 }
 
 describe('CLI multi-turn contract (local SSE, no live model)', () => {
+  it('discards an unfinished SSE response while retaining completed tool effects', async () => {
+    const result = await exercise(['write draft', 'recover', 'exit'], (res, index) => {
+      if (index === 0) sendReply(res, [writeFile], 'tool_use')
+      else if (index === 1) {
+        res.writeHead(200, { 'content-type': 'text/event-stream' })
+        const event = (type: string, value: object) =>
+          res.write(`event: ${type}\ndata: ${JSON.stringify(value)}\n\n`)
+        event('message_start', {
+          type: 'message_start',
+          message: {
+            id: 'msg_partial',
+            type: 'message',
+            role: 'assistant',
+            content: [],
+            model: 'contract-model',
+            stop_reason: null,
+            stop_sequence: null,
+            usage: { input_tokens: 1, output_tokens: 0 },
+          },
+        })
+        event('content_block_start', {
+          type: 'content_block_start',
+          index: 0,
+          content_block: { type: 'text', text: '' },
+        })
+        event('content_block_delta', {
+          type: 'content_block_delta',
+          index: 0,
+          delta: { type: 'text_delta', text: 'unfinished-sse-fragment' },
+        })
+        event('content_block_stop', { type: 'content_block_stop', index: 0 })
+        event('content_block_start', {
+          type: 'content_block_start',
+          index: 1,
+          content_block: { type: 'tool_use', id: 'partial_call', name: 'write_file', input: {} },
+        })
+        event('content_block_delta', {
+          type: 'content_block_delta',
+          index: 1,
+          delta: {
+            type: 'input_json_delta',
+            partial_json: '{"path":"partial.txt","content":"unfinished',
+          },
+        })
+        event('error', {
+          type: 'error',
+          error: { type: 'api_error', message: 'partial-contract-failure' },
+        })
+        res.end()
+      } else sendReply(res, [{ type: 'text', text: 'recovered after SSE error' }])
+    })
+    expect(result.requests).toHaveLength(3)
+    const history = result.requests[2].messages
+    expect(history).toHaveLength(5)
+    expect(history[2].content).toEqual([expect.objectContaining({ tool_use_id: 'write_1' })])
+    expect(history[3].content).toContain('[Harness] This turn was interrupted')
+    expect(history[4].content).toBe('recover')
+    expect(JSON.stringify(history)).not.toMatch(/unfinished|partial_call|partial-contract-failure/)
+    expect(result.stdout).toContain('unfinished-sse-fragment')
+    expect(result.stdout).toContain('recovered after SSE error')
+    expect(result.stderr).toContain('partial-contract-failure')
+    expect(result.file).toBe('persisted tool effect')
+    expect(result.partialFile).toBeNull()
+    expect(result.stdout.split('⚡ write_file')).toHaveLength(2)
+  })
+
   it('carries tool history, handles /new locally, and does not undo files', async () => {
     const result = await exercise(
       ['write draft', 'follow up', '/new', 'fresh question', 'exit'],

@@ -19,7 +19,7 @@ export interface AgentOptions {
 }
 
 /**
- * Agent 类，提供简洁的 API 来运行 ReACT 循环
+ * 每个 Agent 持有一个 Session；每次 run 是一个 Turn，内部可循环调用模型和工具。
  */
 export class Agent {
   private options: AgentOptions
@@ -54,7 +54,7 @@ export class Agent {
   }
 
   /**
-   * 静态方法：快速运行一次
+   * 静态方法：每次创建独立 Session，快速运行一次。
    */
   static async run(message: string, options?: AgentOptions): Promise<string> {
     const agent = new Agent(options)

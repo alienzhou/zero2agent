@@ -8,16 +8,21 @@ export class Session {
   private messages: Anthropic.MessageParam[] = []
   private running = false
 
+  /** Last committed snapshot; the running turn is not visible until it finishes. */
   getHistory(): Anthropic.MessageParam[] {
     return structuredClone(this.messages)
   }
 
+  /** Reject while running: reset is neither cancellation nor rollback. */
   reset(): void {
     this.assertIdle()
     this.messages = []
   }
 
-  /** @internal The loop appends only complete messages and matched tool results. */
+  /**
+   * @internal The executor, not Session, must maintain message/tool pairing.
+   * Failures still commit recorded evidence plus a Harness notice, then rethrow.
+   */
   async runTurn(
     message: string,
     execute: (messages: Anthropic.MessageParam[]) => Promise<string>
