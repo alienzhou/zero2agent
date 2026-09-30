@@ -1,0 +1,20 @@
+.vibecoding/2026-09-30/e02-s004-human-ux/dialogue.md
+  h_afc6b161d429e0 1-29
+.vibecoding/2026-09-30/e02-s004-human-ux/learnings.md
+  h_afc6b161d429e0 1-8
+.vibecoding/2026-09-30/e02-s004-human-ux/prompt.md
+  h_afc6b161d429e0 1-8
+researches/interactive-commands/experiments/human-ux-smoke-2026-09-30.md
+  h_afc6b161d429e0 1-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f853d55e590ff82e1a4964bf21c41340671647e4",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
