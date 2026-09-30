@@ -60,6 +60,8 @@ node packages/tui/dist/cli.js --terminal 'read -r -p "Name: " name; printf "Hell
 
 直接进入 bash：`node packages/tui/dist/cli.js --terminal`。已有 Agent REPL 中用 `/terminal [command]`；Agent REPL 本身仍沿用模型配置要求。真实 PTY 测试覆盖对应路径，但不代替你在常用终端和实际程序里的人工验收。
 
+需要固定版本和分步练习时，使用[跟练与人工验收](./follow-along.md)。它区分已验证的本地候选提交、工具驱动操作和仍需用户签收的项目；尚未提供公开发布版本。
+
 ## 实现与验收资料
 
 - [总览](./details/00-overview.md)：范围与选型。
