@@ -1,6 +1,6 @@
 # E02-S004-human-terminal Retrospective
 
-> 2026-09-29｜实现与自动验证完成，待人工验收与合入，不代表已发布。
+> 2026-09-30 更新｜两项用户试用与源码专项复核完成，脱敏分支已推送；未合入 main、未打 Tag，不代表全部平台或社交内容已发布。
 
 [Story](../specs/E02-act-and-execute/S004-interactive-commands/README.md) | [实施决策](../.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md) | [验收证据](../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)
 
@@ -50,4 +50,6 @@
 
 本机全量离线测试通过，精确数量和命令见验收证据。Windows 不在范围内；Linux、慢终端极限压力、复杂终端显示协议及实际认证流程仍未实测。普通进程组清理不是沙箱，不承诺主动脱组且未被观察的后代或宿主 SIGKILL 后的回收。
 
-下一步由用户在常用终端与实际命令中验收、人工审查，再决定合入与发布。全仓历史格式告警未顺手重写。
+9 月 30 日 Node/less 两项用户试用已通过。后续源码专项复核补出 CLI 取消被子程序 exit 0 掩盖的问题，真实 PTY 先红后绿，当前固定实现为 `b200c9f`；完整离线回归 249 通过、25 项真实模型测试跳过，人工终端契约增至 31 项。用户另行授权逐提交脱敏后推送，`release/e02-s004-human-terminal` 已公开，main 和 Tag 保持不动。原本地分支及用户未提交改动保留。
+
+仍待单独决定是否合入与打 Tag；平台矩阵、压力测试和逐行人工源码签收不能由两项功能反馈替代。全仓历史格式告警未顺手重写。

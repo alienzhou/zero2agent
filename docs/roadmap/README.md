@@ -16,7 +16,7 @@
 
 **回来看最新进展？** 去 [CHANGELOG](../../CHANGELOG.md) 找到最新迭代，顺着链接进入对应 Story。
 
-当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证与两项用户试用已完成，待审查与合入；尚无发布 Tag，Epic 2 仍保持进行中。
+当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已推送；尚未合入 main 或打 Tag，Epic 2 仍保持进行中。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
 ---
 

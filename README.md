@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E02-S004 人工交互终端已实现，两项用户试用通过，待审查与合入 — [原理与使用方式](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
+**最新更新**：E02-S004 人工交互终端已实现，两项用户试用与源码专项复核已完成，脱敏发布分支 `release/e02-s004-human-terminal` 已推送，尚未合入 main 或打 Tag — [原理与使用方式](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -195,7 +195,7 @@ node packages/tui/dist/cli.js "你的提示词"
 
 环境要求：Node.js >= 22.0.0, pnpm >= 9.0.0
 
-只体验人工终端，无需 API key：构建后在 POSIX 真实终端运行 `node packages/tui/dist/cli.js --terminal`，确认后进入 bash。输入 `exit` 返回；`Ctrl-]` 中止整个接管。已有 Agent REPL 中可用 `/terminal [command]`。本版已在 macOS 验证，平台与隐私边界见 [S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md)。
+只体验人工终端，无需 API key：先按[固定版本跟练](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)获取已公开的 `release/e02-s004-human-terminal`，不要直接使用尚无本课功能的 main。构建后在仓库根目录的 POSIX 真实终端运行 `node packages/tui/dist/cli.js --terminal`，确认后进入 bash。输入 `exit` 返回；`Ctrl-]` 中止整个接管。已有 Agent REPL 中可用 `/terminal [command]`。macOS 已验证、Linux 未实测、Windows 不支持，隐私边界见 [S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md)。
 
 ---
 
