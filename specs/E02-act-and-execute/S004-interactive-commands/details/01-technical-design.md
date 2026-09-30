@@ -1,0 +1,96 @@
+# E02-S004：人工交互终端技术设计
+
+> 已实现的方案与取舍；运行证据见 03-verification-checklist，两项用户试用已反馈正常，发布前代码审查与合入仍待完成。
+
+[Story](../README.md) | [总览](./00-overview.md)
+
+## 整体结构
+
+人的终端 ↔ 宿主 raw 按键/输出桥 ↔ PTY master/slave ↔ bash。人工窗口期间 Agent 不消费按键，模型等待工具完成。
+
+| 层 | 职责 |
+|---|---|
+| [terminal.ts](../../../../packages/core/src/tools/terminal.ts) | 校验 command/workdir，按 interactive 分流 |
+| [terminal-runtime.ts](../../../../packages/core/src/tools/terminal-runtime.ts) | runInteractive 请求与摘要结果 |
+| [setup-terminal-runtime.ts](../../../../packages/tui/src/setup-terminal-runtime.ts) | 绑定人工确认与终端接管 |
+| [human-terminal.ts](../../../../packages/tui/src/human-terminal.ts) | 输入租约、确认、PTY 桥接、恢复与挂断 |
+| [human-terminal-process.ts](../../../../packages/tui/src/human-terminal-process.ts) | 原进程组和已跟踪后代的清理 |
+| [cli.ts](../../../../packages/tui/src/cli.ts) | --terminal 与 /terminal 入口 |
+
+interactive 缺省或 false 走旧路径；true 不创建 OutputSink，不走普通后台跳过流程。宿主缺失、平台不支持、TTY 不满足时明确失败，不能静默降级成 pipe 或继承输入执行。
+
+## 人工确认先于创建 PTY
+
+显示 command、解析后的 workdir 与 `Allow human terminal? [y/N]`。只接受 y/yes 加 Enter；空回车、EOF、其他输入拒绝。确认内容不能作为命令输入转发，模型参数不能绕过确认。
+
+stdin/stdout 都必须为 TTY；CLI 独立入口在 LLM 配置检查前分流。TTY 只是连接条件，不是安全审查。启动确认也不是会话内每次人工操作的审批。
+
+批准后用 `@lydell/node-pty@1.2.0-beta.15`，以 `/bin/bash --noprofile --norc -c command` 启动，传入工作目录和终端尺寸。空 CLI/REPL 命令映射到 bash，不按命令名检测交互需求。
+
+## 输入所有权与恢复
+
+接管前保存 stdin 的 raw mode、paused 状态及原 readline/输入监听。临时隔离旧监听，不能仅调用 readline.pause() 就假定 Agent 不再收到按键。确认与活动阶段之间也须明确交接。
+
+实际保存 readableFlowing，区分未开始读取与正在流动的 stdin；未曾读取的流不能在结束后被 resume 留住宿主。用 stty -g 保存设备属性，接管时关闭外层 OPOST，避免内层 PTY 已转换的换行被再次转换；归还可用终端时还原属性。
+
+活动阶段设置 raw mode，将原始字节送 PTY；旧 data/keypress 监听不能同时消费。stdout resize 更新 PTY columns/rows。提示必须含 `Human terminal active` 和 `Ctrl-]`。
+
+| 输入或事件 | 行为 |
+|---|---|
+| 普通键、Enter、方向键 | 原样转 PTY，不成为 Agent 消息 |
+| Ctrl-C/Ctrl-D | 控制字节交给程序 |
+| Ctrl-] | 宿主拦截，中止整个会话 |
+| 程序自然退出 | 清理后归还 Agent |
+| spawn 失败、普通取消 | 结束受管执行，终端仍可用时恢复 |
+| 活终端上的外部 SIGHUP | 中止并恢复终端，退出 129 |
+| 物理断连／控制终端不可用 | 同步清理并退出，不尝试异步终端恢复 |
+
+恢复应幂等：移除本次输入/resize/退出监听，清理 PTY 与受管子进程，恢复原 raw mode、监听和 paused 状态，最后结算结果。重复退出事件不能重复注册监听或回传结果。自然结束后也不能留下占用终端的普通后代。
+
+私有输入消费者覆盖启动空隙与退出清理期。子进程结束后不再转发输入，但继续消费并丢弃，归还 readline 前经过一轮事件循环并排空已到达缓冲，避免收尾时键入的秘密进入 Agent 历史。归还时明确显示结束提示。
+
+## 控制字符与清理边界
+
+Ctrl-C 在 ISIG 等条件下可能转为 SIGINT，raw 程序也可能自行处理。Ctrl-D 通常在 canonical 空行触发读取 EOF，不是通用关闭 PTY。二者不保证结束整个会话。
+
+Ctrl-] 是宿主中止，清理原进程组和已跟踪子孙；不提供 detach/重连。按 PID 与启动时间复核已观察后代，不在根进程消失时立刻撤销仍存续的组所有权；组已空或组长身份冲突后不再重用。扫描失败仍执行拥有的组级 TERM→KILL 兜底，并把故障作为错误报告。
+
+普通停止的宽限期为 150ms；真正的 stdin 断连或控制终端不可用时同步强制清理并退出 129。当前 macOS/Node 实验中，挂断后依赖异步计时器/终端恢复不能可靠推进；因此此路径不向不可用终端写提示、不等输出排空，也不尝试异步恢复。
+
+外部 SIGHUP 不直接等于物理断连。宿主以 O_NONBLOCK 打开 /dev/tty 并探测一次读取：仍可读或暂时 EAGAIN 时走普通恢复，不可用时保守同步退出。探测最多消耗一个属于私人收尾窗口的字节，不检查所有输入输出 fd，也不是后续恢复成功的证明。资源耗尽导致打开失败时仍可能跳过活终端恢复，这是已知异常环境限制。活端外部 SIGINT/SIGTERM/SIGHUP 清理、恢复后分别以 130/143/129 退出；键盘 Ctrl-C 仍是给子程序的数据。
+
+不承诺主动脱离原进程组且在采样前重挂父进程的后代、复杂守护化/namespace 逃逸、PID 竞争或宿主 SIGKILL 后的全部清理。测试必须检查进程存活，不能仅检查 promise 返回。
+
+## 输出与结果契约
+
+PTY 正文直接写宿主 stdout，不写 OutputSink、临时输出文件、对话历史或模型工具正文，不提供后续回读。PTY 合流输出不能标成独立 stderr。
+
+结束后仅返回 status、可用的 exitCode/signal 等元信息。模型发起工具调用时才将此回执交给模型；用户直接使用 `--terminal` 或 `/terminal` 时只在本地显示，不调用 `agent.run`，不自动追加模型上下文。拒绝、失败、取消、成功不可混同；退出码不证明登录或业务操作成功。模型需要内容时由人主动描述，不能假装已读终端。
+
+宿主请求是 `{ command, cwd }`，结果是 `{ status: 'completed' | 'declined' | 'cancelled', exitCode?, signal? }`。`completed` 表示进程结束，不表示业务成功，非零退出码仍保留；native 同时给出信号和零退出码时只返回信号，避免误报成功。基础设施故障抛错，由 core 转成固定错误摘要，不透传可能含正文的异常消息。独立 CLI 拒绝或错误退出 1，信号终止按 `128 + signal` 映射。
+
+此约束只限 Zero2Agent 交互采集路径。command 参数可能已记录，shell history、程序写文件、录屏和环境继承不受控制。测试用虚构标记，不用真实凭据。直写并不等于自动脱敏或无限输出内存有界，背压另行验证。
+
+当前单批输入超过 64KiB 会中止；待写 stdout 超过 1MiB 会中止，stdout 需要 drain 时暂停 PTY 读取。它们不是所有 native/kernel 队列的总内存证明，慢终端压力测试仍列为 P1 缺口。入口使用 getBaseShellEnv，不套 S003 的非交互覆盖；移除 BASH_ENV，设置 TERM，并让本层 bash 的 HISTFILE 指向 /dev/null，不保证嵌套程序无历史。
+
+## 设计决策记录
+
+### ADR-01：人工接管，不新增模型 stdin 工具
+
+用户纠偏为“让人能进行 bash 命令交互”。因此无需模型 yield/session/poll/write 协议，Agent 等待人操作完成。
+
+### ADR-02：参考成熟实现的职责，不复制全部行为
+
+| 已有本地调研 | 借鉴 | 不照搬 |
+|---|---|---|
+| [Aider](../../../../researches/interactive-commands/aider.md) | child.interact 人工 PTY 窗口 | 默认 Yes/EOF 可同意、捕获输出 |
+| [pi-mono](../../../../researches/interactive-commands/pi-mono.md) | 停止/恢复 TUI，只回摘要 | 同步继承 stdio、示例恢复保障不足 |
+| [Gemini CLI](../../../../researches/interactive-commands/gemini-cli.md) | 人按键到 PTY、resize 与生命周期 | 后台面板、xterm 缓存、正文入模 |
+
+来源为已有固定源码调研，没有联网刷新或产品 E2E。依赖版本、入口名称、保留键、隐私边界均为本轮实现选择，不声称用户逐项审定。
+
+2026-09-30 已做[人工交互追加复核](../../../../researches/interactive-commands/notes/human-ux-verification-2026-09-30.md)：刷新四家源码与官方资料，并运行 Aider 原始执行模块。Aider 用户 /run 和 pi 示例扩展不会重复确认执行；Gemini 以 Tab/Shift+Tab 切换焦点，普通前台输出会进入模型。本课统一 y/N、正文不分享和退出才归还输入均为自选简化，不应在教学中表述为「大家都这样做」。追加复核仍不是完整产品 E2E。
+
+## 当前不做的事情
+
+Windows/ConPTY、headless 回退、模型输入、交互后台化、自动检测、多终端并行和重连。理由见 [Backlog](./04-backlog.md)。

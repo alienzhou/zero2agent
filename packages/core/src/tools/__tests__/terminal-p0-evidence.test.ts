@@ -81,16 +81,23 @@ describe('P0 证据：超长输出阈值两侧', () => {
 
   it('[P0] 20KB 以内不越界，略超 20KB 越界', async () => {
     const under = await terminalTool.execute(
-      { command: 'node -e "process.stdout.write(\'x\'.repeat(20400))"' },
+      {
+        command: `${JSON.stringify(process.execPath)} -e "process.stdout.write('x'.repeat(20400))"`,
+      },
       ctx
     )
+    expect(under).toContain('Exit code: 0')
+    expect(under).toContain('x'.repeat(20400))
     expect(under).toContain('<untrusted_command_output')
     expect(under).not.toContain('Saved to:')
 
     const over = await terminalTool.execute(
-      { command: 'node -e "process.stdout.write(\'y\'.repeat(21000))"' },
+      {
+        command: `${JSON.stringify(process.execPath)} -e "process.stdout.write('y'.repeat(21000))"`,
+      },
       ctx
     )
+    expect(over).toContain('Exit code: 0')
     expect(over).toContain('Saved to:')
     expect(over).not.toContain('<untrusted_command_output')
   }, 30_000)
@@ -138,13 +145,13 @@ describe('P0 证据：读取侧 drain', () => {
     const start = Date.now()
     const result = await terminalTool.execute(
       {
-        command:
-          "node -e \"import{spawn}from'node:child_process';const c=spawn('sleep',['5'],{detached:true,stdio:['ignore','inherit','inherit']});c.unref();process.exit(0)\"",
+        command: `${JSON.stringify(process.execPath)} -e "import{spawn}from'node:child_process';const c=spawn('sleep',['5'],{detached:true,stdio:['ignore','inherit','inherit']});c.unref();process.exit(0)"`,
       },
       ctx
     )
     const elapsed = Date.now() - start
 
+    expect(result).toContain('Exit code: 0')
     expect(elapsed).toBeGreaterThanOrEqual(1800)
     expect(elapsed).toBeLessThan(3500)
     expect(result).toContain('descendant process may still be holding the output pipe')

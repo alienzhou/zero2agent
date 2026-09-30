@@ -1,0 +1,163 @@
+{
+  "indexed_at": "2026-09-28T16:06:30.229Z",
+  "source_observation_date": "2026-09-28",
+  "timezone": "Asia/Shanghai",
+  "notes": [
+    "Tag null means unavailable in the fetched shallow history, not no published releases.",
+    "Source snapshots do not establish released binary behavior.",
+    "Old Kimi repository is migration evidence only."
+  ],
+  "sources": [
+    {
+      "repository": "https://github.com/openai/codex",
+      "sha": "69f7140559180269e2eb8f5be6e0c20eb37b0c85",
+      "commit_date": "2026-09-28T14:46:32Z",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "core",
+      "report": "codex.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/anomalyco/opencode",
+      "sha": "ad6c72c7068812d43b31f3cfb9e413356a19d850",
+      "commit_date": "2026-09-28T15:46:01Z",
+      "branch": "dev",
+      "nearest_reachable_tag": null,
+      "scope": "core",
+      "report": "opencode.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/badlogic/pi-mono",
+      "sha": "11894012dd461232eb075bc890538b6866860a10",
+      "commit_date": "2026-09-28T17:21:20+02:00",
+      "branch": "main",
+      "nearest_reachable_tag": "v0.87.1",
+      "scope": "core",
+      "report": "pi-mono.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/google-gemini/gemini-cli",
+      "sha": "2fe7c2d3f065dc40ad573d50b2091116f8a4aa18",
+      "commit_date": "2026-09-25T22:50:05Z",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "core",
+      "report": "gemini-cli.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/Aider-AI/aider",
+      "sha": "5dc9490bb35f9729ef2c95d00a19ccd30c26339c",
+      "commit_date": "2026-05-22T07:02:20-07:00",
+      "branch": "main",
+      "nearest_reachable_tag": "v0.86.3.dev",
+      "scope": "core",
+      "report": "aider.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/deepseek-ai/deepseek-harness",
+      "sha": "4878cdabd87d4041bdaff61d04c966883b9fd07a",
+      "commit_date": "2026-09-28T19:48:10+08:00",
+      "branch": "master",
+      "nearest_reachable_tag": "dsh-v0.2.0-rc.1",
+      "scope": "core",
+      "report": "deepseek-harness.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/xai-org/grok-build",
+      "sha": "f0e3be1100ef5252488e3be8bb0e91cf68d8c305",
+      "commit_date": "2026-09-23T16:52:41Z",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "core",
+      "report": "grok-build.md",
+      "source_rev": "036a5d8348cd744767cd0b08518ab17bf608fa7f",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/cline/cline",
+      "sha": "46c9035e4d9f62ecc81ee0673aeb41db1561239d",
+      "commit_date": "2026-09-28T07:48:03-07:00",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/block/goose",
+      "sha": "0193ffc4ff9253fa0708c8cfe94871be9636d951",
+      "commit_date": "2026-09-28T12:59:29Z",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/MoonshotAI/kimi-cli",
+      "sha": "9ab1286b8fe4e6bcd116949a27ce5e0ac3389c82",
+      "commit_date": "2026-09-22T09:29:17Z",
+      "branch": "main",
+      "nearest_reachable_tag": "1.52.0",
+      "scope": "migration-only",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/MoonshotAI/kimi-code",
+      "sha": "a940f2ff049ed57abce68c59526de7a6628a4112",
+      "commit_date": "2026-09-28T19:36:51+08:00",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/OpenHands/software-agent-sdk",
+      "sha": "a130c8f9edf38c7a46825f7e6761d2497a00907b",
+      "commit_date": "2026-09-28T12:27:52-03:00",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/RooCodeInc/Roo-Code",
+      "sha": "b867ec9145750d0ae1ff7f02d35406e9bf2a0b16",
+      "commit_date": "2026-05-15T14:04:45-04:00",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "historical-screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/SWE-agent/mini-swe-agent",
+      "sha": "04d809ceab9df28f9adaed044884180159172930",
+      "commit_date": "2026-09-03T01:05:59-04:00",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    },
+    {
+      "repository": "https://github.com/QwenLM/qwen-code",
+      "sha": "a765229c0affd0642973412a3480b992935e2eff",
+      "commit_date": "2026-09-28T15:07:40Z",
+      "branch": "main",
+      "nearest_reachable_tag": null,
+      "scope": "screen",
+      "report": "landscape.md",
+      "evidence": "S; source read; product/tests not executed"
+    }
+  ]
+}

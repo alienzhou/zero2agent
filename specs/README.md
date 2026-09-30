@@ -64,6 +64,19 @@ specs/
 
 ---
 
+## Epic 2：能动 / 能改 / 能执行
+
+[进入 Epic 2](./E02-act-and-execute/README.md)。S001–S003 已完成；S004 的脱敏发布分支已推送，尚未合入 main 或打课程 Tag。
+
+| Story | 内容 | 入口 |
+|---|---|---|
+| E02-S001 | 写文件与删文件 | [课程与设计](./E02-act-and-execute/S001-write-file/README.md) |
+| E02-S002 | 局部替换 | [课程与设计](./E02-act-and-execute/S002-replace-in-file/README.md) |
+| E02-S003 | 普通命令执行 | [课程与设计](./E02-act-and-execute/S003-terminal/README.md) |
+| E02-S004 | 人工接管 bash / PTY | [课程与设计](./E02-act-and-execute/S004-interactive-commands/README.md) · [固定版本跟练](./E02-act-and-execute/S004-interactive-commands/follow-along.md) |
+
+---
+
 ## 历史迭代
 
 | 迭代 | 名称 | 状态 | 说明 |

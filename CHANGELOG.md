@@ -71,10 +71,44 @@ git checkout main
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改已有内容 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，用户试用通过 |
 
 ---
 
 ## [Unreleased]
+
+### E02-S004-human-terminal (Implemented)
+
+所属 Epic：[Epic 2：能动 / 能改 / 能执行](./specs/E02-act-and-execute/README.md) | Story 详情：[S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
+
+2026-09-29：在 `feat/e02-s004-human-terminal` 实现并完成本机自动验证，待人工审查、验收与合入；未发布或打 Tag。
+
+2026-09-30 复验：修正 drain 测试的冷环境计时干扰、补慢环境反回归；修复活终端收到外部 SIGHUP 时漏显示恢复。最终代码连续两轮均为 248 项通过、25 跳过。已补[固定候选与跟练](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)，用户签收与发布仍未代办。
+
+2026-09-30 19:36：用户对 Node REPL 与 less 两项试用回复「正常」，已登记[功能试用通过](./.vibecoding/2026-09-30/e02-s004-acceptance/user-feedback.md)。未据此修改确认策略，也未推送、合入、打 Tag 或发布。
+
+**能力**：`terminal` 增加 `interactive: true`；人工确认后接管真实 PTY，模型等待结束。独立 `--terminal [command]` 不要求 API key，REPL 支持 `/terminal [command]`。默认非交互路径和八工具集合不变。
+
+**你会学到**：
+
+- PTY 的 master/slave 如何把人的按键与 bash 连接起来。
+- 为什么暂停界面不等于转移输入权，以及如何防止收尾输入进入 Agent 历史。
+- 程序控制字符、宿主中止、进程组清理与物理终端断连为什么需要不同处理。
+- 正文不入模的隐私边界，以及退出摘要不能替代业务成功判断。
+
+**实现与验证**：
+
+- 默认 No 确认；Ctrl-C/Ctrl-D 给程序，Ctrl-] 结束整个接管。
+- 保存并恢复输入监听、raw mode、完整 stty 属性，转发 resize。
+- 清理原进程组及已观察后代，物理断连同步清理并退出。
+- 正文与按键不进 OutputSink、应用输出日志或模型回执；不保证外部程序无记录。
+- 最新脱敏发布复验：固定实现 `b200c9f`，构建和 E2E 类型检查通过；core 199、E2E 49、cdp-debug 1，共 249 项通过，25 项 E2E 跳过。人工终端契约占 31 项。
+- 修复 CLI 宿主取消被子程序 exit 0 掩盖的问题；Node 测试改用 process.execPath，受控无 Node PATH 环境下先红后绿。
+- `release/e02-s004-human-terminal` 保留逐提交脱敏历史，补齐架构与上手文档。用户授权验收后推送，不包含自动合入 main 或打 Tag。
+- lint 为 0 errors / 15 warnings；变更文件格式检查通过，全仓仍有 27 个未改动文件的格式问题。
+- 仅 macOS arm64 实测；Windows 不支持，Linux、慢终端压力与真实模型流程未实测。
+
+先读[技术设计](./specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md)与[验收证据](./specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)，过程见[复盘](./retros/E02-S004-human-terminal.md)与[协作记录](./.vibecoding/2026-09-29/e02-s004-human-terminal/dialogue.md)。
 
 ### E02-S001-write-file (Done)
 

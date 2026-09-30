@@ -88,9 +88,12 @@ describe('terminal', () => {
 
   it('中文/emoji 跨 chunk 不乱码', async () => {
     const result = await terminalTool.execute(
-      { command: 'node -e "process.stdout.write(\'😀\'.repeat(100))"' },
+      {
+        command: `${JSON.stringify(process.execPath)} -e "process.stdout.write('😀'.repeat(100))"`,
+      },
       ctx
     )
+    expect(result).toContain('Exit code: 0')
     expect(result).not.toContain('\uFFFD')
     expect(result).toContain('😀')
   })

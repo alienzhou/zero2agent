@@ -1,0 +1,47 @@
+{
+  "script_commit": "02e17f7",
+  "repeated_runs": [
+    {
+      "run": 1,
+      "file": "probe.py",
+      "passed": 12,
+      "total": 12,
+      "observed_at": "2026-09-29T00:10:39.407101+08:00"
+    },
+    {
+      "run": 1,
+      "file": "real_repls.py",
+      "passed": 4,
+      "total": 4,
+      "observed_at": "2026-09-29T00:10:40.006482+08:00"
+    },
+    {
+      "run": 2,
+      "file": "probe.py",
+      "passed": 12,
+      "total": 12,
+      "observed_at": "2026-09-29T00:10:42.495151+08:00"
+    },
+    {
+      "run": 2,
+      "file": "real_repls.py",
+      "passed": 4,
+      "total": 4,
+      "observed_at": "2026-09-29T00:10:43.108355+08:00"
+    },
+    {
+      "run": 3,
+      "file": "probe.py",
+      "passed": 12,
+      "total": 12,
+      "observed_at": "2026-09-29T00:10:45.626371+08:00"
+    },
+    {
+      "run": 3,
+      "file": "real_repls.py",
+      "passed": 4,
+      "total": 4,
+      "observed_at": "2026-09-29T00:10:46.235393+08:00"
+    }
+  ]
+}

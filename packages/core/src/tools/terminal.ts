@@ -28,6 +28,7 @@ const SHELL = '/bin/bash'
 interface TerminalInput {
   command: string
   workdir?: string
+  interactive?: boolean
 }
 
 export type TerminalOutcome = 'completed' | 'cancelled' | 'skipped' | 'drain-timeout'
@@ -58,7 +59,7 @@ export async function resolveWorkdir(
 
   if (!workdir) return { path: cwdReal }
 
-  const resolved = path.resolve(ctx.cwd, workdir)
+  const resolved = path.resolve(cwdReal, workdir)
   let targetReal: string
   try {
     targetReal = await realpath(resolved)
@@ -520,7 +521,10 @@ export const terminalTool: Tool = {
     'Execute a shell command via bash -c in the workspace. stdout and stderr are merged. ' +
     'Returns exit code and output wrapped in an untrusted isolation tag. ' +
     'Non-zero exit codes are normal output, not tool errors. ' +
-    'This is a non-interactive environment: commands needing tty or user input will fail; use flags like -y or --no-input. ' +
+    'By default this is non-interactive: commands needing tty or user input will fail; use flags like -y or --no-input. ' +
+    'Set interactive=true for human takeover, requiring an actual CLI TTY and user confirmation. ' +
+    'Interactive mode is not for unattended execution; the human supplies input, and interactive content is not recorded or sent to the model. ' +
+    'Never put credentials in command. Do not automatically retry a declined interactive request. ' +
     'Use workdir instead of cd — each call is a new process and cd does not persist. ' +
     'Very large output (>800 lines / 20KB) is saved to /tmp and omitted from the receipt; use read_file or grep_search to read the saved file.',
   input_schema: {
@@ -534,12 +538,21 @@ export const terminalTool: Tool = {
         type: 'string',
         description: 'Relative directory under the workspace to run in (use this instead of cd)',
       },
+      interactive: {
+        type: 'boolean',
+        description:
+          'Human-controlled terminal requiring a real TTY and user confirmation (default: false)',
+      },
     },
     required: ['command'],
   },
 
   execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
-    const { command, workdir } = input as unknown as TerminalInput
+    const { command, workdir, interactive } = input as unknown as TerminalInput
+
+    if (interactive !== undefined && typeof interactive !== 'boolean') {
+      return 'Error: interactive must be a boolean'
+    }
 
     if (!command || typeof command !== 'string' || command.trim() === '') {
       return 'Error: command must not be empty'
@@ -554,6 +567,29 @@ export const terminalTool: Tool = {
       await fs.promises.access(workdirResult.path)
     } catch {
       return `Error: workdir not found: ${workdir ?? '.'}`
+    }
+
+    if (interactive) {
+      const runtime = getTerminalRuntimeHooks()
+      if (!runtime.isTTY || !runtime.runInteractive) {
+        return 'Error: human-controlled terminal requires an interactive CLI/TTY with host support'
+      }
+
+      try {
+        const result = await runtime.runInteractive({ command, cwd: workdirResult.path })
+        // Only status metadata crosses back to the model; never echo host output or input.
+        const parts = [`Status: human-controlled ${result.status}`]
+        if (result.exitCode !== undefined) parts.push(`Exit code: ${result.exitCode}`)
+        if (result.signal !== undefined) parts.push(`Signal: ${result.signal}`)
+        if (result.status === 'declined') {
+          parts.push('User declined execution. Do not automatically retry.')
+        }
+        parts.push('Interactive content was not recorded or sent to the model.')
+        return parts.join('\n')
+      } catch {
+        // Host errors may contain terminal content or credentials; do not forward them.
+        return 'Error: human-controlled terminal failed; interactive content was not recorded or sent to the model'
+      }
     }
 
     // 先触发 env 采集，再消费失败提示（P1：首次回执即告知）

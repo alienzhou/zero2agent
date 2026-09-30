@@ -39,7 +39,8 @@ export function buildToolPolicySection(): string {
     '- 删除文件时使用 delete，可一次传入多个文件路径',
     '- 修改已存在文件前，建议先用 read_file 确认当前内容',
     '- 运行 git、npm、测试等命令时使用 terminal；文件读写搜索仍用专用工具',
-    '- terminal 是非交互环境，需要输入的命令会失败，请用 -y / --no-input 等无交互标志',
+    '- terminal 默认是非交互环境；已知输入优先用非交互写法，需要用户直接操作时可请求 interactive=true，由宿主确认并接管',
+    '- 人工交互期间只有用户输入，结束回执仅含状态；不要猜测交互内容、索取凭据或自动重试已拒绝的请求',
     '- 切换执行目录用 terminal 的 workdir，不要写 cd（每次调用是新进程）',
     '- terminal 超长输出会落盘到 /tmp，用 read_file 或 grep_search 回读保存路径',
   ].join('\n')

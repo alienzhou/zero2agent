@@ -21,8 +21,14 @@ export {
   setTerminalRuntimeHooks,
   getTerminalRuntimeHooks,
   listBackgroundProcesses,
+  getBaseShellEnv,
 } from './tools/index.js'
-export type { Tool } from './tools/index.js'
+export type {
+  Tool,
+  HumanTerminalRequest,
+  HumanTerminalResult,
+  TerminalRuntimeHooks,
+} from './tools/index.js'
 
 // Prompt 构建器
 export {

@@ -106,7 +106,7 @@ The course content is organized into four layers:
 | Epic | Goal | Status |
 | ---- | ---- | ---- |
 | [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
-| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | Planned |
+| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
 | Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | Planned |
 | Epic 4: Robustness and Context Management | Handle failures, long context, and complex runtime situations | Planned |
 | Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
@@ -157,13 +157,18 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: E01-S003 File Search (find_files) is done — [see details](./CHANGELOG.md#e01-s003-file-search-done)
+**Latest update**: E02-S004 is available on the published `release/e02-s004-human-terminal` branch. Two user trials and scoped code review are complete; it is not merged into main or tagged — [principles and usage](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
 | [E01-S001](./specs/E01-read-and-search/S001-react-basic/README.md) | Basic Agent Harness loop | Done |
 | [E01-S002](./specs/E01-read-and-search/S002-content-search/README.md) | Content Search (grep_search) | Done |
 | [E01-S003](./specs/E01-read-and-search/S003-file-search/README.md) | File Search (find_files) | Done |
+| [E01-S004](./specs/E01-read-and-search/S004-prompt-structure/README.md) | Structured System Prompt | Done |
+| [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | Write and Delete Files | Done |
+| [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | Targeted File Replacement | Done |
+| [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | Command Execution | Done |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Implemented; release branch published; main merge pending |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 
@@ -174,11 +179,21 @@ See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) |
 ```bash
 git clone git@github.com:alienzhou/zero2agent.git
 cd zero2agent
-pnpm install && pnpm build
-pnpm --filter @zero2agent/tui start
+git fetch origin release/e02-s004-human-terminal
+git switch --track origin/release/e02-s004-human-terminal
+pnpm install --frozen-lockfile && pnpm build
+
+# Human terminal only: no API key needed
+node packages/tui/dist/cli.js --terminal
+
+# Agent chat: configure a real Anthropic or compatible API first
+export ANTHROPIC_API_KEY="your-api-key"
+node packages/tui/dist/cli.js
 ```
 
-Requirements: Node.js >= 22.0.0, pnpm >= 9.0.0
+Requirements: Node.js >= 22.0.0, pnpm >= 9.0.0. Run from the repository root so commands use that workspace. The release branch is not yet merged into main.
+
+The human terminal requires a real POSIX TTY. Confirm to enter bash; use `exit` to return or `Ctrl-]` to stop the handoff. An existing Agent REPL also accepts `/terminal [command]`. macOS is tested, Linux is untested, and Windows is unsupported. See [pinned practice instructions](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md) and [S004 boundaries](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
 
 ---
 

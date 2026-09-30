@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E02-S003 驱动执行环境（terminal）已完成 — [查看详情](./CHANGELOG.md#e02-s003-terminal-done)
+**最新更新**：E02-S004 人工交互终端已实现，两项用户试用与源码专项复核已完成，脱敏发布分支 `release/e02-s004-human-terminal` 已推送，尚未合入 main 或打 Tag — [原理与使用方式](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -172,6 +172,7 @@ zero2agent/
 | [E02-S001](./specs/E02-act-and-execute/S001-write-file/README.md) | 写文件 + 删文件 (write_file / delete) | Done |
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
+| [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Implemented，用户试用通过 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 
@@ -193,6 +194,8 @@ node packages/tui/dist/cli.js "你的提示词"
 ```
 
 环境要求：Node.js >= 22.0.0, pnpm >= 9.0.0
+
+只体验人工终端，无需 API key：先按[固定版本跟练](./specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)获取已公开的 `release/e02-s004-human-terminal`，不要直接使用尚无本课功能的 main。构建后在仓库根目录的 POSIX 真实终端运行 `node packages/tui/dist/cli.js --terminal`，确认后进入 bash。输入 `exit` 返回；`Ctrl-]` 中止整个接管。已有 Agent REPL 中可用 `/terminal [command]`。macOS 已验证、Linux 未实测、Windows 不支持，隐私边界见 [S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md)。
 
 ---
 

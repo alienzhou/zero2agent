@@ -4,6 +4,7 @@ import {
   setTerminalRuntimeHooks,
 } from '@zero2agent/core'
 import * as readline from 'node:readline'
+import { runHumanTerminal } from './human-terminal.js'
 
 const DIM = '\x1b[2m'
 const RESET = '\x1b[0m'
@@ -25,6 +26,7 @@ export function setupTerminalRuntime(
 
   setTerminalRuntimeHooks({
     isTTY,
+    runInteractive: request => runHumanTerminal(request, rl),
     onStatus: line => {
       options?.onStatusLine?.(line)
       process.stdout.write(`${DIM}${line}${RESET}\n`)

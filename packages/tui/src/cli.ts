@@ -2,7 +2,7 @@
 /**
  * zero2agent CLI 入口
  */
-import { Agent, buildSystemPrompt } from '@zero2agent/core'
+import { Agent, buildSystemPrompt, terminalTool } from '@zero2agent/core'
 import type { LoopEventHandlers } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import path from 'node:path'
@@ -59,7 +59,8 @@ function summarizeToolOutput(toolName: string, output: string): string {
   if (toolName === 'terminal') {
     const statusLine = output.split('\n').find(l => l.startsWith('Status:'))
     const exitLine = output.split('\n').find(l => l.startsWith('Exit code:'))
-    return statusLine ?? exitLine ?? firstLine
+    const signalLine = output.split('\n').find(l => l.startsWith('Signal:'))
+    return [statusLine, exitLine, signalLine].filter(Boolean).join(' · ') || firstLine
   }
   return `${output.length} chars`
 }
@@ -105,6 +106,28 @@ const events: LoopEventHandlers = {
 }
 
 async function main() {
+  if (process.argv[2] === '--terminal') {
+    setupTerminalRuntime()
+    const command = process.argv.slice(3).join(' ') || 'exec /bin/bash --noprofile --norc -i'
+    const result = await terminalTool.execute(
+      { command, interactive: true },
+      { cwd: process.cwd() }
+    )
+    process.stdout.write(result + '\n')
+    const code = result.match(/^Exit code: (\d+)$/m)
+    const signal = result.match(/^Signal: (\d+)$/m)
+    process.exitCode =
+      result.startsWith('Error:') || result.includes('human-controlled declined')
+        ? 1
+        : signal
+          ? 128 + Number(signal[1])
+          : result.includes('human-controlled cancelled')
+            ? 130
+            : code
+              ? Number(code[1])
+              : 0
+    return
+  }
   loadLocalEnv()
 
   const messageArg = process.argv[2]
@@ -136,7 +159,7 @@ async function main() {
 
   // 交互模式
   console.log('zero2agent - Agent Harness（文件读写演示）')
-  console.log('输入你的问题，输入 exit 退出\n')
+  console.log('输入你的问题；/terminal [bash命令] 交给人操作；exit 退出\n')
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -171,7 +194,16 @@ async function main() {
 
       try {
         resetStreamState()
-        await agent.run(trimmed)
+        if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
+          const command =
+            trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
+          process.stdout.write(
+            (await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })) +
+              '\n'
+          )
+        } else {
+          await agent.run(trimmed)
+        }
         console.log('\n')
       } catch (error) {
         console.error('\n错误:', (error as Error).message, '\n')

@@ -31,9 +31,18 @@ def main() -> int:
     start = time.monotonic()
     sent = 0
     status = None
+    input_ready_at = None
 
     while True:
-        elapsed_ms = (time.monotonic() - start) * 1000
+        if input_ready_at is None and config.get("commandStartPath"):
+            try:
+                with open(config["commandStartPath"], encoding="utf-8") as marker:
+                    input_ready_at = float(marker.read())
+            except (FileNotFoundError, ValueError):
+                pass
+        elapsed_ms = ((time.time() * 1000 - input_ready_at)
+                      if input_ready_at is not None else
+                      (-1 if config.get("commandStartPath") else (time.monotonic() - start) * 1000))
         while sent < len(keys) and keys[sent]["delayMs"] <= elapsed_ms:
             payload = bytes(keys[sent]["bytes"])
             os.write(master_fd, payload)
