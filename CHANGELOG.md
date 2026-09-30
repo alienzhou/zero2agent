@@ -77,6 +77,18 @@ git checkout main
 
 ## [Unreleased]
 
+### E03-S001-multi-turn（已实现，未发布）
+
+所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S001-multi-turn/README.md)
+
+- Session 持有进程内历史；同一 Agent 跨轮延续，静态 Agent.run 与未传 session 的 runLoop 保持一次性。
+- 最终回答、完整工具调用与结果进入历史；支持 reset / `/new`、深拷贝快照及运行互斥，固定 Agent 创建时 cwd。
+- 流式失败保留已完成工具证据，截断调用不执行且补错误回执；不可打印的工具异常也不会打断整批结果。展示回调与执行数据隔离。
+- 新增 27 项 Core 单测与 4 项本地 SSE + 真实 CLI 契约测试，涵盖跨轮、新对话、失败后恢复和半截 SSE；完整结果见[验收记录](./specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。
+- 仅在本地功能分支实施；无持久化／压缩／全局取消 UI，未进行真实模型试用、推送、合入或打 Tag。
+
+学习重点是消息所有权与副作用证据，而非把字符串拼成聊天记录。过程见[调研](./researches/multi-turn/README.md)、[设计决策](./.discuss/2026-10-01/e03-s001-multi-turn/decisions/D01-session-contract.md)和[复盘](./retros/E03-S001-multi-turn.md)。
+
 ### 2026-10-01：确认 Epic 3 课程计划
 
 - 新增 [Epic 3 阶段入口](./specs/E03-product-foundations/README.md)，确认六节课：多轮会话、权限与 Approval、基础 TUI、会话恢复、运行日志、文件 Checkpoint。

@@ -18,6 +18,14 @@ This directory contains retrospective notes and lessons learned.
 
 ## Directory structure
 
+## Local implementation, not released
+
+| Retro | Iteration | Notes |
+|---|---|---|
+| [E03-S001-multi-turn.md](./E03-S001-multi-turn.md) | E03-S001 进程内多轮会话 | 历史所有权、工具副作用证据与真实 SSE 失败验证；本地实现，未合入或打 Tag |
+
+## Directory structure
+
 ```
 retros/
 ├── E01-S001-react-basic.md

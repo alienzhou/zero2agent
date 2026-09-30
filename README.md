@@ -111,7 +111,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | ---- | ---- | ---- |
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [六节课已规划，待实现](./specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [进行中：S001 多轮会话](./specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理异常、长上下文和复杂运行情况 | Planned |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
 
@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：E02-S004 人工交互终端已完成并合入 `main`，保留逐提交脱敏历史；两项用户试用、源码专项复核及本机工程验证已完成，未打课程 Tag — [原理与使用方式](./specs/E02-act-and-execute/S004-interactive-commands/README.md)
+**最新更新**：[E03-S001：让 Agent 接着上一轮聊](./specs/E03-product-foundations/S001-multi-turn/README.md)已实现进程内多轮会话与 `/new`，附源码调研、技术设计、测试与分步跟练；尚未合入、推送或打 Tag。最近已合入课程仍为 E02-S004。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -173,6 +173,7 @@ zero2agent/
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
+| [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 进程内多轮会话与新建对话 | 已实现，未合入／发布 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

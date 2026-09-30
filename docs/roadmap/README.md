@@ -18,6 +18,8 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
+最新开发课程：[E03-S001：让 Agent 接着上一轮聊](../../specs/E03-product-foundations/S001-multi-turn/README.md)。已实现进程内会话与 `/new`，尚未合入或发布；体验版本与测试入口见[分步跟练](../../specs/E03-product-foundations/S001-multi-turn/follow-along.md)。
+
 ---
 
 ## 学习地图
@@ -26,7 +28,7 @@
 |------|----------|--------------------|------|------|
 | Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | ✅ Done | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮会话、Approval、TUI、会话恢复、日志与 Checkpoint | 六节课已规划，待实现 | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮会话、Approval、TUI、会话恢复、日志与 Checkpoint | 进行中：S001 已实现，未发布 | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理复杂异常与长上下文问题 | 理解异常处理、上下文管理与稳定性优化 | 📝 Planned | Coming soon |
 | Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解 AGENTS、Skills、MCP、Hooks 等扩展能力 | 📝 Planned | Coming soon |
 

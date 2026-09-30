@@ -72,4 +72,4 @@ node packages/tui/dist/cli.js --terminal 'read -r -p "Name: " name; printf "Hell
 - [验收检查清单](./details/03-verification-checklist.md)：需要真实 PTY 证明的行为。
 - [Backlog](./details/04-backlog.md)：范围外能力与延伸问题。
 
-上一篇：[E02-S003：执行终端命令](../S003-terminal/README.md) | 下一篇：待规划
+上一篇：[E02-S003：执行终端命令](../S003-terminal/README.md) | 下一篇：[E03-S001：多轮会话](../../E03-product-foundations/S001-multi-turn/README.md)
