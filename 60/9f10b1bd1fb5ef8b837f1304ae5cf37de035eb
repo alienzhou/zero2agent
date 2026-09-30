@@ -1,0 +1,22 @@
+.gitignore
+  h_afc6b161d429e0 9-10
+docs/architecture.md
+  h_afc6b161d429e0 9-15,17-18,28,30-50,55-58,62,64,66-70,73,75,77,137-139
+docs/getting-started.md
+  h_afc6b161d429e0 45-59
+specs/E02-act-and-execute/S004-interactive-commands/README.md
+  h_afc6b161d429e0 17,38
+specs/E02-act-and-execute/S004-interactive-commands/details/01-technical-design.md
+  h_afc6b161d429e0 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "609f10b1bd1fb5ef8b837f1304ae5cf37de035eb",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
