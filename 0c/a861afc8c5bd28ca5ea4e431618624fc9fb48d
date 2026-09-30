@@ -1,0 +1,30 @@
+.discuss/2026-10-01/e03-course-plan/decisions/D01-course-sequence.md
+  h_afc6b161d429e0 1-23
+.discuss/2026-10-01/e03-course-plan/outline.md
+  h_afc6b161d429e0 1-17
+.vibecoding/2026-10-01/e03-course-plan/dialogue.md
+  h_afc6b161d429e0 1-22
+.vibecoding/2026-10-01/e03-course-plan/learnings.md
+  h_afc6b161d429e0 1-6
+.vibecoding/2026-10-01/e03-course-plan/prompt.md
+  h_afc6b161d429e0 1-5
+CHANGELOG.md
+  h_afc6b161d429e0 80-85
+specs/E02-act-and-execute/README.md
+  h_afc6b161d429e0 52-53
+specs/E03-product-foundations/README.md
+  h_afc6b161d429e0 1-35
+specs/README.md
+  h_afc6b161d429e0 80-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0ca861afc8c5bd28ca5ea4e431618624fc9fb48d",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
