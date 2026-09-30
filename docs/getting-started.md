@@ -37,12 +37,11 @@ cd zero2agent
 # 2. 安装依赖
 pnpm install
 
-# 3. 构建并运行
+# 3. 构建
 pnpm build
-pnpm --filter @zero2agent/tui start
 ```
 
-普通 Agent 对话需要先完成下方 API key 配置；没有密钥也可用 S004 的独立人工终端。
+普通 Agent 对话需要先完成下方 API key 配置，再从仓库根目录运行 `node packages/tui/dist/cli.js`；没有密钥也可先获取 S004 发布分支并使用独立人工终端。
 
 ### 不调用模型，先试人工终端
 
@@ -71,7 +70,7 @@ node packages/tui/dist/cli.js --terminal
 export ANTHROPIC_API_KEY="your-api-key"
 
 # 然后运行
-pnpm --filter @zero2agent/tui start
+node packages/tui/dist/cli.js
 ```
 
 **获取 API KEY**：https://console.anthropic.com/
@@ -87,7 +86,7 @@ export ANTHROPIC_API_KEY="your-minimax-api-key"
 export MODEL_NAME="MiniMax-M2.7"
 
 # 然后运行
-pnpm --filter @zero2agent/tui start
+node packages/tui/dist/cli.js
 ```
 
 **获取 MiniMax API KEY**：https://platform.minimaxi.com/
@@ -110,7 +109,7 @@ cp .env.example .env.local
 仓库根目录的 `.env.local` 会被自动加载，改完直接运行：
 
 ```bash
-pnpm --filter @zero2agent/tui start
+node packages/tui/dist/cli.js
 ```
 
 ### 环境变量说明
@@ -166,7 +165,7 @@ pnpm install
 pnpm build
 
 # 运行 CLI
-pnpm --filter @zero2agent/tui start
+node packages/tui/dist/cli.js
 
 # 只构建某个 package
 pnpm --filter @zero2agent/core build
