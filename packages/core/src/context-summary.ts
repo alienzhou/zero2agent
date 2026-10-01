@@ -18,7 +18,8 @@ function requestFor(model: string, budget: ContextBudget, history: string): Cont
   return {
     model,
     max_tokens: budget.summaryTokens,
-    system: SUMMARY_SYSTEM,
+    // This is a compactness goal in bytes, not an estimate of output tokens.
+    system: `${SUMMARY_SYSTEM}\nKeep the handoff within ${budget.summaryTokens * 4} UTF-8 bytes.`,
     messages: [
       {
         role: 'user',
@@ -39,7 +40,7 @@ function inputTooLong(error: unknown): boolean {
   )
 }
 
-function completedText(response: Anthropic.Message, source: string, budget: ContextBudget): string {
+function completedText(response: Anthropic.Message, source: string): string {
   if (
     response.stop_reason !== 'end_turn' ||
     !response.content.length ||
@@ -54,9 +55,8 @@ function completedText(response: Anthropic.Message, source: string, budget: Cont
     .join('\n')
     .trim()
   const size = Buffer.byteLength(text, 'utf8')
-  // The byte cap is intentionally stricter than a token cap, including in provider-counting mode.
-  if (!text || size > budget.summaryTokens || size >= Buffer.byteLength(source, 'utf8')) {
-    throw new ContextBudgetError('Summary is empty, too large, or does not reduce its source')
+  if (!text || size >= Buffer.byteLength(source, 'utf8') * 0.9) {
+    throw new ContextBudgetError('Summary is empty or does not reduce its source sufficiently')
   }
   return text
 }
@@ -76,13 +76,31 @@ export function createContextSummarizer(
     let calls = 0
     let counts = 0
     let ceiling = budget.inputLimit
-    const count = async (text: string): Promise<boolean> => {
+    const countRequest = async (request: ContextRequest): Promise<number> => {
       signal.throwIfAborted()
       if (++counts > 2048) throw new ContextBudgetError('Summary token-count call budget exhausted')
+      return budget.count(request, client, signal)
+    }
+    const count = async (text: string): Promise<boolean> => {
       return (
-        (await budget.count(requestFor(model, budget, text), client, signal)) <=
+        (await countRequest(requestFor(model, budget, text))) <=
         Math.min(ceiling, budget.inputLimit)
       )
+    }
+    const validateSummary = async (text: string): Promise<void> => {
+      // Output tokens and future input size are different units. Bound both, without a byte/token fiction.
+      if (Buffer.byteLength(text, 'utf8') > budget.summaryTokens * 4) {
+        throw new ContextBudgetError('Summary exceeds its compact input byte goal')
+      }
+      const size = await countRequest({
+        model,
+        max_tokens: budget.outputTokens,
+        messages: [{ role: 'user', content: text }],
+      })
+      // Read live limits after counting: tighten() may run while the provider request is pending.
+      if (size > Math.min(ceiling, budget.inputLimit, budget.targetLimit)) {
+        throw new ContextBudgetError('Summary exceeds its current input budget')
+      }
     }
 
     for (let round = 0; round < 16; round++) {
@@ -125,7 +143,8 @@ export function createContextSummarizer(
             })
             timeout.throwIfAborted()
             timed.throwIfAborted()
-            result = completedText(response, piece, budget)
+            result = completedText(response, piece)
+            await validateSummary(result)
             break
           } catch (error) {
             timeout.throwIfAborted()

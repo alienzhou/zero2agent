@@ -47,7 +47,7 @@ export class Agent {
   }
 
   async compact(): Promise<boolean> {
-    return this.session.compact(createCompactionRuntime(this.options, this.session))
+    return this.session.compact(() => createCompactionRuntime(this.options, this.session))
   }
 
   getContext(): Anthropic.MessageParam[] {

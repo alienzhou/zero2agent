@@ -111,6 +111,20 @@ describe('provider counting and tightening', () => {
     expect(countTokens).toHaveBeenCalledTimes(1)
   })
 
+  it('cancels an in-flight provider count with the parent signal', async () => {
+    const controller = new AbortController()
+    const countTokens = vi.fn(
+      (_request, options: { signal: AbortSignal }) => new Promise((_resolve, reject) => {
+        options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true })
+        controller.abort(new Error('parent cancelled counting'))
+      })
+    )
+    const client = { messages: { countTokens } } as unknown as Anthropic
+    const budget = new ContextBudget(model, { counting: 'provider', timeoutMs: 100 })
+    await expect(budget.count(request, client, controller.signal)).rejects.toThrow('parent cancelled counting')
+    expect(countTokens).toHaveBeenCalledTimes(1)
+  })
+
   it('cancels a provider count when its finite timeout expires', async () => {
     const countTokens = vi.fn(
       (_request, options: { signal: AbortSignal }) =>

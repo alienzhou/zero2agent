@@ -105,6 +105,34 @@ describe('compaction across the real loop and session', () => {
     expect(JSON.stringify(requests[2].messages)).toContain('previous result')
   })
 
+  it('sends the same detached tool schema that was counted before an asynchronous wait', async () => {
+    const tool: Tool = {
+      name: 'write',
+      description: 'write',
+      input_schema: { type: 'object', properties: { path: { type: 'string' } } },
+      execute: async () => 'done',
+    }
+    const { client, requests } = provider([text('done')])
+    let finish!: (value: { input_tokens: number }) => void
+    const countTokens = vi
+      .fn()
+      .mockResolvedValueOnce({ input_tokens: 100 })
+      .mockImplementationOnce(
+        () =>
+          new Promise(resolve => {
+            finish = resolve
+          })
+      )
+    Object.assign(client.messages, { countTokens })
+    const agent = new Agent({ tools: [tool], context: { ...context, counting: 'provider' } })
+    const operation = agent.run('task')
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'))
+    tool.input_schema.properties.path = { type: 'string', description: 'x'.repeat(50000) }
+    finish({ input_tokens: 100 })
+    expect(await operation).toBe('done')
+    expect(requests[0].tools?.[0].input_schema.properties).toEqual({ path: { type: 'string' } })
+  })
+
   it('does not retry generic network errors as context overflow', async () => {
     const { requests, summaries } = provider([new Error('network unavailable')])
     const agent = new Agent({ tools: [], context })
@@ -147,6 +175,25 @@ describe('compaction across the real loop and session', () => {
     finish(text('Prior work summarized.'))
     expect(await compacting).toBe(true)
     expect(await agent.run('after')).toBe('resumed')
+  })
+
+  it('rejects manual compaction while a normal model request is running', async () => {
+    const { client } = provider([text('unused')])
+    let finish!: (message: Anthropic.Message) => void
+    client.messages.stream.mockImplementationOnce(() => ({
+      on: vi.fn(),
+      finalMessage: () =>
+        new Promise(resolve => {
+          finish = resolve
+        }),
+    }))
+    const agent = new Agent({ tools: [], context })
+    const operation = agent.run('first')
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'))
+    await expect(agent.compact()).rejects.toThrow('already running')
+    expect(client.messages.create).not.toHaveBeenCalled()
+    finish(text('normal answer'))
+    expect(await operation).toBe('normal answer')
   })
 
   it('supports cancellation of foreground compression without leaking a stale summary', async () => {

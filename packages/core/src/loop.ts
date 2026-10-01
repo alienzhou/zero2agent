@@ -148,13 +148,14 @@ export function createCompactionRuntime(
   return {
     client,
     budget,
-    request: messages => ({
-      model,
-      max_tokens: budget.outputTokens,
-      messages,
-      tools: (options.tools ?? allTools).map(toAnthropicTool),
-      ...(options.systemPrompt && { system: options.systemPrompt }),
-    }),
+    request: messages =>
+      structuredClone({
+        model,
+        max_tokens: budget.outputTokens,
+        messages,
+        tools: (options.tools ?? allTools).map(toAnthropicTool),
+        ...(options.systemPrompt && { system: options.systemPrompt }),
+      }),
     summarize: createContextSummarizer(client, model, budget),
     onCompaction: options.events?.onCompaction,
   }

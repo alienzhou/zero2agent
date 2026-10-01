@@ -267,6 +267,69 @@ describe('tiered context management', () => {
     expect(events.some(e => e.phase === 'pruned')).toBe(true)
   })
 
+  it('keeps safe sends available after compression fails with fixed overhead near the foreground line', async () => {
+    const { manager, runtime } = fixture(
+      vi.fn(async () => {
+        throw new Error('offline')
+      })
+    )
+    runtime.request = messages => ({
+      model: 'fixture',
+      max_tokens: 512,
+      system: 's'.repeat(9200),
+      messages,
+    })
+    const messages = [user('first'), assistant('done'), user('next')]
+    const request = await manager.prepare(messages, runtime)
+    expect(runtime.budget.estimate(request)).toBeLessThan(runtime.budget.inputLimit)
+    expect(request.messages).toEqual(messages)
+  })
+
+  it('makes a long single-line result readable in bounded character slices', async () => {
+    const { manager, runtime } = fixture()
+    const output = '𠮷single-line'.repeat(3000) + 'END-EVIDENCE'
+    const messages: Message[] = [
+      user('inspect'),
+      {
+        role: 'assistant',
+        content: [{ type: 'tool_use', id: 'long', name: 'read_file', input: {} }],
+      },
+      { role: 'user', content: [{ type: 'tool_result', tool_use_id: 'long', content: output }] },
+    ]
+    const request = await manager.prepare(messages, runtime)
+    const receipt = String(
+      (request.messages[2].content as Anthropic.ToolResultBlockParam[])[0].content
+    )
+    const path = receipt.match(/Long lines: read (.+?\.chunks\.jsonl)/)![1]
+    artifacts.push(dirname(path))
+    const rows = (await readFile(path, 'utf8')).trim().split('\n')
+    const chunks = rows.map(row => JSON.parse(row) as { start_character: number; text: string })
+    expect(chunks.map(row => row.text).join('')).toBe(output)
+    expect(chunks.at(-1)?.text).toContain('END-EVIDENCE')
+    expect(rows.every(row => Buffer.byteLength(row) < 1024)).toBe(true)
+    const readback = await import('../tools/read-file.js')
+    const last = await readback.readFileTool.execute(
+      { path, start_line: rows.length, end_line: rows.length },
+      { cwd: dirname(path) }
+    )
+    expect(last).toContain('END-EVIDENCE')
+  })
+
+  it('cancels promptly while provider token counting is pending', async () => {
+    const { manager, runtime } = fixture()
+    let signal: AbortSignal | undefined
+    vi.spyOn(runtime.budget, 'count').mockImplementation((_request, _client, currentSignal) => {
+      signal = currentSignal
+      return new Promise<number>(() => {})
+    })
+    const preparing = manager.prepare([user('hello')], runtime)
+    const rejection = expect(preparing).rejects.toThrow('cancelled')
+    await vi.waitFor(() => expect(signal).toBeDefined())
+    manager.cancel()
+    await rejection
+    expect(signal?.aborted).toBe(true)
+  })
+
   it('keeps long multi-turn conversations within the budget after repeated compactions', async () => {
     const { manager, runtime, summarize } = fixture()
     const messages: Message[] = []

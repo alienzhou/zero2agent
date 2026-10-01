@@ -34,11 +34,11 @@ export class Session {
     return this.context.prepare(messages, runtime)
   }
 
-  async compact(runtime: CompactionRuntime): Promise<boolean> {
+  async compact(createRuntime: () => CompactionRuntime): Promise<boolean> {
     this.assertIdle()
     this.running = true
     try {
-      return await this.context.compact(this.messages, runtime)
+      return await this.context.compact(this.messages, createRuntime())
     } finally {
       this.running = false
     }

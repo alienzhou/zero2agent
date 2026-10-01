@@ -61,6 +61,7 @@ export class ContextManager {
   private through = 0
   private summary = ''
   private epoch = 0
+  private operationController = new AbortController()
   private job?: CompactionJob
   private failedThrough = -1
   private replacements = new Map<number, Message>()
@@ -78,8 +79,25 @@ export class ContextManager {
 
   cancel(): void {
     this.epoch++
-    this.job?.controller.abort(new Error('Compaction cancelled.'))
+    const reason = new ContextBudgetError('Context operation cancelled.')
+    this.operationController.abort(reason)
+    this.operationController = new AbortController()
+    this.job?.controller.abort(reason)
     this.job = undefined
+  }
+
+  private async count(request: ContextRequest, runtime: CompactionRuntime): Promise<number> {
+    const signal = this.operationController.signal
+    let abort: (() => void) | undefined
+    try {
+      const cancelled = new Promise<never>((_, reject) => {
+        abort = () => reject(signal.reason)
+        signal.addEventListener('abort', abort, { once: true })
+      })
+      return await Promise.race([runtime.budget.count(request, runtime.client, signal), cancelled])
+    } finally {
+      if (abort) signal.removeEventListener('abort', abort)
+    }
   }
 
   private assertCurrent(epoch: number): void {
@@ -102,19 +120,25 @@ export class ContextManager {
     await this.checkPinned(messages, runtime)
     this.assertCurrent(epoch)
     let request = runtime.request(this.getContext(messages))
-    let tokens = await runtime.budget.count(request, runtime.client)
+    let tokens = await this.count(request, runtime)
     this.assertCurrent(epoch)
     if (tokens >= runtime.budget.backgroundLimit) {
       if (await this.prune(messages, runtime)) {
         request = runtime.request(this.getContext(messages))
-        tokens = await runtime.budget.count(request, runtime.client)
+        tokens = await this.count(request, runtime)
       }
     }
     this.assertCurrent(epoch)
     if (tokens >= runtime.budget.foregroundLimit) {
-      await this.compact(messages, runtime, 'auto')
+      try {
+        await this.compact(messages, runtime, 'auto')
+      } catch (error) {
+        this.assertCurrent(epoch)
+        // A failed optimization may not block a still-safe request, nor release an unsafe one.
+        if (tokens > runtime.budget.inputLimit) throw error
+      }
       request = runtime.request(this.getContext(messages))
-      tokens = await runtime.budget.count(request, runtime.client)
+      tokens = await this.count(request, runtime)
     } else if (tokens >= runtime.budget.backgroundLimit && !this.job) {
       const cut = this.chooseBoundary(messages, runtime)
       if (cut > this.through && cut > this.failedThrough)
@@ -138,10 +162,7 @@ export class ContextManager {
     if (!messages.length) return false
     await this.checkPinned(messages, runtime)
     this.assertCurrent(epoch)
-    const before = await runtime.budget.count(
-      runtime.request(this.getContext(messages)),
-      runtime.client
-    )
+    const before = await this.count(runtime.request(this.getContext(messages)), runtime)
     this.assertCurrent(epoch)
     let changed = await this.adopt(messages, runtime)
     this.assertCurrent(epoch)
@@ -153,10 +174,7 @@ export class ContextManager {
     }
     for (let attempt = 0; attempt < 3; attempt++) {
       this.assertCurrent(epoch)
-      const current = await runtime.budget.count(
-        runtime.request(this.getContext(messages)),
-        runtime.client
-      )
+      const current = await this.count(runtime.request(this.getContext(messages)), runtime)
       this.assertCurrent(epoch)
       if (changed && current <= runtime.budget.targetLimit) return true
       const cut = this.chooseBoundary(messages, runtime)
@@ -174,16 +192,10 @@ export class ContextManager {
       const adopted = await this.adopt(messages, runtime)
       if (!adopted) break
       changed = true
-      const after = await runtime.budget.count(
-        runtime.request(this.getContext(messages)),
-        runtime.client
-      )
+      const after = await this.count(runtime.request(this.getContext(messages)), runtime)
       if (after >= current) break
     }
-    const after = await runtime.budget.count(
-      runtime.request(this.getContext(messages)),
-      runtime.client
-    )
+    const after = await this.count(runtime.request(this.getContext(messages)), runtime)
     this.assertCurrent(epoch)
     if (after > runtime.budget.inputLimit) {
       throw new ContextBudgetError(
@@ -196,7 +208,7 @@ export class ContextManager {
   private async checkPinned(messages: Message[], runtime: CompactionRuntime): Promise<void> {
     const index = latestUser(messages)
     const pinned = index < 0 ? [] : [messages[index]]
-    const tokens = await runtime.budget.count(runtime.request(pinned), runtime.client)
+    const tokens = await this.count(runtime.request(pinned), runtime)
     if (tokens > runtime.budget.inputLimit) {
       throw new ContextBudgetError(
         'The latest input plus system prompt and tools exceeds the context budget. Use a file reference, split the input, or reduce fixed instructions. No model request was sent.'
@@ -300,8 +312,8 @@ export class ContextManager {
     candidate.push(
       ...messages.slice(job.through).map((m, i) => this.replacements.get(job.through + i) ?? m)
     )
-    const before = await runtime.budget.count(runtime.request(previous), runtime.client)
-    const after = await runtime.budget.count(runtime.request(candidate), runtime.client)
+    const before = await this.count(runtime.request(previous), runtime)
+    const after = await this.count(runtime.request(candidate), runtime)
     // Counting may yield; reset/cancel or replacement of the prefix invalidates this result.
     if (
       job.epoch !== this.epoch ||
@@ -346,8 +358,25 @@ export class ContextManager {
         const path = join(directory, `${randomUUID()}.txt`)
         await writeFile(path, block.content, { flag: 'wx', mode: 0o600 })
         this.assertCurrent(epoch)
+        let readHint = 'Read it in line ranges'
+        if (block.content.split('\n').some(line => Buffer.byteLength(line) > limit / 2)) {
+          const points = Array.from(block.content)
+          const chunks: string[] = []
+          for (let offset = 0; offset < points.length; offset += 128) {
+            chunks.push(
+              JSON.stringify({
+                start_character: offset,
+                text: points.slice(offset, offset + 128).join(''),
+              })
+            )
+          }
+          const chunkPath = `${path}.chunks.jsonl`
+          await writeFile(chunkPath, chunks.join('\n') + '\n', { flag: 'wx', mode: 0o600 })
+          this.assertCurrent(epoch)
+          readHint = `Long lines: read ${chunkPath} one line at a time; each line contains a JSON-escaped character slice`
+        }
         const preview = [...block.content].slice(0, 120).join('')
-        block.content = `[Harness: tool output shortened; full output saved to ${path}. Read it in line ranges; do not re-run the tool.]\n${preview}`
+        block.content = `[Harness: tool output shortened; full output saved to ${path}. ${readHint}; do not re-run the tool.]\n${preview}`
         replaced = true
       }
       if (replaced) {

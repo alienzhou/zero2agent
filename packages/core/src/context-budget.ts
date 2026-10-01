@@ -40,7 +40,7 @@ function checkContent(content: Anthropic.MessageParam['content']): void {
   for (const block of content) {
     if (block.type === 'image' || block.type === 'document') {
       throw new ContextBudgetError(
-        `Conservative counting does not support ${block.type} content; use provider counting`
+        `Conservative counting does not support ${block.type} content; text-only summarization also excludes it`
       )
     }
     if (block.type === 'tool_result' && block.content) checkContent(block.content)
