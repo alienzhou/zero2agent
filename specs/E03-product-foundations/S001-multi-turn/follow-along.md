@@ -4,9 +4,9 @@
 
 ## 版本与前提
 
-本节代码位于本地 `feat/e03-s001-multi-turn` 分支，尚未推送、合入或打 Tag。先确认你拿到的是含 `packages/core/src/session.ts` 的版本；不要把旧 main 当作本节实现。
+本节代码已推送到 `origin/feat/e03-s001-multi-turn`，尚未合入 main 或打 Tag。先确认你拿到的是含 `packages/core/src/session.ts` 的版本；不要把旧 main 当作本节实现。
 
-本轮复核的代码提交为 `b615f01`，补齐了输入管道退出与空响应提示。发布状态独立于本地验证，不提供尚不存在的课程 Tag。尚未取得本地候选的读者可先阅读，待公开版本可用后跟练，不能直接用旧 main 代替。
+本轮复核的代码提交为 `b615f01`，补齐了输入管道退出与空响应提示。在已有仓库运行 `git fetch origin`，再用 `git worktree add ../zero2agent-e03-s001 origin/feat/e03-s001-multi-turn` 创建独立跟练目录，避免切换或覆盖现有工作区。进入该目录后执行下文命令；自行补测前用 `git switch -c practice/e03-s001` 创建练习分支。分支可获取不等于正式发布，不提供尚不存在的课程 Tag。
 
 Node.js 22+、pnpm 9+。下列命令从仓库根目录运行；依赖尚未安装时先运行 `pnpm install`。
 
