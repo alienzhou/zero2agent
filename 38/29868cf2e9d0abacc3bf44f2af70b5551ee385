@@ -1,0 +1,14 @@
+packages/core/src/__tests__/compact-loop.test.ts
+  h_afc6b161d429e0 5-6,63-70,143-369
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3829868cf2e9d0abacc3bf44f2af70b5551ee385",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
