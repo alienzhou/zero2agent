@@ -42,30 +42,41 @@ describe('summary requests', () => {
   })
 
   it.each(['Latest intent'.repeat(30), '保留用户意图'.repeat(20)])(
-    'accepts completed safe summaries whose UTF-8 bytes exceed output tokens', async text => {
+    'accepts completed safe summaries whose UTF-8 bytes exceed output tokens',
+    async text => {
       const budget = makeBudget()
       const create = vi.fn().mockResolvedValue(response(text))
       const client = { messages: { create } } as unknown as Anthropic
       expect(Buffer.byteLength(text)).toBeGreaterThan(budget.summaryTokens)
-      expect(await createContextSummarizer(client, model, budget)(history('original '.repeat(300)), signal()))
-        .toBe(text)
+      expect(
+        await createContextSummarizer(
+          client,
+          model,
+          budget
+        )(history('original '.repeat(300)), signal())
+      ).toBe(text)
       expect(create.mock.calls[0][0].max_tokens).toBe(256)
-      expect(budget.estimate({ model, max_tokens: budget.outputTokens, messages: history(text) }))
-        .toBeLessThan(budget.targetLimit)
+      expect(
+        budget.estimate({ model, max_tokens: budget.outputTokens, messages: history(text) })
+      ).toBeLessThan(budget.targetLimit)
     }
   )
 
   it('rejects an oversized completed reducing summary without truncating or retrying it', async () => {
     const create = vi.fn().mockResolvedValue(response('x'.repeat(1025)))
     const client = { messages: { create } } as unknown as Anthropic
-    await expect(createContextSummarizer(client, model, makeBudget())(history('x'.repeat(3000)), signal()))
-      .rejects.toThrow(/input byte goal/)
+    await expect(
+      createContextSummarizer(client, model, makeBudget())(history('x'.repeat(3000)), signal())
+    ).rejects.toThrow(/input byte goal/)
     expect(create).toHaveBeenCalledTimes(1)
   })
 
   it('rechecks live tightened limits after provider counting a completed summary', async () => {
     const budget = new ContextBudget(model, {
-      contextWindow: 8192, maxInputTokens: 5000, summaryTokens: 256, counting: 'provider',
+      contextWindow: 8192,
+      maxInputTokens: 5000,
+      summaryTokens: 256,
+      counting: 'provider',
     })
     const create = vi.fn().mockResolvedValue(response('Latest intent'.repeat(30)))
     const countTokens = vi.fn(async (request: ContextRequest) => {
@@ -76,18 +87,23 @@ describe('summary requests', () => {
       return { input_tokens: 1000 }
     })
     const client = { messages: { create, countTokens } } as unknown as Anthropic
-    await expect(createContextSummarizer(client, model, budget)(history('original '.repeat(300)), signal()))
-      .rejects.toThrow(/current input budget/)
+    await expect(
+      createContextSummarizer(client, model, budget)(history('original '.repeat(300)), signal())
+    ).rejects.toThrow(/current input budget/)
     expect(budget.targetLimit).toBe(1800)
     expect(create).toHaveBeenCalledTimes(1)
   })
 
-  it.each(['image', 'document'])('rejects %s summary history without suggesting provider support', async type => {
-    const budget = new ContextBudget(model, { contextWindow: 8192, counting: 'provider' })
-    const messages = [{ role: 'user', content: [{ type }] }] as Anthropic.MessageParam[]
-    await expect(createContextSummarizer({} as Anthropic, model, budget)(messages, signal()))
-      .rejects.toThrow(/text-only summarization also excludes it/)
-  })
+  it.each(['image', 'document'])(
+    'rejects %s summary history without suggesting provider support',
+    async type => {
+      const budget = new ContextBudget(model, { contextWindow: 8192, counting: 'provider' })
+      const messages = [{ role: 'user', content: [{ type }] }] as Anthropic.MessageParam[]
+      await expect(
+        createContextSummarizer({} as Anthropic, model, budget)(messages, signal())
+      ).rejects.toThrow(/text-only summarization also excludes it/)
+    }
+  )
 
   it('covers every original code point across bounded chunks and combines their summaries', async () => {
     const requests: ContextRequest[] = []
@@ -121,7 +137,9 @@ describe('summary requests', () => {
     await createContextSummarizer(client, model, budget)(history('history '.repeat(100)), signal())
     expect(countTokens).toHaveBeenCalled()
     expect(countTokens.mock.calls[0][0].messages).toEqual(create.mock.calls[0][0].messages)
-    expect(countTokens.mock.calls.at(-1)![0].messages).toEqual(history('Kept intent and pending work.'))
+    expect(countTokens.mock.calls.at(-1)![0].messages).toEqual(
+      history('Kept intent and pending work.')
+    )
   })
 })
 
