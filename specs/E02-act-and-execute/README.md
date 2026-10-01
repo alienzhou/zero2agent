@@ -50,4 +50,4 @@ Epic 2 的主轴是让 Agent 跨过"只读"这条线：
 
 每个 Story 页面里有完整的阅读顺序、代码指引和跟练说明，跟着走就行。
 
-本阶段四节课已完成并合入 main，S004 尚未打课程 Tag。下一阶段进入 [Epic 3：基础能力与产品化](../E03-product-foundations/README.md)，课程计划已确认，尚未实现。
+本阶段四节课已完成并合入 main，S004 尚未打课程 Tag。下一阶段进入 [Epic 3：基础能力与产品化](../E03-product-foundations/README.md)，S001 多轮会话已实现，尚未合入或发布。

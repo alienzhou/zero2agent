@@ -103,6 +103,17 @@ const events: LoopEventHandlers = {
   onToolError: (_name, error) => {
     process.stdout.write(`${DIM}  ${RED}✗${RESET}${DIM} ${error}${RESET}\n`)
   },
+  onCompaction: event => {
+    const labels = {
+      pruned: '已缩短工具正文，完整结果保留为可回读文件。',
+      background: '正在后台压缩历史，对话继续。',
+      waiting: '上下文接近预算，正在等待后台压缩。',
+      foreground: '正在压缩上下文，完成后继续。',
+      completed: '上下文压缩完成。',
+      failed: '压缩未完成，原始记录已保留；发送前仍会检查预算。',
+    }
+    process.stdout.write(`\n${DIM}${labels[event.phase]}${RESET}\n`)
+  },
 }
 
 async function main() {
@@ -143,6 +154,16 @@ async function main() {
     systemPrompt: buildSystemPrompt(),
     events,
     cwd: process.cwd(),
+    context: {
+      contextWindow: process.env.CONTEXT_WINDOW ? Number(process.env.CONTEXT_WINDOW) : undefined,
+      maxInputTokens: process.env.MAX_INPUT_TOKENS
+        ? Number(process.env.MAX_INPUT_TOKENS)
+        : undefined,
+      maxOutputTokens: process.env.MAX_OUTPUT_TOKENS
+        ? Number(process.env.MAX_OUTPUT_TOKENS)
+        : undefined,
+      counting: process.env.CONTEXT_COUNTING === 'provider' ? 'provider' : 'conservative',
+    },
   })
 
   if (messageArg) {
@@ -152,14 +173,18 @@ async function main() {
       console.log()
     } catch (error) {
       console.error('\n执行出错:', (error as Error).message)
-      process.exit(1)
+      process.exitCode = 1
+    } finally {
+      agent.cancelCompaction()
     }
     return
   }
 
   // 交互模式
   console.log('zero2agent - Agent Harness（文件读写演示）')
-  console.log('输入你的问题；/terminal [bash命令] 交给人操作；exit 退出\n')
+  console.log(
+    '输入你的问题；/new 新建对话；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出\n'
+  )
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -172,7 +197,17 @@ async function main() {
   let closed = false
   rl.on('close', () => {
     closed = true
+    agent.cancelCompaction()
     void cleanupBackgroundOnExit()
+      .catch(error => {
+        console.error('退出清理失败:', error instanceof Error ? error.message : String(error))
+        process.exitCode = 1
+      })
+      .finally(() => {
+        // readline.close() only pauses a pipe; release it after cleanup so exit needs no EOF.
+        // Keep TTY handling intact: background cleanup may need a final interactive answer.
+        if (!process.stdin.isTTY) process.stdin.destroy()
+      })
   })
 
   const prompt = () => {
@@ -194,7 +229,15 @@ async function main() {
 
       try {
         resetStreamState()
-        if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
+        if (trimmed === '/new') {
+          agent.reset()
+          process.stdout.write('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。\n')
+        } else if (trimmed === '/compact') {
+          const changed = await agent.compact()
+          process.stdout.write(
+            changed ? '已压缩工作上下文，完整会话记录保留。\n' : '当前没有可压缩的历史。\n'
+          )
+        } else if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
           const command =
             trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
           process.stdout.write(
