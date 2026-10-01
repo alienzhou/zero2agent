@@ -1,0 +1,14 @@
+specs/E03-product-foundations/S001-multi-turn/follow-along.md
+  h_afc6b161d429e0 7,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5f72f73302606df92b33df642de52d978155ad1",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
