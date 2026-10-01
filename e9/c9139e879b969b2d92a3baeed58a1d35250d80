@@ -1,0 +1,21 @@
+packages/core/src/__tests__/context-budget.test.ts
+  s_290530285adada::t_8cacf5cd353485 117-123,127-129
+packages/core/src/__tests__/context-summary.test.ts
+  s_290530285adada::t_3e6d15e9f4e8ca 45-46,51-57,59-61,68-70,76-79,90-92,97-106,140-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e9c9139e879b969b2d92a3baeed58a1d35250d80",
+  "prompts": {},
+  "sessions": {
+    "s_290530285adada": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f5df-ce1f-7cc0-b123-6ed3c8d0654f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
