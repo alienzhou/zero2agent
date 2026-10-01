@@ -79,6 +79,10 @@ async function exercise(
       ANTHROPIC_API_KEY: 'contract-placeholder',
       ANTHROPIC_BASE_URL: `http://127.0.0.1:${address.port}`,
       MODEL_NAME: 'contract-model',
+      CONTEXT_WINDOW: '200000',
+      CONTEXT_COUNTING: 'conservative',
+      MAX_INPUT_TOKENS: '190000',
+      MAX_OUTPUT_TOKENS: '4096',
     },
     stdio: ['pipe', 'pipe', 'pipe'],
   })

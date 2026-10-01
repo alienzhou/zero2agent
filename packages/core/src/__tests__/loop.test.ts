@@ -114,7 +114,7 @@ describe('executeToolCalls', () => {
 
 vi.mock('../llm/index.js', () => ({
   createAnthropicClient: vi.fn(),
-  getModelName: vi.fn(() => 'mock-model'),
+  getModelName: vi.fn(() => 'claude-sonnet-4-20250514'),
 }))
 
 import { createAnthropicClient } from '../llm/index.js'

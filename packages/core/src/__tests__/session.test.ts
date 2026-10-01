@@ -17,7 +17,7 @@ import {
 
 vi.mock('../llm/index.js', () => ({
   createAnthropicClient: vi.fn(),
-  getModelName: (config: { model?: string }) => config.model ?? 'test-model',
+  getModelName: (config: { model?: string }) => config.model ?? 'claude-sonnet-4-20250514',
 }))
 
 type Message = Anthropic.MessageParam
@@ -80,6 +80,40 @@ function expectPaired(history: Message[]) {
 afterEach(() => vi.restoreAllMocks())
 
 describe('in-memory sessions', () => {
+  it('compacts working context without changing full history and returns detached snapshots', async () => {
+    const requests = transport(
+      answer('historical evidence '.repeat(150)),
+      answer('follow-up answer')
+    )
+    const agent = new Agent({ tools: [], context: { maxInputTokens: 12_000 } })
+    await agent.run('original task')
+    const client = vi.mocked(createAnthropicClient).mock.results.at(-1)!.value as Anthropic
+    const create = vi.fn(async () => answer('Summary: verified historical evidence retained.'))
+    client.messages.create = create as unknown as Anthropic['messages']['create']
+    const history = agent.getHistory()
+    expect(await agent.compact()).toBe(true)
+    expect(agent.getHistory()).toEqual(history)
+    expect(agent.getContext()).toContainEqual({ role: 'user', content: 'original task' })
+    expect(JSON.stringify(agent.getContext())).toContain(
+      'Summary: verified historical evidence retained.'
+    )
+    expect(JSON.stringify(agent.getContext())).not.toContain('historical evidence '.repeat(150))
+    const snapshot = agent.getContext()
+    snapshot[0].content = 'tampered context'
+    expect(JSON.stringify(agent.getContext())).not.toContain('tampered context')
+    expect(create).toHaveBeenCalledTimes(1)
+    const summaryRequest = create.mock.calls[0] as unknown as [Record<string, unknown>]
+    expect(summaryRequest[0]).not.toHaveProperty('tools')
+    expect(summaryRequest[0]).not.toHaveProperty('stream')
+    await agent.run('latest user intent')
+    expect(JSON.stringify(requests[1])).toContain('Summary: verified historical evidence retained.')
+    expect(requests[1].at(-1)).toEqual({ role: 'user', content: 'latest user intent' })
+    expect(agent.getHistory()).toHaveLength(4)
+    agent.reset()
+    expect(agent.getContext()).toEqual([])
+    expect(agent.getHistory()).toEqual([])
+  })
+
   it('keeps the previously committed snapshot while a later turn is running', async () => {
     let finish!: (value: Reply) => void
     transport(
@@ -97,6 +131,7 @@ describe('in-memory sessions', () => {
     const snapshot = agent.getHistory()
     snapshot[0].content = 'tampered'
     expect(agent.getHistory()).toEqual(committed)
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'))
     finish(answer('second answer'))
     await pending
     expect(agent.getHistory()).toHaveLength(4)
@@ -112,6 +147,7 @@ describe('in-memory sessions', () => {
     const onToolEnd = vi.fn()
     const agent = new Agent({
       config,
+      context: { contextWindow: 200_000 },
       systemPrompt: 'Keep this instruction',
       tools: [echo],
       events: { onToolEnd },
@@ -261,6 +297,7 @@ describe('in-memory sessions', () => {
     await expect(agent.run('second')).rejects.toThrow('already running')
     expect(() => agent.reset()).toThrow('already running')
     expect(agent.getHistory()).toEqual([])
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'))
     finish(answer('first done'))
     await pending
     await agent.run('next')
