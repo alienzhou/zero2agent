@@ -1,0 +1,32 @@
+packages/core/src/__tests__/compact-loop.test.ts
+  h_afc6b161d429e0 108-135,180-198
+packages/core/src/__tests__/context-budget.test.ts
+  h_afc6b161d429e0 114-127
+packages/core/src/__tests__/context-manager.test.ts
+  h_afc6b161d429e0 270-332
+packages/core/src/__tests__/context-summary.test.ts
+  h_afc6b161d429e0 44-91,123-124,133
+packages/core/src/agent.ts
+  h_afc6b161d429e0 50
+packages/core/src/context-budget.ts
+  h_afc6b161d429e0 43
+packages/core/src/context-manager.ts
+  h_afc6b161d429e0 64,82-85,89-102,123,128,133-139,141,165,177,195,198,211,315-316,361-377,379
+packages/core/src/context-summary.ts
+  h_afc6b161d429e0 21-22,43,58-59,79,82-84,86,90-104,146-147
+packages/core/src/loop.ts
+  h_afc6b161d429e0 151-158
+packages/core/src/session.ts
+  h_afc6b161d429e0 37,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7feabd975c5a51e16c54e91b681a8c2a60701834",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
