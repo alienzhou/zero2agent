@@ -1,0 +1,30 @@
+.env.example
+  h_afc6b161d429e0 21-29
+packages/core/src/__tests__/compact-loop.test.ts
+  h_afc6b161d429e0 1-174
+packages/core/src/__tests__/context-manager.test.ts
+  h_afc6b161d429e0 1-298
+packages/core/src/agent.ts
+  h_afc6b161d429e0 4-5,15,40,49-60
+packages/core/src/context-manager.ts
+  h_afc6b161d429e0 1-369
+packages/core/src/index.ts
+  h_afc6b161d429e0 10-12
+packages/core/src/loop.ts
+  h_afc6b161d429e0 9-11,47,122,138-167,174-176,182-197
+packages/core/src/session.ts
+  h_afc6b161d429e0 2-3,12-54,64-65
+packages/tui/src/cli.ts
+  h_afc6b161d429e0 106-116,157-166,176-178,185-187,200,235-239
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae9aabb72b3086280d51b2ea5be3cdf1b1fe7e07",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
