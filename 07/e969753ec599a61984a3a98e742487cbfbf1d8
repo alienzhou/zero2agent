@@ -1,0 +1,36 @@
+CHANGELOG.md
+  h_afc6b161d429e0 90
+README.md
+  h_afc6b161d429e0 164
+docs/roadmap/README.md
+  h_afc6b161d429e0 21
+packages/core/README.md
+  h_afc6b161d429e0 7
+retros/E03-S001-multi-turn.md
+  h_afc6b161d429e0 5
+specs/E03-product-foundations/README.md
+  h_afc6b161d429e0 9
+specs/E03-product-foundations/S001-multi-turn/README.md
+  h_afc6b161d429e0 3,56
+specs/E03-product-foundations/S001-multi-turn/details/00-overview.md
+  h_afc6b161d429e0 9
+specs/E03-product-foundations/S001-multi-turn/details/01-technical-design.md
+  h_afc6b161d429e0 5
+specs/E03-product-foundations/S001-multi-turn/details/02-task-list.md
+  h_afc6b161d429e0 3
+specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md
+  h_afc6b161d429e0 3
+specs/E03-product-foundations/S001-multi-turn/follow-along.md
+  h_afc6b161d429e0 7,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "07e969753ec599a61984a3a98e742487cbfbf1d8",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
