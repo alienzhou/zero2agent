@@ -4,9 +4,9 @@
 
 ## 版本与前提
 
-本节代码已推送到 `origin/feat/e03-s001-multi-turn`，尚未合入 main 或打 Tag。先确认你拿到的是含 `packages/core/src/session.ts` 的版本；不要把旧 main 当作本节实现。
+实现与自动测试已完成，生产代码基线 `ea498a3` 未变，最终验收测试候选为 `3829868`，已本地提交、尚未推送。远端 `origin/feat/e03-s001-multi-turn` 的旧多轮版本 `a5f72f7` 不含这次压缩增量；只获取远端旧版本不能完成下面的压缩练习，也没有本期发布 Tag。
 
-本轮复核的代码提交为 `b615f01`，补齐了输入管道退出与空响应提示。在已有仓库运行 `git fetch origin`，再用 `git worktree add ../zero2agent-e03-s001 origin/feat/e03-s001-multi-turn` 创建独立跟练目录，避免切换或覆盖现有工作区。进入该目录后执行下文命令；自行补测前用 `git switch -c practice/e03-s001` 创建练习分支。分支可获取不等于正式发布，不提供尚不存在的课程 Tag。
+先确认工作区包含 `packages/core/src/context-budget.ts`、`context-summary.ts`、`context-manager.ts` 与 `e2e/src/compact-contract.test.ts`。已有本地基线可继续；缺失时先做多轮练习，等压缩版本推送后再获取。最终 `3829868` 验收测试已包含两项强化用例，生产代码仍为 `ea498a3`。不要覆盖已有未提交工作。
 
 Node.js 22+、pnpm 9+。下列命令从仓库根目录运行；依赖尚未安装时先运行 `pnpm install`。
 
@@ -65,29 +65,71 @@ it('exercise: continue after two failures', async () => {
 
 为了验证测试真的能发现问题，可在个人练习分支暂时去掉 `Agent.run()` 传给 Loop 的 `session`，运行上述测试观察失败；再恢复该参数，确认测试变绿。不要修改真实工作文件来制造副作用。
 
-## 4. 手动体验两轮对话
+## 4. 先验证自动层级，再体验手动命令
 
-按仓库首页配置模型后，在根目录启动：
+从一次读入大文件的场景出发：工具结果会让同一 Turn 内的下一次请求突然增大。预算检查必须放在每次模型请求前，而不是只在用户按回车时执行。
 
 ```sh
-node packages/tui/dist/cli.js
+pnpm --filter @zero2agent/core test -- src/__tests__/context-budget.test.ts src/__tests__/context-summary.test.ts src/__tests__/context-manager.test.ts
+pnpm --filter @zero2agent/core test -- src/__tests__/session.test.ts src/__tests__/loop.test.ts src/__tests__/compact-loop.test.ts
+pnpm build
+pnpm --filter @zero2agent/e2e test -- src/compact-contract.test.ts src/multi-turn-contract.test.ts
 ```
+
+这些专项使用 mock 或本地 HTTP/SSE 服务，不需要真实模型、真实 API key，也不设置 `E2E_LIVE=1`。CLI 契约测试隔离本地密钥和模型环境，并显式配置测试模型窗口；构建失败时先修复再运行 E2E，以免测试旧 dist。生产代码 `ea498a3`、验收测试候选 `3829868` 最终全量 379 通过、25 项真实模型测试因缺 API 配置跳过；compact-loop 12/12 和 strict 类型检查通过，详见[验收清单](./details/03-verification-checklist.md)。你自己的运行仍应分别记录成功、失败与跳过。
+
+按以下顺序观察断言：
+
+1. **预算完整性**：system、工具 schema、多字节消息与工具结果都计入；未知模型无窗口时拒绝，provider 计数失败不放行。
+2. **先做便宜的缩短**：大工具结果写入临时文件；读回全文与原结果一致，原始历史和 tool_use_id 不变。长单行另有 `.chunks.jsonl`，检查 read_file 能按行读到末尾，而不只是文件存在。
+3. **后台不丢增量**：打开 `context-manager.test.ts` 中使用 deferred 的测试，让摘要 Promise 暂不完成；继续追加回答和用户修正，再 resolve，检查尾部原样保留。
+4. **前台等待与硬上限分开**：让新增文本超过前台阈值；在 resolve 前断言 prepare 没有返回。摘要失败但完整请求仍在硬预算内可以继续，超过则必须拒绝。reset/cancel 后旧摘要不得采用，立即取消也不得继续启动计数。
+5. **摘要也会超长**：阅读 `context-summary.test.ts` 的分块与失败用例，检查输出 token 上限、字节目标和后续输入预算分别约束，输出截断不能算成功。
+6. **最后看手动入口**：CLI 契约区分主请求和摘要请求，断言 `/compact` 不成为 user 消息、`/compact extra` 是普通输入、失败后原史仍在、`/new` 清掉摘要。
+
+可在个人练习分支给后台增量测试追加一条“保留 public API”的用户修正，再断言压缩后最新输入仍完整存在。不要只断言摘要字符串出现：那样发现不了丢失增量。另检查溢出恢复用例的工具调用次数，确认重试的是模型请求而非工具副作用。
+
+## 5. 可选：真实模型两轮与前台压缩
+
+只有确认 API 费用与数据边界后才做这一步。SDK 和 CLI 的摘要也请求同一个配置模型；长历史可能被分成多次摘要请求，后台摘要与主请求可能并发。`provider` 还会增加计数请求，兼容服务未必支持该 API；按供应商实际规则计费。不要用大量重复文本向真实模型强行压测阈值，用上面的本地测试即可。
+
+先按仓库首页配置模型。以下示例仅适用于已知默认模型；改用其他 MODEL_NAME 时，必须按供应商文档显式填写对应 CONTEXT_WINDOW，不能照抄 200000：
+
+```sh
+MODEL_NAME=claude-sonnet-4-20250514 CONTEXT_WINDOW=200000 MAX_INPUT_TOKENS=190000 MAX_OUTPUT_TOKENS=4096 CONTEXT_COUNTING=conservative node packages/tui/dist/cli.js
+```
+
+MAX_INPUT_TOKENS 是含固定指令、工具定义与消息的输入上限，还需留出输出和安全空间；conservative 是 UTF-8 字节保守估算，不是精确 token 读数。四个变量只由 CLI 转为 context 选项；SDK 使用 `new Agent({ context: { ... } })`。
 
 逐条输入，等每次重新出现 `你: ` 再继续：
 
 ```text
-本次练习的代号是 cedar-17，只回复已记住，不要调用工具。
-刚才的练习代号是什么？
+本次练习代号是 cedar-17。目标是只讨论测试组织；保留 public API，不修改文件、不调用工具。请用几句话复述约束与下一步。
+刚才的代号、约束和下一步分别是什么？
+/compact
+继续：先复述必须保留的约束，不要执行任何工具。
 /new
 当前对话中，我是否告诉过你练习代号？不要猜测。
 exit
 ```
 
-第二问应能接续上下文；`/new` 后请求不含旧代号。自然语言回复受模型影响，判断传输是否正确请以测试的请求断言为准。真实模型体验会产生供应商 API 费用，本轮未自动执行。
+`/compact` 前台等待，界面可能显示等待已有后台任务、前台压缩、完成或失败。短历史可能没有可采用的缩减，不能把“没有可压缩的历史”当作失败；失败时先检查预算及服务错误，别无限重复付费请求。自然语言回答不等于契约证据，仍以本地请求快照断言为准。本轮未自动执行真实模型体验。
 
-## 5. 知道哪些事情不会发生
+在已有 SDK 集成中，可于空闲时观察两个视图（调用 compact 仍会请求真实模型，除非你已 mock 客户端）：
 
-- `/new` 不回退文件，不停止后台进程，不清除终端滚屏，也不删除供应商记录。
-- 退出后重新启动不会恢复会话。
-- 历史不会自动压缩；长对话仍可能超过模型上下文限制。
-- 本节没有新增全局中断 UI；已有 terminal 中止继续通过工具结果反馈。
+```ts
+const original = agent.getHistory()
+const changed = await agent.compact()
+const context = agent.getContext()
+console.log({ changed, historyMessages: original.length, contextMessages: context.length })
+// 原史内容应保持不变；消息条数不是 token 数，也不能证明摘要质量。
+agent.cancelCompaction() // 取消压缩，不是撤销工具或全局中断。
+```
+
+## 6. 知道哪些事情不会发生
+
+- `/compact` 不删除原史，不回退文件；`/new` 清空会话，但不撤销文件、日志、后台命令，也不删除供应商记录。
+- 摘要有损，不保证保留所有事实；重要操作应回读文件或重新检查当前状态，而非重跑有副作用的原工具。
+- 自动压缩不能容纳任意大的最新输入或固定指令；安全请求无法构造时会报错，需拆分输入。
+- 原始历史仍占内存，退出不会恢复会话；工具结果临时文件不等于持久化，会受系统清理影响。
+- 本节没有新增全局中断 UI；手动 compact 与 run/reset 互斥，已有 terminal 中止继续通过工具结果反馈。
