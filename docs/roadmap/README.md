@@ -18,7 +18,7 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新开发课程：[E03-S001：让 Agent 接着聊，也能控制上下文长度](../../specs/E03-product-foundations/S001-multi-turn/README.md)。多轮会话、请求预算、自动后台／前台压缩与手动 `/compact` 已实现，生产代码 `ea498a3` 与最终验收测试候选 `3829868` 已通过自动验证；候选已本地提交、未推送，旧多轮版本已推送，尚未合入或发布。最终全量 379 通过、25 跳过，18 页图文本地成稿与交付包验证完成、未发布；真实模型试用未执行。先从情景理解历史与工作上下文，再学自动层级／并发，最后做[无真实模型跟练](../../specs/E03-product-foundations/S001-multi-turn/follow-along.md)。基础压缩不再推迟到 Epic 4；该阶段保留高级质量评估与更复杂上下文工程。
+最新开发课程：[E03-S001：让 Agent 接着聊，也能控制上下文长度](../../specs/E03-product-foundations/S001-multi-turn/README.md)。多轮会话、请求预算、自动后台／前台压缩与手动 `/compact` 已实现，生产代码 `ea498a3` 与最终验收测试 `3829868` 已通过自动验证；功能分支已推送至 `50d1c1a`，尚未合入或发布。最终全量 379 通过、25 跳过，18 页图文本地成稿与交付包验证完成、未发布；真实模型试用未执行。先从情景理解历史与工作上下文，再学自动层级／并发，最后做[无真实模型跟练](../../specs/E03-product-foundations/S001-multi-turn/follow-along.md)。基础压缩不再推迟到 Epic 4；该阶段保留高级质量评估与更复杂上下文工程。
 
 ---
 

@@ -4,9 +4,9 @@
 
 ## 版本与前提
 
-实现与自动测试已完成，生产代码基线 `ea498a3` 未变，最终验收测试候选为 `3829868`，已本地提交、尚未推送。远端 `origin/feat/e03-s001-multi-turn` 的旧多轮版本 `a5f72f7` 不含这次压缩增量；只获取远端旧版本不能完成下面的压缩练习，也没有本期发布 Tag。
+实现与自动测试已完成，生产代码基线 `ea498a3` 未变，最终验收测试为 `3829868`，已推送至 `origin/feat/e03-s001-multi-turn` 的 `50d1c1a`。该分支包含下面的压缩练习，但尚未合入 `main`，也没有本期发布 Tag。
 
-先确认工作区包含 `packages/core/src/context-budget.ts`、`context-summary.ts`、`context-manager.ts` 与 `e2e/src/compact-contract.test.ts`。已有本地基线可继续；缺失时先做多轮练习，等压缩版本推送后再获取。最终 `3829868` 验收测试已包含两项强化用例，生产代码仍为 `ea498a3`。不要覆盖已有未提交工作。
+先确认工作区包含 `packages/core/src/context-budget.ts`、`context-summary.ts`、`context-manager.ts` 与 `e2e/src/compact-contract.test.ts`。可从已推送的功能分支获取；最终 `3829868` 验收测试已包含两项强化用例，生产代码仍为 `ea498a3`。不要覆盖已有未提交工作。
 
 Node.js 22+、pnpm 9+。下列命令从仓库根目录运行；依赖尚未安装时先运行 `pnpm install`。
 
