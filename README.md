@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S001：让 Agent 接着聊，也能控制上下文长度](./specs/E03-product-foundations/S001-multi-turn/README.md)已实现进程内多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。生产代码 `ea498a3` 未变，最终验收测试 `3829868` 全量 379 通过、25 项真实模型测试缺 API 配置跳过，compact-loop 12/12 及 strict 类型检查通过。18 页图文本地成稿与交付包验证完成，未发布。功能分支已推送至 `50d1c1a`；尚未合入、打 Tag 或发布。最近已合入课程仍为 E02-S004。
+**最新更新**：[E03-S001：让 Agent 接着聊，也能控制上下文长度](./specs/E03-product-foundations/S001-multi-turn/README.md)已实现进程内多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。生产代码 `ea498a3` 与最终验收测试 `3829868` 已合入 `main`（`f883252`）；全量 379 通过、25 项真实模型测试缺 API 配置跳过，compact-loop 12/12 及 strict 类型检查通过。18 页图文本地成稿与交付包验证完成，尚未对外发布。Story Tag 已创建。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -173,7 +173,7 @@ zero2agent/
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
-| [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | 已实现，基线自动测试通过，未合入／发布 |
+| [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | Done，已合入 main、已打 Tag，未对外发布 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

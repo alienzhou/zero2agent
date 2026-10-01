@@ -77,7 +77,7 @@ git checkout main
 
 ## [Unreleased]
 
-### E03-S001-multi-turn（已实现，未发布）
+### E03-S001-multi-turn（已合入 main，未对外发布）
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S001-multi-turn/README.md)
 
@@ -93,7 +93,7 @@ git checkout main
 - 摘要 token 与字节紧凑目标分离，采用时重新计数完整请求；计数可取消，立即取消不再发起后续计数。自动前台失败若请求仍在硬预算内可继续，硬超限必须拒绝。
 - 大工具结果原文保留，长单行增加 Unicode 字符切片 JSONL，可用 read_file 按行读到末尾；静态 Agent.run 与默认 runLoop 在结束时取消无主后台摘要。
 - SDK 增加 compact/getContext/getHistory/cancelCompaction；CLI 精确 `/compact` 前台执行，提供四个上下文环境变量。压缩不改原史、不重跑工具，不承诺无损摘要或任意供应商永久不超限。
-- 无持久化与全局取消 UI，未进行真实模型试用、合入或打 Tag；真实试用是可选付费体验，不是自动验收必过项。
+- 已通过 PR #15 合入 `main`（`f883252`），并创建 Story Tag `E03-S001-multi-turn`。无持久化与全局取消 UI，未进行真实模型试用；真实试用是可选付费体验，不是自动验收必过项。
 
 学习重点是消息所有权、预算与副作用证据，而非把字符串拼成聊天记录。课程按场景、原理、自动层级／并发、手动跟练展开，见[技术设计](./specs/E03-product-foundations/S001-multi-turn/details/01-technical-design.md)和[复盘](./retros/E03-S001-multi-turn.md)。
 
