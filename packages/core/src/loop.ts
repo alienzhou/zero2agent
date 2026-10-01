@@ -135,7 +135,13 @@ export interface RunLoopOptions {
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
   const session = options.session ?? new Session()
-  return session.runTurn(userMessage, messages => runTurnLoop(messages, { ...options, session }))
+  try {
+    return await session.runTurn(userMessage, messages =>
+      runTurnLoop(messages, { ...options, session })
+    )
+  } finally {
+    if (!options.session) session.cancelCompaction()
+  }
 }
 
 export function createCompactionRuntime(

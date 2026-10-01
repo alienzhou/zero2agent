@@ -330,6 +330,17 @@ describe('tiered context management', () => {
     expect(signal?.aborted).toBe(true)
   })
 
+  it('cancels before token counting starts without starting work under a fresh signal', async () => {
+    const { manager, runtime } = fixture()
+    const count = vi
+      .spyOn(runtime.budget, 'count')
+      .mockImplementation(() => new Promise<number>(() => {}))
+    const preparing = manager.prepare([user('hello')], runtime)
+    manager.cancel()
+    await expect(preparing).rejects.toThrow('cancelled')
+    expect(count).not.toHaveBeenCalled()
+  })
+
   it('keeps long multi-turn conversations within the budget after repeated compactions', async () => {
     const { manager, runtime, summarize } = fixture()
     const messages: Message[] = []

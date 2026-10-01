@@ -73,6 +73,10 @@ export class Agent {
    */
   static async run(message: string, options?: AgentOptions): Promise<string> {
     const agent = new Agent(options)
-    return agent.run(message)
+    try {
+      return await agent.run(message)
+    } finally {
+      agent.cancelCompaction()
+    }
   }
 }

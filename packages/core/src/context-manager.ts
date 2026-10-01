@@ -117,6 +117,7 @@ export class ContextManager {
   async prepare(messages: Message[], runtime: CompactionRuntime): Promise<ContextRequest> {
     const epoch = this.epoch
     await this.adopt(messages, runtime)
+    this.assertCurrent(epoch)
     await this.checkPinned(messages, runtime)
     this.assertCurrent(epoch)
     let request = runtime.request(this.getContext(messages))
@@ -124,6 +125,7 @@ export class ContextManager {
     this.assertCurrent(epoch)
     if (tokens >= runtime.budget.backgroundLimit) {
       if (await this.prune(messages, runtime)) {
+        this.assertCurrent(epoch)
         request = runtime.request(this.getContext(messages))
         tokens = await this.count(request, runtime)
       }
@@ -137,6 +139,7 @@ export class ContextManager {
         // A failed optimization may not block a still-safe request, nor release an unsafe one.
         if (tokens > runtime.budget.inputLimit) throw error
       }
+      this.assertCurrent(epoch)
       request = runtime.request(this.getContext(messages))
       tokens = await this.count(request, runtime)
     } else if (tokens >= runtime.budget.backgroundLimit && !this.job) {

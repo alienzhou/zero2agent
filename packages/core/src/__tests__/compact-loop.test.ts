@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
 import { Agent } from '../agent.js'
+import { runLoop } from '../loop.js'
 import { createAnthropicClient } from '../llm/index.js'
 import { ContextBudget, type ContextRequest } from '../context-budget.js'
 import type { Tool } from '../tools/types.js'
@@ -60,6 +61,45 @@ function provider(
 afterEach(() => vi.restoreAllMocks())
 
 describe('compaction across the real loop and session', () => {
+  it.each(['static', 'loop'])(
+    'cancels orphaned background work after a %s one-shot run',
+    async entry => {
+      const reply = toolReply()
+      reply.content.unshift({ type: 'text', text: 'analysis '.repeat(1200), citations: null })
+      const tool: Tool = {
+        name: 'write',
+        description: 'write',
+        input_schema: { type: 'object', properties: {} },
+        execute: async () => 'done',
+      }
+      const { client } = provider([reply, text('completed')])
+      let signal: AbortSignal | undefined
+      client.messages.create.mockImplementationOnce(
+        (_request, options?: { signal?: AbortSignal }) => {
+          signal = options?.signal
+          return new Promise<Anthropic.Message>(() => {})
+        }
+      )
+      client.messages.stream
+        .mockImplementationOnce(() => ({
+          on: vi.fn(),
+          finalMessage: async () => reply,
+        }))
+        .mockImplementationOnce(() => ({
+          on: vi.fn(),
+          finalMessage: async () => {
+            await vi.waitFor(() => expect(signal).toBeDefined())
+            return text('completed')
+          },
+        }))
+      const options = { tools: [tool], context }
+      expect(
+        await (entry === 'static' ? Agent.run('task', options) : runLoop('task', options))
+      ).toBe('completed')
+      expect(signal?.aborted).toBe(true)
+    }
+  )
+
   it('recovers an upstream context rejection without repeating an executed tool', async () => {
     const execute = vi.fn(
       async () => 'changed file once; inspected original content ' + 'r'.repeat(3000)
