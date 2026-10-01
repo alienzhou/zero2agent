@@ -1,7 +1,8 @@
 /**
  * Agent 类 - 封装 ReACT 循环的简化入口
  */
-import { runLoop } from './loop.js'
+import { runLoop, createCompactionRuntime } from './loop.js'
+import type { ContextOptions } from './context-budget.js'
 import type { LoopEventHandlers } from './loop.js'
 import type { Tool } from './tools/index.js'
 import type { LLMConfig } from './llm/index.js'
@@ -11,6 +12,7 @@ import type Anthropic from '@anthropic-ai/sdk'
 
 export interface AgentOptions {
   config?: LLMConfig
+  context?: ContextOptions
   tools?: Tool[]
   systemPrompt?: string
   events?: LoopEventHandlers
@@ -35,12 +37,25 @@ export class Agent {
   async run(message: string): Promise<string> {
     return runLoop(message, {
       config: this.options.config,
+      context: this.options.context,
       tools: this.options.tools,
       systemPrompt: this.options.systemPrompt,
       events: this.options.events,
       cwd: this.options.cwd,
       session: this.session,
     })
+  }
+
+  async compact(): Promise<boolean> {
+    return this.session.compact(createCompactionRuntime(this.options, this.session))
+  }
+
+  getContext(): Anthropic.MessageParam[] {
+    return this.session.getContext()
+  }
+
+  cancelCompaction(): void {
+    this.session.cancelCompaction()
   }
 
   /** Start a new conversation without undoing files or stopping background processes. */

@@ -6,6 +6,9 @@ import type Anthropic from '@anthropic-ai/sdk'
 import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
 import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
 import { Session } from './session.js'
+import type { ContextOptions } from './context-budget.js'
+import { createContextSummarizer } from './context-summary.js'
+import type { CompactionEvent, CompactionRuntime } from './context-manager.js'
 
 const MAX_ITERATIONS = 20
 
@@ -41,6 +44,7 @@ export interface LoopEventHandlers {
   onToolEnd?: (toolName: string, output: string, durationMs: number) => void
   /** 工具执行出错 */
   onToolError?: (toolName: string, error: string) => void
+  onCompaction?: (event: CompactionEvent) => void
 }
 
 /**
@@ -115,6 +119,7 @@ export interface RunLoopOptions {
   /** Omit for a one-shot run; reuse explicitly for a multi-turn conversation. */
   session?: Session
   config?: LLMConfig
+  context?: ContextOptions
   tools?: Tool[]
   systemPrompt?: string
   events?: LoopEventHandlers
@@ -130,42 +135,66 @@ export interface RunLoopOptions {
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
   const session = options.session ?? new Session()
-  return session.runTurn(userMessage, messages => runTurnLoop(messages, options))
+  return session.runTurn(userMessage, messages => runTurnLoop(messages, { ...options, session }))
+}
+
+export function createCompactionRuntime(
+  options: RunLoopOptions,
+  session: Session
+): CompactionRuntime {
+  const client = createAnthropicClient(options.config ?? {})
+  const model = getModelName(options.config ?? {})
+  const budget = session.getContextBudget(model, options.context)
+  return {
+    client,
+    budget,
+    request: messages => ({
+      model,
+      max_tokens: budget.outputTokens,
+      messages,
+      tools: (options.tools ?? allTools).map(toAnthropicTool),
+      ...(options.systemPrompt && { system: options.systemPrompt }),
+    }),
+    summarize: createContextSummarizer(client, model, budget),
+    onCompaction: options.events?.onCompaction,
+  }
+}
+
+function isContextOverflow(error: unknown): boolean {
+  if (!(error instanceof Error)) return false
+  return /prompt is too long|context[_ ](?:length[_ ]exceeded|overflow|window)|maximum context|too many (?:input )?tokens/i.test(
+    error.message
+  )
 }
 
 async function runTurnLoop(
   messages: Anthropic.MessageParam[],
   options: RunLoopOptions
 ): Promise<string> {
-  const { config = {}, tools = allTools, systemPrompt, events, cwd } = options
-
-  // 构造工具执行上下文
+  const { tools = allTools, events, cwd } = options
+  const session = options.session!
+  const runtime = createCompactionRuntime(options, session)
   const ctx: ToolContext = { cwd: cwd ?? process.cwd() }
-
-  const client = createAnthropicClient(config)
-  const model = getModelName(config)
-  const toolDefinitions = tools.map(toAnthropicTool)
-
   let iterations = 0
 
   while (iterations < MAX_ITERATIONS) {
     iterations++
-
-    // 流式调用 LLM
-    const stream = client.messages.stream({
-      model,
-      max_tokens: 4096,
-      tools: toolDefinitions,
-      messages: structuredClone(messages),
-      ...(systemPrompt && { system: systemPrompt }),
-    })
-
-    stream.on('text', text => {
-      notifyObserver(() => events?.onText?.(text))
-    })
-
-    // Partial stream events belong to the display, not to the committed transcript.
-    const response = await stream.finalMessage()
+    let response: Anthropic.Message
+    for (let recovery = 0; ; recovery++) {
+      const request = await session.prepareRequest(messages, runtime)
+      try {
+        const stream = runtime.client.messages.stream(request)
+        stream.on('text', text => {
+          notifyObserver(() => events?.onText?.(text))
+        })
+        // Partial stream events belong to the display, not to the committed transcript.
+        response = await stream.finalMessage()
+        break
+      } catch (error) {
+        if (!isContextOverflow(error) || recovery >= 2) throw error
+        if (!(await session.recoverContext(messages, runtime))) throw error
+      }
+    }
 
     if (response.stop_reason === 'tool_use') {
       if (!response.content.some(block => block.type === 'tool_use')) {

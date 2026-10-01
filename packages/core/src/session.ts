@@ -1,4 +1,6 @@
 import type Anthropic from '@anthropic-ai/sdk'
+import { ContextManager, type CompactionRuntime } from './context-manager.js'
+import { ContextBudget, type ContextOptions, type ContextRequest } from './context-budget.js'
 
 const INTERRUPTED =
   '[Harness] This turn was interrupted. Completed tool results are retained; no file changes were rolled back. Re-check the workspace before continuing.'
@@ -7,6 +9,49 @@ const INTERRUPTED =
 export class Session {
   private messages: Anthropic.MessageParam[] = []
   private running = false
+  private context = new ContextManager()
+  private budget?: ContextBudget
+  private budgetKey = ''
+
+  getContextBudget(model: string, options: ContextOptions = {}): ContextBudget {
+    const key = JSON.stringify([model, options])
+    if (!this.budget || this.budgetKey !== key) {
+      this.context.cancel()
+      this.budget = new ContextBudget(model, options)
+      this.budgetKey = key
+    }
+    return this.budget
+  }
+
+  getContext(): Anthropic.MessageParam[] {
+    return this.context.getContext(this.messages)
+  }
+
+  prepareRequest(
+    messages: Anthropic.MessageParam[],
+    runtime: CompactionRuntime
+  ): Promise<ContextRequest> {
+    return this.context.prepare(messages, runtime)
+  }
+
+  async compact(runtime: CompactionRuntime): Promise<boolean> {
+    this.assertIdle()
+    this.running = true
+    try {
+      return await this.context.compact(this.messages, runtime)
+    } finally {
+      this.running = false
+    }
+  }
+
+  recoverContext(messages: Anthropic.MessageParam[], runtime: CompactionRuntime): Promise<boolean> {
+    runtime.budget.tighten()
+    return this.context.compact(messages, runtime, 'overflow')
+  }
+
+  cancelCompaction(): void {
+    this.context.cancel()
+  }
 
   /** Last committed snapshot; the running turn is not visible until it finishes. */
   getHistory(): Anthropic.MessageParam[] {
@@ -16,6 +61,8 @@ export class Session {
   /** Reject while running: reset is neither cancellation nor rollback. */
   reset(): void {
     this.assertIdle()
+    this.context.reset()
+    this.budget = undefined
     this.messages = []
   }
 
