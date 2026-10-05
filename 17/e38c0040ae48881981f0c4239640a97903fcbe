@@ -1,0 +1,23 @@
+e2e/src/helpers/live-pty.ts
+  s_3f8917a8bd952b::t_b7a2ab865ba78e 40-41,53-56,74
+  s_3f8917a8bd952b::t_b02e93dcb42cc2 19,31,57,75-80,115-117
+e2e/src/human-terminal-session-live.test.ts
+  s_3f8917a8bd952b::t_b02e93dcb42cc2 15-20
+  s_3f8917a8bd952b::t_f8b1c4b84f6714 21-35,63,65,116-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "17e38c0040ae48881981f0c4239640a97903fcbe",
+  "prompts": {},
+  "sessions": {
+    "s_3f8917a8bd952b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a109f6-3679-7771-9bca-20d42c14b5a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
