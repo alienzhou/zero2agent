@@ -1,0 +1,29 @@
+e2e/src/permission-live-matrix.test.ts
+  s_3f23efb1434656::t_03ba35b05ad05e 1-340
+e2e/src/terminal-live/d01-tool-baseline.live.test.ts
+  s_3f23efb1434656::t_a38bc518db3645 30-31,48-49,68-69
+e2e/src/terminal-live/d02-no-truncate.live.test.ts
+  s_3f23efb1434656::t_04ab61b93d1ba5 32-33,53-54,74-75
+e2e/src/terminal-live/d03-no-kill.live.test.ts
+  s_3f23efb1434656::t_5c5f179c373b5d 36-37,59-60,77-78
+e2e/src/terminal-live/d04-lifecycle.live.test.ts
+  s_3f23efb1434656::t_85063a8a63c5b2 50-51,77-78,104-105
+e2e/src/terminal-live/d05-exec-env.live.test.ts
+  s_3f23efb1434656::t_be1ab7092de9c8 42-43,66-67,89-90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "20553e831e5e83ce57eb40bd3bb7907a5a969ea5",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
