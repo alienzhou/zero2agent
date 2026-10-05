@@ -1,0 +1,26 @@
+e2e/src/helpers/live-pty.ts
+  s_3f8917a8bd952b::t_1bf09c8aa75691 15-24,26-28,57-67,70-72,77-82,99-103,125-128
+  s_3f8917a8bd952b::t_e76d5e3a0138ae 1-14,25,29-56,68-69,73-76,83-98,104-124
+e2e/src/human-terminal-session-live.test.ts
+  s_3f8917a8bd952b::t_e76d5e3a0138ae 1-107
+  s_3f8917a8bd952b::t_3476a373eb1a0a 108-110
+  s_3f8917a8bd952b::t_f6fe68950873f9 111-153
+e2e/src/helpers/human-terminal.ts
+  s_3f8917a8bd952b::t_1bf09c8aa75691 28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1df8277e4834f883c37732b8e8ee3045d62d3fb0",
+  "prompts": {},
+  "sessions": {
+    "s_3f8917a8bd952b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a109f6-3679-7771-9bca-20d42c14b5a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
