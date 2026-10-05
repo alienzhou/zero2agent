@@ -1,6 +1,6 @@
 # E03-S002 验收清单
 
-固定生产与测试候选 `73ecdbc`，2026-10-05 完成验证。完整输出与真实 CLI 请求见 [验收证据](../../../../researches/permissions/acceptance/README.md)。
+生产代码 `73ecdbc`；2026-10-05 已追加 [本机实测补验](../../../../researches/permissions/acceptance/runtime-audit/README.md)，测试候选 `8e47cae`。完整输出与真实 CLI 请求见 [验收证据](../../../../researches/permissions/acceptance/README.md)。
 
 | ID | 要求 | 证明入口 | 状态 |
 |---|---|---|---|
@@ -15,8 +15,11 @@
 | A09 | 四竞品证据、Spec、课程正文与实现对应 | 文档及链接检查 | 通过 |
 | A10 | 16 页图文、可读 PNG、手机图、逐页审阅与当前哈希 ZIP | render / QA / package | 通过 |
 | A11 | README/roadmap/Epic/前后文/复盘/CHANGELOG 完整互链 | 导航检查 | 通过 |
+| A13 | 本机真实模型、实际 CLI/PTY 权限场景及旧功能回归 | runtime-audit，50 live、50 记录、124 HTTP 200 | 通过（仅 macOS） |
 | A12 | 独立分支、检查点提交及固定跟练 Tag | git 状态 | 通过 |
 
 真实模型行为是可选补充：审批执行链的确定性验证用本地 SSE，不依赖模型是否恰好提议写入。AI 源码复核会留记录；AGENTS 要求的人工审查仍由用户在交付时进行，不冒充已获人工签收。
 
-汇总：463 项离线通过、30 live 默认跳过；本课另行运行 2 项 MiniMax-M2.7 真实 CLI/PTY 验收通过。build、e2e TypeScript 与改动 TS 格式通过；lint 0 错误、15 条既有告警。16 页渲染零错误/孤字，主图/手机图逐页复核，10 项包验证通过。最终源哈希与 ZIP 见证据目录。固定跟练使用 `E03-S002-permissions-approval`，代码候选仍待人工审查和合并；课程未对外发布。
+最新汇总：463 项离线通过、50 live 默认跳过；本次显式执行 50 项真实模型用例（本课 22 项、旧功能 28 项），全部通过。E2E 137 项最终覆盖通过，其中最后 3 项在修复记录器后补跑，原报告保留。build、e2e TypeScript 与改动 TS 格式通过；lint 0 错误、15 条既有告警。16 页渲染零错误/孤字，主图/手机图逐页复核，10 项包验证通过。最终源哈希与 ZIP 见证据目录。固定补验跟练使用 `E03-S002-permissions-approval-verified`（原 Tag 不改写），代码候选仍待人工审查和合并；课程未对外发布。
+
+本机自动化实测不等于人工操作或所有平台/竞品实机已测。Linux、Windows 全套与四竞品实机均未执行；普通 CLI 无法制造的宿主非法响应仍由单元/确定性验证。

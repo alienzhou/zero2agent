@@ -57,7 +57,7 @@ CLI 在 TTY 显示工具和完整 JSON 参数，`y` 批准本次，其余回答�
 3. [path-guard.ts](../../../packages/core/src/tools/path-guard.ts)：解析已有软链接祖先，写工具再次检查；[approval.ts](../../../packages/tui/src/approval.ts)处理 TTY 回答与 readline 清理。
 4. 按[跟练](./follow-along.md)先验证临时文件副作用，再观察真实 CLI。离线跟练不消耗模型用量。
 
-代码、确定性测试和两项真实 MiniMax-M2.7 + CLI + PTY 验收已具备；最终证据与课程包状态见[验收清单](./details/03-verification-checklist.md)。本课不实现系统沙箱、永久授权或 TUI。路径重查不能完全阻止并发文件系统替换，shell 仍使用当前宿主权限。
+代码、确定性测试和本机 50 项真实 MiniMax-M2.7 + CLI 验收已具备（本课权限 22 项含真实 PTY，旧功能 28 项）；最终证据与课程包状态见[验收清单](./details/03-verification-checklist.md)。本课不实现系统沙箱、永久授权或 TUI。路径重查不能完全阻止并发文件系统替换，shell 仍使用当前宿主权限。
 
 [概述](./details/00-overview.md) | [设计](./details/01-technical-design.md) | [任务](./details/02-task-list.md) | [Backlog](./details/04-backlog.md)
 

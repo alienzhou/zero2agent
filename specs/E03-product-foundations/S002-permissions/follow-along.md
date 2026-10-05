@@ -2,7 +2,7 @@
 
 [课程](./README.md) | [设计](./details/01-technical-design.md) | [验收](./details/03-verification-checklist.md)
 
-需要 Node >=22、pnpm >=9。固定版本完成后用 Tag `E03-S002-permissions-approval`；当前开发分支为 `codex/e03-s002-permissions`。从工程根目录运行：
+需要 Node >=22、pnpm >=9。固定版本完成后用 Tag `E03-S002-permissions-approval-verified`（原 Tag 仍保留首轮交付）；当前开发分支为 `codex/e03-s002-permissions`。从工程根目录运行：
 
 ```sh
 pnpm install --frozen-lockfile
@@ -51,4 +51,6 @@ const agent = new Agent({
 
 `yourUI` 是你实现的 UI，不是项目已有 API。处理器应监听 request.signal 结束过期交互；不能返回 always 或不同 requestId。没有处理器时 ask 会变为拒绝；onPermission 是观察结果的事件，不提供授权。`PERMISSION_RULES` 可传规则 JSON 数组；只支持顶层标量精确匹配，不支持 shell 前缀或正则。
 
-可选真实验收：配置环境后设置 E2E_LIVE=1，再单独运行 e2e 的 `src/permission-live.test.ts`。证据目录 E2E_EVIDENCE_DIR 仅保存临时测试请求和输出，不保存密钥。不要把你的真实工作内容用于测试目录。
+可选真实验收：配置环境后设置 E2E_LIVE=1，再单独运行 e2e 的 `src/permission-live.test.ts` 与 `src/permission-live-matrix.test.ts`。证据目录 E2E_EVIDENCE_DIR 仅保存临时测试请求和输出，不保存密钥。不要把你的真实工作内容用于测试目录。
+
+最新本机实测结果与限制见 [补验记录](../../../researches/permissions/acceptance/runtime-audit/README.md)。全部 live 测试的最小环境、宿主授权和记录器在测试夹具里明确配置；这不改变普通 CLI 的 default 规则。

@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S002：执行前，先判断是否允许](./specs/E03-product-foundations/S002-permissions/README.md)完成权限模式、三态规则、一次审批、TTY 交互和真实路径重查。固定代码候选 `73ecdbc`，463 项离线与 2 项真实 MiniMax-M2.7 验收通过；16 页图文、手机图与双 ZIP 本地完成。[验收证据](./researches/permissions/acceptance/README.md)与[跟练](./specs/E03-product-foundations/S002-permissions/follow-along.md)已齐备，Tag 为 `E03-S002-permissions-approval`。实现候选待人工审阅与合并，课程未对外发布。下一课：E03-S003 运行状态与 TUI。
+**最新更新**：[E03-S002：执行前，先判断是否允许](./specs/E03-product-foundations/S002-permissions/README.md)完成权限模式、三态规则、一次审批、TTY 交互和真实路径重查。固定代码候选 `73ecdbc`，463 项离线与本机 50 项真实 MiniMax-M2.7 验收通过（本课 22 项、旧功能 28 项）；16 页图文、手机图与双 ZIP 本地完成。[验收证据](./researches/permissions/acceptance/README.md)与[跟练](./specs/E03-product-foundations/S002-permissions/follow-along.md)已齐备，补验 Tag 为 `E03-S002-permissions-approval-verified`。[本机实测记录](./researches/permissions/acceptance/runtime-audit/README.md)明确 Linux 与竞品实机尚未验证。实现候选待人工审阅与合并，课程未对外发布。下一课：E03-S003 运行状态与 TUI。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |

@@ -81,6 +81,8 @@ git checkout main
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S002-permissions/README.md)
 
+- 2026-10-05 用户追问后补齐本机实际 CLI/PTY 与真实模型：权限 22 项、旧功能 28 项，共 50 项通过；50 份记录、124 次 HTTP 200。默认离线 463 通过、50 live 跳过；137 项 E2E 最终覆盖通过，记录器修复后的 3 项为独立补跑。[补验报告](./researches/permissions/acceptance/runtime-audit/README.md)保留原失败与通过证据，固定补验 Tag `E03-S002-permissions-approval-verified`。以下 2 项/30 跳过为首轮历史数据，不能代表全套真机已完成。
+
 - 统一执行前权限：default/read-only/accept-edits/bypass、deny > ask > allow，工具元信息与精确标量规则由宿主管理。
 - 一次审批绑定调用和参数快照，默认最多等待 120 秒；无宿主、异常、非法/晚到回答、超时或取消均拒绝。整批调用先快照，拒绝仍返回配对的错误结果。
 - 工作区写、只读外部读、软链接与已有祖先在执行前重查，直接写工具保留边界；路径校验与用户批准不提供操作系统沙箱。

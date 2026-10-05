@@ -18,7 +18,7 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新本地课程候选：[E03-S002：执行前，先判断是否允许](../../specs/E03-product-foundations/S002-permissions/README.md)。统一工具权限、一次审批和路径重查已实现，463 项离线与 2 项真实模型验收通过；16 页图文本地成稿、双 ZIP 验证完成。先做[离线跟练](../../specs/E03-product-foundations/S002-permissions/follow-along.md)，再看[验收证据](../../researches/permissions/acceptance/README.md)。Tag 为 `E03-S002-permissions-approval`；候选待人工审阅与合并，课程未对外发布。下一课 E03-S003：运行状态与 TUI。
+最新本地课程候选：[E03-S002：执行前，先判断是否允许](../../specs/E03-product-foundations/S002-permissions/README.md)。统一工具权限、一次审批和路径重查已实现，463 项离线与本机 50 项真实模型验收通过（权限 22 项、旧功能 28 项）；16 页图文本地成稿、双 ZIP 验证完成。先做[离线跟练](../../specs/E03-product-foundations/S002-permissions/follow-along.md)，再看[验收证据](../../researches/permissions/acceptance/README.md)。补验 Tag 为 `E03-S002-permissions-approval-verified`；候选待人工审阅与合并，课程未对外发布。下一课 E03-S003：运行状态与 TUI。
 
 ---
 
