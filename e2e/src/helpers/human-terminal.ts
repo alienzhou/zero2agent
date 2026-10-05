@@ -25,7 +25,7 @@ interface PtyModule {
   ): PtyProcess
 }
 
-interface HumanTerminalSession {
+export interface HumanTerminalSession {
   readonly pid: number
   readonly output: string
   write(data: string): void
