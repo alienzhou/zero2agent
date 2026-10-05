@@ -1,0 +1,25 @@
+e2e/src/compact-contract.test.ts
+  s_3f23efb1434656::t_5558dd693a3b26 73-74
+e2e/src/helpers/sse.ts
+  s_3f23efb1434656::t_67978a2c4d4a81 1-47
+e2e/src/multi-turn-contract.test.ts
+  s_3f23efb1434656::t_2ebf7cfbbb86c0 79-80
+e2e/src/permission-contract.test.ts
+  s_3f23efb1434656::t_50463896dab398 1-219
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0979fdc2d529ce217d8c634724886c4bfc183e98",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
