@@ -245,8 +245,8 @@ AssertionError: expected 'zero2agent - Agent Harness（文件读写演示）\n�
 + zero2agent - Agent Harness（文件读写演示）
 + 输入你的问题；/new 新建对话；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出
 +
-+ 你: 你: 
-+ 错误: Unknown model MiniMax-M2.7: provide contextWindow explicitly 
++ 你: 你:
++ 错误: Unknown model MiniMax-M2.7: provide contextWindow explicitly
 +
 +
 

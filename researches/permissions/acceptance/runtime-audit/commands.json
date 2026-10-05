@@ -77,8 +77,8 @@
       "--check",
       "origin/main"
     ],
-    "exitCode": 2,
-    "source": "8e47cae"
+    "exitCode": 0,
+    "source": "5c2a76b; normalized saved log line endings"
   },
   {
     "check": "unchanged-production",
