@@ -41,7 +41,8 @@ export function startHumanTerminal(
   entry: string,
   args: string[],
   cwd: string,
-  repl = false
+  repl = false,
+  options: { env?: Record<string, string>; timeoutMs?: number } = {}
 ): HumanTerminalSession {
   const require = createRequire(path.join(REPO_ROOT, 'packages/tui/package.json'))
   const pty = require('@lydell/node-pty') as PtyModule
@@ -60,6 +61,7 @@ export function startHumanTerminal(
       ...(repl
         ? { ANTHROPIC_API_KEY: 'fake-contract-key', ANTHROPIC_BASE_URL: 'http://127.0.0.1:1' }
         : {}),
+      ...options.env,
     },
   })
   let output = ''
@@ -81,7 +83,7 @@ export function startHumanTerminal(
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(
         () => finish(new Error(`Timed out waiting for ${marker}\n${output.slice(-4000)}`)),
-        12_000
+        options.timeoutMs ?? 12_000
       )
       const finish = (error?: Error): void => {
         clearTimeout(timeout)
@@ -107,7 +109,7 @@ export function startHumanTerminal(
         new Promise<never>((_, reject) => {
           timeout = setTimeout(
             () => reject(new Error(`CLI did not exit\n${output.slice(-4000)}`)),
-            12_000
+            options.timeoutMs ?? 12_000
           )
         }),
       ])
