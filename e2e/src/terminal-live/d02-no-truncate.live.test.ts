@@ -29,6 +29,8 @@ describe.skipIf(!live)('D02 不截断', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toMatch(/Saved to:|zero2agent-.*\.log|\/tmp\//i)
     expect(output).toMatch(/\b1\b/)
@@ -48,6 +50,8 @@ describe.skipIf(!live)('D02 不截断', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toContain('tiny-inline-output')
     expect(output).not.toMatch(/Saved to:/)
@@ -67,6 +71,8 @@ describe.skipIf(!live)('D02 不截断', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toContain('grep_search')
     expect(output).toContain('850')

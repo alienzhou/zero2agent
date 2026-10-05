@@ -39,6 +39,8 @@ describe.skipIf(!live)('D05 执行环境', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toMatch(/dumb/)
   })
@@ -61,6 +63,8 @@ describe.skipIf(!live)('D05 执行环境', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expectTerminalCommand(output, PATH_CMD)
     expect(output).toMatch(/Exit code: 0 \(\d+ms\)/)
@@ -82,6 +86,8 @@ describe.skipIf(!live)('D05 执行环境', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toMatch(/commit-[1-5]/)
     const execMs = extractTerminalExecMs(output)

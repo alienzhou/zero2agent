@@ -47,6 +47,8 @@ describe.skipIf(!live)('D04 三道防线', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expectTerminalCommand(output, NOHUP_CMD)
 
@@ -72,6 +74,8 @@ describe.skipIf(!live)('D04 三道防线', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expectTerminalCommand(output, DISOWN_CMD)
 
@@ -97,6 +101,8 @@ describe.skipIf(!live)('D04 三道防线', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expectTerminalCommand(output, '& exit 0')
     expect(hasDrainPipeNote(output)).toBe(true)

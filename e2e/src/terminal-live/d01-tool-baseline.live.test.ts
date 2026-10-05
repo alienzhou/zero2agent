@@ -27,6 +27,8 @@ describe.skipIf(!live)('D01 工具基本盘', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toMatch(/src/i)
   })
@@ -43,6 +45,8 @@ describe.skipIf(!live)('D01 工具基本盘', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toMatch(/42/)
   })
@@ -61,6 +65,8 @@ describe.skipIf(!live)('D01 工具基本盘', () => {
 
     expect(result.code).toBe(0)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toContain('merge-stdout-only')
     expect(output).toContain('merge-stderr-only')
