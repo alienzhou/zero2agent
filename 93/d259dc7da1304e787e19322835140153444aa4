@@ -1,0 +1,63 @@
+.vibecoding/2026-10-05/e03-s002-permissions/dialogue.md
+  s_3f23efb1434656::t_5d62da70245ae4 4-7
+.vibecoding/2026-10-05/e03-s002-permissions/learnings.md
+  s_3f23efb1434656::t_0bad2e6c735271 1-7
+.vibecoding/2026-10-05/e03-s002-permissions/review.md
+  s_3f23efb1434656::t_2dc2dcab017661 1-11
+CHANGELOG.md
+  s_3f23efb1434656::t_bf58fb280b7a56 80-91
+README.md
+  s_3f23efb1434656::t_79cee396a9b65b 114,164,177
+docs/roadmap/README.md
+  s_3f23efb1434656::t_a59b94ac70a5e1 21,31
+researches/permissions/acceptance/README.md
+  s_3f23efb1434656::t_4f91cce3f83eba 1-17
+researches/permissions/acceptance/build.txt
+  s_3f23efb1434656::t_5db4c0bad5440a 1-13
+researches/permissions/acceptance/course-package-manifest.json
+  s_3f23efb1434656::t_dc2c0c1d96b6ed 1-82
+researches/permissions/acceptance/course-qa.json
+  s_3f23efb1434656::t_cae91a44924d74 1-265
+researches/permissions/acceptance/format.txt
+  s_3f23efb1434656::t_8b9466bd00797f 1-2
+researches/permissions/acceptance/lint.txt
+  s_3f23efb1434656::t_586f85b5e27ab6 1-30
+researches/permissions/acceptance/live-tests.txt
+  s_3f23efb1434656::t_1dcff6b8d0462e 1-9
+researches/permissions/acceptance/offline-tests.txt
+  s_3f23efb1434656::t_03ffbbf7b25668 1-27
+researches/permissions/acceptance/permission-approve.json
+  s_3f23efb1434656::t_d9d5768eafd3c8 1-462
+researches/permissions/acceptance/permission-deny.json
+  s_3f23efb1434656::t_dd508af607d04c 1-463
+retros/E03-S002-permissions-approval.md
+  s_3f23efb1434656::t_ed7c3239c7ac41 1-15
+retros/README.md
+  s_3f23efb1434656::t_9b71b3b72b29fd 24
+specs/E03-product-foundations/README.md
+  s_3f23efb1434656::t_72a840226f488b 9,16,35-37
+specs/E03-product-foundations/S001-multi-turn/README.md
+  s_3f23efb1434656::t_a1159cea9955c9 70
+specs/E03-product-foundations/S002-permissions/details/02-task-list.md
+  s_3f23efb1434656::t_d658fefbd64e69 6-13
+specs/E03-product-foundations/S002-permissions/details/03-verification-checklist.md
+  s_3f23efb1434656::t_8b60d1a7750d2a 3,7-18,21-22
+specs/README.md
+  s_3f23efb1434656::t_440e809716a5b0 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "93d259dc7da1304e787e19322835140153444aa4",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
