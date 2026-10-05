@@ -1,0 +1,23 @@
+CHANGELOG.md
+  s_3f8917a8bd952b::t_196a5573116671 96-97
+README.md
+  s_3f8917a8bd952b::t_16bdfbd59d8685 164
+specs/E03-product-foundations/S001-multi-turn/README.md
+  s_3f8917a8bd952b::t_151e9fadf05942 3,56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "db6ecf9a68658bdf24271d3186f634d258c7d516",
+  "prompts": {},
+  "sessions": {
+    "s_3f8917a8bd952b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a109f6-3679-7771-9bca-20d42c14b5a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
