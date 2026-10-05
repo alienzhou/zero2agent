@@ -31,7 +31,8 @@ export interface LiveCliResult extends CliResult {
 export async function runLiveCli(options: RunCliOptions): Promise<LiveCliResult> {
   const hostEnv = Object.fromEntries(
     Object.entries(options.env ?? {}).filter(
-      (entry): entry is [string, string] => entry[1] !== undefined
+      (entry): entry is [string, string] =>
+        entry[1] !== undefined && !['ANTHROPIC_API_KEY', 'ANTHROPIC_BASE_URL'].includes(entry[0])
     )
   )
   const p = await startLivePty({}, hostEnv)
