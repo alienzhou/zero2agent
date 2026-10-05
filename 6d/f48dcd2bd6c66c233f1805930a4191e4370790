@@ -1,0 +1,27 @@
+researches/permissions/acceptance/final-audit-2026-10-06.md
+  s_3f23efb1434656::t_3dbc274242bc96 1-29
+researches/permissions/acceptance/final-audit-build.txt
+  s_3f23efb1434656::t_ebf5fbf1725f5c 1-13
+researches/permissions/acceptance/final-audit-cli.txt
+  s_3f23efb1434656::t_cc7d3fe0069567 1-8
+researches/permissions/acceptance/final-audit-permissions.txt
+  s_3f23efb1434656::t_f6a17710d96208 1-9
+researches/permissions/acceptance/final-audit-smoke.txt
+  s_3f23efb1434656::t_30567a0e937cb3 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6df48dcd2bd6c66c233f1805930a4191e4370790",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
