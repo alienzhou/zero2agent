@@ -1,0 +1,9 @@
+◇ injected env (0) from ../../.env.local // tip: ⌘ enable debugging { debug: true }
+
+ RUN  v4.1.0 /workspace/zero2agent/packages/core
+
+
+ Test Files  1 passed (1)
+      Tests  54 passed (54)
+   Start at  00:10:58
+   Duration  376ms (transform 82ms, setup 0ms, import 159ms, tests 138ms, environment 0ms)

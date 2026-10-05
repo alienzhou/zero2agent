@@ -1,0 +1,8 @@
+
+ RUN  v4.1.0 /workspace/zero2agent/e2e
+
+
+ Test Files  1 passed (1)
+      Tests  20 passed (20)
+   Start at  00:10:59
+   Duration  4.47s (transform 29ms, setup 0ms, import 55ms, tests 4.35s, environment 0ms)
