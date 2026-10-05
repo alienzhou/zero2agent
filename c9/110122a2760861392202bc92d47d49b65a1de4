@@ -1,0 +1,41 @@
+.vibecoding/2026-10-05/e02-e03-real-e2e/acceptance.md
+  s_3f8917a8bd952b::t_bf0ad366688593 1-69
+.vibecoding/2026-10-05/e02-e03-real-e2e/dialogue.md
+  s_3f8917a8bd952b::t_4d1a9ed77e9b8b 1-18
+.vibecoding/2026-10-05/e02-e03-real-e2e/learnings.md
+  s_3f8917a8bd952b::t_615a931df73ae1 1-8
+.vibecoding/2026-10-05/e02-e03-real-e2e/prompt.md
+  s_3f8917a8bd952b::t_34ad3510412b3c 1-17
+e2e/src/helpers/human-terminal.ts
+  s_3f8917a8bd952b::t_c942dcedebf0e4 28,44-45,64,86,112
+e2e/src/helpers/live-pty.ts
+  s_3f8917a8bd952b::t_e15b60c01279c9 1-141
+e2e/src/human-terminal-session-e2e.test.ts
+  s_3f8917a8bd952b::t_a695e3a2f8a043 1-407
+e2e/src/human-terminal-session-live.test.ts
+  s_3f8917a8bd952b::t_d67b0fe044174f 1-176
+packages/core/src/__tests__/context-summary.test.ts
+  s_3f8917a8bd952b::t_de5d1da51b0bf3 44-63,173-189
+packages/core/src/context-summary.ts
+  s_3f8917a8bd952b::t_60506534e1f1e2 47-50,56-57
+specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md
+  s_3f8917a8bd952b::t_99ba6dfed230c3 5-7
+specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md
+  s_3f8917a8bd952b::t_26a0607c91b8cb 3,5-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c9110122a2760861392202bc92d47d49b65a1de4",
+  "prompts": {},
+  "sessions": {
+    "s_3f8917a8bd952b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a109f6-3679-7771-9bca-20d42c14b5a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
