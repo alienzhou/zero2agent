@@ -12,6 +12,7 @@
 | 实际 CLI / SSE / PTY | 20 通过，已包含在 E2E 总数 | permission-contract.test.ts |
 | MiniMax-M2.7 真实 CLI / PTY | 2 通过，批准前无文件；批准后写入；拒绝后无文件；配对回执与 HTTP 200 | [输出](./live-tests.txt)、[批准](./permission-approve.json)、[拒绝](./permission-deny.json) |
 | 课程渲染 | 16 页，0 布局错误、0 孤字告警，已逐页看主图/手机图 | [QA](./course-qa.json) |
+| 本地预览 | 320/360/390/768/1440 五种视口无横向溢出，16 张图片加载，37 个资源 HTTP 200 | [预览 QA](./course-preview.json) |
 | 交付 ZIP | 名单和逐文件哈希一致，10 项防陈旧/损坏验证通过 | [包哈希](./course-package-manifest.json) |
 
 真实模型证据仅支持当前输入和供应商；确定性异常、软链接、取消、晚到回答、输入篡改和人工 PTY 正文边界由专项测试覆盖。课程完整源与 review 在 content-generator 的 `zero2agent-xhs/epic03-story002/`，固定工程代码仍待人工审阅与合并；课程未对外发布。

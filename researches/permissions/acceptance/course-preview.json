@@ -1,0 +1,31 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "images": 16,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 360,
+      "images": 16,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "images": 16,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "images": 16,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "images": 16,
+      "horizontalOverflow": false
+    }
+  ],
+  "linksChecked": 37,
+  "status": "passed"
+}
