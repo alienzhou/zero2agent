@@ -1,0 +1,49 @@
+.vibecoding/2026-10-05/e03-s002-permissions/dialogue.md
+  s_3f23efb1434656::t_27f324dfb9d684 8-9
+.vibecoding/2026-10-05/e03-s002-permissions/learnings.md
+  s_3f23efb1434656::t_8ffc76ccf6bd38 8-9
+.vibecoding/2026-10-05/e03-s002-permissions/prompt.md
+  s_3f23efb1434656::t_3155a3b0bc279a 4-7
+.vibecoding/2026-10-05/e03-s002-permissions/review.md
+  s_3f23efb1434656::t_277c7281c8002d 12-13
+CHANGELOG.md
+  s_3f23efb1434656::t_c1e1d176c1b280 84-85
+README.md
+  s_3f23efb1434656::t_a9faea5932d1a4 164
+docs/roadmap/README.md
+  s_3f23efb1434656::t_274b5c27b749ab 21
+researches/permissions/acceptance/README.md
+  s_3f23efb1434656::t_37562da7cfed88 3-5
+researches/permissions/acceptance/runtime-audit/README.md
+  s_3f23efb1434656::t_400b039f1e29a0 1-46
+researches/permissions/acceptance/runtime-audit/commands.json
+  s_3f23efb1434656::t_c6333f9b188d3e 1-97
+researches/permissions/acceptance/runtime-audit/whitespace.txt
+  s_3f23efb1434656::t_bcc807a8e49e99 1
+retros/E03-S002-permissions-approval.md
+  s_3f23efb1434656::t_03ba83a9c52bb7 16-17
+specs/E03-product-foundations/README.md
+  s_3f23efb1434656::t_e5b3801bfec170 35
+specs/E03-product-foundations/S002-permissions/README.md
+  s_3f23efb1434656::t_cedcf82c38979d 60
+specs/E03-product-foundations/S002-permissions/details/03-verification-checklist.md
+  s_3f23efb1434656::t_9b989b3c996646 3,18,23-25
+specs/E03-product-foundations/S002-permissions/follow-along.md
+  s_3f23efb1434656::t_6d5c5950db4881 5,54-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5c2a76bf9c27f2871503847e197caea995aabc44",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
