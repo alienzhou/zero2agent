@@ -41,6 +41,26 @@ describe('summary requests', () => {
     })
   })
 
+  it.each([
+    { type: 'thinking', thinking: 'Private reasoning. '.repeat(100), signature: 'signature' },
+    { type: 'redacted_thinking', data: 'opaque-provider-data' },
+  ])('adopts only completed summary text alongside $type', async reasoning => {
+    const text = 'Latest corrected port: 9237. Preserve project quartz.'
+    const create = vi.fn().mockResolvedValue({
+      stop_reason: 'end_turn',
+      content: [reasoning, { type: 'text', text }],
+    })
+    const client = { messages: { create } } as unknown as Anthropic
+    expect(
+      await createContextSummarizer(
+        client,
+        model,
+        makeBudget()
+      )(history('original '.repeat(300)), signal())
+    ).toBe(text)
+    expect(create).toHaveBeenCalledTimes(1)
+  })
+
   it.each(['Latest intent'.repeat(30), '保留用户意图'.repeat(20)])(
     'accepts completed safe summaries whose UTF-8 bytes exceed output tokens',
     async text => {
@@ -150,7 +170,23 @@ describe('summary failures remain failures', () => {
     response('partial', 'stop_sequence'),
     response('x'.repeat(1025)),
     { stop_reason: 'end_turn', content: [{ type: 'tool_use' }] },
-  ])('rejects incomplete, empty, overlarge and non-text responses', async reply => {
+    { stop_reason: 'end_turn', content: [{ type: 'thinking', thinking: 'No summary text' }] },
+    {
+      stop_reason: 'max_tokens',
+      content: [
+        { type: 'thinking', thinking: 'Reasoning' },
+        { type: 'text', text: 'partial' },
+      ],
+    },
+    {
+      stop_reason: 'end_turn',
+      content: [
+        { type: 'thinking', thinking: 'Reasoning' },
+        { type: 'text', text: 'A summary with an unexpected tool call' },
+        { type: 'tool_use', id: 'tool-1', name: 'bash', input: { command: 'pwd' } },
+      ],
+    },
+  ])('rejects incomplete, empty, overlarge and tool-bearing responses', async reply => {
     const create = vi.fn().mockResolvedValue(reply)
     const client = { messages: { create } } as unknown as Anthropic
     await expect(

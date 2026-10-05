@@ -44,12 +44,17 @@ function completedText(response: Anthropic.Message, source: string): string {
   if (
     response.stop_reason !== 'end_turn' ||
     !response.content.length ||
-    response.content.some(block => block.type !== 'text')
+    response.content.some(
+      block =>
+        block.type !== 'text' && block.type !== 'thinking' && block.type !== 'redacted_thinking'
+    )
   ) {
     throw new ContextBudgetError(
       'Summary did not finish with completed text (no truncation is accepted)'
     )
   }
+  // Reasoning-capable providers may include these blocks even on tool-free requests.
+  // Adopt only the completed handoff text; reasoning never becomes summary history.
   const text = response.content
     .map(block => (block.type === 'text' ? block.text : ''))
     .join('\n')
