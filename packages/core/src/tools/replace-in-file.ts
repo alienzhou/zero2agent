@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises'
 import type { Tool, ToolContext } from './types.js'
-import { resolveInsideCwd } from './path-guard.js'
+import { resolvePhysicalInsideCwd } from './path-guard.js'
 
 interface ReplaceInFileInput {
   path: string
@@ -20,6 +20,7 @@ interface ReplaceInFileInput {
  * - 目标路径必须落在工作区（cwd）内，越界硬拒绝
  */
 export const replaceInFileTool: Tool = {
+  permission: { effect: 'write', paths: ['path'] },
   name: 'replace_in_file',
   description:
     '对已有文件做精确的局部替换。old_string 必须与文件内容逐字符精确匹配（含空白和缩进），且默认必须唯一出现；若出现多次，请补充更多上下文使 old_string 唯一，或传 replace_all=true 替换全部。new_string 是要替换成的新内容（可为空字符串，表示删除该片段）。只能修改工作区目录内的文件。',
@@ -46,12 +47,16 @@ export const replaceInFileTool: Tool = {
     required: ['path', 'old_string', 'new_string'],
   },
   execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
-    const { path: filePath, old_string, new_string, replace_all } =
-      input as unknown as ReplaceInFileInput
+    const {
+      path: filePath,
+      old_string,
+      new_string,
+      replace_all,
+    } = input as unknown as ReplaceInFileInput
     const replaceAll = replace_all === true
 
     // 1. 物理边界校验：越界硬拒绝，不产生任何磁盘副作用
-    const resolvedPath = resolveInsideCwd(ctx.cwd, filePath)
+    const resolvedPath = resolvePhysicalInsideCwd(ctx.cwd, filePath)
     if (resolvedPath === null) {
       return `Error: ${filePath} is outside the workspace, operation refused`
     }

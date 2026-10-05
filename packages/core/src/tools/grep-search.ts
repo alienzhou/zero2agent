@@ -48,13 +48,7 @@ interface GrepSearchInput {
 // ── ripgrep 调用 ────────────────────────────────────
 
 function buildRgArgs(input: GrepSearchInput, searchPath: string): string[] {
-  const args = [
-    '--json',
-    '--line-number',
-    '--color=never',
-    '--hidden',
-    '--no-messages',
-  ]
+  const args = ['--json', '--line-number', '--color=never', '--hidden', '--no-messages']
 
   if (input.include) args.push('--glob', input.include)
   if (input.exclude) args.push('--glob', `!${input.exclude}`)
@@ -65,7 +59,7 @@ function buildRgArgs(input: GrepSearchInput, searchPath: string): string[] {
 }
 
 function runRipgrep(args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const proc = spawn(rgPath, args, { stdio: ['ignore', 'pipe', 'pipe'] })
     const stdoutChunks: Buffer[] = []
     const stderrChunks: Buffer[] = []
@@ -73,7 +67,7 @@ function runRipgrep(args: string[]): Promise<{ stdout: string; stderr: string; e
     proc.stdout.on('data', (chunk: Buffer) => stdoutChunks.push(chunk))
     proc.stderr.on('data', (chunk: Buffer) => stderrChunks.push(chunk))
 
-    proc.on('close', (code) => {
+    proc.on('close', code => {
       resolve({
         stdout: Buffer.concat(stdoutChunks).toString('utf-8'),
         stderr: Buffer.concat(stderrChunks).toString('utf-8'),
@@ -143,7 +137,7 @@ function groupByFile(lines: MatchLine[]): FileGroup[] {
     groups.push({
       filePath,
       lines: fileLines,
-      matchCount: fileLines.filter((l) => !l.isContext).length,
+      matchCount: fileLines.filter(l => !l.isContext).length,
     })
   }
 
@@ -156,7 +150,7 @@ async function sortByMtime(groups: FileGroup[]): Promise<void> {
   const mtimeMap = new Map<string, number>()
 
   await Promise.all(
-    groups.map(async (g) => {
+    groups.map(async g => {
       try {
         const stat = await fs.stat(g.filePath)
         mtimeMap.set(g.filePath, stat.mtimeMs)
@@ -171,7 +165,11 @@ async function sortByMtime(groups: FileGroup[]): Promise<void> {
 
 // ── 截断 ────────────────────────────────────────────
 
-function truncateMatches(groups: FileGroup[]): { groups: FileGroup[]; totalMatches: number; truncated: boolean } {
+function truncateMatches(groups: FileGroup[]): {
+  groups: FileGroup[]
+  totalMatches: number
+  truncated: boolean
+} {
   let totalMatches = 0
   for (const g of groups) {
     totalMatches += g.matchCount
@@ -218,7 +216,7 @@ function formatOutput(
   fileCount: number,
   pattern: string,
   truncated: boolean,
-  basePath: string,
+  basePath: string
 ): string {
   const header = `Found ${totalMatches} matches for "${pattern}" in ${fileCount} files`
   const parts: string[] = [header]
@@ -248,9 +246,9 @@ function formatOutput(
 // ── 工具定义 ────────────────────────────────────────
 
 export const grepSearchTool: Tool = {
+  permission: { effect: 'read', paths: ['path'] },
   name: 'grep_search',
-  description:
-    `Search file contents using regex patterns. Returns matching lines with file paths and line numbers, sorted by file modification time. Results are truncated to ${MAX_MATCHES} matches. Respects .gitignore rules.`,
+  description: `Search file contents using regex patterns. Returns matching lines with file paths and line numbers, sorted by file modification time. Results are truncated to ${MAX_MATCHES} matches. Respects .gitignore rules.`,
   input_schema: {
     type: 'object',
     properties: {
@@ -315,6 +313,13 @@ export const grepSearchTool: Tool = {
     const { groups: truncatedGroups, totalMatches, truncated } = truncateMatches(groups)
 
     // 基于 ctx.cwd 计算相对路径
-    return formatOutput(truncatedGroups, totalMatches, totalFileCount, params.pattern, truncated, ctx.cwd)
+    return formatOutput(
+      truncatedGroups,
+      totalMatches,
+      totalFileCount,
+      params.pattern,
+      truncated,
+      ctx.cwd
+    )
   },
 }

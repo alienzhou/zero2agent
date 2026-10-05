@@ -49,3 +49,14 @@ export type { SystemPromptOptions, UserTaskOptions } from './prompt/index.js'
 // ReACT 循环
 export { runLoop } from './loop.js'
 export type { RunLoopOptions, LoopEventHandlers } from './loop.js'
+
+export { PermissionController } from './permissions.js'
+export type {
+  PermissionAction,
+  PermissionMode,
+  PermissionRule,
+  PermissionDecision,
+  PermissionOptions,
+  ApprovalRequest,
+  ApprovalResponse,
+} from './permissions.js'

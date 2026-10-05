@@ -2,7 +2,7 @@ import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import { Buffer } from 'node:buffer'
 import type { Tool, ToolContext } from './types.js'
-import { resolveInsideCwd } from './path-guard.js'
+import { resolvePhysicalInsideCwd } from './path-guard.js'
 
 interface WriteFileInput {
   path: string
@@ -19,6 +19,7 @@ interface WriteFileInput {
  * - 目标路径必须落在工作区（cwd）内，越界硬拒绝
  */
 export const writeFileTool: Tool = {
+  permission: { effect: 'write', paths: ['path'] },
   name: 'write_file',
   description:
     '将完整内容写入指定文件（全量覆盖，非追加）。文件不存在则创建，已存在则整篇覆盖；缺失的父目录会自动创建。只能写入工作区目录内的路径。局部修改请使用 replace_in_file（若可用）。',
@@ -40,7 +41,7 @@ export const writeFileTool: Tool = {
     const { path: filePath, content } = input as unknown as WriteFileInput
 
     // 1. 物理边界校验：越界硬拒绝，不产生任何磁盘副作用
-    const resolvedPath = resolveInsideCwd(ctx.cwd, filePath)
+    const resolvedPath = resolvePhysicalInsideCwd(ctx.cwd, filePath)
     if (resolvedPath === null) {
       return `Error: ${filePath} is outside the workspace, operation refused`
     }

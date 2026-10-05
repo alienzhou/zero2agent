@@ -7,12 +7,14 @@ import type { LoopEventHandlers } from './loop.js'
 import type { Tool } from './tools/index.js'
 import type { LLMConfig } from './llm/index.js'
 import { resolve } from 'node:path'
+import { PermissionController, type PermissionOptions } from './permissions.js'
 import { Session } from './session.js'
 import type Anthropic from '@anthropic-ai/sdk'
 
 export interface AgentOptions {
   config?: LLMConfig
   context?: ContextOptions
+  permissions?: PermissionOptions
   tools?: Tool[]
   systemPrompt?: string
   events?: LoopEventHandlers
@@ -26,8 +28,10 @@ export interface AgentOptions {
 export class Agent {
   private options: AgentOptions
   private session = new Session()
+  private permissions: PermissionController
 
   constructor(options: AgentOptions = {}) {
+    this.permissions = new PermissionController(options.permissions)
     this.options = { ...options, cwd: resolve(options.cwd ?? process.cwd()) }
   }
 
@@ -43,6 +47,7 @@ export class Agent {
       events: this.options.events,
       cwd: this.options.cwd,
       session: this.session,
+      permissionController: this.permissions,
     })
   }
 
@@ -52,6 +57,10 @@ export class Agent {
 
   getContext(): Anthropic.MessageParam[] {
     return this.session.getContext()
+  }
+
+  cancelPendingApprovals(): void {
+    this.permissions.cancelPending()
   }
 
   cancelCompaction(): void {

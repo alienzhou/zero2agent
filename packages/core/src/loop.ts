@@ -10,6 +10,12 @@ import type { ContextOptions } from './context-budget.js'
 import { createContextSummarizer } from './context-summary.js'
 import type { CompactionEvent, CompactionRuntime } from './context-manager.js'
 
+import {
+  PermissionController,
+  type PermissionOptions,
+  type PermissionDecision,
+} from './permissions.js'
+
 const MAX_ITERATIONS = 20
 
 function describeToolError(error: unknown): string {
@@ -44,6 +50,7 @@ export interface LoopEventHandlers {
   onToolEnd?: (toolName: string, output: string, durationMs: number) => void
   /** 工具执行出错 */
   onToolError?: (toolName: string, error: string) => void
+  onPermission?: (toolCallId: string, decision: PermissionDecision) => void
   onCompaction?: (event: CompactionEvent) => void
 }
 
@@ -64,7 +71,8 @@ export async function executeToolCalls(
   content: Anthropic.ContentBlock[],
   tools: Tool[],
   ctx: ToolContext,
-  events?: LoopEventHandlers
+  events?: LoopEventHandlers,
+  permissions = new PermissionController()
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
 
@@ -85,19 +93,23 @@ export async function executeToolCalls(
       }
 
       try {
-        notifyObserver(() =>
-          events?.onToolStart?.(block.name, structuredClone(block.input) as Record<string, unknown>)
-        )
+        const input = structuredClone(block.input) as Record<string, unknown>
+        const callCtx = Object.freeze({ ...ctx })
+        const decision = await permissions.authorize(block.id, tool, input, callCtx)
+        notifyObserver(() => events?.onPermission?.(block.id, { ...decision }))
+        if (decision.action !== 'allow') throw new Error(`Permission denied: ${decision.reason}`)
+        // Awaiting the host can change the filesystem. Check hard boundaries again.
+        const boundary = permissions.checkWorkspace(tool, input, callCtx)
+        if (boundary?.action === 'deny') throw new Error(`Permission denied: ${boundary.reason}`)
+        notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
         const start = Date.now()
-        const output = await tool.execute(
-          structuredClone(block.input) as Record<string, unknown>,
-          ctx
-        )
+        const output = await tool.execute(input, callCtx)
         notifyObserver(() => events?.onToolEnd?.(block.name, output, Date.now() - start))
         results.push({
           type: 'tool_result',
           tool_use_id: block.id,
           content: output,
+          ...(output.startsWith('Error:') && { is_error: true }),
         })
       } catch (error) {
         const errorMessage = `Error: ${describeToolError(error)}`
@@ -118,6 +130,8 @@ export async function executeToolCalls(
 export interface RunLoopOptions {
   /** Omit for a one-shot run; reuse explicitly for a multi-turn conversation. */
   session?: Session
+  permissions?: PermissionOptions
+  permissionController?: PermissionController
   config?: LLMConfig
   context?: ContextOptions
   tools?: Tool[]
@@ -181,6 +195,7 @@ async function runTurnLoop(
   const { tools = allTools, events, cwd } = options
   const session = options.session!
   const runtime = createCompactionRuntime(options, session)
+  const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const ctx: ToolContext = { cwd: cwd ?? process.cwd() }
   let iterations = 0
 
@@ -208,7 +223,7 @@ async function runTurnLoop(
         throw new Error('Model stopped for tool_use without any tool calls.')
       }
       messages.push({ role: 'assistant', content: structuredClone(response.content) })
-      const toolResults = await executeToolCalls(response.content, tools, ctx, events)
+      const toolResults = await executeToolCalls(response.content, tools, ctx, events, permissions)
       messages.push({ role: 'user', content: toolResults })
       continue
     }

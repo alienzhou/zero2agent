@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises'
 import type { Tool, ToolContext } from './types.js'
-import { resolveInsideCwd } from './path-guard.js'
+import { resolvePhysicalInsideCwd } from './path-guard.js'
 
 interface DeleteInput {
   paths: string[]
@@ -24,6 +24,7 @@ interface FailedItem {
  *   - 部分成功 → 如实陈述成败，不带 Error: 前缀
  */
 export const deleteTool: Tool = {
+  permission: { effect: 'write', paths: ['paths'] },
   name: 'delete',
   description:
     '删除一个或多个文件。传入文件相对路径数组，逐个尽力删除并逐条汇总结果。只能删除工作区目录内的文件，不删除目录、不递归删除。',
@@ -50,7 +51,7 @@ export const deleteTool: Tool = {
 
     for (const rel of paths) {
       // 每个路径单独过边界校验——不能因为在数组里就跳过安全检查
-      const resolved = resolveInsideCwd(ctx.cwd, rel)
+      const resolved = resolvePhysicalInsideCwd(ctx.cwd, rel)
       if (resolved === null) {
         failed.push({ path: rel, reason: 'outside the workspace' })
         continue
@@ -84,7 +85,7 @@ export const deleteTool: Tool = {
  * 按方案 B 拼装回执。
  */
 function formatReceipt(succeeded: string[], failed: FailedItem[]): string {
-  const failedText = failed.map((f) => `${f.path} (${f.reason})`).join(', ')
+  const failedText = failed.map(f => `${f.path} (${f.reason})`).join(', ')
 
   // 全部失败 → Error: 前缀
   if (succeeded.length === 0) {
