@@ -1,0 +1,37 @@
+researches/permissions/acceptance/runtime-audit/d05-rerun.json
+  s_3f23efb1434656::t_cbda7eca31a3dd 1
+researches/permissions/acceptance/runtime-audit/d05-rerun.txt
+  s_3f23efb1434656::t_ebecbf8d3e76c4 1-14
+researches/permissions/acceptance/runtime-audit/expanded-live-audit.txt
+  s_3f23efb1434656::t_a97767bb5e51c2 1-195
+researches/permissions/acceptance/runtime-audit/format.txt
+  s_3f23efb1434656::t_f0a3a9b651c318 1-2
+researches/permissions/acceptance/runtime-audit/full-run.json
+  s_3f23efb1434656::t_8fe2335aba18b4 1
+researches/permissions/acceptance/runtime-audit/full-run.txt
+  s_3f23efb1434656::t_31266333dbf674 1-148
+researches/permissions/acceptance/runtime-audit/initial-live-audit.txt
+  s_3f23efb1434656::t_87b574f3481650 1-587
+researches/permissions/acceptance/runtime-audit/lint.txt
+  s_3f23efb1434656::t_1f3bb57ecb14ce 1-29
+researches/permissions/acceptance/runtime-audit/offline.txt
+  s_3f23efb1434656::t_3c76af9c16850f 1-27
+researches/permissions/acceptance/runtime-audit/summary.json
+  s_3f23efb1434656::t_c8afdedb660b67 1-987
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fe70f0e760dd4cf2b1e4b1afc144012da3de2836",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
