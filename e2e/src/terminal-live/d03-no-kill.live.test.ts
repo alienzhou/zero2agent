@@ -3,9 +3,9 @@
  * 设计：不设执行上限；非 TTY 须跑过竞品常见 10s 超时窗口
  */
 import { describe, it, expect, afterEach } from 'vitest'
-import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
+import { stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
-import { liveCliEnv } from '../helpers/live-cli.js'
+import { liveCliEnv, liveToolReceipts, runLiveCli as runCli } from '../helpers/live-cli.js'
 import { hasWallTimeInReceipt } from '../helpers/terminal-live.js'
 
 describe.skipIf(!live)('D03 不杀死', () => {
@@ -31,6 +31,8 @@ describe.skipIf(!live)('D03 不杀死', () => {
     const elapsed = Date.now() - start
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     expect(elapsed).toBeGreaterThanOrEqual(15_000)
     const output = stripAnsi(result.output)
     expect(output).toMatch(/^\s*⚡ terminal\(/m)
@@ -54,6 +56,8 @@ describe.skipIf(!live)('D03 不杀死', () => {
     const elapsed = Date.now() - start
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     expect(elapsed).toBeGreaterThanOrEqual(11_000)
     const output = stripAnsi(result.output)
     expect(output).toMatch(/^\s*⚡ terminal\(/m)
@@ -73,10 +77,12 @@ describe.skipIf(!live)('D03 不杀死', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toMatch(/^\s*⚡ terminal\(/m)
     expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
-    expect(hasWallTimeInReceipt(output)).toBe(true)
+    expect(hasWallTimeInReceipt(liveToolReceipts(result, 'terminal')[0])).toBe(true)
   }, 30_000)
 })

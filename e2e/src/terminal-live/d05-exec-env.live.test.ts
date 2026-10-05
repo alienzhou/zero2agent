@@ -4,9 +4,9 @@
  */
 import os from 'node:os'
 import { describe, it, expect, afterEach } from 'vitest'
-import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
+import { stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
-import { liveCliEnv } from '../helpers/live-cli.js'
+import { liveCliEnv, runLiveCli as runCli } from '../helpers/live-cli.js'
 import {
   expectTerminalCommand,
   extractTerminalExecMs,
@@ -38,6 +38,8 @@ describe.skipIf(!live)('D05 执行环境', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toMatch(/^\s*⚡ terminal\(/m)
     expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
@@ -62,6 +64,8 @@ describe.skipIf(!live)('D05 执行环境', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toMatch(/^\s*⚡ terminal\(/m)
     expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
@@ -85,6 +89,8 @@ describe.skipIf(!live)('D05 执行环境', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toMatch(/^\s*⚡ terminal\(/m)
     expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)

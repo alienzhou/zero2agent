@@ -12,15 +12,9 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import {
-  runCli,
-  stripAnsi,
-  makeTempWorkspace,
-  isLiveEnabled,
-  liveSkipReason,
-} from './helpers/cli.js'
+import { stripAnsi, makeTempWorkspace, isLiveEnabled, liveSkipReason } from './helpers/cli.js'
 
-import { liveCliEnv } from './helpers/live-cli.js'
+import { liveCliEnv, runLiveCli as runCli } from './helpers/live-cli.js'
 
 const live = isLiveEnabled()
 
@@ -50,6 +44,8 @@ describe.skipIf(!live)('CLI 真实行为：读能力', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     // 断言模型确实拿到了文件里的事实，而非凭空作答
     expect(output).toContain('kettle-service')
@@ -73,6 +69,8 @@ describe.skipIf(!live)('CLI 真实行为：读能力', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toContain('alpha.ts')
     expect(output).toContain('beta.ts')
@@ -93,6 +91,8 @@ describe.skipIf(!live)('CLI 真实行为：读能力', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     expect(stripAnsi(result.output)).toContain('b.ts')
   })
 })
@@ -116,6 +116,8 @@ describe.skipIf(!live)('CLI 真实行为：写能力闭环', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
 
     // 关键断言：磁盘上的事实，而不是模型说它做了
     const content = await fs.readFile(path.join(ws.dir, 'greeting.txt'), 'utf8')
@@ -140,6 +142,8 @@ describe.skipIf(!live)('CLI 真实行为：写能力闭环', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
 
     const content = await fs.readFile(path.join(ws.dir, 'version.ts'), 'utf8')
     expect(content).toContain('2.5.0')
@@ -163,6 +167,8 @@ describe.skipIf(!live)('CLI 真实行为：写能力闭环', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
 
     await expect(fs.access(path.join(ws.dir, 'obsolete.txt'))).rejects.toThrow()
     // 不该波及其他文件
@@ -193,6 +199,8 @@ describe.skipIf(!live)('CLI 真实行为：多工具协同', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
 
     const content = await fs.readFile(path.join(ws.dir, 'src/two.ts'), 'utf8')
     expect(content).toContain('LEGACY_FLAG = false')
@@ -216,6 +224,8 @@ describe.skipIf(!live)('CLI 真实行为：多工具协同', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     // 不要求具体措辞，只要求表达出「没有/不存在/失败」之一
     expect(stripAnsi(result.output)).toMatch(/不存在|没有找到|没有|无法|失败|not exist|Error/i)
   })
@@ -240,6 +250,8 @@ describe.skipIf(!live)('CLI 真实行为：交互模式', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toContain('你: ')
     expect(output).toContain('待办')
@@ -267,6 +279,8 @@ describe.skipIf(!live)('CLI 真实行为：terminal（E02-S003）', () => {
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
     expect(output).toContain('terminal')
     expect(output).toMatch(/demo|"demo"/)
