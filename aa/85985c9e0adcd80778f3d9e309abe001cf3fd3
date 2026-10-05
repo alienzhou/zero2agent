@@ -1,0 +1,34 @@
+e2e/src/helpers/live-cli.ts
+  s_3f23efb1434656::t_844acaf4f87f7e 1-15
+e2e/src/helpers/terminal-live.ts
+  s_3f23efb1434656::t_844acaf4f87f7e 7,53
+  s_3f23efb1434656::t_c8153bb2598bd9 101-104
+e2e/src/cli-live.test.ts
+  s_3f23efb1434656::t_9f0c0f65053a80 23-24,49,72,92,115,139,162,192,215,238,266
+e2e/src/terminal-live/d01-tool-baseline.live.test.ts
+  s_3f23efb1434656::t_096d7b819285ed 8,25,41,59
+e2e/src/terminal-live/d02-no-truncate.live.test.ts
+  s_3f23efb1434656::t_bc88cbf86f7685 8,27,46,65
+e2e/src/terminal-live/d03-no-kill.live.test.ts
+  s_3f23efb1434656::t_59c913bfbc16a2 8,29,50,68
+e2e/src/terminal-live/d04-lifecycle.live.test.ts
+  s_3f23efb1434656::t_9f466748619ea8 9,19,42,44,67,69,95
+e2e/src/terminal-live/d05-exec-env.live.test.ts
+  s_3f23efb1434656::t_f24e0f9b4c497b 9,51,55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa85985c9e0adcd80778f3d9e309abe001cf3fd3",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
