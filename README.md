@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S001：让 Agent 接着聊，也能控制上下文长度](./specs/E03-product-foundations/S001-multi-turn/README.md)已实现进程内多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。生产代码 `ea498a3` 与最终验收测试 `3829868` 已合入 `main`（`f883252`）；全量 379 通过、25 项真实模型测试缺 API 配置跳过，compact-loop 12/12 及 strict 类型检查通过。18 页图文本地成稿与交付包验证完成，尚未对外发布。Story Tag 已创建。
+**最新更新**：[E03-S001：让 Agent 接着聊，也能控制上下文长度](./specs/E03-product-foundations/S001-multi-turn/README.md)已实现进程内多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。原实现与验收测试已合入 `main`（`f883252`）。2026-10-05 补验修复 thinking 摘要兼容问题：3/3 真实 MiniMax-M2.7 E2E 通过，完整离线回归 389 通过、28 live 跳过；证据见 [验收清单](./specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。18 页图文本地成稿与交付包验证完成，尚未对外发布。Story Tag 已创建。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
