@@ -195,7 +195,11 @@ export class PermissionController {
               return { action: 'deny' as const, reason: 'Approval expired' }
             return {
               action: response.decision,
-              reason: response.reason ?? `User ${response.decision}ed this call`,
+              reason:
+                response.reason ??
+                (response.decision === 'allow'
+                  ? 'User approved this call'
+                  : 'User denied this call'),
             }
           },
           () => ({ action: 'deny' as const, reason: 'Approval host failed' })

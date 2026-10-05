@@ -238,6 +238,24 @@ describe('single approval lifecycle', () => {
     expect(t.execute).toHaveBeenCalledWith(input, ctx)
     expect(results.map(r => r.tool_use_id)).toEqual(['a', 'b'])
   })
+  it('pins call IDs, tool names and the entire batch before an asynchronous host reply', async () => {
+    const t = tool()
+    const content = [
+      call('original', t.name, { message: 'original' }),
+      call('second', t.name, { message: 'second' }),
+    ]
+    const p = controller({
+      requestApproval: async request => {
+        content[0].id = 'mutated'
+        content[0].name = 'other'
+        content[1].input.message = 'changed'
+        return { requestId: request.id, decision: 'allow' }
+      },
+    })
+    const results = await executeToolCalls(content, [t], ctx, undefined, p)
+    expect(results.map(result => result.tool_use_id)).toEqual(['original', 'second'])
+    expect(t.execute).toHaveBeenNthCalledWith(2, { message: 'second' }, ctx)
+  })
   it('returned Error receipts are error tool results', async () => {
     const t = { ...tool('read'), execute: async () => 'Error: no file' }
     expect((await executeToolCalls([call('a', t.name)], [t], ctx))[0].is_error).toBe(true)

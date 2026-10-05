@@ -76,7 +76,7 @@ export async function executeToolCalls(
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
 
-  for (const block of content) {
+  for (const block of structuredClone(content)) {
     if (block.type === 'tool_use') {
       const tool = tools.find(t => t.name === block.name)
 
