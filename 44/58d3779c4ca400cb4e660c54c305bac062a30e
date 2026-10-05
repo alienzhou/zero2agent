@@ -1,0 +1,22 @@
+e2e/src/helpers/human-terminal.ts
+  s_3f8917a8bd952b::t_0e1e694ad47acb 44-45,64,86,112
+e2e/src/human-terminal-session-e2e.test.ts
+  s_3f8917a8bd952b::t_0e1e694ad47acb 1-336
+  s_3f8917a8bd952b::t_9b15723ed5948b 337-407
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4458d3779c4ca400cb4e660c54c305bac062a30e",
+  "prompts": {},
+  "sessions": {
+    "s_3f8917a8bd952b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a109f6-3679-7771-9bca-20d42c14b5a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
