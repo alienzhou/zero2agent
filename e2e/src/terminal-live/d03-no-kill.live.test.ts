@@ -5,6 +5,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
+import { liveCliEnv } from '../helpers/live-cli.js'
 import { hasWallTimeInReceipt } from '../helpers/terminal-live.js'
 
 describe.skipIf(!live)('D03 不杀死', () => {
@@ -25,6 +26,7 @@ describe.skipIf(!live)('D03 不杀死', () => {
         '用 terminal 执行 sleep 16 && echo survived-16s，完成后告诉我输出里有没有 survived-16s',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
     const elapsed = Date.now() - start
 
@@ -45,6 +47,7 @@ describe.skipIf(!live)('D03 不杀死', () => {
         '用 terminal 执行 sleep 12 && echo survived-12s，完成后告诉我输出里有没有 survived-12s',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
     const elapsed = Date.now() - start
 
@@ -62,6 +65,7 @@ describe.skipIf(!live)('D03 不杀死', () => {
     const result = await runCli({
       args: ['用 terminal 执行 sleep 3.5 && echo wall-marker，把 terminal 回执原文告诉我'],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
 
     expect(result.code).toBe(0)

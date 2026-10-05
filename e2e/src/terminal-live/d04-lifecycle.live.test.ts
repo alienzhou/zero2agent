@@ -6,6 +6,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
+import { liveCliEnv } from '../helpers/live-cli.js'
 import {
   expectTerminalCommand,
   extractTerminalExecMs,
@@ -15,8 +16,7 @@ import {
   readPidFile,
 } from '../helpers/terminal-live.js'
 
-const NOHUP_CMD =
-  'nohup sleep 120 > /dev/null 2>&1 & echo $! > orphan-nohup.pid'
+const NOHUP_CMD = 'nohup sleep 120 > /dev/null 2>&1 & echo $! > orphan-nohup.pid'
 const DISOWN_CMD =
   "nohup bash -c 'sleep 120 & echo $! > orphan-disown.pid; disown' > /dev/null 2>&1 &"
 
@@ -39,10 +39,9 @@ describe.skipIf(!live)('D04 三道防线', () => {
 
     const started = Date.now()
     const result = await runCli({
-      args: [
-        `只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${NOHUP_CMD}`,
-      ],
+      args: [`只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${NOHUP_CMD}`],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
     const wallMs = Date.now() - started
 
@@ -65,10 +64,9 @@ describe.skipIf(!live)('D04 三道防线', () => {
 
     const started = Date.now()
     const result = await runCli({
-      args: [
-        `只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${DISOWN_CMD}`,
-      ],
+      args: [`只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${DISOWN_CMD}`],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
     const wallMs = Date.now() - started
 
@@ -94,6 +92,7 @@ describe.skipIf(!live)('D04 三道防线', () => {
         '请用 terminal 一次，command 必须是字面量：(sleep 8) & exit 0。把回执里 Note 和 Exit code 原文告诉我',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
 
     expect(result.code).toBe(0)

@@ -5,6 +5,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
+import { liveCliEnv } from '../helpers/live-cli.js'
 
 describe.skipIf(!live)('D02 不截断', () => {
   let cleanup: (() => Promise<void>) | undefined
@@ -23,6 +24,7 @@ describe.skipIf(!live)('D02 不截断', () => {
         '用 terminal 执行 seq 1 900。若回执提示 Saved to /tmp，用 read_file 读该文件，告诉我第 1 行和第 900 行数字',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
 
     expect(result.code).toBe(0)
@@ -41,6 +43,7 @@ describe.skipIf(!live)('D02 不截断', () => {
     const result = await runCli({
       args: ['用 terminal 执行 echo tiny-inline-output，把命令输出原文告诉我'],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
 
     expect(result.code).toBe(0)
@@ -59,6 +62,7 @@ describe.skipIf(!live)('D02 不截断', () => {
         '用 terminal 执行 seq 1 850。若输出落盘，用 grep_search 在落盘文件里搜 "850"，告诉我是否找到',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
 
     expect(result.code).toBe(0)

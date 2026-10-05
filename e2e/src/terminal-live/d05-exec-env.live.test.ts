@@ -6,6 +6,7 @@ import os from 'node:os'
 import { describe, it, expect, afterEach } from 'vitest'
 import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
+import { liveCliEnv } from '../helpers/live-cli.js'
 import {
   expectTerminalCommand,
   extractTerminalExecMs,
@@ -47,12 +48,11 @@ describe.skipIf(!live)('D05 执行环境', () => {
     cleanup = ws.cleanup
 
     const result = await runCli({
-      args: [
-        `只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${PATH_CMD}`,
-      ],
+      args: [`只用 terminal 一次，不要 read_file/ps/kill。command 必须是字面量：${PATH_CMD}`],
       cwd: ws.dir,
       inheritEnv: false,
       env: {
+        ...liveCliEnv('terminal'),
         ...minimalEnv,
         SHELL: process.env.SHELL ?? '/bin/bash',
         HOME: process.env.HOME ?? os.homedir(),
