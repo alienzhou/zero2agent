@@ -8,7 +8,13 @@ import {
   type ApprovalRequest,
 } from '../permissions.js'
 import { executeToolCalls } from '../loop.js'
-import { allTools, writeFileTool, deleteTool, replaceInFileTool } from '../tools/index.js'
+import {
+  allTools,
+  readFileTool,
+  writeFileTool,
+  deleteTool,
+  replaceInFileTool,
+} from '../tools/index.js'
 import type { Tool } from '../tools/types.js'
 
 const temp: string[] = []
@@ -310,6 +316,33 @@ describe('workspace paths and real file effects', () => {
     expect(start).not.toHaveBeenCalled()
     expect(result[0].is_error).toBe(true)
     await expect(readFile(join(outside, 'file'))).rejects.toThrow()
+  })
+  it('preserves the read-only boundary when an approved read path changes', async () => {
+    const { cwd, outside } = await workspace()
+    await mkdir(join(cwd, 'target'))
+    await writeFile(join(cwd, 'target/file'), 'inside')
+    await writeFile(join(outside, 'file'), 'outside secret')
+    const p = controller({
+      mode: 'read-only',
+      rules: [{ tool: readFileTool.name, action: 'ask' }],
+      requestApproval: async request => {
+        await rm(join(cwd, 'target'), { recursive: true })
+        await symlink(outside, join(cwd, 'target'))
+        return { requestId: request.id, decision: 'allow' }
+      },
+    })
+    const start = vi.fn()
+    const [result] = await executeToolCalls(
+      [call('read', readFileTool.name, { path: 'target/file' })],
+      [readFileTool],
+      { cwd },
+      { onToolStart: start },
+      p
+    )
+    expect(start).not.toHaveBeenCalled()
+    expect(result.is_error).toBe(true)
+    expect(result.content).toContain('Read-only')
+    expect(result.content).not.toContain('outside secret')
   })
   it('creates missing directories and permits names beginning with two dots', async () => {
     const { cwd } = await workspace()

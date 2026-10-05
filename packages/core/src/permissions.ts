@@ -111,7 +111,9 @@ export class PermissionController {
           if (!isInsidePath(root, target, effect === 'read')) {
             return effect === 'write'
               ? { action: 'deny', reason: 'Write target is outside the workspace or is its root' }
-              : { action: 'ask', reason: 'Read target is outside the workspace' }
+              : this.mode === 'read-only'
+                ? { action: 'deny', reason: 'Read-only mode permits only workspace reads' }
+                : { action: 'ask', reason: 'Read target is outside the workspace' }
           }
         }
       }
