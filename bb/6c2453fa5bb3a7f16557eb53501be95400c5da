@@ -1,0 +1,25 @@
+scripts/e03-s002-permission-demo.mjs
+  s_3f23efb1434656::t_5aaea68953bc78 1-18
+specs/E03-product-foundations/S002-permissions/README.md
+  s_3f23efb1434656::t_fef8019b66a788 1-68
+specs/E03-product-foundations/S002-permissions/deep-dive/01-approval-and-isolation.md
+  s_3f23efb1434656::t_57805bd0904b77 1-21
+specs/E03-product-foundations/S002-permissions/follow-along.md
+  s_3f23efb1434656::t_d563b22b562eee 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bb6c2453fa5bb3a7f16557eb53501be95400c5da",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
