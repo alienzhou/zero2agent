@@ -1,0 +1,21 @@
+packages/core/src/__tests__/permissions.test.ts
+  s_3f23efb1434656::t_fb05b2085ae5f3 113-114
+packages/core/src/permissions.ts
+  s_3f23efb1434656::t_ea4eba9b15a0ff 57,59,63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b4cc18d2f09b80b1e8b33f066e9e4e08dc5eecd",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
