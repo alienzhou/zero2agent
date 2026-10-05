@@ -23,7 +23,7 @@ export function createApprovalHandler(
     try {
       return await new Promise<ApprovalResponse>(resolve => {
         let settled = false
-        const finish = (decision: 'allow' | 'deny', reason: string) => {
+        const finish = (decision: 'allow' | 'deny', reason: string): void => {
           if (settled) return
           settled = true
           rl.removeListener('close', onClose)
@@ -34,9 +34,9 @@ export function createApprovalHandler(
           resolve(answer(decision, reason))
         }
         const question = new AbortController()
-        const onClose = () => finish('deny', 'Input closed')
-        const onInterrupt = () => finish('deny', 'Approval cancelled by user')
-        const onAbort = () => finish('deny', String(request.signal.reason))
+        const onClose = (): void => finish('deny', 'Input closed')
+        const onInterrupt = (): void => finish('deny', 'Approval cancelled by user')
+        const onAbort = (): void => finish('deny', String(request.signal.reason))
         rl.once('close', onClose)
         rl.once('SIGINT', onInterrupt)
         request.signal.addEventListener('abort', onAbort, { once: true })

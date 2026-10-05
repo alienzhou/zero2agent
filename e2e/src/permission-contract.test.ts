@@ -117,6 +117,44 @@ describe('permissions through built CLI, SDK SSE and real PTY', () => {
       await f.close()
     }
   })
+  it('gates model terminal execution before the human takeover confirmation', async () => {
+    const f = await setup([
+      {
+        type: 'tool_use',
+        id: 'human',
+        name: 'terminal',
+        input: { command: 'bash ./private.sh', interactive: true },
+      },
+    ])
+    await writeFile(
+      join(f.workspace.dir, 'private.sh'),
+      'read -p TOKEN_READY token\nprintf "private-%s" "$token"\n'
+    )
+    const pty = startHumanTerminal(CLI_ENTRY, [], f.workspace.dir, true, { env: f.env })
+    try {
+      await pty.waitFor('你: ')
+      const from = pty.output.length
+      pty.write('human terminal\r')
+      await pty.waitFor('[y/N]: ', from)
+      expect(pty.output.slice(from)).not.toContain('Allow human terminal?')
+      pty.write('y\r')
+      await pty.waitFor('Allow human terminal? [y/N]', from)
+      pty.write('y\r')
+      await pty.waitFor('TOKEN_READY', from)
+      pty.write('fake-secret\r')
+      await pty.waitFor('RESULT_DONE', from)
+      const encoded = JSON.stringify(f.requests)
+      expect(encoded).toContain('human-controlled completed')
+      expect(encoded).not.toContain('fake-secret')
+      expect(encoded).not.toContain('private-fake')
+      await pty.waitFor('你: ', pty.output.indexOf('RESULT_DONE', from))
+      pty.write('exit\r')
+      expect(await pty.waitExit()).toBe(0)
+    } finally {
+      await pty.close()
+      await f.close()
+    }
+  })
   it('supports a one-shot TTY approval', async () => {
     const f = await setup([write()])
     const pty = startHumanTerminal(CLI_ENTRY, ['make a file'], f.workspace.dir, false, {

@@ -152,9 +152,9 @@ async function main() {
 
   setupTerminalRuntime()
 
-  let approvalReadline: readline.Interface | undefined
+  const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
-    permissions: permissionOptionsFromEnv(createApprovalHandler(() => approvalReadline)),
+    permissions: permissionOptionsFromEnv(createApprovalHandler(() => approvalReadline.current)),
     systemPrompt: buildSystemPrompt(),
     events,
     cwd: process.cwd(),
@@ -195,7 +195,7 @@ async function main() {
     output: process.stdout,
   })
 
-  approvalReadline = rl
+  approvalReadline.current = rl
   setupTerminalRuntime(rl)
 
   // stdin 结束（EOF / 管道输入耗尽）后不能再 question，否则抛 ERR_USE_AFTER_CLOSE

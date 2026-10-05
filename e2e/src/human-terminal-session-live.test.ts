@@ -35,7 +35,10 @@ describe.skipIf(!isLiveEnabled() || process.platform === 'win32')(
       }
     })
     async function start(files: Record<string, string> = {}): Promise<LivePty> {
-      const instance = await startLivePty(files)
+      const instance = await startLivePty(files, {
+        PERMISSION_MODE: 'accept-edits',
+        PERMISSION_RULES: JSON.stringify([{ tool: 'terminal', action: 'allow' }]),
+      })
       sessions.push(instance)
       return instance
     }

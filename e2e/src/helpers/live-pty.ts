@@ -23,7 +23,10 @@ export interface LivePtySession {
 }
 
 /** Records request bodies, never credentials; every response comes from the real provider. */
-export async function startLivePty(files: Record<string, string> = {}): Promise<LivePtySession> {
+export async function startLivePty(
+  files: Record<string, string> = {},
+  hostEnv: Record<string, string> = {}
+): Promise<LivePtySession> {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('Missing live API configuration')
   const workspace = await makeTempWorkspace(files)
   const upstream = process.env.ANTHROPIC_BASE_URL ?? 'https://api.anthropic.com'
@@ -100,6 +103,7 @@ export async function startLivePty(files: Record<string, string> = {}): Promise<
     MAX_INPUT_TOKENS: process.env.MAX_INPUT_TOKENS ?? '24000',
     MAX_OUTPUT_TOKENS: process.env.MAX_OUTPUT_TOKENS ?? '2048',
     CONTEXT_COUNTING: 'conservative',
+    ...hostEnv,
   }
   const session = startHumanTerminal(CLI_ENTRY, [], workspace.dir, true, { env, timeoutMs: 90_000 })
   return {

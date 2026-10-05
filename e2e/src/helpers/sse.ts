@@ -6,7 +6,7 @@ export function sendSSEReply(
   stopReason = 'end_turn'
 ): void {
   res.writeHead(200, { 'content-type': 'text/event-stream' })
-  const event = (type: string, value: object) =>
+  const event = (type: string, value: object): boolean =>
     res.write(`event: ${type}\ndata: ${JSON.stringify(value)}\n\n`)
   event('message_start', {
     type: 'message_start',

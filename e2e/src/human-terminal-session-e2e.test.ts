@@ -148,6 +148,9 @@ describe.skipIf(process.platform === 'win32')('E02-S004 + E03-S001: real CLI/SDK
       MAX_OUTPUT_TOKENS: '4096',
       CONTEXT_COUNTING: 'conservative',
       ZERO2AGENT_SKIP_LOCAL_ENV: '1',
+      // This earlier contract covers human handoff and sessions, with explicit host grants.
+      PERMISSION_MODE: 'accept-edits',
+      PERMISSION_RULES: JSON.stringify([{ tool: 'terminal', action: 'allow' }]),
     }
     return { cwd: workspace.dir, requests, env }
   }
