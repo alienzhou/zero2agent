@@ -16,7 +16,7 @@ export interface LivePtySession {
   session: ReturnType<typeof startHumanTerminal>
   env: Record<string, string>
   requests: LiveRequest[]
-  responses: Array<{ path: string; status: number }>
+  responses: Array<{ path: string; status: number; blockTypes?: string[]; stopReason?: string }>
   cwd: string
   input(value: string, from?: number): Promise<number>
   close(): Promise<void>
@@ -28,7 +28,7 @@ export async function startLivePty(files: Record<string, string> = {}): Promise<
   const workspace = await makeTempWorkspace(files)
   const upstream = process.env.ANTHROPIC_BASE_URL ?? 'https://api.anthropic.com'
   const requests: LiveRequest[] = []
-  const responses: Array<{ path: string; status: number }> = []
+  const responses: LivePtySession['responses'] = []
   const server = createServer(async (req, res) => {
     const controller = new AbortController()
     res.once('close', () => {
@@ -37,7 +37,8 @@ export async function startLivePty(files: Record<string, string> = {}): Promise<
     try {
       let body = ''
       for await (const chunk of req) body += chunk
-      requests.push(JSON.parse(body) as LiveRequest)
+      const request = JSON.parse(body) as LiveRequest
+      requests.push(request)
       const headers = new Headers()
       for (const [name, value] of Object.entries(req.headers)) {
         if (['host', 'connection', 'content-length', 'accept-encoding'].includes(name)) continue
@@ -49,7 +50,11 @@ export async function startLivePty(files: Record<string, string> = {}): Promise<
         body,
         signal: controller.signal,
       })
-      responses.push({ path: req.url ?? '', status: response.status })
+      const observation: LivePtySession['responses'][number] = {
+        path: req.url ?? '',
+        status: response.status,
+      }
+      responses.push(observation)
       if (!response.ok) {
         // Provider diagnostics may echo credentials. Preserve the status, not the body.
         res.writeHead(response.status, { 'content-type': 'application/json' }).end(
@@ -66,7 +71,13 @@ export async function startLivePty(files: Record<string, string> = {}): Promise<
       res.writeHead(response.status, {
         'content-type': response.headers.get('content-type') ?? 'application/json',
       })
-      if (response.body) for await (const chunk of response.body) res.write(chunk)
+      if (!request.stream) {
+        const body = await response.text()
+        const parsed = JSON.parse(body) as { content?: LiveBlock[]; stop_reason?: string }
+        observation.blockTypes = parsed.content?.map(block => block.type)
+        observation.stopReason = parsed.stop_reason
+        res.write(body)
+      } else if (response.body) for await (const chunk of response.body) res.write(chunk)
       res.end()
     } catch {
       if (!res.headersSent) res.writeHead(502, { 'content-type': 'application/json' })
@@ -101,7 +112,9 @@ export async function startLivePty(files: Record<string, string> = {}): Promise<
       await session.waitFor('你: ', from)
       const next = session.output.length
       session.write(value + '\r')
-      return next
+      // Readline can redraw "你: " while echoing a long line. Start after its Enter echo.
+      await session.waitFor(/\n/, next)
+      return session.output.indexOf('\n', next) + 1
     },
     async close(): Promise<void> {
       try {

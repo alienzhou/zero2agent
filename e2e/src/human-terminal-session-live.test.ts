@@ -12,7 +12,27 @@ describe.skipIf(!isLiveEnabled() || process.platform === 'win32')(
   () => {
     const sessions: LivePty[] = []
     afterEach(async () => {
-      for (const session of sessions.splice(0)) await session.close()
+      for (const session of sessions.splice(0)) {
+        try {
+          if (process.env.E2E_EVIDENCE_DIR) {
+            await fs.mkdir(process.env.E2E_EVIDENCE_DIR, { recursive: true })
+            await fs.writeFile(
+              path.join(process.env.E2E_EVIDENCE_DIR, `live-${Date.now()}-${randomUUID()}.json`),
+              JSON.stringify(
+                {
+                  requests: session.requests,
+                  responses: session.responses,
+                  output: session.session.output,
+                },
+                null,
+                2
+              )
+            )
+          }
+        } finally {
+          await session.close()
+        }
+      }
     })
     async function start(files: Record<string, string> = {}): Promise<LivePty> {
       const instance = await startLivePty(files)
@@ -40,7 +60,9 @@ describe.skipIf(!isLiveEnabled() || process.platform === 'win32')(
       await expect(fs.access(path.join(p.cwd, 'human-result.txt'))).rejects.toThrow()
       p.session.write('y\r')
       await p.session.waitFor('TOKEN_READY', from)
+      from = p.session.output.length
       p.session.write(secret + '\r')
+      await p.session.waitFor('returning control.', from)
       await p.session.waitFor('你: ', from)
       expect(await fs.readFile(path.join(p.cwd, 'human-result.txt'), 'utf8')).toBe(secret)
       expect(p.session.output).toContain(marker)
@@ -91,7 +113,8 @@ describe.skipIf(!isLiveEnabled() || process.platform === 'win32')(
         port: 9237,
       })
       from = await p.input('/compact', from)
-      await p.session.waitFor('已压缩工作上下文', from)
+      await p.session.waitFor('你: ', from)
+      expect(p.session.output.slice(from)).toContain('已压缩工作上下文')
       expect(p.requests.some(request => !request.stream && !request.tools)).toBe(true)
       const beforeRecall = p.requests.length
       from = await p.input(
