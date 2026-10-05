@@ -1,0 +1,21 @@
+researches/permissions/acceptance/README.md
+  s_3f23efb1434656::t_55c98937e90ecf 15
+researches/permissions/acceptance/course-preview.json
+  s_3f23efb1434656::t_5fb815f65bdf5f 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c0eebf79a07d9f87260f40bef72687f572375a9d",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
