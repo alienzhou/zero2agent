@@ -1,0 +1,195 @@
+
+ RUN  v4.1.0 /workspace/zero2agent/e2e
+
+ ✓ src/cli-live.test.ts (10 tests) 48768ms
+     ✓ 应能读取文件内容并在输出中体现  2690ms
+     ✓ 应能列目录并找到其中的文件  3337ms
+     ✓ 应能按内容搜索并定位到正确的文件  2899ms
+     ✓ 应能创建文件，且内容真实落到磁盘  2815ms
+     ✓ 应能就地修改文件，且保留未涉及的内容  6575ms
+     ✓ 应能删除文件  2619ms
+     ✓ 应能先搜索定位、再修改，完成跨工具的多轮任务  6521ms
+     ✓ 目标文件不存在时应如实说明，而不是伪造成功  3629ms
+     ✓ 交互模式下应能完成一轮真实任务  2614ms
+     ✓ 应能用 terminal 执行命令并读回结果  15066ms
+ ✓ src/terminal-live/d01-tool-baseline.live.test.ts (3 tests) 14224ms
+     ✓ workdir 应在相对子目录执行  5213ms
+     ✓ 非零退出码应进入回执  3261ms
+     ✓ stdout 与 stderr 应合流回执  5748ms
+ ✓ src/terminal-live/d04-lifecycle.live.test.ts (3 tests) 19993ms
+     ✓ 后台存活：nohup 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true  4114ms
+     ✓ 后台存活：disown 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true  5418ms
+     ✓ 防线③：command 须为 (sleep 8) & exit 0，约 2s drain  10460ms
+ ❯ src/terminal-live/d03-no-kill.live.test.ts (3 tests | 1 failed) 44094ms
+     ✓ sleep 16s 应自然结束（超过竞品 10s 默认超时窗口）  20549ms
+     ✓ sleep 12s 应自然结束（仍超过 10s 竞品窗口）  15858ms
+     × sleep 3.5s 回执须含 Wall time 字段 7687ms
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts (3 tests | 2 failed) 17320ms
+     × 超 800 行应落盘，回执给路径而非全文 6322ms
+     ✓ 小输出应直接出现在回执，不落盘  3353ms
+     × 落盘文件应可用 grep_search 精确检索 7644ms
+ ✓ src/human-terminal-session-live.test.ts (3 tests) 63515ms
+     ✓ lets a real model request human takeover and receives only metadata across another turn  5377ms
+     ✓ uses real multi-turn facts, manual summary and correction to write a file, then resets locally  26662ms
+     ✓ automatically summarizes growing real-model history before forwarding bounded requests  31475ms
+ ✓ src/human-terminal-contract.test.ts (31 tests) 9954ms
+     ✓ supports two read rounds, isatty, and /dev/tty  356ms
+     ✓ forwards readline editing keys and UTF-8 human input  365ms
+     ✓ does not echo a read -s token or create an output artifact  366ms
+     ✓ accepts explicit yes and discards the rest of the confirmation chunk  363ms
+     ✓ restores the connected terminal and cleans descendants on external SIGINT  474ms
+     ✓ restores the connected terminal and cleans descendants on external SIGTERM  474ms
+     ✓ restores the connected terminal and cleans descendants on external SIGHUP  463ms
+     ✓ cleans an ordinary background descendant after normal command exit  355ms
+     ✓ cleans a HUP-ignoring child created between two ownership scans  471ms
+     ✓ discards private input typed during terminal teardown, before readline recovery  364ms
+     ✓ uses owned-group cleanup when process inspection fails after real spawn  557ms
+     ✓ returns from a real pager and preserves its final displayed output  374ms
+     ✓ forwards Ctrl-C to the foreground program  355ms
+     ✓ does not report a successful exit when Ctrl-C terminates the child by signal  367ms
+     ✓ forwards Ctrl-D to read as EOF  363ms
+     ✓ Ctrl-] ends a SIGINT-ignoring process and its ordinary descendant  366ms
+     ✓ reports host cancellation when the child handles TERM with exit zero  366ms
+     ✓ propagates resize to the real inner terminal  360ms
+     ✓ restores readline/raw/listeners after two handoffs and excludes secrets from receipts/history  643ms
+     ✓ accepts two /terminal commands followed by exit in the actual CLI REPL  656ms
+     ✓ Ctrl-D exits the default bash and then the host REPL  369ms
+     ✓ drains final output before reporting exit  372ms
+ ✓ src/permission-live-matrix.test.ts (20 tests) 83173ms
+     ✓ denies empty without writing  2704ms
+     ✓ denies invalid without writing  3088ms
+     ✓ denies cancel without writing  4133ms
+     ✓ denies EOF without writing  3586ms
+     ✓ denies timeout without writing  4126ms
+     ✓ honors host read-only without an approval prompt  5905ms
+     ✓ honors host accept-edits without an approval prompt  4750ms
+     ✓ honors host bypass without an approval prompt  4063ms
+     ✓ explicit deny wins even in bypass  4352ms
+     ✓ explicit ask wins over allow and bypass  2875ms
+     ✓ approves replace_in_file before its real effect  5868ms
+     ✓ approves delete before its real effect  2596ms
+     ✓ requires two answers for two calls to the same tool  6576ms
+     ✓ refuses an outside write even under bypass  6339ms
+     ✓ rechecks a path changed during an actual approval wait  3258ms
+     ✓ reads a workspace file without asking  2386ms
+     ✓ asks before reading a file outside the workspace  5935ms
+     ✓ separates tool approval and human PTY takeover with a real model  3574ms
+     ✓ refuses terminal before offering human takeover  3493ms
+     ✓ does not accept piped y as approval with a real provider  3564ms
+ ✓ src/terminal-live/d05-exec-env.live.test.ts (3 tests) 14033ms
+     ✓ TERM 应为 dumb（呈现覆盖）  2655ms
+     ✓ PATH 应宽于最小 /usr/bin:/bin（login shell 采集）  5407ms
+     ✓ PAGER=cat：git log 不应卡在分页器  5970ms
+ ✓ src/permission-live.test.ts (2 tests) 6226ms
+     ✓ real model write proposal with user approved=true  3125ms
+     ✓ real model write proposal with user approved=false  3099ms
+ ✓ src/compact-contract.test.ts (7 tests) 4163ms
+     ✓ handles exact /compact locally and continues using a summary and the latest input  324ms
+     ✓ clears the adopted summary on /new  311ms
+     ✓ keeps main and summary requests bounded over forty growing turns  2211ms
+     ✓ promotes pending background compression to a foreground wait before sending the next turn  367ms
+     ✓ cancels pending background compaction on /new without contaminating the new session  419ms
+ ✓ src/permission-contract.test.ts (20 tests) 3101ms
+     ✓ gates model terminal execution before the human takeover confirmation  410ms
+     ✓ a terminal command is refused without approval, or allowed by an exact host rule  897ms
+ ✓ src/human-terminal-session-e2e.test.ts (5 tests) 1729ms
+     ✓ keeps model-driven and direct handoffs private across another turn, /compact and /new  706ms
+     ✓ cancels a real child tree, reports cancellation to the provider and restores the REPL  412ms
+     ✓ adopts a pending background summary while a real human handoff is active without leaking its content  392ms
+ ✓ src/cli-contract.test.ts (11 tests) 466ms
+ ✓ src/multi-turn-contract.test.ts (6 tests) 487ms
+ ✓ src/terminal-contract.test.ts (7 tests) 411ms
+     ✓ [P0] terminal 创建文件 + read_file 回读  388ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/terminal-live/d02-no-truncate.live.test.ts > D02 不截断 > 超 800 行应落盘，回执给路径而非全文
+AssertionError: expected '  ⚡ terminal(command: "seq 1 900")\n …' to contain 'read_file'
+
+- Expected
++ Received
+
+- read_file
++   ⚡ terminal(command: "seq 1 900")
++   ✓ Exit code: 0 (401ms)
++   ✗ Error: Permission denied: Approval requires an interactive TTY
++
++
++
++ 权限受限，改用 `cat` 命令读取：
++
++   ⚡ terminal(command: "cat /tmp/zero2agent-6938c930.log | head -1 && echo "---" && cat /tmp/zero2agent-6938c930.log | tail -1")
++   ✓ Exit code: 0 (13ms)
++
++
++
++ 结果：
++
++ - **第 1 行**：`1`
++ - **第 900 行**：`900`
++
+
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts:38:20
+     36|     expect(output).toMatch(/\b1\b/)
+     37|     expect(output).toMatch(/900/)
+     38|     expect(output).toContain('read_file')
+       |                    ^
+     39|   })
+     40|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/terminal-live/d02-no-truncate.live.test.ts > D02 不截断 > 落盘文件应可用 grep_search 精确检索
+AssertionError: expected '  ⚡ terminal(command: "seq 1 850")\n …' to contain 'grep_search'
+
+- Expected
++ Received
+
+- grep_search
++   ⚡ terminal(command: "seq 1 850")
++   ✓ Exit code: 0 (482ms)
++   ✗ Error: Permission denied: Approval requires an interactive TTY
++   ⚡ terminal(command: "grep "850" /tmp/zero2agent-8dde2df9.log")
++   ✓ Exit code: 0 (20ms)
++
++
++
++ 找到了。落盘文件 `/tmp/zero2agent-8dde2df9.log` 中包含 "850"（即 seq 1 850 的最后一行）。
++
+
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts:77:20
+     75|     expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
+     76|     expect(output).toContain('terminal')
+     77|     expect(output).toContain('grep_search')
+       |                    ^
+     78|     expect(output).toContain('850')
+     79|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/terminal-live/d03-no-kill.live.test.ts > D03 不杀死 > sleep 3.5s 回执须含 Wall time 字段
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/terminal-live/d03-no-kill.live.test.ts:80:42
+     78|     expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
+     79|     expect(output).toContain('terminal')
+     80|     expect(hasWallTimeInReceipt(output)).toBe(true)
+       |                                          ^
+     81|   }, 30_000)
+     82| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 14 passed (16)
+      Tests  3 failed | 134 passed (137)
+   Start at  23:04:23
+   Duration  333.44s (transform 202ms, setup 0ms, import 554ms, tests 331.66s, environment 1ms)
+
+JSON report written to /tmp/e03-s002-live-final-matrix.json

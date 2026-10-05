@@ -1,0 +1,29 @@
+
+> zero2agent@0.0.0 lint /workspace/zero2agent
+> eslint packages e2e --ext .ts,.tsx
+
+
+/workspace/zero2agent/e2e/src/helpers/terminal-live.ts
+  36:29  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+
+/workspace/zero2agent/packages/core/src/tools/terminal.ts
+  205:54  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+  295:23  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+
+/workspace/zero2agent/packages/tui/src/cli.ts
+   19:1   warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+   81:1   warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  121:1   warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  177:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  188:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  189:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  219:21  warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  226:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  256:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+/workspace/zero2agent/packages/tui/src/setup-terminal-runtime.ts
+  42:60  warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  64:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  67:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+✖ 15 problems (0 errors, 15 warnings)

@@ -1,0 +1,148 @@
+
+ RUN  v4.1.0 /workspace/zero2agent/e2e
+
+ ✓ src/terminal-live/d03-no-kill.live.test.ts (3 tests) 44503ms
+     ✓ sleep 16s 应自然结束（超过竞品 10s 默认超时窗口）  20450ms
+     ✓ sleep 12s 应自然结束（仍超过 10s 竞品窗口）  16421ms
+     ✓ sleep 3.5s 回执须含 Wall time 字段  7631ms
+ ✓ src/terminal-live/d02-no-truncate.live.test.ts (3 tests) 16648ms
+     ✓ 超 800 行应落盘，回执给路径而非全文  8688ms
+     ✓ 小输出应直接出现在回执，不落盘  2968ms
+     ✓ 落盘文件应可用 grep_search 精确检索  4992ms
+ ✓ src/permission-live-matrix.test.ts (20 tests) 76292ms
+     ✓ denies empty without writing  3814ms
+     ✓ denies invalid without writing  4229ms
+     ✓ denies cancel without writing  3788ms
+     ✓ denies EOF without writing  2773ms
+     ✓ denies timeout without writing  4718ms
+     ✓ honors host read-only without an approval prompt  4440ms
+     ✓ honors host accept-edits without an approval prompt  3099ms
+     ✓ honors host bypass without an approval prompt  3455ms
+     ✓ explicit deny wins even in bypass  2720ms
+     ✓ explicit ask wins over allow and bypass  2469ms
+     ✓ approves replace_in_file before its real effect  4570ms
+     ✓ approves delete before its real effect  3435ms
+     ✓ requires two answers for two calls to the same tool  5546ms
+     ✓ refuses an outside write even under bypass  4650ms
+     ✓ rechecks a path changed during an actual approval wait  3847ms
+     ✓ reads a workspace file without asking  3618ms
+     ✓ asks before reading a file outside the workspace  3762ms
+     ✓ separates tool approval and human PTY takeover with a real model  3429ms
+     ✓ refuses terminal before offering human takeover  4300ms
+     ✓ does not accept piped y as approval with a real provider  3628ms
+ ✓ src/human-terminal-session-live.test.ts (3 tests) 54447ms
+     ✓ lets a real model request human takeover and receives only metadata across another turn  6055ms
+     ✓ uses real multi-turn facts, manual summary and correction to write a file, then resets locally  14965ms
+     ✓ automatically summarizes growing real-model history before forwarding bounded requests  33426ms
+ ✓ src/cli-live.test.ts (10 tests) 34987ms
+     ✓ 应能读取文件内容并在输出中体现  2595ms
+     ✓ 应能列目录并找到其中的文件  2631ms
+     ✓ 应能按内容搜索并定位到正确的文件  3116ms
+     ✓ 应能创建文件，且内容真实落到磁盘  2743ms
+     ✓ 应能就地修改文件，且保留未涉及的内容  5780ms
+     ✓ 应能删除文件  2064ms
+     ✓ 应能先搜索定位、再修改，完成跨工具的多轮任务  6615ms
+     ✓ 目标文件不存在时应如实说明，而不是伪造成功  2613ms
+     ✓ 交互模式下应能完成一轮真实任务  4131ms
+     ✓ 应能用 terminal 执行命令并读回结果  2697ms
+ ✓ src/terminal-live/d04-lifecycle.live.test.ts (3 tests) 22305ms
+     ✓ 后台存活：nohup 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true  5332ms
+     ✓ 后台存活：disown 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true  6795ms
+     ✓ 防线③：command 须为 (sleep 8) & exit 0，约 2s drain  10177ms
+ ✓ src/terminal-live/d01-tool-baseline.live.test.ts (3 tests) 15468ms
+     ✓ workdir 应在相对子目录执行  8452ms
+     ✓ 非零退出码应进入回执  3451ms
+     ✓ stdout 与 stderr 应合流回执  3564ms
+ ❯ src/terminal-live/d05-exec-env.live.test.ts (3 tests | 3 failed) 29650ms
+     × TERM 应为 dumb（呈现覆盖） 3297ms
+     × PATH 应宽于最小 /usr/bin:/bin（login shell 采集） 4233ms
+     × PAGER=cat：git log 不应卡在分页器 22119ms
+ ✓ src/human-terminal-contract.test.ts (31 tests) 9981ms
+     ✓ supports two read rounds, isatty, and /dev/tty  354ms
+     ✓ forwards readline editing keys and UTF-8 human input  373ms
+     ✓ does not echo a read -s token or create an output artifact  351ms
+     ✓ accepts explicit yes and discards the rest of the confirmation chunk  360ms
+     ✓ restores the connected terminal and cleans descendants on external SIGINT  474ms
+     ✓ restores the connected terminal and cleans descendants on external SIGTERM  461ms
+     ✓ restores the connected terminal and cleans descendants on external SIGHUP  461ms
+     ✓ cleans an ordinary background descendant after normal command exit  352ms
+     ✓ cleans a HUP-ignoring child created between two ownership scans  476ms
+     ✓ discards private input typed during terminal teardown, before readline recovery  375ms
+     ✓ uses owned-group cleanup when process inspection fails after real spawn  575ms
+     ✓ returns from a real pager and preserves its final displayed output  413ms
+     ✓ forwards Ctrl-C to the foreground program  373ms
+     ✓ does not report a successful exit when Ctrl-C terminates the child by signal  359ms
+     ✓ forwards Ctrl-D to read as EOF  367ms
+     ✓ Ctrl-] ends a SIGINT-ignoring process and its ordinary descendant  351ms
+     ✓ reports host cancellation when the child handles TERM with exit zero  343ms
+     ✓ propagates resize to the real inner terminal  352ms
+     ✓ restores readline/raw/listeners after two handoffs and excludes secrets from receipts/history  670ms
+     ✓ accepts two /terminal commands followed by exit in the actual CLI REPL  654ms
+     ✓ Ctrl-D exits the default bash and then the host REPL  366ms
+     ✓ drains final output before reporting exit  376ms
+ ✓ src/permission-live.test.ts (2 tests) 7087ms
+     ✓ real model write proposal with user approved=true  3529ms
+     ✓ real model write proposal with user approved=false  3556ms
+ ✓ src/compact-contract.test.ts (7 tests) 4146ms
+     ✓ handles exact /compact locally and continues using a summary and the latest input  319ms
+     ✓ clears the adopted summary on /new  314ms
+     ✓ keeps main and summary requests bounded over forty growing turns  2253ms
+     ✓ promotes pending background compression to a foreground wait before sending the next turn  366ms
+     ✓ cancels pending background compaction on /new without contaminating the new session  420ms
+ ✓ src/permission-contract.test.ts (20 tests) 2777ms
+     ✓ gates model terminal execution before the human takeover confirmation  412ms
+     ✓ a terminal command is refused without approval, or allowed by an exact host rule  593ms
+ ✓ src/human-terminal-session-e2e.test.ts (5 tests) 1743ms
+     ✓ keeps model-driven and direct handoffs private across another turn, /compact and /new  715ms
+     ✓ cancels a real child tree, reports cancellation to the provider and restores the REPL  415ms
+     ✓ adopts a pending background summary while a real human handoff is active without leaking its content  391ms
+ ✓ src/multi-turn-contract.test.ts (6 tests) 478ms
+ ✓ src/cli-contract.test.ts (11 tests) 482ms
+ ✓ src/terminal-contract.test.ts (7 tests) 456ms
+     ✓ [P0] terminal 创建文件 + read_file 回读  431ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/terminal-live/d05-exec-env.live.test.ts > D05 执行环境 > TERM 应为 dumb（呈现覆盖）
+AssertionError: expected 0 to be greater than 0
+ ❯ src/terminal-live/d05-exec-env.live.test.ts:41:37
+     39|
+     40|     expect(result.code).toBe(0)
+     41|     expect(result.responses.length).toBeGreaterThan(0)
+       |                                     ^
+     42|     expect(result.responses.every(r => r.status === 200)).toBe(true)
+     43|     const output = stripAnsi(result.output)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/terminal-live/d05-exec-env.live.test.ts > D05 执行环境 > PATH 应宽于最小 /usr/bin:/bin（login shell 采集）
+AssertionError: expected 0 to be greater than 0
+ ❯ src/terminal-live/d05-exec-env.live.test.ts:67:37
+     65|
+     66|     expect(result.code).toBe(0)
+     67|     expect(result.responses.length).toBeGreaterThan(0)
+       |                                     ^
+     68|     expect(result.responses.every(r => r.status === 200)).toBe(true)
+     69|     const output = stripAnsi(result.output)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/terminal-live/d05-exec-env.live.test.ts > D05 执行环境 > PAGER=cat：git log 不应卡在分页器
+AssertionError: expected 0 to be greater than 0
+ ❯ src/terminal-live/d05-exec-env.live.test.ts:92:37
+     90|
+     91|     expect(result.code).toBe(0)
+     92|     expect(result.responses.length).toBeGreaterThan(0)
+       |                                     ^
+     93|     expect(result.responses.every(r => r.status === 200)).toBe(true)
+     94|     const output = stripAnsi(result.output)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed | 15 passed (16)
+      Tests  3 failed | 134 passed (137)
+   Start at  23:13:33
+   Duration  323.34s (transform 203ms, setup 0ms, import 639ms, tests 321.45s, environment 1ms)
+
+JSON report written to /tmp/e03-s002-runtime-verified.json
