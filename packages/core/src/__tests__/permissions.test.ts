@@ -110,6 +110,8 @@ describe('permission rules and host configuration', () => {
     { approvalTimeoutMs: NaN },
     { approvalTimeoutMs: Infinity },
     { rules: {} },
+    { rules: null },
+    { mode: null },
     { rules: [{ tool: '', action: 'allow' }] },
     { rules: [{ tool: 'x', action: 'unknown' }] },
     { rules: [{ tool: 'x', action: 'allow', input: [] }] },

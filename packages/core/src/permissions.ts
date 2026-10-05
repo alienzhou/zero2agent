@@ -54,13 +54,13 @@ export class PermissionController {
   private pending = new Set<AbortController>()
 
   constructor(options: PermissionOptions = {}) {
-    this.mode = options.mode ?? 'default'
+    this.mode = options.mode === undefined ? 'default' : options.mode
     if (!modes.includes(this.mode)) throw new Error('Invalid permission mode')
-    this.timeout = options.approvalTimeoutMs ?? 120_000
+    this.timeout = options.approvalTimeoutMs === undefined ? 120_000 : options.approvalTimeoutMs
     if (!Number.isFinite(this.timeout) || this.timeout <= 0 || this.timeout > 2_147_483_647) {
       throw new Error('approvalTimeoutMs must be a positive timer duration')
     }
-    const rules = options.rules ?? []
+    const rules = options.rules === undefined ? [] : options.rules
     if (!Array.isArray(rules)) throw new Error('Permission rules must be an array')
     for (const rule of rules) {
       if (!rule || typeof rule.tool !== 'string' || !rule.tool || !actions.includes(rule.action)) {
