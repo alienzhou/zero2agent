@@ -77,6 +77,7 @@ describe('compaction across the real loop and session', () => {
       const reply = toolReply()
       reply.content.unshift({ type: 'text', text: 'analysis '.repeat(1200), citations: null })
       const tool: Tool = {
+        permission: { effect: 'read' },
         name: 'write',
         description: 'write',
         input_schema: { type: 'object', properties: {} },
@@ -115,6 +116,7 @@ describe('compaction across the real loop and session', () => {
       async () => 'changed file once; inspected original content ' + 'r'.repeat(3000)
     )
     const tool: Tool = {
+      permission: { effect: 'read' },
       name: 'write',
       description: 'write',
       input_schema: { type: 'object', properties: {} },
@@ -143,6 +145,7 @@ describe('compaction across the real loop and session', () => {
   it('stops after two real context recoveries when the provider keeps rejecting', async () => {
     const execute = vi.fn(async () => 'saved once ' + 'r'.repeat(1000))
     const tool: Tool = {
+      permission: { effect: 'read' },
       name: 'write',
       description: 'write',
       input_schema: { type: 'object', properties: {} },
@@ -210,18 +213,21 @@ describe('compaction across the real loop and session', () => {
     const inspect = vi.fn(async () => 'new tail: saved file inspected')
     const tools: Tool[] = [
       {
+        permission: { effect: 'read' },
         name: 'write',
         description: 'write',
         input_schema: { type: 'object', properties: {} },
         execute: write,
       },
       {
+        permission: { effect: 'read' },
         name: 'fail',
         description: 'fail',
         input_schema: { type: 'object', properties: {} },
         execute: fail,
       },
       {
+        permission: { effect: 'read' },
         name: 'inspect',
         description: 'inspect',
         input_schema: { type: 'object', properties: {} },
@@ -384,6 +390,7 @@ describe('compaction across the real loop and session', () => {
 
   it('sends the same detached tool schema that was counted before an asynchronous wait', async () => {
     const tool: Tool = {
+      permission: { effect: 'read' },
       name: 'write',
       description: 'write',
       input_schema: { type: 'object', properties: { path: { type: 'string' } } },

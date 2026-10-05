@@ -37,6 +37,7 @@ const reply = (content: Reply['content'], stop: Reply['stop_reason'] = 'end_turn
   ({ content, stop_reason: stop }) as Reply
 const answer = (value: string) => reply([text(value)])
 const echo: Tool = {
+  permission: { effect: 'read' },
   name: 'echo',
   description: 'echo',
   input_schema: { type: 'object', properties: {} },
