@@ -1,0 +1,265 @@
+{
+  "sourceHash": "70fe15461bb0a42e2673d49b01c047d9a8639be72b2f1dd48a1d59bfcd1a8e21",
+  "browser": "Chrome/154.0.8037.95",
+  "width": 1080,
+  "height": 1440,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "png": "01-cover.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent\nEpic. 03 / Story 002\n\n从零实现 CODING AGENT\n\n执行之前\n先看权限\n\n从三态规则到一次 Approval\n\n模型提议，宿主决定\n\n读取源码 → 允许\n\n修改文件 → 询问\n\n规则禁止 → 拒绝\n\n批准一次，只执行这一次。\n\n工程实战\n真实经验\n开源项目",
+      "fonts": [
+        "32px",
+        "36px"
+      ],
+      "sha256": "6a19915b53e85c751353117719cea93c231419a0703fc559a10bb63812f50a4a"
+    },
+    {
+      "file": "02-scope.html",
+      "png": "02-scope.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 情景引入\n02\n修好项目，\n能做到哪一步？\n\n同一项任务，三个操作的影响不同。\n\n01\n读取源码\n\n先看文件里的错误。\n\n02\n修改文件\n\n把改动写到你的工作目录。\n\n03\n运行命令\n\n启动程序，也可能影响目录之外。\n\n用户说「先分析」，权限就应限制在分析所需的范围。",
+      "fonts": [
+        "32px",
+        "30px"
+      ],
+      "sha256": "52274c0dbc4afdb3a9a92ec4a2e73964e135f0a7f2581488d10880e28ae31d1e"
+    },
+    {
+      "file": "03-gate.html",
+      "png": "03-gate.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 执行入口\n03\n一句「先问我」，\n怎样成为执行规则？\n\n把权限检查放到工具 execute 之前。\n\n模型\n\n提出工具名与参数\n\n↓\nHarness\n\n检查规则，决定是否需要询问\n\n↓\n工具\n\n获准后才产生实际效果\n\n执行时强制检查\n提示词影响提议\n\n权限规则由宿主掌握，模型不能靠一句「已批准」放行。",
+      "fonts": [
+        "32px",
+        "34px"
+      ],
+      "sha256": "fd974ec387fcd61902c8553c50d4024a8bd17d2cf187a0199854ade118e36f34"
+    },
+    {
+      "file": "04-three-actions.html",
+      "png": "04-three-actions.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 权限判断\n04\n一条工具调用，\n三种处理\n\n允许、询问、拒绝分别走不同路径。\n\nallow\n直接执行\n\n规则已经允许，无需等待用户。\n\nask\n先暂停，再回答\n\n宿主发出审批；批准这次才能执行。\n\ndeny\n留下拒绝结果\n\n工具不执行，模型收到明确原因。",
+      "fonts": [
+        "32px"
+      ],
+      "sha256": "ca97bdf419e6ad4f2bf172dc1f3d404cc424ff3f756bca6973815fa19631a4cd"
+    },
+    {
+      "file": "05-competitors.html",
+      "png": "05-competitors.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 竞品调研\n05\n竞品都管权限，\n规则并不相同\n\n官方文档为主，公开源码辅助核对。\n\nClaude\n拒绝优先\n\n显式 deny、ask、allow 依次判定。\n\nCodex\n审批与沙箱分开\n\n是否暂停询问，与进程可访问的资源分开配置。\n\nGemini\n按优先级匹配\n\n无交互环境里的 ask_user 按拒绝处理。\n\nOpenCode\n最后匹配生效\n\n本次核对的 v1 规则采用最后匹配；提供一次批准。",
+      "fonts": [
+        "32px"
+      ],
+      "sha256": "8a2127bd1bc8b1e3dddd24a5739b717fc2ddc2774642ffaf6aa381eb3886272c"
+    },
+    {
+      "file": "06-modes.html",
+      "png": "06-modes.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 模式选择\n06\n默认先自动读，\n再询问写与执行\n\n本课模式由宿主配置，模型不能自行切换。\n\ndefault\n读允许，写和命令询问\n\n默认沿用逐次批准。\n\nread-only\n只读工作区\n\n写、命令和未知工具直接拒绝。\n\naccept-edits\n授权工作区修改\n\n命令和未知工具仍然询问。\n\nbypass 跳过默认询问，仍遵守显式 deny / ask 和工作区写边界。",
+      "fonts": [
+        "32px",
+        "30px"
+      ],
+      "sha256": "4fb1c6e91813cd27f936d586ed62e0ede5dfbd765f38ec3a82ef294db32f5771"
+    },
+    {
+      "file": "07-rule-order.html",
+      "png": "07-rule-order.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 规则优先级\n07\n规则有冲突，\n先看哪一条？\n\n本课选择 deny → ask → allow。\n\n两条同时命中\nterminal → allow\nterminal → deny\n最终结果\n拒绝执行\n\n显式拒绝先于允许；调换数组顺序，也不会改变结果。\n\n只读模式与写工具的硬边界先行检查，不能用允许规则覆盖。",
+      "fonts": [
+        "32px",
+        "34px",
+        "30px"
+      ],
+      "sha256": "1fe98c33f47d5ff25d3e339c4d37efdc08396e759d3d36c799a51e29c565cc69"
+    },
+    {
+      "file": "08-exact-match.html",
+      "png": "08-exact-match.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 参数匹配\n08\n允许这条命令，\n会放行另一条吗？\n\n规则只匹配工具全名与顶层标量参数。\n\n宿主允许的精确输入\ncommand: \"git status\"\n不同输入，不会命中\ncommand: \"git status; other-command\"\n\n不使用简单字符串前缀白名单。精确匹配表示授权这个原始输入，也不等于命令安全分析。",
+      "fonts": [
+        "32px",
+        "34px"
+      ],
+      "sha256": "fbb5005836584897c737e8f0deaca63b17f6a73450b15d90e74ac124cfc112e5"
+    },
+    {
+      "file": "09-request.html",
+      "png": "09-request.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 审批请求\n09\n审批时，\n用户需要看到什么？\n\n完整参数、工作目录与当前调用。\n\n界面示意 · 参数以 JSON 显示\nApproval · \"write_file\"\n工作目录: \"/project\"\n参数: {\n  \"path\": \"lesson.txt\",\n  \"content\": \"hello\"\n}\n允许这次操作？[y/N]:\n\n请求有独立 ID。SDK 回答必须带同一个 requestId，避免另一条审批的回答被误用。",
+      "fonts": [
+        "32px",
+        "34px"
+      ],
+      "sha256": "0e4f35168ad8971657220e1fc6d24bbe09dd9de3b36bdf9cfa37fd86c802d234"
+    },
+    {
+      "file": "10-once.html",
+      "png": "10-once.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 授权范围\n10\n批准一次，\n只执行这一次\n\n同工具的下一次调用，重新判断权限。\n\n调用 A\n\n用户回答 y，批准当前参数\n\n↓\n执行 A\n\n使用审批前保存的参数快照\n\n↓\n调用 B\n\n同一个工具，也再次经过权限判断\n\n参数不能被展示事件或审批回调改写；UI 不自动保存「以后都允许」。",
+      "fonts": [
+        "32px",
+        "30px"
+      ],
+      "sha256": "f75346ff920f237041781166004b909e1ed78e66ccc51ce985c352cd864e2428"
+    },
+    {
+      "file": "11-expiry.html",
+      "png": "11-expiry.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 等待与取消\n11\n等不到有效回答，\n就停止放行\n\nask 必须有明确的结束方式。\n\n没有 UI\n返回拒绝\n\n默认 SDK 无审批处理器；CLI 管道输入不接受 y 当批准。\n\n回答失效\n返回拒绝\n\n处理器报错、ID 不符或非法回答，均不执行。\n\n等待结束\n返回拒绝\n\n默认 120 秒超时；Ctrl+C、EOF 或取消也不会被当成同意。",
+      "fonts": [
+        "32px"
+      ],
+      "sha256": "f72b6be1c4dc550347c5ed9daf28ed40359722b01e45734d964ddab135cb759e"
+    },
+    {
+      "file": "12-paths.html",
+      "png": "12-paths.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 工作区边界\n12\n等用户回答时，\n路径也可能变了\n\n审批前检查，执行前再检查。\n\n审批前\n\ntarget 目录仍位于工作区内\n\n↓\n等待期间\n\n目录被替换为指向外部的软链接\n\n↓\n执行前\n\n重新解析已有祖先，拒绝外部写入\n\n新文件也要检查已有父目录；写工具自身保留校验。路径检查并不提供系统沙箱。",
+      "fonts": [
+        "32px",
+        "30px"
+      ],
+      "sha256": "e53fce2ee8082206a10d870f7c400a88d2159a3127e46dadaa30e7cf9d2fa151"
+    },
+    {
+      "file": "13-receipts.html",
+      "png": "13-receipts.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 会话证据\n13\n拒绝执行，\n也要留下完整回执\n\n每个 tool_use 都有配对的 tool_result。\n\n拒绝回执示意\ntool_use_id: \"write_1\"\nis_error: true\n\"Error: Permission denied: ...\"\n下一次模型请求\n知道哪些操作没有执行\n\n保留调用 ID 与拒绝原因；多工具批次逐条配对，不把拒绝伪装成成功。",
+      "fonts": [
+        "32px",
+        "34px"
+      ],
+      "sha256": "4f752fab1c23889333a340438734b38400ea729d551b94591bea21b1ea837d01"
+    },
+    {
+      "file": "14-two-layers.html",
+      "png": "14-two-layers.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 终端交接\n14\n批准执行，\n再确认人工接管\n\n通用工具权限与 PTY 交接分别判断。\n\n第一层\n\n模型提出 terminal，先过通用权限\n\n↓\n第二层\n\n确认是否把终端控制权交给人\n\n↓\n返回模型\n\n仅返回人工终端状态元信息\n\n人工终端正文仍不进入模型上下文。命令获批后以宿主权限运行，本课没有实现操作系统隔离。",
+      "fonts": [
+        "32px",
+        "30px"
+      ],
+      "sha256": "ff0eeb56d7289c9ab09be177e93b5f9f97c5d88fbd65fd5ed37c2851eef19204"
+    },
+    {
+      "file": "15-practice.html",
+      "png": "15-practice.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 实践验证\n15\n跟练：先拒绝，\n再批准一次\n\n先用离线脚本核对文件效果。\n\n最后一条用反斜线续行\npnpm install --frozen-lockfile\npnpm build\nnode \\\n  scripts/e03-s002-permission-demo.mjs\n拒绝\n文件不存在\n\n检查 is_error 与调用 ID，不能只看提示文字。\n\n批准\n临时文件被写入\n\n脚本验证生产执行入口，退出后清理；不调用模型。\n\n完整跟练见工程本期 follow-along.md；真实 CLI 练习需配置模型，会产生 API 用量。",
+      "fonts": [
+        "32px",
+        "30px"
+      ],
+      "sha256": "30dfbee7ecdea7299b0506201f30d9f0f6e38812d87eb9b635f7c55be555f7d9"
+    },
+    {
+      "file": "16-next.html",
+      "png": "16-next.png",
+      "errors": [],
+      "orphans": [],
+      "canvas": {
+        "width": 1080,
+        "height": 1440
+      },
+      "text": "Zero2Agent • 关注连载\n16\n管住执行，\n再让过程看得见\n\nE03-S002 · 权限与 Approval\n\n本课完成\n三态规则 → 一次审批 → 配对结果\n\n执行前判断权限，等待与取消都有明确结果。\n\n下一课 · E03-S003\n运行状态与 TUI\n\n把工具状态、审批和控制接口接到终端界面。\n\n课程免费开源 · Zero2Agent\n工程实战 / 真实经验 / 开源项目",
+      "fonts": [
+        "32px",
+        "34px",
+        "31px"
+      ],
+      "sha256": "54fceefa7a35161429c16e9cd0cca5afc03537ade754a52191abc98ac83f63c0"
+    }
+  ],
+  "errors": 0,
+  "orphanWarnings": 0
+}

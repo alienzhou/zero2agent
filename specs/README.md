@@ -79,7 +79,7 @@ specs/
 
 ## Epic 3：基础能力与产品化
 
-[进入 Epic 3](./E03-product-foundations/README.md)。六节课的顺序与边界已确认：多轮会话 → 权限与 Approval → TUI → 会话恢复 → 运行日志 → 文件 Checkpoint。[S001：多轮会话](./E03-product-foundations/S001-multi-turn/README.md)已合入 main 并打 Tag，尚未对外发布；其余 Story 待设计。
+[进入 Epic 3](./E03-product-foundations/README.md)。六节课的顺序与边界已确认：多轮会话 → 权限与 Approval → TUI → 会话恢复 → 运行日志 → 文件 Checkpoint。[S001：多轮会话](./E03-product-foundations/S001-multi-turn/README.md)已合入 main 并打 Tag，尚未对外发布；[S002：权限与 Approval](./E03-product-foundations/S002-permissions/README.md)的实现与课程候选已完成，待人工审阅与合并；下一课 S003 运行状态与 TUI，后续 Story 待设计。
 
 ---
 

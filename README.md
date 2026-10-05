@@ -111,7 +111,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | ---- | ---- | ---- |
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001 多轮与基础压缩已实现，未发布](./specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S002 权限与 Approval 本地完成，未发布](./specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理异常、长上下文和复杂运行情况 | Planned |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
 
@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S001：让 Agent 接着聊，也能控制上下文长度](./specs/E03-product-foundations/S001-multi-turn/README.md)已实现进程内多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。原实现与验收测试已合入 `main`（`f883252`）。2026-10-05 补验修复 thinking 摘要兼容问题：3/3 真实 MiniMax-M2.7 E2E 通过，完整离线回归 389 通过、28 live 跳过；证据见 [验收清单](./specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。18 页图文本地成稿与交付包验证完成，尚未对外发布。Story Tag 已创建。
+**最新更新**：[E03-S002：执行前，先判断是否允许](./specs/E03-product-foundations/S002-permissions/README.md)完成权限模式、三态规则、一次审批、TTY 交互和真实路径重查。固定代码候选 `73ecdbc`，463 项离线与 2 项真实 MiniMax-M2.7 验收通过；16 页图文、手机图与双 ZIP 本地完成。[验收证据](./researches/permissions/acceptance/README.md)与[跟练](./specs/E03-product-foundations/S002-permissions/follow-along.md)已齐备，Tag 为 `E03-S002-permissions-approval`。实现候选待人工审阅与合并，课程未对外发布。下一课：E03-S003 运行状态与 TUI。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -174,6 +174,7 @@ zero2agent/
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
 | [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | Done，已合入 main、已打 Tag，未对外发布 |
+| [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | 权限与一次 Approval | 实现及课程候选完成，待人工审阅与合并，未发布 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

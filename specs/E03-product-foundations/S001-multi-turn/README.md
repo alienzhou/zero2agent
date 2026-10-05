@@ -67,4 +67,4 @@ SDK 使用 `await agent.compact()`，返回是否采用了压缩结果；`cancel
 
 1. [为什么回滚消息不等于回滚世界](./deep-dive/01-history-is-not-rollback.md)：理解工具执行后的证据为什么不能随错误一起删除，以及会话历史、运行日志和文件快照的不同职责。
 
-上一篇：[E02-S004：人工交互终端](../../E02-act-and-execute/S004-interactive-commands/README.md) | 下一篇：E03-S002 权限与 Approval（待设计）
+上一篇：[E02-S004：人工交互终端](../../E02-act-and-execute/S004-interactive-commands/README.md) | 下一篇：[E03-S002 权限与 Approval](../S002-permissions/README.md)

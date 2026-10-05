@@ -1,0 +1,82 @@
+{
+  "sourceHash": "70fe15461bb0a42e2673d49b01c047d9a8639be72b2f1dd48a1d59bfcd1a8e21",
+  "publicationStatus": "unpublished",
+  "images": [
+    {
+      "png": "01-cover.png",
+      "sha256": "6a19915b53e85c751353117719cea93c231419a0703fc559a10bb63812f50a4a"
+    },
+    {
+      "png": "02-scope.png",
+      "sha256": "52274c0dbc4afdb3a9a92ec4a2e73964e135f0a7f2581488d10880e28ae31d1e"
+    },
+    {
+      "png": "03-gate.png",
+      "sha256": "fd974ec387fcd61902c8553c50d4024a8bd17d2cf187a0199854ade118e36f34"
+    },
+    {
+      "png": "04-three-actions.png",
+      "sha256": "ca97bdf419e6ad4f2bf172dc1f3d404cc424ff3f756bca6973815fa19631a4cd"
+    },
+    {
+      "png": "05-competitors.png",
+      "sha256": "8a2127bd1bc8b1e3dddd24a5739b717fc2ddc2774642ffaf6aa381eb3886272c"
+    },
+    {
+      "png": "06-modes.png",
+      "sha256": "4fb1c6e91813cd27f936d586ed62e0ede5dfbd765f38ec3a82ef294db32f5771"
+    },
+    {
+      "png": "07-rule-order.png",
+      "sha256": "1fe98c33f47d5ff25d3e339c4d37efdc08396e759d3d36c799a51e29c565cc69"
+    },
+    {
+      "png": "08-exact-match.png",
+      "sha256": "fbb5005836584897c737e8f0deaca63b17f6a73450b15d90e74ac124cfc112e5"
+    },
+    {
+      "png": "09-request.png",
+      "sha256": "0e4f35168ad8971657220e1fc6d24bbe09dd9de3b36bdf9cfa37fd86c802d234"
+    },
+    {
+      "png": "10-once.png",
+      "sha256": "f75346ff920f237041781166004b909e1ed78e66ccc51ce985c352cd864e2428"
+    },
+    {
+      "png": "11-expiry.png",
+      "sha256": "f72b6be1c4dc550347c5ed9daf28ed40359722b01e45734d964ddab135cb759e"
+    },
+    {
+      "png": "12-paths.png",
+      "sha256": "e53fce2ee8082206a10d870f7c400a88d2159a3127e46dadaa30e7cf9d2fa151"
+    },
+    {
+      "png": "13-receipts.png",
+      "sha256": "4f752fab1c23889333a340438734b38400ea729d551b94591bea21b1ea837d01"
+    },
+    {
+      "png": "14-two-layers.png",
+      "sha256": "ff0eeb56d7289c9ab09be177e93b5f9f97c5d88fbd65fd5ed37c2851eef19204"
+    },
+    {
+      "png": "15-practice.png",
+      "sha256": "30dfbee7ecdea7299b0506201f30d9f0f6e38812d87eb9b635f7c55be555f7d9"
+    },
+    {
+      "png": "16-next.png",
+      "sha256": "54fceefa7a35161429c16e9cd0cca5afc03537ade754a52191abc98ac83f63c0"
+    }
+  ],
+  "packages": [
+    {
+      "file": "E03-S002-course-images.zip",
+      "entries": 19,
+      "sha256": "1a50b86493ad95f857c622cbb49ae4a930af06d428978483edacf319a1eb7989"
+    },
+    {
+      "file": "E03-S002-editable-source.zip",
+      "entries": 34,
+      "sha256": "ef7babc24ad46f362505b4df794bc8b22853b596f7c2137dd6b1b29c5a0ebf9c"
+    }
+  ]
+}
