@@ -1,0 +1,39 @@
+.discuss/2026-10-05/e03-s002-permissions/decisions/D01-execution-gate.md
+  s_3f23efb1434656::t_a97e83bd541252 1-3
+.discuss/2026-10-05/e03-s002-permissions/outline.md
+  s_3f23efb1434656::t_1425c99a9fb94f 1-5
+.vibecoding/2026-10-05/e03-s002-permissions/dialogue.md
+  s_3f23efb1434656::t_d29a270fb3082b 1-3
+.vibecoding/2026-10-05/e03-s002-permissions/prompt.md
+  s_3f23efb1434656::t_eb0ea574ff8adb 1-3
+researches/permissions/README.md
+  s_3f23efb1434656::t_4af07e1e20dcbc 1-41
+researches/permissions/source-pins.json
+  s_3f23efb1434656::t_1b5013584b8a88 1-23
+specs/E03-product-foundations/S002-permissions/details/00-overview.md
+  s_3f23efb1434656::t_9958ba59f74968 1-7
+specs/E03-product-foundations/S002-permissions/details/01-technical-design.md
+  s_3f23efb1434656::t_7fd3cb0f2dbcf6 1-25
+specs/E03-product-foundations/S002-permissions/details/02-task-list.md
+  s_3f23efb1434656::t_e93138fd591216 1-11
+specs/E03-product-foundations/S002-permissions/details/03-verification-checklist.md
+  s_3f23efb1434656::t_b08478a6363127 1-20
+specs/E03-product-foundations/S002-permissions/details/04-backlog.md
+  s_3f23efb1434656::t_2cac4679c5e360 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "361b3738cad9ca62dabbe01fc84b8312d9acb6c0",
+  "prompts": {},
+  "sessions": {
+    "s_3f23efb1434656": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10b81-dbda-7382-a30a-70975b87ec52",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
