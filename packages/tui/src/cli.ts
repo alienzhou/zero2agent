@@ -8,6 +8,8 @@ import * as readline from 'node:readline'
 import path from 'node:path'
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 
+import { createApprovalHandler, permissionOptionsFromEnv } from './approval.js'
+
 // ── 环境变量 ───────────────────────────────────────
 
 /**
@@ -150,7 +152,9 @@ async function main() {
 
   setupTerminalRuntime()
 
+  let approvalReadline: readline.Interface | undefined
   const agent = new Agent({
+    permissions: permissionOptionsFromEnv(createApprovalHandler(() => approvalReadline)),
     systemPrompt: buildSystemPrompt(),
     events,
     cwd: process.cwd(),
@@ -191,6 +195,7 @@ async function main() {
     output: process.stdout,
   })
 
+  approvalReadline = rl
   setupTerminalRuntime(rl)
 
   // stdin 结束（EOF / 管道输入耗尽）后不能再 question，否则抛 ERR_USE_AFTER_CLOSE
@@ -198,6 +203,7 @@ async function main() {
   rl.on('close', () => {
     closed = true
     agent.cancelCompaction()
+    agent.cancelPendingApprovals()
     void cleanupBackgroundOnExit()
       .catch(error => {
         console.error('退出清理失败:', error instanceof Error ? error.message : String(error))
@@ -259,4 +265,7 @@ async function main() {
   prompt()
 }
 
-main()
+main().catch(error => {
+  console.error('启动失败:', error instanceof Error ? error.message : String(error))
+  process.exitCode = 1
+})

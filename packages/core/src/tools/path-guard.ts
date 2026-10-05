@@ -66,7 +66,7 @@ export function resolvePhysicalInsideCwd(cwd: string, value: string): string | n
   try {
     const root = resolvePhysicalPath(cwd)
     const target = resolvePhysicalPath(value, cwd)
-    return isInsidePath(root, target) ? target : null
+    return isInsidePath(root, target) ? path.resolve(cwd, value) : null
   } catch {
     return null
   }

@@ -177,7 +177,10 @@ export class PermissionController {
         timer = setTimeout(() => controller.abort('Approval timed out'), this.timeout)
       })
       const answer = Promise.resolve()
-        .then(() => this.handler!(request))
+        .then(() => {
+          if (controller.signal.aborted) throw new Error('Approval expired')
+          return this.handler!(request)
+        })
         .then(
           response => {
             if (
