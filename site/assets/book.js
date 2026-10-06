@@ -3,6 +3,7 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
 const pad = value => String(value).padStart(2, '0');
 const storageKey = 'zero2agent.book.progress.v1';
+const readingAnchor = 92;
 const main = $('#main');
 const outline = $('#outline');
 const sidebar = $('#sidebar');
@@ -104,7 +105,7 @@ function setActivePage(page, persist = true) {
 function savePosition() {
   if (!currentChapter || !activePage) return;
   const section = document.getElementById(activePage.id);
-  const offset = section ? Math.min(1, Math.max(0, (100 - section.getBoundingClientRect().top) / section.offsetHeight)) : 0;
+  const offset = section ? Math.min(1, Math.max(0, (readingAnchor - section.getBoundingClientRect().top) / section.offsetHeight)) : 0;
   const saved = progress.chapters[currentChapter.id] || {};
   progress.chapters[currentChapter.id] = {page: activePage.id, offset, completed: Boolean(saved.completed)};
   progress.last = {chapter: currentChapter.id, page: activePage.id};
@@ -175,7 +176,7 @@ function handleRoute(initial = false) {
       const target = document.getElementById(route.page.id);
       const saved = progress.chapters[route.chapter.id];
       const offset = (initial || resumePosition) && saved?.page === route.page.id ? Math.min(1, Math.max(0, Number(saved.offset) || 0)) : 0;
-      if (target) window.scrollTo(0, window.scrollY + target.getBoundingClientRect().top - 92 + offset * target.offsetHeight);
+      if (target) window.scrollTo(0, window.scrollY + target.getBoundingClientRect().top - readingAnchor + offset * target.offsetHeight);
     }
     restoring = false;
     resumePosition = false;
@@ -333,7 +334,7 @@ window.addEventListener('resize', () => {
   resizeFigures();
   requestAnimationFrame(() => {
     const target = document.getElementById(page.id);
-    if (target) window.scrollTo(0, atTop ? 0 : window.scrollY + target.getBoundingClientRect().top - 92 + offset * target.offsetHeight);
+    if (target) window.scrollTo(0, atTop ? 0 : window.scrollY + target.getBoundingClientRect().top - readingAnchor + offset * target.offsetHeight);
     restoring = false;
     lastScrollY = window.scrollY;
     savePosition();
