@@ -1,0 +1,21 @@
+site/assets/book.js
+  s_7ef586e3e4b6e0::t_b3795184cd5402 10,21,63,138,147-148,172,177,296-299
+site/assets/book.css
+  s_7ef586e3e4b6e0::t_b3795184cd5402 180-181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "68dd875cff3d142a1312ef6eb2b5826980daafe2",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
