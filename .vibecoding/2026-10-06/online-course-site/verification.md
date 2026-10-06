@@ -37,3 +37,14 @@
 ## 验证范围
 
 以上是内置浏览器的 PC 与移动视口验收，没有声称已经在真实 iOS、Android 设备或远端 Nginx 上实测。Nginx 配置与同步命令保存在 deploy/nginx-site.conf 和 docs/site.md；本轮没有远端部署。
+
+## 课程制作闭环
+
+同日补齐 Zero2Agent 内部的编辑、构建、校验与预览流程后，完成以下验证：
+
+- 只复制本仓库的 site/、.authoring/site/、课程脚本与 package.json 到临时目录，运行 node scripts/build-site.mjs 成功，生成 10 章、135 篇图解；无需 content-generator、node_modules 或额外安装。
+- 隔离构建前后全部部署文件的 SHA-256 相同，确认迁入的编辑源能复现当前站点。
+- 临时删除 CSS、加入 PNG、修改小节标题但不更新目录，校验命令分别拒绝缺失依赖、非站点文件与过期目录；恢复后通过校验。
+- pnpm site:preview --port 8790 启动成功，首页、目录、脚本、样式和全部图解共 139 个地址返回 200、非空内容与正确 MIME。HEAD 无正文，缺失文件返回 404，不支持的方法返回 405，越过静态目录的请求返回 403。
+- 测试预览已停止，原有 8788 预览保留。重建未改变图解 HTML 或生成目录；既有响应式与阅读行为验收仍对应相同内容。
+- content-generator/zero2agent-xhs/README.md 已标为历史材料，指出新的制作入口；旧文件保留，不再作为后续课程的编辑源。
