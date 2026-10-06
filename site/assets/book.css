@@ -166,6 +166,12 @@ mark { background: var(--accent-soft); color: var(--accent); }
   .outline-mobile { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); right: 18px; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; padding: 9px 14px; background: var(--card); color: var(--ink); box-shadow: 0 4px 20px #0001; z-index: 25; font-size: 13px; }
   .outline.open { display: block; position: fixed; inset: var(--header) 0 0 auto; height: auto; width: min(320px,85vw); padding: 25px; background: var(--paper); border-left: 1px solid var(--line); z-index: 40; }
   .outline.open .drawer-heading { display: flex; }
+  .icon-button { width: 44px; height: 44px; }
+  .search-trigger { min-height: 44px; }
+  .chapter-link { min-height: 44px; }
+  .outline-link { min-height: 44px; padding-top: 10px; padding-bottom: 10px; font-size: 13px; }
+  .zoom-button { min-height: 44px; font-size: 12px; padding: 7px 9px; }
+  .text-content summary { min-height: 44px; padding: 10px 0; font-size: 14px; }
 }
 @media (max-width: 760px) {
   :root { --header: 62px; --sidebar: 0px; }
