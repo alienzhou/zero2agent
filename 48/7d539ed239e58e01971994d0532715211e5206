@@ -1,0 +1,93 @@
+.vibecoding/2026-10-06/online-course-site/dialogue.md
+  s_7ef586e3e4b6e0::t_2dd96dc81292d5 34-45
+site/chapters/epic01-story001/01-cover.html
+  s_7ef586e3e4b6e0::t_7244b9e40b90f4 11-13,28,42,64,72,76
+site/chapters/epic01-story001/02-learning-gap.html
+  s_7ef586e3e4b6e0::t_c35a00e607ebfb 11-13,24,28,32,35,38,56,58,76
+site/chapters/epic01-story001/03-roadmap.html
+  s_7ef586e3e4b6e0::t_d003845b87fb19 11-13,23,33,105,186,188,192,201,210,219,228,246,248
+site/chapters/epic01-story001/04-react-loop.html
+  s_7ef586e3e4b6e0::t_6817df2fa04379 10-12,22,44,53,90,112,114,120,131
+site/chapters/epic01-story001/05-minimal-loop.html
+  s_7ef586e3e4b6e0::t_1f6b004e26997e 10-12,22,67,126,128,130,143,149,161,163
+site/chapters/epic01-story001/06-deep-dive.html
+  s_7ef586e3e4b6e0::t_b580f62e9496bc 10-12,22,43,99,101,103,122,133,135
+site/chapters/epic01-story001/07-learning-depth.html
+  s_7ef586e3e4b6e0::t_32d17b97fbe5fa 10-12,22,44,57-58,63,85,87,89,97,105,115
+site/chapters/epic01-story001/08-cta.html
+  s_7ef586e3e4b6e0::t_98ccb68661a4ac 11-13,31,58,67,74,81,83,92,101
+site/chapters/epic01-story002/01-cover.html
+  s_7ef586e3e4b6e0::t_824095bb1ab667 11-13,28,42,64,72,76
+site/chapters/epic01-story002/02-intro-workflow.html
+  s_7ef586e3e4b6e0::t_c8b7857c77aaf9 11-13,24,38,48,56,70,77,99,101,103,131
+site/chapters/epic01-story002/03-tool-design.html
+  s_7ef586e3e4b6e0::t_e560803ede34af 11-13,24,108,110,148
+site/chapters/epic01-story002/04-context-budget.html
+  s_7ef586e3e4b6e0::t_57d52e4b81bbe8 10-12,22,105,107,141
+site/chapters/epic01-story002/05-tech-selection.html
+  s_7ef586e3e4b6e0::t_c63017d447012f 10-12,22,65,96,101,132
+site/chapters/epic01-story002/06-product-insights.html
+  s_7ef586e3e4b6e0::t_f67cfb4377670d 10-12,22,60,93,118
+site/chapters/epic01-story002/07-industry-comparison.html
+  s_7ef586e3e4b6e0::t_fe467cb1e4e349 10-12,22,104,109,168
+site/chapters/epic01-story002/08-why-no-rag.html
+  s_7ef586e3e4b6e0::t_ddba4146cb49db 10-12,22,104,106,137
+site/chapters/epic01-story002/09-cursor-part1.html
+  s_7ef586e3e4b6e0::t_ffb1595d9c9635 10-12,22,68,97,99,135
+site/chapters/epic01-story002/10-cursor-part2.html
+  s_7ef586e3e4b6e0::t_3f89168607b4f2 10-12,22,105,107,135
+site/chapters/epic01-story002/11-cursor-part3.html
+  s_7ef586e3e4b6e0::t_a8fbade3967ebb 10-12,22,105,107,131
+site/chapters/epic01-story002/12-agentic-search.html
+  s_7ef586e3e4b6e0::t_70c52531ccd4ae 10-12,22,32,80,82,95
+site/chapters/epic01-story002/13-swe-grep.html
+  s_7ef586e3e4b6e0::t_30ad6b377c12be 10-12,22,32,80,82
+site/chapters/epic01-story002/14-ast-grep-concept.html
+  s_7ef586e3e4b6e0::t_463231a8809f95 10-12,22,97,99,128
+site/chapters/epic01-story002/15-ast-grep-demo.html
+  s_7ef586e3e4b6e0::t_0967bdf9b4fe39 10-12,22,101,103
+site/chapters/epic01-story002/16-open-questions.html
+  s_7ef586e3e4b6e0::t_d323c551474ed2 10-12,22,105,107,132
+site/chapters/epic01-story002/17-cta.html
+  s_7ef586e3e4b6e0::t_2c220a45d03f0b 10-12,29,82
+site/chapters/epic01-story003/01-cover.html
+  s_7ef586e3e4b6e0::t_241d12fffbba62 11-13,28,42,64,72,76
+site/chapters/epic01-story003/02-intro.html
+  s_7ef586e3e4b6e0::t_f96472b834ce3e 11-13,24,151,153,155,197
+site/chapters/epic01-story003/03-find-files.html
+  s_7ef586e3e4b6e0::t_9342df7d1edd47 12-14,25,183,185,187,189,238
+site/chapters/epic01-story003/04-transition.html
+  s_7ef586e3e4b6e0::t_e7f0051940082f 10-12,22,68,92,113
+site/chapters/epic01-story003/05-benchmark-methodology.html
+  s_7ef586e3e4b6e0::t_b6c6c9317fb8cb 10-12,22-23,27,126,129,171
+site/chapters/epic01-story003/06-benchmark-data.html
+  s_7ef586e3e4b6e0::t_6f27c208f5cabc 10-12,22-23,27,111,149,152,154,217
+site/chapters/epic01-story003/07-benchmark-conclusion.html
+  s_7ef586e3e4b6e0::t_78b07f2bdddd1d 10-12,22-23,27,93-95,132,135,137,180
+site/chapters/epic01-story003/08-debug-tower.html
+  s_7ef586e3e4b6e0::t_53e6421670fae6 10-12,22-23,27,141,144,146,190
+site/chapters/epic01-story003/09-debug-workflow.html
+  s_7ef586e3e4b6e0::t_e4665dc883ab1d 11-13,23-24,28,31,169,172,174
+site/chapters/epic01-story003/10-debug-arch.html
+  s_7ef586e3e4b6e0::t_c154726afd4fa6 11-13,23-24,28,197,200,202,252
+site/chapters/epic01-story003/11-debug-practice.html
+  s_7ef586e3e4b6e0::t_968ff41d1f7f06 10-12,22-23,27,128,131,168
+site/chapters/epic01-story003/12-cta.html
+  s_7ef586e3e4b6e0::t_bd64ee8977d8b2 10-12,30,83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "487d539ed239e58e01971994d0532715211e5206",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
