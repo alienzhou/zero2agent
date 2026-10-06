@@ -1,0 +1,33 @@
+.vibecoding/2026-10-05/e03-s002-permissions/dialogue.md
+  s_7ef586e3e4b6e0::t_da834e32759a3b 10-17
+.vibecoding/2026-10-05/e03-s002-permissions/review.md
+  s_7ef586e3e4b6e0::t_6a6896a5de0e49 14-15
+researches/permissions/acceptance/merge-review-2026-10-06/README.md
+  s_7ef586e3e4b6e0::t_e7d004d926264f 1-32
+researches/permissions/acceptance/merge-review-2026-10-06/changed-ts-format.txt
+  s_7ef586e3e4b6e0::t_2ded8d78e86a60 1-2
+researches/permissions/acceptance/merge-review-2026-10-06/lint.txt
+  s_7ef586e3e4b6e0::t_16df434416d7f0 1-30
+researches/permissions/acceptance/merge-review-2026-10-06/offline.txt
+  s_7ef586e3e4b6e0::t_d39cd9e1eb6405 1-41
+researches/permissions/acceptance/merge-review-2026-10-06/permission-demo.txt
+  s_7ef586e3e4b6e0::t_6ff4641aea760d 1-2
+researches/permissions/acceptance/merge-review-2026-10-06/site-build.txt
+  s_7ef586e3e4b6e0::t_74efe739048cf6 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a87ba19ad15b65420526ea4e3335feb7b840257b",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
