@@ -7,9 +7,9 @@
     body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
     .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
     .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
-    
-    .doc { 
-      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
       box-sizing: border-box; position: relative; z-index: 10;
     }
 
@@ -19,7 +19,7 @@
       padding-bottom: 20px; margin-bottom: 50px; color: #666666;
     }
     .page-num { color: #D32F2F; font-size: 24px; }
-    
+
     .title { font-size: 56px; font-weight: 900; line-height: 1.3; color: #1A1A1A; margin-bottom: 50px; letter-spacing: -0.5px; }
 
     .route-card {
@@ -29,7 +29,7 @@
       margin-bottom: 40px;
       position: relative;
     }
-    
+
     .route-badge {
       position: absolute;
       top: -20px;
@@ -77,9 +77,9 @@
       <span class="serif">Zero2Agent • 探索路线 1</span>
       <span class="page-num serif">12</span>
     </div>
-    
+
     <div class="title serif">跳出底层优化：<br>用架构隔离搜索污染</div>
-    
+
     <div class="route-card" style="margin-top: 20px;">
       <div class="route-badge">ROUTE.01</div>
       <div class="route-title">
@@ -92,7 +92,7 @@
         主进程在外面等待子进程只把筛洗完毕的、纯粹干净的结论（相关路径、片段精要）合回主线。用「空间」上的隔离，换取主干推理上下文的纯净。
       </div>
     </div>
-    
+
     <div class="summary">
       <div class="summary-mark serif">"</div>
       <div class="summary-text serif">Sub Agent 的上下文隔离，不光用在搜索场景。</div>

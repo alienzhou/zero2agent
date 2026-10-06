@@ -7,9 +7,9 @@
     body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
     .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
     .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
-    
-    .doc { 
-      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
       box-sizing: border-box; position: relative; z-index: 10;
     }
 
@@ -19,7 +19,7 @@
       padding-bottom: 16px; margin-bottom: 40px; color: #666666;
     }
     .page-num { color: #D32F2F; font-size: 24px; }
-    
+
     .title { font-size: 50px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 36px; letter-spacing: -0.5px; }
 
     .content-columns {
@@ -102,9 +102,9 @@
       <span class="serif">Zero2Agent • 核心问题</span>
       <span class="page-num serif">04</span>
     </div>
-    
+
     <div class="title serif">给多少才够？<br>搜索里的上下文预算矛盾</div>
-    
+
     <div class="content-columns">
       <div class="paragraph">
         <span class="drop-cap">在</span>定义 <code>grep_search</code> 的输出时，你会遇到了 Agent 工程中最常见的困境之一：<span class="highlight">信息丰度与上下文占用的冲突</span>。如果工具只返回干瘪的文件名，Agent 无法判断该不该读；如果顺手返回大段上下文代码，搜索就会占用大量窗口。
@@ -138,7 +138,7 @@
         同样的 Token 预算，是用来换取“更多的候选文件”，还是换取“更深的单条阅读”？这些都是我们在后续「Epic 4：上下文与健壮性管理」中，会尝试去一起深入的。
       </div>
     </div>
-    
+
     <div class="summary">
       <div class="summary-mark serif">"</div>
       <div class="summary-text serif">工具契约的设计，本质是在分配有限的推理预算。</div>

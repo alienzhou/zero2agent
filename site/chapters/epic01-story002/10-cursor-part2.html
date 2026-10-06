@@ -7,9 +7,9 @@
     body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
     .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
     .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
-    
-    .doc { 
-      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
       box-sizing: border-box; position: relative; z-index: 10;
     }
 
@@ -19,7 +19,7 @@
       padding-bottom: 20px; margin-bottom: 50px; color: #666666;
     }
     .page-num { color: #D32F2F; font-size: 24px; }
-    
+
     .title { font-size: 54px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 44px; letter-spacing: -0.5px; }
 
     .content-columns {
@@ -102,9 +102,9 @@
       <span class="serif">Zero2Agent • 核心演进 2</span>
       <span class="page-num serif">10</span>
     </div>
-    
+
     <div class="title serif">Cursor Grep 优化拆解 (二)：<br>Sparse N-grams</div>
-    
+
     <div class="content-columns">
       <div class="paragraph">
         <span class="drop-cap">长</span>分词看起来不是一个好的解决方案，需要找了好办法。ClickHouse 和 GitHub 新版 Code Search 给出了一个可能的解法：<span class="highlight">稀疏 N-grams (Sparse N-grams)</span>。
@@ -132,7 +132,7 @@
         只需极少的几次索引探测，就能将候选文件范围从几万个精准坍缩到个位数。剩下的，再交给传统的正则引擎在内存中做验证。
       </div>
     </div>
-    
+
     <div class="summary">
       <div class="summary-mark serif">"</div>
       <div class="summary-text serif">经典的用资源来换效率</div>

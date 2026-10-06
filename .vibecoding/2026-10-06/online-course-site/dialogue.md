@@ -31,3 +31,15 @@
 **助手**：课程的编辑源、章节配置和构建命令已经归到 zero2agent。现在我会验证它脱离 content-generator 后能否独立构建，并给旧目录加上归档说明，避免以后两边同时修改。
 
 **助手**：独立构建验证通过：只复制 zero2agent 的课程文件，就能生成相同的 10 章、135 页图解。新的预览命令也已验证；旧素材保留在 content-generator，并已标明后续课程在 zero2agent 维护。
+
+### 推送、合入与本地整理
+
+用户：我在 zero2agent 的代码里没看到变更啊 /Users/zhouhongxuan/program/works/zero2agent
+
+助手：改动在该目录，已保存为本地 Git 提交，因此未提交变更中看不到；主要文件为 site/、.authoring/site/ 与课程脚本，尚未推送。
+
+用户：推送远端合入主干，本地是不是有些东西不需要，不需要要清理么
+
+助手：核对后，这次相对主干的改动都属于教程站点和制作流程，没有 Agent 核心代码改动。用单独的站点分支合入；本地源码、制作资料和已有审阅记录保留，清理系统杂项及合并后不再需要的站点分支。
+
+整理：删除被忽略的 Finder 元数据 docs/.DS_Store；去掉迁入 HTML 的行尾空格。review.md 与 .discuss/.snapshot.yaml 属于此前的本地内容，未改动、未提交。content-generator 的历史图文继续保留。

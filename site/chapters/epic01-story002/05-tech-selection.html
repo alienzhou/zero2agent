@@ -7,9 +7,9 @@
     body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
     .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
     .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
-    
-    .doc { 
-      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
       box-sizing: border-box; position: relative; z-index: 10;
     }
 
@@ -19,7 +19,7 @@
       padding-bottom: 16px; margin-bottom: 36px; color: #666666;
     }
     .page-num { color: #D32F2F; font-size: 24px; }
-    
+
     .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 16px; letter-spacing: -0.5px; }
     .subtitle { font-size: 22px; color: #666666; line-height: 1.5; margin-bottom: 32px; }
 
@@ -62,7 +62,7 @@
       margin-bottom: 8px;
     }
     .pro-con:last-child { margin-bottom: 0; }
-    
+
     .mark-good { color: #D32F2F; font-weight: bold; margin-right: 12px; font-size: 24px; }
     .mark-bad { color: #888888; font-weight: bold; margin-right: 12px; font-size: 24px; }
     .text-bad { color: #666666; }
@@ -93,12 +93,12 @@
       <span class="serif">Zero2Agent • 技术选型</span>
       <span class="page-num serif">05</span>
     </div>
-    
+
     <div class="title serif">Grep 基础能力怎么选？<br>技术选型：</div>
     <div class="subtitle">
       在决定给 Agent 做 Grep Search 工具时，我们可以在「工具能力」「性能表现」「生态情况」「鲁棒性」「跨平台兼容性」上做出权衡。
     </div>
-    
+
     <div class="compare-row">
       <div class="row-header">方案1: 系统内置<br><span style="font-size: 16px; font-weight: 400; opacity: 0.8; margin-top: 8px;">(grep / rg)</span></div>
       <div class="row-content">
@@ -129,7 +129,7 @@
     <div class="conclusion-box">
       <strong>竞品情况：</strong>拆解调研 OpenCode、Pi、Gemini CLI 等产品，大部分选择了基于 <code>ripgrep</code> 构建能力。不过在<strong>“如何为 Agent 封装参数并截断排序”</strong>互有差异。
     </div>
-    
+
     <div class="summary">
       <div class="summary-mark serif">"</div>
       <div class="summary-text serif">技术选型随产品发展也会演进，<br>实际借助系统内置+终端也具备不错可行度</div>

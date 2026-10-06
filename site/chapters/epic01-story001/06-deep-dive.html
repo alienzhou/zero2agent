@@ -7,9 +7,9 @@
     body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
     .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
     .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-    
-    .doc { 
-      width: 960px; height: 1300px; padding: 60px 80px; display: flex; flex-direction: column; 
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px; display: flex; flex-direction: column;
       box-sizing: border-box;
     }
 
@@ -19,7 +19,7 @@
       padding-bottom: 20px; margin-bottom: 60px; color: #666666;
     }
     .page-num { color: #D32F2F; font-size: 24px; }
-    
+
     .title { font-size: 64px; font-weight: 900; line-height: 1.3; color: #1A1A1A; margin-bottom: 60px; }
 
     .content-box { display: flex; flex-direction: column; gap: 60px; flex: 1; }
@@ -40,7 +40,7 @@
       border-bottom: 2px solid #1A1A1A;
       padding-bottom: 16px;
     }
-    
+
     .concept-tag {
       background: #1A1A1A;
       color: #F4F1EA;
@@ -96,11 +96,11 @@
       <span class="serif">Zero2Agent • 深度解析</span>
       <span class="page-num serif">06</span>
     </div>
-    
+
     <div class="title">揭开魔法的黑盒：<br>ReACT 与 Tool Use</div>
-    
+
     <div class="content-box">
-      
+
       <div class="concept-card">
         <div class="concept-title">
           <span>Agent Loop</span>
@@ -119,7 +119,7 @@
           <span class="flow-arrow">↻</span>
         </div>
       </div>
-      
+
       <div class="concept-card">
         <div class="concept-title">
           <span>Tool Use 机制</span>
@@ -130,9 +130,9 @@
           模型通过标准的 <code>tool_calls</code> 吐出需要调用的函数名和参数，宿主执行后再通过 <code>tool_result</code> 将物理世界的观测注入回上下文中。
         </div>
       </div>
-      
+
     </div>
-    
+
     <div class="summary">
       <div class="summary-mark serif">"</div>
       <div class="summary-text serif">纸上得来终觉浅。该如何使用它来学习呢？</div>

@@ -8,9 +8,9 @@
     body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
     .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
     .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-    
-    .doc { 
-      width: 960px; height: 1300px; padding: 60px 80px; display: flex; flex-direction: column; 
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px; display: flex; flex-direction: column;
       box-sizing: border-box;
     }
 
@@ -20,7 +20,7 @@
       padding-bottom: 20px; margin-bottom: 60px; color: #888888;
     }
     .page-num { color: #D32F2F; font-size: 24px; }
-    
+
     .title { font-size: 64px; font-weight: 900; line-height: 1.3; color: #F4F1EA; margin-bottom: 60px; }
 
     /* 路线图专有样式 */
@@ -30,7 +30,7 @@
       flex-direction: column;
       position: relative;
     }
-    
+
     /* 贯穿全线的中轴线 */
     .roadmap-container::before {
       content: '';
@@ -102,7 +102,7 @@
       border-color: #D32F2F;
       background: #D32F2F;
     }
-    
+
     .step-current .step-title {
       color: #D32F2F;
     }
@@ -183,13 +183,13 @@
       <span class="serif">Zero2Agent • 路线图</span>
       <span class="page-num serif">03</span>
     </div>
-    
+
     <div class="title">我们将如何展开？</div>
-    
+
     <div class="roadmap-container">
       <!-- 为了视觉效果添加一根实线覆盖底层虚线 -->
       <div style="position: absolute; left: 159px; top: 0; bottom: 0; width: 2px; border-left: 2px dashed #333333;"></div>
-      
+
       <div class="roadmap-step step-current">
         <div class="step-tag serif">EPIC 01</div>
         <div class="step-node"></div>
@@ -198,7 +198,7 @@
           <div class="step-desc">让 Agent 跑起安全、可解释的最小只读闭环。</div>
         </div>
       </div>
-      
+
       <div class="roadmap-step">
         <div class="step-tag serif">EPIC 02</div>
         <div class="step-node"></div>
@@ -207,7 +207,7 @@
           <div class="step-desc">让 Agent 从“会看”走向“能动手做事”。</div>
         </div>
       </div>
-      
+
       <div class="roadmap-step">
         <div class="step-tag serif">EPIC 03</div>
         <div class="step-node"></div>
@@ -216,7 +216,7 @@
           <div class="step-desc">让 Agent 从 demo 走向可使用的产品形态。</div>
         </div>
       </div>
-      
+
       <div class="roadmap-step">
         <div class="step-tag serif">EPIC 04</div>
         <div class="step-node"></div>
@@ -225,7 +225,7 @@
           <div class="step-desc">鲁棒性、环境感知、上下文管理与和复杂运行。</div>
         </div>
       </div>
-      
+
       <div class="roadmap-step">
         <div class="step-tag serif">EPIC 05</div>
         <div class="step-node"></div>
@@ -243,9 +243,9 @@
           <div class="step-desc-muted">更多的工程主题与专项路线</div>
         </div>
       </div>
-      
+
     </div>
-    
+
     <div class="summary">
       <div class="summary-mark serif">"</div>
       <div class="summary-text serif">每周跟随一个 Story，持续学习 Agent 工程实践。</div>
