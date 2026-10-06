@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 32px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress {
+      background: #1A1A1A; color: #FFFFFF; font-size: 16px; padding: 4px 10px;
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 24px; padding-top: 10px; }
+
+    /* 技术实现图表 */
+    .diagram {
+      background: #FFFFFF;
+      border: 3px solid #1A1A1A;
+      padding: 40px;
+      box-shadow: 10px 10px 0px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .seq-headers {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .seq-header {
+      width: 150px;
+      text-align: center;
+      background: #EBE8E0;
+      border: 2px solid #1A1A1A;
+      padding: 10px 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: #1A1A1A;
+    }
+
+    .seq-header.core {
+      background: #D32F2F;
+      color: #FFFFFF;
+    }
+
+    .seq-header.agent {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+
+    .seq-body {
+      position: relative;
+      height: 320px;
+      margin-top: -2px;
+    }
+
+    .seq-line {
+      width: 4px;
+      background: #CCCCCC;
+      height: 100%;
+      position: absolute;
+      top: 0;
+    }
+
+    .seq-line-1 { left: 73px; }
+    .seq-line-2 { left: 263px; background: rgba(211,47,47,0.3); }
+    .seq-line-3 { left: 453px; }
+    .seq-line-4 { left: 643px; border-left: 4px dashed #1A1A1A; background: transparent; width: 0; }
+
+    .seq-message {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .msg-1 { top: 40px; left: 75px; width: 190px; }
+    .msg-2 { top: 110px; left: 265px; width: 190px; }
+    .msg-3 { top: 180px; left: 455px; width: 190px; }
+
+    .seq-msg-label {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 18px;
+      color: #1A1A1A;
+      margin-bottom: 6px;
+      background: #FFFFFF;
+      padding: 0 4px;
+    }
+
+    .seq-msg-arrow-right {
+      width: 100%;
+      height: 4px;
+      background: #D32F2F;
+      position: relative;
+    }
+    .seq-msg-arrow-right::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: -6px;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 16px solid #D32F2F;
+    }
+
+    .seq-msg-arrow-left {
+      width: 100%;
+      height: 4px;
+      background: #1A1A1A;
+      position: relative;
+    }
+    .seq-msg-arrow-left::after {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: -6px;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 16px solid #1A1A1A;
+    }
+
+    .seq-note {
+      position: absolute;
+      top: 250px;
+      left: 455px;
+      transform: translateX(-50%);
+      text-align: center;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 18px;
+      color: #666666;
+      background: #F9F9F9;
+      border: 1px dashed #CCCCCC;
+      padding: 8px 12px;
+      line-height: 1.4;
+    }
+
+    /* 底层分析 */
+    .analysis-container {
+      background: rgba(211,47,47,0.04);
+      border-left: 4px solid #D32F2F;
+      padding: 24px;
+      margin-top: 16px;
+    }
+
+    .analysis-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #D32F2F;
+      margin-bottom: 12px;
+    }
+
+    .analysis-text {
+      font-size: 22px;
+      color: #333333;
+      line-height: 1.6;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">DEBUG 3/4</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">10</span>
+    </div>
+
+    <div class="main-title serif">Agent Debug 方法论</div>
+    <div class="sub-title">动态日志的技术链路拆解</div>
+
+    <div class="content-area">
+
+      <div class="diagram">
+        <!-- 头部节点 -->
+        <div class="seq-headers">
+          <div class="seq-header">浏览器代码</div>
+          <div class="seq-header core">Log Server</div>
+          <div class="seq-header">日志文件</div>
+          <div class="seq-header agent">智能体 (Agent)</div>
+        </div>
+
+        <!-- 纵向生命线与消息交互 -->
+        <div class="seq-body">
+          <div class="seq-line seq-line-1"></div>
+          <div class="seq-line seq-line-2"></div>
+          <div class="seq-line seq-line-3"></div>
+          <div class="seq-line seq-line-4"></div>
+
+          <!-- Message 1 -->
+          <div class="seq-message msg-1">
+            <div class="seq-msg-label">fetch POST (JSON)</div>
+            <div class="seq-msg-arrow-right"></div>
+          </div>
+
+          <!-- Message 2 -->
+          <div class="seq-message msg-2">
+            <div class="seq-msg-label">append to file</div>
+            <div class="seq-msg-arrow-right"></div>
+          </div>
+
+          <!-- Message 3 -->
+          <div class="seq-message msg-3">
+            <div class="seq-msg-label">分析与验证假设</div>
+            <div class="seq-msg-arrow-left"></div>
+          </div>
+
+          <!-- 落盘注释 -->
+          <div class="seq-note">
+            ~/.your-project/<br>hypothesis-debug.log
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-container">
+        <div class="analysis-title">关键设计点</div>
+        <div class="analysis-text">
+          浏览器无法直接写文件。通过一个很小的 <strong>Log Server</strong> 将日志转存为 <strong>NDJSON</strong>（一行一条 JSON），同时包含时间戳和位置标识，可以让 Agent 非常容易地读取并校验先前的假设。
+        </div>
+      </div>
+
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">相比于肉眼猜 bug，基于“事实”的调试才是工程化</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 64px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #1A1A1A; padding-bottom: 18px; margin-bottom: 30px; color: #666666; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 58px; font-weight: 900; line-height: 1.18; color: #1A1A1A; margin-bottom: 12px; flex-shrink: 0; }
+    .subtitle { font-size: 30px; color: #4A4A4A; margin-bottom: 32px; line-height: 1.45; flex-shrink: 0; }
+
+    .body { flex: 1; display: flex; flex-direction: column; gap: 26px; justify-content: flex-start; }
+
+    /* 对比行：旧 vs 新 */
+    .compare { display: flex; border: 2px solid #1A1A1A; background: #FDFCF9; }
+    .compare-old { width: 300px; flex-shrink: 0; padding: 30px 26px; border-right: 2px solid #1A1A1A; }
+    .compare-old-tag { font-size: 16px; color: #888888; letter-spacing: 2px; font-weight: bold; margin-bottom: 12px; }
+    .compare-old-title { font-size: 32px; font-weight: 800; color: #999999; text-decoration: line-through; margin-bottom: 14px; }
+    .compare-old-desc { font-size: 24px; color: #888888; line-height: 1.5; }
+    .compare-new { flex: 1; padding: 30px 28px; position: relative; }
+    .compare-new::before { content: '◆'; position: absolute; left: -11px; top: 36px; color: #D32F2F; font-size: 20px; background: #FDFCF9; }
+    .compare-new-tag { font-size: 16px; color: #D32F2F; letter-spacing: 2px; font-weight: bold; margin-bottom: 12px; }
+    .compare-new-title { font-size: 32px; font-weight: 800; color: #1A1A1A; margin-bottom: 14px; }
+    .compare-new-desc { font-size: 24px; color: #4A4A4A; line-height: 1.5; }
+    .compare-new-desc b { color: #1A1A1A; border-bottom: 2px solid #D32F2F; }
+
+    /* 高亮盒 */
+    .highlight { border: 1px solid #1A1A1A; border-left: 6px solid #D32F2F; background: #FDFCF9; padding: 28px 30px; box-shadow: 8px 8px 0 rgba(26,26,26,0.08); }
+    .highlight-title { font-size: 28px; font-weight: 800; color: #1A1A1A; margin-bottom: 12px; }
+    .highlight-text { font-size: 26px; color: #4A4A4A; line-height: 1.6; }
+    .highlight-text b { color: #1A1A1A; background: rgba(211,47,47,0.1); padding: 0 4px; }
+
+    .summary { margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 26px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 34px; font-weight: bold; color: #1A1A1A; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制</span>
+      <span class="page-num serif">02</span>
+    </div>
+    <div class="title serif">跨过只读线</div>
+    <div class="subtitle">Epic 2 给 Agent 装上 write_file 和 delete，它第一次能改动工作区</div>
+
+    <div class="body">
+      <div class="compare">
+        <div class="compare-old">
+          <div class="compare-old-tag mono">EPIC 1 · READ &amp; SEARCH</div>
+          <div class="compare-old-title">只能读</div>
+          <div class="compare-old-desc">list / read / grep / find，工作区对它是只读的，看得到、碰不了</div>
+        </div>
+        <div class="compare-new">
+          <div class="compare-new-tag mono">EPIC 2 · ACT &amp; EXECUTE</div>
+          <div class="compare-new-title">能写了</div>
+          <div class="compare-new-desc">write_file 全量写入，delete 批量删除。Agent 第一次有了<b>改变世界的动作</b></div>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">但实现只有几十行，值得讲的不是实现</div>
+        <div class="highlight-text">调用 <b>fs.writeFile / fs.unlink</b> 谁都会写。真正决定 Agent 表现的，是工具接口的四件事：<b>粒度、参数格式、能力边界、回执</b>。这一期就讲这四件事。</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

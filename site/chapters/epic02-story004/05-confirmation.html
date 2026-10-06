@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 05 · 按下 y 之后，才真正把键盘交过去</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="05" data-sources="C06 C17">
+<header class="page-header" data-block><span>Zero2Agent · 开始交接</span><span class="page-number">05</span></header>
+<div class="heading" data-block><h1>按下 y 之后，<br>才真正把键盘交过去</h1><p class="deck">先确认要运行什么，再进入人工操作</p></div><div class="content">
+
+<div class="terminal" data-block><div class="console-label">确认界面示意 · 工作目录按实际展示</div><pre>Command: "NODE_REPL_HISTORY= node"
+Directory: "/project"
+Allow human terminal? [y/N]</pre></div>
+<div class="decision-branches"><section data-block><span class="decision-key">直接回车</span><h2>拒绝，不启动</h2><p data-prose>默认 N，拒绝本次启动。此时尚未创建交互 PTY。</p></section><section data-block><span class="decision-key accent">y / yes + 回车</span><h2>等提示符出现</h2><p data-prose>创建 PTY、启动 Node。看到 &gt;，再输入表达式。</p></section></div>
+<div class="stage-steps" data-block><span>核对命令与目录</span><b>→</b><span>单独输入 y</span><b>→</b><span>等 &gt; 再操作</span></div>
+<p data-prose data-block>别把 <code>y</code> 和后续代码整段粘贴：确认与程序输入分属两个阶段，粘贴可能落错位置。</p>
+<p class="note" data-prose data-block>只批准启动，不逐条审批后续操作。三个入口都再次确认是本课策略，不是行业惯例。</p>
+</div></article></body></html>

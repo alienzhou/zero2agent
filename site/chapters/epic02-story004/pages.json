@@ -1,0 +1,148 @@
+{
+  "title": "Zero2Agent · E02-S004 人工交互终端",
+  "date": "2026-09-30",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "candidate": "b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "Agent 会跑命令，我来接着操作",
+      "number": 1,
+      "sources": [
+        "C01",
+        "C03",
+        "C18",
+        "C20"
+      ]
+    },
+    {
+      "file": "02-why-human.html",
+      "title": "先试一下：让 Agent 等我操作",
+      "number": 2,
+      "sources": [
+        "C02",
+        "C03",
+        "C07",
+        "C18",
+        "C20"
+      ]
+    },
+    {
+      "file": "03-core-principle.html",
+      "title": "追踪一次按键：42 是怎么回来的？",
+      "number": 3,
+      "sources": [
+        "C03",
+        "C04",
+        "C20"
+      ]
+    },
+    {
+      "file": "04-why-pty.html",
+      "title": "都有 stdin，为什么还需要 PTY？",
+      "number": 4,
+      "sources": [
+        "C04",
+        "C05",
+        "C20"
+      ]
+    },
+    {
+      "file": "05-confirmation.html",
+      "title": "按下 y 之后，才真正把键盘交过去",
+      "number": 5,
+      "sources": [
+        "C06",
+        "C17"
+      ]
+    },
+    {
+      "file": "06-entry-points.html",
+      "title": "接通输入和输出，代码里是哪两条线？",
+      "number": 6,
+      "sources": [
+        "C01",
+        "C03",
+        "C04",
+        "C07"
+      ]
+    },
+    {
+      "file": "07-output-boundary.html",
+      "title": "我刚输入的内容，模型能看到吗？",
+      "number": 7,
+      "sources": [
+        "C08",
+        "C09",
+        "C17",
+        "C20"
+      ]
+    },
+    {
+      "file": "08-control-keys.html",
+      "title": "按 Ctrl-C，为什么不一定回到 Agent？",
+      "number": 8,
+      "sources": [
+        "C10",
+        "C18",
+        "C20"
+      ]
+    },
+    {
+      "file": "09-return-input.html",
+      "title": "程序退出了，下一句话发给谁？",
+      "number": 9,
+      "sources": [
+        "C11"
+      ]
+    },
+    {
+      "file": "10-process-ownership.html",
+      "title": "原命令退出了，子进程也一定结束了吗？",
+      "number": 10,
+      "sources": [
+        "C12"
+      ]
+    },
+    {
+      "file": "11-verification.html",
+      "title": "怎么知道接好了？别只试一句 Hello",
+      "number": 11,
+      "sources": [
+        "C05",
+        "C13",
+        "C14",
+        "C19",
+        "C20"
+      ]
+    },
+    {
+      "file": "12-practice.html",
+      "title": "现在自己试：计算一段，翻几页文档",
+      "number": 12,
+      "sources": [
+        "C07",
+        "C15",
+        "C18",
+        "C20"
+      ]
+    },
+    {
+      "file": "13-close.html",
+      "title": "再看开头那次操作：我们给 Agent 加了什么？",
+      "number": 13,
+      "sources": [
+        "C01",
+        "C03",
+        "C08",
+        "C11",
+        "C16"
+      ]
+    }
+  ],
+  "edition": "v3-guided-observation"
+}

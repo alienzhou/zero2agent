@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 32px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 28px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 48px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 22px;
+      color: #333333;
+      line-height: 1.62;
+      margin-bottom: 18px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 72px;
+      line-height: 0.8;
+      padding-top: 6px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 6px;
+      display: inline-block;
+    }
+
+    .pull-quote {
+      font-size: 26px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 16px 0;
+      margin: 24px 0;
+      border-top: 2px solid #D32F2F;
+      border-bottom: 2px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 行业分析</span>
+      <span class="page-num serif">08</span>
+    </div>
+
+    <div class="title serif">Codebase RAG：为什么<br>主流 Agent 拒绝纯 RAG？</div>
+
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">面</span>对上一页极度一边倒的产品现状，很多人会产生直觉上的困惑：语义搜索（RAG）明明听起来更高级，为什么这些 Agent 在代码搜索场景偏偏更青睐传统的 Grep？我觉得上有三层原因：
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">第一层：结构化差异</div>
+      <div class="paragraph">
+        代码和自然语言有根本区别。<br>在知识库里，同一个概念有无数种表达，同时里面的概念也不像项目中这么收敛，所以可能需要语义召回。<br>针对代码仓库的搜索，相比网络搜索等，实际还是偏向于一个封闭域内的搜索。我在百万行代码的仓库里工作过，通过有效的实践仍然有不错的召回率与准确性，大部分仓库都不会超过这个规模。代码这种是高度结构化的规范体系，加上大模型本身对主流代码写法已经有了极强的先验认知，使得<span class="highlight">文本「硬」匹配在代码领域的天花板出奇的高</span>。
+      </div>
+    </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">第二层：高昂的系统算账</div>
+      <div class="paragraph">
+        RAG 绝不只是多算几个 Token，它是一条包含分片、向量化模型、数据库存储、多路召回重排的重资产链路。特别是在企业级代码库高频变动的场景下，维持向量索引实时更新的成本并不低。Cursor 去年就曾介绍过他们的优化。<br>相比之下，传统的 Grep 配合本地优化，能给出极具性价比的体验。
+      </div>
+    </div>
+
+      <div class="pull-quote serif">
+        Agent：让我精准操控搜索，不要替我语义模糊地召回。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">第三层：关键的可控性</div>
+      <div class="paragraph">
+        Agent 调用 Grep 搜 <code>ABC</code>，如果没有，它立刻知道是关键词问题，马上换策略重试。但 RAG 是黑盒系统，如果向量匹配偏轨返回了一堆不相干的代码，Agent 无从排错，反而会被这些“貌似相关”的噪音污染了整个思维上下文。
+      </div>
+    </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">在封闭的代码域内，<br>确定性与可迭代性可能超过了模糊的「语义智能」。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

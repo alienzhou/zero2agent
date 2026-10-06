@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 64px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #1A1A1A; padding-bottom: 18px; margin-bottom: 30px; color: #666666; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 58px; font-weight: 900; line-height: 1.18; color: #1A1A1A; margin-bottom: 12px; flex-shrink: 0; }
+    .subtitle { font-size: 30px; color: #4A4A4A; margin-bottom: 30px; line-height: 1.45; flex-shrink: 0; }
+
+    .body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 26px; }
+
+    /* 四要素 */
+    .facets { display: flex; gap: 16px; }
+    .facet { flex: 1; border: 2px solid #1A1A1A; background: #FDFCF9; padding: 20px 16px; text-align: center; }
+    .facet-label { font-size: 15px; color: #D32F2F; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px; }
+    .facet-name { font-size: 30px; font-weight: 800; color: #1A1A1A; }
+
+    .connector { text-align: center; font-size: 30px; color: #D32F2F; line-height: 1; letter-spacing: 4px; }
+
+    /* 三个面 */
+    .faces { display: flex; flex-direction: column; gap: 16px; }
+    .face { display: flex; align-items: center; border: 2px solid #1A1A1A; background: #FDFCF9; }
+    .face-key { width: 200px; flex-shrink: 0; background: #1A1A1A; color: #F4F1EA; font-size: 26px; font-weight: 800; padding: 22px 18px; text-align: center; line-height: 1.3; box-sizing: border-box; }
+    .face-val { padding: 20px 26px; font-size: 27px; color: #4A4A4A; line-height: 1.45; }
+    .face-val b { color: #1A1A1A; border-bottom: 2px solid #D32F2F; }
+
+    .summary { margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 26px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 34px; font-weight: bold; color: #1A1A1A; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 产品洞察</span>
+      <span class="page-num serif">04</span>
+    </div>
+    <div class="title serif">接口就是行动语言</div>
+    <div class="subtitle">工具接口的四个要素，决定了模型能做什么、被拦什么、看到什么</div>
+
+    <div class="body">
+      <div class="facets">
+        <div class="facet"><div class="facet-label mono">01</div><div class="facet-name">粒度</div></div>
+        <div class="facet"><div class="facet-label mono">02</div><div class="facet-name">参数格式</div></div>
+        <div class="facet"><div class="facet-label mono">03</div><div class="facet-name">能力边界</div></div>
+        <div class="facet"><div class="facet-label mono">04</div><div class="facet-name">回执</div></div>
+      </div>
+
+      <div class="connector mono">▼ 共同决定三件事 ▼</div>
+
+      <div class="faces">
+        <div class="face">
+          <div class="face-key serif">模型能表达</div>
+          <div class="face-val">给了 <b>write_file</b> 才能写；没给 append 就没法只追加一行</div>
+        </div>
+        <div class="face">
+          <div class="face-key serif">Harness 能约束</div>
+          <div class="face-val">参数走工具而非直接跑 shell，才留得下<b>校验的拦截点</b></div>
+        </div>
+        <div class="face">
+          <div class="face-key serif">模型能观测</div>
+          <div class="face-val">模型看不到磁盘，只能靠<b>回执</b>知道世界变了什么</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">设计工具，先想模型要表达什么，再是功能实现</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

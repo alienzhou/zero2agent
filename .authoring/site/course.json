@@ -1,0 +1,95 @@
+{
+  "title": "Zero2Agent",
+  "epics": [
+    {
+      "id": "epic01",
+      "number": 1,
+      "title": "能看，也能查",
+      "description": "跑通最小循环，再让 Agent 找到需要的代码。"
+    },
+    {
+      "id": "epic02",
+      "number": 2,
+      "title": "能改，也能执行",
+      "description": "从只读走向行动：修改文件、执行命令、交接终端。"
+    },
+    {
+      "id": "epic03",
+      "number": 3,
+      "title": "从循环到产品",
+      "description": "接上多轮对话、上下文压缩和执行权限。"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "epic01-story001",
+      "epic": "epic01",
+      "title": "最小 Agent 循环",
+      "description": "先跑通观察、思考与工具调用，理解 Agent Harness 的最小闭环。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E01-read-and-search/S001-react-basic"
+    },
+    {
+      "id": "epic01-story002",
+      "epic": "epic01",
+      "title": "内容搜索与上下文预算",
+      "description": "把 grep_search 接进循环，理解搜索结果、上下文预算与工程选型。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E01-read-and-search/S002-content-search"
+    },
+    {
+      "id": "epic01-story003",
+      "epic": "epic01",
+      "title": "文件查找与工程验证",
+      "description": "实现 find_files，通过 Benchmark 和分层 Debug 做出工程判断。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E01-read-and-search/S003-file-search"
+    },
+    {
+      "id": "epic01-story004",
+      "epic": "epic01",
+      "title": "组织 Prompt 与上下文",
+      "description": "把 System Prompt、用户输入和工具反馈放到各自合适的位置。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E01-read-and-search/S004-prompt-structure"
+    },
+    {
+      "id": "epic02-story001",
+      "epic": "epic02",
+      "title": "写文件与工具接口",
+      "description": "实现写入和删除，理解工具接口怎样影响模型的行动与观测。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E02-act-and-execute/S001-write-file"
+    },
+    {
+      "id": "epic02-story002",
+      "epic": "epic02",
+      "title": "精确修改文件",
+      "description": "用唯一匹配、明确回执和边界检查，让修改只落在该改的地方。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E02-act-and-execute/S002-replace-in-file"
+    },
+    {
+      "id": "epic02-story003",
+      "epic": "epic02",
+      "title": "执行命令与进程管理",
+      "description": "为终端执行设计返回值、超时、长输出和后台进程生命周期。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E02-act-and-execute/S003-terminal"
+    },
+    {
+      "id": "epic02-story004",
+      "epic": "epic02",
+      "title": "把终端交给人",
+      "description": "通过 PTY 接通人工操作，再把输入和执行状态交回 Agent。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E02-act-and-execute/S004-interactive-commands"
+    },
+    {
+      "id": "epic03-story001",
+      "epic": "epic03",
+      "title": "多轮会话与上下文压缩",
+      "description": "让 Agent 接着聊，并用请求预算、自动压缩与 /compact 控制上下文。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E03-product-foundations/S001-multi-turn"
+    },
+    {
+      "id": "epic03-story002",
+      "epic": "epic03",
+      "title": "执行权限与 Approval",
+      "description": "在执行之前接入三态权限判断，明确一次授权的对象、范围与有效期。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e03-s002-permissions/specs/E03-product-foundations/S002-permissions"
+    }
+  ]
+}

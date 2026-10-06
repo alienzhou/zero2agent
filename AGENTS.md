@@ -25,6 +25,7 @@ zero2agent/
 ├── specs/              # 设计文档 (每个迭代的 spec)
 ├── retros/             # 复盘笔记 (每个迭代的反思)
 ├── docs/               # 读者文档 (roadmap、架构、快速上手)
+├── site/               # 在线图解教程，可直接部署到 Nginx
 ├── .authoring/         # 作者书写规范 (写作风格、导航规范、页面模板)
 ├── .vibecoding/        # AI 协作记录 (prompt、对话、修正)
 ├── .discuss/           # 需求讨论记录
@@ -104,6 +105,14 @@ AI 生成的代码需要人工审查，关注：
 | `02-task-list.md` | 开发任务清单 |
 | `03-verification-checklist.md` | 验收检查清单 |
 | `04-backlog.md` | Backlog |
+
+---
+
+## 在线课程制作
+
+Zero2Agent 的课程内容在本仓库闭环维护。HTML、CSS 与小节顺序放在 site/chapters/；章节元信息、图解生成源、内容计划和来源审阅资料放在 .authoring/site/。content-generator/zero2agent-xhs 是迁移前的历史材料，后续课程不在那里制作后再复制回来。
+
+遵循 [.authoring/site/README.md](./.authoring/site/README.md)：修改编辑源后运行 pnpm site:build 和 pnpm site:check，再通过 pnpm site:preview 检查 PC 与 H5。只部署 site/；生成源与部署产物在同一提交保存。
 
 ---
 

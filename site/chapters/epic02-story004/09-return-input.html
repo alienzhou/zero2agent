@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 09 · 程序退出了，下一句话发给谁？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="09" data-sources="C11">
+<header class="page-header" data-block><span>Zero2Agent · 问题推演</span><span class="page-number">09</span></header>
+<div class="heading" data-block><h1>程序退出了，<br>下一句话发给谁？</h1><p class="deck">最容易漏掉的，是退出与恢复之间的空隙</p></div><div class="content">
+
+<p data-prose data-block>Node 刚退出，你顺手又打了 <code>abc</code>。如果清理还没完成，这些按键算程序输入，还是下一条聊天？</p>
+<div class="handoff-sequence" data-block><div><span class="overline">① 程序退出</span><h2>Node 结束</h2></div><span class="sequence-arrow">→</span><div><span class="overline">② 宿主清理</span><h2>又收到 abc</h2></div><span class="sequence-arrow">→</span><div><span class="overline">③ 恢复对话</span><h2>等待新消息</h2></div></div>
+<div class="paired-observations risk-pair"><section data-block><span class="overline accent">如果过早恢复 · 情景推演</span><h2>输入串线了</h2><pre class="prompt-sample">你: abc</pre><p data-prose>给旧程序的按键，落进 Agent 的下一条消息。</p></section><section data-block><span class="overline">本课的处理方式</span><h2>恢复后再收新输入</h2><pre class="prompt-sample">你: ▏</pre><p data-prose>清理期继续独占并丢弃晚到按键；恢复后留下空提示符。</p></section></div>
+<p class="note" data-prose data-block>收尾顺序：停止转发 → 清理进程 → 恢复终端与监听。等新的「你:」出现后再打字，清理期输入不会重放。</p>
+</div></article></body></html>

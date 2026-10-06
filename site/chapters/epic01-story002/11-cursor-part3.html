@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 50px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 52px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 44px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 56px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 24px;
+      color: #333333;
+      line-height: 1.68;
+      margin-bottom: 24px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 88px;
+      line-height: 0.8;
+      padding-top: 8px;
+      padding-right: 12px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 8px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .pull-quote {
+      font-size: 30px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 20px 0;
+      margin: 36px 0;
+      border-top: 2px solid #D32F2F;
+      border-bottom: 2px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心演进 3</span>
+      <span class="page-num serif">11</span>
+    </div>
+
+    <div class="title serif">Cursor Grep 优化拆解 (三)：<br>为了零幻觉的绝对本地化</div>
+
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">这</span>套极其优越的索引数据，存在云端并不好。语义索引（Codebase RAG）放在服务端还算是 OK 的，代码稍微改动，在多维空间中的位移并不大，但仍然可能需要本地校准。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">消除自我检索的幻觉</div>
+      <div class="paragraph">
+        但正则搜索必须<span class="highlight">保持良好的新鲜度</span>。按目前来看，Agent 搜索很频繁，并且对于 Grep 的理解就是“精准”搜索，如果网络往返产生几百毫秒的延迟同步差，就会很容易导致它搜不到自己写的东西，进而累计产生一些严重的幻觉。所以 Cursor 目前选择使用本地内存来存储索引信息。
+      </div>
+    </div>
+
+      <div class="pull-quote serif">
+        使用本地内存来存储
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">mmap 内存映射</div>
+      <div class="paragraph">
+        为了不吃爆本地编辑器的内存，Cursor 将索引分成两个文件落盘。一个存储连续的 Posting list，另一个极度紧凑的哈希表记录偏移量。<br><br>在编辑器进程中，只对这张寻址表执行 <code>mmap</code>。查询时直接二分查找拿到偏移，再精准从磁盘对应扇区抽回数据。配合监听本地 Git 状态做增量合并，实现了 Chromium 级别大仓中近乎瞬时且无感知占用的体验。
+      </div>
+    </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">也算是一种空间换时间</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

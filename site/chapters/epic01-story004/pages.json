@@ -1,0 +1,72 @@
+{
+  "title": "组织 Prompt 与上下文",
+  "width": 1080,
+  "height": 1440,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "把 Prompt 组织起来",
+      "number": 1
+    },
+    {
+      "file": "02-intro.html",
+      "title": "框架与上下文，两条线一起看",
+      "number": 2
+    },
+    {
+      "file": "03-timeline.html",
+      "title": "2023–2024：从一段到分层",
+      "number": 3
+    },
+    {
+      "file": "04-timeline-era3.html",
+      "title": "2025–2026：上下文的演进",
+      "number": 4
+    },
+    {
+      "file": "05-system-user.html",
+      "title": "System 与 User 的职责",
+      "number": 5
+    },
+    {
+      "file": "06-message-stack.html",
+      "title": "Message List 的完整结构",
+      "number": 6
+    },
+    {
+      "file": "07-system-sections.html",
+      "title": "System Prompt 的五个部分",
+      "number": 7
+    },
+    {
+      "file": "08-user-xml.html",
+      "title": "User Prompt 的两层包装",
+      "number": 8
+    },
+    {
+      "file": "09-context-map.html",
+      "title": "各种上下文放在哪里",
+      "number": 9
+    },
+    {
+      "file": "10-tool-loop.html",
+      "title": "工具反馈怎样进入对话",
+      "number": 10
+    },
+    {
+      "file": "11-cache.html",
+      "title": "缓存与每轮刷新",
+      "number": 11
+    },
+    {
+      "file": "12-s004-mapping.html",
+      "title": "对应 Zero2Agent 的实现",
+      "number": 12
+    },
+    {
+      "file": "13-cta.html",
+      "title": "源码与下一步",
+      "number": 13
+    }
+  ]
+}

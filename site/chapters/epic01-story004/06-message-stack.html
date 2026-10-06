@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_page-shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 结构</span>
+      <span class="page-num serif">06</span>
+    </div>
+    <div class="title serif">Message List 全景栈</div>
+    <div class="subtitle">运行时真正送进模型的，是一串有序消息</div>
+
+    <div class="content stack">
+      <div class="layer">
+        <div class="layer-label mono">MSG 01</div>
+        <div class="layer-title mono">system</div>
+        <div class="layer-desc">身份、规则、工具策略 — 通常每 session 只发一次</div>
+      </div>
+      <div class="connector">▼</div>
+      <div class="layer">
+        <div class="layer-label mono">MSG 02</div>
+        <div class="layer-title mono">user</div>
+        <div class="layer-desc">本轮任务 + runtime context（文件、选中代码、AGENTS.md 等）</div>
+      </div>
+      <div class="connector">▼</div>
+      <div class="layer">
+        <div class="layer-label mono">MSG 03</div>
+        <div class="layer-title mono">assistant → tool → tool_result</div>
+        <div class="layer-desc">模型决策调用工具，结果以 tool 消息插回列表</div>
+      </div>
+      <div class="connector">▼</div>
+      <div class="layer">
+        <div class="layer-label mono">MSG 04</div>
+        <div class="layer-title mono">assistant（续）</div>
+        <div class="layer-desc">读完 tool 结果后继续推理，直到给出最终回复</div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">送进模型的，是一串<em>会增长的消息列表</em></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

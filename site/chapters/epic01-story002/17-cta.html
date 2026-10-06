@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 80px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+      justify-content: center;
+    }
+
+    .cta-box {
+      width: 100%;
+      border: 1px solid rgba(211,47,47,0.3);
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(26,26,26,0) 0%, rgba(211,47,47,0.05) 100%);
+    }
+
+    .quote-mark { font-size: 80px; color: #D32F2F; line-height: 0.5; margin-bottom: 20px; font-family: 'Georgia', serif;}
+
+    .cta-title { font-size: 48px; font-weight: 900; color: #F4F1EA; margin-bottom: 30px; letter-spacing: 2px;}
+    .cta-title span { color: #D32F2F; }
+
+    .cta-desc { font-size: 26px; color: #AAAAAA; line-height: 1.6; margin-bottom: 50px; max-width: 80%; }
+
+    .action-badge {
+      background: #D32F2F;
+      color: #FFFFFF;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 16px 40px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 20px rgba(211,47,47,0.3);
+      transform: rotate(-2deg);
+      display: inline-block;
+    }
+
+    .github-link {
+      margin-top: 40px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: #F4F1EA;
+      font-size: 22px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed #666666;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: #666666;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="cta-box">
+      <div class="quote-mark">"</div>
+      <div class="cta-title serif">本节课所有源码和文档<br><span>已完全开源发布</span></div>
+      <div class="cta-desc">
+        如果你对这种从 0 到 1 的工程跟练与分析感兴趣，建议你前往查阅 E01-S002 及配套的 Deep Dive 技术文档。
+      </div>
+      <div class="action-badge">📌 欢迎一起跟练学习</div>
+      <div class="github-link">alienzhou/zero2agent</div>
+    </div>
+
+    <div class="footer">
+      Next: Story 003 / 敬请期待
+    </div>
+  </div>
+</div>
+</body>
+</html>

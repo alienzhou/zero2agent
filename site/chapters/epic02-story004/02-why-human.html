@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 02 · 先试一下：让 Agent 等我操作</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="02" data-sources="C02 C03 C07 C18 C20">
+<header class="page-header" data-block><span>Zero2Agent · 先看效果</span><span class="page-number">02</span></header>
+<div class="heading" data-block><h1>先试一下：<br>让 Agent 等我操作</h1><p class="deck">打开同一个 Node，连续输入两行代码</p></div><div class="content">
+
+<div class="terminal demo-terminal" data-block><div class="console-label">已配置的 Agent 对话 · 转录示意 · &gt; 不用输入</div><pre>/terminal NODE_REPL_HISTORY= node
+<span class="dim">Allow human terminal? [y/N]</span> y
+&gt; const n = 21
+<span class="dim">undefined</span>
+&gt; n * 2
+<span class="result">42</span>
+&gt; .exit
+<span class="dim">… 结束回执省略 …</span>
+<span class="result">你:</span></pre></div>
+<div class="paired-observations"><section data-block><h2>盯住这个 42</h2><p data-prose>第二次输入还能使用 n：你一直在操作同一个 Node。</p></section><section data-block><h2>再看「你:」</h2><p data-prose>提示符重新出现，表示可以继续给 Agent 发消息。</p></section></div>
+<p class="note" data-prose data-block>/terminal 在本地执行，不会把这些输入发给模型。人工模式须在启动前选择，不能接管已运行的普通命令。</p>
+</div></article></body></html>

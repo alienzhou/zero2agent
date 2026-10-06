@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 46px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制 · 长输出</span>
+      <span class="page-num serif">08</span>
+    </div>
+    <div class="title serif">输出太长<br>就不放进对话</div>
+    <div class="subtitle">对话能装的字有限，不能全塞进去</div>
+    <div class="content prose">
+      <p class="p">一次 build 可能打出很多行。全部放进对话，<span class="hl">对话会装不下</span>。</p>
+      <p class="p">所以工具设<strong>输出上限</strong>（按行数或按大小，数字你自己定）。超了就不留在内存里，写到临时文件。返回的字里不给正文，只给两样：一共多少、文件在哪。</p>
+      <div class="example"><span class="accent">Output:</span> 约四千行（示例）
+<span class="accent">Saved to:</span> /tmp/…（示例路径）</div>
+      <p class="cap">模型看到路径后，用 read_file 或 grep_search 自己去看需要的那几行。</p>
+      <div class="callout">有的工具会截断并写 <b>[truncated]</b>，后面的字就没了。这里不截断：全文在文件里，模型自己打开看。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+:root {
+  --paper: #faf9f5; --panel: #f3f2ec; --card: #fffefa; --ink: #202622;
+  --muted: #6c736b; --line: #e1e3d9; --accent: #ac3d30; --accent-soft: #f4e7e1;
+  --green: #38634c; --header: 68px; --sidebar: 270px;
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.7;
+}
+:root[data-theme="dark"] {
+  --paper: #1c201e; --panel: #242a25; --card: #272d28; --ink: #eaece2;
+  --muted: #a0ab9e; --line: #374038; --accent: #e8957e; --accent-soft: #3e2a24; --green: #a3c5a5;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, a, input, summary { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+button { border: 0; }
+button:disabled { cursor: default; opacity: .5; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; top: -80px; left: 16px; padding: 10px; z-index: 100; background: var(--card); }
+.skip-link:focus { top: 10px; }
+.topbar { position: fixed; inset: 0 0 auto; height: var(--header); border-bottom: 1px solid var(--line); background: var(--paper); z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; gap: 12px; }
+.brand { display: flex; gap: 12px; align-items: center; font-weight: 740; font-size: 18px; letter-spacing: -.4px; white-space: nowrap; }
+.brand-mark { width: 32px; height: 32px; background: var(--ink); color: var(--paper); border-radius: 7px; font: 650 23px/32px Georgia, serif; text-align: center; }
+.brand-mark span { font: 11px ui-monospace, monospace; color: #ec8c72; }
+.brand-caption { font-size: 12px; color: var(--muted); font-weight: 400; padding-left: 15px; border-left: 1px solid var(--line); letter-spacing: 0; }
+.top-actions { display: flex; align-items: center; gap: 18px; }
+.icon-button { width: 34px; height: 34px; background: transparent; border-radius: 5px; font-size: 23px; line-height: 1; flex-shrink: 0; }
+.icon-button:hover { background: var(--panel); }
+.search-trigger { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); padding: 5px 10px; border-radius: 6px; font-size: 12px; min-width: 230px; }
+.search-trigger > span:first-child { font-size: 23px; line-height: 1; }
+kbd { font: 10px/1.5 ui-monospace, monospace; border: 1px solid var(--line); border-radius: 3px; padding: 1px 5px; color: var(--muted); background: var(--paper); white-space: nowrap; }
+.search-trigger kbd { margin-left: auto; }
+.github-link { font-size: 12px; }
+.sidebar { position: fixed; inset: var(--header) auto 0 0; width: var(--sidebar); background: var(--panel); border-right: 1px solid var(--line); padding: 30px 20px 22px; overflow: auto; z-index: 20; display: flex; flex-direction: column; }
+.course-home { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 6px; margin-bottom: 24px; font-weight: 600; font-size: 13px; }
+.course-home[aria-current], .chapter-link[aria-current] { background: var(--accent-soft); color: var(--accent); }
+.nav-group { margin-bottom: 24px; }
+.nav-group-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 12px; margin: 0 0 8px; font-size: 11px; font-weight: 600; letter-spacing: .08em; color: var(--muted); }
+.chapter-link { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; margin: 2px 0; border-radius: 6px; font-size: 12px; line-height: 1.65; }
+.chapter-link:hover, .course-home:hover { background: var(--line); }
+.chapter-link[aria-current]:hover, .course-home[aria-current]:hover { background: var(--accent-soft); }
+.chapter-number { font: 11px/1.8 ui-monospace, monospace; color: var(--muted); min-width: 19px; }
+.chapter-check { margin-left: auto; color: var(--green); font-size: 13px; }
+.sidebar-footer { border-top: 1px solid var(--line); margin-top: auto; padding: 22px 12px 0; font-size: 10px; color: var(--muted); }
+.sidebar-footer a { display: block; margin-top: 7px; font-size: 11px; }
+.status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 8px; }
+.book-layout { margin: var(--header) 0 0 var(--sidebar); display: grid; grid-template-columns: minmax(0,1fr) 216px; max-width: 1510px; }
+#main { min-width: 0; padding: 50px clamp(24px,4vw,64px) 70px; outline: none; }
+.outline { padding: 48px 22px 28px 4px; position: sticky; top: var(--header); align-self: start; height: calc(100vh - var(--header)); overflow: auto; }
+.outline-heading { font-size: 11px; margin: 0 0 16px; font-weight: 600; color: var(--muted); letter-spacing: .08em; }
+.outline-list { border-left: 1px solid var(--line); }
+.outline-link { display: block; color: var(--muted); padding: 6px 8px 6px 15px; margin-left: -1px; border-left: 2px solid transparent; font-size: 11px; line-height: 1.6; }
+.outline-link:hover { color: var(--ink); }
+.outline-link[aria-current] { color: var(--accent); border-left-color: var(--accent); }
+.outline-link small { font: 9px ui-monospace, monospace; margin-right: 6px; }
+.outline-note { border-top: 1px solid var(--line); margin-top: 25px; padding-top: 18px; font-size: 11px; color: var(--muted); }
+.outline-note a { display: block; margin-top: 12px; color: var(--ink); }
+.eyebrow { font: 10px ui-monospace, monospace; letter-spacing: .14em; color: var(--accent); text-transform: uppercase; margin: 0 0 20px; }
+.home-hero { padding-bottom: 33px; border-bottom: 1px solid var(--line); }
+.home-hero h1 { font: 650 clamp(36px,3.7vw,55px)/1.35 Georgia, "Songti SC", serif; letter-spacing: -.035em; margin: 0 0 21px; }
+.home-hero h1 em { font-style: normal; color: var(--accent); }
+.home-description { color: var(--muted); font-size: 14px; max-width: 560px; margin: 0 0 26px; line-height: 1.95; }
+.primary-link { display: inline-flex; gap: 28px; align-items: center; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); padding: 10px 20px; border-radius: 5px; font-size: 12px; font-weight: 550; }
+.primary-link:hover { opacity: .84; }
+.quiet-link { display: inline-block; font-size: 12px; margin-left: 22px; color: var(--muted); }
+.hero-stats { display: flex; gap: 22px; flex-wrap: wrap; color: var(--muted); font-size: 10px; margin-top: 26px; }
+.hero-stats span + span { border-left: 1px solid var(--line); padding-left: 22px; }
+.hero-stats strong { color: var(--ink); font-weight: 600; }
+.loop-figure { margin: 32px 0 35px; padding: 23px 22px 17px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); }
+.loop-title { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 21px; }
+.loop-nodes { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.loop-node { border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; text-align: center; font-size: 12px; flex: 1; }
+.loop-node strong { display: block; font: 10px ui-monospace, monospace; color: var(--muted); margin-bottom: 3px; }
+.loop-node.accent { background: var(--accent-soft); border-color: var(--accent); }
+.loop-node.accent strong { color: var(--accent); }
+.loop-arrow { color: var(--muted); font-size: 16px; }
+.loop-return { text-align: center; font-size: 10px; color: var(--muted); margin: 14px 0 0; }
+.course-section { margin: 42px 0; scroll-margin-top: 92px; }
+.course-section-heading { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+.part-number { color: var(--accent); font: italic 30px/1.2 Georgia, serif; }
+.course-section h2 { font: 650 22px/1.35 Georgia, "Songti SC", serif; margin: 0; }
+.course-section-heading p { font-size: 11px; color: var(--muted); margin: 7px 0 0; }
+.lesson-row { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; padding: 18px 0; border-top: 1px solid var(--line); }
+.lesson-row:last-child { border-bottom: 1px solid var(--line); }
+.lesson-row:hover h3 { color: var(--accent); }
+.lesson-row h3 { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+.lesson-row p { font-size: 11px; color: var(--muted); margin: 0; }
+.lesson-row-number { font: 11px ui-monospace, monospace; color: var(--muted); }
+.lesson-row-tail { text-align: right; font-size: 10px; color: var(--muted); white-space: nowrap; }
+.lesson-row-tail span { font-size: 19px; margin-left: 14px; color: var(--ink); }
+.home-guide { font-size: 11px; color: var(--muted); margin-bottom: 25px; }
+.home-guide p { margin: 0 0 13px; }
+.home-guide strong { display: block; font-size: 12px; color: var(--ink); margin-bottom: 4px; font-weight: 550; }
+.progress-track { height: 3px; background: var(--line); margin: 10px 0; border-radius: 2px; overflow: hidden; }
+.progress-track span { display: block; height: 100%; background: var(--green); }
+.progress-caption { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+.breadcrumbs { font-size: 10px; color: var(--muted); margin: 0 0 25px; display: flex; gap: 9px; flex-wrap: wrap; }
+.breadcrumbs a:hover { color: var(--accent); }
+.chapter-header { border-bottom: 1px solid var(--line); padding-bottom: 29px; margin-bottom: 24px; }
+.chapter-header h1 { font: 650 clamp(28px,2.8vw,40px)/1.4 Georgia, "Songti SC", serif; letter-spacing: -.035em; margin: 0 0 16px; }
+.chapter-description { font-size: 13px; line-height: 1.9; color: var(--muted); margin: 0 0 20px; }
+.chapter-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 10px; color: var(--muted); }
+.chapter-meta a { margin-left: auto; border-bottom: 1px solid var(--line); }
+.reading-note { font-size: 11px; color: var(--muted); border-left: 2px solid var(--accent); padding: 3px 0 3px 12px; margin: 0 0 36px; }
+.lesson-section { scroll-margin-top: 92px; margin: 0 0 44px; }
+.section-heading { display: flex; align-items: center; gap: 13px; margin: 0 0 13px; }
+.section-heading > span { font: 10px ui-monospace, monospace; color: var(--accent); }
+.section-heading h2 { margin: 0; font-size: 14px; line-height: 1.6; font-weight: 600; flex: 1; }
+.zoom-button { background: transparent; font-size: 10px; color: var(--muted); white-space: nowrap; border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; }
+.zoom-button:hover { color: var(--accent); border-color: var(--accent); }
+.figure-viewport { width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; background: #f4f1ea; border: 1px solid var(--line); border-radius: 5px; }
+.figure-stage { position: relative; }
+.figure-stage iframe { width: 1080px; height: 1440px; border: none; display: block; transform-origin: 0 0; position: absolute; inset: 0; background: #f4f1ea; }
+.text-content { margin-top: 8px; font-size: 11px; color: var(--muted); }
+.text-content summary { cursor: pointer; width: fit-content; }
+.text-content[open] { background: var(--card); border: 1px solid var(--line); padding: 14px 18px; border-radius: 5px; }
+.text-content[open] summary { color: var(--ink); margin-bottom: 18px; }
+.text-content p { color: var(--ink); font-size: 15px; line-height: 1.9; margin: 0 0 14px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.chapter-finish { margin: 50px 0 28px; padding: 22px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); display: flex; gap: 14px; align-items: center; justify-content: space-between; }
+.chapter-finish p { margin: 0; font-size: 13px; font-weight: 550; }
+.chapter-finish small { display: block; font-size: 10px; font-weight: 400; color: var(--muted); margin-top: 5px; }
+.complete-button { background: var(--ink); color: var(--paper); padding: 9px 13px; font-size: 11px; border-radius: 4px; white-space: nowrap; }
+.chapter-pagination { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid var(--line); padding-top: 22px; }
+.chapter-pagination a:last-child { text-align: right; }
+.chapter-pagination span { display: block; font-size: 10px; color: var(--muted); margin-bottom: 5px; }
+.chapter-pagination strong { font-weight: 550; font-size: 12px; }
+.book-footer { margin-top: 45px; color: var(--muted); font-size: 10px; border-top: 1px solid var(--line); padding-top: 19px; }
+.mobile-only { display: none; }
+.loading { padding: 50px; color: var(--muted); }
+.scrim { position: fixed; inset: var(--header) 0 0; z-index: 39; background: #0006; }
+dialog { border: 1px solid var(--line); padding: 0; color: var(--ink); background: var(--paper); width: min(640px,calc(100% - 32px)); border-radius: 10px; max-height: 80vh; max-height: 80dvh; box-shadow: 0 22px 100px #0004; }
+dialog::backdrop { background: #18201dcc; backdrop-filter: blur(3px); }
+.search-box { padding: 22px; }
+.search-header { display: flex; align-items: center; justify-content: space-between; }
+.search-header h2 { font-size: 15px; margin: 0; }
+#search-input { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 5px; padding: 12px; color: var(--ink); margin: 20px 0 0; font-size: 14px; }
+.search-count { color: var(--muted); font-size: 10px; margin: 11px 0; }
+#search-results { max-height: 46vh; max-height: 46dvh; overflow: auto; }
+.search-result { display: block; padding: 14px 8px; border-top: 1px solid var(--line); }
+.search-result:hover, .search-result:focus { background: var(--panel); }
+.search-result small { display: block; color: var(--muted); font-size: 10px; margin-bottom: 4px; }
+.search-result strong { font-weight: 550; font-size: 13px; }
+.search-result p { font-size: 11px; color: var(--muted); margin: 6px 0 0; }
+mark { background: var(--accent-soft); color: var(--accent); }
+.search-footer { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 12px; font-size: 10px; color: var(--muted); }
+@media (min-width: 1680px) { .book-layout { margin-right: auto; } }
+@media (max-width: 1200px) {
+  :root { --sidebar: 238px; }
+  .book-layout { grid-template-columns: minmax(0,1fr) 180px; }
+  .sidebar { padding-left: 12px; padding-right: 12px; }
+  #main { padding-left: 30px; padding-right: 30px; }
+  .brand-caption { display: none; }
+}
+@media (max-width: 1100px) {
+  :root { --sidebar: 225px; }
+  .book-layout { display: block; }
+  #main { padding: 36px 32px 90px; }
+  .outline { display: none; }
+  .outline-mobile:not([hidden]) { display: block; }
+  .outline-mobile { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); right: 18px; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; padding: 9px 14px; background: var(--card); color: var(--ink); box-shadow: 0 4px 20px #0001; z-index: 25; font-size: 13px; }
+  .outline.open { display: block; position: fixed; inset: var(--header) 0 0 auto; height: auto; width: min(320px,85vw); padding: 25px; background: var(--paper); border-left: 1px solid var(--line); z-index: 40; }
+  .outline.open .drawer-heading { display: flex; }
+  .icon-button { width: 44px; height: 44px; }
+  .search-trigger { min-height: 44px; }
+  .chapter-link { min-height: 44px; }
+  .outline-link { min-height: 44px; padding-top: 10px; padding-bottom: 10px; font-size: 13px; }
+  .zoom-button { min-height: 44px; font-size: 12px; padding: 7px 9px; }
+  .text-content summary { min-height: 44px; padding: 10px 0; font-size: 14px; }
+}
+@media (max-width: 760px) {
+  :root { --header: 62px; --sidebar: 0px; }
+  .mobile-only { display: block; }
+  .topbar { padding: 0 12px; gap: 8px; }
+  .brand { font-size: 16px; gap: 8px; margin-right: auto; }
+  .brand-mark { width: 28px; height: 28px; line-height: 28px; font-size: 20px; }
+  .top-actions { gap: 0; }
+  .icon-button { width: 44px; height: 44px; }
+  .github-link, .search-trigger kbd { display: none; }
+  .search-trigger { min-width: 0; padding: 0; width: 44px; height: 44px; justify-content: center; border: 0; background: transparent; }
+  .search-trigger > span:nth-child(2) { display: none; }
+  .sidebar { width: min(300px,85vw); transform: translateX(-100%); visibility: hidden; padding: 22px 18px; z-index: 40; }
+  .sidebar.open { transform: translateX(0); visibility: visible; }
+  .drawer-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 14px; }
+  body.drawer-open { overflow: hidden; }
+  #main { padding: 28px 18px calc(90px + env(safe-area-inset-bottom, 0px)); }
+  .course-home, .chapter-link { min-height: 46px; font-size: 14px; }
+  .outline-link { min-height: 44px; padding-top: 10px; padding-bottom: 10px; font-size: 13px; }
+  .home-hero h1 { font-size: 37px; }
+  .home-description { font-size: 13px; }
+  .hero-stats { gap: 12px; font-size: 9px; }
+  .hero-stats span + span { padding-left: 12px; }
+  .loop-figure { padding: 18px 12px 15px; }
+  .loop-nodes { gap: 6px; }
+  .loop-node { padding: 9px 6px; font-size: 11px; }
+  .loop-node strong { font-size: 8px; }
+  .loop-title { font-size: 9px; }
+  .quiet-link { margin-left: 14px; }
+  .lesson-row { grid-template-columns: 20px 1fr auto; gap: 8px; }
+  .lesson-row h3 { font-size: 14px; }
+  .lesson-row p { font-size: 12px; }
+  .lesson-row-tail { font-size: 9px; }
+  .lesson-row-tail span { margin-left: 6px; font-size: 15px; }
+  .chapter-header h1 { font-size: 30px; }
+  .section-heading { gap: 9px; }
+  .section-heading h2 { font-size: 14px; }
+  .zoom-button { min-height: 44px; font-size: 12px; padding: 7px 9px; }
+  .text-content summary { min-height: 44px; padding: 10px 0; font-size: 14px; }
+  .text-content p { font-size: 16px; }
+  .reading-note, .chapter-meta { font-size: 12px; }
+  .complete-button { min-height: 44px; font-size: 12px; }
+  #search-input { font-size: 16px; }
+  .search-result strong { font-size: 15px; }
+  .search-result p { font-size: 13px; }
+  .chapter-finish { padding: 17px; }
+  .chapter-finish p { font-size: 12px; }
+  .chapter-pagination { gap: 16px; }
+  .chapter-pagination strong { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }

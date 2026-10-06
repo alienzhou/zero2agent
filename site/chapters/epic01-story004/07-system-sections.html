@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .sections { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+    .sec { border: 2px solid #1A1A1A; padding: 22px 24px 22px 30px; background: #FDFCF9; position: relative; display: flex; align-items: center; gap: 20px; flex: 1; }
+    .sec::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #D32F2F; border-radius: 50%; }
+    .sec-num { font-size: 16px; color: #D32F2F; font-weight: bold; width: 36px; flex-shrink: 0; }
+    .sec-name { font-size: 38px; font-weight: 800; color: #1A1A1A; width: 200px; flex-shrink: 0; }
+    .sec-desc { font-size: 34px; color: #4A4A4A; line-height: 1.45; flex: 1; }
+    .nested-wrap { border: 3px solid #1A1A1A; padding: 24px; background: #F4F1EA; flex: 1; display: flex; flex-direction: column; }
+    .nested-label { font-size: 14px; color: #666; letter-spacing: 1px; margin-bottom: 16px; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 结构</span>
+      <span class="page-num serif">07</span>
+    </div>
+    <div class="title serif">Default System 五段式</div>
+    <div class="subtitle">把身份、范围、策略、流程、输出拆开——不再混成一坨</div>
+    <div class="content">
+      <div class="nested-wrap">
+        <div class="nested-label mono">SYSTEM PROMPT · INNER SECTIONS</div>
+        <div class="sections">
+          <div class="sec"><div class="sec-num mono">01</div><div class="sec-name mono">Role</div><div class="sec-desc">你是谁：Coding Agent 身份定义</div></div>
+          <div class="sec"><div class="sec-num mono">02</div><div class="sec-name mono">Scope</div><div class="sec-desc">能做什么、不能做什么的边界</div></div>
+          <div class="sec"><div class="sec-num mono">03</div><div class="sec-name mono">Policy</div><div class="sec-desc">工具怎么用的策略，不含参数清单</div></div>
+          <div class="sec"><div class="sec-num mono">04</div><div class="sec-name mono">Workflow</div><div class="sec-desc">推荐的工作流与决策顺序</div></div>
+          <div class="sec"><div class="sec-num mono">05</div><div class="sec-name mono">Output</div><div class="sec-desc">回复格式与质量标准</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">模型越强，System 越短——只留<em>策略</em>，不写工具清单</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

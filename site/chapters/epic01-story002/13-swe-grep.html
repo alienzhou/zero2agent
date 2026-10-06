@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 50px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 56px; font-weight: 900; line-height: 1.3; color: #1A1A1A; margin-bottom: 50px; letter-spacing: -0.5px; }
+
+    .route-card {
+      border: 2px solid #1A1A1A;
+      background: #FFFFFF;
+      padding: 40px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .route-badge {
+      position: absolute;
+      top: -20px;
+      left: 30px;
+      background: #D32F2F;
+      color: #FFFFFF;
+      font-size: 20px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: bold;
+      padding: 8px 16px;
+    }
+
+    .route-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .route-desc {
+      font-size: 24px;
+      color: #4A4A4A;
+      line-height: 1.6;
+    }
+    .route-highlight {
+      font-weight: bold;
+      color: #1A1A1A;
+      border-bottom: 2px solid #D32F2F;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 探索路线 2</span>
+      <span class="page-num serif">13</span>
+    </div>
+
+    <div class="title serif">专职小模型：<br>用 RL 炼蛊一只猎犬</div>
+
+    <div class="route-card" style="margin-top: 20px;">
+      <div class="route-badge">ROUTE.02</div>
+      <div class="route-title">
+        <span>SWE-grep (专职小模型)</span>
+        <span style="font-size: 20px; color: #888888; font-weight: 400; font-family: ui-monospace, SFMono-Regular, monospace;">[ 例: Devin / Windsurf ]</span>
+      </div>
+      <div class="route-desc">
+        Cognition (Devin 团队) 说他们分析数据发现，Agent 居然有超过 60% 的时间在浪费在“找代码”上。RAG 不靠谱，让上千亿参数的大模型去做搜代码这种苦力又太慢太贵。<br><br>
+        解法就是：他们使用 RL 专门训练了一个<span class="route-highlight">专职搜代码的小模型</span>。一触发，它就会多路并发探测，最多 4 轮锁定。在 Reward 设定上，刻意且严重地偏袒“查准率”，希望宁可漏掉线索，也不容许带回无关代码造成主脑的幻觉。
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

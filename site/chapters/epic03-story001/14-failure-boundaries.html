@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 14 · 压不下去，就别硬发</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="14" data-sources="C16"><header class="page-header" data-block><span>Zero2Agent · 失败边界</span><span class="page-number">14</span></header><div class="heading" data-block><h1>压不下去，就别硬发</h1><p class="deck">压缩是有边界的恢复策略，不是无限窗口</p></div><main class="content">
+<div class="decision-list" data-block><section><span>输入</span><div><h2>当前问题本身就太大</h2><p data-prose>加上 system 与工具定义已超预算：拆分输入、改用文件引用，或减少固定内容。</p></div></section><section><span>摘要</span><div><h2>失败后，不丢原始历史</h2><p data-prose>空摘要、截断、超时或未缩小，都不能当作成功采用。</p></div></section><section><span>接口</span><div><h2>供应商仍返回上下文超限</h2><p data-prose>收紧预算并有限次恢复，只重试模型请求；不重跑已经完成的工具。</p></div></section></div>
+<div class="rule-note" data-block><p data-prose>前台压缩后仍过硬预算，不发主请求。保守估算也不能保证任意厂商永不报错。</p></div>
+</main></article></body></html>

@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 11 · 三个水位，逐级减少上下文</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="11" data-sources="C13 C14"><header class="page-header" data-block><span>Zero2Agent · 自动分级处理</span><span class="page-number">11</span></header><div class="heading" data-block><h1>三个水位，逐级减少上下文</h1><p class="deck">默认比例以输入预算为分母，不按轮数触发</p></div><main class="content">
+<div class="waterlines" data-block><div><strong>45%</strong><span>目标水位</span><p>压缩争取降到这里<br>不保证一定可达</p></div><div><strong>65%</strong><span>后台水位</span><p>先缩短大工具正文<br>仍高则后台摘要</p></div><div><strong>85%</strong><span>前台水位</span><p>先等后台结果<br>必要时前台接管</p></div></div>
+<div class="request" data-block><div class="request-label">第一层：轻量缩短工具结果</div><div class="message-line"><b>发送视图</b><span>短预览 + 完整结果文件引用</span></div><div class="message-line"><b>原始历史</b><span>完整正文不删，不重跑工具</span></div></div>
+<p data-prose data-block>完整结果写入私有临时文件，需要时按行回读。先做这一步，再重新计数决定是否摘要。</p>
+<p class="note" data-prose data-block>临时结果文件不是会话存档。超过硬性输入预算仍无法缩小，就停止主请求。</p>
+</main></article></body></html>

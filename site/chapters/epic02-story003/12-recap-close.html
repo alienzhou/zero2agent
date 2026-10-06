@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 46px; }
+    .recap { list-style: none; margin: 4px 0 26px; padding: 0; }
+    .recap li { position: relative; padding-left: 44px; margin-bottom: 16px; font-size: 29px; line-height: 1.5; color: #2B2B2B; }
+    .recap li .b { position: absolute; left: 0; top: -2px; font-family: 'Georgia', serif; font-size: 30px; font-weight: 700; color: #D32F2F; }
+    .recap li b { color: #1A1A1A; font-weight: 800; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 收束</span>
+      <span class="page-num serif">12</span>
+    </div>
+    <div class="title serif">难的不是<br>写起进程的代码</div>
+    <div class="subtitle">难的是下面这五件事怎么配合</div>
+    <div class="content prose">
+      <p class="p">写「起一个进程」的代码不多。代码多出来，多半是在处理：<span class="hl">外面程序打出来的字，怎么安全地给 Agent 看</span>。</p>
+      <ul class="recap">
+        <li><span class="b">②</span> 把结果写成模型能读的一段<b>字</b>；</li>
+        <li><span class="b">③</span> 输出太长就存文件，只给<b>路径</b>；</li>
+        <li><span class="b">①</span> 跑太久不自动杀，让人<b>取消或转后台</b>；</li>
+        <li><span class="b">④</span> 把跑命令的<b>环境</b>设对；</li>
+        <li><span class="b">⑤</span> 后台还在跑的命令，<b>记下来并收尾</b>。</li>
+      </ul>
+      <div class="callout">重点不是多做一个 API。重点是<b>想清楚每条规则</b>。这是这课想让你记住的。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

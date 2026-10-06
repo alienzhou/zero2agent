@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 46px; }
+    .p { margin-bottom: 26px; }
+    .example { font-size: 24px; line-height: 1.68; padding: 20px 24px; margin: 4px 0 18px; }
+    .cap { margin: -8px 0 24px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制 · 回执 (1/2)</span>
+      <span class="page-num serif">06</span>
+    </div>
+    <div class="title serif">工具只能<br>返回一段字</div>
+    <div class="subtitle">模型只能读字，读不了别的格式</div>
+    <div class="content prose">
+      <p class="p">命令跑完，工具只能 <span class="code">return</span> 一段字。退出码、有没有成功、打出来的内容，<span class="hl">都要写进这一段字里</span>。</p>
+      <div class="example"><span class="dim">$ npm test</span>
+<span class="accent">Exit code: 1</span>
+&lt;untrusted_command_output id="a3f9c1b2"&gt;
+  2 failing · 30 passing
+&lt;/untrusted_command_output&gt;</div>
+      <p class="cap">退出码和输出写在同一段字里，模型才能看到。</p>
+      <p class="p">为什么不把退出码只放在界面上、不给模型？因为<span class="red">模型读不到那一层</span>。模型只能看到对话里这一段字。</p>
+      <p class="p">输出外面包一层带随机 id 的标签：如果输出里有人写假结束标签，会被转义，模型不会当成系统命令。</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

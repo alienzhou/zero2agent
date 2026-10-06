@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 64px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #1A1A1A; padding-bottom: 18px; margin-bottom: 30px; color: #666666; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 58px; font-weight: 900; line-height: 1.18; color: #1A1A1A; margin-bottom: 12px; flex-shrink: 0; }
+    .subtitle { font-size: 30px; color: #4A4A4A; margin-bottom: 32px; line-height: 1.45; flex-shrink: 0; }
+
+    .body { flex: 1; display: flex; flex-direction: column; gap: 28px; justify-content: flex-start; }
+
+    /* 工具条 */
+    .tool { display: flex; border: 2px solid #1A1A1A; background: #FDFCF9; }
+    .tool-name { width: 250px; flex-shrink: 0; background: #1A1A1A; color: #F4F1EA; font-size: 28px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 26px 16px; box-sizing: border-box; }
+    .tool-body { flex: 1; padding: 26px 30px; }
+    .tool-row { font-size: 26px; color: #4A4A4A; line-height: 1.55; margin-bottom: 12px; padding-left: 22px; position: relative; }
+    .tool-row:last-child { margin-bottom: 0; }
+    .tool-row::before { content: '·'; position: absolute; left: 0; color: #D32F2F; font-size: 34px; line-height: 1; top: -2px; }
+    .tool-row b { color: #1A1A1A; border-bottom: 2px solid #D32F2F; }
+    .tool-row .no { color: #999999; }
+
+    .note { font-size: 24px; color: #666666; line-height: 1.55; border-left: 4px solid #CCCCCC; padding-left: 20px; }
+    .note b { color: #1A1A1A; }
+
+    .summary { margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 26px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 34px; font-weight: bold; color: #1A1A1A; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 工具设计</span>
+      <span class="page-num serif">03</span>
+    </div>
+    <div class="title serif">两个工具长什么样</div>
+    <div class="subtitle">先看具体设计，后面再讲为什么这么定</div>
+
+    <div class="body">
+      <div class="tool">
+        <div class="tool-name mono">write_file</div>
+        <div class="tool-body">
+          <div class="tool-row">参数只有 <b>path + content</b> 两个，全量写入</div>
+          <div class="tool-row">不存在则新建、存在则覆盖、自动创建父目录</div>
+          <div class="tool-row"><span class="no">不做 append、不做局部替换——那是下一个工具的事</span></div>
+        </div>
+      </div>
+
+      <div class="tool">
+        <div class="tool-name mono">delete</div>
+        <div class="tool-body">
+          <div class="tool-row">接受<b>一组路径</b>，批量删除文件，不递归删目录</div>
+          <div class="tool-row">越出工作区的路径，工具层直接返回 Error</div>
+          <div class="tool-row"><b>逐条汇总</b>：哪个删了、哪个不存在、为什么</div>
+        </div>
+      </div>
+
+      <div class="note">
+        一个工具 = 一种意图。不把「全量写」和「局部改」揉成一个带 mode 开关的大工具——<b>模型不用先猜该拨哪个开关</b>，选工具本身就是在表达意图。
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">工具集就是模型的动作词汇表，越清楚，越不容易错</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

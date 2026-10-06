@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .dual-flow { flex: 1; display: flex; flex-direction: column; gap: 28px; }
+    .flow-row { display: flex; align-items: stretch; gap: 24px; flex: 1; min-height: 0; }
+    .flow-block { flex: 1; border: 2px solid #1A1A1A; background: #FDFCF9; padding: 36px 32px; display: flex; flex-direction: column; }
+    .flow-tag { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; margin-bottom: 14px; }
+    .flow-title { font-size: 42px; font-weight: 800; color: #1A1A1A; margin-bottom: 24px; line-height: 1.25; }
+    .flow-list { margin: 0; padding: 0; list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+    .flow-list li { font-size: 34px; color: #4A4A4A; line-height: 1.5; padding-left: 22px; position: relative; }
+    .flow-list li::before { content: '—'; position: absolute; left: 0; color: #D32F2F; }
+    .arrow-bridge { text-align: center; font-size: 40px; color: #D32F2F; line-height: 1; padding: 8px 0; flex-shrink: 0; }
+    .bridge-note { text-align: center; font-size: 34px; color: #666666; line-height: 1.55; padding: 0 24px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 导读</span>
+      <span class="page-num serif">02</span>
+    </div>
+    <div class="title serif">两条线，一起讲清楚</div>
+    <div class="subtitle">先看清 Prompt 为什么变，再看清今天该怎么摆</div>
+    <div class="content dual-flow">
+      <div class="flow-row">
+        <div class="flow-block">
+          <div class="flow-tag mono">PART 1 · WHY</div>
+          <div class="flow-title serif">行业演化</div>
+          <ul class="flow-list">
+            <li>翻了 6 家 Agent 的 git 历史</li>
+            <li>2023→2026 时间线</li>
+            <li>该拆的拆出去，该短的变短</li>
+          </ul>
+        </div>
+        <div class="flow-block">
+          <div class="flow-tag mono">PART 2 · WHAT</div>
+          <div class="flow-title serif">结构化摆放</div>
+          <ul class="flow-list">
+            <li>System vs User 两大分块</li>
+            <li>Message List 全景栈</li>
+            <li>上下文安放 + Cache 分区</li>
+          </ul>
+        </div>
+      </div>
+      <div class="arrow-bridge">↓</div>
+      <div class="bridge-note">演化到今天，做法很清楚：信息拆到对的通道里，<br>长 prompt 不解决问题</div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">看懂 Prompt 怎么变，就知道今天该怎么摆</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

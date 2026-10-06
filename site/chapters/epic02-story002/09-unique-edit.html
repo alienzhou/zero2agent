@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E02-S002 · 成功修改</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet" data-page="09"><header class="page-header" data-block><span>Zero2Agent · 补充上下文</span><span class="page-number">09</span></header><div class="heading" data-block><h1>带上变量名，就找对了</h1><p class="deck" data-prose>原文唯一出现后，修改只落在 API 超时上</p></div><main class="content"><div class="code-box" data-block><p class="label">replace_in_file 的完整输入</p><pre>{ "path": "config.ts",
+  "old_string": "apiTimeout = 30",
+  "new_string": "apiTimeout = 60" }</pre></div><div class="code-box diff" data-block><p class="label">修改前后 · 其余两行保留原样</p><pre><span class="removed">− const apiTimeout = 30;</span>
+<span class="added">+ const apiTimeout = <b>60</b>;</span>
+  const retryDelay = 30;
+  const retries = 3;</pre></div><div class="receipt" data-block><p class="label">真实工具回执</p><pre>Replaced config.ts (1 occurrence)</pre></div><p class="note" data-block data-prose>更复杂的文件里，可以继续带上函数名、注释或相邻行，直到原文能唯一定位目标。</p></main></article></body></html>

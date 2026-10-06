@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 06 · 历史里，还要留住做事的证据</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="06" data-sources="C05"><header class="page-header" data-block><span>Zero2Agent · 工具消息</span><span class="page-number">06</span></header><div class="heading" data-block><h1>历史里，还要留住做事的证据</h1><p class="deck">只存最终回答，会漏掉实际发生过的操作</p></div><main class="content"><div class="tool-pair" data-block><section><p class="mini-label">assistant · 模型请求调用</p><h2>写入 draft.txt</h2><pre>type: tool_use
+id: <span class="accent">write_1</span>
+name: write_file</pre></section><div class="pair-link">同一个调用 ID ↓</div><section><p class="mini-label">user · 宿主返回工具结果</p><h2>文件已创建</h2><pre>type: tool_result
+tool_use_id: <span class="accent">write_1</span>
+content: …</pre></section></div>
+<div class="message-end" data-block><span>assistant</span><p data-prose>模型收到结果，再给出完整回答。</p></div>
+<p class="note" data-block data-prose>结构示意：本项目的 Anthropic Messages 协议用 user 角色传工具结果，不代表用户的新输入。失败结果同样需要配对。</p></main></article></body></html>

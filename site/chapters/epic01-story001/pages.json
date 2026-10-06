@@ -1,0 +1,47 @@
+{
+  "title": "最小 Agent 循环",
+  "width": 1080,
+  "height": 1440,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "从零实现 Coding Agent",
+      "number": 1
+    },
+    {
+      "file": "02-learning-gap.html",
+      "title": "这门课有什么不一样",
+      "number": 2
+    },
+    {
+      "file": "03-roadmap.html",
+      "title": "完整学习路线",
+      "number": 3
+    },
+    {
+      "file": "04-react-loop.html",
+      "title": "让 Agent 跑起核心循环",
+      "number": 4
+    },
+    {
+      "file": "05-minimal-loop.html",
+      "title": "先做一个只读闭环",
+      "number": 5
+    },
+    {
+      "file": "06-deep-dive.html",
+      "title": "理解 ReAct 与 Tool Use",
+      "number": 6
+    },
+    {
+      "file": "07-learning-depth.html",
+      "title": "选择你的学习深度",
+      "number": 7
+    },
+    {
+      "file": "08-cta.html",
+      "title": "源码与下一步",
+      "number": 8
+    }
+  ]
+}

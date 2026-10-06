@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 64px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #1A1A1A; padding-bottom: 18px; margin-bottom: 30px; color: #666666; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 58px; font-weight: 900; line-height: 1.18; color: #1A1A1A; margin-bottom: 12px; flex-shrink: 0; }
+    .subtitle { font-size: 30px; color: #4A4A4A; margin-bottom: 32px; line-height: 1.45; flex-shrink: 0; }
+
+    .body { flex: 1; display: flex; flex-direction: column; gap: 28px; justify-content: flex-start; }
+
+    /* 数据卡（浅色版） */
+    .metric { border: 2px solid #1A1A1A; background: #FDFCF9; padding: 30px 32px; box-shadow: 8px 8px 0 rgba(26,26,26,0.08); }
+    .metric-source { font-size: 17px; color: #888888; letter-spacing: 1px; font-weight: bold; margin-bottom: 16px; }
+    .metric-nums { display: flex; align-items: baseline; gap: 18px; margin-bottom: 14px; }
+    .num-old { font-size: 56px; font-weight: 900; color: #BBBBBB; text-decoration: line-through; font-family: ui-monospace, Menlo, monospace; }
+    .num-arrow { font-size: 42px; color: #D32F2F; line-height: 1; }
+    .num-new { font-size: 92px; font-weight: 900; color: #D32F2F; line-height: 1; font-family: ui-monospace, Menlo, monospace; }
+    .metric-desc { font-size: 26px; color: #4A4A4A; line-height: 1.5; }
+    .metric-desc b { color: #1A1A1A; }
+
+    /* 我们的取舍 */
+    .takeaway { border: 2px solid #1A1A1A; background: #FDFCF9; padding: 28px 32px; }
+    .takeaway-tag { font-size: 16px; color: #D32F2F; letter-spacing: 2px; font-weight: bold; margin-bottom: 12px; }
+    .takeaway-text { font-size: 26px; color: #4A4A4A; line-height: 1.6; }
+    .takeaway-text b { color: #1A1A1A; border-bottom: 2px solid #D32F2F; }
+
+    .summary { margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 26px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 34px; font-weight: bold; color: #1A1A1A; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 技术选型</span>
+      <span class="page-num serif">05</span>
+    </div>
+    <div class="title serif">工具缺一块，模型就绕路</div>
+    <div class="subtitle">粒度不是实现细节，它直接决定模型能不能顺畅表达意图</div>
+
+    <div class="body">
+      <div class="metric">
+        <div class="metric-source mono">SWE-AGENT · 去掉专用编辑动作</div>
+        <div class="metric-nums">
+          <span class="num-old">18.0%</span>
+          <span class="num-arrow">→</span>
+          <span class="num-new">10.3%</span>
+        </div>
+        <div class="metric-desc">SWE-bench 解题率近腰斩。<b>同一个模型，能力没变</b>，只是工具少了一件，就得退回更通用的方式改文件，绕路、出错。</div>
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-tag mono">我们的取舍</div>
+        <div class="takeaway-text">write_file <b>只做全量写</b>，「改一小段」单独留给下一个工具 replace_in_file。两个动作拆成两个工具，模型选哪个、表达什么意图，都清清楚楚。</div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">接口在补模型的能力 gap：工具缺位，代价由模型的成功率来付</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

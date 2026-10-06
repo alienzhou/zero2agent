@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 12 · 后台压缩，怎样不覆盖新消息？</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson dark" data-page="12" data-sources="C14"><header class="page-header" data-block><span>Zero2Agent · 后台与前台协作</span><span class="page-number">12</span></header><div class="heading" data-block><h1>后台压缩，怎样不覆盖新消息？</h1><p class="deck">只处理配对完成的稳定前缀，不动新增尾部</p></div><main class="content">
+<div class="prefix-diagram" data-block><div class="prefix-lane"><span>稳定历史前缀</span><span>新增尾部</span></div><p class="down-label">后台摘要 ↓　核对前缀与任务代次</p><div class="prefix-lane"><span>已采用的摘要</span><span>原样保留</span></div><p class="note" data-prose>切分点不能拆开 tool_use / tool_result。最新用户输入单独保留。</p></div>
+<div class="closing-steps" data-block><section><span>01</span><div><h2>还有安全空间</h2><p data-prose>后台做摘要，当前安全主请求可继续。</p></div></section><section><span>02</span><div><h2>达到前台水位</h2><p data-prose>先等后台；仍需缩小时，前台继续压缩。</p></div></section><section><span>03</span><div><h2>采用前再核对</h2><p data-prose>完整请求重新计数；前缀或代次变了，丢弃迟到结果。</p></div></section></div>
+</main></article></body></html>

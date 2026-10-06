@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .loop { flex: 1; display: flex; flex-direction: column; gap: 0; }
+    .loop-box { border: 2px solid #1A1A1A; padding: 24px 28px; background: #FDFCF9; position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .loop-box::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #D32F2F; border-radius: 50%; }
+    .loop-tag { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; margin-bottom: 8px; }
+    .loop-title { font-size: 36px; font-weight: 800; color: #1A1A1A; margin-bottom: 8px; }
+    .loop-desc { font-size: 30px; color: #4A4A4A; line-height: 1.45; }
+    .loop-arrow { font-size: 28px; color: #D32F2F; padding: 6px 0; line-height: 1; text-align: center; }
+    .loop-return { font-size: 30px; color: #666666; text-align: center; padding: 16px 20px; border: 2px dashed #CCCCCC; margin-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 运行时</span>
+      <span class="page-num serif">10</span>
+    </div>
+    <div class="title serif">Tool 反馈插入对话</div>
+    <div class="subtitle">tool_call 和 tool_result 都是 Message List 里的条目</div>
+    <div class="content loop">
+      <div class="loop-box">
+        <div class="loop-tag mono">STEP 1</div>
+        <div class="loop-title mono">assistant</div>
+        <div class="loop-desc">模型决定调用 read_file / grep 等工具</div>
+      </div>
+      <div class="loop-arrow">▼</div>
+      <div class="loop-box">
+        <div class="loop-tag mono">STEP 2</div>
+        <div class="loop-title mono">tool_call → tool_result</div>
+        <div class="loop-desc">结构化调用请求执行后，结果作为 tool 消息插回列表</div>
+      </div>
+      <div class="loop-arrow">▼</div>
+      <div class="loop-box">
+        <div class="loop-tag mono">STEP 3</div>
+        <div class="loop-title mono">assistant（续）</div>
+        <div class="loop-desc">读完结果继续推理，多轮循环直到给出最终回复</div>
+      </div>
+      <div class="loop-return mono">↻ 多轮 tool 循环 = Message List 不断增长</div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">运行时反馈会写回列表，是<em>对话的一部分</em></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 13 · 想现在整理，就输入 /compact</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="13" data-sources="C15"><header class="page-header" data-block><span>Zero2Agent · 手动前台压缩</span><span class="page-number">13</span></header><div class="heading" data-block><h1>想现在整理，就输入 /compact</h1><p class="deck">一段工作告一段落，可以主动收紧工作上下文</p></div><main class="content">
+<div class="reset-command" data-block><kbd>/compact</kbd><p data-prose>宿主识别命令<br>前台等待压缩完成</p></div>
+<div class="small-split" data-block><section><h2>不会做什么</h2><p data-prose>不把命令当普通问题，不新增用户轮次，不重跑历史工具。</p></section><section><h2>可能做什么</h2><p data-prose>等待已有后台任务，再调用模型摘要；会产生 API 用量。</p></section></div>
+<div class="code-panel" data-block><p class="console-label">SDK · 同一个 Agent 实例</p><pre>const changed = await agent.compact()
+const context = agent.getContext()
+const history = agent.getHistory()</pre></div>
+<p class="note" data-block data-prose>changed 表示是否采用了压缩结果。getContext() 是消息视图，不含独立的 system/tools；getHistory() 是完整记录的深拷贝。</p>
+</main></article></body></html>

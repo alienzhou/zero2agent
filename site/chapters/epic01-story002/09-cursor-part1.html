@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 40px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 52px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 40px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 56px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 24px;
+      color: #333333;
+      line-height: 1.68;
+      margin-bottom: 26px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 80px;
+      line-height: 0.8;
+      padding-top: 6px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 6px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .diagram-box {
+      border: 1px solid #1A1A1A;
+      padding: 16px;
+      margin-bottom: 24px;
+      background: #FFFFFF;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 17px;
+      line-height: 1.45;
+      color: #1A1A1A;
+      break-inside: avoid;
+    }
+    .diagram-box span { color: #D32F2F; font-weight: bold; }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心演进 1</span>
+      <span class="page-num serif">09</span>
+    </div>
+
+    <div class="title serif">Cursor Grep 优化拆解 (一)：<br>为什么经典 Trigram 行不通</div>
+
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">前</span>面我们说了 ripgrep 在大仓里的性能问题：动辄几十秒的搜索时间。<br>去年 Cursor 说他们做了 Instant Grep，最近详细披露了他们为了突破动辄 15+ 秒的扫描瓶颈，决定重回 1993 年的经典思路：为文本搜索建立<span class="highlight">倒排索引 (Inverted Index)</span>。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">分词粒度的死亡三角</div>
+      <div class="paragraph">
+        为代码建立倒排索引，最核心的问题是：用多长的字符片段 (N-grams) 作为 Token 键？
+      </div>
+    </div>
+
+      <div class="diagram-box">
+        // 二元组 (Bigram) 灾难<br>
+        [A,B] -> [List: 10万个文件]<br>
+        键很少，但 posting list 庞大到无法计算。
+      </div>
+
+      <div class="diagram-box">
+        // 四元组 (Quadgram) 灾难<br>
+        [A,B,C,D] -> [List: 2个文件]<br>
+        列表虽小，但键的数量爆炸 (数十亿)，内存撑爆。
+      </div>
+
+      <div class="paragraph">
+        经典的折中方案是 <strong>Trigram（三元组）</strong>，提取所有重叠的 3 字符序列建索引。Google 的 CodeSearch 和 Zoekt 都是基于此。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">仍然存在的冗余</div>
+      <div class="paragraph">
+        但对 Cursor 来说，Trigram 依然不够好。每个 trigram 中的字符在相邻的 trigram 中大量重复。如果在查询时拆少了，候选文件依然很多；拆多了，从索引加载几十上百个列表的开销，甚至会比直接从头扫描文件更慢。
+      </div>
+    </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">要在本地实现毫秒级检索，<br>必须找到比 Trigram 更聪明的切片维度。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
