@@ -1,0 +1,166 @@
+{
+  "title": "Zero2Agent · E02-S002 局部修改",
+  "date": "2026-10-02",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "candidate": "07e9697",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "v3-history-first",
+  "pages": [
+    {
+      "number": 1,
+      "file": "01-cover.html",
+      "title": "让 Agent 只改该改的地方",
+      "sources": [
+        "C01",
+        "C10"
+      ]
+    },
+    {
+      "number": 2,
+      "file": "02-edit-history.html",
+      "title": "这件小事，也有一段演进",
+      "sources": [
+        "C11",
+        "C12",
+        "C14"
+      ]
+    },
+    {
+      "number": 3,
+      "file": "03-model-progress.html",
+      "title": "模型的编辑能力在变强",
+      "sources": [
+        "C13",
+        "C15"
+      ]
+    },
+    {
+      "number": 4,
+      "file": "04-thin-harness.html",
+      "title": "Harness 变薄，薄在哪？",
+      "sources": [
+        "C06",
+        "C11",
+        "C15"
+      ]
+    },
+    {
+      "number": 5,
+      "file": "05-one-line.html",
+      "title": "这次，我们只想改一行",
+      "sources": [
+        "C01",
+        "C10"
+      ]
+    },
+    {
+      "number": 6,
+      "file": "06-tool-input.html",
+      "title": "先告诉工具，哪里要改",
+      "sources": [
+        "C02"
+      ]
+    },
+    {
+      "number": 7,
+      "file": "07-match-count.html",
+      "title": "找到一次，才允许修改",
+      "sources": [
+        "C03"
+      ]
+    },
+    {
+      "number": 8,
+      "file": "08-ambiguous.html",
+      "title": "只找「30」，会匹配两处",
+      "sources": [
+        "C03",
+        "C10"
+      ]
+    },
+    {
+      "number": 9,
+      "file": "09-unique-edit.html",
+      "title": "带上变量名，就找对了",
+      "sources": [
+        "C03",
+        "C10"
+      ]
+    },
+    {
+      "number": 10,
+      "file": "10-exact-match.html",
+      "title": "少一个空格，也会找不到",
+      "sources": [
+        "C02",
+        "C09",
+        "C10"
+      ]
+    },
+    {
+      "number": 11,
+      "file": "11-replace-all.html",
+      "title": "确实都要改，再开批量",
+      "sources": [
+        "C04",
+        "C10"
+      ]
+    },
+    {
+      "number": 12,
+      "file": "12-insert-delete.html",
+      "title": "新增一行，也能用替换表达",
+      "sources": [
+        "C05",
+        "C10"
+      ]
+    },
+    {
+      "number": 13,
+      "file": "13-implementation.html",
+      "title": "先判断，再生成新内容",
+      "sources": [
+        "C06"
+      ]
+    },
+    {
+      "number": 14,
+      "file": "14-dollar-trap.html",
+      "title": "新内容里的 $，要原样写入",
+      "sources": [
+        "C07"
+      ]
+    },
+    {
+      "number": 15,
+      "file": "15-boundaries.html",
+      "title": "匹配成功后，还要核对结果",
+      "sources": [
+        "C08",
+        "C09"
+      ]
+    },
+    {
+      "number": 16,
+      "file": "16-practice.html",
+      "title": "先看到拒绝，再改对一处",
+      "sources": [
+        "C03",
+        "C04",
+        "C10"
+      ]
+    },
+    {
+      "number": 17,
+      "file": "17-next.html",
+      "title": "能改文件之后，再验证执行结果",
+      "sources": [
+        "C01",
+        "C10"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "title": "写文件与工具接口",
+  "width": 1080,
+  "height": 1440,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "让 Agent 能写也能删",
+      "number": 1
+    },
+    {
+      "file": "02-cross-readonly.html",
+      "title": "跨过只读边界",
+      "number": 2
+    },
+    {
+      "file": "03-two-tools.html",
+      "title": "写入与删除两个工具",
+      "number": 3
+    },
+    {
+      "file": "04-interface-language.html",
+      "title": "接口就是行动语言",
+      "number": 4
+    },
+    {
+      "file": "05-granularity.html",
+      "title": "工具粒度怎样影响模型",
+      "number": 5
+    },
+    {
+      "file": "06-coevolution.html",
+      "title": "写入格式与成功率",
+      "number": 6
+    },
+    {
+      "file": "07-receipt.html",
+      "title": "回执是模型的观测窗口",
+      "number": 7
+    },
+    {
+      "file": "08-cta.html",
+      "title": "源码与跟练",
+      "number": 8
+    }
+  ]
+}

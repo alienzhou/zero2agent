@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从最小循环到产品级 Agent Harness：Zero2Agent 免费开源图解教程。">
+  <meta name="color-scheme" content="light dark">
+  <title>Zero2Agent · 从零实现 Coding Agent</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231e2320'/%3E%3Ctext x='20' y='28' text-anchor='middle' font-size='26' font-family='monospace' fill='%23f4f1ea'%3Ez%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./assets/book.css">
+  <script type="module" src="./assets/book.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="icon-button mobile-only" id="menu-button" aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar">☰</button>
+    <a class="brand" href="#/"><span class="brand-mark">z<span>2</span></span><span>Zero2Agent</span><span class="brand-caption">开源实战教程</span></a>
+    <div class="top-actions">
+      <button class="search-trigger" id="search-button" aria-label="搜索课程"><span aria-hidden="true">⌕</span><span>搜索课程</span><kbd>⌘ K</kbd></button>
+      <button class="icon-button" id="theme-button" aria-label="切换深色主题">◐</button>
+      <a class="github-link" href="https://github.com/alienzhou/zero2agent" target="_blank" rel="noopener noreferrer" aria-label="在 GitHub 查看源码">GitHub ↗</a>
+    </div>
+  </header>
+  <button id="scrim" class="scrim" aria-label="关闭目录" hidden></button>
+  <aside class="sidebar" id="sidebar" aria-label="课程目录">
+    <div class="drawer-heading mobile-only"><strong>课程目录</strong><button class="icon-button" data-close-drawer aria-label="关闭课程目录">×</button></div>
+    <nav id="course-nav"></nav>
+    <div class="sidebar-footer"><span class="status-dot"></span>免费 · 开源 · 持续更新<a href="https://github.com/alienzhou/zero2agent" target="_blank" rel="noopener noreferrer">查看项目源码 ↗</a></div>
+  </aside>
+  <div class="book-layout">
+    <main id="main" tabindex="-1"><p class="loading">正在打开课程……</p></main>
+    <aside class="outline" id="outline" aria-label="本章目录"></aside>
+  </div>
+  <button id="outline-button" class="outline-mobile mobile-only" aria-controls="outline" aria-expanded="false" hidden>本章目录 ↑</button>
+  <dialog id="search-dialog" aria-labelledby="search-heading">
+    <div class="search-box">
+      <div class="search-header"><h2 id="search-heading">搜索课程</h2><button class="icon-button" id="search-close" aria-label="关闭搜索">×</button></div>
+      <label class="sr-only" for="search-input">搜索章节、概念或代码</label>
+      <input id="search-input" type="search" placeholder="搜索章节、概念或代码，例如 PTY" autocomplete="off">
+      <p id="search-count" class="search-count" aria-live="polite"></p>
+      <div id="search-results"></div>
+      <div class="search-footer"><span>搜索全部章节与图解正文</span><kbd>Esc 关闭</kbd></div>
+    </div>
+  </dialog>
+  <noscript><p class="loading">请启用 JavaScript，以使用课程目录和阅读导航。</p></noscript>
+</body>
+</html>

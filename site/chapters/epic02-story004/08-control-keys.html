@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 08 · 按 Ctrl-C，为什么不一定回到 Agent？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="08" data-sources="C10 C18 C20">
+<header class="page-header" data-block><span>Zero2Agent · 按键试验</span><span class="page-number">08</span></header>
+<div class="heading" data-block><h1>按 Ctrl-C，<br>为什么不一定回到 Agent？</h1><p class="deck">先区分：操作当前程序，还是中止整场接管</p></div><div class="content">
+
+<div class="key-replay" data-block><p class="overline">本机 Node 转录 · 方括号是动作说明</p><pre>&gt; n *  [不回车，按 Ctrl-C]
+&gt;      [清空本行，仍在 Node]</pre></div>
+<div class="exit-routes" data-block><h2>同样输入 .exit，返回位置不同</h2><div><span class="overline">第 2 页 · 直接启动 Node</span><p>Node <b>─ .exit →</b> Agent 对话</p></div><div><span class="overline">第 12 页 · 先进入 bash</span><p>Node <b>─ .exit →</b> bash <b>─ exit →</b> 原命令行</p></div><p class="note" data-prose>less 的 q 也是退出当前程序，不会顺带退出外层 bash。</p></div>
+<div class="key-scenarios"><section class="host-key" data-block><kbd>Ctrl-]</kbd><div><h2>要中止整场接管，用这个键</h2><p data-prose>宿主拦截并清理受管进程；不是把程序切到后台继续跑。</p></div></section></div>
+<p class="note" data-prose data-block>Ctrl-C / D 交给程序与终端模式解释。Ctrl-D 在按行输入的空行上通常表示 EOF，不是通用退出键。</p>
+</div></article></body></html>

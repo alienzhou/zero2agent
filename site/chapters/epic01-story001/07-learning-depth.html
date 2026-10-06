@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px; display: flex; flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 60px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 64px; font-weight: 900; line-height: 1.3; color: #1A1A1A; margin-bottom: 24px; }
+
+    .bridge-text {
+      font-size: 24px;
+      color: #666666;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      padding-left: 20px;
+      border-left: 4px solid #D32F2F;
+    }
+
+    .tiers-container { display: flex; flex-direction: column; gap: 28px; flex: 1; }
+
+    .tier-card {
+      border: 2px solid #1A1A1A;
+      padding: 24px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    /* 模拟印刷偏移的阴影 */
+    .tier-card::after {
+      content: ''; position: absolute; top: 8px; left: 8px; right: -8px; bottom: -8px;
+      background: rgba(26, 26, 26, 0.05); z-index: -1; border: 1px solid rgba(26, 26, 26, 0.1);
+    }
+
+    .tier-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 1px dashed #CCCCCC; padding-bottom: 16px;
+    }
+
+    .tier-title { font-size: 36px; font-weight: bold; color: #1A1A1A; display: flex; align-items: center; gap: 12px;}
+    .tier-time {
+      background: #1A1A1A; color: #F4F1EA; font-size: 20px; padding: 4px 12px;
+      font-weight: bold; letter-spacing: 1px;
+    }
+
+    .tier-desc { font-size: 26px; color: #4A4A4A; line-height: 1.6; }
+
+    .highlight-bold {
+      font-weight: 800;
+      color: #1A1A1A;
+      box-shadow: inset 0 -12px 0 rgba(211, 47, 47, 0.2);
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 40px;
+      display: flex; gap: 24px; align-items: center;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 32px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 学习指南</span>
+      <span class="page-num serif">07</span>
+    </div>
+
+    <div class="title">丰俭由人：<br>选择你的学习深度</div>
+
+    <div class="tiers-container">
+
+      <div class="tier-card">
+        <div class="tier-header">
+          <div class="tier-title">每周花 20-30 分钟</div>
+          <div class="tier-time">看懂架构</div>
+        </div>
+        <div class="tier-desc"><span class="highlight-bold">看懂主流 Agent 的核心架构与设计</span></div>
+      </div>
+
+      <div class="tier-card">
+        <div class="tier-header">
+          <div class="tier-title">每周花 1-2 小时</div>
+          <div class="tier-time">独立实现</div>
+        </div>
+        <div class="tier-desc"><span class="highlight-bold">亲手从 0 到 1 写出一个可用的 Agent</span></div>
+      </div>
+
+      <div class="tier-card">
+        <div class="tier-header">
+          <div class="tier-title">投入更多时间</div>
+          <div class="tier-time">深度进阶</div>
+        </div>
+        <div class="tier-desc"><span class="highlight-bold">理解产品级 Agent 的技术细节与产品架构</span></div>
+      </div>
+
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">不要有压力，随时跟练，找到适合你的节奏。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

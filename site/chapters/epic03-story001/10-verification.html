@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 10 · 请求预算，不能只数聊天正文</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="10" data-sources="C13"><header class="page-header" data-block><span>Zero2Agent · 从多轮到长上下文</span><span class="page-number">10</span></header><div class="heading" data-block><h1>请求预算，不能只数聊天正文</h1><p class="deck">读几个大文件，可能比聊很多轮更快占满窗口</p></div><main class="content">
+<div class="request" data-block><div class="request-label">完整请求预算 · 结构示意，非等比例图</div><div class="message-line"><b>输入</b><span>system + 工具定义 + 消息</span></div><div class="message-line"><b>预留</b><span>输出空间 + 安全余量</span></div><div class="message-line newest"><b>窗口</b><span>两部分合计不能超过模型窗口</span></div></div>
+<div class="small-split" data-block><section><h2>conservative</h2><p data-prose>按 UTF-8 字节与结构开销保守估算，不是精准 token 数。</p></section><section><h2>provider</h2><p data-prose>需兼容计数接口；失败就拒绝放行，不切回猜测值。</p></section></div>
+<div class="rule-note" data-block><p data-prose>输入上限还要给主回答与摘要中较大的输出预算留空间。未知模型必须显式配置窗口。</p></div>
+</main></article></body></html>

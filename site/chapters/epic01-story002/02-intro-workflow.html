@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    /* 基础底色与全局设定 */
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    /* 页眉 */
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 50px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 52px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 40px; letter-spacing: -0.5px; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 48px; }
+
+    .compare-card {
+      background: #FFFFFF;
+      border: 1px solid #1A1A1A;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 12px 12px 0px rgba(0,0,0,0.05);
+    }
+
+    .compare-card-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .compare-badge {
+      background: #1A1A1A;
+      color: #F4F1EA;
+      font-size: 18px;
+      padding: 4px 12px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .compare-badge.bad { background: #666666; }
+    .compare-badge.good { background: #D32F2F; }
+
+    .compare-flow {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 22px;
+      color: #4A4A4A;
+      background: #F9F9F9;
+      padding: 20px;
+      border: 1px dashed #CCCCCC;
+    }
+
+    .flow-arrow { color: #D32F2F; margin: 0 12px; font-weight: bold; }
+
+    .compare-desc {
+      font-size: 24px;
+      line-height: 1.55;
+      color: #333333;
+      margin-top: 18px;
+    }
+
+    .highlight {
+      border-bottom: 3px solid #D32F2F;
+      font-weight: bold;
+    }
+
+    /* 底部粗线总结 */
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 导读</span>
+      <span class="page-num serif">02</span>
+    </div>
+
+    <div class="title serif">为什么只有 read_file<br>是不够的？</div>
+
+    <div class="content-area">
+
+      <div class="compare-card">
+        <div class="compare-card-title">
+          <span>旧工作流</span>
+          <span class="compare-badge bad">盲读与猜盲盒</span>
+        </div>
+        <div class="compare-flow">
+          猜文件路径 <span class="flow-arrow">→</span> read_file <span class="flow-arrow">→</span> 没找到 <span class="flow-arrow">→</span> 继续猜下一个
+        </div>
+        <div class="compare-desc">
+          在第一课中，我们给了 Agent 查看文件的能力。但这导致了极其低效的行为：当遇到大项目时，它要么把整个文件从头读到尾吞噬 Token，要么靠瞎猜路径疯狂试错。
+        </div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-card-title">
+          <span>新工作流</span>
+          <span class="compare-badge good">搜索驱动</span>
+        </div>
+        <div class="compare-flow">
+          grep_search 模糊定位 <span class="flow-arrow">→</span> 选择候选文件 <span class="flow-arrow">→</span> read_file 精读
+        </div>
+        <div class="compare-desc">
+          真实的工程师从不会通读整个项目，而是<span class="highlight">先搜索关键词，再打开相关文件精读</span>。这一课的核心，就是让 Agent 获得这种“先定位、再精读”的基础工作流升级。
+        </div>
+      </div>
+
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">为 Agent 重塑一条更像人类的逻辑链路。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

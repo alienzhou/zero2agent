@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 50px 80px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 36px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 50px; font-weight: 900; line-height: 1.3; color: #1A1A1A; margin-bottom: 28px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 56px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 23px;
+      color: #333333;
+      line-height: 1.66;
+      margin-bottom: 22px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 80px;
+      line-height: 0.8;
+      padding-top: 8px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 25px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 26px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 6px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .pull-quote {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 14px 0;
+      margin: 26px 0;
+      border-top: 2px solid #D32F2F;
+      border-bottom: 2px solid #D32F2F;
+      text-align: center;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 36px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 24px;
+      display: flex; gap: 20px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 42px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 26px; font-weight: bold; color: #1A1A1A; letter-spacing: 0.5px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent · 开放追问</span>
+      <span class="page-num serif">16</span>
+    </div>
+
+    <div class="title serif">关于 Grep：<br>留给实际产品的三个开放问题</div>
+
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">在</span>这一课的拆解中，我们看到了 Grep 搜索的基本设计方案，以及多种突破路线。<br>但篇幅有限，有几个也很重要的问题无法展开了，它们都需要在工程上权衡，这里也留给大家讨论。
+      </div>
+
+      <div class="sub-heading">Q1：动态上下文截断——到底给 Agent 多少才恰好？</div>
+      <div class="paragraph">
+        搜索返回结果有体积，会消耗 Agent 的上下文。结果极少时，是否应自动附带更厚的上下文？命中极多时，该返回更多候选路径，还是只给几条但附带更长代码段？<span class="highlight">不同样的上下文容量，是否该有不同策略？</span>
+      </div>
+
+      <div class="pull-quote serif">
+        RAG 真的死了吗？
+      </div>
+
+      <div class="sub-heading" style="margin-top: 0;">Q2：走出封闭域后，搜索的规则会彻底改写</div>
+      <div class="paragraph">
+        代码仓库是结构收敛的"封闭域"——大多说超不过几万文件。但 Agent 走出 IDE 去查官方文档、搜 GitHub Issues、找设计参考时，就坠入无序的"广域"。封闭域杀手锏——正则、本地索引、AST——在广域中可能全部失效。RAG 等其他方案，很可能不得不重夺主导权。
+      </div>
+
+      <div class="sub-heading">Q3：索引加速是用内存换时间——有平衡点么？</div>
+      <div class="paragraph">
+        Cursor 的 Sparse N-gram 索引、ast-grep 的语法树解析，都在<span class="highlight">用本地资源换取检索速度</span>。在企业级的开发场景里，当多个编辑器窗口、多个项目同时跑着，这块是否是个需要考虑的问题。
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">搜索不仅决定效率，更决定效果。<br>它控制着 Agent 能看到什么，看到的质量决定了推理的上限。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

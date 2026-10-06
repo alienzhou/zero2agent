@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_page-shared.css">
+  <style>
+    .current-badge { display: inline-block; background: #D32F2F; color: #fff; font-size: 20px; padding: 3px 10px; border-radius: 4px; margin-left: 8px; vertical-align: middle; font-weight: bold; }
+    .caveat { margin-top: 10px; background: #1A1A1A; color: #CCCCCC; padding: 14px 18px; font-size: 26px; line-height: 1.4; border-left: 4px solid #D32F2F; }
+    .title { font-size: 48px; }
+    .subtitle { font-size: 30px; margin-bottom: 22px; }
+    .caveat strong { color: #F4F1EA; }
+    /* 本页含 4 卡 + 注意框，最密，收紧步距与卡片内边距 */
+    .tl-step { margin-bottom: 8px; }
+    .tl-card { padding: 13px 22px; }
+    .tl-product { margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 时间线</span>
+      <span class="page-num serif">04</span>
+    </div>
+    <div class="title serif">2025–2026：一个值得留意的趋势</div>
+    <div class="subtitle">模型变强后，部分教学性指令开始收缩</div>
+    <div class="content timeline">
+      <div class="tl-step">
+        <div class="tl-year mono">2025</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">ERA 3 · TOOLS</div>
+          <div class="tl-event">工具说明离开 System</div>
+          <div class="tl-desc">工具描述彻底外移，System 只留策略</div>
+          <div class="tl-product mono">→ OpenAI Codex CLI</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year mono">2025-26</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">MINIMAL</div>
+          <div class="tl-event">极简 base prompt</div>
+          <div class="tl-desc">Pi ~150 词 base，信任预训练能力</div>
+          <div class="tl-product mono">→ Pi agent</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year mono">2026</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">MODEL-SPEC</div>
+          <div class="tl-event">同框架，不同模型不同 prompt</div>
+          <div class="tl-desc">gpt-5-codex 67 行 vs gpt-5.1 330 行</div>
+          <div class="tl-product mono">→ 针对模型单独重写</div>
+        </div>
+      </div>
+      <div class="tl-step current">
+        <div class="tl-year mono">NOW</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">TREND</div>
+          <div class="tl-event">Prompt 侧面印证<span class="current-badge">We Are Here</span></div>
+          <div class="tl-desc">Message List 分工更清晰，静态/动态开始分离</div>
+          <div class="caveat"><strong>注意：</strong>Harness 还管工具编排、循环、上下文。Prompt 只是其中一个侧面。</div>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">下面用结构图展开：信息该放在哪个通道</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

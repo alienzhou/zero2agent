@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 72px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 18px; margin-bottom: 32px; color: #888888; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 54px; font-weight: 900; line-height: 1.2; color: #F4F1EA; margin-bottom: 14px; flex-shrink: 0; }
+    .subtitle { font-size: 32px; color: #AAAAAA; margin-bottom: 32px; line-height: 1.45; flex-shrink: 0; }
+    .zones { flex: 1; display: flex; flex-direction: column; gap: 24px; justify-content: flex-start; }
+    .zone { border: 2px solid rgba(255,255,255,0.25); padding: 32px 34px; position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .zone-static { background: rgba(211,47,47,0.08); border-color: rgba(211,47,47,0.4); }
+    .zone-dynamic { background: rgba(255,255,255,0.04); }
+    .zone-tag { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-bottom: 14px; }
+    .zone-static .zone-tag { color: #D32F2F; }
+    .zone-dynamic .zone-tag { color: #888888; }
+    .zone-title { font-size: 40px; font-weight: 800; color: #F4F1EA; margin-bottom: 20px; }
+    .zone-list { margin: 0; padding: 0; list-style: none; }
+    .zone-list li { font-size: 34px; color: #CCCCCC; line-height: 1.5; margin-bottom: 14px; padding-left: 20px; position: relative; }
+    .zone-list li::before { content: '·'; position: absolute; left: 0; color: #D32F2F; font-size: 40px; line-height: 1; top: 2px; }
+    .divider { text-align: center; font-size: 28px; color: #555555; padding: 8px 0; flex-shrink: 0; }
+    .summary { margin-top: auto; border-top: 4px solid #333333; padding-top: 28px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 36px; font-weight: bold; color: #F4F1EA; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • Cache</span>
+      <span class="page-num serif">11</span>
+    </div>
+    <div class="title serif">什么该缓存、什么每轮刷新</div>
+    <div class="subtitle">静态前缀命中 cache，动态后缀每轮重建</div>
+    <div class="zones">
+      <div class="zone zone-static">
+        <div class="zone-tag mono">STATIC ZONE · CACHEABLE</div>
+        <div class="zone-title">静态区（前缀）</div>
+        <ul class="zone-list">
+          <li>System Prompt 五段式</li>
+          <li>Tool schema 定义</li>
+          <li>跨轮不变的指令与策略</li>
+        </ul>
+      </div>
+      <div class="divider mono">— — — 缓存分界线 — — —</div>
+      <div class="zone zone-dynamic">
+        <div class="zone-tag mono">DYNAMIC ZONE · PER-TURN</div>
+        <div class="zone-title">动态区（后缀）</div>
+        <ul class="zone-list">
+          <li>User runtime_context + user_task</li>
+          <li>assistant / tool / tool_result 消息</li>
+          <li>每轮新增的对话历史</li>
+        </ul>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">行业做法：OpenCode 把 system 拆成 system[] 数组，静态段独立缓存</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

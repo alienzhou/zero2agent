@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 03 · 把第二轮请求摊开看</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="03" data-sources="C02 C03"><header class="page-header" data-block><span>Zero2Agent · 核心原理</span><span class="page-number">03</span></header><div class="heading" data-block><h1>把第二轮请求摊开看</h1><p class="deck">决定能否接上的，是这次发送了哪些消息</p></div><main class="content"><div class="request old" data-block><div class="request-label">旧实现 · 每次重新建数组</div><div class="message-line"><b>user</b><span>按刚才的建议改。</span></div></div>
+<div class="down-label" data-block>会话保存历史后 ↓</div>
+<div class="request" data-block><div class="request-label">第二轮请求 · 尚未压缩的纯文本示意</div><div class="message-line"><b>user</b><span>先分析测试结构。</span></div><div class="message-line"><b>assistant</b><span>上一轮完整回答。</span></div><div class="message-line newest"><b>user</b><span>按刚才的建议改。</span></div></div>
+<p data-prose data-block>历史和新问题一起发送。模型才能把「刚才」对应到先前的内容。</p>
+<p class="note" data-prose data-block>这里省略了工具链；真实任务还要带工具调用与结果。System Prompt 仍是请求的独立字段。</p></main></article></body></html>

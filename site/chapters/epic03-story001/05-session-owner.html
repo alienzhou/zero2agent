@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 05 · 把 Session 留在 Agent 里</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="05" data-sources="C03 C04"><header class="page-header" data-block><span>Zero2Agent · 代码从哪里改</span><span class="page-number">05</span></header><div class="heading" data-block><h1>把 Session 留在 Agent 里</h1><p class="deck">复用同一个实例，让历史跨过函数返回</p></div><main class="content"><div class="code-panel" data-block><p class="console-label">agent.ts · 节选，省略模型与工具配置</p><pre>class Agent {
+  private session = new Session()
+  async run(message: string) {
+    return runLoop(message, {
+      session: this.session
+    })
+  }
+}</pre></div>
+<div class="code-demo" data-block><pre>const agent = new Agent()
+await agent.run('先分析测试')
+await agent.run('按刚才的建议改')</pre></div>
+<div class="small-split" data-block><section><h2>同一实例</h2><p data-prose>两次 run，共用一段历史。</p></section><section><h2>新建实例</h2><p data-prose>独立会话，不会串入旧消息。</p></section></div>
+<p class="note" data-prose data-block>静态 Agent.run() 每次都是一次性调用。直接用 runLoop() 时，需显式传入同一个 Session 才会延续。</p></main></article></body></html>

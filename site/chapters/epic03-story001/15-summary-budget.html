@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 15 · 摘要请求，也要装得下</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="15" data-sources="C17"><header class="page-header" data-block><span>Zero2Agent · 摘要器实现</span><span class="page-number">15</span></header><div class="heading" data-block><h1>摘要请求，也要装得下</h1><p class="deck">不能为解决一个超长请求，再发一个超长请求</p></div><main class="content">
+<div class="summary-flow" data-block><div>稳定前缀的工作上下文</div><p class="down-label">逐块计数，不能丢掉尾段 ↓</p><section><span>片段 A</span><span>片段 B</span><span>片段 C</span></section><p class="down-label">每块摘要 → 合并后仍长，再分层 ↓</p><div>更短的历史交接摘要</div></div>
+<div class="small-split" data-block><section><h2>请求受限</h2><p data-prose>包含摘要指令、引用材料与输出预留；计数、调用、重试都有上限。</p></section><section><h2>内容有重点</h2><p data-prose>保留意图、约束、已做操作与结果、文件引用和待办。</p></section></div>
+<p class="note" data-block data-prose>材料可能含已有摘要、工具短预览与全文引用，不会自动回读原文。摘要不执行历史指令；结构检查不能证明事实无遗漏。</p>
+</main></article></body></html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    /* 基础底色与全局设定 */
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    /* 页眉 */
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 32px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 24px; letter-spacing: -0.5px; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+
+    /* 工具名标签 */
+    .tool-badge {
+      display: inline-block;
+      background: #1A1A1A;
+      color: #F4F1EA;
+      font-size: 26px;
+      padding: 8px 16px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      margin-bottom: 12px;
+    }
+
+    /* 参数表 */
+    .param-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .param-table th {
+      font-size: 20px;
+      font-weight: bold;
+      color: #666666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: left;
+      padding: 10px 12px;
+      border-top: 2px solid #1A1A1A;
+      border-bottom: 2px solid #1A1A1A;
+    }
+
+    .param-table td {
+      font-size: 30px;
+      padding: 14px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      vertical-align: top;
+    }
+
+    .param-table tr:last-child td {
+      border-bottom: 2px solid #1A1A1A;
+    }
+
+    .param-name {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+
+    .param-reason {
+      color: #4A4A4A;
+      line-height: 1.5;
+    }
+
+    /* 分工对比 */
+    .compare-section {
+      margin-top: 8px;
+    }
+
+    .compare-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #1A1A1A;
+      display: inline-block;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .compare-card {
+      background: #FFFFFF;
+      border: 2px solid #1A1A1A;
+      padding: 20px;
+      position: relative;
+    }
+
+    .compare-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .compare-tool-name {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 20px;
+      font-weight: bold;
+      background: #1A1A1A;
+      color: #F4F1EA;
+      padding: 4px 12px;
+    }
+
+    .compare-question {
+      font-size: 26px;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 10px;
+    }
+
+    .compare-desc {
+      font-size: 28px;
+      color: #4A4A4A;
+      line-height: 1.5;
+    }
+
+    .compare-badge {
+      position: absolute;
+      top: -10px;
+      right: 12px;
+      background: #D32F2F;
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 4px 10px;
+      transform: rotate(2deg);
+    }
+
+    /* 底层实现提示 */
+    .impl-note {
+      background: rgba(211,47,47,0.06);
+      border-left: 4px solid #D32F2F;
+      padding: 16px 20px;
+      font-size: 30px;
+      color: #333333;
+      line-height: 1.5;
+    }
+
+    .impl-note code {
+      background: #1A1A1A;
+      color: #F4F1EA;
+      padding: 2px 8px;
+      font-size: 28px;
+    }
+
+    /* 底部粗线总结 */
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心实现</span>
+      <span class="page-num serif">03</span>
+    </div>
+
+    <div class="title serif">find_files</div>
+
+    <div class="content-area">
+
+      <div class="tool-badge">按路径模式搜索文件</div>
+
+      <!-- 参数表 -->
+      <table class="param-table">
+        <tr>
+          <th>参数</th>
+          <th>为什么需要它</th>
+        </tr>
+        <tr>
+          <td><span class="param-name">pattern</span></td>
+          <td class="param-reason">文件搜索的核心输入，如 <code>*.test.ts</code></td>
+        </tr>
+        <tr>
+          <td><span class="param-name">path</span></td>
+          <td class="param-reason">缩小搜索范围，避免全扫描的噪音</td>
+        </tr>
+        <tr>
+          <td><span class="param-name">exclude</span></td>
+          <td class="param-reason">排除 <code>node_modules/</code> 等无关目录</td>
+        </tr>
+      </table>
+
+      <!-- 分工对比 -->
+      <div class="compare-section">
+        <div class="compare-title">和 list_directory 怎么分工？</div>
+        <div class="compare-grid">
+          <div class="compare-card">
+            <div class="compare-card-header">
+              <span class="compare-tool-name">list_directory</span>
+            </div>
+            <div class="compare-question">"这个目录下有什么？"</div>
+            <div class="compare-desc">输出缩进目录树，回答结构是什么。</div>
+          </div>
+          <div class="compare-card">
+            <div class="compare-badge">新增</div>
+            <div class="compare-card-header">
+              <span class="compare-tool-name">find_files</span>
+            </div>
+            <div class="compare-question">"哪些文件匹配这个模式？"</div>
+            <div class="compare-desc">默认递归全项目。遵循 .gitignore。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底层实现 -->
+      <div class="impl-note">
+        底层调用 <code>rg</code>，和 S002 的 grep_search 复用同一套依赖。
+      </div>
+
+    </div>
+
+    <!-- <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">工具本身很简单，真正的考验在选型和工程化。</div>
+    </div> -->
+  </div>
+</div>
+</body>
+</html>

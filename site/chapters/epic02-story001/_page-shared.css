@@ -1,0 +1,22 @@
+/* 各页共用组件样式 v2 */
+.tl-step { display: flex; align-items: flex-start; margin-bottom: 14px; position: relative; flex-shrink: 0; }
+.tl-year { width: 120px; padding-right: 28px; box-sizing: border-box; text-align: right; font-size: 20px; font-weight: bold; color: #D32F2F; letter-spacing: 1px; padding-top: 14px; white-space: nowrap; position: relative; z-index: 3; background: #F4F1EA; }
+.tl-node { position: absolute; left: 128px; top: 18px; transform: translateX(-50%); width: 12px; height: 12px; background: #F4F1EA; border: 2px solid #1A1A1A; border-radius: 50%; z-index: 2; }
+.tl-step.current .tl-node { background: #D32F2F; border-color: #D32F2F; }
+.tl-card { flex: 1; margin-left: 24px; border: 2px solid #1A1A1A; background: #FDFCF9; padding: 16px 22px; position: relative; }
+.tl-card::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #D32F2F; border-radius: 50%; }
+.tl-label { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; margin-bottom: 6px; }
+.tl-event { font-size: 34px; font-weight: 800; color: #1A1A1A; margin-bottom: 8px; line-height: 1.22; }
+.tl-desc { font-size: 30px; color: #4A4A4A; line-height: 1.45; }
+.tl-product { font-size: 24px; color: #888888; margin-top: 8px; }
+.timeline { flex: 1; display: flex; flex-direction: column; position: relative; justify-content: flex-start; }
+.timeline::before { content: ''; position: absolute; left: 128px; top: 8px; bottom: 8px; border-left: 2px dashed #CCCCCC; z-index: 0; }
+
+.stack { flex: 1; display: flex; flex-direction: column; gap: 0; justify-content: flex-start; }
+.layer { border: 2px solid #1A1A1A; padding: 22px 24px 22px 28px; position: relative; background: #FDFCF9; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.layer + .layer { border-top: none; }
+.layer::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #D32F2F; border-radius: 50%; }
+.layer-label { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
+.layer-title { font-size: 36px; font-weight: 800; color: #1A1A1A; margin-bottom: 10px; }
+.layer-desc { font-size: 30px; color: #4A4A4A; line-height: 1.45; }
+.connector { text-align: center; font-size: 28px; color: #D32F2F; padding: 6px 0; line-height: 1; flex-shrink: 0; }

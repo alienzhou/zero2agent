@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 17 · 跟练：追问、压缩、再清空</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="17" data-sources="C11 C15 C19"><header class="page-header" data-block><span>Zero2Agent · 动手跟练</span><span class="page-number">17</span></header><div class="heading" data-block><h1>跟练：追问、压缩、再清空</h1><p class="deck">含压缩的候选确认后，在项目根目录启动</p></div><main class="content">
+<div class="practice-launch" data-block><p class="mini-label">Node.js 22+ · pnpm 9+ · 先配置模型与 API</p><pre>pnpm install
+pnpm build
+node packages/tui/dist/cli.js</pre><p data-prose>未知模型要配 CONTEXT_WINDOW；可设 MAX_INPUT_TOKENS、MAX_OUTPUT_TOKENS 与 CONTEXT_COUNTING。</p></div>
+<div class="practice-steps" data-block><section><span>1</span><div><h2>先形成可追问的历史</h2><p data-prose>说「代号 cedar-17，先分析测试结构，不改文件」，等完成后追问建议。</p></div></section><section><span>2</span><div><h2>输入 /compact，再追问代号</h2><p data-prose>观察压缩状态；短历史未必能缩小，不要编造成功结果。</p></div></section><section><span>3</span><div><h2>/new 后再问是否知道代号</h2><p data-prose>旧上下文不应再发送。逐条等「你:」再输入，最后 exit。</p></div></section></div>
+<p class="version-note" data-block data-prose>自然语言与摘要会调用 API。压缩实现与自动验证已合入 main 并打 Tag；课程尚未对外发布。</p>
+</main></article></body></html>

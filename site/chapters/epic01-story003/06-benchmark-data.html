@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+    .doc {
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress {
+      background: #D32F2F; color: #FFFFFF; font-size: 16px; padding: 4px 10px;
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; gap: 28px; }
+
+    /* 候选来源说明 */
+    .source-note {
+      font-size: 24px;
+      color: #4A4A4A;
+      line-height: 1.6;
+      padding: 16px 20px;
+      background: rgba(211,47,47,0.05);
+      border-left: 4px solid #D32F2F;
+    }
+
+    /* Benchmark 数据表 */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      font-size: 20px;
+      font-weight: bold;
+      color: #666666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: left;
+      padding: 14px 12px;
+      border-top: 3px solid #1A1A1A;
+      border-bottom: 3px solid #1A1A1A;
+    }
+
+    .data-table td {
+      font-size: 26px;
+      padding: 16px 12px;
+      border-bottom: 2px dashed #CCCCCC;
+      vertical-align: middle;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: 3px solid #1A1A1A;
+    }
+
+    .tool-name {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+
+    .data-value {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: bold;
+    }
+
+    .fast { color: #D32F2F; }
+    .slow { color: #888888; }
+
+    .data-source {
+      font-size: 20px;
+      color: #666666;
+    }
+
+    /* 数据指标卡 */
+    .metric-row {
+      display: flex;
+      gap: 24px;
+    }
+
+    .metric-card {
+      flex: 1;
+      background: #FFFFFF;
+      border: 2px solid #1A1A1A;
+      padding: 20px;
+    }
+
+    .metric-value {
+      font-size: 56px;
+      font-weight: 900;
+      color: #D32F2F;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 22px;
+      color: #4A4A4A;
+      line-height: 1.4;
+    }
+
+    /* 结论框 */
+    .conclusion-box {
+      background: #1A1A1A;
+      color: #F4F1EA;
+      padding: 20px 24px;
+      font-size: 26px;
+      line-height: 1.5;
+    }
+    .conclusion-box code {
+      background: #D32F2F;
+      padding: 2px 8px;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">BENCHMARK 2/3</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">06</span>
+    </div>
+
+    <div class="main-title serif">Benchmark 与技术选型</div>
+    <div class="sub-title">四个候选方案的实测数据</div>
+
+    <div class="content-area">
+
+      <div class="source-note">
+        候选方案来自竞品调研：OpenCode/Codex 用 rg，Pi 用 fd，Gemini CLI 用 npm glob，Node 22 新增 fs.glob。主流 Agent 已替我们初筛了一轮。
+      </div>
+
+      <!-- Benchmark 数据表 -->
+      <table class="data-table">
+        <tr>
+          <th>工具</th>
+          <th>全量列文件</th>
+          <th>*.ts 过滤</th>
+          <th>多扩展名</th>
+          <th>来源</th>
+        </tr>
+        <tr>
+          <td><span class="tool-name">rg --files</span></td>
+          <td><span class="data-value fast">12.2ms</span></td>
+          <td><span class="data-value fast">11.4ms</span></td>
+          <td><span class="data-value fast">11.1ms</span></td>
+          <td class="data-source">OpenCode/Codex</td>
+        </tr>
+        <tr>
+          <td><span class="tool-name">fd</span></td>
+          <td><span class="data-value fast">11.8ms</span></td>
+          <td><span class="data-value fast">11.2ms</span></td>
+          <td><span class="data-value fast">12.0ms</span></td>
+          <td class="data-source">Pi</td>
+        </tr>
+        <tr>
+          <td><span class="tool-name">npm glob</span></td>
+          <td><span class="data-value slow">60.4ms</span></td>
+          <td><span class="data-value slow">50.4ms</span></td>
+          <td><span class="data-value slow">61.9ms</span></td>
+          <td class="data-source">Gemini CLI</td>
+        </tr>
+        <tr>
+          <td><span class="tool-name">fs.glob</span></td>
+          <td><span class="data-value slow">34.3ms</span></td>
+          <td><span class="data-value slow">30.0ms</span></td>
+          <td><span class="data-value slow">35.9ms</span></td>
+          <td class="data-source">Node 22</td>
+        </tr>
+      </table>
+
+      <!-- 指标卡 -->
+      <div class="metric-row">
+        <div class="metric-card">
+          <div class="metric-value">~5×</div>
+          <div class="metric-label">rg/fd 比 npm glob 快</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">~3×</div>
+          <div class="metric-label">rg/fd 比 fs.glob 快</div>
+        </div>
+      </div>
+      备注：受限测试环境，数据可能有误差
+
+      <!-- 结论 -->
+      <div class="conclusion-box">
+        rg 和 fd 性能接近，但 <code>rg</code> 已在 S002 接入，继续用它零增量成本。综合考虑 rg 目前是我们稳妥的选择。
+      </div>
+
+    </div>
+
+    <!-- <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">性能和场景适应度接近时，优先选集成成本低的。</div>
+    </div> -->
+  </div>
+</div>
+</body>
+</html>

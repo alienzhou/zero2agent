@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 980px; height: 1340px; padding: 60px; display: flex; flex-direction: column; box-sizing: border-box; position: relative; border: 3px solid #1A1A1A; background: #F4F1EA; }
+    .doc::after { content: ''; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 1px solid #1A1A1A; pointer-events: none; }
+    .issue-info { display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 3px solid #1A1A1A; padding-bottom: 20px; margin-bottom: 56px; color: #1A1A1A; z-index: 1; }
+    .masthead { text-align: left; margin-bottom: 44px; z-index: 1; }
+    .main-title { font-weight: 900; line-height: 1; color: #1A1A1A; margin-bottom: 28px; }
+    .title-line1 { font-size: 52px; letter-spacing: 3px; margin-bottom: 10px; }
+    .title-line2 { font-size: 82px; letter-spacing: -1px; color: #D32F2F; margin-left: -4px; line-height: 1.1; }
+    .sub-title { font-size: 28px; font-weight: bold; color: #1A1A1A; background: #EBE8E0; padding: 14px 28px; display: inline-block; border-radius: 12px; border: 3px solid #1A1A1A; box-shadow: 8px 8px 0 #1A1A1A; }
+    .hero-area { flex: 1; border: 3px solid #1A1A1A; margin-bottom: 44px; z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: repeating-linear-gradient(45deg, #EBE8E0, #EBE8E0 2px, #F4F1EA 2px, #F4F1EA 12px); }
+    .hero-badge { background: #D32F2F; color: #FFFFFF; font-size: 34px; font-weight: bold; padding: 22px 36px; border-radius: 20px; border: 3px solid #1A1A1A; box-shadow: 12px 12px 0 #1A1A1A; transform: rotate(-5deg); text-align: center; line-height: 1.45; letter-spacing: 2px; z-index: 2; }
+    .features { display: flex; justify-content: space-between; padding: 10px 0; z-index: 1; }
+    .feature-item { font-size: 24px; font-weight: bold; color: #1A1A1A; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+    .feature-item::before { content: ''; width: 14px; height: 14px; background: #D32F2F; border-radius: 50%; border: 3px solid #1A1A1A; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="issue-info">
+      <span>Zero2Agent</span>
+      <span style="color: #D32F2F;">Epic. 02 / Story 001</span>
+    </div>
+    <div class="masthead">
+      <div class="main-title serif">
+        <div class="title-line1">如何实现</div>
+        <div class="title-line2">AGENT<br>HARNESS (05)</div>
+      </div>
+      <div class="sub-title serif">开源的免费实战课</div>
+    </div>
+    <div class="hero-area">
+      <div class="hero-badge serif">第五节：write_file + delete<br>让 Agent 第一次动手改变世界</div>
+    </div>
+    <div class="features">
+      <div class="feature-item">工程实战</div>
+      <div class="feature-item">真实经验</div>
+      <div class="feature-item">开源项目</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

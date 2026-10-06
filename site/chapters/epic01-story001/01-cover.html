@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    /* 封面：重度期刊风（只用于封面，视觉冲击力强） */
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+
+    .doc {
+      width: 980px; height: 1340px; padding: 60px; display: flex; flex-direction: column;
+      box-sizing: border-box; position: relative;
+      border: 3px solid #1A1A1A;
+      background: #F4F1EA;
+    }
+    .doc::after {
+      content: ''; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 1px solid #1A1A1A; pointer-events: none;
+    }
+
+    .issue-info {
+      display: flex; justify-content: space-between; font-size: 22px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 3px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 60px; color: #1A1A1A; z-index: 1;
+    }
+
+    .masthead { text-align: left; margin-bottom: 50px; z-index: 1; }
+    .main-title { font-weight: 900; line-height: 1; color: #1A1A1A; margin-bottom: 30px; }
+    .title-line1 { font-size: 80px; letter-spacing: 4px; margin-bottom: 10px; }
+    .title-line2 { font-size: 190px; letter-spacing: -2px; color: #D32F2F; margin-left: -6px; }
+    .sub-title { font-size: 38px; font-weight: bold; color: #1A1A1A; background: #EBE8E0; padding: 18px 36px; display: inline-block; border-radius: 12px; border: 3px solid #1A1A1A; box-shadow: 8px 8px 0 #1A1A1A; }
+
+    .hero-area {
+      flex: 1; border: 3px solid #1A1A1A; margin-bottom: 50px; z-index: 1;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      background: repeating-linear-gradient(45deg, #EBE8E0, #EBE8E0 2px, #F4F1EA 2px, #F4F1EA 12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      background: #D32F2F; color: #FFFFFF; font-size: 46px; font-weight: bold;
+      padding: 30px 50px; border-radius: 20px; border: 3px solid #1A1A1A;
+      box-shadow: 12px 12px 0 #1A1A1A; transform: rotate(-5deg);
+      text-align: center; line-height: 1.4; letter-spacing: 2px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .features { display: flex; justify-content: space-between; padding-top: 10px; padding-bottom: 10px; z-index: 1; }
+    .feature-item { font-size: 30px; font-weight: bold; color: #1A1A1A; display: flex; align-items: center; gap: 14px; }
+    .feature-item::before { content: ''; display: block; width: 14px; height: 14px; background: #D32F2F; border-radius: 50%; border: 2px solid #1A1A1A; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="issue-info">
+      <span>Zero2Agent</span>
+      <span style="color: #D32F2F;">Epic. 01 / Story 001</span>
+    </div>
+
+    <div class="masthead">
+      <div class="main-title serif">
+        <div class="title-line1">和你一起做</div>
+        <div class="title-line2">AGENT</div>
+      </div>
+      <div class="sub-title serif">开源的免费实战课</div>
+    </div>
+
+    <div class="hero-area">
+      <div class="hero-badge serif">从零开始跟着学<br>做产品级 Agent！</div>
+    </div>
+
+    <div class="features">
+      <div class="feature-item">工程实战</div>
+      <div class="feature-item">真实经验</div>
+      <div class="feature-item">开源项目</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

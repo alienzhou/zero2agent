@@ -1,0 +1,144 @@
+{
+  "title": "Zero2Agent · E03-S001 多轮会话与上下文压缩",
+  "date": "2026-10-01",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "candidate": "ea498a3",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "v3-multi-turn-compaction",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "多轮会话与上下文压缩",
+      "number": 1,
+      "sources": [
+        "C01",
+        "C02"
+      ]
+    },
+    {
+      "file": "02-follow-up.html",
+      "title": "一句「接着做」，它该知道什么？",
+      "number": 2,
+      "sources": [
+        "C01",
+        "C02"
+      ]
+    },
+    {
+      "file": "03-request-history.html",
+      "title": "把第二轮请求摊开看",
+      "number": 3,
+      "sources": [
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "file": "04-session-turn-loop.html",
+      "title": "会话、轮次、循环，各管一层",
+      "number": 4,
+      "sources": [
+        "C03"
+      ]
+    },
+    {
+      "file": "05-session-owner.html",
+      "title": "把 Session 留在 Agent 里",
+      "number": 5,
+      "sources": [
+        "C03",
+        "C04"
+      ]
+    },
+    {
+      "file": "06-tool-pairs.html",
+      "title": "历史里，还要留住做事的证据",
+      "number": 6,
+      "sources": [
+        "C05"
+      ]
+    },
+    {
+      "file": "07-failed-after-write.html",
+      "title": "文件已经改了，回复却断了",
+      "number": 7,
+      "sources": [
+        "C06"
+      ]
+    },
+    {
+      "file": "08-partial-stream.html",
+      "title": "半截输出，先别当作完整结果",
+      "number": 8,
+      "sources": [
+        "C07"
+      ]
+    },
+    {
+      "file": "09-new-session.html",
+      "title": "新建对话，究竟清空了什么？",
+      "number": 9,
+      "sources": [
+        "C08",
+        "C09"
+      ]
+    },
+    {
+      "file": "10-verification.html",
+      "title": "请求预算，不能只数聊天正文",
+      "number": 10,
+      "sources": ["C13"]
+    },
+    {
+      "file": "11-practice.html",
+      "title": "三个水位，逐级减少上下文",
+      "number": 11,
+      "sources": ["C13", "C14"]
+    },
+    {
+      "file": "12-next.html",
+      "title": "后台压缩，怎样不覆盖新消息？",
+      "number": 12,
+      "sources": ["C14"]
+    },
+    {
+      "file": "13-manual-compact.html",
+      "title": "想现在整理，就输入 /compact",
+      "number": 13,
+      "sources": ["C15"]
+    },
+    {
+      "file": "14-failure-boundaries.html",
+      "title": "压不下去，就别硬发",
+      "number": 14,
+      "sources": ["C16"]
+    },
+    {
+      "file": "15-summary-budget.html",
+      "title": "摘要请求，也要装得下",
+      "number": 15,
+      "sources": ["C17"]
+    },
+    {
+      "file": "16-verification.html",
+      "title": "验证请求，不只问「记得吗」",
+      "number": 16,
+      "sources": ["C10", "C18"]
+    },
+    {
+      "file": "17-practice.html",
+      "title": "跟练：追问、压缩、再清空",
+      "number": 17,
+      "sources": ["C11", "C15", "C19"]
+    },
+    {
+      "file": "18-next.html",
+      "title": "留住记录，管住每次请求",
+      "number": 18,
+      "sources": ["C01", "C12", "C19"]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 04 · 都有 stdin，为什么还需要 PTY？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="04" data-sources="C04 C05 C20">
+<header class="page-header" data-block><span>Zero2Agent · 做个小实验</span><span class="page-number">04</span></header>
+<div class="heading" data-block><h1>都有 stdin，<br>为什么还需要 PTY？</h1><p class="deck">用同一个检测，比较两种输入连接</p></div><div class="content">
+
+<div class="terminal tty-commands" data-block><div class="console-label">① 在普通 shell 中运行：给 Node 接一条管道</div><pre>printf '' | node -p \
+  'Boolean(process.stdin.isTTY)'</pre><div class="console-label second-label">② 重新进入第 2 页的 Node，再输入这一行</div><pre>Boolean(process.stdin.isTTY)</pre></div>
+<div class="tty-comparison compact"><section data-block><p class="overline">① 输出 · 管道连接</p><p class="tty-value">false</p><p data-prose>能传字节，但不是终端设备。</p></section><section data-block><p class="overline">② 输出 · PTY 连接</p><p class="tty-value accent">true</p><p data-prose>Node 认出了终端设备。</p></section></div>
+<p data-prose data-block>这个差别影响交互方式：Node 可用提示符持续接收输入；less 还会使用终端尺寸分页，窗口变化由宿主同步。</p>
+<p class="note" data-prose data-block>pipe 也能按行交互，false 不代表“不能输入”。提示与行编辑由应用实现；PTY 不画屏幕，也不保证所有界面兼容。</p>
+</div></article></body></html>

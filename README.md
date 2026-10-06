@@ -200,6 +200,17 @@ node packages/tui/dist/cli.js "你的提示词"
 
 ---
 
+## 在线图解教程
+
+课程 HTML 与阅读站点在本仓库的 site/ 中维护。包含章节目录、全文搜索、连续阅读和 PC／手机布局。
+
+    pnpm site:build
+    pnpm site:preview
+
+打开 http://127.0.0.1:8788/。制作、检查和 Nginx 部署方式见 [在线课程说明](./docs/site.md)。
+
+---
+
 ## 📄 License
 
 MIT

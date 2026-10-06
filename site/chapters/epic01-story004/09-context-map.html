@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .table-wrap { flex: 1; display: flex; flex-direction: column; }
+    table { width: 100%; border-collapse: collapse; flex: 1; }
+    th { font-size: 28px; font-weight: 700; color: #1A1A1A; text-align: left; padding: 22px 14px; border-top: 3px solid #1A1A1A; border-bottom: 3px solid #1A1A1A; letter-spacing: 1px; }
+    td { font-size: 34px; color: #4A4A4A; padding: 0 14px; border-bottom: 2px dashed #CCCCCC; vertical-align: middle; line-height: 1.45; height: 18%; }
+    tr:last-child td { border-bottom: 3px solid #1A1A1A; }
+    .col-info { font-weight: 600; color: #1A1A1A; }
+    .col-role { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 32px; color: #1A1A1A; }
+    .col-cache { font-size: 32px; }
+    .cache-yes { color: #D32F2F; font-weight: 600; }
+    .cache-no { color: #888888; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 结构</span>
+      <span class="page-num serif">09</span>
+    </div>
+    <div class="title serif">各种上下文该放哪</div>
+    <div class="subtitle">信息类型 × 消息角色 × 缓存属性</div>
+    <div class="content table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:32%">信息类型</th>
+            <th style="width:34%">放进</th>
+            <th style="width:34%">Cache</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-info">身份 / 规则 / 策略</td>
+            <td class="col-role">system</td>
+            <td class="col-cache cache-yes">静态 · 可缓存</td>
+          </tr>
+          <tr>
+            <td class="col-info">工具参数定义</td>
+            <td class="col-role">tool schema</td>
+            <td class="col-cache cache-yes">静态 · 可缓存</td>
+          </tr>
+          <tr>
+            <td class="col-info">cwd / 文件 / 选中代码</td>
+            <td class="col-role">user · runtime</td>
+            <td class="col-cache cache-no">动态 · 每轮刷新</td>
+          </tr>
+          <tr>
+            <td class="col-info">AGENTS.md / Skills</td>
+            <td class="col-role">user · runtime</td>
+            <td class="col-cache cache-no">动态 · 按需注入</td>
+          </tr>
+          <tr>
+            <td class="col-info">工具调用结果</td>
+            <td class="col-role">tool message</td>
+            <td class="col-cache cache-no">动态 · 插回列表</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">放错通道 = 缓存失效 + 上下文污染</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
