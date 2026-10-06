@@ -14,6 +14,9 @@ let resizeObserver = null;
 let saveTimer = null;
 let scrollPending = false;
 let restoring = false;
+let lastScrollY = 0;
+let lastViewportWidth = window.innerWidth;
+let resumePosition = false;
 let progress = readStorage(storageKey, {chapters: {}, last: null});
 if (!progress || typeof progress !== 'object' || !progress.chapters || typeof progress.chapters !== 'object') progress = {chapters: {}, last: null};
 
@@ -42,7 +45,7 @@ function renderHome() {
   const completed = course.chapters.filter(isCompleted).length;
   const lastChapter = course.chapters.find(chapter => chapter.id === progress.last?.chapter);
   const lastPage = lastChapter?.pages.find(page => page.id === progress.last?.page);
-  main.innerHTML = '<section class="home-hero"><p class="eyebrow">A PRACTICAL GUIDE TO AGENT HARNESS</p><h1>从零开始，<br>做一个能动手的 <em>Agent。</em></h1><p class="home-description">从第一行代码到产品级 Agent Harness。一起搭建循环、工具与上下文，在真实工程问题中理解 Coding Agent 是怎样工作的。</p><a class="primary-link" href="' + routeURL(lastChapter || course.chapters[0], lastPage) + '">' + (lastChapter ? '继续阅读' : '从第一章开始') + '<span aria-hidden="true">→</span></a><a class="quiet-link" href="#/chapter/' + course.chapters.at(-1).id + '">查看最新章节 ↗</a><div class="hero-stats"><span><strong>' + course.chapters.length + '</strong> 个章节</span><span><strong>' + course.totalPages + '</strong> 篇图解</span><span><strong>TypeScript</strong> 工程实战</span></div></section>' +
+  main.innerHTML = '<section class="home-hero"><p class="eyebrow">A PRACTICAL GUIDE TO AGENT HARNESS</p><h1>从零开始，<br>做一个能动手的 <em>Agent。</em></h1><p class="home-description">从第一行代码到产品级 Agent Harness。一起搭建循环、工具与上下文，在真实工程问题中理解 Coding Agent 是怎样工作的。</p><a class="primary-link"' + (lastChapter ? ' data-resume' : '') + ' href="' + routeURL(lastChapter || course.chapters[0], lastPage) + '">' + (lastChapter ? '继续阅读' : '从第一章开始') + '<span aria-hidden="true">→</span></a><a class="quiet-link" href="#/chapter/' + course.chapters.at(-1).id + '">查看最新章节 ↗</a><div class="hero-stats"><span><strong>' + course.chapters.length + '</strong> 个章节</span><span><strong>' + course.totalPages + '</strong> 篇图解</span><span><strong>TypeScript</strong> 工程实战</span></div></section>' +
     '<figure class="loop-figure"><figcaption class="loop-title"><span>先理解一个最小的 Agent 闭环</span><span>REACT LOOP</span></figcaption><div class="loop-nodes"><div class="loop-node"><strong>01 · THINK</strong>思考下一步</div><span class="loop-arrow" aria-hidden="true">→</span><div class="loop-node accent"><strong>02 · ACT</strong>调用工具</div><span class="loop-arrow" aria-hidden="true">→</span><div class="loop-node"><strong>03 · OBSERVE</strong>观察结果</div></div><p class="loop-return">↳ 把结果带回对话，继续思考，直到任务完成 ↲</p></figure>' +
     course.epics.map(epic => '<section class="course-section" id="' + epic.id + '"><div class="course-section-heading"><span class="part-number">' + pad(epic.number) + '</span><div><h2>' + escapeHTML(epic.title) + '</h2><p>' + escapeHTML(epic.description) + '</p></div></div>' +
       course.chapters.filter(chapter => chapter.epic === epic.id).map(chapter => '<a class="lesson-row" href="' + routeURL(chapter) + '"><span class="lesson-row-number">' + pad(chapter.number) + '</span><div><h3>' + escapeHTML(chapter.title) + '</h3><p>' + escapeHTML(chapter.description) + '</p></div><div class="lesson-row-tail">' + (isCompleted(chapter) ? '已读完 ✓' : chapter.pages.length + ' 篇图解') + '<span aria-hidden="true">↗</span></div></a>').join('') + '</section>').join('') + footer();
@@ -106,6 +109,7 @@ function savePosition() {
   writeStorage(storageKey, progress);
 }
 function trackScroll() {
+  lastScrollY = window.scrollY;
   if (!currentChapter || restoring || scrollPending) return;
   scrollPending = true;
   requestAnimationFrame(() => {
@@ -136,7 +140,8 @@ function handleRoute(initial = false) {
   if (route.chapter && route.chapter === currentChapter && !initial) {
     const target = route.page || route.chapter.pages[0];
     setActivePage(target, false);
-    document.getElementById(target.id).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+    document.getElementById(target.id).scrollIntoView({behavior: 'instant'});
+    savePosition();
     return;
   }
   savePosition();
@@ -162,10 +167,12 @@ function handleRoute(initial = false) {
     if (route.chapter && route.page) {
       const target = document.getElementById(route.page.id);
       const saved = progress.chapters[route.chapter.id];
-      const offset = initial && saved?.page === route.page.id ? Math.min(1, Math.max(0, Number(saved.offset) || 0)) : 0;
+      const offset = (initial || resumePosition) && saved?.page === route.page.id ? Math.min(1, Math.max(0, Number(saved.offset) || 0)) : 0;
       window.scrollTo(0, window.scrollY + target.getBoundingClientRect().top - 92 + offset * target.offsetHeight);
     }
     restoring = false;
+    resumePosition = false;
+    lastScrollY = window.scrollY;
     if (route.chapter) savePosition();
     if (!initial) main.focus({preventScroll: true});
   });
@@ -253,6 +260,10 @@ $('#menu-button').addEventListener('click', () => openDrawer('menu'));
 $('#outline-button').addEventListener('click', () => openDrawer('outline'));
 $('#scrim').addEventListener('click', closeDrawers);
 document.addEventListener('click', event => {
+  if (event.target.closest('.skip-link')) {
+    event.preventDefault(); main.focus({preventScroll: true}); window.scrollTo(0, 0);
+  }
+  if (event.target.closest('[data-resume]')) resumePosition = true;
   const close = event.target.closest('[data-close-drawer]');
   if (close) { closeDrawers(); $('#menu-button').focus(); }
   const homeAnchor = event.target.closest('[data-home-anchor]');
@@ -295,7 +306,28 @@ document.addEventListener('keydown', event => {
 });
 window.addEventListener('scroll', trackScroll, {passive: true});
 window.addEventListener('pagehide', savePosition);
-window.addEventListener('resize', () => { closeDrawers(); resizeFigures(); });
+window.addEventListener('resize', () => {
+  closeDrawers();
+  const widthChanged = lastViewportWidth !== window.innerWidth;
+  lastViewportWidth = window.innerWidth;
+  if (!widthChanged || !currentChapter || !activePage || restoring) {
+    resizeFigures(); return;
+  }
+  const page = activePage;
+  const saved = progress.chapters[currentChapter.id];
+  const offset = saved?.page === page.id ? Math.min(1, Math.max(0, Number(saved.offset) || 0)) : 0;
+  const atTop = lastScrollY < 100;
+  restoring = true;
+  clearTimeout(saveTimer);
+  resizeFigures();
+  requestAnimationFrame(() => {
+    const target = document.getElementById(page.id);
+    if (target) window.scrollTo(0, atTop ? 0 : window.scrollY + target.getBoundingClientRect().top - 92 + offset * target.offsetHeight);
+    restoring = false;
+    lastScrollY = window.scrollY;
+    savePosition();
+  });
+});
 window.addEventListener('hashchange', () => { if (course) handleRoute(); });
 updateDrawerAccess();
 try {
