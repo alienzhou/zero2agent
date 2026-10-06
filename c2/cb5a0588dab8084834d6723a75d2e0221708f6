@@ -1,0 +1,123 @@
+.authoring/site/README.md
+  s_7ef586e3e4b6e0::t_fd90997ef33698 1-47
+.authoring/README.md
+  s_7ef586e3e4b6e0::t_fd90997ef33698 12
+package.json
+  s_7ef586e3e4b6e0::t_fd90997ef33698 25-27
+AGENTS.md
+  s_7ef586e3e4b6e0::t_fd90997ef33698 28,111-115
+  s_7ef586e3e4b6e0::t_d2237973f7b006 116-118
+README.md
+  s_7ef586e3e4b6e0::t_b6fb6279d5ab80 203-213
+.vibecoding/2026-10-06/online-course-site/dialogue.md
+  s_7ef586e3e4b6e0::t_b6fb6279d5ab80 20-27
+.authoring/site/templates/pages.json
+  s_7ef586e3e4b6e0::t_fd90997ef33698 1-12
+scripts/check-site.mjs
+  s_7ef586e3e4b6e0::t_b6fb6279d5ab80 68
+  s_7ef586e3e4b6e0::t_fd90997ef33698 1-67,69-81
+scripts/build-site.mjs
+  s_7ef586e3e4b6e0::t_fd90997ef33698 1-28
+.discuss/2026-10-06/online-course-site/decisions/D01-authoring-ownership.md
+  s_7ef586e3e4b6e0::t_b6fb6279d5ab80 1-13
+docs/site.md
+  s_7ef586e3e4b6e0::t_b6fb6279d5ab80 13-15,17,21,23-26,29-30,33
+scripts/preview-site.mjs
+  s_7ef586e3e4b6e0::t_fd90997ef33698 1-35
+.authoring/site/templates/page.html
+  s_7ef586e3e4b6e0::t_fd90997ef33698 1-26
+.authoring/site/chapters/epic01-story001/juejin-post.md
+  s_7ef586e3e4b6e0::t_481e4110480a14 1-110
+.authoring/site/chapters/epic01-story002/blog-post.md
+  s_7ef586e3e4b6e0::t_7742dc4e1a6bce 1-244
+.authoring/site/chapters/epic01-story003/blog-post.md
+  s_7ef586e3e4b6e0::t_dca7a82418a018 1-150
+.authoring/site/chapters/epic01-story003/post-copy.md
+  s_7ef586e3e4b6e0::t_e198a32e8e5320 1-88
+.authoring/site/chapters/epic01-story004/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_4a2b37ea285a16 1-155
+.authoring/site/chapters/epic01-story004/post-copy.md
+  s_7ef586e3e4b6e0::t_a788f5fd9bd3f0 1-78
+.authoring/site/chapters/epic02-story001/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_498742c17e296f 1-37
+.authoring/site/chapters/epic02-story001/post-copy.md
+  s_7ef586e3e4b6e0::t_718dceb2ea3a48 1-49
+.authoring/site/chapters/epic02-story002/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_a4837a562bf790 1-29
+.authoring/site/chapters/epic02-story002/brief.md
+  s_7ef586e3e4b6e0::t_f2ab7a3b73c1a6 1-17
+.authoring/site/chapters/epic02-story002/post-copy.md
+  s_7ef586e3e4b6e0::t_5b821510bf49e7 1-23
+.authoring/site/chapters/epic02-story002/review.md
+  s_7ef586e3e4b6e0::t_b22393b649d205 1-42
+.authoring/site/chapters/epic02-story002/sources.md
+  s_7ef586e3e4b6e0::t_5e243ac8244d87 1-31
+.authoring/site/chapters/epic02-story003/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_1e3abe7b88842a 1-58
+.authoring/site/chapters/epic02-story003/post-copy.md
+  s_7ef586e3e4b6e0::t_f3675c8d9237fb 1-63
+.authoring/site/chapters/epic02-story004/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_179d491828b1ef 1-27
+.authoring/site/chapters/epic02-story004/brief.md
+  s_7ef586e3e4b6e0::t_7fe50e3ad92e45 1-23
+.authoring/site/chapters/epic02-story004/post-copy.md
+  s_7ef586e3e4b6e0::t_f3f4f25c3c7c93 1-19
+.authoring/site/chapters/epic02-story004/review.md
+  s_7ef586e3e4b6e0::t_7882536a3c12a7 1-110
+.authoring/site/chapters/epic02-story004/sources.md
+  s_7ef586e3e4b6e0::t_78757d009f1d04 1-60
+.authoring/site/chapters/epic03-story001/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_85cd9669aa2bd9 1-26
+.authoring/site/chapters/epic03-story001/brief.md
+  s_7ef586e3e4b6e0::t_181a738b5729a2 1-27
+.authoring/site/chapters/epic03-story001/post-copy.md
+  s_7ef586e3e4b6e0::t_08f2e4b1f221b3 1-11
+.authoring/site/chapters/epic03-story001/review.md
+  s_7ef586e3e4b6e0::t_3bb819894eefc5 1-103
+.authoring/site/chapters/epic03-story001/sources.md
+  s_7ef586e3e4b6e0::t_1a42425055e41f 1-37
+.authoring/site/chapters/epic03-story002/CONTENT-PLAN.md
+  s_7ef586e3e4b6e0::t_313597da44c25b 1-24
+.authoring/site/chapters/epic03-story002/author.cjs
+  s_7ef586e3e4b6e0::t_f8ecb853367ae6 1-175
+.authoring/site/chapters/epic03-story002/brief.md
+  s_7ef586e3e4b6e0::t_9afda314e6a71a 1-11
+.authoring/site/chapters/epic03-story002/post-copy.md
+  s_7ef586e3e4b6e0::t_67833bbc964b18 1-21
+.authoring/site/chapters/epic03-story002/review.md
+  s_7ef586e3e4b6e0::t_ff84d0062d61dd 1-44
+.authoring/site/chapters/epic03-story002/sources.md
+  s_7ef586e3e4b6e0::t_f5d8f0c39199ad 1-25
+.authoring/site/course.json
+  s_7ef586e3e4b6e0::t_be047cda9ca6cc 1-95
+scripts/build-site-catalog.mjs
+  s_7ef586e3e4b6e0::t_58afbb31669bd0 1,6-8,24-25,27-28,34,40,42
+site/chapters/epic01-story001/pages.json
+  s_7ef586e3e4b6e0::t_50376a2e07faa6 1-47
+site/chapters/epic01-story002/pages.json
+  s_7ef586e3e4b6e0::t_71dd51e9cf2ee0 1-92
+site/chapters/epic01-story003/pages.json
+  s_7ef586e3e4b6e0::t_65c927b27076ad 1-67
+site/chapters/epic01-story004/pages.json
+  s_7ef586e3e4b6e0::t_d70e7dc4054f03 1-72
+site/chapters/epic02-story001/pages.json
+  s_7ef586e3e4b6e0::t_652744c1c1a836 1-47
+site/chapters/epic02-story003/pages.json
+  s_7ef586e3e4b6e0::t_306d7885472b92 1-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c2cb5a0588dab8084834d6723a75d2e0221708f6",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
