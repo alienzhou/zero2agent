@@ -147,6 +147,7 @@ function handleRoute(initial = false) {
     restoring = false;
     lastScrollY = window.scrollY;
     savePosition();
+    main.focus({preventScroll: true});
     return;
   }
   savePosition();
@@ -222,7 +223,8 @@ function openSearch() {
   dialog.showModal();
   $('#search-input').focus();
 }
-function closeDrawers() {
+function closeDrawers(restoreFocus = false) {
+  const trigger = sidebar.classList.contains('open') ? $('#menu-button') : outline.classList.contains('open') ? $('#outline-button') : null;
   sidebar.classList.remove('open');
   outline.classList.remove('open');
   $('#scrim').hidden = true;
@@ -230,17 +232,18 @@ function closeDrawers() {
   $('#outline-button').setAttribute('aria-expanded', 'false');
   document.body.classList.remove('drawer-open');
   updateDrawerAccess();
+  if (restoreFocus) trigger?.focus({preventScroll: true});
 }
 function updateDrawerAccess() {
   sidebar.inert = matchMedia('(max-width: 760px)').matches && !sidebar.classList.contains('open');
-  outline.inert = matchMedia('(max-width: 1000px)').matches && !outline.classList.contains('open');
+  outline.inert = matchMedia('(max-width: 1100px)').matches && !outline.classList.contains('open');
 }
 function openDrawer(kind) {
   const panel = kind === 'menu' ? sidebar : outline;
   const button = kind === 'menu' ? $('#menu-button') : $('#outline-button');
   const wasOpen = panel.classList.contains('open');
   closeDrawers();
-  if (wasOpen) return;
+  if (wasOpen) { button.focus({preventScroll: true}); return; }
   panel.classList.add('open');
   button.setAttribute('aria-expanded', 'true');
   $('#scrim').hidden = false;
@@ -253,6 +256,7 @@ function applyTheme(theme) {
   $('#theme-button').setAttribute('aria-label', theme === 'dark' ? '切换浅色主题' : '切换深色主题');
 }
 applyTheme(readStorage('zero2agent.book.theme', 'light'));
+$('#search-button kbd').textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
 $('#theme-button').addEventListener('click', () => {
   const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
   applyTheme(theme); writeStorage('zero2agent.book.theme', theme);
@@ -264,14 +268,14 @@ dialog.addEventListener('click', event => { if (event.target === dialog) dialog.
 dialog.addEventListener('close', () => $('#search-button').focus({preventScroll: true}));
 $('#menu-button').addEventListener('click', () => openDrawer('menu'));
 $('#outline-button').addEventListener('click', () => openDrawer('outline'));
-$('#scrim').addEventListener('click', closeDrawers);
+$('#scrim').addEventListener('click', () => closeDrawers(true));
 document.addEventListener('click', event => {
   if (event.target.closest('.skip-link')) {
     event.preventDefault(); main.focus({preventScroll: true}); window.scrollTo(0, 0);
   }
   if (event.target.closest('[data-resume]')) resumePosition = true;
   const close = event.target.closest('[data-close-drawer]');
-  if (close) { closeDrawers(); $('#menu-button').focus(); }
+  if (close) closeDrawers(true);
   const homeAnchor = event.target.closest('[data-home-anchor]');
   if (homeAnchor) {
     event.preventDefault();
@@ -303,7 +307,7 @@ document.addEventListener('keydown', event => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
     event.preventDefault(); openSearch();
   }
-  if (event.key === 'Escape' && !dialog.open) closeDrawers();
+  if (event.key === 'Escape' && !dialog.open) closeDrawers(true);
   const drawer = sidebar.classList.contains('open') ? sidebar : outline.classList.contains('open') ? outline : null;
   if (event.key === 'Tab' && drawer) {
     const controls = $$('button, a', drawer).filter(control => control.offsetParent !== null);
