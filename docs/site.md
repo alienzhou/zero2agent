@@ -10,21 +10,27 @@ PC 宽屏使用课程目录、正文、本章目录三栏布局；1100px 及以�
 
 在仓库根目录执行：
 
-    python3 -m http.server 8788 --directory site
+    pnpm site:build
+    pnpm site:check
+    pnpm site:preview
 
-然后在浏览器打开 http://localhost:8788/。需要通过 HTTP 查看，以便加载课程目录。
+然后在浏览器打开 http://127.0.0.1:8788/。预览启动时会先构建并检查站点；端口占用时可运行 pnpm site:preview --port 8790。编辑后重新运行 site:build，再刷新浏览器。
 
 ## 维护课程
 
-- site/chapters/ 下每个目录对应一个 Story，保留正式编号 HTML、引用的 CSS 和有序的 pages.json（如有）。
+- site/chapters/ 下每个目录对应一个 Story，保留正式编号 HTML、引用的 CSS 和有序的 pages.json。
 - 站点不包含导出的截图、图片包和素材制作工具。ReAct 流程图在 HTML 内用 SVG 绘制。
-- 修改正文后，运行 node scripts/build-site-catalog.mjs，更新导航标题、全文搜索和文字内容。
-- 新增章节时，在 scripts/build-site-catalog.mjs 的 definitions 中加入章节元信息。在该章节的 pages.json 中维护小节顺序与标题；旧章节的缺省标题在 earlyTitles 中维护。
+- 章节顺序、标题、简介与源码入口维护在 .authoring/site/course.json；新增章节不用修改构建脚本。
+- E03-S002 的图解与图内文案编辑源在 .authoring/site/chapters/epic03-story002/author.cjs；构建时生成 HTML。其他现有章节直接编辑源 HTML。
+- 内容计划、来源、审阅记录与发布文案放在 .authoring/site/chapters/，与课程代码和文档一起维护。
+- 修改编辑源后运行 pnpm site:build，生成 HTML、导航标题、全文搜索和文字内容，并检查依赖、页序与部署文件。
 - sourceURL 应指向该章实际可访问的设计文档。尚未合入 main 的内容，应指向对应分支。
+
+课程制作在 zero2agent 内闭环。content-generator 中的旧课程保留作历史材料，后续课程从本仓库维护。详细流程与模板见 [在线课程制作](../.authoring/site/README.md)。
 
 ## Nginx 部署
 
-将 site/ 的内容同步到服务器目录；运行时不需要 Node 服务，也不用构建 packages/。
+先运行 pnpm site:build，再将 site/ 的内容同步到服务器目录；运行时不需要 Node 服务，也不用构建 packages/。.authoring/ 中的编辑源和制作资料不进入部署目录。
 
     rsync -av site/ deploy@your-server:/var/www/zero2agent/
 

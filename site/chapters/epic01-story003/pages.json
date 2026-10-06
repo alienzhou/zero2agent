@@ -1,0 +1,67 @@
+{
+  "title": "文件查找与工程验证",
+  "width": 1080,
+  "height": 1440,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "让 Agent 找到文件",
+      "number": 1
+    },
+    {
+      "file": "02-intro.html",
+      "title": "能搜内容，还要找到文件",
+      "number": 2
+    },
+    {
+      "file": "03-find-files.html",
+      "title": "实现 find_files",
+      "number": 3
+    },
+    {
+      "file": "04-transition.html",
+      "title": "用证据做技术选型",
+      "number": 4
+    },
+    {
+      "file": "05-benchmark-methodology.html",
+      "title": "怎样设计 Benchmark",
+      "number": 5
+    },
+    {
+      "file": "06-benchmark-data.html",
+      "title": "理解 Benchmark 数据",
+      "number": 6
+    },
+    {
+      "file": "07-benchmark-conclusion.html",
+      "title": "从数据得出选型结论",
+      "number": 7
+    },
+    {
+      "file": "08-debug-tower.html",
+      "title": "建立分层 Debug 视角",
+      "number": 8
+    },
+    {
+      "file": "09-debug-workflow.html",
+      "title": "定位一次 Agent 故障",
+      "number": 9
+    },
+    {
+      "file": "10-debug-arch.html",
+      "title": "组织调试架构",
+      "number": 10
+    },
+    {
+      "file": "11-debug-practice.html",
+      "title": "把 Debug 方法用起来",
+      "number": 11
+    },
+    {
+      "file": "12-cta.html",
+      "title": "源码与下一步",
+      "number": 12
+    }
+  ]
+}

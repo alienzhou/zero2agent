@@ -9,6 +9,7 @@
 | [写作风格](./writing-style.md) | 标题、语气、信息密度、结构，以及 Story README 专项写法 |
 | [导航与互链](./navigation.md) | 面包屑格式、页面互链、新增 Story/Epic 检查清单 |
 | [Story README 自检清单](./story-checklist.md) | 写完 Story README 后的快速检查项 |
+| [在线课程制作](./site/README.md) | HTML 图解、章节元信息、生成源、来源审阅与本地构建流程 |
 
 ## 模板索引
 

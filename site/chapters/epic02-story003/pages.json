@@ -1,0 +1,72 @@
+{
+  "title": "执行命令与进程管理",
+  "width": 1080,
+  "height": 1440,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "让 Agent 执行命令",
+      "number": 1
+    },
+    {
+      "file": "02-recap.html",
+      "title": "回顾已有工具",
+      "number": 2
+    },
+    {
+      "file": "03-why-terminal.html",
+      "title": "为什么还需要 terminal",
+      "number": 3
+    },
+    {
+      "file": "04-uncertainty.html",
+      "title": "怎样面对外部程序的不确定性",
+      "number": 4
+    },
+    {
+      "file": "05-five-map.html",
+      "title": "执行工具的五个问题",
+      "number": 5
+    },
+    {
+      "file": "06-receipt-text.html",
+      "title": "用文字回执描述执行结果",
+      "number": 6
+    },
+    {
+      "file": "07-receipt-endings.html",
+      "title": "五种可能的执行状态",
+      "number": 7
+    },
+    {
+      "file": "08-long-output.html",
+      "title": "长输出怎样处理",
+      "number": 8
+    },
+    {
+      "file": "09-no-kill.html",
+      "title": "超时、终止与转后台",
+      "number": 9
+    },
+    {
+      "file": "10-shell-env.html",
+      "title": "保持一致的 Shell 环境",
+      "number": 10
+    },
+    {
+      "file": "11-lifecycle.html",
+      "title": "管理后台进程的生命周期",
+      "number": 11
+    },
+    {
+      "file": "12-recap-close.html",
+      "title": "回顾终端工具的设计",
+      "number": 12
+    },
+    {
+      "file": "13-cta.html",
+      "title": "源码与下一步",
+      "number": 13
+    }
+  ]
+}
