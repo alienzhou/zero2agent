@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 09 · 新建对话，究竟清空了什么？</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="09" data-sources="C08 C09"><header class="page-header" data-block><span>Zero2Agent · 清空与隔离</span><span class="page-number">09</span></header><div class="heading" data-block><h1>新建对话，究竟清空了什么？</h1><p class="deck">/new 在宿主处理，不作为问题发给模型</p></div><main class="content"><div class="reset-command" data-block><kbd>/new</kbd><p data-prose>历史和工作上下文一起重置</p></div>
+<div class="reset-columns" data-block><section><p class="mini-label">清空</p><h2>历史、摘要与替换视图</h2><p data-prose>取消后台压缩；旧任务即使迟到，也不能写回新会话。</p></section><section><p class="mini-label">保留</p><h2>已经改变的环境</h2><p data-prose>文件、日志、后台命令不动；模型配置也保留。</p></section></div>
+<div class="guard-box" data-block><h2>主轮次或手动压缩中？先等结束</h2><p data-prose>run、手动 compact 与 reset 共享互斥约束。后台摘要不等于后台命令。</p></div>
+<p class="note" data-block data-prose>/new 不回滚文件，也不删除供应商记录。历史保存在内存，退出后不提供落盘恢复。</p></main></article></body></html>

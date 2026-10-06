@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 11 · 怎么知道接好了？别只试一句 Hello</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson dark" data-page="11" data-sources="C05 C13 C14 C19 C20">
+<header class="page-header" data-block><span>Zero2Agent · 验收也能动手</span><span class="page-number">11</span></header>
+<div class="heading" data-block><h1>怎么知道接好了？<br>别只试一句 Hello</h1><p class="deck">用三个现象，检查交互链是否完整</p></div><div class="content">
+
+<div class="experiment-list">
+<section data-block><span class="experiment-num">01</span><div><h2>定义 n = 21，再算 n * 2</h2><p data-prose>预期：第二次输入得到 42。</p><p class="diagnostic" data-prose>若 n 丢了 → 先查是否每次都重启进程。</p></div></section>
+<section data-block><span class="experiment-num">02</span><div><h2>打开 less，再缩小窗口</h2><p data-prose>预期：按新尺寸分页、重绘。</p><p class="diagnostic" data-prose>若画面不变 → 先查 resize 是否传到 PTY。</p></div></section>
+<section data-block><span class="experiment-num">03</span><div><h2>从 /terminal 返回，再输入</h2><p data-prose>预期：输入回到 Agent，不残留在程序里。</p><p class="diagnostic" data-prose>若回显错乱 → 先查终端模式与监听恢复。</p></div></section>
+</div>
+<p class="note" data-prose data-block>以上是排查起点，不是唯一归因。本机 macOS 已有真实 PTY 验证，用户两项功能试用反馈正常。</p>
+<div class="platform-strip" data-block><p data-prose>Linux 未实测 · Windows 不支持</p><p class="note" data-prose>慢输出、极限粘贴、跨终端显示仍需验证。</p></div>
+</div></article></body></html>

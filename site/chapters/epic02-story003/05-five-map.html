@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 48px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 五个问题</span>
+      <span class="page-num serif">05</span>
+    </div>
+    <div class="title serif">要想清楚的<br>五个问题</div>
+    <div class="subtitle">简单 demo 可以不管，正经做都要答</div>
+    <div class="content prose">
+      <ul class="enum">
+        <li>
+          <span class="n serif">1</span>
+          <div class="qq">命令跑完后，给模型看什么字？</div>
+          <div class="aa">模型只能读字。退出码、状态、输出都要写成一段字。</div>
+        </li>
+        <li>
+          <span class="n serif">2</span>
+          <div class="qq">输出太多行，塞不进对话怎么办？</div>
+          <div class="aa">太长就存进文件，只告诉文件路径，让模型自己用读文件工具去看。</div>
+        </li>
+        <li>
+          <span class="n serif">3</span>
+          <div class="qq">命令跑很久还没停，要等还是停？</div>
+          <div class="aa">工具不会自动帮你杀掉。你可以取消，或转到后台继续跑。</div>
+        </li>
+        <li>
+          <span class="n serif">4</span>
+          <div class="qq">Agent 里跑命令，和你终端里不一样怎么办？</div>
+          <div class="aa">该一样的环境变量要一样；会让界面卡住的那种设置要改掉。</div>
+        </li>
+        <li>
+          <span class="n serif">5</span>
+          <div class="qq">转到后台的程序，Agent 关了以后怎么办？</div>
+          <div class="aa">记下来是谁转的；Agent 退出时问你要不要停；默认不停。</div>
+        </li>
+      </ul>
+      <p class="p" style="margin-top:26px;font-weight:700;color:#1A1A1A;border-top:2px solid #1A1A1A;padding-top:20px;">下面几页，一个一个讲。</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

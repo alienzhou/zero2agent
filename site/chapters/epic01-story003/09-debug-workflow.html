@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress { 
+      background: #1A1A1A; color: #FFFFFF; font-size: 16px; padding: 4px 10px; 
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+    
+    .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #F4F1EA; margin-bottom: 24px; letter-spacing: -0.5px; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+
+    /* 流程步骤 */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      border-left: 4px solid #1A1A1A;
+    }
+
+    .flow-step.highlight {
+      background: rgba(211,47,47,0.05);
+      border-color: #D32F2F;
+      border-left-width: 6px;
+    }
+
+    .flow-num {
+      font-size: 28px;
+      font-weight: 900;
+      color: #888888;
+      font-family: 'Georgia', serif;
+      min-width: 32px;
+    }
+
+    .flow-step.highlight .flow-num {
+      color: #D32F2F;
+    }
+
+    .flow-text {
+      font-size: 24px;
+      color: #333333;
+      line-height: 1.4;
+    }
+
+    .flow-step.highlight .flow-text {
+      color: #1A1A1A;
+      font-weight: 600;
+    }
+
+    /* 假设状态 */
+    .hypothesis-box {
+      background: #FFFFFF;
+      border: 2px solid #1A1A1A;
+      border-radius: 0px;
+      padding: 20px 24px;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.05);
+    }
+
+    .hypothesis-title {
+      font-size: 22px;
+      color: #666666;
+      margin-bottom: 16px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .hypothesis-item {
+      font-size: 22px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      line-height: 1.8;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .hypothesis-item::before {
+      position: absolute;
+      left: 0;
+      font-size: 20px;
+    }
+
+    .hypothesis-item.rejected {
+      color: #888888;
+      text-decoration: line-through;
+    }
+    .hypothesis-item.rejected::before {
+      content: '[x]';
+    }
+
+    .hypothesis-item.confirmed {
+      color: #1A1A1A;
+      font-weight: bold;
+    }
+    .hypothesis-item.confirmed::before {
+      content: '[v]';
+    }
+
+    .hypothesis-item.inconclusive {
+      color: #666666;
+    }
+    .hypothesis-item.inconclusive::before {
+      content: '[?]';
+    }
+
+    .hypothesis-note {
+      font-size: 18px;
+      color: #666666;
+      margin-left: 24px;
+    }
+
+    /* 核心约束 */
+    .constraint-box {
+      background: #D32F2F;
+      padding: 20px 24px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">DEBUG 2/4</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">09</span>
+    </div>
+    
+    <div class="main-title serif">Agent Debug 方法论</div>
+    <div class="sub-title">假设验证 + 动态日志，是非常有效的 Agent Debug 方案，工作原理如下：</div>
+    
+    <div class="content-area">
+      
+      <div class="flow-container">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-text">用户：描述问题</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-text">Agent：基于问题，分析代码，生成 3-5 个假设</div>
+        </div>
+        <div class="flow-step highlight">
+          <div class="flow-num">3</div>
+          <div class="flow-text">Agent：在代码中插入日志埋点，贯穿各个假设链路</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-text">用户：复现问题（或 Agent 自己 E2E）</div>
+        </div>
+        <div class="flow-step highlight">
+          <div class="flow-num">5</div>
+          <div class="flow-text">Agent：读取刚才埋的日志信息，分析每个假设</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-text">Agent：基于确认的假设进行修复</div>
+        </div>
+      </div>
+
+      <div class="hypothesis-box">
+        <div class="hypothesis-title">// 日志分析结果示例</div>
+        <div class="hypothesis-item rejected">H1: 状态同步问题 <span class="hypothesis-note">（日志显示状态一致）</span></div>
+        <div class="hypothesis-item confirmed">H2: API 超时 <span class="hypothesis-note">（日志显示请求耗时 5200ms）</span></div>
+        <div class="hypothesis-item inconclusive">H3: 边界条件 <span class="hypothesis-note">（未触发该路径）</span></div>
+      </div>
+
+      <div class="constraint-box">
+        日志为 Agent 提供了关键的运行时信息
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

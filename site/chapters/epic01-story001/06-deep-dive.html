@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px; display: flex; flex-direction: column; 
+      box-sizing: border-box;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 60px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 64px; font-weight: 900; line-height: 1.3; color: #1A1A1A; margin-bottom: 60px; }
+
+    .content-box { display: flex; flex-direction: column; gap: 60px; flex: 1; }
+
+    .concept-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .concept-title {
+      font-size: 38px;
+      font-weight: 800;
+      color: #1A1A1A;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 16px;
+    }
+    
+    .concept-tag {
+      background: #1A1A1A;
+      color: #F4F1EA;
+      font-size: 20px;
+      padding: 4px 12px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .concept-desc {
+      font-size: 28px;
+      color: #4A4A4A;
+      line-height: 1.7;
+    }
+
+    .highlight-text {
+      background: rgba(211, 47, 47, 0.1);
+      padding: 0 6px;
+      color: #1A1A1A;
+      font-weight: bold;
+    }
+
+    .flow-diagram {
+      margin-top: 10px;
+      padding: 30px;
+      background: #FFFFFF;
+      border: 1px solid #1A1A1A;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 22px;
+      color: #1A1A1A;
+      font-weight: bold;
+    }
+
+    .flow-arrow {
+      color: #D32F2F;
+      font-weight: bold;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 40px;
+      display: flex; gap: 24px; align-items: center;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 32px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 深度解析</span>
+      <span class="page-num serif">06</span>
+    </div>
+    
+    <div class="title">揭开魔法的黑盒：<br>ReACT 与 Tool Use</div>
+    
+    <div class="content-box">
+      
+      <div class="concept-card">
+        <div class="concept-title">
+          <span>Agent Loop</span>
+          <span class="concept-tag">CORE</span>
+        </div>
+        <div class="concept-desc">
+          Agent 不是魔法，它的本质是一个用代码写出的<span class="highlight-text">while 循环</span>。<br>
+          模型不再返回一次性回答，而是返回结构化的 <code>stop_reason</code>。只有当返回 <code>end_turn</code> 时循环才结束；如果是 <code>tool_use</code>，则触发宿主的工具执行逻辑，并进入下一轮。
+        </div>
+        <div class="flow-diagram">
+          <span>调用 LLM</span>
+          <span class="flow-arrow">→</span>
+          <span>stop_reason 分支</span>
+          <span class="flow-arrow">→</span>
+          <span>执行工具并写回</span>
+          <span class="flow-arrow">↻</span>
+        </div>
+      </div>
+      
+      <div class="concept-card">
+        <div class="concept-title">
+          <span>Tool Use 机制</span>
+          <span class="concept-tag">PROTOCOL</span>
+        </div>
+        <div class="concept-desc">
+          这是让 LLM 从“只能说”变成“能做事”的桥梁。我们使用<span class="highlight-text">强类型的 JSON Schema</span> 来定义工具。<br>
+          模型通过标准的 <code>tool_calls</code> 吐出需要调用的函数名和参数，宿主执行后再通过 <code>tool_result</code> 将物理世界的观测注入回上下文中。
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">纸上得来终觉浅。该如何使用它来学习呢？</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

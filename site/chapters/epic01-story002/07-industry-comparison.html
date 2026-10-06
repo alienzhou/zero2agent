@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 32px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 20px; letter-spacing: -0.5px; }
+
+    .subtitle {
+      font-size: 22px; color: #4A4A4A; line-height: 1.5; margin-bottom: 32px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .data-table th, .data-table td {
+      padding: 14px 12px;
+      text-align: left;
+      font-size: 21px;
+      border-bottom: 1px dashed #CCCCCC;
+    }
+
+    .data-table th {
+      border-top: 2px solid #1A1A1A;
+      border-bottom: 2px solid #1A1A1A;
+      font-weight: bold;
+      color: #1A1A1A;
+      font-size: 18px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 12px;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: 2px solid #1A1A1A;
+    }
+
+    .data-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: #1A1A1A;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 22px;
+    }
+
+    .data-table td:last-child {
+      text-align: left;
+      font-size: 17px;
+      color: #666666;
+      line-height: 1.35;
+      width: 35%;
+    }
+
+    .status-yes {
+      color: #D32F2F;
+      font-size: 28px;
+    }
+    .status-yes-text {
+      color: #D32F2F;
+    }
+    .status-no {
+      color: #AAAAAA;
+      font-weight: 300;
+    }
+
+    .table-legend {
+      font-size: 18px; color: #888888; text-align: right; font-style: italic; margin-top: 10px;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent · 行业分析</span>
+      <span class="page-num serif">07</span>
+    </div>
+    
+    <div class="title serif">各大 Coding Agent，<br>都在用什么搜索方案？</div>
+    <div class="subtitle">
+      目前（2026.03），绝大多数的 Coding Agent 产品，在核心链路上都拒绝了 RAG（语义搜索），而是坚守了 Grep。
+    </div>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="text-align: left;">Product</th>
+          <th>Grep Search</th>
+          <th>RAG Codebase</th>
+          <th style="text-align: left;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Claude Code</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-no">—</span></td>
+          <td>明确不做 embedding，通过拉起子 Agent 执行多步搜索</td>
+        </tr>
+        <tr>
+          <td>Cursor</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-yes">■</span></td>
+          <td>自研模型，基于本地 mmap 构建极致性能的 regex index</td>
+        </tr>
+        <tr>
+          <td>Codex CLI</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-no">—</span></td>
+          <td>围绕 rg 构建结构化工具能力，暂无原生语义支持</td>
+        </tr>
+        <tr>
+          <td>Gemini CLI</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-no">—</span></td>
+          <td>官方推荐复杂的语义搜索需求交由外部 MCP 解决</td>
+        </tr>
+        <tr>
+          <td>Aider</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-no">—</span></td>
+          <td>使用 tree-sitter 构建 repo map 提供全局视野，不搞向量化</td>
+        </tr>
+        <tr>
+          <td>Windsurf</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-yes">■</span></td>
+          <td>引入专职搜代码的小模型 (SWE-grep) 配合语义索引使用</td>
+        </tr>
+        <tr>
+          <td>OpenCode</td>
+          <td><span class="status-yes">■</span></td>
+          <td><span class="status-no">—</span></td>
+          <td>主要依赖封装 ripgrep，尝试补充 LSP 结构能力</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="table-legend">
+      <span class="status-yes-text">■</span> 代表作为主要内置方案支持 &nbsp;&nbsp; — 代表明确未内置或放弃
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">传统的文本搜索是大家的青睐。为什么？</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

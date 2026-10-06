@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 52px 60px 60px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 18px; margin-bottom: 26px; color: #888888; flex-shrink: 0; }
+    .page-num { color: #E04840; font-size: 26px; }
+    .title { font-size: 58px; font-weight: 900; line-height: 1.12; color: #F4F1EA; margin-bottom: 8px; flex-shrink: 0; }
+    .title em { color: #E04840; font-style: italic; }
+    .subtitle { font-size: 28px; color: #B8B2A6; margin-bottom: 12px; line-height: 1.4; flex-shrink: 0; }
+    .callback { font-size: 22px; color: #C98A2B; margin-bottom: 26px; line-height: 1.4; flex-shrink: 0; }
+    .callback b { color: #E8C06A; }
+
+    /* 数据指标卡 */
+    .metrics { display: flex; gap: 26px; margin-bottom: 26px; flex-shrink: 0; }
+    .metric { flex: 1; border: 2px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.03); padding: 24px 26px; position: relative; }
+    .metric-source { font-size: 17px; color: #B8B2A6; letter-spacing: 1px; font-weight: bold; margin-bottom: 14px; }
+    .metric-nums { display: flex; align-items: baseline; gap: 14px; margin-bottom: 12px; }
+    .num-old { font-size: 50px; font-weight: 900; color: #C98A2B; text-decoration: line-through; font-family: ui-monospace, Menlo, monospace; }
+    .num-plain { font-size: 50px; font-weight: 900; color: #C98A2B; font-family: ui-monospace, Menlo, monospace; }
+    .num-arrow { font-size: 40px; color: #E04840; line-height: 1; }
+    .num-new { font-size: 84px; font-weight: 900; color: #E04840; line-height: 1; font-family: ui-monospace, Menlo, monospace; }
+    .num-unit { font-size: 22px; color: #B8B2A6; }
+    .metric-desc { font-size: 23px; color: #D8D3C8; line-height: 1.4; }
+
+    /* 双向机制条 */
+    .mech { border: 2px solid rgba(224,72,64,0.6); background: rgba(224,72,64,0.12); padding: 22px 26px; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; margin-bottom: 26px; }
+    .mech-row { display: flex; align-items: center; gap: 18px; font-size: 25px; color: #EDE8DE; line-height: 1.4; }
+    .mech-glyph { color: #E04840; font-size: 30px; font-family: ui-monospace, Menlo, monospace; flex-shrink: 0; }
+    .mech-row b { color: #F4F1EA; }
+
+    /* 边界上移 */
+    .layers { display: flex; align-items: center; gap: 14px; flex-shrink: 0; margin-bottom: 8px; }
+    .layer-chip { flex: 1; text-align: center; border: 2px solid rgba(255,255,255,0.28); padding: 16px 10px; background: rgba(255,255,255,0.04); }
+    .layer-chip.current { border-color: rgba(224,72,64,0.7); background: rgba(224,72,64,0.16); }
+    .layer-name { font-size: 22px; font-weight: 800; color: #F4F1EA; }
+    .layer-who { font-size: 18px; color: #B8B2A6; margin-top: 4px; }
+    .layer-chip.current .layer-who { color: #E04840; font-weight: bold; }
+    .layer-arrow { font-size: 28px; color: #E04840; flex-shrink: 0; font-family: ui-monospace, Menlo, monospace; }
+
+    .summary { margin-top: auto; border-top: 4px solid #444444; padding-top: 24px; display: flex; gap: 16px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 52px; color: #E04840; line-height: 1; }
+    .summary-text { font-size: 32px; font-weight: bold; color: #F4F1EA; line-height: 1.38; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 行业分析</span>
+      <span class="page-num serif">06</span>
+    </div>
+    <div class="title serif">写文件的格式，就是<em>成功率</em></div>
+    <div class="subtitle">模型每强一代，格式脚手架就拆一层</div>
+    <div class="callback">↩ 上一章讲 <b>prompt 结构决定效果</b>；写文件同理——模型输出的<b>格式</b>，直接决定它写对写错</div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-source mono">AIDER · 同一模型换编辑格式</div>
+        <div class="metric-nums">
+          <span class="num-old">20%</span>
+          <span class="num-arrow">→</span>
+          <span class="num-new">61%</span>
+        </div>
+        <div class="metric-desc">GPT-4 Turbo 编辑成功率 ×3：unified diff 不如「搜索替换」好生成</div>
+      </div>
+      <div class="metric">
+        <div class="metric-source mono">SWE-AGENT · 关掉格式校验</div>
+        <div class="metric-nums">
+          <span class="num-plain">1×</span>
+          <span class="num-arrow">→</span>
+          <span class="num-new">≈9×</span>
+        </div>
+        <div class="metric-desc">编辑错误次数涨 9 倍：今天的模型，还离不开格式兜底</div>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-row"><span class="mech-glyph">▲</span><span><b>模型吸收 Harness</b>：严格格式、校验兜底，都是为还不够强的模型补的课</span></div>
+      <div class="mech-row"><span class="mech-glyph">▼</span><span><b>Harness 随之精简</b>：模型越可靠，需要工具替它把的关就越少</span></div>
+    </div>
+
+    <div class="layers">
+      <div class="layer-chip">
+        <div class="layer-name">工具层</div>
+        <div class="layer-who">我们 · 硬校验 cwd</div>
+      </div>
+      <span class="layer-arrow">→</span>
+      <div class="layer-chip">
+        <div class="layer-name">Harness 层</div>
+        <div class="layer-who">OpenCode · 升级询问</div>
+      </div>
+      <span class="layer-arrow">→</span>
+      <div class="layer-chip current">
+        <div class="layer-name">运行时层</div>
+        <div class="layer-who">Pi · 容器隔离</div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">格式是模型的脚手架：你今天的接口设计，只是当前模型这一格的快照</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    /* CTA页：反转色，增加冲击力 */
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 80px; display: flex; flex-direction: column; 
+      box-sizing: border-box; justify-content: center; align-items: center; text-align: center;
+      position: relative;
+    }
+
+    /* 四周的细红线边框 */
+    .doc::before {
+      content: ''; position: absolute; top: 40px; left: 40px; right: 40px; bottom: 40px;
+      border: 1px solid rgba(211, 47, 47, 0.3); pointer-events: none;
+    }
+
+    .cta-icon {
+      font-size: 80px;
+      margin-bottom: 40px;
+      color: #D32F2F;
+    }
+
+    .title { font-size: 80px; font-weight: 900; line-height: 1.2; color: #F4F1EA; margin-bottom: 30px; }
+    
+    .desc { font-size: 32px; color: #CCCCCC; line-height: 1.6; margin-bottom: 80px; max-width: 80%; }
+
+    .action-box {
+      border: 2px solid #D32F2F;
+      padding: 40px 60px;
+      background: rgba(211, 47, 47, 0.05);
+      margin-bottom: 60px;
+    }
+
+    .action-text {
+      font-size: 36px; font-weight: bold; color: #F4F1EA; letter-spacing: 2px;
+    }
+
+    .path-box {
+      margin-bottom: 60px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: #F4F1EA;
+      padding: 16px 32px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .path-icon {
+      color: #D32F2F;
+    }
+
+    .footer-note {
+      font-size: 24px; color: #888888; letter-spacing: 4px; text-transform: uppercase;
+      margin-top: auto; border-top: 1px solid #333333; padding-top: 40px; width: 100%;
+    }
+    
+    .highlight { color: #D32F2F; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    
+    <div class="header" style="position: absolute; top: 60px; left: 80px; right: 80px; display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #888888; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 20px;">
+      <span class="serif">Zero2Agent • 关注连载</span>
+      <span class="page-num serif" style="color: #D32F2F; font-size: 24px;">08</span>
+    </div>
+
+    <div class="cta-icon serif">"</div>
+    
+    <div class="title">课程完全<span class="highlight">免费开源</span></div>
+    
+    <div class="desc">
+      从本周开始，我们将从零开始，一行行代码构建一个。
+    </div>
+
+    <div class="path-box">
+      <span class="path-icon">📌</span>
+      <span>生产级的 Coding Agent</span>
+    </div>
+    
+    <!--<div class="path-box">
+      <span class="path-icon">📌</span>
+      <span>评论区见</span>
+    </div>
+    -->
+    <div class="footer-note serif">
+      Next: Story 002 / Grep Search
+    </div>
+    
+  </div>
+</div>
+</body>
+</html>

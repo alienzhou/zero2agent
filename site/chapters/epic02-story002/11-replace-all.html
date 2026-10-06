@@ -1,0 +1,5 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E02-S002 · 批量替换</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet" data-page="11"><header class="page-header" data-block><span>Zero2Agent · 显式批量修改</span><span class="page-number">11</span></header><div class="heading" data-block><h1>确实都要改，再开批量</h1><p class="deck" data-prose>新请求：超时和重试间隔一起从 30 改成 60</p></div><main class="content"><div class="code-box" data-block><p class="label">每个例子独立，从初始配置开始</p><pre>old_string: "30"
+new_string: "60"
+<span class="accent">replace_all: true</span></pre></div><div class="code-box" data-block><p class="label">修改后的文件 · 两处都改变</p><pre>const apiTimeout = <span class="accent">60</span>;
+const retryDelay = <span class="accent">60</span>;
+const retries = 3;</pre></div><div class="receipt" data-block><p class="label">真实工具回执</p><pre>Replaced config.ts (2 occurrences)</pre></div><p data-block data-prose>批量模式仍按字面量替换。注释、字符串、较长名称里的相同片段也会受影响，不能用它保证语义重命名正确。</p><p class="note" data-block data-prose>批量模式零处匹配仍报错。只改 API 超时时，保持批量关闭。</p></main></article></body></html>

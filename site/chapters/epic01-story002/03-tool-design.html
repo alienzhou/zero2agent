@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    /* 基础底色与全局设定 */
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    /* 页眉 - 保持纯净 */
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 50px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 26px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 50px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 22px;
+      color: #333333;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 76px;
+      line-height: 0.8;
+      padding-top: 6px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 25px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 6px;
+      display: inline-block;
+    }
+
+    .pull-quote {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 14px 0;
+      margin: 20px 0;
+      border-top: 2px solid #D32F2F;
+      border-bottom: 2px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    /* 强调文字 */
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    /* 底部粗线总结 */
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 工具设计</span>
+      <span class="page-num serif">03</span>
+    </div>
+    
+    <div class="title serif">设计 Agent 工具，<br>应该先想什么？</div>
+    
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">设</span>计工作区工具时，我有一个习惯的概念判断：“对人友好的工具，对 Agent 也会友好”。如果一个工具连人类开发者拿着文档都很难理解它能做什么、不能做什么，Agent 拿到参数定义时也很难稳定用对。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">1. 到底该不该做？</div>
+      <div class="paragraph">
+        工具不是越多越好。新增之前，先拿三个标准拷问：现有能力的<span class="highlight">覆盖度</span>够不够？它能否带来<span class="highlight">效果</span>提升？它是否有<span class="highlight">成本优势</span>（Token 消耗和执行耗时）？如果只是“能做”，那往往并不值得做。
+      </div>
+    </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">2. 定义工具边界</div>
+      <div class="paragraph">
+        确定要做后，必须明确工具边界，工具间最好能正交。以本期的 <code>grep_search</code> 为例：它只负责定位候选位置，绝对不负责直接生成答案，也不替代 <code>read_file</code> 的精读。边界一旦模糊，Agent 在复杂任务中就容易发生严重的工具混用。
+      </div>
+    </div>
+
+      <div class="pull-quote serif">
+        不断添加工具/技能并不困难，难的是保持克制。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">3. 克制的参数设计</div>
+      <div class="paragraph">
+        不要把底层库（如 ripgrep）支持的所有参数全盘托出。判断标准很简单：不传这个参数，Agent 会犯致命错误吗？这部分复杂度能不能由其他方式消化？只有过滤无关变量，模型才能把有限的推理能力聚焦在“搜索什么内容”上。
+      </div>
+    </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">4. 迭代与优化</div>
+      <div class="paragraph">
+        工具做出来并不代表设计结束了。上线后还要继续看它是否真的好用。这本身也是个很复杂的话题，这里就先不扩展。Anthropic 去年有篇文章里提到他们如何做一个工具的，包括「用评测而不是感觉来判断工具是否变好」/「让 Agent 帮你分析评测结果」/「不只看最终正确率」
+      </div>
+    </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">切记：功能≠工具</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .map { flex: 1; display: flex; flex-direction: column; gap: 16px; justify-content: flex-start; }
+    .map-row { display: flex; align-items: stretch; gap: 18px; flex: 1; min-height: 0; }
+    .map-left { width: 240px; flex-shrink: 0; border: 2px solid #1A1A1A; background: #1A1A1A; color: #F4F1EA; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+    .map-fn { font-size: 32px; font-weight: bold; line-height: 1.35; }
+    .map-arrow { font-size: 36px; color: #D32F2F; display: flex; align-items: center; flex-shrink: 0; }
+    .map-right { flex: 1; border: 2px solid #1A1A1A; background: #FDFCF9; padding: 20px 26px; position: relative; display: flex; flex-direction: column; justify-content: center; }
+    .map-right::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #D32F2F; border-radius: 50%; }
+    .map-label { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; margin-bottom: 8px; }
+    .map-title { font-size: 38px; font-weight: 800; color: #1A1A1A; margin-bottom: 10px; }
+    .map-desc { font-size: 32px; color: #4A4A4A; line-height: 1.45; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 落地</span>
+      <span class="page-num serif">12</span>
+    </div>
+    <div class="title serif">zero2agent S004 对齐</div>
+    <div class="subtitle">行业共识落到代码：两个 builder 函数</div>
+    <div class="content map">
+      <div class="map-row">
+        <div class="map-left"><div class="map-fn mono">buildSystem<br>Prompt()</div></div>
+        <div class="map-arrow">→</div>
+        <div class="map-right">
+          <div class="map-label mono">OUTPUT</div>
+          <div class="map-title">System Message</div>
+          <div class="map-desc">五段式：Role / Scope / Policy / Workflow / Output</div>
+        </div>
+      </div>
+      <div class="map-row">
+        <div class="map-left"><div class="map-fn mono">buildUser<br>TaskMessage()</div></div>
+        <div class="map-arrow">→</div>
+        <div class="map-right">
+          <div class="map-label mono">OUTPUT</div>
+          <div class="map-title">User Message</div>
+          <div class="map-desc">XML 两层：runtime_context + user_task</div>
+        </div>
+      </div>
+      <div class="map-row">
+        <div class="map-left"><div class="map-fn mono">message<br>list[]</div></div>
+        <div class="map-arrow">→</div>
+        <div class="map-right">
+          <div class="map-label mono">RUNTIME</div>
+          <div class="map-title">Growing List</div>
+          <div class="map-desc">assistant / tool / tool_result 循环追加</div>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">两个 builder 函数，把上面的结构落进 S004 代码</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

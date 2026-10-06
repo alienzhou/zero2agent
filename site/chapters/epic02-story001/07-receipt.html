@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 64px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #1A1A1A; padding-bottom: 18px; margin-bottom: 30px; color: #666666; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 56px; font-weight: 900; line-height: 1.18; color: #1A1A1A; margin-bottom: 12px; flex-shrink: 0; }
+    .subtitle { font-size: 30px; color: #4A4A4A; margin-bottom: 32px; line-height: 1.45; flex-shrink: 0; }
+
+    .body { flex: 1; display: flex; flex-direction: column; gap: 24px; justify-content: flex-start; }
+
+    /* 高亮盒 */
+    .highlight { border: 1px solid #1A1A1A; border-left: 6px solid #D32F2F; background: #FDFCF9; padding: 26px 30px; box-shadow: 8px 8px 0 rgba(26,26,26,0.08); }
+    .highlight-title { font-size: 28px; font-weight: 800; color: #1A1A1A; margin-bottom: 10px; }
+    .highlight-text { font-size: 26px; color: #4A4A4A; line-height: 1.6; }
+    .highlight-text b { color: #1A1A1A; background: rgba(211,47,47,0.1); padding: 0 4px; }
+
+    /* 回执对比 */
+    .receipt { border: 2px solid #1A1A1A; background: #FDFCF9; padding: 24px 30px; }
+    .receipt-tag { font-size: 16px; letter-spacing: 2px; font-weight: bold; margin-bottom: 14px; }
+    .receipt.good .receipt-tag { color: #D32F2F; }
+    .receipt.bad .receipt-tag { color: #999999; }
+    .receipt-line { font-size: 24px; color: #1A1A1A; line-height: 1.6; font-family: ui-monospace, Menlo, monospace; }
+    .receipt.bad .receipt-line { color: #AAAAAA; }
+    .receipt-note { font-size: 23px; color: #666666; line-height: 1.5; margin-top: 12px; font-family: -apple-system, 'PingFang SC', sans-serif; }
+
+    .summary { margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 26px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 34px; font-weight: bold; color: #1A1A1A; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 深度解析</span>
+      <span class="page-num serif">07</span>
+    </div>
+    <div class="title serif">回执是模型唯一的观测窗口</div>
+    <div class="subtitle">模型看不到磁盘，它只能靠回执知道世界变了什么</div>
+
+    <div class="body">
+      <div class="receipt good">
+        <div class="receipt-tag mono">我们的设计</div>
+        <div class="receipt-line">已创建文件 src/app.ts（新建）</div>
+        <div class="receipt-line">已覆盖文件 src/app.ts（覆盖）</div>
+        <div class="receipt-line">已删 2 个；a.log 不存在，未删</div>
+        <div class="receipt-note">write_file 区分新建 vs 覆盖；delete 批量逐条汇总。模型据此确认自己到底做了什么，决定下一步。</div>
+      </div>
+
+      <div class="receipt bad">
+        <div class="receipt-tag mono">如果只回两个字</div>
+        <div class="receipt-line">成功</div>
+        <div class="receipt-note">磁盘上做的事没变，但模型丢掉了「新建还是覆盖」「哪个删了哪个没删」——后续判断更容易错。</div>
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">回到双向协同</div>
+        <div class="highlight-text">全量写 + 批量删 + 清晰回执，是<b>当前模型阶段</b>「够用且不越界」的取舍。模型再变强，这套接口还会跟着调。</div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">回执写多写少，决定模型能看见多少世界的变化</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

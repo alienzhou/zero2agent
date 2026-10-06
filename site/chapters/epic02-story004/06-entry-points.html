@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 06 · 接通输入和输出，代码里是哪两条线？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="06" data-sources="C01 C03 C04 C07">
+<header class="page-header" data-block><span>Zero2Agent · 实现骨架</span><span class="page-number">06</span></header>
+<div class="heading" data-block><h1>接通输入和输出，<br>代码里是哪两条线？</h1><p class="deck">只看桥接骨架，就能理解数据怎么走</p></div><div class="content">
+
+<div class="bridge-code" data-block><p class="overline accent">① 输入桥 · 你敲的 n * 2 从这里经过</p><pre>input.on('data', bytes =&gt; {
+  pty.write(decode(bytes))
+})</pre><p class="note" data-prose>少了这一条，程序可以显示提示，却收不到你的按键。</p></div>
+<div class="bridge-code" data-block><p class="overline accent">② 输出桥 · Node 算出的 42 从这里回来</p><pre>pty.onData(text =&gt; {
+  output.write(text)
+})</pre><p class="note" data-prose>少了这一条，程序即使执行了，你也看不到返回结果。</p></div>
+<p class="note" data-prose data-block>连接伪代码：decode 表示 UTF-8 流式解码。省略输入独占、窗口同步、背压和退出清理，不是完整实现。</p>
+<div class="entry-rail" data-block><p data-prose><code>--terminal</code> 独立启动 · <code>/terminal</code> 对话内启动<br>模型用 <code>interactive: true</code> 请求，三者共用桥接。</p></div>
+</div></article></body></html>

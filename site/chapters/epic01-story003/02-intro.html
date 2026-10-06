@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    /* 基础底色与全局设定 */
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    /* 页眉 */
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 40px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 32px; letter-spacing: -0.5px; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; gap: 28px; }
+
+    /* 回顾标签 */
+    .recap-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #1A1A1A;
+      color: #F4F1EA;
+      font-size: 20px;
+      padding: 6px 14px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      margin-bottom: 12px;
+    }
+
+    .recap-text {
+      font-size: 30px;
+      color: #4A4A4A;
+      line-height: 1.6;
+      padding-left: 20px;
+      border-left: 4px solid #CCCCCC;
+    }
+
+    /* 问题卡片 */
+    .problem-card {
+      background: #FFFFFF;
+      border: 3px solid #1A1A1A;
+      padding: 28px;
+      position: relative;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.06);
+    }
+
+    .problem-label {
+      position: absolute;
+      top: -14px;
+      left: 24px;
+      background: #D32F2F;
+      color: #FFFFFF;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 4px 12px;
+      transform: rotate(-1deg);
+    }
+
+    .problem-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 16px;
+      margin-top: 8px;
+    }
+
+    .problem-flow {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 30px;
+      color: #4A4A4A;
+      background: #F9F9F9;
+      padding: 16px;
+      border: 2px dashed #CCCCCC;
+      margin-bottom: 16px;
+    }
+
+    .flow-arrow { color: #D32F2F; margin: 0 8px; font-weight: bold; }
+
+    .problem-desc {
+      font-size: 30px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    .highlight {
+      border-bottom: 3px solid #D32F2F;
+      font-weight: bold;
+    }
+
+    /* 维度对比表 */
+    .dimension-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .dimension-table th {
+      font-size: 22px;
+      font-weight: bold;
+      color: #666666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: left;
+      padding: 12px 16px;
+      border-top: 2px solid #1A1A1A;
+      border-bottom: 2px solid #1A1A1A;
+    }
+
+    .dimension-table td {
+      font-size: 30px;
+      padding: 14px 16px;
+      border-bottom: 1px dashed #CCCCCC;
+      vertical-align: middle;
+    }
+
+    .dimension-table tr:last-child td {
+      border-bottom: 2px solid #1A1A1A;
+    }
+
+    .status-yes { color: #D32F2F; font-weight: bold; }
+    .status-no { color: #AAAAAA; }
+
+    /* 底部粗线总结 */
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 导读</span>
+      <span class="page-num serif">02</span>
+    </div>
+    
+    <div class="title serif">能搜内容了，<br>但找不到文件</div>
+    
+    <div class="content-area">
+      
+      <!-- 上期回顾 -->
+      <div>
+        <div class="recap-badge">S002 回顾</div>
+        <div class="recap-text">
+          上一期我们为 Agent 加上了 <code>grep_search</code>，可以在文件内容里搜关键词，定位到"哪一行出现了某个词"。今天还是 Agent Harness 的基础部分，我们先逐步把 Agent 做好。
+        </div>
+      </div>
+
+      <!-- 本期问题 -->
+      <div class="problem-card">
+        <div class="problem-label">本期问题</div>
+        <div class="problem-title">文件搜索维度缺失</div>
+        <div class="problem-flow">
+          用户：帮我找一下项目里所有的测试文件
+        </div>
+        <div class="problem-desc">
+          <code>grep_search</code> 搜的是<span class="highlight">文件内容</span>。<br>
+          但上面这个问题关心的是<span class="highlight">文件路径</span>。
+        </div>
+      </div>
+
+      <!-- 维度对比 -->
+      <table class="dimension-table">
+        <tr>
+          <th>搜索维度</th>
+          <th>已有工具</th>
+          <th>回答的问题</th>
+        </tr>
+        <tr>
+          <td>内容</td>
+          <td><span class="status-yes">grep_search</span></td>
+          <td>哪一行包含这个关键词？</td>
+        </tr>
+        <tr>
+          <td>文件</td>
+          <td><span class="status-no">[x] 没有</span></td>
+          <td>哪些文件匹配这个模式？</td>
+        </tr>
+      </table>
+
+    </div>
+    
+    <!-- <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">补齐 Agent Harness 的经典搜索工具。</div>
+    </div> -->
+  </div>
+</div>
+</body>
+</html>

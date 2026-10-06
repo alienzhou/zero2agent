@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 10 · 原命令退出了，子进程也一定结束了吗？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="10" data-sources="C12">
+<header class="page-header" data-block><span>Zero2Agent · 清理的原因</span><span class="page-number">10</span></header>
+<div class="heading" data-block><h1>原命令退出了，<br>子进程也一定结束了吗？</h1><p class="deck">脚本打印 done，不代表所有工作都结束</p></div><div class="content">
+
+<div class="terminal" data-block><div class="console-label">脚本关系示例 · &amp; 让 sleep 在后台运行</div><pre>sleep 30 &amp;
+echo done</pre></div>
+<div class="process-story" data-block><p class="overline">打印 done 的这一刻 · 后台进程关系示意</p><div class="process-line"><span class="process-name">脚本</span><span class="process-state">不等 sleep，先走到末尾</span></div><div class="descendant-line"><span>└─ sleep 30</span><strong>仍可能没结束</strong></div></div>
+<div class="cleanup-scope"><section data-block><h2>如果只盯着原命令的退出码</h2><p data-prose>你可能漏掉仍在工作的后代。本课在正常退出与中止时，都清理原进程组和已观察、可核对身份的后代。</p></section><section data-block><h2>有意脱离跟踪的进程呢？</h2><p data-prose>未观察到就脱组、改挂父进程的后代，不能保证回收。宿主被强杀、断电也不在保证内；这不是沙箱。</p></section></div>
+</div></article></body></html>

@@ -1,0 +1,20 @@
+/* 风格 A · 浅色内容页共用 v2 — 手机可读字号 + 饱满排版 */
+body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+.serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+.doc { width: 960px; height: 1300px; padding: 56px 64px 72px; display: flex; flex-direction: column; box-sizing: border-box; }
+.header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #1A1A1A; padding-bottom: 18px; margin-bottom: 32px; color: #666666; flex-shrink: 0; }
+.page-num { color: #D32F2F; font-size: 26px; }
+.title { font-size: 54px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 14px; flex-shrink: 0; }
+.subtitle { font-size: 32px; color: #666666; margin-bottom: 32px; line-height: 1.45; flex-shrink: 0; }
+.content { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.summary { margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px; display: flex; gap: 18px; align-items: flex-start; flex-shrink: 0; }
+.summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+.summary-text { font-size: 36px; font-weight: bold; color: #1A1A1A; line-height: 1.4; }
+.summary-text em { color: #D32F2F; font-style: normal; }
+.box { border: 2px solid #1A1A1A; background: #FDFCF9; padding: 24px 28px; position: relative; }
+.box::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #D32F2F; border-radius: 50%; }
+.box-label { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; margin-bottom: 8px; }
+.box-title { font-size: 38px; font-weight: 800; color: #1A1A1A; margin-bottom: 10px; line-height: 1.25; }
+.box-desc { font-size: 34px; color: #4A4A4A; line-height: 1.5; }

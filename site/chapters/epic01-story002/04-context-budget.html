@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 40px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 50px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 36px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 52px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 23px;
+      color: #333333;
+      line-height: 1.66;
+      margin-bottom: 24px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 88px;
+      line-height: 0.8;
+      padding-top: 8px;
+      padding-right: 12px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .pull-quote {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 18px 0;
+      margin: 28px 0;
+      border-top: 2px solid #D32F2F;
+      border-bottom: 2px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .code-snippet {
+      background: #1A1A1A;
+      color: #F4F1EA;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      padding: 16px;
+      font-size: 17px;
+      line-height: 1.45;
+      margin-bottom: 24px;
+      border-left: 4px solid #D32F2F;
+      break-inside: avoid;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心问题</span>
+      <span class="page-num serif">04</span>
+    </div>
+    
+    <div class="title serif">给多少才够？<br>搜索里的上下文预算矛盾</div>
+    
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">在</span>定义 <code>grep_search</code> 的输出时，你会遇到了 Agent 工程中最常见的困境之一：<span class="highlight">信息丰度与上下文占用的冲突</span>。如果工具只返回干瘪的文件名，Agent 无法判断该不该读；如果顺手返回大段上下文代码，搜索就会占用大量窗口。
+      </div>
+
+      <div class="paragraph">
+        在这当前基础版的迭代中，我做了一个最简化版的处理：默认不给上下文，可选 <code>context</code> 参数，并强制设定 100 条硬性截断。其输出契约本质上是一份“坐标简报”：
+      </div>
+
+      <div class="code-snippet">
+        Found 5 matches for "runLoop"<br>
+        ---<br>
+        File: src/core/loop.ts<br>
+        L42: export async function runLoop() {<br>
+        ---
+      </div>
+
+      <div class="pull-quote serif">
+        搜索准确性会程度影响 <br>效果、速度与成本。
+      </div>
+
+      <div class="paragraph">
+        虽然能 work，但这绝非终点。在生产级框架中，这个矛盾会演化出一系列极其复杂的动态策略课题：
+        <br><br>
+        1. 能否根据当前剩余的上下文预算，动态决定截断长度？<br>
+        2. 当命中极少时，是否该自动下发更厚的单条信息？<br>
+        3. 能否在返回给主循环前，先筛掉测试代码或其他无关的噪音？
+      </div>
+
+      <div class="paragraph">
+        同样的 Token 预算，是用来换取“更多的候选文件”，还是换取“更深的单条阅读”？这些都是我们在后续「Epic 4：上下文与健壮性管理」中，会尝试去一起深入的。
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">工具契约的设计，本质是在分配有限的推理预算。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

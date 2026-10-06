@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 48px; }
+    .duo .name { font-family: ui-monospace, Menlo, monospace; font-size: 24px; color: #D32F2F; font-weight: 700; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 前逻辑</span>
+      <span class="page-num serif">04</span>
+    </div>
+    <div class="title serif">外面跑的程序<br>事先不知道会怎样</div>
+    <div class="subtitle">不知道要跑多久、会打出多少字、会不会一直不停</div>
+    <div class="content prose">
+      <p class="p">前 7 个工具：调一次、马上返回、马上结束。调用前你就知道会拿到什么。terminal 不一样。</p>
+      <div class="duo">
+        <div class="cell muted">
+          <div class="name">read_file</div>
+          <div class="d">读多少、要多久、读完就停。调用前你就知道。</div>
+        </div>
+        <div class="cell">
+          <div class="name">terminal("npm run dev")</div>
+          <div class="d">会打出多少字？要跑多久？跑完后进程还在吗？都不知道。</div>
+        </div>
+      </div>
+      <div class="callout">写「起一个进程」的代码不多。难的是：<b>程序打出来的字，哪些要给 Agent 看，哪些不要给</b>。这一课主要讲这个。</div>
+      <p class="p">做简单 demo 可以先不管。<span class="hl">要做正经产品</span>，这些问题都要想清楚。</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

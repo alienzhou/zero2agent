@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    .doc { width: 960px; height: 1300px; padding: 56px 64px 72px; display: flex; flex-direction: column; box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 18px; margin-bottom: 30px; color: #888888; flex-shrink: 0; }
+    .page-num { color: #D32F2F; font-size: 26px; }
+    .title { font-size: 46px; font-weight: 900; line-height: 1.22; color: #F4F1EA; margin-bottom: 14px; flex-shrink: 0; }
+    .subtitle { font-size: 28px; color: #AAAAAA; margin-bottom: 28px; line-height: 1.45; flex-shrink: 0; text-wrap: pretty; }
+    .lead, .p, .callout { text-wrap: pretty; }
+    .content { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+    .lead { font-size: 35px; line-height: 1.62; color: #F4F1EA; font-weight: 700; margin: 0 0 30px; }
+    .lead em { color: #D32F2F; font-style: normal; }
+    .p { font-size: 32px; line-height: 1.78; color: #CFCFCF; margin: 0 0 28px; }
+    .p b { color: #F4F1EA; font-weight: 800; }
+    .p .red { color: #FF7A7A; font-weight: 700; }
+    .callout { border-left: 6px solid #D32F2F; background: rgba(211,47,47,0.1); padding: 22px 26px; font-size: 29px; line-height: 1.6; color: #E0E0E0; }
+    .callout b { color: #F4F1EA; }
+    .callout .dim { display: block; margin-top: 10px; color: #8A8A8A; font-size: 25px; }
+    .summary { margin-top: auto; border-top: 4px solid rgba(255,255,255,0.2); padding-top: 26px; display: flex; gap: 18px; flex-shrink: 0; }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; }
+    .summary-text { font-size: 34px; font-weight: bold; color: #F4F1EA; line-height: 1.4; }
+    .summary-text em { color: #D32F2F; font-style: normal; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制 · 生命周期</span>
+      <span class="page-num serif">11</span>
+    </div>
+    <div class="title serif">后台跑的程序<br>谁记着、谁收尾</div>
+    <div class="subtitle">记下来 · 退出时问 · 默认不停</div>
+    <div class="content">
+      <p class="lead">上一页可以把命令<strong>转到后台</strong>。它还在跑时，程序要记下来；Agent 要退出时，也要说清楚怎么办。</p>
+      <p class="p"><b>① 记下来</b>：只有你点转后台的命令会进列表。跑完后，下次跑命令时会在返回的字里说一句「它结束了」。</p>
+      <p class="p"><b>② 退出时</b>：Agent 正常退出前，列出还在跑的后台命令，问你要不要一起停——<span class="red">默认不停</span>。转后台就是要让它继续跑。</p>
+      <p class="p"><b>③ 突然死掉</b>：Agent 被强制关掉时，用看门狗尽量停掉相关子进程，少留没人管的进程。</p>
+      <div class="callout">还有一种情况：子进程停了，但还有进程抓着输出不放。最多等 <b>2 秒</b>就结束，并写上输出可能不全。<span class="dim">不给模型「列进程 / 杀进程」的工具，也不扫整机进程表。这些事留给人做。</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

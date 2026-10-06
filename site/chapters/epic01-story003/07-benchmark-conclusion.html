@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress { 
+      background: #D32F2F; color: #FFFFFF; font-size: 16px; padding: 4px 10px; 
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+
+    /* 方法论模板 - 编号列表 */
+    .method-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .method-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .method-num {
+      font-size: 36px;
+      font-weight: 900;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      min-width: 36px;
+    }
+
+    .method-content {
+      flex: 1;
+    }
+
+    .method-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 6px;
+    }
+
+    .method-desc {
+      font-size: 24px;
+      color: #4A4A4A;
+      line-height: 1.5;
+    }
+
+    /* 高亮盒 */
+    .highlight-box {
+      background: #FFFFFF;
+      border: 2px solid #1A1A1A;
+      border-left: 8px solid #D32F2F;
+      padding: 24px 28px;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.04);
+    }
+
+    .highlight-box-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 12px;
+    }
+
+    .highlight-box-text {
+      font-size: 24px;
+      color: #333333;
+      line-height: 1.6;
+    }
+
+    .highlight-box-text .key { 
+      color: #D32F2F; 
+      font-weight: bold; 
+    }
+
+    /* 分隔线 */
+    .divider {
+      border-top: 1px dashed #CCCCCC;
+      margin: 8px 0;
+    }
+
+    /* 副标题 */
+    .section-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #666666;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">BENCHMARK 3/3</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">07</span>
+    </div>
+    
+    <div class="main-title serif">Benchmark 与技术选型</div>
+    <div class="sub-title">可复用的方法论模板</div>
+    
+    <div class="content-area">
+      
+      <div class="method-list">
+        <div class="method-item">
+          <div class="method-num">1</div>
+          <div class="method-content">
+            <div class="method-title">竞品调研</div>
+            <div class="method-desc">看别人在用什么，避免凭空列举。例如这个功能，主流 Agent Harness 已替我们做了一轮初步筛选</div>
+          </div>
+        </div>
+        <div class="method-item">
+          <div class="method-num">2</div>
+          <div class="method-content">
+            <div class="method-title">定性分析</div>
+            <div class="method-desc">可以列出自己关心的维度，在各个维度上做横向对比，快速缩小候选范围</div>
+          </div>
+        </div>
+        <div class="method-item">
+          <div class="method-num">3</div>
+          <div class="method-content">
+            <div class="method-title">设计 Benchmark（如需）</div>
+            <div class="method-desc">一些技术方案，可能非常关心性能等指标。这时候设计一套公平有效、适应自己场景的 Benchmark，比冰冷的数据更能反应情况。以前这步需要花费很多时间，如今借助 AI 的“知识面”可能快速完成。</div>
+          </div>
+        </div>
+        <div class="method-item">
+          <div class="method-num">4</div>
+          <div class="method-content">
+            <div class="method-title">解读结论</div>
+            <div class="method-desc">包括定性与定量的结论，人做最终判断</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="highlight-box">
+        <div class="highlight-box-title">Benchmark 的价值</div>
+        <div class="highlight-box-text">
+          好的定性分析通常能给出<span class="key">正确方向</span>。<br><br>
+          而 Benchmark 在此基础上，不仅给出了数据判断的价值，<span class="key">还可能发现定性分析难以触及的细节</span>——比如 fs.glob 的 globstar 行为异常、npm glob 在错误场景下静默退出等。Benchmark 的本身，也在做一场适应性接入的 Demo 测试，看看该技术实际运行起来，能力是否对齐。
+        </div>
+      </div>
+
+    </div>
+    
+    <!-- <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">Benchmark 可被 AI 大幅加速</div>
+    </div> -->
+  </div>
+</div>
+</body>
+</html>

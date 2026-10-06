@@ -1,0 +1,155 @@
+{
+  "title": "Zero2Agent · E03-S002 权限与 Approval",
+  "date": "2026-10-06",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "candidate": "73ecdbc",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 16,
+  "edition": "v2-illustrated-permissions",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "Agent 执行前先过权限关",
+      "number": 1,
+      "sources": [
+        "C01"
+      ]
+    },
+    {
+      "file": "02-scope.html",
+      "title": "“修好这个报错”，授权到了哪一步？",
+      "number": 2,
+      "sources": [
+        "C01",
+        "C02"
+      ]
+    },
+    {
+      "file": "03-gate.html",
+      "title": "权限判断，必须接在 execute 之前",
+      "number": 3,
+      "sources": [
+        "C03"
+      ]
+    },
+    {
+      "file": "04-three-actions.html",
+      "title": "同一次工具调用，有三条去路",
+      "number": 4,
+      "sources": [
+        "C02"
+      ]
+    },
+    {
+      "file": "05-competitors.html",
+      "title": "都叫权限控制，判定方法并不相同",
+      "number": 5,
+      "sources": [
+        "R01",
+        "R02",
+        "R03",
+        "R04"
+      ]
+    },
+    {
+      "file": "06-modes.html",
+      "title": "先选默认模式，再处理例外规则",
+      "number": 6,
+      "sources": [
+        "C02"
+      ]
+    },
+    {
+      "file": "07-rule-order.html",
+      "title": "两条规则都命中，该听哪一条？",
+      "number": 7,
+      "sources": [
+        "C02"
+      ]
+    },
+    {
+      "file": "08-exact-match.html",
+      "title": "允许 git status，不等于允许后面的命令",
+      "number": 8,
+      "sources": [
+        "C02",
+        "C05"
+      ]
+    },
+    {
+      "file": "09-request.html",
+      "title": "批准之前，把“这次操作”看完整",
+      "number": 9,
+      "sources": [
+        "C04",
+        "C06"
+      ]
+    },
+    {
+      "file": "10-once.html",
+      "title": "同一个工具，下一次还要重新判断",
+      "number": 10,
+      "sources": [
+        "C04",
+        "C05"
+      ]
+    },
+    {
+      "file": "11-expiry.html",
+      "title": "用户一直没回答，调用不能一直悬着",
+      "number": 11,
+      "sources": [
+        "C04",
+        "C06",
+        "C08"
+      ]
+    },
+    {
+      "file": "12-paths.html",
+      "title": "你批准的路径，执行时还在原地吗？",
+      "number": 12,
+      "sources": [
+        "C07",
+        "C08"
+      ]
+    },
+    {
+      "file": "13-receipts.html",
+      "title": "拒绝执行之后，模型会收到什么？",
+      "number": 13,
+      "sources": [
+        "C03",
+        "C08"
+      ]
+    },
+    {
+      "file": "14-two-layers.html",
+      "title": "允许启动命令，还要确认终端交给谁",
+      "number": 14,
+      "sources": [
+        "C06",
+        "C08"
+      ]
+    },
+    {
+      "file": "15-practice.html",
+      "title": "先拒绝，再批准，直接检查文件有没有生成",
+      "number": 15,
+      "sources": [
+        "C08",
+        "C09"
+      ]
+    },
+    {
+      "file": "16-next.html",
+      "title": "权限已接入，下一步把运行过程展示出来",
+      "number": 16,
+      "sources": [
+        "C01",
+        "C09"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress { 
+      background: #D32F2F; color: #FFFFFF; font-size: 16px; padding: 4px 10px; 
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 48px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 26px;
+      color: #333333;
+      line-height: 1.65;
+      margin-bottom: 16px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 80px;
+      line-height: 0.8;
+      padding-top: 6px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 4px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .pull-quote {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 14px 0;
+      margin: 20px 0;
+      border-top: 3px solid #D32F2F;
+      border-bottom: 3px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 42px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .flow-box {
+      background: #FFFFFF;
+      border: 2px solid #1A1A1A;
+      padding: 14px 18px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 24px;
+      color: #4A4A4A;
+      margin: 16px 0;
+      break-inside: avoid;
+    }
+    .flow-arrow { color: #D32F2F; margin: 0 6px; }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">BENCHMARK 1/3</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">05</span>
+    </div>
+    
+    <div class="main-title serif">Benchmark 与技术选型</div>
+    <div class="sub-title">聊聊 AI Coding 时代如何做技术选型的 Benchmark</div>
+    
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">S</span>002 选 ripgrep 时，我们的分析路径是：调研四家竞品 → 提炼五个维度 → 列横向对比表 → 得出结论。逻辑合理。
+      </div>
+
+      <div class="paragraph">
+        但回头看，会发现结论都建立在调研与判断之上，缺少实测数据。比如「rg 性能强」到底比 npm glob 快多少？
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">Benchmark 方法论</div>
+      <div class="flow-box">
+        设计方案<span class="flow-arrow">→</span>实现脚本<span class="flow-arrow">→</span>运行收数<span class="flow-arrow">→</span>解读结论
+      </div>
+      <div class="paragraph">
+        整个 benchmark 的设计和实现，都是和 AI Agent 协同完成的。重点是和它讨论清楚测试方案，这样可以让它自主进行 benchmark。
+      </div>
+      </div>
+
+      <div class="pull-quote serif">
+        30 分钟讨论，能省下未来几个小时的弯路
+      </div>
+
+      <div class="paragraph">
+        在设计 Benchmark 方案时候，需要注意：
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">公平性</div>
+      <div class="paragraph">
+        测试条件一旦不一致，数据就很难置信。CLI 工具直接调用；Node API 用最小化的脚本包一层；所有工具统一 <code>--no-ignore --hidden</code>，遍历同一棵文件树。<span class="highlight">胶水代码越少，越接近真实的表现。</span>
+      </div>
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">语料选择</div>
+      <div class="paragraph">
+        选择了 小/中/大三个量级的文件集。分别使用了本项目、Vite、Next.js 从小到大三个项目。clone + install 后锁定 commit，避免隔几天再跑面对不同的文件树。
+      </div>
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">AI 可以大幅加速 Benchmark 的实施。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

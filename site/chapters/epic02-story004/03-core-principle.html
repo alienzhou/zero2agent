@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 03 · 追踪一次按键：42 是怎么回来的？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="03" data-sources="C03 C04 C20">
+<header class="page-header" data-block><span>Zero2Agent · 核心原理</span><span class="page-number">03</span></header>
+<div class="heading" data-block><h1>追踪一次按键：<br>42 是怎么回来的？</h1><p class="deck">把上一页的操作，拆成一条输入与输出链</p></div><div class="content">
+
+<p data-prose data-block>这次回车没有发起模型请求。顺着 <code>n * 2</code> 往下看，再沿着 <code>42</code> 往上看，就能找到谁在做什么。</p>
+<div class="trace-labels" data-block><span>输入向下：n * 2 ↵</span><span>结果向上：42</span></div>
+<div class="trace">
+<section data-block><span class="trace-id">01</span><div><h2>你的真实终端</h2><p data-prose>你敲入表达式，也在这里看到 42。</p></div></section>
+<div class="flow-arrow" aria-hidden="true">↓ ↑</div>
+<section data-block><span class="trace-id">02</span><div><h2>宿主 CLI</h2><p data-prose>运行 Agent 的程序，暂停对话输入、双向转发。</p></div></section>
+<div class="flow-arrow" aria-hidden="true">↓ ↑</div>
+<section class="trace-pty" data-block><span class="trace-id">03</span><div><h2>PTY：程序眼里的终端</h2><p data-prose><code>master</code> 端给宿主，<code>slave</code> 端接程序。</p></div></section>
+<div class="flow-arrow" aria-hidden="true">↓ ↑</div>
+<section data-block><span class="trace-id">04</span><div><h2>bash 启动的 Node</h2><p data-prose>保存着 n = 21；真正执行 n * 2 的是它。</p></div></section>
+</div>
+<p class="note" data-prose data-block>模型不在按键链里。若由模型发起 interactive: true 请求，它只等工具结束，不代替人继续输入。</p>
+</div></article></body></html>

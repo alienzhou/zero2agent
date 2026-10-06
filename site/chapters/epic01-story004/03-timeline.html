@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_page-shared.css">
+  <style>
+    .title { font-size: 46px; margin-bottom: 10px; }
+    .subtitle { font-size: 28px; margin-bottom: 20px; }
+    .summary-text { font-size: 32px; }
+    /* 时间线页内容较密，收紧步距与卡片内边距，避免压到底部金句 */
+    .tl-step { margin-bottom: 10px; }
+    .tl-card { padding: 14px 22px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 时间线</span>
+      <span class="page-num serif">03</span>
+    </div>
+    <div class="title serif">2023–2024：从泥球到分层</div>
+    <div class="subtitle">早期 Coding Agent 的 Prompt，往往是一坨什么都往里塞的字符串</div>
+
+    <div class="content timeline">
+      <div class="tl-step">
+        <div class="tl-year mono">2023.06</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">ERA 1 · START</div>
+          <div class="tl-event">单字符串 Prompt</div>
+          <div class="tl-desc">身份、格式要求、工作流程全写在一起</div>
+          <div class="tl-product mono">→ Aider 早期 main_system</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year mono">2023</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">SPLIT 01</div>
+          <div class="tl-event">第一次职责拆分</div>
+          <div class="tl-desc">main_system 管身份与规则，system_reminder 管格式提醒</div>
+          <div class="tl-product mono">→ Aider system_reminder</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year mono">2024</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">SPLIT 02</div>
+          <div class="tl-event">工具描述外移</div>
+          <div class="tl-desc">参数说明移进 tool schema，System 只留策略</div>
+          <div class="tl-product mono">→ function calling 时代</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-year mono">2024</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-label mono">CHANNEL</div>
+          <div class="tl-event">动态信息独立通道</div>
+          <div class="tl-desc">cwd、AGENTS.md 等不再塞进 base prompt</div>
+          <div class="tl-product mono">→ runtime context 分化</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">信息拆到对的通道里，prompt 不必越写越长</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

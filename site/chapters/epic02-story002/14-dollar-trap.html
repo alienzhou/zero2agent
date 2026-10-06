@@ -1,0 +1,5 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E02-S002 · 特殊字符</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet dark" data-page="14"><header class="page-header" data-block><span>Zero2Agent · 一个实现细节</span><span class="page-number">14</span></header><div class="heading" data-block><h1>新内容里的 $，要原样写入</h1><p class="deck" data-prose>把 foo 换成两个字符：美元符号和 &amp;</p></div><main class="content"><div class="receipt" data-block><p class="label">String.replace · 字符串替换参数</p><pre>"foo".replace("foo", "$&amp;")
+
+结果：<span class="accent">"foo"</span></pre></div><p data-block data-prose>在这种写法里，<code>$&amp;</code> 会被解释成“匹配到的原文”。想写入的符号被转换了。</p><div class="receipt" data-block><p class="label">本版用 split / join · 字面量拼接</p><pre>"foo".split("foo").join("$&amp;")
+
+结果：<span class="accent">"$&amp;"</span></pre></div><p data-block data-prose>原文作为字符串分隔符，新内容直接参与拼接。这样能保留代码、脚本和模板里的特殊字符。</p><p class="note" data-block data-prose>两个结果均由本地 JavaScript 运行验证。也可以用 replace 的函数回调保留字面量；这里沿用本项目的 split / join 实现。</p></main></article></body></html>

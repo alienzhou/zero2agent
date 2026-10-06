@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 12 · 现在自己试：计算一段，翻几页文档</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="12" data-sources="C07 C15 C18 C20">
+<header class="page-header" data-block><span>Zero2Agent · 两项跟练</span><span class="page-number">12</span></header>
+<div class="heading" data-block><h1>现在自己试：<br>计算一段，翻几页文档</h1><p class="deck">不需要模型密钥，直接从独立入口开始</p></div><div class="content">
+
+<div class="practice-setup" data-block><p class="note" data-prose>对应版本仓库根目录先 <code>pnpm build</code>，再运行：</p><pre>node packages/tui/dist/cli.js --terminal</pre><p class="note" data-prose>单独输入 y；看到 bash 提示符后开始，不要整段粘贴。</p></div>
+<section class="practice-unit" data-block><h2><span class="accent">01</span> 在 bash 启动 Node</h2><pre>NODE_REPL_HISTORY= node</pre><p class="note" data-prose>看到 &gt; 后，逐行输入下面三行，不用输入 &gt;：</p><div class="practice-answer"><pre>const n = 21
+n * 2
+.exit</pre><p><span>第二行预期输出</span><strong>42</strong><span>.exit 回到 bash</span></p></div></section>
+<section class="practice-unit" data-block><h2><span class="accent">02</span> 回到 bash，再读文档</h2><pre>LESSCHARSET=utf-8 LESSHISTFILE=/dev/null \
+  less README.md</pre><p data-prose>空格翻页 · b 返回 · / 搜索 · q 回到 bash。</p></section>
+<p class="note" data-prose data-block>最后在 bash 输入 <code>exit</code>，回到原命令行。本课已合入 main；复现可用固定实现 b200c9f，获取步骤见课程跟练文档。</p>
+</div></article></body></html>

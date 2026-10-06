@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .xml-wrap { flex: 1; display: flex; flex-direction: column; gap: 0; justify-content: flex-start; }
+    .xml-outer { border: 3px solid #1A1A1A; padding: 32px; background: #FDFCF9; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .xml-tag { font-size: 30px; color: #D32F2F; font-weight: bold; margin-bottom: 28px; }
+    .xml-inner { border: 2px dashed #1A1A1A; padding: 28px 30px; background: #F4F1EA; margin-bottom: 24px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .xml-inner:last-child { margin-bottom: 0; }
+    .xml-inner-tag { font-size: 28px; color: #1A1A1A; font-weight: bold; margin-bottom: 14px; }
+    .xml-desc { font-size: 34px; color: #4A4A4A; line-height: 1.5; }
+    .xml-example { font-size: 28px; color: #888888; margin-top: 14px; line-height: 1.45; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 结构</span>
+      <span class="page-num serif">08</span>
+    </div>
+    <div class="title serif">User Prompt 两层包装</div>
+    <div class="subtitle">动态上下文和本轮任务，用 XML 边界块分开</div>
+    <div class="content xml-wrap">
+      <div class="xml-outer">
+        <div class="xml-tag mono">&lt;user_message&gt; ... &lt;/user_message&gt;</div>
+        <div class="xml-inner">
+          <div class="xml-inner-tag mono">&lt;runtime_context&gt;</div>
+          <div class="xml-desc">cwd、打开文件、选中代码、AGENTS.md 等运行时信息</div>
+          <div class="xml-example mono">不进 System，每轮按需注入</div>
+        </div>
+        <div class="xml-inner">
+          <div class="xml-inner-tag mono">&lt;user_task&gt;</div>
+          <div class="xml-desc">用户本轮的具体指令与任务描述</div>
+          <div class="xml-example mono">与上下文分离，便于解析与裁剪</div>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">Runtime 信息走 User 通道，<em>不要</em>硬拼进 System</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

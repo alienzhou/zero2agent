@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 20px; margin-bottom: 80px; color: #888888;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* 巨型叙事字 */
+    .hero-text {
+      font-size: 48px;
+      font-weight: 800;
+      color: #F4F1EA;
+      line-height: 1.5;
+      margin-bottom: 60px;
+    }
+    .hero-text span { color: #D32F2F; font-family: 'Georgia', serif; font-style: italic; }
+
+    /* 数据指标卡 */
+    .metric-container {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .metric-card {
+      flex: 1;
+      border-top: 2px solid #D32F2F;
+      padding-top: 20px;
+    }
+
+    .metric-value {
+      font-size: 72px;
+      font-weight: 900;
+      color: #F4F1EA;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      margin-bottom: 12px;
+    }
+    
+    .metric-label {
+      font-size: 22px;
+      color: #AAAAAA;
+      line-height: 1.5;
+    }
+
+    /* 痛点引用 */
+    .pain-point {
+      background: #222222;
+      border-left: 4px solid #555555;
+      padding: 30px;
+      font-size: 24px;
+      color: #CCCCCC;
+      line-height: 1.6;
+    }
+    .pain-point strong { color: #F4F1EA; }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #333333; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #F4F1EA; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 产品洞察</span>
+      <span class="page-num serif">06</span>
+    </div>
+    
+    <div class="content-wrapper">
+      <div class="hero-text">
+        关于 Grep Search：<br>
+        1973 年，grep 发布。<br>
+        后来又有了更多可选新技术。<br>
+        但在半个世纪后的今天，<br>
+        <span>“AI Agents 简直太爱用 grep 了。”</span>
+      </div>
+
+      <div class="metric-container">
+        <div class="metric-card">
+          <div class="metric-value">15-20%</div>
+          <div class="metric-label">在我们真实的 Coding Agent 产品数据中，搜索工具占据了很高的调用比例。是除读写文件外最核心的基础能力。</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">&gt;15s</div>
+          <div class="metric-label">在大型仓库中，ripgrep 由于扫描文件量太大，单次搜索耗时很容易超过 15 秒，严重拖慢 Agent 迭代流。</div>
+        </div>
+      </div>
+
+      <div class="pain-point">
+        当 <strong>ripgrep 这种物理扫描方案在大仓库中遇到性能与准确性问题</strong> 时，可以怎么应对？后面我们会一起来看看业界有哪些方案
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">事物似乎总是螺旋式上升，Grep 又重现荣光。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

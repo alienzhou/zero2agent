@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>E03-S001 · 16 · 验证请求，不只问「记得吗」</title><link rel="stylesheet" href="course.css"></head><body><article class="sheet lesson" data-page="16" data-sources="C10 C18"><header class="page-header" data-block><span>Zero2Agent · 可复核的验证</span><span class="page-number">16</span></header><div class="heading" data-block><h1>验证请求，不只问「记得吗」</h1><p class="deck">用本地 HTTP/SSE 服务，捕获真实 CLI 的请求</p></div><main class="content">
+<div class="check-table" data-block><div class="check-head"><span>触发情景</span><span>检查边界</span></div><div><strong>第二轮追问</strong><p data-prose>消息顺序正确，工具调用与结果配对。</p></div><div><strong>跨越水位</strong><p data-prose>先缩短、再摘要；主请求不越过预算。</p></div><div><strong>后台 + 新消息</strong><p data-prose>尾部保留；reset 后迟到摘要不写回。</p></div><div><strong>手动与失败</strong><p data-prose>命令不入史；截断不采用，工具不重跑。</p></div></div>
+<p class="note" data-block data-prose>SSE 是服务端流式事件。这些检查验证传输与状态契约，不是真实模型效果；还要另查摘要是否保住重要事实。</p>
+<p class="version-note" data-block data-prose>预算、并发与真实 CLI 契约已自动验证；测试明细见验收记录，真实模型效果需另行体验。</p>
+</main></article></body></html>

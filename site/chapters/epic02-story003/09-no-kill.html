@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 46px; }
+    .duo .key { font-family: ui-monospace, Menlo, monospace; font-size: 24px; color: #D32F2F; font-weight: 700; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制 · 长命令</span>
+      <span class="page-num serif">09</span>
+    </div>
+    <div class="title serif">跑太久<br>可以不杀、可以转后台</div>
+    <div class="subtitle">等太久时，可以让命令在后台继续跑</div>
+    <div class="content prose">
+      <p class="p">有人想加 timeout：到时间就自动 kill。这个工具<span class="hl">没有 timeout</span>。杀掉了不能恢复，电脑也分不清是该等还是该停。</p>
+      <p class="p">做法是：<span class="hl">跑过一段时间后，你可以把命令转到后台</span>。程序继续跑，Agent 可以先做别的事（有界面时要你点一下确认，不会自动杀）。你也可以随时<strong>取消</strong>：</p>
+      <div class="duo">
+        <div class="cell">
+          <div class="key">取消</div>
+          <div class="d">不想等了，停掉命令和它起的子进程。已经打出来的字照样返回。</div>
+        </div>
+        <div class="cell">
+          <div class="key">转后台</div>
+          <div class="d">到提示时间后你可以选：命令在后台继续跑，你和 Agent 继续聊天。</div>
+        </div>
+      </div>
+      <div class="callout">在 CI 里没有界面、不能按键。那种情况要在外面自己加 timeout。工具不会假装内置「120 秒必杀」。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

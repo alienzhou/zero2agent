@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress { 
+      background: #1A1A1A; color: #FFFFFF; font-size: 16px; padding: 4px 10px; 
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+
+    .content-area { flex: 1; display: flex; flex-direction: column; }
+
+    /* 五层塔 */
+    .tower {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .tower-level {
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid #CCCCCC;
+    }
+
+    .tower-level:last-child {
+      border-bottom: none;
+    }
+
+    .tower-num {
+      width: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 900;
+      font-family: 'Georgia', serif;
+      color: #CCCCCC;
+      border-right: 2px solid #1A1A1A;
+    }
+
+    .tower-content {
+      flex: 1;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tower-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tower-desc {
+      font-size: 24px;
+      color: #4A4A4A;
+      line-height: 1.5;
+    }
+
+    /* 当前层高亮 */
+    .tower-level.current {
+      background: rgba(211,47,47,0.06);
+    }
+    .tower-level.current .tower-num {
+      color: #D32F2F;
+    }
+    .tower-level.current .tower-title {
+      color: #D32F2F;
+    }
+
+    /* 标签 */
+    .level-badge {
+      font-size: 16px;
+      background: #1A1A1A;
+      color: #F4F1EA;
+      padding: 3px 10px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .level-badge.core {
+      background: #D32F2F;
+    }
+    .level-badge.future {
+      background: #666666;
+    }
+
+    /* 底部注释 */
+    .note {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      font-size: 26px;
+      color: #666666;
+      line-height: 1.5;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">DEBUG 1/4</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">08</span>
+    </div>
+    
+    <div class="main-title serif">Agent Debug 方法论</div>
+    <div class="sub-title">Vibe Coding 最怕修不好的 Bug</div>
+    
+    <div class="content-area">
+      
+      <div class="tower">
+        <div class="tower-level">
+          <div class="tower-num">1</div>
+          <div class="tower-content">
+            <div class="tower-title">纯静态分析 <span class="level-badge">入门起点</span></div>
+            <div class="tower-desc">Agent 通过看代码、看报错，梳理链路来“脑内”Debug<br>天花板低但门槛也低</div>
+          </div>
+        </div>
+        <div class="tower-level">
+          <div class="tower-num">2</div>
+          <div class="tower-content">
+            <div class="tower-title">预埋日志 <span class="level-badge">基础保障</span></div>
+            <div class="tower-desc">在开发阶段就在关键链路里写日志<br>运行时出问题可以让 Agent Grep 日志来分析</div>
+          </div>
+        </div>
+        <div class="tower-level current">
+          <div class="tower-num">3</div>
+          <div class="tower-content">
+            <div class="tower-title">动态日志 <span class="level-badge core">高“性价比”</span></div>
+            <div class="tower-desc">在开发阶段，让 Agent 分析问题后动态补充日志埋点<br>复现后针对性分析日志，再讨论改法</div>
+          </div>
+        </div>
+        <div class="tower-level">
+          <div class="tower-num">4</div>
+          <div class="tower-content">
+            <div class="tower-title">CDP 简单调试 <span class="level-badge future">MVP</span></div>
+            <div class="tower-desc">打断点、暂停、读变量、拉调用栈<br>可以像人一样进行简单的 Debugger 操作，及时性不错</div>
+          </div>
+        </div>
+        <div class="tower-level">
+          <div class="tower-num">5</div>
+          <div class="tower-content">
+            <div class="tower-title">CDP 高级能力 <span class="level-badge future">能力最强</span></div>
+            <div class="tower-desc">条件断点、Heap 分析、性能 Profile<br>理论上可以达到高级工程师的“调试能力”</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        1/2层几乎每个项目都可以做，养成让 Agent 加日志、出问题让 Agent 看日志的习惯，对于调用链路较长的问题，Debug 效果有明显提升。
+      </div>
+
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">困难问题不能光让 Agent 脑内 Debug</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

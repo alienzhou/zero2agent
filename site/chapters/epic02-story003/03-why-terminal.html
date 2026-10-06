@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 48px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 承上启下</span>
+      <span class="page-num serif">03</span>
+    </div>
+    <div class="title serif">为什么还要<br>terminal 工具</div>
+    <div class="subtitle">前 7 个工具不能跑命令</div>
+    <div class="content prose">
+      <p class="lead">前 7 个工具只改文件。terminal 工具用来<em>在电脑上跑命令</em>。</p>
+      <p class="p">跑测试、跑构建、跑 lint，结果<span class="hl">不在文件里</span>。结果在命令结束时的退出码和打印出来的字。<span class="code">read_file</span> 读不到测试过没过。</p>
+      <p class="p">要用 <span class="code">npm</span>、<span class="code">git</span>、装依赖，都要在 shell 里跑程序。这些不能用「写个文件」代替。</p>
+      <div class="callout">terminal 不是第 8 个读文件工具。它是 Agent <b>第一次让外面的程序自己跑</b>。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

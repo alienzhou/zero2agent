@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 44px; }
+    .duo { flex-direction: column; gap: 16px; }
+    .duo .cell { display: flex; align-items: baseline; gap: 16px; }
+    .duo .cell .dir { font-size: 30px; font-weight: 900; color: #D32F2F; flex-shrink: 0; }
+    .duo .cell .t { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制 · 执行环境</span>
+      <span class="page-num serif">10</span>
+    </div>
+    <div class="title serif">跑命令的环境<br>要和你电脑上一致</div>
+    <div class="subtitle">还要关掉会卡住界面的那种交互</div>
+    <div class="content prose">
+      <p class="p">要做两件事，而且<span class="hl">方向不一样</span>：</p>
+      <div class="duo">
+        <div class="cell">
+          <div class="dir">↑</div>
+          <div>
+            <div class="t">要一样的</div>
+            <div class="d">PATH 等要和你的 shell 一样，不然命令找不到。启动时用你的登录 shell 读一次 PATH 存起来。读失败就在返回的字里提醒一句。</div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="dir">↓</div>
+          <div>
+            <div class="t">要改掉的</div>
+            <div class="d">关掉分页、关掉弹编辑器、关掉等你输入。这样 git 不会开翻页，程序也不会停在那里等你打字。</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">命令<b>找不到</b>：多半是 PATH 没设对。界面<b>一直滚或卡住</b>：多半是交互没关掉。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

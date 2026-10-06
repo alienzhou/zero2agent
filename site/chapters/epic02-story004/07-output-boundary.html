@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>Zero2Agent S004 · 07 · 我刚输入的内容，模型能看到吗？</title><link rel="stylesheet" href="course.css"></head>
+<body><article class="sheet lesson " data-page="07" data-sources="C08 C09 C17 C20">
+<header class="page-header" data-block><span>Zero2Agent · 两个视角</span><span class="page-number">07</span></header>
+<div class="heading" data-block><h1>我刚输入的内容，<br>模型能看到吗？</h1><p class="deck">由模型发起时，画面与工具回执分开</p></div><div class="content">
+
+<div class="split-views"><section data-block><p class="overline">你看到的终端 · 转录示意</p><pre>&gt; const n = 21
+undefined
+&gt; n * 2
+<span class="result">42</span>
+&gt; .exit</pre></section><section data-block><p class="overline">模型收到的回执 · 换行摘录</p><pre>Status:
+human-controlled
+completed
+
+Exit code: 0</pre></section></div>
+<div class="editor-note" data-block><h2>只凭右边，能知道你算出了 42 吗？</h2><p data-prose>不能。回执不含表达式和结果，退出码 0 也不能证明你的计算目标已完成。</p></div>
+<p data-prose data-block>第 2 页的 /terminal 是你直接启动：回执只在本地显示。本页换成模型请求 interactive: true，模型才收到右侧元信息。</p>
+<p class="note" data-prose data-block>想继续让模型分析，需要另行提供愿意分享的内容。正文不入模不等于无痕，启动命令和外部日志仍可能留痕。</p>
+</div></article></body></html>

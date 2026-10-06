@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 16px; margin-bottom: 40px; color: #888888;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* 巨型叙事字 */
+    .hero-text {
+      font-size: 48px;
+      font-weight: 800;
+      color: #F4F1EA;
+      line-height: 1.5;
+      margin-bottom: 50px;
+    }
+    .hero-text span { color: #D32F2F; font-family: 'Georgia', serif; font-style: italic; }
+
+    /* 三个考验 */
+    .challenge-grid {
+      display: flex;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .challenge-card {
+      flex: 1;
+      border-top: 3px solid #D32F2F;
+      padding-top: 24px;
+      padding-right: 16px;
+    }
+
+    .challenge-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #333333;
+      font-family: 'Georgia', serif;
+      margin-bottom: 16px;
+    }
+
+    .challenge-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #F4F1EA;
+      margin-bottom: 12px;
+    }
+    
+    .challenge-desc {
+      font-size: 24px;
+      color: #AAAAAA;
+      line-height: 1.5;
+    }
+
+    .highlight-word { color: #D32F2F; font-weight: bold; }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #333333; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #F4F1EA; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 转折</span>
+      <span class="page-num serif">04</span>
+    </div>
+    
+    <div class="content-wrapper">
+      <div class="hero-text">
+        find_files 比较简单<br><br>
+        今天再讨论些<br>
+        <span>AI Coding 实践</span>
+      </div>
+
+      <div class="challenge-grid">
+        <div class="challenge-card">
+          <div class="challenge-num">01</div>
+          <div class="challenge-title">关于技术选型</div>
+          <div class="challenge-desc">find_files 的技术选型<br>AI 可以帮我们快速完成，包括传统软件的 <span class="highlight-word">Benchmark</span></div>
+        </div>
+        <div class="challenge-card">
+          <div class="challenge-num">02</div>
+          <div class="challenge-title">关于调试</div>
+          <div class="challenge-desc">Vibe Coding 解 Bug？<br>遇到 Bug 时候，如何高效让 Agent 能辅助甚至自主<span class="highlight-word">Debug</span></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">代码是结果，更多藏在代码的过程中。</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

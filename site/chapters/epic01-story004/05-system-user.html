@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <style>
+    .bands { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+    .band { border: 2px solid #1A1A1A; background: #FDFCF9; display: flex; flex-direction: column; flex: 1; }
+    .band-head { padding: 20px 26px; border-bottom: 2px solid #1A1A1A; background: #EBE8E0; display: flex; align-items: baseline; gap: 16px; }
+    .band-tag { font-size: 14px; color: #D32F2F; font-weight: bold; letter-spacing: 2px; }
+    .band-title { font-size: 38px; font-weight: 800; color: #1A1A1A; }
+    .band-items { display: flex; flex: 1; }
+    .band-item { flex: 1; padding: 24px 22px; border-right: 1px dashed #CCCCCC; display: flex; flex-direction: column; justify-content: center; }
+    .band-item:last-child { border-right: none; }
+    .item-title { font-size: 34px; font-weight: 700; color: #1A1A1A; margin-bottom: 10px; }
+    .item-desc { font-size: 30px; color: #4A4A4A; line-height: 1.45; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 总览</span>
+      <span class="page-num serif">05</span>
+    </div>
+    <div class="title serif">今天的结构：System vs User</div>
+    <div class="subtitle">演化终点：两大分块，职责边界清晰</div>
+    <div class="content bands">
+      <div class="band">
+        <div class="band-head">
+          <div class="band-tag mono">BLOCK A</div>
+          <div class="band-title mono">System Prompt</div>
+        </div>
+        <div class="band-items">
+          <div class="band-item"><div class="item-title">稳定约束</div><div class="item-desc">身份、规则、工具使用策略</div></div>
+          <div class="band-item"><div class="item-title">跨轮不变</div><div class="item-desc">通常每 session 构建一次</div></div>
+          <div class="band-item"><div class="item-title">利于缓存</div><div class="item-desc">静态前缀，适合 prompt cache</div></div>
+        </div>
+      </div>
+      <div class="band">
+        <div class="band-head">
+          <div class="band-tag mono">BLOCK B</div>
+          <div class="band-title mono">User Prompt</div>
+        </div>
+        <div class="band-items">
+          <div class="band-item"><div class="item-title">动态任务</div><div class="item-desc">本轮用户指令 + 附加上下文</div></div>
+          <div class="band-item"><div class="item-title">每轮刷新</div><div class="item-desc">文件、选中代码、AGENTS.md 等</div></div>
+          <div class="band-item"><div class="item-title">XML 包装</div><div class="item-desc">runtime_context + user_task 分层</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">System 管「你是谁、怎么干活」，User 管「这次干什么」</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

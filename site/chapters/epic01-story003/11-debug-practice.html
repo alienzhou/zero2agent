@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 28px; color: #666666;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .topic-progress { 
+      background: #D32F2F; color: #FFFFFF; font-size: 16px; padding: 4px 10px; 
+      letter-spacing: 1px; font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .main-title { font-size: 48px; font-weight: 900; line-height: 1.2; color: #1A1A1A; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .sub-title { font-size: 28px; font-weight: 600; color: #666666; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px dashed #CCCCCC; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 48px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 26px;
+      color: #333333;
+      line-height: 1.65;
+      margin-bottom: 16px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 80px;
+      line-height: 0.8;
+      padding-top: 6px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 4px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .pull-quote {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.4;
+      padding: 14px 0;
+      margin: 20px 0;
+      border-top: 3px solid #D32F2F;
+      border-bottom: 3px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 42px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .compare-inline {
+      background: #FFFFFF;
+      border: 2px solid #1A1A1A;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 24px;
+      break-inside: avoid;
+    }
+
+    .compare-inline .env {
+      font-weight: bold;
+      color: #D32F2F;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 56px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 28px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="header-left">
+        <span class="topic-progress">DEBUG 3/3</span>
+        <span class="serif">Zero2Agent</span>
+      </span>
+      <span class="page-num serif">10</span>
+    </div>
+    
+    <div class="main-title serif">Agent Debug 方法论</div>
+    <div class="sub-title">调试实践：先看日志，再改代码</div>
+    
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">我</span>自己用 Agent 修 bug 时，遇到困难问题，会让 Agent「先看日志、再修代码」。
+      </div>
+
+      <div class="paragraph">
+        除了确实能修一些疑难杂症外，这种方式修的问题一般会更精准。相信大家都遇到过 Agent 用临时方案修，把代码搞得很难维护。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">按层选工具</div>
+      <div class="paragraph">
+        分层上，我的习惯是先看<span class="highlight">预埋日志</span>能不能兜住；兜不住再通过<span class="highlight">动态埋点</span>，然后复现去修。那种本地特别特别妖的，也可以考虑开 CDP，不过一般动态日志成功率就很高了。
+      </div>
+      </div>
+
+      <!-- <div class="pull-quote serif">
+        调试能力，本身也是 Harnesss 中的重要能力
+      </div> -->
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">线上 vs 本地</div>
+      <div class="compare-inline">
+        <span class="env">线上：</span>没有 inspect，只能靠开发阶段把预埋日志下扎实
+        <br><br>
+        <span class="env">本地：</span>理论上五层都能走，按问题复杂度选工具
+      </div>
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">为什么要关注</div>
+      <div class="paragraph">
+        把这些方法练熟，自己用 Agent 写代码会省很多时间。未来 Agent 自己的调试能力也会越来越重要。毕竟都接不住 bug 的 Agent，实在是“管杀不管埋”。
+      </div>
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">调试能力，本身也是 Harnesss 中的重要能力</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

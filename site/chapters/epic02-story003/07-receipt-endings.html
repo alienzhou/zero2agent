@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="_base-light.css">
+  <link rel="stylesheet" href="_prose.css">
+  <style>
+    .title { font-size: 46px; }
+    .enum li { margin-bottom: 20px; }
+    .enum .aa { margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心机制 · 回执 (2/2)</span>
+      <span class="page-num serif">07</span>
+    </div>
+    <div class="title serif">同一种工具<br>会有五种情况</div>
+    <div class="subtitle">不只是成功和失败</div>
+    <div class="content prose">
+      <ul class="enum">
+        <li>
+          <span class="n serif">1</span>
+          <div class="qq">正常跑完</div>
+          <div class="aa">返回退出码和全部输出。测试失败（退出码不是 0）也算<span class="red">正常结果，不是工具坏了</span>。</div>
+        </li>
+        <li>
+          <span class="n serif">2</span>
+          <div class="qq">输出太长</div>
+          <div class="aa">不返回正文，只告诉有多少行、文件存哪。下一页讲。</div>
+        </li>
+        <li>
+          <span class="n serif">3</span>
+          <div class="qq">你按了取消</div>
+          <div class="aa">状态写 cancelled。已经打出来的字照样返回。</div>
+        </li>
+        <li>
+          <span class="n serif">4</span>
+          <div class="qq">你把它转到了后台</div>
+          <div class="aa">状态写 skipped，带上进程号，并说明怎么查还在不在跑。</div>
+        </li>
+        <li>
+          <span class="n serif">5</span>
+          <div class="qq">读输出卡住了</div>
+          <div class="aa">强制结束，并写上输出可能不全。</div>
+        </li>
+      </ul>
+      <div class="callout">「取消」和「转后台」时，用 <b>Status:</b> 代替退出码，因为这时还没有退出码。</div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

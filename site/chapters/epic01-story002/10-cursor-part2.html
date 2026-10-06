@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 20px; margin-bottom: 50px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 54px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 44px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 58px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 24px;
+      color: #333333;
+      line-height: 1.68;
+      margin-bottom: 26px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 88px;
+      line-height: 0.8;
+      padding-top: 8px;
+      padding-right: 12px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1A1A1A;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 8px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .highlight {
+      color: #1A1A1A;
+      font-weight: 600;
+      background: linear-gradient(transparent 60%, rgba(211,47,47,0.15) 60%);
+    }
+
+    .pull-quote {
+      font-size: 32px;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.5;
+      padding: 24px 0;
+      margin: 48px 0;
+      border-top: 2px solid #D32F2F;
+      border-bottom: 2px solid #D32F2F;
+      text-align: left;
+      break-inside: avoid;
+    }
+    .pull-quote::before, .pull-quote::after {
+      content: '"';
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-size: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 核心演进 2</span>
+      <span class="page-num serif">10</span>
+    </div>
+    
+    <div class="title serif">Cursor Grep 优化拆解 (二)：<br>Sparse N-grams</div>
+    
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">长</span>分词看起来不是一个好的解决方案，需要找了好办法。ClickHouse 和 GitHub 新版 Code Search 给出了一个可能的解法：<span class="highlight">稀疏 N-grams (Sparse N-grams)</span>。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">变长且离散的切片</div>
+      <div class="paragraph">
+        它不再机械地每 3 个字符切一刀。算法会为文档中的每一对字符分配一个确定性的“权重”。只有当子串两端的权重大于内部包含的所有权重时，它才会被提取为一个 token。这意味着提取出的片段长度是随机变长的。
+      </div>
+    </div>
+
+      <div class="pull-quote serif">
+        让哈希函数偏袒那些极其罕见的字符组合。
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">用算力换取极致过滤</div>
+      <div class="paragraph">
+        建索引时付出了极高的算力提取特征，但在查询时，算法根本不需要全量匹配。因为权重是基于真实开源代码的频率表生成的（极其罕见的字符对权重最高），查询引擎只需要抽出搜索词中<span class="highlight">最冷门、区分度最高</span>的边界 token 去查倒排索引。
+      </div>
+    </div>
+
+      <div class="paragraph">
+        只需极少的几次索引探测，就能将候选文件范围从几万个精准坍缩到个位数。剩下的，再交给传统的正则引擎在内存中做验证。
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">经典的用资源来换效率</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

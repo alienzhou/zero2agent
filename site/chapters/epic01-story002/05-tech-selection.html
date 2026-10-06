@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #F4F1EA; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #F4F1EA; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #1A1A1A;
+      padding-bottom: 16px; margin-bottom: 36px; color: #666666;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 48px; font-weight: 900; line-height: 1.25; color: #1A1A1A; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .subtitle { font-size: 22px; color: #666666; line-height: 1.5; margin-bottom: 32px; }
+
+    .compare-row {
+      display: flex;
+      margin-bottom: 16px;
+      border: 1px solid #E0E0E0;
+      background: #FFFFFF;
+      align-items: stretch;
+    }
+
+    .row-header {
+      width: 160px;
+      background: #1A1A1A;
+      color: #F4F1EA;
+      padding: 16px 20px;
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: left;
+      border-right: 4px solid #D32F2F;
+    }
+
+    .row-content {
+      flex: 1;
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .pro-con {
+      font-size: 21px;
+      line-height: 1.52;
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .pro-con:last-child { margin-bottom: 0; }
+    
+    .mark-good { color: #D32F2F; font-weight: bold; margin-right: 12px; font-size: 24px; }
+    .mark-bad { color: #888888; font-weight: bold; margin-right: 12px; font-size: 24px; }
+    .text-bad { color: #666666; }
+
+    .conclusion-box {
+      margin-top: 12px;
+      padding: 20px 24px;
+      background: rgba(211,47,47,0.05);
+      border-left: 4px solid #D32F2F;
+      font-size: 22px;
+      color: #1A1A1A;
+      line-height: 1.5;
+    }
+    .conclusion-box strong { font-weight: 800; }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #1A1A1A; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 技术选型</span>
+      <span class="page-num serif">05</span>
+    </div>
+    
+    <div class="title serif">Grep 基础能力怎么选？<br>技术选型：</div>
+    <div class="subtitle">
+      在决定给 Agent 做 Grep Search 工具时，我们可以在「工具能力」「性能表现」「生态情况」「鲁棒性」「跨平台兼容性」上做出权衡。
+    </div>
+    
+    <div class="compare-row">
+      <div class="row-header">方案1: 系统内置<br><span style="font-size: 16px; font-weight: 400; opacity: 0.8; margin-top: 8px;">(grep / rg)</span></div>
+      <div class="row-content">
+        <div class="pro-con"><span class="mark-good">✓</span> 引入依赖最少，接入成本极低</div>
+        <div class="pro-con"><span class="mark-bad">✗</span> <span class="text-bad">跨平台兼容性最弱，重度依赖宿主机预装环境</span></div>
+        <div class="pro-con"><span class="mark-bad">✗</span> <span class="text-bad">版本差异极大，不利于可能的精细控制</span></div>
+      </div>
+    </div>
+
+    <div class="compare-row">
+      <div class="row-header">方案2: 自己手写<br><span style="font-size: 16px; font-weight: 400; opacity: 0.8; margin-top: 8px;">(fs + RegExp)</span></div>
+      <div class="row-content">
+        <div class="pro-con"><span class="mark-good">✓</span> 绝对可控，无第三方依赖顾虑</div>
+        <div class="pro-con"><span class="mark-bad">✗</span> <span class="text-bad">很容易实现不好性能差，在大仓库中急剧退化</span></div>
+        <div class="pro-con"><span class="mark-bad">✗</span> <span class="text-bad">需要覆盖的功能多，里文件过滤、.gitignore 解析</span></div>
+      </div>
+    </div>
+
+    <div class="compare-row">
+      <div class="row-header">方案3: 成熟组件<br><span style="font-size: 16px; font-weight: 400; opacity: 0.8; margin-top: 8px;">(基于 ripgrep)</span></div>
+      <div class="row-content">
+        <div class="pro-con"><span class="mark-good">✓</span> 性能好，天然支持工程级排障（如识别 gitignore）</div>
+        <div class="pro-con"><span class="mark-good">✓</span> 生态成熟，大模型很懂它，Agent 更容易写对参数</div>
+        <div class="pro-con"><span class="mark-good">✓</span> 有成熟的跨平台兼容方案</div>
+      </div>
+    </div>
+
+    <div class="conclusion-box">
+      <strong>竞品情况：</strong>拆解调研 OpenCode、Pi、Gemini CLI 等产品，大部分选择了基于 <code>ripgrep</code> 构建能力。不过在<strong>“如何为 Agent 封装参数并截断排序”</strong>互有差异。
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">技术选型随产品发展也会演进，<br>实际借助系统内置+终端也具备不错可行度</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

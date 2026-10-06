@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta name="viewport" content="width=1080">
+  <meta charset="UTF-8">
+  <style>
+    body { background: #1A1A1A; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .serif { font-family: 'Georgia', 'Songti SC', 'Noto Serif CJK SC', serif; }
+    .page { width: 1080px; height: 1440px; background: #1A1A1A; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+    
+    .doc { 
+      width: 960px; height: 1300px; padding: 60px 80px 100px; display: flex; flex-direction: column; 
+      box-sizing: border-box; position: relative; z-index: 10;
+    }
+
+    .header {
+      display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;
+      letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 16px; margin-bottom: 40px; color: #888888;
+    }
+    .page-num { color: #D32F2F; font-size: 24px; }
+    
+    .title { font-size: 52px; font-weight: 900; line-height: 1.25; color: #F4F1EA; margin-bottom: 36px; letter-spacing: -0.5px; }
+
+    .content-columns {
+      column-count: 2;
+      column-gap: 56px;
+      flex: 1;
+      text-align: justify;
+    }
+
+    .paragraph {
+      font-size: 23px;
+      color: #CCCCCC;
+      line-height: 1.66;
+      margin-bottom: 26px;
+      break-inside: avoid;
+    }
+
+    .drop-cap {
+      float: left;
+      font-size: 80px;
+      line-height: 0.8;
+      padding-top: 6px;
+      padding-right: 10px;
+      color: #D32F2F;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+
+    .sub-heading {
+      font-size: 26px;
+      font-weight: 800;
+      color: #F4F1EA;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #555555;
+      padding-bottom: 6px;
+      display: inline-block;
+      break-inside: avoid;
+    }
+
+    .highlight {
+      color: #F4F1EA;
+      font-weight: 600;
+      border-bottom: 2px solid #D32F2F;
+    }
+
+    .code-snippet {
+      background: #000000;
+      border: 1px solid #333333;
+      padding: 16px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: #AAAAAA;
+      font-size: 17px;
+      line-height: 1.45;
+      margin: 24px 0;
+      break-inside: avoid;
+    }
+    .code-snippet .keyword { color: #D32F2F; }
+
+    .summary {
+      margin-top: auto; border-top: 4px solid #333333; padding-top: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .summary-mark { font-size: 48px; color: #D32F2F; line-height: 1; margin-top: -4px; }
+    .summary-text { font-size: 30px; font-weight: bold; color: #F4F1EA; letter-spacing: 1px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="doc">
+    <div class="header">
+      <span class="serif">Zero2Agent • 探索路线 3</span>
+      <span class="page-num serif">14</span>
+    </div>
+    
+    <div class="title serif">AST + Grep：<br>把代码作为语法树检索</div>
+    
+    <div class="content-columns">
+      <div class="paragraph">
+        <span class="drop-cap">前</span>两者的还是在解决纯文本搜索的局限。而 <strong>ast-grep</strong>（13k+ Stars）代表的是一条全新的维度：<span class="highlight">不搜文本，改搜结构。</span>
+      </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">文本正则的脏数据原罪</div>
+      <div class="paragraph">
+        如果你的 Agent 想在一大推代码里找 <code>fetchUserData</code>，传统的 grep 会把注释里、长篇 Markdown 文档里、甚至报错字符串常量里的同名字符全部兜回来。Agent 花了海量 Token 读了一堆毫无执行价值的垃圾。
+      </div>
+    </div>
+
+      <div style="break-inside: avoid;">
+      <div class="sub-heading">Tree-Sitter</div>
+      <div class="paragraph">
+        ast-grep 借用了 tree-sitter 这个很好用的库，在搜索发生前，就已经把源码解析为抽象语法树 (AST)。你用的不再是反人类的 Regex 猜边界，而是直接写一段带占位符的合法代码模式。
+      </div>
+    </div>
+
+      <div class="code-snippet">
+        <span style="color: #666;">// 查找并匹配任意变量的 console 调用</span><br>
+        sg -p <span class="keyword">"console.log($ARG)"</span>
+      </div>
+
+      <div class="paragraph">
+        它能够凭借 AST 的能力，精准命中只有逻辑上的函数调用，顺带连附赠的代码重写（Rewrite）也能依靠同一套节点安全替换。
+      </div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-mark serif">"</div>
+      <div class="summary-text serif">这就是利用我们之前说的代码的特定结构化信息</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
