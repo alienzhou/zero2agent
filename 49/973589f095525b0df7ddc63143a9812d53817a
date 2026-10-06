@@ -1,0 +1,23 @@
+docs/site.md
+  s_7ef586e3e4b6e0::t_e1ec9c4fd558ee 7-8
+site/assets/book.css
+  s_7ef586e3e4b6e0::t_e1ec9c4fd558ee 117,137,144,160,166,171,176-177,179,185-187,199-200,205-213
+site/assets/book.js
+  s_7ef586e3e4b6e0::t_e1ec9c4fd558ee 150,226-227,235,239,246,259,271,278,310
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "49973589f095525b0df7ddc63143a9812d53817a",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
