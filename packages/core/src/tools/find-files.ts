@@ -25,12 +25,7 @@ interface FileEntry {
 // ── ripgrep 调用 ────────────────────────────────────
 
 function buildRgArgs(input: FindFilesInput, searchPath: string): string[] {
-  const args = [
-    '--files',
-    '--hidden',
-    '--no-messages',
-    '--glob', input.pattern,
-  ]
+  const args = ['--files', '--hidden', '--no-messages', '--glob', input.pattern]
 
   if (input.exclude) args.push('--glob', `!${input.exclude}`)
 
@@ -39,7 +34,7 @@ function buildRgArgs(input: FindFilesInput, searchPath: string): string[] {
 }
 
 function runRipgrep(args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const proc = spawn(rgPath, args, { stdio: ['ignore', 'pipe', 'pipe'] })
     const stdoutChunks: Buffer[] = []
     const stderrChunks: Buffer[] = []
@@ -47,7 +42,7 @@ function runRipgrep(args: string[]): Promise<{ stdout: string; stderr: string; e
     proc.stdout.on('data', (chunk: Buffer) => stdoutChunks.push(chunk))
     proc.stderr.on('data', (chunk: Buffer) => stderrChunks.push(chunk))
 
-    proc.on('close', (code) => {
+    proc.on('close', code => {
       resolve({
         stdout: Buffer.concat(stdoutChunks).toString('utf-8'),
         stderr: Buffer.concat(stderrChunks).toString('utf-8'),
@@ -63,7 +58,7 @@ async function getFilesWithMtime(filePaths: string[]): Promise<FileEntry[]> {
   const entries: FileEntry[] = []
 
   await Promise.all(
-    filePaths.map(async (filePath) => {
+    filePaths.map(async filePath => {
       try {
         const stat = await fs.stat(filePath)
         entries.push({ filePath, mtimeMs: stat.mtimeMs })
@@ -113,15 +108,16 @@ function formatOutput(
 // ── 工具定义 ────────────────────────────────────────
 
 export const findFilesTool: Tool = {
+  permission: { effect: 'read', paths: ['path'] },
   name: 'find_files',
-  description:
-    `Search for files by glob pattern. Returns file paths sorted by modification time (newest first). Results are truncated to ${MAX_FILES} files. Respects .gitignore rules. Use this to find files by name; use grep_search to find files by content.`,
+  description: `Search for files by glob pattern. Returns file paths sorted by modification time (newest first). Results are truncated to ${MAX_FILES} files. Respects .gitignore rules. Use this to find files by name; use grep_search to find files by content.`,
   input_schema: {
     type: 'object',
     properties: {
       pattern: {
         type: 'string',
-        description: 'Glob pattern to match file paths, e.g. "**/*.ts", "src/**/test_*.js", "*.config.{js,ts}"',
+        description:
+          'Glob pattern to match file paths, e.g. "**/*.ts", "src/**/test_*.js", "*.config.{js,ts}"',
       },
       path: {
         type: 'string',
@@ -166,8 +162,8 @@ export const findFilesTool: Tool = {
     // 解析文件路径（每行一个）
     const filePaths = stdout
       .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
 
     if (filePaths.length === 0) {
       return `No files found matching "${params.pattern}"`

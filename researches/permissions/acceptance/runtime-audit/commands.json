@@ -1,0 +1,97 @@
+[
+  {
+    "check": "lint",
+    "command": [
+      "pnpm",
+      "lint"
+    ],
+    "exitCode": 0,
+    "source": "8e47cae"
+  },
+  {
+    "check": "types",
+    "command": [
+      "pnpm",
+      "--filter",
+      "@zero2agent/e2e",
+      "exec",
+      "tsc",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "source": "8e47cae"
+  },
+  {
+    "check": "format",
+    "command": [
+      "pnpm",
+      "exec",
+      "prettier",
+      "--check",
+      "e2e/src/cli-live.test.ts",
+      "e2e/src/compact-contract.test.ts",
+      "e2e/src/helpers/live-cli.ts",
+      "e2e/src/helpers/live-pty.ts",
+      "e2e/src/helpers/sse.ts",
+      "e2e/src/helpers/terminal-live.ts",
+      "e2e/src/human-terminal-session-e2e.test.ts",
+      "e2e/src/human-terminal-session-live.test.ts",
+      "e2e/src/multi-turn-contract.test.ts",
+      "e2e/src/permission-contract.test.ts",
+      "e2e/src/permission-live-matrix.test.ts",
+      "e2e/src/permission-live.test.ts",
+      "e2e/src/terminal-live/d01-tool-baseline.live.test.ts",
+      "e2e/src/terminal-live/d02-no-truncate.live.test.ts",
+      "e2e/src/terminal-live/d03-no-kill.live.test.ts",
+      "e2e/src/terminal-live/d04-lifecycle.live.test.ts",
+      "e2e/src/terminal-live/d05-exec-env.live.test.ts",
+      "packages/core/src/__tests__/compact-loop.test.ts",
+      "packages/core/src/__tests__/loop.test.ts",
+      "packages/core/src/__tests__/permissions.test.ts",
+      "packages/core/src/__tests__/session.test.ts",
+      "packages/core/src/agent.ts",
+      "packages/core/src/index.ts",
+      "packages/core/src/loop.ts",
+      "packages/core/src/permissions.ts",
+      "packages/core/src/tools/delete.ts",
+      "packages/core/src/tools/find-files.ts",
+      "packages/core/src/tools/grep-search.ts",
+      "packages/core/src/tools/list-directory.ts",
+      "packages/core/src/tools/path-guard.ts",
+      "packages/core/src/tools/read-file.ts",
+      "packages/core/src/tools/replace-in-file.ts",
+      "packages/core/src/tools/terminal.ts",
+      "packages/core/src/tools/types.ts",
+      "packages/core/src/tools/write-file.ts",
+      "packages/tui/src/approval.ts",
+      "packages/tui/src/cli.ts"
+    ],
+    "exitCode": 0,
+    "source": "8e47cae"
+  },
+  {
+    "check": "whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "origin/main"
+    ],
+    "exitCode": 0,
+    "source": "5c2a76b; normalized saved log line endings"
+  },
+  {
+    "check": "unchanged-production",
+    "command": [
+      "git",
+      "diff",
+      "--quiet",
+      "73ecdbc",
+      "--",
+      "packages",
+      "scripts"
+    ],
+    "exitCode": 0,
+    "source": "8e47cae"
+  }
+]

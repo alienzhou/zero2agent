@@ -77,6 +77,20 @@ git checkout main
 
 ## [Unreleased]
 
+### E03-S002-permissions-approval（本地候选，待人工审阅与合并）
+
+所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S002-permissions/README.md)
+
+- 2026-10-05 用户追问后补齐本机实际 CLI/PTY 与真实模型：权限 22 项、旧功能 28 项，共 50 项通过；50 份记录、124 次 HTTP 200。默认离线 463 通过、50 live 跳过；137 项 E2E 最终覆盖通过，记录器修复后的 3 项为独立补跑。[补验报告](./researches/permissions/acceptance/runtime-audit/README.md)保留原失败与通过证据，固定补验 Tag `E03-S002-permissions-approval-verified`。以下 2 项/30 跳过为首轮历史数据，不能代表全套真机已完成。
+
+- 统一执行前权限：default/read-only/accept-edits/bypass、deny > ask > allow，工具元信息与精确标量规则由宿主管理。
+- 一次审批绑定调用和参数快照，默认最多等待 120 秒；无宿主、异常、非法/晚到回答、超时或取消均拒绝。整批调用先快照，拒绝仍返回配对的错误结果。
+- 工作区写、只读外部读、软链接与已有祖先在执行前重查，直接写工具保留边界；路径校验与用户批准不提供操作系统沙箱。
+- CLI 使用 TTY y/N 与完整 JSON 参数；管道回答不批准，人工 PTY 保留独立交接确认和正文边界。
+- 固定生产与测试候选 `73ecdbc`：54 项权限单元和 20 项 CLI 契约包含在全量 463 通过、30 live 默认跳过中；另行 2 项 MiniMax-M2.7 真实验收通过。build、e2e 类型、改动格式通过，lint 0 错误、15 条既有告警。[证据](./researches/permissions/acceptance/README.md) / [源码复核](./.vibecoding/2026-10-05/e03-s002-permissions/review.md)。
+- 四竞品研究、五篇 Spec、跟练、Deep Dive、讨论与[复盘](./retros/E03-S002-permissions-approval.md)已补齐；16 页图文主图和手机图逐页复核，双 ZIP 与 10 项包检查通过。固定版本 Tag `E03-S002-permissions-approval`；候选待人工审阅和合并，图文未对外发布。
+- 下一课 E03-S003 为运行状态与 TUI，将已有审批与状态接入终端界面。
+
 ### E03-S001-multi-turn（已合入 main，未对外发布）
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S001-multi-turn/README.md)

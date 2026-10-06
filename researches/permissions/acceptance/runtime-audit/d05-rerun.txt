@@ -1,0 +1,14 @@
+
+ RUN  v4.1.0 /workspace/zero2agent/e2e
+
+ ✓ src/terminal-live/d05-exec-env.live.test.ts (3 tests) 29943ms
+     ✓ TERM 应为 dumb（呈现覆盖）  2473ms
+     ✓ PATH 应宽于最小 /usr/bin:/bin（login shell 采集）  7925ms
+     ✓ PAGER=cat：git log 不应卡在分页器  19544ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  23:20:34
+   Duration  30.08s (transform 35ms, setup 0ms, import 66ms, tests 29.94s, environment 0ms)
+
+JSON report written to /tmp/e03-s002-runtime-d05.json

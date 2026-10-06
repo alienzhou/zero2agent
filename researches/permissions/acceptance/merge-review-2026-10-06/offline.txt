@@ -1,0 +1,40 @@
+Scope: 5 of 6 workspace projects
+
+> @zero2agent/cdp-debug@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e03-s002/packages/cdp-debug
+> vitest run --no-file-parallelism
+
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e03-s002/packages/cdp-debug
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  22:54:26
+   Duration  173ms (transform 24ms, setup 0ms, import 37ms, tests 10ms, environment 0ms)
+
+
+> @zero2agent/core@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e03-s002/packages/core
+> vitest run --no-file-parallelism
+
+◇ injected env (0) from ../../.env.local // tip: ⌁ auth for agents [www.vestauth.com]
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e03-s002/packages/core
+
+
+ Test Files  25 passed (25)
+      Tests  375 passed (375)
+   Start at  22:54:26
+   Duration  95.35s (transform 319ms, setup 0ms, import 773ms, tests 92.70s, environment 1ms)
+
+
+> @zero2agent/e2e@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e03-s002/e2e
+> vitest run --no-file-parallelism
+
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e03-s002/e2e
+
+
+ Test Files  7 passed | 9 skipped (16)
+      Tests  87 passed | 50 skipped (137)
+   Start at  22:56:02
+   Duration  28.34s (transform 279ms, setup 0ms, import 719ms, tests 26.40s, environment 1ms)

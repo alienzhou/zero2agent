@@ -4,6 +4,7 @@
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { liveCliEnv } from './live-cli.js'
 
 /** 进程是否仍存活 */
 export function isPidAlive(pid: number): boolean {
@@ -49,6 +50,7 @@ export async function initGitRepoWithCommit(wsDir: string): Promise<void> {
 /** 最小 PATH 父进程环境（证伪 login shell 采集） */
 export function minimalParentCliEnv(): Record<string, string> {
   const env: Record<string, string> = {
+    ...liveCliEnv('terminal'),
     PATH: '/usr/bin:/bin',
     ZERO2AGENT_SKIP_LOCAL_ENV: '1',
     E2E_LIVE: '1',
@@ -96,7 +98,10 @@ export function pathLooksCollected(output: string): boolean {
 
   const m = output.match(/PATH[=:\s]+([^\n<"]+)/i)
   if (!m) return false
-  const parts = m[1].split(':').map(p => p.trim()).filter(Boolean)
+  const parts = m[1]
+    .split(':')
+    .map(p => p.trim())
+    .filter(Boolean)
   const minimal = new Set(['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin'])
   return parts.some(p => !minimal.has(p)) || parts.length > 4
 }

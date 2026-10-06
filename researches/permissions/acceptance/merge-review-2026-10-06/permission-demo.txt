@@ -1,0 +1,2 @@
+{"decision":"deny","result":{"type":"tool_result","tool_use_id":"deny","content":"Error: Permission denied: User denied this call","is_error":true},"fileExists":false}
+{"decision":"allow","result":{"type":"tool_result","tool_use_id":"allow","content":"Created allow.txt (13 bytes written)"},"fileExists":true}

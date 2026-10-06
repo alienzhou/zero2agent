@@ -1,0 +1,27 @@
+
+> zero2agent@0.0.0 test /workspace/zero2agent
+> pnpm -r test
+
+Scope: 5 of 6 workspace projects
+packages/cdp-debug test$ vitest run
+packages/cdp-debug test:  RUN  v4.1.0 /workspace/zero2agent/packages/cdp-debug
+packages/cdp-debug test:  Test Files  1 passed (1)
+packages/cdp-debug test:       Tests  1 passed (1)
+packages/cdp-debug test:    Start at  23:18:11
+packages/cdp-debug test:    Duration  100ms (transform 13ms, setup 0ms, import 23ms, tests 5ms, environment 0ms)
+packages/cdp-debug test: Done
+packages/core test$ vitest run
+packages/core test: ◇ injected env (0) from ../../.env.local // tip: ⌁ auth for agents [www.vestauth.com]
+packages/core test:  RUN  v4.1.0 /workspace/zero2agent/packages/core
+packages/core test:  Test Files  25 passed (25)
+packages/core test:       Tests  375 passed (375)
+packages/core test:    Start at  23:18:11
+packages/core test:    Duration  45.38s (transform 1.11s, setup 0ms, import 1.89s, tests 97.15s, environment 2ms)
+packages/core test: Done
+e2e test$ vitest run
+e2e test:  RUN  v4.1.0 /workspace/zero2agent/e2e
+e2e test:  Test Files  7 passed | 9 skipped (16)
+e2e test:       Tests  87 passed | 50 skipped (137)
+e2e test:    Start at  23:18:57
+e2e test:    Duration  27.37s (transform 192ms, setup 0ms, import 581ms, tests 25.71s, environment 1ms)
+e2e test: Done

@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: E02-S004 is complete and merged into `main`, preserving sanitized per-commit history. Two user trials and scoped code review are complete; no course tag has been published — [principles and usage](./specs/E02-act-and-execute/S004-interactive-commands/README.md).
+**Latest update**: [E03-S002: Permissions and single-call Approval](./specs/E03-product-foundations/S002-permissions/README.md) implements allow/deny/ask rules, bounded approvals, TTY interaction and physical path checks. The candidate awaits human review and merge. Existing evidence covers 463 offline tests and 50 real MiniMax-M2.7 cases on macOS; see the [runtime audit](./researches/permissions/acceptance/runtime-audit/README.md) for scope and original failures. The 16 diagrams are maintained in this repository as part of the [online course](./docs/site.md). Use `E03-S002-permissions-approval-verified` for the fixed [follow-along version](./specs/E03-product-foundations/S002-permissions/follow-along.md). The course has not been externally published.
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -169,6 +169,8 @@ zero2agent/
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | Targeted File Replacement | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | Command Execution | Done |
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Done; merged into main |
+| [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | Multi-turn sessions and context compaction | Done; merged and tagged |
+| [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | Permissions and single-call Approval | Implementation and course complete; awaiting human review and merge |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

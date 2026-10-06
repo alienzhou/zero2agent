@@ -21,7 +21,7 @@ This directory contains retrospective notes and lessons learned.
 
 | Retro | Iteration | Notes |
 |---|---|---|
-| [E03-S001-multi-turn.md](./E03-S001-multi-turn.md) | E03-S001 进程内多轮会话 | 历史所有权、工具副作用证据与真实 SSE 失败验证；本地实现，未合入或打 Tag |
+| [E03-S002-permissions-approval.md](./E03-S002-permissions-approval.md) | E03-S002 权限与一次审批 | 整批快照、有限等待、路径变化、SSE/PTY 与真实模型验收；候选待人工审阅和合并，课程未发布 |
 
 ## Directory structure
 

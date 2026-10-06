@@ -34,6 +34,7 @@ describe('extractTextContent', () => {
 
 describe('executeToolCalls', () => {
   const mockTool: Tool = {
+    permission: { effect: 'read' },
     name: 'echo',
     description: 'echo tool',
     input_schema: { type: 'object', properties: {} },
@@ -63,10 +64,13 @@ describe('executeToolCalls', () => {
 
   it('工具抛出异常时捕获并返回错误', async () => {
     const failTool: Tool = {
+      permission: { effect: 'read' },
       name: 'fail',
       description: '',
       input_schema: { type: 'object', properties: {} },
-      execute: async (_input, _ctx) => { throw new Error('boom') },
+      execute: async (_input, _ctx) => {
+        throw new Error('boom')
+      },
     }
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_3', name: 'fail', input: {} },
@@ -97,10 +101,13 @@ describe('executeToolCalls', () => {
   it('工具出错时触发 onToolError', async () => {
     const onToolError = vi.fn()
     const failTool: Tool = {
+      permission: { effect: 'read' },
       name: 'fail',
       description: '',
       input_schema: { type: 'object', properties: {} },
-      execute: async (_input, _ctx) => { throw new Error('boom') },
+      execute: async (_input, _ctx) => {
+        throw new Error('boom')
+      },
     }
     const content: Anthropic.ContentBlock[] = [
       { type: 'tool_use', id: 'call_5', name: 'fail', input: {} },
@@ -125,7 +132,9 @@ const mockCreate = vi.mocked(createAnthropicClient)
  */
 function buildMockStream(response: Anthropic.Message) {
   return {
-    on: vi.fn(function (this: unknown) { return this }),
+    on: vi.fn(function (this: unknown) {
+      return this
+    }),
     finalMessage: vi.fn(async () => response),
   }
 }
@@ -151,12 +160,22 @@ function makeEndTurnResponse(text: string): Anthropic.Message {
     model: 'mock-model',
     stop_reason: 'end_turn',
     stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
+    usage: {
+      input_tokens: 10,
+      output_tokens: 10,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
+      server_tool_use: null,
+      service_tier: null,
+    },
     content: [{ type: 'text', text, citations: null }],
   }
 }
 
-function makeToolUseResponse(toolName: string, toolInput: Record<string, unknown>): Anthropic.Message {
+function makeToolUseResponse(
+  toolName: string,
+  toolInput: Record<string, unknown>
+): Anthropic.Message {
   return {
     id: 'msg_2',
     type: 'message',
@@ -164,7 +183,14 @@ function makeToolUseResponse(toolName: string, toolInput: Record<string, unknown
     model: 'mock-model',
     stop_reason: 'tool_use',
     stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
+    usage: {
+      input_tokens: 10,
+      output_tokens: 10,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
+      server_tool_use: null,
+      service_tier: null,
+    },
     content: [
       { type: 'text', text: 'Let me check...', citations: null },
       { type: 'tool_use', id: 'toolu_1', name: toolName, input: toolInput },
@@ -180,7 +206,14 @@ function makeMaxTokensResponse(text: string): Anthropic.Message {
     model: 'mock-model',
     stop_reason: 'max_tokens',
     stop_sequence: null,
-    usage: { input_tokens: 10, output_tokens: 4096, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
+    usage: {
+      input_tokens: 10,
+      output_tokens: 4096,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
+      server_tool_use: null,
+      service_tier: null,
+    },
     content: [{ type: 'text', text, citations: null }],
   }
 }
@@ -196,6 +229,7 @@ describe('runLoop', () => {
 
   it('模型先调用工具再 end_turn，完成两轮循环', async () => {
     const echoTool: Tool = {
+      permission: { effect: 'read' },
       name: 'echo',
       description: 'echo',
       input_schema: { type: 'object', properties: {} },
@@ -223,15 +257,14 @@ describe('runLoop', () => {
 
   it('达到最大迭代次数时返回错误信息', async () => {
     const noop: Tool = {
+      permission: { effect: 'read' },
       name: 'noop',
       description: '',
       input_schema: { type: 'object', properties: {} },
       execute: async (_input, _ctx) => '',
     }
 
-    const infiniteResponses = Array.from({ length: 21 }, () =>
-      makeToolUseResponse('noop', {})
-    )
+    const infiniteResponses = Array.from({ length: 21 }, () => makeToolUseResponse('noop', {}))
     const client = buildMockClient(infiniteResponses)
     mockCreate.mockReturnValue(client)
 
@@ -247,7 +280,8 @@ describe('runLoop', () => {
     await runLoop('hi', { tools: [], events: { onText } })
 
     // 验证 stream.on('text', ...) 被调用
-    const streamInstance = (client.messages.stream as ReturnType<typeof vi.fn>).mock.results[0].value
+    const streamInstance = (client.messages.stream as ReturnType<typeof vi.fn>).mock.results[0]
+      .value
     expect(streamInstance.on).toHaveBeenCalledWith('text', expect.any(Function))
   })
 })

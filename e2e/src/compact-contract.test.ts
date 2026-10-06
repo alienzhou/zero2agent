@@ -70,6 +70,8 @@ async function exercise(
     env: {
       PATH: process.env.PATH,
       ZERO2AGENT_SKIP_LOCAL_ENV: '1',
+      // These older contracts exercise session/compaction with explicit edit authorization.
+      PERMISSION_MODE: 'accept-edits',
       ANTHROPIC_API_KEY: 'local-contract-placeholder',
       ANTHROPIC_BASE_URL: `http://127.0.0.1:${address.port}`,
       MODEL_NAME: MODEL,

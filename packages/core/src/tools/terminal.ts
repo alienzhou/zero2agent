@@ -516,6 +516,7 @@ function appendNotices(parts: string[], notices: string[]): void {
 // ── 工具定义 ─────────────────────────────────────────
 
 export const terminalTool: Tool = {
+  permission: { effect: 'execute', paths: [] },
   name: 'terminal',
   description:
     'Execute a shell command via bash -c in the workspace. stdout and stderr are merged. ' +

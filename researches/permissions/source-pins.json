@@ -1,0 +1,23 @@
+{
+  "retrieved": "2026-10-05",
+  "sources": [
+    {
+      "repo": "openai/codex",
+      "path": "codex-rs/core/src/exec_policy.rs",
+      "sha": "1f4c47343a1bff2d8cddc429c5d39503fb5a6c30",
+      "url": "https://github.com/openai/codex/blob/1f4c47343a1bff2d8cddc429c5d39503fb5a6c30/codex-rs/core/src/exec_policy.rs"
+    },
+    {
+      "repo": "google-gemini/gemini-cli",
+      "path": "packages/core/src/policy/policy-engine.ts",
+      "sha": "2fe7c2d3f065dc40ad573d50b2091116f8a4aa18",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/2fe7c2d3f065dc40ad573d50b2091116f8a4aa18/packages/core/src/policy/policy-engine.ts"
+    },
+    {
+      "repo": "anomalyco/opencode",
+      "path": "packages/opencode/src/permission/index.ts",
+      "sha": "907b3bc518fa48e90e8ec24dd327d13eee71c36c",
+      "url": "https://github.com/anomalyco/opencode/blob/907b3bc518fa48e90e8ec24dd327d13eee71c36c/packages/opencode/src/permission/index.ts"
+    }
+  ]
+}

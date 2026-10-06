@@ -3,8 +3,9 @@
  * 设计：不设执行上限；非 TTY 须跑过竞品常见 10s 超时窗口
  */
 import { describe, it, expect, afterEach } from 'vitest'
-import { runCli, stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
+import { stripAnsi, makeTempWorkspace } from '../helpers/cli.js'
 import { live } from '../helpers/live.js'
+import { liveCliEnv, liveToolReceipts, runLiveCli as runCli } from '../helpers/live-cli.js'
 import { hasWallTimeInReceipt } from '../helpers/terminal-live.js'
 
 describe.skipIf(!live)('D03 不杀死', () => {
@@ -25,12 +26,17 @@ describe.skipIf(!live)('D03 不杀死', () => {
         '用 terminal 执行 sleep 16 && echo survived-16s，完成后告诉我输出里有没有 survived-16s',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
     const elapsed = Date.now() - start
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     expect(elapsed).toBeGreaterThanOrEqual(15_000)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toContain('survived-16s')
   }, 90_000)
@@ -45,12 +51,17 @@ describe.skipIf(!live)('D03 不杀死', () => {
         '用 terminal 执行 sleep 12 && echo survived-12s，完成后告诉我输出里有没有 survived-12s',
       ],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
     const elapsed = Date.now() - start
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     expect(elapsed).toBeGreaterThanOrEqual(11_000)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
     expect(output).toContain('survived-12s')
   }, 60_000)
@@ -62,11 +73,16 @@ describe.skipIf(!live)('D03 不杀死', () => {
     const result = await runCli({
       args: ['用 terminal 执行 sleep 3.5 && echo wall-marker，把 terminal 回执原文告诉我'],
       cwd: ws.dir,
+      env: liveCliEnv('terminal'),
     })
 
     expect(result.code).toBe(0)
+    expect(result.responses.length).toBeGreaterThan(0)
+    expect(result.responses.every(r => r.status === 200)).toBe(true)
     const output = stripAnsi(result.output)
+    expect(output).toMatch(/^\s*⚡ terminal\(/m)
+    expect(output).toMatch(/^\s*✓ .*\(\d+ms\)$/m)
     expect(output).toContain('terminal')
-    expect(hasWallTimeInReceipt(output)).toBe(true)
+    expect(hasWallTimeInReceipt(liveToolReceipts(result, 'terminal')[0])).toBe(true)
   }, 30_000)
 })

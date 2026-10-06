@@ -1,0 +1,587 @@
+
+ RUN  v4.1.0 /workspace/zero2agent/e2e
+
+ ✓ src/permission-live.test.ts (2 tests) 7461ms
+     ✓ real model write proposal with user approved=true  3625ms
+     ✓ real model write proposal with user approved=false  3835ms
+ ✓ src/human-terminal-contract.test.ts (31 tests) 10184ms
+     ✓ supports two read rounds, isatty, and /dev/tty  356ms
+     ✓ forwards readline editing keys and UTF-8 human input  359ms
+     ✓ does not echo a read -s token or create an output artifact  358ms
+     ✓ accepts explicit yes and discards the rest of the confirmation chunk  369ms
+     ✓ restores the connected terminal and cleans descendants on external SIGINT  486ms
+     ✓ restores the connected terminal and cleans descendants on external SIGTERM  469ms
+     ✓ restores the connected terminal and cleans descendants on external SIGHUP  482ms
+     ✓ cleans the real process tree when the outer terminal disconnects  315ms
+     ✓ cleans an ordinary background descendant after normal command exit  357ms
+     ✓ cleans a HUP-ignoring child created between two ownership scans  464ms
+     ✓ discards private input typed during terminal teardown, before readline recovery  359ms
+     ✓ uses owned-group cleanup when process inspection fails after real spawn  597ms
+     ✓ returns from a real pager and preserves its final displayed output  371ms
+     ✓ forwards Ctrl-C to the foreground program  352ms
+     ✓ does not report a successful exit when Ctrl-C terminates the child by signal  361ms
+     ✓ forwards Ctrl-D to read as EOF  370ms
+     ✓ Ctrl-] ends a SIGINT-ignoring process and its ordinary descendant  372ms
+     ✓ reports host cancellation when the child handles TERM with exit zero  389ms
+     ✓ propagates resize to the real inner terminal  396ms
+     ✓ restores readline/raw/listeners after two handoffs and excludes secrets from receipts/history  676ms
+     ✓ accepts two /terminal commands followed by exit in the actual CLI REPL  680ms
+     ✓ Ctrl-D exits the default bash and then the host REPL  380ms
+     ✓ drains final output before reporting exit  372ms
+ ✓ src/cli-contract.test.ts (11 tests) 497ms
+ ✓ src/compact-contract.test.ts (7 tests) 4039ms
+     ✓ handles exact /compact locally and continues using a summary and the latest input  317ms
+     ✓ clears the adopted summary on /new  306ms
+     ✓ keeps main and summary requests bounded over forty growing turns  2227ms
+     ✓ promotes pending background compression to a foreground wait before sending the next turn  309ms
+     ✓ cancels pending background compaction on /new without contaminating the new session  361ms
+ ✓ src/permission-contract.test.ts (20 tests) 2837ms
+     ✓ gates model terminal execution before the human takeover confirmation  414ms
+     ✓ a terminal command is refused without approval, or allowed by an exact host rule  602ms
+ ✓ src/human-terminal-session-e2e.test.ts (5 tests) 1768ms
+     ✓ keeps model-driven and direct handoffs private across another turn, /compact and /new  708ms
+     ✓ cancels a real child tree, reports cancellation to the provider and restores the REPL  429ms
+     ✓ adopts a pending background summary while a real human handoff is active without leaking its content  395ms
+ ✓ src/multi-turn-contract.test.ts (6 tests) 487ms
+ ✓ src/terminal-contract.test.ts (7 tests) 378ms
+     ✓ [P0] terminal 创建文件 + read_file 回读  358ms
+ ❯ src/cli-live.test.ts (10 tests | 10 failed) 468ms
+     × 应能读取文件内容并在输出中体现 47ms
+     × 应能列目录并找到其中的文件 45ms
+     × 应能按内容搜索并定位到正确的文件 46ms
+     × 应能创建文件，且内容真实落到磁盘 47ms
+     × 应能就地修改文件，且保留未涉及的内容 45ms
+     × 应能删除文件 47ms
+     × 应能先搜索定位、再修改，完成跨工具的多轮任务 48ms
+     × 目标文件不存在时应如实说明，而不是伪造成功 45ms
+     × 交互模式下应能完成一轮真实任务 50ms
+     × 应能用 terminal 执行命令并读回结果 47ms
+ ✓ src/human-terminal-session-live.test.ts (3 tests) 60202ms
+     ✓ lets a real model request human takeover and receives only metadata across another turn  6239ms
+     ✓ uses real multi-turn facts, manual summary and correction to write a file, then resets locally  13833ms
+     ✓ automatically summarizes growing real-model history before forwarding bounded requests  40129ms
+ ❯ src/terminal-live/d01-tool-baseline.live.test.ts (3 tests | 3 failed) 135ms
+     × workdir 应在相对子目录执行 51ms
+     × 非零退出码应进入回执 42ms
+     × stdout 与 stderr 应合流回执 41ms
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts (3 tests | 3 failed) 130ms
+     × 超 800 行应落盘，回执给路径而非全文 46ms
+     × 小输出应直接出现在回执，不落盘 42ms
+     × 落盘文件应可用 grep_search 精确检索 42ms
+ ❯ src/terminal-live/d03-no-kill.live.test.ts (3 tests | 3 failed) 132ms
+     × sleep 16s 应自然结束（超过竞品 10s 默认超时窗口） 45ms
+     × sleep 12s 应自然结束（仍超过 10s 竞品窗口） 42ms
+     × sleep 3.5s 回执须含 Wall time 字段 43ms
+ ❯ src/terminal-live/d04-lifecycle.live.test.ts (3 tests | 3 failed) 133ms
+     × 后台存活：nohup 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true 48ms
+     × 后台存活：disown 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true 42ms
+     × 防线③：command 须为 (sleep 8) & exit 0，约 2s drain 43ms
+ ❯ src/terminal-live/d05-exec-env.live.test.ts (3 tests | 3 failed) 23797ms
+     × TERM 应为 dumb（呈现覆盖） 8238ms
+     × PATH 应宽于最小 /usr/bin:/bin（login shell 采集） 8286ms
+     × PAGER=cat：git log 不应卡在分页器 7272ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 25 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：读能力 > 应能读取文件内容并在输出中体现
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:49:25
+     47|     })
+     48|
+     49|     expect(result.code).toBe(0)
+       |                         ^
+     50|     const output = stripAnsi(result.output)
+     51|     // 断言模型确实拿到了文件里的事实，而非凭空作答
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：读能力 > 应能列目录并找到其中的文件
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:71:25
+     69|     })
+     70|
+     71|     expect(result.code).toBe(0)
+       |                         ^
+     72|     const output = stripAnsi(result.output)
+     73|     expect(output).toContain('alpha.ts')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：读能力 > 应能按内容搜索并定位到正确的文件
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:90:25
+     88|     })
+     89|
+     90|     expect(result.code).toBe(0)
+       |                         ^
+     91|     expect(stripAnsi(result.output)).toContain('b.ts')
+     92|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：写能力闭环 > 应能创建文件，且内容真实落到磁盘
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:112:25
+    110|     })
+    111|
+    112|     expect(result.code).toBe(0)
+       |                         ^
+    113|
+    114|     // 关键断言：磁盘上的事实，而不是模型说它做了
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：写能力闭环 > 应能就地修改文件，且保留未涉及的内容
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:135:25
+    133|     })
+    134|
+    135|     expect(result.code).toBe(0)
+       |                         ^
+    136|
+    137|     const content = await fs.readFile(path.join(ws.dir, 'version.ts'),…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：写能力闭环 > 应能删除文件
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:157:25
+    155|     })
+    156|
+    157|     expect(result.code).toBe(0)
+       |                         ^
+    158|
+    159|     await expect(fs.access(path.join(ws.dir, 'obsolete.txt'))).rejects…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：多工具协同 > 应能先搜索定位、再修改，完成跨工具的多轮任务
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:186:25
+    184|     })
+    185|
+    186|     expect(result.code).toBe(0)
+       |                         ^
+    187|
+    188|     const content = await fs.readFile(path.join(ws.dir, 'src/two.ts'),…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：多工具协同 > 目标文件不存在时应如实说明，而不是伪造成功
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:208:25
+    206|     })
+    207|
+    208|     expect(result.code).toBe(0)
+       |                         ^
+    209|     // 不要求具体措辞，只要求表达出「没有/不存在/失败」之一
+    210|     expect(stripAnsi(result.output)).toMatch(/不存在|没有找到|没有|无法|失败|not ex…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：交互模式 > 交互模式下应能完成一轮真实任务
+AssertionError: expected 'zero2agent - Agent Harness（文件读写演示）\n输…' to contain '待办'
+
+- Expected
++ Received
+
+- 待办
++ zero2agent - Agent Harness（文件读写演示）
++ 输入你的问题；/new 新建对话；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出
++
++ 你: 你:
++ 错误: Unknown model MiniMax-M2.7: provide contextWindow explicitly
++
++
+
+ ❯ src/cli-live.test.ts:234:20
+    232|     const output = stripAnsi(result.output)
+    233|     expect(output).toContain('你: ')
+    234|     expect(output).toContain('待办')
+       |                    ^
+    235|   })
+    236| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/25]⎯
+
+ FAIL  src/cli-live.test.ts > CLI 真实行为：terminal（E02-S003） > 应能用 terminal 执行命令并读回结果
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/cli-live.test.ts:257:25
+    255|     })
+    256|
+    257|     expect(result.code).toBe(0)
+       |                         ^
+    258|     const output = stripAnsi(result.output)
+    259|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/25]⎯
+
+ FAIL  src/terminal-live/d01-tool-baseline.live.test.ts > D01 工具基本盘 > workdir 应在相对子目录执行
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d01-tool-baseline.live.test.ts:26:25
+     24|     })
+     25|
+     26|     expect(result.code).toBe(0)
+       |                         ^
+     27|     const output = stripAnsi(result.output)
+     28|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/25]⎯
+
+ FAIL  src/terminal-live/d01-tool-baseline.live.test.ts > D01 工具基本盘 > 非零退出码应进入回执
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d01-tool-baseline.live.test.ts:41:25
+     39|     })
+     40|
+     41|     expect(result.code).toBe(0)
+       |                         ^
+     42|     const output = stripAnsi(result.output)
+     43|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/25]⎯
+
+ FAIL  src/terminal-live/d01-tool-baseline.live.test.ts > D01 工具基本盘 > stdout 与 stderr 应合流回执
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d01-tool-baseline.live.test.ts:58:25
+     56|     })
+     57|
+     58|     expect(result.code).toBe(0)
+       |                         ^
+     59|     const output = stripAnsi(result.output)
+     60|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/25]⎯
+
+ FAIL  src/terminal-live/d02-no-truncate.live.test.ts > D02 不截断 > 超 800 行应落盘，回执给路径而非全文
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts:28:25
+     26|     })
+     27|
+     28|     expect(result.code).toBe(0)
+       |                         ^
+     29|     const output = stripAnsi(result.output)
+     30|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/25]⎯
+
+ FAIL  src/terminal-live/d02-no-truncate.live.test.ts > D02 不截断 > 小输出应直接出现在回执，不落盘
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts:46:25
+     44|     })
+     45|
+     46|     expect(result.code).toBe(0)
+       |                         ^
+     47|     const output = stripAnsi(result.output)
+     48|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/25]⎯
+
+ FAIL  src/terminal-live/d02-no-truncate.live.test.ts > D02 不截断 > 落盘文件应可用 grep_search 精确检索
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d02-no-truncate.live.test.ts:64:25
+     62|     })
+     63|
+     64|     expect(result.code).toBe(0)
+       |                         ^
+     65|     const output = stripAnsi(result.output)
+     66|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/25]⎯
+
+ FAIL  src/terminal-live/d03-no-kill.live.test.ts > D03 不杀死 > sleep 16s 应自然结束（超过竞品 10s 默认超时窗口）
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d03-no-kill.live.test.ts:31:25
+     29|     const elapsed = Date.now() - start
+     30|
+     31|     expect(result.code).toBe(0)
+       |                         ^
+     32|     expect(elapsed).toBeGreaterThanOrEqual(15_000)
+     33|     const output = stripAnsi(result.output)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/25]⎯
+
+ FAIL  src/terminal-live/d03-no-kill.live.test.ts > D03 不杀死 > sleep 12s 应自然结束（仍超过 10s 竞品窗口）
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d03-no-kill.live.test.ts:51:25
+     49|     const elapsed = Date.now() - start
+     50|
+     51|     expect(result.code).toBe(0)
+       |                         ^
+     52|     expect(elapsed).toBeGreaterThanOrEqual(11_000)
+     53|     const output = stripAnsi(result.output)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/25]⎯
+
+ FAIL  src/terminal-live/d03-no-kill.live.test.ts > D03 不杀死 > sleep 3.5s 回执须含 Wall time 字段
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d03-no-kill.live.test.ts:67:25
+     65|     })
+     66|
+     67|     expect(result.code).toBe(0)
+       |                         ^
+     68|     const output = stripAnsi(result.output)
+     69|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/25]⎯
+
+ FAIL  src/terminal-live/d04-lifecycle.live.test.ts > D04 三道防线 > 后台存活：nohup 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d04-lifecycle.live.test.ts:49:25
+     47|     const wallMs = Date.now() - started
+     48|
+     49|     expect(result.code).toBe(0)
+       |                         ^
+     50|     const output = stripAnsi(result.output)
+     51|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/25]⎯
+
+ FAIL  src/terminal-live/d04-lifecycle.live.test.ts > D04 三道防线 > 后台存活：disown 落 pid 后 CLI 远短于 120s 返回，kill -0 仍为 true
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d04-lifecycle.live.test.ts:75:25
+     73|     const wallMs = Date.now() - started
+     74|
+     75|     expect(result.code).toBe(0)
+       |                         ^
+     76|     const output = stripAnsi(result.output)
+     77|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/25]⎯
+
+ FAIL  src/terminal-live/d04-lifecycle.live.test.ts > D04 三道防线 > 防线③：command 须为 (sleep 8) & exit 0，约 2s drain
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/terminal-live/d04-lifecycle.live.test.ts:99:25
+     97|     })
+     98|
+     99|     expect(result.code).toBe(0)
+       |                         ^
+    100|     const output = stripAnsi(result.output)
+    101|     expect(output).toContain('terminal')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/25]⎯
+
+ FAIL  src/terminal-live/d05-exec-env.live.test.ts > D05 执行环境 > TERM 应为 dumb（呈现覆盖）
+AssertionError: expected '  ✗ Error: Permission denied: Approva…' to contain 'terminal'
+
+- Expected
++ Received
+
+- terminal
++   ✗ Error: Permission denied: Approval requires an interactive TTY
++
++ 宿主拒绝了这次非交互的 `echo $TERM`，原因是工具策略要求交互式 TTY 才能执行 shell 命令（避免任意命令无声执行）。如果需要这个值，可以：
++
++ - 改用交互模式（`interactive=true`）由你亲自在终端里执行，或
++ - 直接告诉我你那边 `echo $TERM` 的输出，我再帮你解读（常见的取值有 `xterm-256color`、`xterm`、`screen-256color`、`tmux-256color`、`dumb` 等）。
++
+
+ ❯ src/terminal-live/d05-exec-env.live.test.ts:41:20
+     39|     expect(result.code).toBe(0)
+     40|     const output = stripAnsi(result.output)
+     41|     expect(output).toContain('terminal')
+       |                    ^
+     42|     expect(output).toMatch(/dumb/)
+     43|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/25]⎯
+
+ FAIL  src/terminal-live/d05-exec-env.live.test.ts > D05 执行环境 > PATH 应宽于最小 /usr/bin:/bin（login shell 采集）
+Error: terminal(command: ...) not found in CLI output
+ ❯ expectTerminalCommand src/helpers/terminal-live.ts:80:19
+     78| export function expectTerminalCommand(output: string, mustInclude: str…
+     79|   const cmd = extractTerminalCommand(output)
+     80|   if (!cmd) throw new Error('terminal(command: ...) not found in CLI o…
+       |                   ^
+     81|   if (!cmd.includes(mustInclude)) {
+     82|     throw new Error(`terminal command mismatch.\nExpected fragment: ${…
+ ❯ src/terminal-live/d05-exec-env.live.test.ts:65:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/25]⎯
+
+ FAIL  src/terminal-live/d05-exec-env.live.test.ts > D05 执行环境 > PAGER=cat：git log 不应卡在分页器
+AssertionError: expected '  ✗ Error: Permission denied: Approva…' to match /commit-[1-5]/
+
+- Expected:
+/commit-[1-5]/
+
++ Received:
+"  ✗ Error: Permission denied: Approval requires an interactive TTY
+
+权限拒绝（Permission denied: Approval requires an interactive TTY）。
+
+这通常是因为 git 相关命令需要宿主进程交互确认才能放行。我的可用工具里 `terminal` 默认是非交互模式，而执行 `git` 在当前宿主里需要人工确认 / TTY，因此被拒。
+
+需要你这边二选一来推进：
+
+1. **直接放行**：在宿主侧授予执行 `git` 的权限（或允许 `terminal` 运行 git 命令），我再重试。
+2. **改用其他信息源**：如果只是想看提交历史，我可以改为：
+   - 用 `grep_search` / `find_files` 在工作区内基于文件内容做溯源（前提是仓库里有 commit 信息文件或日志文件）。
+   - 读取你本地某份已落盘的 `git log` 输出文件（如果你有保存路径）。
+
+你想怎么走？
+"
+
+ ❯ src/terminal-live/d05-exec-env.live.test.ts:86:20
+     84|     const output = stripAnsi(result.output)
+     85|     expect(output).toContain('terminal')
+     86|     expect(output).toMatch(/commit-[1-5]/)
+       |                    ^
+     87|     const execMs = extractTerminalExecMs(output)
+     88|     expect(execMs).not.toBeNull()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/25]⎯
+
+
+ Test Files  6 failed | 9 passed (15)
+      Tests  25 failed | 92 passed (117)
+   Start at  22:56:39
+   Duration  114.18s (transform 186ms, setup 0ms, import 497ms, tests 112.65s, environment 1ms)
+
+JSON report written to /tmp/e03-s002-live-all.json

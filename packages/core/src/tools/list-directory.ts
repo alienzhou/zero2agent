@@ -1,10 +1,10 @@
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import type { Tool, ToolContext } from "./types.js";
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
+import type { Tool, ToolContext } from './types.js'
 
 interface ListDirectoryInput {
-  path: string;
-  recursive?: boolean;
+  path: string
+  recursive?: boolean
 }
 
 /**
@@ -18,95 +18,95 @@ async function listDirRecursive(
   displayBasePath: string,
   depth: number = 0
 ): Promise<string[]> {
-  const entries = await fs.readdir(fsPath, { withFileTypes: true });
-  const results: string[] = [];
+  const entries = await fs.readdir(fsPath, { withFileTypes: true })
+  const results: string[] = []
 
   // 按名称排序，目录在前
   const sorted = entries.sort((a, b) => {
-    if (a.isDirectory() && !b.isDirectory()) return -1;
-    if (!a.isDirectory() && b.isDirectory()) return 1;
-    return a.name.localeCompare(b.name);
-  });
+    if (a.isDirectory() && !b.isDirectory()) return -1
+    if (!a.isDirectory() && b.isDirectory()) return 1
+    return a.name.localeCompare(b.name)
+  })
 
   for (const entry of sorted) {
-    const entryFsPath = path.join(fsPath, entry.name);
-    const entryDisplayPath = path.join(displayBasePath, entry.name);
-    const indent = "  ".repeat(depth);
-    const type = entry.isDirectory() ? "[dir]" : "[file]";
-    const displayPath = entry.isDirectory() ? `${entryDisplayPath}/` : entryDisplayPath;
+    const entryFsPath = path.join(fsPath, entry.name)
+    const entryDisplayPath = path.join(displayBasePath, entry.name)
+    const indent = '  '.repeat(depth)
+    const type = entry.isDirectory() ? '[dir]' : '[file]'
+    const displayPath = entry.isDirectory() ? `${entryDisplayPath}/` : entryDisplayPath
 
-    results.push(`${indent}${type} ${displayPath}`);
+    results.push(`${indent}${type} ${displayPath}`)
 
     if (entry.isDirectory()) {
-      const subEntries = await listDirRecursive(entryFsPath, entryDisplayPath, depth + 1);
-      results.push(...subEntries);
+      const subEntries = await listDirRecursive(entryFsPath, entryDisplayPath, depth + 1)
+      results.push(...subEntries)
     }
   }
 
-  return results;
+  return results
 }
 
 /**
  * list_directory 工具：列出目录结构
  */
 export const listDirectoryTool: Tool = {
-  name: "list_directory",
-  description:
-    "列出指定目录的文件和子目录。可以选择递归列出所有层级的内容。",
+  permission: { effect: 'read', paths: ['path'] },
+  name: 'list_directory',
+  description: '列出指定目录的文件和子目录。可以选择递归列出所有层级的内容。',
   input_schema: {
-    type: "object",
+    type: 'object',
     properties: {
       path: {
-        type: "string",
-        description: "目录的相对路径",
+        type: 'string',
+        description: '目录的相对路径',
       },
       recursive: {
-        type: "boolean",
-        description: "是否递归列出子目录内容（默认 false）",
+        type: 'boolean',
+        description: '是否递归列出子目录内容（默认 false）',
       },
     },
-    required: ["path"],
+    required: ['path'],
   },
   execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
-    const { path: dirPath, recursive = false } = input as unknown as ListDirectoryInput;
-    const resolvedPath = path.resolve(ctx.cwd, dirPath);
+    const { path: dirPath, recursive = false } = input as unknown as ListDirectoryInput
+    const resolvedPath = path.resolve(ctx.cwd, dirPath)
 
     try {
       // 检查路径是否存在
-      await fs.access(resolvedPath);
-      const stat = await fs.stat(resolvedPath);
+      await fs.access(resolvedPath)
+      const stat = await fs.stat(resolvedPath)
 
       if (!stat.isDirectory()) {
-        return `Error: Not a directory: ${dirPath}`;
+        return `Error: Not a directory: ${dirPath}`
       }
 
       if (recursive) {
         // fsPath 用于文件系统操作，dirPath 用于展示相对路径
-        const lines = await listDirRecursive(resolvedPath, dirPath);
-        return lines.join("\n");
+        const lines = await listDirRecursive(resolvedPath, dirPath)
+        return lines.join('\n')
       }
 
       // 非递归模式
-      const entries = await fs.readdir(resolvedPath, { withFileTypes: true });
+      const entries = await fs.readdir(resolvedPath, { withFileTypes: true })
       const sorted = entries.sort((a, b) => {
-        if (a.isDirectory() && !b.isDirectory()) return -1;
-        if (!a.isDirectory() && b.isDirectory()) return 1;
-        return a.name.localeCompare(b.name);
-      });
+        if (a.isDirectory() && !b.isDirectory()) return -1
+        if (!a.isDirectory() && b.isDirectory()) return 1
+        return a.name.localeCompare(b.name)
+      })
 
-      const lines = sorted.map((entry) => {
-        const type = entry.isDirectory() ? "[dir]" : "[file]";
-        const fullPath = path.join(dirPath, entry.name);
-        const displayPath = entry.isDirectory() ? `${fullPath}/` : fullPath;
-        return `${type} ${displayPath}`;
-      });
+      const lines = sorted.map(entry => {
+        const type = entry.isDirectory() ? '[dir]' : '[file]'
+        const fullPath = path.join(dirPath, entry.name)
+        const displayPath = entry.isDirectory() ? `${fullPath}/` : fullPath
+        return `${type} ${displayPath}`
+      })
 
-      return lines.join("\n");
+      return lines.join('\n')
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-        return `Error: Directory not found: ${dirPath}`;
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        return `Error: Directory not found: ${dirPath}`
       }
-      return `Error: Failed to list directory: ${(error as Error).message}`;
+      return `Error: Failed to list directory: ${(error as Error).message}`
     }
   },
-};
+}
