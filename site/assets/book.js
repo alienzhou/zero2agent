@@ -7,6 +7,7 @@ const main = $('#main');
 const outline = $('#outline');
 const sidebar = $('#sidebar');
 const dialog = $('#search-dialog');
+history.scrollRestoration = 'manual';
 let course;
 let currentChapter = null;
 let activePage = null;
@@ -17,6 +18,7 @@ let restoring = false;
 let lastScrollY = 0;
 let lastViewportWidth = window.innerWidth;
 let resumePosition = false;
+let routeRevision = 0;
 let progress = readStorage(storageKey, {chapters: {}, last: null});
 if (!progress || typeof progress !== 'object' || !progress.chapters || typeof progress.chapters !== 'object') progress = {chapters: {}, last: null};
 
@@ -58,7 +60,7 @@ function renderChapter(chapter) {
   const chapterIndex = course.chapters.indexOf(chapter);
   const previous = course.chapters[chapterIndex - 1];
   const next = course.chapters[chapterIndex + 1];
-  main.innerHTML = '<nav class="breadcrumbs" aria-label="当前位置"><a href="#/">课程总览</a><span>/</span><span>' + escapeHTML(epic.title) + '</span><span>/</span><span>第 ' + pad(chapter.number) + ' 章</span></nav><header class="chapter-header"><p class="eyebrow">CHAPTER ' + pad(chapter.number) + ' · ' + escapeHTML(chapter.code) + '</p><h1>' + escapeHTML(chapter.title) + '</h1><p class="chapter-description">' + escapeHTML(chapter.description) + '</p><div class="chapter-meta"><span>' + chapter.pages.length + ' 篇图解</span><span>·</span><span>按顺序连续阅读</span><a href="' + chapter.sourceURL + '" target="_blank" rel="noopener noreferrer">设计文档与源码 ↗</a></div></header><p class="reading-note">用右侧目录跳到具体问题。图解可放大查看，也可以展开文字内容。</p>' +
+  main.innerHTML = '<nav class="breadcrumbs" aria-label="当前位置"><a href="#/">课程总览</a><span>/</span><span>' + escapeHTML(epic.title) + '</span><span>/</span><span>第 ' + pad(chapter.number) + ' 章</span></nav><header class="chapter-header"><p class="eyebrow">CHAPTER ' + pad(chapter.number) + ' · ' + escapeHTML(chapter.code) + '</p><h1>' + escapeHTML(chapter.title) + '</h1><p class="chapter-description">' + escapeHTML(chapter.description) + '</p><div class="chapter-meta"><span>' + chapter.pages.length + ' 篇图解</span><span>·</span><span>按顺序连续阅读</span><a href="' + chapter.sourceURL + '" target="_blank" rel="noopener noreferrer">设计文档与源码 ↗</a></div></header><p class="reading-note">用本章目录跳到具体问题。图解可放大查看，也可以展开文字内容。</p>' +
     chapter.pages.map(page => '<section class="lesson-section" id="' + page.id + '" data-page="' + page.id + '"><div class="section-heading"><span>' + pad(page.number) + '</span><h2>' + escapeHTML(page.title) + '</h2><button class="zoom-button" data-zoom="' + page.id + '" aria-expanded="false">放大图解</button></div><div class="figure-viewport"><div class="figure-stage"><iframe loading="lazy" width="1080" height="1440" title="' + escapeHTML(page.title) + '" src="./chapters/' + chapter.id + '/' + page.file + '" scrolling="no" sandbox="allow-same-origin"></iframe></div></div><details class="text-content"><summary>文字内容</summary>' + page.paragraphs.map(text => '<p>' + escapeHTML(text) + '</p>').join('') + '</details></section>').join('') +
     '<div class="chapter-finish"><p>读完这一章了？<small>标记后，可以在课程目录中查看进度。</small></p><button class="complete-button" id="complete-button">' + (isCompleted(chapter) ? '已读完 ✓ · 取消标记' : '标记本章已读完 ✓') + '</button></div><nav class="chapter-pagination" aria-label="章节翻页"><a href="' + (previous ? routeURL(previous) : '#/') + '"><span>← ' + (previous ? '上一章' : '返回课程总览') + '</span><strong>' + escapeHTML(previous?.title || '查看完整学习路线') + '</strong></a><a href="' + (next ? routeURL(next) : '#/') + '"><span>' + (next ? '下一章 →' : '回到课程总览 →') + '</span><strong>' + escapeHTML(next?.title || '继续按自己的节奏学习') + '</strong></a></nav>' + footer();
   outline.innerHTML = '<div class="drawer-heading mobile-only"><strong>本章目录</strong><button class="icon-button" data-close-drawer aria-label="关闭本章目录">×</button></div><h2 class="outline-heading">本章内容</h2><nav class="outline-list">' + chapter.pages.map(page => '<a class="outline-link" data-outline-page="' + page.id + '" href="' + routeURL(chapter, page) + '"><small>' + pad(page.number) + '</small>' + escapeHTML(page.title) + '</a>').join('') + '</nav><div class="outline-note"><div class="progress-caption"><span>当前小节</span><span id="page-count">1 / ' + chapter.pages.length + '</span></div><div class="progress-track"><span id="chapter-progress" style="width:0"></span></div><a href="' + chapter.sourceURL + '" target="_blank" rel="noopener noreferrer">结合源码跟练 ↗</a></div>';
@@ -133,6 +135,7 @@ function parseRoute() {
   return {chapter, page};
 }
 function handleRoute(initial = false) {
+  const revision = ++routeRevision;
   const route = parseRoute();
   closeDrawers();
   if (dialog.open) dialog.close();
@@ -141,6 +144,8 @@ function handleRoute(initial = false) {
     const target = route.page || route.chapter.pages[0];
     setActivePage(target, false);
     document.getElementById(target.id).scrollIntoView({behavior: 'instant'});
+    restoring = false;
+    lastScrollY = window.scrollY;
     savePosition();
     return;
   }
@@ -164,11 +169,12 @@ function handleRoute(initial = false) {
   renderNav();
   window.scrollTo(0, 0);
   requestAnimationFrame(() => {
+    if (revision !== routeRevision) return;
     if (route.chapter && route.page) {
       const target = document.getElementById(route.page.id);
       const saved = progress.chapters[route.chapter.id];
       const offset = (initial || resumePosition) && saved?.page === route.page.id ? Math.min(1, Math.max(0, Number(saved.offset) || 0)) : 0;
-      window.scrollTo(0, window.scrollY + target.getBoundingClientRect().top - 92 + offset * target.offsetHeight);
+      if (target) window.scrollTo(0, window.scrollY + target.getBoundingClientRect().top - 92 + offset * target.offsetHeight);
     }
     restoring = false;
     resumePosition = false;
@@ -287,9 +293,10 @@ document.addEventListener('click', event => {
     renderNav();
   }
   const searchResult = event.target.closest('.search-result');
-  if (searchResult) {
-    dialog.close();
-    if (searchResult.getAttribute('href') === location.hash) handleRoute();
+  if (searchResult) dialog.close();
+  const routeLink = event.target.closest('a[href^="#/"]');
+  if (routeLink?.getAttribute('href') === location.hash) {
+    event.preventDefault(); handleRoute();
   }
 });
 document.addEventListener('keydown', event => {

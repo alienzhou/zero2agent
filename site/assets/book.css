@@ -177,8 +177,8 @@ mark { background: var(--accent-soft); color: var(--accent); }
   .github-link, .search-trigger kbd { display: none; }
   .search-trigger { min-width: 0; padding: 0; width: 34px; height: 34px; justify-content: center; border: 0; background: transparent; }
   .search-trigger > span:nth-child(2) { display: none; }
-  .sidebar { width: min(300px,85vw); transform: translateX(-100%); padding: 22px 18px; z-index: 40; }
-  .sidebar.open { transform: translateX(0); }
+  .sidebar { width: min(300px,85vw); transform: translateX(-100%); visibility: hidden; padding: 22px 18px; z-index: 40; }
+  .sidebar.open { transform: translateX(0); visibility: visible; }
   .drawer-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 14px; }
   body.drawer-open { overflow: hidden; }
   #main { padding: 28px 18px 90px; }
