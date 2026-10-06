@@ -38,4 +38,3 @@ Scope: 5 of 6 workspace projects
       Tests  87 passed | 50 skipped (137)
    Start at  22:56:02
    Duration  28.34s (transform 279ms, setup 0ms, import 719ms, tests 26.40s, environment 1ms)
-
