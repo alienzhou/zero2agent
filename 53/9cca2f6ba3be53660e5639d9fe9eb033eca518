@@ -1,0 +1,19 @@
+.vibecoding/2026-10-06/online-course-site/verification.md
+  s_7ef586e3e4b6e0::t_a3dbe0a1442eb7 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "539cca2f6ba3be53660e5639d9fe9eb033eca518",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
