@@ -1,0 +1,23 @@
+README.en.md
+  s_7ef586e3e4b6e0::t_d7f8ec54d7e560 160,172-173
+README.md
+  s_7ef586e3e4b6e0::t_752812b27b4c5b 164
+specs/E03-product-foundations/S002-permissions/README.md
+  s_7ef586e3e4b6e0::t_1aa507215de3de 60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c4b371aa976331d63b1cf6dfa03775dc6944452a",
+  "prompts": {},
+  "sessions": {
+    "s_7ef586e3e4b6e0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11155-5455-70e0-bf71-1046809cc026",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
