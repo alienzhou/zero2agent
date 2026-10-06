@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S002：执行前，先判断是否允许](./specs/E03-product-foundations/S002-permissions/README.md)完成权限模式、三态规则、一次审批、TTY 交互和真实路径重查。固定代码候选 `73ecdbc`，463 项离线与本机 50 项真实 MiniMax-M2.7 验收通过（本课 22 项、旧功能 28 项）；16 页图文、手机图与双 ZIP 本地完成。[验收证据](./researches/permissions/acceptance/README.md)与[跟练](./specs/E03-product-foundations/S002-permissions/follow-along.md)已齐备，补验 Tag 为 `E03-S002-permissions-approval-verified`。[本机实测记录](./researches/permissions/acceptance/runtime-audit/README.md)明确 Linux 与竞品实机尚未验证。实现候选待人工审阅与合并，课程未对外发布。下一课：E03-S003 运行状态与 TUI。
+**最新更新**：[E03-S002：执行前，先判断是否允许](./specs/E03-product-foundations/S002-permissions/README.md)已完成三态权限、一次审批、TTY 交互和真实路径重查，候选待人工审阅与合入。已有 463 项离线与本机 50 项真实 MiniMax-M2.7 验收证据（本课 22 项、旧功能 28 项），固定跟练版本为 `E03-S002-permissions-approval-verified`。16 页图解已纳入[在线教程](./docs/site.md)，内容在本仓库维护；未对外发布。[验收证据](./researches/permissions/acceptance/README.md)与[跟练](./specs/E03-product-foundations/S002-permissions/follow-along.md)说明版本和范围；[本机实测记录](./researches/permissions/acceptance/runtime-audit/README.md)保留未测平台与原始失败记录。下一课：E03-S003 运行状态与 TUI。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
