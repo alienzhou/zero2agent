@@ -1,0 +1,40 @@
+packages/core/src/diagnostics.ts
+  s_08884e0d462e65::t_e12ccc0b7b1b8e 1-167
+  s_08884e0d462e65::t_5f6f667458edf3 168-269
+.vibecoding/2026-10-07/e03-s005-runtime-logging/failures.md
+  s_08884e0d462e65::t_19e5659940371a 1-5
+packages/core/src/__tests__/diagnostics.test.ts
+  s_08884e0d462e65::t_8351038ae941ba 1-233
+packages/core/src/agent.ts
+  s_08884e0d462e65::t_256d746695aea6 4-8,22,50,55-56,71,73-74,77-90,93,96-101
+packages/core/src/context-budget.ts
+  s_08884e0d462e65::t_a33cb360ba961e 1,145-150,156,163,168
+packages/core/src/context-manager.ts
+  s_08884e0d462e65::t_5d648706453227 1,21,111-114
+packages/core/src/context-summary.ts
+  s_08884e0d462e65::t_70a3f2cd2b0a95 1,74-75,89,145-146,148,153,160
+packages/core/src/index.ts
+  s_08884e0d462e65::t_894cddb68afd04 69-71
+packages/core/src/loop.ts
+  s_08884e0d462e65::t_fe5760df6cd262 5-11,24,84-85,117-132,134,138,148,203-204,227-231,243,248,251,261,273-274,282,291,306-307,322-323,342,351,363,367,388-389
+packages/core/src/tools/terminal.ts
+  s_08884e0d462e65::t_1117863ad0de87 1,600-606,638-645
+packages/core/src/tools/types.ts
+  s_08884e0d462e65::t_790a7b62fb8c1a 7-12,14-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1c98769fe0d12d84a1af7ba0c17ca593c7bbe8f9",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
