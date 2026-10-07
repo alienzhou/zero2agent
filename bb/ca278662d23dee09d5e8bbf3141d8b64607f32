@@ -1,0 +1,27 @@
+e2e/src/checkpoint-store.test.ts
+  s_08884e0d462e65::t_e5845bf7c65f8a 267-276,278-291,298-303
+  s_08884e0d462e65::t_8bc0fa54fcbc64 266,277,292-297
+packages/tui/src/checkpoint-store.ts
+  s_08884e0d462e65::t_e5845bf7c65f8a 81,807
+  s_08884e0d462e65::t_8bc0fa54fcbc64 768,770-789
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/failures.md
+  s_08884e0d462e65::t_0010c383e8434c 17-20
+researches/file-checkpoints/acceptance/pre-handoff-summary.json
+  s_08884e0d462e65::t_25fdaccd74edcd 1-459
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bbca278662d23dee09d5e8bbf3141d8b64607f32",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
