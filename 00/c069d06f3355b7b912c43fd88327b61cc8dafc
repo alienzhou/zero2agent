@@ -1,0 +1,27 @@
+.discuss/2026-10-07/e03-s003-runtime-tui/decisions/D02-interaction-quality.md
+  s_08884e0d462e65::t_208eff09283bb4 1-22
+specs/E03-product-foundations/S003-runtime-tui/README.md
+  s_08884e0d462e65::t_3ecac1d2b1546e 1-79
+specs/E03-product-foundations/S003-runtime-tui/deep-dive/01-cancellation-and-evidence.md
+  s_08884e0d462e65::t_6522e4944cded8 1-39
+specs/E03-product-foundations/S003-runtime-tui/details/01-technical-design.md
+  s_08884e0d462e65::t_7fc393cb619a1c 42
+specs/E03-product-foundations/S003-runtime-tui/follow-along.md
+  s_08884e0d462e65::t_d3b072cb680daa 1-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "00c069d06f3355b7b912c43fd88327b61cc8dafc",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
