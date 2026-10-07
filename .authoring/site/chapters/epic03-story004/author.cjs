@@ -22,7 +22,7 @@ line('M211 225V301H360',C.green,true)+doc(405,272,121,147,'green')+t(603,325,'�
 line('M0 449H952',C.red,false,'10 10')+box(290,420,370,57,C.paper,C.paper,0)+t(475,460,'进程结束 / 重新启动',31,C.red,650,'middle')+
 line('M466 425V514',C.green,true)+
 smallTerminal(0,527,952,214,['你 › 刚才的识别码是什么？','Agent › ALPHA-42。'],'新进程 · 恢复同一个会话 UUID')),
-'图中对话是离线跟练的教学重排。保存让历史跨进程存在；恢复后仍要用当前配置重新运行。',['D01','S04'],'cover');
+'教学示意：保存历史，重启后用当前配置继续对话。',['D01','S04'],'cover');
 
 page('02-lifetimes.html','问题从哪里来','文件还在，\n为什么 Agent 却忘了？','文件系统与进程内存，有不同的寿命。',svg('两条时间线：文件跨越退出边界继续存在，messages数组随旧进程结束，新进程得到空数组',
 t(0,55,'昨天',35,C.ink,700)+t(788,55,'今天',35,C.ink,700)+
@@ -167,7 +167,7 @@ for(const [i,p] of pages.entries()){
  const header=`<header class="page-header"><span>Zero2Agent · ${p.section}</span><span class="page-number">${number}</span></header>`;
  const heading=`<div class="heading" data-block><h1>${esc(p.title).replaceAll('\n','<br>')}</h1><p class="deck" data-prose>${esc(p.deck)}</p></div>`;
  const content=`<div class="content">${p.body}${p.note?`<p class="explain" data-block data-prose>${esc(p.note)}</p>`:''}</div>`;
- const inner=i===0?`<div class="cover-frame">${header}${heading}${content}<div class="cover-tags"><span>工程实战</span><span>交互设计</span><span>开源课程</span></div></div>`:header+heading+content;
- fs.writeFileSync(p.file,`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${esc(p.title.replaceAll('\n',''))}</title><link rel="stylesheet" href="course.css"></head><body><main class="sheet ${p.extra}" data-page="${number}">${inner}</main></body></html>\n`);
+ const inner=i===0?`<div class="cover-frame"><header class="page-header"><span>Zero2Agent · 从循环到产品</span><span class="page-number">E03-S004</span></header><div class="series-masthead" data-block><h1 class="series-title">从零到一做 <span>Agent</span></h1><p class="series-description" data-prose>亲手实现 Coding Agent · 开源实战课程</p><h2 class="lesson-title">${esc(p.section)}</h2><p class="lesson-promise" data-prose>关掉程序，下次还能接着聊</p></div><div class="series-body">${p.body}${p.note?`<p class="explain" data-block data-prose>${esc(p.note)}</p>`:''}</div><div class="cover-tags"><span>工程实战</span><span>交互设计</span><span>开源课程</span></div></div>`:header+heading+content;
+ fs.writeFileSync(p.file,`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${esc(p.title.replaceAll('\n',''))}</title><link rel="stylesheet" href="course.css"></head><body><main class="sheet ${p.extra}${i===0?' series-cover':''}" data-page="${number}">${inner}</main></body></html>\n`);
 }
 fs.writeFileSync('pages.json',JSON.stringify({title:'Zero2Agent · E03-S004 会话落盘与恢复',date:'2026-10-07',draft:false,publicationStatus:'unpublished',width:1080,height:1440,maxImages:20,edition:'v1-session-persistence',pages:pages.map((p,i)=>({file:p.file,title:p.title.replaceAll('\n',''),number:i+1,sources:p.sources}))},null,2)+'\n');
