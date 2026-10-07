@@ -1,5 +1,4 @@
 import * as readline from 'node:readline'
-import { terminalTool } from '@zero2agent/core'
 import type {
   Agent,
   ApprovalRequest,
@@ -13,7 +12,6 @@ import { clipText, graphemes, safeText, textWidth, wrapText } from './display-te
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 import { runHumanTerminal } from './human-terminal.js'
 import { Conversations } from './conversations.js'
-import type { SessionItem } from './session-store.js'
 import { restoreTimeline } from './runtime-state.js'
 
 const ENTER_SCREEN = '\x1b[?1049h\x1b[?2004h\x1b[?25l'
@@ -47,11 +45,13 @@ const COMMANDS = [
   '/resume',
   '/session',
   '/save',
+  '/logs',
+  '/log',
 ]
 const MAX_DRAFT_LENGTH = 16_384
 const DRAFT_LIMIT_NOTICE = '输入上限 16,384 个 UTF-16 单元；本次输入或整段粘贴未加入，原草稿保留。'
 const HELP =
-  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/logs 运行日志列表，/log [UUID] [operationId] 查看日志。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -68,7 +68,18 @@ export class RuntimeTui {
   private state = initialState()
   private agent?: Agent
   private conversations?: Conversations
-  private selector?: { items: SessionItem[]; index: number; displayed: boolean }
+  private selector?: {
+    items: Array<{
+      id: string
+      title: string
+      updatedAt: string
+      error?: string
+      pending?: unknown
+    }>
+    index: number
+    displayed: boolean
+    logs?: boolean
+  }
   private active = false
   private closed = false
   private busy = false
@@ -97,6 +108,10 @@ export class RuntimeTui {
   private tick?: NodeJS.Timeout
   private operation?: Promise<void>
   private done: () => void = () => {}
+
+  logFailure(): void {
+    this.notice('日志记录不可用；任务继续，使用 /log 查看状态。')
+  }
 
   readonly events: LoopEventHandlers = {
     onEvent: event => {
@@ -361,11 +376,11 @@ export class RuntimeTui {
       else if (key.name === 'return') {
         const item = selector.items[selector.index]
         if (item?.error) {
-          this.notice(`无法恢复: ${item.error}`)
+          this.notice(`${selector.logs ? '无法读取日志' : '无法恢复'}: ${item.error}`)
           this.selector = undefined
         } else if (item) {
           this.selector = undefined
-          this.operation = this.submit(`/resume ${item.id}`)
+          this.operation = this.submit(`${selector.logs ? '/log' : '/resume'} ${item.id}`)
         }
       }
       selector.index = Math.max(0, Math.min(selector.items.length - 1, selector.index))
@@ -564,6 +579,15 @@ export class RuntimeTui {
       } else if (input === '/save') {
         await this.conversations!.save()
         this.notice(this.conversations!.status)
+      } else if (input === '/logs') {
+        const items = await this.conversations!.listLogs()
+        if (!items.length) this.notice('当前工作目录没有运行日志。')
+        else this.selector = { items, index: 0, displayed: false, logs: true }
+        this.state.phase = 'idle'
+      } else if (input === '/log' || input.startsWith('/log ')) {
+        const [, id, operationId] = input.split(/\s+/)
+        this.notice(await this.conversations!.readLog(id, operationId))
+        this.state.phase = 'idle'
       } else if (input === '/compact') {
         this.compacting = true
         this.state.phase = 'preparing'
@@ -576,9 +600,7 @@ export class RuntimeTui {
       } else if (input === '/terminal' || input.startsWith('/terminal ')) {
         const command =
           input.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
-        this.notice(
-          await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })
-        )
+        this.notice(await this.conversations!.terminal(command))
         this.state.phase = 'completed'
       } else await this.conversations!.run(input)
     } catch (error) {
@@ -645,11 +667,11 @@ export class RuntimeTui {
         ? ` · ${((Date.now() - this.state.startedAt) / 1000).toFixed(1)}s`
         : ''
     const spinner = this.busy ? ['◐', '◓', '◑', '◒'][Math.floor(Date.now() / 250) % 4] : '●'
-    const header = `${spinner} zero2agent · ${this.approval ? '等待审批' : this.selector ? '选择会话' : this.busy && this.state.finished ? '正在保存会话' : (PHASE[this.state.phase] ?? this.state.phase)}${elapsed}`
+    const header = `${spinner} zero2agent${this.conversations?.logFailed ? ' · 日志不可用' : ''} · ${this.approval ? '等待审批' : this.selector ? (this.selector.logs ? '选择运行日志' : '选择会话') : this.busy && this.state.finished ? '正在保存会话' : (PHASE[this.state.phase] ?? this.state.phase)}${elapsed}`
     const lines = [
       clipText(header, width),
       clipText(
-        `会话: ${(this.conversations?.status ?? '').replace(this.conversations?.id ?? '\0', this.conversations?.id?.slice(0, 8) ?? '')} · 工作目录: ${process.cwd()}`,
+        `会话: ${(this.conversations?.status ?? '').replace(this.conversations?.id ?? '\0', this.conversations?.id?.slice(0, 8) ?? '')} · ${this.conversations?.logStatus ?? ''} · 工作目录: ${process.cwd()}`,
         width
       ),
     ]
@@ -682,14 +704,21 @@ export class RuntimeTui {
         )
         lines.push(
           clipText(
-            `  ${item.id} · ${item.updatedAt.slice(0, 16)}${item.id === this.conversations?.id ? ' · 当前' : ''}`,
+            `  ${item.id} · ${item.updatedAt.slice(0, 16)}${item.id === (this.selector.logs ? this.conversations?.logId : this.conversations?.id) ? ' · 当前' : ''}`,
             width
           )
         )
       }
       while (lines.length < 2 + bodyHeight) lines.push('')
-      lines.push(clipText(`会话 ${index + 1}/${items.length} · 仅当前工作目录`, width))
-      lines.push(clipText('↑↓ / PgUp PgDn 选择 · Enter 恢复', width))
+      lines.push(
+        clipText(
+          `${this.selector.logs ? '运行日志' : '会话'} ${index + 1}/${items.length} · 仅当前工作目录`,
+          width
+        )
+      )
+      lines.push(
+        clipText(`↑↓ / PgUp PgDn 选择 · Enter ${this.selector.logs ? '查看' : '恢复'}`, width)
+      )
       lines.push(clipText('Esc / Ctrl-C 返回 · 草稿保留', width))
       this.selector.displayed = true
     } else {
