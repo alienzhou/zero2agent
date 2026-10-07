@@ -1,0 +1,63 @@
+AGENTS.md
+  s_08884e0d462e65::t_fd0ba2e6762f2f 137-138
+.authoring/site/templates/cover.md
+  s_08884e0d462e65::t_fd0ba2e6762f2f 1-29
+.vibecoding/2026-10-07/course-cover-series/prompt.md
+  s_08884e0d462e65::t_fd0ba2e6762f2f 1-5
+.vibecoding/2026-10-07/course-cover-series/learnings.md
+  s_08884e0d462e65::t_fd0ba2e6762f2f 1-7
+.authoring/site/README.md
+  s_08884e0d462e65::t_fd0ba2e6762f2f 42
+.authoring/site/chapters/epic03-story001/review.md
+  s_08884e0d462e65::t_c3a6f15f410352 104-107
+.authoring/site/chapters/epic03-story002/author.cjs
+  s_08884e0d462e65::t_e03674ca113f4b 174
+.authoring/site/chapters/epic03-story002/review.md
+  s_08884e0d462e65::t_c9e032230b6c5a 45-48
+.authoring/site/chapters/epic03-story003/author.cjs
+  s_08884e0d462e65::t_a6616b00210712 180-181
+.authoring/site/chapters/epic03-story003/review.md
+  s_08884e0d462e65::t_2256ca699d1ac5 55-58
+.authoring/site/chapters/epic03-story004/author.cjs
+  s_08884e0d462e65::t_9c1e03b88b7a28 25,170-171
+.authoring/site/chapters/epic03-story004/review.md
+  s_08884e0d462e65::t_f4e86d5d5f0c2d 12-15
+.vibecoding/2026-10-07/course-cover-series/checks.json
+  s_08884e0d462e65::t_54979f64b52102 1-536
+.vibecoding/2026-10-07/course-cover-series/review.md
+  s_08884e0d462e65::t_907d89efb076b7 1-13
+site/chapters/epic03-story001/01-cover.html
+  s_08884e0d462e65::t_a6264123c97013 2-3
+site/chapters/epic03-story001/course.css
+  s_08884e0d462e65::t_9720a55de7cd27 74-91
+site/chapters/epic03-story002/01-cover.html
+  s_08884e0d462e65::t_417c50ea2155c6 1
+site/chapters/epic03-story002/course.css
+  s_08884e0d462e65::t_5868f9361f4151 50-67
+site/chapters/epic03-story003/01-cover.html
+  s_08884e0d462e65::t_830a5bc5e5d177 1
+site/chapters/epic03-story003/course.css
+  s_08884e0d462e65::t_1689aff71cff55 3-20
+site/chapters/epic03-story004/01-cover.html
+  s_08884e0d462e65::t_8222376dcf7557 1
+site/chapters/epic03-story004/course.css
+  s_08884e0d462e65::t_5c91d67a42e130 3-20
+site/course.json
+  s_08884e0d462e65::t_106c7651177a18 2551-2554,2945-2949,3425-3429,3933-3937,3947
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f061e82af4957833f6ba4c41f532cda98a32135",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
