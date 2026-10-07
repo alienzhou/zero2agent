@@ -1,0 +1,31 @@
+.vibecoding/2026-10-07/e03-s004-session-persistence/failures.md
+  s_08884e0d462e65::t_ed94f517f3a03b 10-11
+e2e/src/session-live.test.ts
+  s_08884e0d462e65::t_d035c1f10245d3 1-79
+e2e/src/session-persistence.test.ts
+  s_08884e0d462e65::t_958f12757ec071 5
+e2e/src/session-store.test.ts
+  s_08884e0d462e65::t_03505af05b500d 6-7
+e2e/vitest.config.ts
+  s_08884e0d462e65::t_03f873ce775ef4 14
+researches/session-persistence/live-preflight/session-resume.json
+  s_08884e0d462e65::t_31c006e8734037 1-451
+scripts/e03-s004-acceptance-report.mjs
+  s_08884e0d462e65::t_b53688159aa68f 1-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6da183a40a7436a1313c4d5fa07d7921c117d1dd",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
