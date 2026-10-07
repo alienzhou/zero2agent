@@ -14,7 +14,7 @@ RuntimeEvent 继续供 TUI 使用，不改变其原契约。诊断 sink 是通�
 
 ## 查看与异常
 
---logs 列表、--log UUID 查看，均不需要 API key；可按 operationId 过滤。TUI /logs 使用焦点独占列表，/log 查看当前/指定运行，草稿和审批输入继续遵守旧约束。读取限制在当前工作区，用 UUID 拒绝目录穿越，O_NOFOLLOW 拒绝文件软链接。
+--logs 列表、--log UUID 查看，均不需要 API key；可按 operationId 过滤。TUI /logs 使用焦点独占列表，/log 查看当前/指定运行，查看器支持方向键、PgUp/PgDn、Home/End；Esc 或 Ctrl-C 返回原日志列表或对话。读取时捕获只读快照，不不断追尾。查看焦点阻止文本/粘贴进入草稿，草稿和审批输入继续遵守旧约束。读取限制在当前工作区，用 UUID 拒绝目录穿越，O_NOFOLLOW 拒绝文件软链接。
 
 只接受已知版本与字段。末尾残缺行标记不完整并保留之前完整行，中部损坏拒绝；正常 host-end、操作结束与请求结束分别检查。显示最多近期 200 行，并报告省略数量；记录仍留在文件中。
 

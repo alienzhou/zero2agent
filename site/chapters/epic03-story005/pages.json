@@ -1,0 +1,201 @@
+{
+  "title": "Zero2Agent · E03-S005 运行日志与问题追查",
+  "date": "2026-10-07",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 20,
+  "edition": "v1-runtime-logging",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "出了问题，找得到发生了什么",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "02-carriers.html",
+      "title": "保存会话、显示状态、记录日志各解决什么？",
+      "number": 2,
+      "sources": [
+        "S01",
+        "S03"
+      ]
+    },
+    {
+      "file": "03-evidence.html",
+      "title": "“没有回答”背后，可能有不同的事实",
+      "number": 3,
+      "sources": [
+        "T01",
+        "T02",
+        "S01"
+      ]
+    },
+    {
+      "file": "04-identity.html",
+      "title": "同名工具调用，怎样找到它的请求？",
+      "number": 4,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-clock.html",
+      "title": "墙上时钟告诉你时间，单调时钟计算耗时",
+      "number": 5,
+      "sources": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "06-request.html",
+      "title": "一次 SDK 调用，记录从开始到结束",
+      "number": 6,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "07-auxiliary.html",
+      "title": "计数、摘要、主请求，都属于真实网络工作",
+      "number": 7,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "08-tool.html",
+      "title": "先过权限边界，再记录工具结果",
+      "number": 8,
+      "sources": [
+        "S01",
+        "S03",
+        "T02"
+      ]
+    },
+    {
+      "file": "09-background.html",
+      "title": "上一轮命令晚点结束，不要记到下一轮头上",
+      "number": 9,
+      "sources": [
+        "S01",
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "10-privacy.html",
+      "title": "先列清楚允许记录什么，再让数据进入日志",
+      "number": 10,
+      "sources": [
+        "S02",
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "11-files.html",
+      "title": "一个工作区目录，每次运行各写一份",
+      "number": 11,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "12-writer.html",
+      "title": "写入队列需要上限，失败还必须看得见",
+      "number": 12,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "13-crash.html",
+      "title": "缺少结束行，结果只能标为未知",
+      "number": 13,
+      "sources": [
+        "S02",
+        "T02",
+        "D01"
+      ]
+    },
+    {
+      "file": "14-reader.html",
+      "title": "损坏的记录，不能悄悄当作正常数据",
+      "number": 14,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "15-tui.html",
+      "title": "选择一份运行日志，在独立视图里浏览",
+      "number": 15,
+      "sources": [
+        "S03",
+        "T02"
+      ]
+    },
+    {
+      "file": "16-cli.html",
+      "title": "TUI、plain、单次调用，使用同一份运行事实",
+      "number": 16,
+      "sources": [
+        "S03",
+        "T02"
+      ]
+    },
+    {
+      "file": "17-triage.html",
+      "title": "先看失败发生在哪一层，再选择检查对象",
+      "number": 17,
+      "sources": [
+        "S01",
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "18-practice.html",
+      "title": "真的执行一次，再追查它的记录",
+      "number": 18,
+      "sources": [
+        "D02",
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "19-limits.html",
+      "title": "有界记录仍有成本，长期治理留给后续",
+      "number": 19,
+      "sources": [
+        "S02",
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "20-next.html",
+      "title": "能够追查运行事实，再讨论如何回退文件",
+      "number": 20,
+      "sources": [
+        "S01",
+        "D01",
+        "D03"
+      ]
+    }
+  ]
+}

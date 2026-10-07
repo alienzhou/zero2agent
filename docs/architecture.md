@@ -148,6 +148,14 @@ packages/tui/src/
 
 ---
 
+## 运行诊断与本地追查
+
+Core 的 `DiagnosticEmitter` 创建操作和请求身份，在实际 SDK 调用、权限与工具边界报告白名单元信息。宿主 `RunJournal` 负责工作区隔离、独占 JSONL、有界串行写入、flush 与可见降级；读取器只读验证版本和完整行，再交给 TUI 或 CLI 展示。
+
+诊断通知与控制接口分开；观察者错误不能改变模型历史或工具结果。后台摘要和命令使用启动时的父身份。运行日志独立于会话快照，不能用于恢复进程、重放工具或判断缺失终态等于没有副作用。详见 [S005 技术设计](../specs/E03-product-foundations/S005-runtime-logging/details/01-technical-design.md)。
+
+---
+
 ## 下一步
 
 - 📖 [快速上手](./getting-started.md) - 先把项目跑起来

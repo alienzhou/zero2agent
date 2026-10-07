@@ -1,0 +1,24 @@
+{
+  "platform": "darwin",
+  "viewport": [
+    96,
+    30
+  ],
+  "narrow": [
+    42,
+    18
+  ],
+  "fixture": "local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0",
+  "head": "6ab631a12d8d21349b3e77c116dcba7381c6c4c5",
+  "capturedAt": "2026-10-07T14:28:32.964Z",
+  "sourceHashes": {
+    "packages/core/src/prompt/system.ts": "0beb0f6fff66be575f205e619e945d4d6d83e892ad4e5f917190ffb3a5a33d86",
+    "packages/core/src/diagnostics.ts": "cfec8537f60f5f5a5c607bb887bcee60525cfb970ff9a39e88a10dd3b03857cf",
+    "packages/core/src/loop.ts": "3f4ce62e36f5ad3e3c05212db39dd400e420fdbf4fd79873fc19f53d63d6ad28",
+    "packages/tui/src/run-log.ts": "a67c8ab7ccd2ea07de555efa1fb36b95e0e2685bfbef797e9457a90881bf31ab",
+    "packages/tui/src/runtime-tui.ts": "d9ea48c7da9503f1b6a10c3442b4c783a0d37cce552763b36dce32650d7cc0e1"
+  },
+  "rawSha256": "bdafc93292fd39a6a51239b3e05de550ed7389030e8a6da8e08a6381811a4d4b",
+  "restorationEscapesObserved": true,
+  "demoWorkspaceRemoved": true
+}

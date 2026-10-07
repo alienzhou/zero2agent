@@ -92,4 +92,4 @@ sequenceDiagram
 
 [总览](details/00-overview.md) · [设计](details/01-technical-design.md) · [任务](details/02-task-list.md) · [验收](details/03-verification-checklist.md) · [Backlog](details/04-backlog.md) · [竞品研究](../../../researches/session-persistence/README.md)
 
-上一篇：[E03-S003 运行状态与 TUI](../S003-runtime-tui/README.md) | 下一篇：E03-S005 运行日志与问题追查（待实现）
+上一篇：[E03-S003 运行状态与 TUI](../S003-runtime-tui/README.md) | 下一篇：[E03-S005 运行日志与问题追查](../S005-runtime-logging/README.md)

@@ -1,0 +1,180 @@
+{
+  "chapter": "epic03-story005",
+  "browser": "154.0.8037.98",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "sha256": "b9184b10f2393c0a7fbd22fdc0fd15c65edbdc906c4d511ac3f5b89ae846f7eb",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "02-carriers.html",
+      "sha256": "c0b55c41b65ddf74ac4b0aec90463bb1f2533a521a9782a47c17582acdb00e1c",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "03-evidence.html",
+      "sha256": "7a05742eb1e9965f86784e55baa84b016d20c5c27409b77d48eec6b1d30af21d",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "04-identity.html",
+      "sha256": "8d52cd5d2cdb47dc7fee1a6a899082c48d36763542812785a42c1d6ae5ff1167",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "05-clock.html",
+      "sha256": "dbcb0f14e7c112dad740b564ea63ce169ec30d6bd37a3931206b8e3a29524156",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "06-request.html",
+      "sha256": "0e8ed25cb16ef7782d210c19c1c550843e2d3adece5cd91f025addc78769d2a8",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "07-auxiliary.html",
+      "sha256": "0ce4005caf3ff6281b2a44f33e08a12d9517b36f1be02149cb3a358ffd963182",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "08-tool.html",
+      "sha256": "5f8c9a4d248ca01387e9251f454cf2ef63e05d76622b549336a83ac0db77a978",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "09-background.html",
+      "sha256": "91798c599ead989f4c2afb15195fc13e2d94b0859ad228154819216ad44d78af",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "10-privacy.html",
+      "sha256": "11781017001dd7cb8ba0c3df903950f24a2bfd39c92bb00621f6e0d01aa2733f",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "11-files.html",
+      "sha256": "1315b594126f006b1c998eb6520a9ac8fc705f2b2243d670791e00be869411af",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "12-writer.html",
+      "sha256": "84e4f5f09c801c6b66979da1da1987ddce23ecc699be2436ce945265c341701c",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "13-crash.html",
+      "sha256": "deb67cff7928c44311ebc3f684efe5fdcbeaec1d2794cf0adeee8cd691126694",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "14-reader.html",
+      "sha256": "f7627d2983d243c8878b4e5a5cd4c4d4774c7bdd94977d214bb1037161d45d8b",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "15-tui.html",
+      "sha256": "3334f43bc7b7562345b5ea8bb646335916f4dee1e162a95611c4749f9c6d9c21",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "16-cli.html",
+      "sha256": "af0c2dff3077cf078c2718fba8eb68f26a2c30895e2cf5d66a0108da68e46c64",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "17-triage.html",
+      "sha256": "5c9b3558b3f8c64606d499e73b002e3f33a85ddd2813bd0c0f714a543c82d3be",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "18-practice.html",
+      "sha256": "03565d2b05e8692660bb91e710b4b62aede44e32c397cab9ed879dd06001a2fa",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "19-limits.html",
+      "sha256": "b6aa9f94cc52b65db7fddd50729eb12277002801e3f86d7c59863c5b2d525c8b",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "20-next.html",
+      "sha256": "a0ab696a4ceeca9289fbed185224a97a894329b0a2bcec42df084edb87842f6e",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sections": 20,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sections": 20,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    }
+  ],
+  "failures": [],
+  "sources": {
+    "author.cjs": "42c7b377c3fc578fc4c74a4270e03f31dbb9afafd5ce802062f8d2d4fbb31a6c",
+    "course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e"
+  },
+  "passed": true
+}

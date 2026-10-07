@@ -1,0 +1,5 @@
+
+> zero2agent@0.0.0 site:check /Users/zhouhongxuan/program/works/zero2agent-e03-s005
+> node scripts/check-site.mjs
+
+Site check passed: 13 chapters, 193 diagrams; local dependencies complete.

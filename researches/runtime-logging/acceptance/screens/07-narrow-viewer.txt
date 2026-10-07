@@ -1,0 +1,18 @@
+● zero2agent · 查看运行日志
+会话: 41604f2a · 已保存 r2 · 日志 c197948
+#8 phase/requesting · op=b6c6dcbc-6b3b-4e
+f4-a5a8-c00fd78999da · session=41604f2a-c
+8e7-40e5-b47c-2fc5e0167614
+#9 request/completed · op=b6c6dcbc-6b3b-4
+ef4-a5a8-c00fd78999da · session=41604f2a-
+c8e7-40e5-b47c-2fc5e0167614 · req=4b4c57e
+c-f6f9-49fe-b2de-306bb91c9f25 · model · 2
+5ms · in=12 · out=8
+#10 phase/tools · op=b6c6dcbc-6b3b-4ef4-a
+5a8-c00fd78999da · session=41604f2a-c8e7-
+40e5-b47c-2fc5e0167614
+#11 tool/pending · op=b6c6dcbc-6b3b-4ef4-
+a5a8-c00fd78999da · session=41604f2a-c8e7
+行 23–35 / 85 · 只读快照
+↑↓ / PgUp PgDn / Home End 翻阅
+Esc / Ctrl-C 返回日志列表 · 草稿保留
