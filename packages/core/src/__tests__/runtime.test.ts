@@ -357,6 +357,38 @@ describe('whole-turn cancellation', () => {
     agent.reset()
   })
 
+  it('honors cancellation from a final Harness notice observer', async () => {
+    const truncated = answer('partial')
+    truncated.stop_reason = 'max_tokens'
+    transport(truncated)
+    const events: RuntimeEvent[] = []
+    const agent = new Agent({
+      tools: [],
+      events: {
+        onEvent: event => {
+          events.push(event)
+          if (event.type === 'notice') agent.cancelTurn()
+        },
+      },
+    })
+    await expect(agent.run('go')).rejects.toBeInstanceOf(TurnCancelledError)
+    expect(events.at(-1)).toMatchObject({ type: 'turn-end', status: 'cancelled' })
+  })
+
+  it('does not interpret arbitrary tool text as a terminal cancellation receipt', async () => {
+    transport(calls('echo'), answer())
+    const events: RuntimeEvent[] = []
+    const agent = new Agent({
+      tools: [{ ...echo, execute: async () => 'Status: cancelled by user' }],
+      events: { onEvent: event => events.push(event) },
+    })
+    await agent.run('go')
+    expect(events.find(event => event.type === 'tool-state' && event.output)).toMatchObject({
+      status: 'completed',
+    })
+    expect(results(agent)[0].is_error).toBeUndefined()
+  })
+
   it('cancels from turn-start synchronously without starting preparation', async () => {
     const { stream } = transport()
     const events: RuntimeEvent[] = []

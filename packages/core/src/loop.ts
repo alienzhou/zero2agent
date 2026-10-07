@@ -130,7 +130,11 @@ export async function executeToolCalls(
       // Never race a tool against cancellation: it may finish a write despite ignoring signal.
       const output = await tool.execute(input, callCtx)
       const durationMs = Date.now() - start
-      const cancelled = /^Status: (?:human-controlled )?cancelled/m.test(output)
+      const cancelled =
+        block.name === 'terminal' &&
+        /^(?:Note: could not load your shell profile; PATH may be incomplete\.\n)?Status: (?:human-controlled )?cancelled(?: by user|\n|$)/.test(
+          output
+        )
       state(cancelled ? 'cancelled' : output.startsWith('Error:') ? 'error' : 'completed', {
         output,
         durationMs,
@@ -395,6 +399,7 @@ async function runTurnLoop(
       emitter.emit({ type: 'notice', text: emptyNotice })
       notifyObserver(() => events?.onText?.(`\n${emptyNotice}\n`))
     }
+    assertNotCancelled(options.signal)
     return text || notice || emptyNotice
   }
 
@@ -402,5 +407,6 @@ async function runTurnLoop(
   messages.push({ role: 'assistant', content: `[Harness] ${limit}` })
   emitter.emit({ type: 'notice', text: `[Harness] ${limit}` })
   notifyObserver(() => events?.onText?.(`\n[Harness] ${limit}\n`))
+  assertNotCancelled(options.signal)
   return limit
 }
