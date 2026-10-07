@@ -53,4 +53,5 @@
 
 - `07963ad` 增加旧交互在默认 TUI 下的实测：权限模式/精确规则、默认 bash 和 Ctrl-D、Ctrl-X/S、后台退出清理、传输错误后继续。20 项该测试文件用例通过。
 - `f4e6a42` 补常用编辑兼容后，`runtime-tui-state.test.ts` 与 `runtime-tui.test.ts` 合计 **26 项通过（20.62s）**；TUI build、E2E `tsc --noEmit` 通过。
+- `5c8ed60` / `7ebf9e0` 补超长粘贴保护后，以上两文件合计 **27 项通过（20.71s）**；其中真实 PTY 输入 17,000 字符的 bracketed paste，断言提示出现、没有 API 请求、原中文/emoji 草稿和中间光标保留，之后发送的内容完全准确。TUI build、E2E 类型检查与新 TUI 源码 ESLint 均通过。
 - 没有重复运行整库测试。最终全量结果与最新源码哈希由主代理的验收记录负责，不以本次定向验证替代。
