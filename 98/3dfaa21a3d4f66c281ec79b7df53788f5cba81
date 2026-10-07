@@ -1,0 +1,37 @@
+e2e/src/runtime-live.test.ts
+  s_08884e0d462e65::t_c5df58c1b23356 102,107-108,117,133,135,137-152
+researches/runtime-tui/acceptance/provider-dialogue-attempt/build.txt
+  s_08884e0d462e65::t_23b71532a1fe2d 1-13
+researches/runtime-tui/acceptance/provider-dialogue-attempt/format.txt
+  s_08884e0d462e65::t_7beab9549d86a3 1-2
+researches/runtime-tui/acceptance/provider-dialogue-attempt/live-results.json
+  s_08884e0d462e65::t_7d005376f1c006 1
+researches/runtime-tui/acceptance/provider-dialogue-attempt/runtime-demo.txt
+  s_08884e0d462e65::t_9d1b3a44279e68 1-114
+researches/runtime-tui/acceptance/provider-dialogue-attempt/site-build.txt
+  s_08884e0d462e65::t_94a7195248c3d8 1-8
+researches/runtime-tui/acceptance/provider-dialogue-attempt/site-check.txt
+  s_08884e0d462e65::t_efea44b2e17ed5 1-5
+researches/runtime-tui/acceptance/provider-dialogue-attempt/summary.json
+  s_08884e0d462e65::t_649bb6e6e296c8 1-383
+researches/runtime-tui/acceptance/provider-dialogue-attempt/terminal-restore.txt
+  s_08884e0d462e65::t_06225975b217bc 1-27
+scripts/e03-s003-acceptance-report.mjs
+  s_08884e0d462e65::t_f7e08f885c5a27 61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "983dfaa21a3d4f66c281ec79b7df53788f5cba81",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
