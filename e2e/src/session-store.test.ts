@@ -3,8 +3,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { hostname } from 'node:os'
 import { Agent } from '@zero2agent/core'
-import { SessionStore } from '../../packages/tui/src/session-store.js'
-import { Conversations, RECOVERY_NOTICE } from '../../packages/tui/src/conversations.js'
+import { SessionStore } from '../../packages/tui/dist/session-store.js'
+import { Conversations, RECOVERY_NOTICE } from '../../packages/tui/dist/conversations.js'
 import { makeTempWorkspace } from './helpers/cli.js'
 
 const state = {

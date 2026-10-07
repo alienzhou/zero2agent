@@ -7,3 +7,5 @@
 - 超长粘贴：`CLI did not exit`。回答已出现但自动保存尚未结束，exit 成为忙时草稿。退出 helper 改为确认最新帧的空闲输入焦点，保留整段拒绝、原草稿/光标与请求内容断言。
 
 产品修正：保存过程中单独显示“正在保存会话/正在保存”；完成后才显示“已保存”。没有把忙时 Enter 改成自动排队，保持上一节用户手动确认的约定。
+
+工程检查还发现：测试 setup 位于 e2e tsconfig 范围之外导致 ESLint project service 报错，已移入 src/helpers；E2E 直接导入 TUI TypeScript 源码越过 rootDir，已改为读取构建产物，与现有 runtime-state 契约一致。没有修改检查配置来忽略这些错误。
