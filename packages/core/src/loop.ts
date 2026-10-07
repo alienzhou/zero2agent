@@ -148,7 +148,9 @@ export async function executeToolCalls(
     } catch (error) {
       const cancelled = ctx.signal?.aborted || error instanceof TurnCancelledError
       const errorMessage = cancelled
-        ? 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
+        ? start === undefined
+          ? 'Error: Turn cancelled before this tool started; it was not executed.'
+          : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
         : `Error: ${describeToolError(error)}`
       state(cancelled ? 'cancelled' : denied ? 'denied' : 'error', {
         output: errorMessage,
@@ -201,6 +203,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       started = true
       options.signal?.addEventListener('abort', cancel, { once: true })
       emitter.emit({ type: 'turn-start' })
+      if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
       return runTurnLoop(messages, { ...options, session }, emitter)
     })
