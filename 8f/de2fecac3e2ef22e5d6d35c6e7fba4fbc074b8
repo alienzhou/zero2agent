@@ -1,0 +1,23 @@
+e2e/src/runtime-tui.test.ts
+  s_08884e0d462e65::t_6f9ac13d5a2844 480-482,485,487,490-491
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/failures.md
+  s_08884e0d462e65::t_06d43f6a246890 21-24
+researches/file-checkpoints/acceptance/readline-initial-summary.json
+  s_08884e0d462e65::t_d4b2387fd89759 1-291
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8fde2fecac3e2ef22e5d6d35c6e7fba4fbc074b8",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
