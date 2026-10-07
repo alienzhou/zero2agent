@@ -1,0 +1,33 @@
+e2e/src/runtime-tui-state.test.ts
+  s_08884e0d462e65::t_d7fe310a25532e 4-10,15-33,35-38,49-51,53-55,60-61,65-70
+e2e/src/runtime-tui.test.ts
+  s_08884e0d462e65::t_de3636fb54325b 14-27,29-31,35-44,47-50,55-57,59-64,67-101,103-107,109-115,117-142,145-162,164-188,190-227,229-246,249-282,284-303,306-333
+packages/tui/src/cli.ts
+  s_08884e0d462e65::t_228c8bba9af727 151-158,169-171
+packages/tui/src/display-text.ts
+  s_08884e0d462e65::t_9ece34b4aef230 21-34
+packages/tui/src/human-terminal.ts
+  s_08884e0d462e65::t_899758c27b0def 337-339
+packages/tui/src/runtime-state.ts
+  s_08884e0d462e65::t_6ed182fd1b87eb 43-46,68-81,83-84,92-96,104-109,116-117
+packages/tui/src/runtime-tui.ts
+  s_08884e0d462e65::t_cb2bba41004c8b 3-9,19-27,30-36,39-42,93-97,130-132,136-140,143-148,178-180,200-201,205-219,221-224,247-249,254-261,266-269,276-279,283-284,294-298,302-308,324-331,335-338,350-353,355-362,370-377,379-382,385-386,401-404,427-431,437-441,449-451,473-476,481-484,489-492,494,502-507,514-516,520-521,523-561,564-566,572-594,600-623
+packages/tui/src/setup-terminal-runtime.ts
+  s_08884e0d462e65::t_72d1766bf51ccf 38-41,43-46,48-62,67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2d34c0a6c54450c2ef3cabcc83ca639790e669d8",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
