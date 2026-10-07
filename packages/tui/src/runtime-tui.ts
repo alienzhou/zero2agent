@@ -148,6 +148,8 @@ export class RuntimeTui {
   private suspend(): void {
     if (!this.active) return
     this.active = false
+    // A PTY lease consumes its own bytes, including a pending paste-end marker.
+    this.paste = false
     clearTimeout(this.renderTimer)
     this.renderTimer = undefined
     clearInterval(this.tick)

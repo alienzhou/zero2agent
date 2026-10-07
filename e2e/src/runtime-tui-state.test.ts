@@ -18,8 +18,11 @@ describe('E03-S003: terminal projection and safe text cells', () => {
     state = reduceRuntime(state, { type: 'turn-start', turnId: 'b', seq: 1 })
     const old: RuntimeEvent = { type: 'turn-end', turnId: 'a', seq: 5, status: 'error' }
     expect(reduceRuntime(state, old)).toBe(state)
+    expect(reduceRuntime(state, { type: 'turn-start', turnId: 'a', seq: 1 })).toBe(state)
     state = reduceRuntime(state, { type: 'text-delta', turnId: 'b', seq: 2, text: 'fresh' })
     expect(reduceRuntime(state, { type: 'text-delta', turnId: 'b', seq: 2, text: 'duplicate' })).toBe(state)
+    state = reduceRuntime(state, { type: 'turn-end', turnId: 'b', seq: 3, status: 'completed' })
+    expect(reduceRuntime(state, { type: 'text-delta', turnId: 'b', seq: 4, text: 'late' })).toBe(state)
   })
 
   it('caps retained history and shows that records have been removed', () => {

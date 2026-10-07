@@ -16,14 +16,16 @@ export interface RuntimeState {
   entries: TimelineEntry[]
   discarded: number
   startedAt?: number
+  retiredTurnIds: string[]
+  finished: boolean
 }
 
 export function initialState(): RuntimeState {
-  return { seq: 0, phase: 'idle', entries: [], discarded: 0 }
+  return { seq: 0, phase: 'idle', entries: [], discarded: 0, retiredTurnIds: [], finished: false }
 }
 
 function bounded(text: string): string {
-  return text.length > MAX_ENTRY_TEXT ? text.slice(-MAX_ENTRY_TEXT) + TRUNCATED : text
+  return text.length > MAX_ENTRY_TEXT ? TRUNCATED + '\n' + text.slice(-MAX_ENTRY_TEXT) : text
 }
 
 function entrySize(entry: TimelineEntry): number {
@@ -60,10 +62,11 @@ export function compactionLabel(event: CompactionEvent): string {
 /** The renderer is a projection; stale turns and replayed events cannot overwrite new state. */
 export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): RuntimeState {
   if (event.type === 'turn-start') {
-    if (previous.turnId === event.turnId) return previous
-    return { ...previous, turnId: event.turnId, seq: event.seq, phase: 'preparing', startedAt: Date.now() }
+    if (previous.turnId === event.turnId || previous.retiredTurnIds.includes(event.turnId)) return previous
+    const retiredTurnIds = previous.turnId ? [...previous.retiredTurnIds, previous.turnId].slice(-MAX_ENTRIES) : previous.retiredTurnIds
+    return { ...previous, turnId: event.turnId, seq: event.seq, phase: 'preparing', startedAt: Date.now(), retiredTurnIds, finished: false }
   }
-  if (event.turnId !== previous.turnId || event.seq <= previous.seq) return previous
+  if (event.turnId !== previous.turnId || event.seq <= previous.seq || previous.finished) return previous
   let state = { ...previous, seq: event.seq, entries: [...previous.entries] }
   switch (event.type) {
     case 'phase':
@@ -71,7 +74,7 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       break
     case 'text-delta': {
       const last = state.entries.at(-1)
-      if (last?.kind === 'text') state.entries[state.entries.length - 1] = { kind: 'text', text: bounded(last.text + event.text) }
+      if (last?.kind === 'text') state.entries[state.entries.length - 1] = { kind: 'text', text: bounded(last.text.replace(TRUNCATED + '\n', '') + event.text) }
       else state.entries.push({ kind: 'text', text: bounded(event.text) })
       break
     }
@@ -98,6 +101,7 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       break
     case 'turn-end':
       state.phase = event.status
+      state.finished = true
       if (event.error) state.entries.push({ kind: 'notice', text: bounded(event.error) })
       break
   }
