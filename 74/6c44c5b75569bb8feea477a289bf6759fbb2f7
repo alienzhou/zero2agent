@@ -1,0 +1,51 @@
+CHANGELOG.md
+  s_08884e0d462e65::t_3bc9977e453a33 80,87-88
+README.en.md
+  s_08884e0d462e65::t_70265ab27a51a0 174
+README.md
+  s_08884e0d462e65::t_ec8dc3474dd918 178
+researches/runtime-tui/acceptance/README.md
+  s_08884e0d462e65::t_f671d2418fbc85 5-7,15,30-33
+researches/runtime-tui/acceptance/build.txt
+  s_08884e0d462e65::t_d1020c69bfabc1 1-13
+researches/runtime-tui/acceptance/final-verification.json
+  s_08884e0d462e65::t_3250798ac32e17 1-40
+researches/runtime-tui/acceptance/format.txt
+  s_08884e0d462e65::t_b09243c16f8e29 1-2
+researches/runtime-tui/acceptance/live-recheck/results.json
+  s_08884e0d462e65::t_90baf7f1f367ba 1
+researches/runtime-tui/acceptance/live-results.json
+  s_08884e0d462e65::t_cb752f91fcef36 1
+researches/runtime-tui/acceptance/runtime-demo.txt
+  s_08884e0d462e65::t_459577d2fdbf21 1-114
+researches/runtime-tui/acceptance/site-build.txt
+  s_08884e0d462e65::t_768e6fff69b7e9 1-8
+researches/runtime-tui/acceptance/site-check.txt
+  s_08884e0d462e65::t_7da017e9349ccc 1-5
+researches/runtime-tui/acceptance/summary.json
+  s_08884e0d462e65::t_b8864aacc626ba 1-383
+researches/runtime-tui/acceptance/terminal-restore.txt
+  s_08884e0d462e65::t_f23339aed99895 1-27
+specs/E03-product-foundations/README.md
+  s_08884e0d462e65::t_cc29efb049f4b5 17
+specs/E03-product-foundations/S003-runtime-tui/details/02-task-list.md
+  s_08884e0d462e65::t_c7850bb98b9aff 9-21
+specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md
+  s_08884e0d462e65::t_cb1b4a3dedf7d2 5-7,11-23,26-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "746c44c5b75569bb8feea477a289bf6759fbb2f7",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
