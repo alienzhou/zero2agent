@@ -18,4 +18,4 @@
 
 独立未完成项：人工代码审查/教学审阅/用户签收、合并、网站部署、其他平台实机验证，以及 S006 文件 Checkpoint。它们没有被记为自动验证通过。本次完整交付的边界是已实现、已验证、可跟练的课程候选与草稿 PR。
 
-固定 Tag：`E03-S005-runtime-logging`。草稿 PR 创建后在本课验收页记录链接。
+固定 Tag：`E03-S005-runtime-logging`。草稿 [PR #21](https://github.com/alienzhou/zero2agent/pull/21)，验收页同步链接。凭据扫描：153 个新增/修改文件通过（gzip 解压后检查）；34 篇 Markdown 文件链接通过；全部生产/测试、课程生成源/20 页 HTML/CSS 与 PTY 哈希相符。主 checkout 仍仅保留原有 `.discuss/.snapshot.yaml` 与 `review.md` 修改。
