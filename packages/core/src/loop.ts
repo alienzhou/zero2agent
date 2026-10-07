@@ -91,7 +91,7 @@ export async function executeToolCalls(
     const state = (
       status: Extract<RuntimeEvent, { type: 'tool-state' }>['status'],
       detail: { output?: string; reason?: string; durationMs?: number } = {}
-    ) =>
+    ): void =>
       emitter?.emit({
         type: 'tool-state',
         toolCallId: block.id,
@@ -195,7 +195,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   const emitter = new RuntimeEmitter(randomUUID(), options.events?.onEvent)
   let started = false
   let cancellationNotified = false
-  const cancel = () => {
+  const cancel = (): void => {
     if (cancellationNotified) return
     cancellationNotified = true
     emitter.emit({ type: 'phase', phase: 'cancelling' })

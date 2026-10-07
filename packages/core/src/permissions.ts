@@ -161,7 +161,7 @@ export class PermissionController {
     if (!this.handler) return { action: 'deny', reason: 'Approval unavailable: no host handler' }
     const controller = new AbortController()
     this.pending.add(controller)
-    const cancelTurn = () => controller.abort('Turn cancelled')
+    const cancelTurn = (): void => controller.abort('Turn cancelled')
     ctx.signal?.addEventListener('abort', cancelTurn, { once: true })
     if (ctx.signal?.aborted) cancelTurn()
     const id = randomUUID()

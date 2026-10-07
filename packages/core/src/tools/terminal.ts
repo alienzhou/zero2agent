@@ -308,7 +308,7 @@ export async function runCommand(
     }
 
     let detached = false
-    let detachRaw: (() => void) | undefined
+    let detachRaw: (() => void) | undefined = undefined
 
     function detachOnce(): void {
       if (detached) return
