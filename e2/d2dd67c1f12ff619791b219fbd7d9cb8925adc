@@ -1,0 +1,27 @@
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/failures.md
+  s_08884e0d462e65::t_589891ff377350 9-10
+e2e/src/checkpoint-store.test.ts
+  s_08884e0d462e65::t_e4ff956dda014f 162-169
+packages/tui/src/checkpoint-store.ts
+  s_08884e0d462e65::t_1b1c2762efb801 179-182
+researches/file-checkpoints/acceptance/second-summary.json
+  s_08884e0d462e65::t_9592011856489c 1-406
+researches/file-checkpoints/acceptance/terminal-restore-initial.txt
+  s_08884e0d462e65::t_9eda83eeaf0aed 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2d2dd67c1f12ff619791b219fbd7d9cb8925adc",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
