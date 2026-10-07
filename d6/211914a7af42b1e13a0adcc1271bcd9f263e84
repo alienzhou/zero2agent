@@ -1,0 +1,19 @@
+.vibecoding/2026-10-07/e03-s003-runtime-tui/interaction-compatibility.md
+  s_08884e0d462e65::t_531576005c04f5 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d6211914a7af42b1e13a0adcc1271bcd9f263e84",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
