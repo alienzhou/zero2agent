@@ -1,0 +1,18 @@
+                                    ▄                                                               
+   █▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█                                                          
+   █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀                                                          
+   ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀                                                          
+                                                                                                    
+  ┃                                                                                                 
+  ┃  中文草稿                                                                                       
+  ┃  second line                                                                                    
+  ┃                                                             ▄                                   
+  ┃  Buil ·No provider selected Connect     █ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█                              
+  ┃  d                          a           ▀ █  █ █    █  █ █  █ █▀▀▀                              
+  ┃                             provider    ▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀                              
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀                                                          
+               tab agents  ctrl+p commands                                                          
+  /private/tmp/zero2agent-         1.18.35                                                          
+  research/ux-opencode-0KD6BU/                                                                      
+  work                                                                                              
+  ● Tip Run /connect to add an AI                                                                   

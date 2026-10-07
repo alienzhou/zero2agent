@@ -1,0 +1,93 @@
+{
+  "product": "opencode",
+  "executable": "/tmp/zero2agent-research/ux-opencode/node_modules/.bin/opencode",
+  "args": [],
+  "cwd": "/tmp/zero2agent-research/ux-opencode-0KD6BU/work",
+  "taskHome": "/tmp/zero2agent-research/ux-opencode-0KD6BU/home",
+  "initialSize": {
+    "cols": 100,
+    "rows": 32
+  },
+  "started": "2026-10-07T05:01:35.326Z",
+  "actions": [
+    {
+      "label": "ready",
+      "wait": 3000
+    },
+    {
+      "text": "\u001b",
+      "label": "dismiss-provider",
+      "wait": 500
+    },
+    {
+      "text": "/",
+      "label": "slash-menu",
+      "wait": 500
+    },
+    {
+      "text": "he",
+      "label": "slash-filter",
+      "wait": 400
+    },
+    {
+      "text": "\u001b\u0003",
+      "label": "clear-input",
+      "wait": 450
+    },
+    {
+      "text": "\u001b[200~第一行草稿\nsecond line draft\nthird line\u001b[201~",
+      "label": "multiline-paste",
+      "wait": 600
+    },
+    {
+      "text": "\u0003",
+      "label": "clear-draft-separate",
+      "wait": 600
+    },
+    {
+      "text": "\u001b[200~中文草稿\nsecond line\u001b[201~",
+      "label": "two-line-paste",
+      "wait": 500
+    },
+    {
+      "resize": {
+        "cols": 44,
+        "rows": 18
+      },
+      "label": "narrow-with-draft",
+      "wait": 800
+    },
+    {
+      "resize": {
+        "cols": 100,
+        "rows": 32
+      },
+      "label": "wide-restored",
+      "wait": 700
+    },
+    {
+      "text": "\u0010",
+      "label": "command-palette-with-draft",
+      "wait": 600
+    },
+    {
+      "text": "\u001b",
+      "label": "restore-draft",
+      "wait": 500
+    },
+    {
+      "text": "\u0003",
+      "label": "clear-before-exit",
+      "wait": 400
+    },
+    {
+      "text": "\u0004",
+      "label": "exit-request",
+      "wait": 600
+    }
+  ],
+  "exit": {
+    "exitCode": 0,
+    "signal": 0
+  }
+}

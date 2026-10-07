@@ -1,0 +1,13 @@
+{
+  "platform": "darwin",
+  "viewport": [
+    96,
+    30
+  ],
+  "narrow": [
+    42,
+    18
+  ],
+  "fixture": "local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0",
+  "restored": true
+}

@@ -1,0 +1,32 @@
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                        Commands                                         esc                        
+                                                                                                    
+                        Search                                                                      
+                                                                                                    
+                        Suggested                                                                   
+             ┃          Switch model                                ctrl+x m                        
+             ┃          Connect provider                                                            
+             ┃  seco                                                                                
+             ┃          Prompt                                                                      
+             ┃  Buil    Stash prompt                                                                
+             ╹▀▀▀▀▀▀    Skills                                                  ▀▀▀▀▀▀▀▀            
+                                                                                commands            
+                        System                                                                      
+                        Hide tips                                   ctrl+x h                        
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+  /private/tmp/zero2agent-research/ux-opencode-0KD6BU/work                                 1.18.35  
+                                                                                                    

@@ -238,6 +238,46 @@
       "url": "https://github.com/vadimdemedes/ink/blob/26d2c3f83008142061c22267482489588cc3823c/src/hooks/use-input.ts",
       "sha256": "f966c145fb098ad854872d6fabff377ea4f4c1b54c2325e5ea2074dd7fddbe2d",
       "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/src/bottom_pane/chat_composer.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/src/bottom_pane/chat_composer.rs",
+      "sha256": "e9451d5905445bc6420747182faa9ca2bed24a6fdfee6ef8b617b36aaca56c1b",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/components/InputPrompt.tsx",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/components/InputPrompt.tsx",
+      "sha256": "18876a05ab4f404132a105be960c9cf28eb57b5ae296e4b00aa612a72e1ac7f3",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/hooks/useInputHistory.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/hooks/useInputHistory.ts",
+      "sha256": "abc71b40aa4491c5deb9a82c5ad2f9f5b42e0bdd4dcefb7f8625e756d2a90518",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/hooks/useTerminalSize.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/hooks/useTerminalSize.ts",
+      "sha256": "0b84c0464586373a98bc59d55fcb17874dfa1ca62b8bb7645c10e73b7cf02b92",
+      "evidence": "static-source-inspection"
     }
   ],
   "documents": [
@@ -285,6 +325,20 @@
       "kind": "official-documentation",
       "url": "https://nodejs.org/download/release/v22.0.0/docs/api/readline.html",
       "retrieved": "2026-10-07"
+    }
+  ],
+  "observations": [
+    {
+      "product": "Codex CLI",
+      "version": "0.160.1",
+      "evidence": "observations/2026-10-07/codex/metadata.json",
+      "scope": "isolated PTY composer, local status, history search and resize; no model task"
+    },
+    {
+      "product": "OpenCode",
+      "version": "1.18.35",
+      "evidence": "observations/2026-10-07/opencode/metadata.json",
+      "scope": "isolated PTY composer, slash menu, paste, palette and resize; no provider configured"
     }
   ]
 }

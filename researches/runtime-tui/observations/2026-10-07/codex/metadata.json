@@ -1,0 +1,122 @@
+{
+  "product": "codex",
+  "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+  "args": [
+    "--no-daemon",
+    "--no-alt-screen",
+    "-s",
+    "read-only",
+    "-a",
+    "never",
+    "-m",
+    "ui-observation",
+    "-c",
+    "model_provider=\"observation\"",
+    "-c",
+    "model_providers.observation={ name=\"UI observation\", base_url=\"http://127.0.0.1:9\", wire_api=\"responses\", requires_openai_auth=false }"
+  ],
+  "cwd": "/tmp/zero2agent-research/ux-codex-5JH1Mp/work",
+  "taskHome": "/tmp/zero2agent-research/ux-codex-5JH1Mp/home",
+  "initialSize": {
+    "cols": 100,
+    "rows": 32
+  },
+  "started": "2026-10-07T05:01:25.920Z",
+  "actions": [
+    {
+      "text": "/",
+      "label": "slash-menu",
+      "wait": 500
+    },
+    {
+      "text": "stat",
+      "label": "slash-filter",
+      "wait": 400
+    },
+    {
+      "text": "\u001b",
+      "label": "dismiss-completion",
+      "wait": 400
+    },
+    {
+      "text": "\u0015\u001b[200~第一行草稿\nsecond line draft\nthird line\u001b[201~",
+      "label": "multiline-paste",
+      "wait": 700
+    },
+    {
+      "resize": {
+        "cols": 44,
+        "rows": 18
+      },
+      "label": "narrow-with-draft",
+      "wait": 650
+    },
+    {
+      "text": "\u0001EDIT: ",
+      "label": "edit-line-start",
+      "wait": 500
+    },
+    {
+      "text": "\u0012",
+      "label": "history-search",
+      "wait": 500
+    },
+    {
+      "text": "\u001b",
+      "label": "restore-draft",
+      "wait": 500
+    },
+    {
+      "resize": {
+        "cols": 100,
+        "rows": 32
+      },
+      "label": "wide-restored",
+      "wait": 600
+    },
+    {
+      "text": "\u0003",
+      "label": "clear-draft",
+      "wait": 500
+    },
+    {
+      "text": "/status\r",
+      "label": "local-status-command",
+      "wait": 700
+    },
+    {
+      "text": "\u001b[A",
+      "label": "history-up",
+      "wait": 500
+    },
+    {
+      "text": "\r",
+      "label": "execute-local-status",
+      "wait": 800
+    },
+    {
+      "text": "\u001b",
+      "label": "close-status",
+      "wait": 400
+    },
+    {
+      "text": "\u001b[A",
+      "label": "recall-local-history",
+      "wait": 500
+    },
+    {
+      "text": "\u0003",
+      "label": "clear-before-exit",
+      "wait": 300
+    },
+    {
+      "text": "\u0004",
+      "label": "exit-request",
+      "wait": 500
+    }
+  ],
+  "exit": {
+    "exitCode": 0,
+    "signal": 0
+  }
+}

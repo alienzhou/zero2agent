@@ -1,0 +1,32 @@
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+             ┃ /agents     Switch agent                                                ┃            
+             ┃ /connect    Connect provider                                            ┃            
+             ┃ /debug      View debug info                                             ┃            
+             ┃ /diff       Open diff viewer                                            ┃            
+             ┃ /editor     Open editor                                                 ┃            
+             ┃ /exit       Exit the app                                                ┃            
+             ┃ /help       Help                                                        ┃            
+             ┃ /init       guided AGENTS.md setup                                      ┃            
+             ┃ /mcps       Toggle MCPs                                                 ┃            
+             ┃ /models     Switch model                                                ┃            
+             ┃                                                                                      
+             ┃  /                                                                                   
+             ┃                                                                                      
+             ┃  Build · No provider selected Connect a provider                                     
+             ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀            
+                                                             tab agents  ctrl+p commands            
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                      ● Tip Run /connect to add an AI provider and start coding                     
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+  /private/tmp/zero2agent-research/ux-opencode-0KD6BU/work                                 1.18.35  
+                                                                                                    

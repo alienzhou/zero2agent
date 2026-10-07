@@ -38,3 +38,5 @@
 ## 关键源码与参考
 
 [TUI 依赖](https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/package.json#L53-L66)为 OpenTUI 与 Solid，不能称为 Ink 实现。[官方 TUI](https://opencode.ai/docs/tui/)和[键位文档](https://opencode.ai/docs/keybinds/)作为入口，当前网页与固定源码可能跨版本，具体行为以 SHA 为准。
+
+本轮另做已安装版本的隔离 PTY 观察，见 [实机记录](./observations/2026-10-07/README.md)；该二进制版本不与上述源码 SHA 强行等同。

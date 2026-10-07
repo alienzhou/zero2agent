@@ -1,0 +1,427 @@
+离线课程演示：模型响应来自本地固定夹具，生产 CLI/Core/工具真实运行。
+输入“写入”看审批，“重复”看两个调用，“慢速”后按 Ctrl+C，“终端”看人工交接，exit 退出。
+临时工作目录：/tmp/zero2agent-runtime-JB4rML（退出自动删除）
+[?1049h[?2004h[?25l[?25l[H[2K[1;36m● zero2agent · 等待输入[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+[2K你: [0m[J[30;5H[?25h[?25l[H[2K[1;36m● zero2agent · 等待输入[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KTab 补全: /help[0m
+[2K你: /help[0m[J[30;10H[?25h[?25l[H[2K[1;36m● zero2agent · 等待输入[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+[2K你: [0m[J[30;5H[?25h[?25l[H[2K[1;36m◑ zero2agent · 等待模型 · 0.0s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K─ 运行中 · 可编辑草稿 ─────────────────────────────────────────────────────────────────────────[0m
+[2KCtrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键[0m
+[2K草稿: [0m[J[30;7H[?25h[?25l[H[2K[1;33m◑ zero2agent · 等待审批 · 0.1s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2KApproval · write_file[0m
+[2K调用: first[0m
+[2K工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K原因: Approval required for write tool[0m
+[2K参数（完整 JSON）:[0m
+[2K{[0m
+[2K  "path": "first.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K详情 1–9 / 9 行（可滚动查看全部参数）[0m
+[2K↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮[0m
+[2K允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝[0m[J[?25l[?25l[H[2K[1;33m◑ zero2agent · 等待审批 · 0.2s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2KApproval · write_file[0m
+[2K调用: first[0m
+[2K工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K原因: Approval required for write tool[0m
+[2K参数（完整 JSON）:[0m
+[2K{[0m
+[2K  "path": "first.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K详情 1–9 / 9 行（可滚动查看全部参数）[0m
+[2K↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮[0m
+[2K允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝[0m[J[?25l[?25l[H[2K[1;33m◒ zero2agent · 等待审批 · 0.3s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2KApproval · write_file[0m
+[2K调用: second[0m
+[2K工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K原因: Approval required for write tool[0m
+[2K参数（完整 JSON）:[0m
+[2K{[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K详情 1–9 / 9 行（可滚动查看全部参数）[0m
+[2K↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮[0m
+[2K允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝[0m[J[?25l[?25l[H[2K[1;33m◒ zero2agent · 等待审批 · 0.4s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2KApproval · write_file[0m
+[2K调用: second[0m
+[2K工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K原因: Approval required for write tool[0m
+[2K参数（完整 JSON）:[0m
+[2K{[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K详情 1–9 / 9 行（可滚动查看全部参数）[0m
+[2K↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮[0m
+[2K允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝[0m[J[?25l[?25l[H[2K[1;36m● zero2agent · 已完成[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[1m┌ ◇ write_file · 已拒绝 · first[0m
+[2K[2m│ {"path":"first.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K└[0m
+[2K[1m┌ ◆ write_file · 完成 · second · 0ms[0m
+[2K[2m│ {"path":"second.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+[2K你: [0m[J[30;5H[?25h[?25l[H[2K[1;36m● zero2agent · 已完成[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[1m┌ ◇ write_file · 已拒绝 · first[0m
+[2K[2m│ {"path":"first.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K└[0m
+[2K[1m┌ ◆ write_file · 完成 · second · 0ms[0m
+[2K[2m│ {[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[0m
+[2K[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+[2K你: [0m[J[30;5H[?25h[?25l[H[2K[1;36m◓ zero2agent · 等待模型 · 0.0s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[1m┌ ◇ write_file · 已拒绝 · first[0m
+[2K[2m│ {"path":"first.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K└[0m
+[2K[1m┌ ◆ write_file · 完成 · second · 0ms[0m
+[2K[2m│ {[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[32m你 › 慢速[0m
+[2K[0m
+[2K─ 运行中 · 可编辑草稿 ─────────────────────────────────────────────────────────────────────────[0m
+[2KCtrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键[0m
+[2K草稿: [0m[J[30;7H[?25h[?25l[H[2K[1;36m◓ zero2agent · 等待模型 · 0.1s[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[1m┌ ◇ write_file · 已拒绝 · first[0m
+[2K[2m│ {"path":"first.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K└[0m
+[2K[1m┌ ◆ write_file · 完成 · second · 0ms[0m
+[2K[2m│ {[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[32m你 › 慢速[0m
+[2K[0m
+[2K─ 运行中 · 可编辑草稿 ─────────────────────────────────────────────────────────────────────────[0m
+[2KCtrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键[0m
+[2K草稿: 下一条草稿[0m[J[30;17H[?25h[?25l[H[2K[1;36m● zero2agent · 已取消[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[1m┌ ◇ write_file · 已拒绝 · first[0m
+[2K[2m│ {"path":"first.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K└[0m
+[2K[1m┌ ◆ write_file · 完成 · second · 0ms[0m
+[2K[2m│ {[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[32m你 › 慢速[0m
+[2K[2m· 本轮已取消。已完成的工具结果保留；已发生的文件修改不会回滚。[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+[2K你: 下一条草稿[0m[J[30;15H[?25h[?25l[H[2K[1;36m● zero2agent · 已取消[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime[0m
+[2K[2m│ {[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime less[0m
+[2Kon.\n"[0m
+[2K}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应[0m
+[2K；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[32m你 › 慢速[0m
+[2K[2m· 本轮已取消。已完成的工具结果保留；已发[0m
+[2K生的文件修改不会回滚。[0m
+[2K─ 输入 ──────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn [0m
+[2K你: 下一条草稿[0m[J[18;15H[?25h[?25l[H[2K[1;36m● zero2agent · 已取消[0m
+[2K[2m工作目录: /private/tmp/zero2agent-runtime-JB4rML[0m
+[2K[2m· 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出[0m
+[2K[32m你 › /help[0m
+[2K[2m· 输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。[0m
+[2K粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。[0m
+[2K查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。[0m
+[2K审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。[0m
+[2K运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。[0m
+[2K命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。[0m
+[2K[32m你 › 重复[0m
+[2K[1m┌ ◇ write_file · 已拒绝 · first[0m
+[2K[2m│ {"path":"first.txt","content":"Hello from the runtime lesson.\n"}[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K[2m│ Error: Permission denied: User denied this call[0m
+[2K└[0m
+[2K[1m┌ ◆ write_file · 完成 · second · 0ms[0m
+[2K[2m│ {[0m
+[2K  "path": "second.txt",[0m
+[2K  "content": "Hello from the runtime lesson.\n"[0m
+[2K}[0m
+[2K[2m│ Approval required for write tool[0m
+[2K[2m│ Created second.txt (31 bytes written)[0m
+[2K└[0m
+[2K[36mAgent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。[0m
+[2K[32m你 › 慢速[0m
+[2K[2m· 本轮已取消。已完成的工具结果保留；已发生的文件修改不会回滚。[0m
+[2K─ 输入 ────────────────────────────────────────────────────────────────────────────────────────[0m
+[2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+[2K你: 下一条草稿[0m[J[30;15H[?25h[0m[?2004l[?25h[?1049l再见！

@@ -36,3 +36,5 @@
 ## 关键源码与参考
 
 以上链接均固定 SHA。[Cargo 依赖](https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/Cargo.toml#L90-L101)表明 TUI 使用 Ratatui；采用其事件原则不要求迁移 Rust。[官方 CLI 页面](https://learn.chatgpt.com/docs/codex/cli)作为产品入口，具体机制以固定源码为准。
+
+本轮另做已安装版本的隔离 PTY 观察，见 [实机记录](./observations/2026-10-07/README.md)；该二进制版本不与上述源码 SHA 强行等同。
