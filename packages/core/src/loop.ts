@@ -115,21 +115,27 @@ export async function executeToolCalls(
       if (!tool) throw new Error(`Unknown tool: ${block.name}`)
       const input = structuredClone(block.input) as Record<string, unknown>
       const originatingRequestId = diagnostics?.latestModelRequestId
+      const metadataObserver: ToolContext['onResultMetadata'] =
+        diagnostics?.enabled || ctx.onResultMetadata
+          ? (metadata: ToolExecutionMetadata) => {
+              diagnostics?.emit('tool', 'metadata', {
+                requestId: originatingRequestId,
+                toolCallId: diagnosticLabel(block.id),
+                toolName: diagnosticLabel(block.name),
+                terminalOutcome: metadata.terminalOutcome,
+                exitCode: diagnosticNumber(metadata.exitCode),
+                pid: diagnosticNumber(metadata.pid),
+                signal:
+                  metadata.signal === undefined
+                    ? undefined
+                    : diagnosticLabel(String(metadata.signal)),
+              })
+              notifyObserver(() => ctx.onResultMetadata?.(structuredClone(metadata)))
+            }
+          : undefined
       const callCtx: ToolContext = Object.freeze({
         ...ctx,
-        onResultMetadata: (metadata: ToolExecutionMetadata) => {
-          diagnostics?.emit('tool', 'metadata', {
-            requestId: originatingRequestId,
-            toolCallId: diagnosticLabel(block.id),
-            toolName: diagnosticLabel(block.name),
-            terminalOutcome: metadata.terminalOutcome,
-            exitCode: diagnosticNumber(metadata.exitCode),
-            pid: diagnosticNumber(metadata.pid),
-            signal:
-              metadata.signal === undefined ? undefined : diagnosticLabel(String(metadata.signal)),
-          })
-          notifyObserver(() => ctx.onResultMetadata?.(structuredClone(metadata)))
-        },
+        ...(metadataObserver && { onResultMetadata: metadataObserver }),
       })
       const initial = permissions.evaluate(tool, input, callCtx)
       diagnostics?.permission('initial', block.id, block.name, initial.action)

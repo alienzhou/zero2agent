@@ -77,7 +77,12 @@ describe('versioned local run logs', () => {
   it('reports open and asynchronous write failures without throwing from observers', async () => {
     const { dir, journal, diagnostics } = await setup()
     await fs.writeFile(path.join(dir, 'blocked'), 'x')
-    const blocked = await LogStore.open(dir, { root: path.join(dir, 'blocked') })
+    const blocked = await LogStore.open(dir, {
+      root: path.join(dir, 'blocked'),
+      onFailure: async () => {
+        throw new Error('async notification failed')
+      },
+    })
     const failed = await blocked.start()
     expect(failed.failure).toBe('open')
     await failed.close()

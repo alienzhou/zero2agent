@@ -265,7 +265,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
-    diagnostics: event => journal?.diagnostic(event),
+    diagnostics: journal ? event => journal.diagnostic(event) : undefined,
     permissions: permissionOptionsFromEnv(
       tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)
     ),

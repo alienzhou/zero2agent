@@ -209,9 +209,21 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
       tty.write('\x1b[200~private-modal-paste\x1b[201~')
       const selected = tty.output.length
       tty.write('\r')
-      await tty.waitFor('host/save-completed', selected)
+      await tty.waitFor('查看运行日志', selected)
       expect(p.requests).toHaveLength(1)
       tty.resize(42, 18)
+      const scrolling = tty.output.length
+      tty.write('\x1b[4~')
+      await tty.waitFor(/行 (?!1–)\d+–\d+ \/ \d+ · 只读快照/, scrolling)
+      const home = tty.output.length
+      tty.write('\x1b[1~')
+      await tty.waitFor(/行 1–/, home)
+      const back = tty.output.length
+      tty.write('\x1b')
+      await tty.waitFor('选择运行日志', back)
+      const conversation = tty.output.length
+      tty.write('\x1b')
+      await tty.waitFor('等待输入', conversation)
       const help = tty.output.length
       tty.write('/help\r')
       await tty.waitFor('/logs', help)
@@ -363,6 +375,27 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
       expect(JSON.stringify(report)).not.toContain('private-human-token')
       expect(JSON.stringify(report)).not.toContain('human-private.sh')
       expect(p.requests).toHaveLength(0)
+    }
+  )
+  it.skipIf(process.platform === 'win32')(
+    'keeps a TUI logging failure visible while a real SDK task succeeds',
+    async () => {
+      const p = await fixture()
+      const blocked = path.join(p.cwd, 'blocked-log-root')
+      await fs.writeFile(blocked, 'preserved')
+      const tty = startHumanTerminal(CLI_ENTRY, [], p.cwd, true, {
+        env: { ...p.env, ZERO2AGENT_LOG_DIR: blocked },
+      })
+      cleanups.push(() => tty.close())
+      await tty.waitFor('日志不可用')
+      const from = tty.output.length
+      tty.write('continue task\r')
+      await tty.waitFor('zero2agent · 日志不可用 · 已完成', from)
+      expect(p.requests).toHaveLength(1)
+      expect(tty.output.slice(from)).toContain('private-model-answer')
+      tty.write('exit\r')
+      expect(await tty.waitExit()).toBe(0)
+      expect(await fs.readFile(blocked, 'utf8')).toBe('preserved')
     }
   )
 })

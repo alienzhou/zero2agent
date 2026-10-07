@@ -212,8 +212,14 @@ export class RunJournal {
     private options: LogOptions
   ) {
     this.file = path.join(directory, this.id + '.jsonl')
-    this.queueLimit = options.queueBytes ?? LOG_LIMITS.queue
-    this.fileLimit = options.fileBytes ?? LOG_LIMITS.file
+    this.queueLimit =
+      Number.isSafeInteger(options.queueBytes) && options.queueBytes! > 0
+        ? Math.min(options.queueBytes!, LOG_LIMITS.queue)
+        : LOG_LIMITS.queue
+    this.fileLimit =
+      Number.isSafeInteger(options.fileBytes) && options.fileBytes! > 0
+        ? Math.min(options.fileBytes!, LOG_LIMITS.file)
+        : LOG_LIMITS.file
     // Defense in depth for provider/model/tool IDs. Bodies are excluded before this step.
     this.secrets = Object.entries(process.env)
       .filter(([k, v]) => /(?:KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL)/i.test(k) && v && v.length >= 4)
@@ -244,7 +250,7 @@ export class RunJournal {
     if (this.failure) return
     this.failure = failure
     try {
-      this.options.onFailure?.(failure)
+      void Promise.resolve(this.options.onFailure?.(failure)).catch(() => {})
     } catch {
       /* Presentation failure is isolated. */
     }

@@ -128,6 +128,9 @@ export class DiagnosticEmitter {
   private startedAt = performance.now()
   private ended = false
   private modelRequestId?: string
+  get enabled(): boolean {
+    return !!this.observer
+  }
   get latestModelRequestId(): string | undefined {
     return this.modelRequestId
   }
