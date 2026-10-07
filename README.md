@@ -175,7 +175,7 @@ zero2agent/
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
 | [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | Done，已合入 main、已打 Tag，未对外发布 |
 | [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | 权限与一次 Approval | Done，已合入 main，已打 Tag |
-| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | 运行事件、Turn 取消与交互 TUI | 本地实现，验收与审阅见课程 |
+| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | 运行事件、Turn 取消与交互 TUI | 实现与验收完成，待合入 main |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

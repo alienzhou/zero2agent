@@ -171,7 +171,7 @@ zero2agent/
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Done; merged into main |
 | [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | Multi-turn sessions and context compaction | Done; merged and tagged |
 | [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | Permissions and single-call Approval | Done; merged and tagged |
-| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | Runtime events, turn cancellation and interactive TUI | Local implementation; see course verification and review |
+| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | Runtime events, turn cancellation and interactive TUI | Implemented and verified; awaiting merge to main |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

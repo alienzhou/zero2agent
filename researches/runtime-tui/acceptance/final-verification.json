@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-07T05:41:58.083578+00:00",
+  "head": "fbb12cf2612b2a2fbe38ae547b9324c154ce20a4",
+  "mode": "Full offline gates plus targeted live recheck; not a second full-suite run",
+  "fullRun": "provider-dialogue-attempt/summary.json",
+  "fullRunNonLivePassed": true,
+  "offlinePassed": 509,
+  "offlineLiveSkipped": 53,
+  "offlineBreakdown": {
+    "core": 394,
+    "e2e": 114,
+    "cdp-debug": 1
+  },
+  "tuiSubsetPassed": 27,
+  "productionSourceMatchesFullRun": true,
+  "changedSinceFullRun": [
+    "e2e/src/runtime-live.test.ts"
+  ],
+  "liveResult": "live-recheck/results.json",
+  "livePassed": 3,
+  "liveSkipped": 0,
+  "liveTestSourceSha256": "dacb424b13c90b9ce0f768a719e27ee954fd6d823aed4d8caac2ba018f55d856",
+  "followupChecks": {
+    "e2eTypecheck": {
+      "command": "pnpm --filter @zero2agent/e2e exec tsc --noEmit",
+      "exitCode": 0
+    },
+    "liveTestLint": {
+      "command": "pnpm exec eslint --no-ignore e2e/src/runtime-live.test.ts",
+      "exitCode": 0
+    },
+    "liveTestFormat": {
+      "command": "pnpm exec prettier --check e2e/src/runtime-live.test.ts",
+      "exitCode": 0
+    }
+  },
+  "coursePagesMatchedReview": 18,
+  "terminalRestorePathsPassed": 3,
+  "passed": true
+}

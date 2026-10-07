@@ -2,7 +2,9 @@
 
 [课程验收矩阵](../../../specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md) | [交互兼容核对](../../../.vibecoding/2026-10-07/e03-s003-runtime-tui/interaction-compatibility.md)
 
-`summary.json` 是最近一次完整门禁的实际结果，包含时间、运行环境、命令、日志和 Core / TUI / E2E 源文件开始与结束时的 SHA-256。只有命令全部通过且源码保持一致时，`passed` 才为 true。Tag 与文档提交可以晚于检查时的 HEAD，源码哈希用于判断所验证代码是否仍相同。
+最终结果见 [final-verification.json](./final-verification.json)：**509 项离线通过、53 项真实模型用例默认跳过；本课真实模型定向复验 3 项通过、0 跳过**。离线由 Core 394、E2E 114、cdp-debug 1 项组成，TUI 27 项包含在 E2E 中。
+
+最终验收采用完整离线门禁加真实模型定向复验。`summary.json` 保留最后一次全量命令的原始结果（其 live 当时失败），不改写为成功。之后只修改 `e2e/src/runtime-live.test.ts` 的对话与证据清理，重新执行该测试、E2E 类型、该文件 lint 与格式检查。SHA-256 比对确认生产代码与其余测试均未变化。最终记录明确各项证据来源，没有冒称又运行了一遍整库。
 
 ## 分层证据
 
@@ -10,7 +12,7 @@
 |---|---|
 | `offline.txt.gz` | 全仓库离线单元与契约回归，包括本地 SSE、真实生产 CLI 和真实 PTY；真实模型测试默认跳过 |
 | `runtime-demo.txt` | 本地固定模型响应驱动生产 SDK / Core / 文件工具，验证拒绝、批准、结果配对和请求取消 |
-| `live.txt`、`live-results.json`、`live-evidence/*.json.gz` | 已配置真实模型服务经过生产 TUI / PTY 的读取与重置、拒绝后批准、前台命令取消与续聊；断言真实文件和后续请求回执 |
+| `live-recheck/results.json`、`live-recheck/evidence/*.json.gz` | 已配置真实模型服务经过生产 TUI / PTY 的读取与重置、拒绝后批准、前台命令取消与续聊；断言真实文件和后续请求回执 |
 | `terminal-restore.txt` | 正常 exit、SIGTERM、SIGHUP 后 `/bin/stty -g` 完全恢复，外层终端重新接受 canonical 输入 |
 | [终端截图](./screens/) | 真实 PTY 原始字节重放到 xterm.js 6.0.0 的 8 个画面，96×30 与 42×18；响应来自本地夹具 |
 | [课程检查](../../../.authoring/site/chapters/epic03-story003/review.md) | 18 页图解逐页排版与视觉检查、PC/H5 阅读、目录、文字展开和放大；源码和页面哈希另存 |
@@ -25,7 +27,10 @@
 
 - `before-input-limit-fix/`：常用编辑键与业务兼容补齐后，508 项离线、3 项真实模型及其余门禁全部通过，源码稳定。随后审计发现超长粘贴仍会静默丢失，追加原子拒绝与反馈，再运行当前目录的最终门禁。
 
-离线与 lint 原始日志包含尾部空行，采用 gzip 无损保留；归档 summary 的 log 路径同步记录压缩形式。
+离线、lint 与含终端字节的 live 原始日志包含尾部空行，采用 gzip 无损保留；归档 summary 的 log 路径同步记录压缩形式。
+
+- `provider-dialogue-attempt/`：最终生产代码的 509 项离线及其余门禁通过；真实模型把重试拒绝请求和长命令执行理解为需要另一次对话确认，两项未实际调用工具。
+- `live-dialogue-recheck/`：独立文件请求修正后，读文件和取消通过；模型在文字中等待新批准，审批测试仍判失败。最终测试允许经生产 TUI 最多回复一次明确确认，仍强制宿主审批、文件和回执断言；`live-recheck/` 为这次 3 项通过的结果。
 
 这些失败不被覆盖为“通过”，也不能据其推断当前源码仍有相同问题。
 
