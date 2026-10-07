@@ -300,8 +300,115 @@ describe.skipIf(process.platform === 'win32')(
       await p.session.waitFor('你: ', from)
       await expect(fs.access(path.join(p.cwd, 'never.txt'))).rejects.toThrow()
       expect(p.requests).toHaveLength(1)
+      const lateFrom = p.session.output.length
+      p.session.write('y')
+      await p.session.waitFor('你: y', lateFrom)
+      await expect(fs.access(path.join(p.cwd, 'never.txt'))).rejects.toThrow()
+      expect(p.requests).toHaveLength(1)
+      p.session.write('\x15')
       await send(p.session, 'continue')
       await p.session.waitFor('next-answer', from)
+      await quit(p.session)
+    })
+
+    it('expires approval and keeps a late answer as draft instead of authorizing the next call', async () => {
+      let continuation: { res: ServerResponse; request: Request } | undefined
+      const p = await start(
+        (res, request, index) => {
+          if (index === 1)
+            reply(
+              res,
+              request,
+              call('expired-write', 'write_file', {
+                path: 'expired.txt',
+                content: 'must not write',
+              })
+            )
+          else if (index === 2) continuation = { res, request }
+          else reply(res, request, text('both-requests-denied'))
+        },
+        { APPROVAL_TIMEOUT_MS: '500' }
+      )
+      const from = await send(p.session, 'request the first write')
+      await p.session.waitFor('允许这次操作', from)
+      await expect.poll(() => Boolean(continuation)).toBe(true)
+      await p.session.waitFor('Approval timed out', from)
+      expect(JSON.stringify(continuation!.request)).toContain('Approval timed out')
+      const lateFrom = p.session.output.length
+      p.session.write('y\r')
+      await p.session.waitFor('草稿: y', lateFrom)
+      await expect(fs.access(path.join(p.cwd, 'expired.txt'))).rejects.toThrow()
+      const secondFrom = p.session.output.length
+      reply(
+        continuation!.res,
+        continuation!.request,
+        call('new-write', 'write_file', { path: 'next.txt', content: 'requires a new decision' })
+      )
+      await p.session.waitFor('允许这次操作', secondFrom)
+      await new Promise(resolve => setTimeout(resolve, 80))
+      await expect(fs.access(path.join(p.cwd, 'next.txt'))).rejects.toThrow()
+      expect(p.requests).toHaveLength(2)
+      p.session.write('n')
+      await p.session.waitFor('both-requests-denied', secondFrom)
+      await p.session.waitFor('你: y', secondFrom)
+      expect(JSON.stringify(p.requests.at(-1))).toContain('User denied this call')
+      await expect(fs.access(path.join(p.cwd, 'expired.txt'))).rejects.toThrow()
+      await expect(fs.access(path.join(p.cwd, 'next.txt'))).rejects.toThrow()
+      p.session.write('\x15')
+      await quit(p.session)
+    })
+
+    it('restores the TUI after two human PTYs and excludes their private input and output from subsequent API history', async () => {
+      const secrets = ['private-token-one-9217', 'private-token-two-6348']
+      const p = await start(
+        (res, request, index) => {
+          if (index === 1 || index === 3)
+            reply(
+              res,
+              request,
+              call(`human-${index}`, 'terminal', {
+                command: 'bash ./private.sh',
+                interactive: true,
+              })
+            )
+          else
+            reply(
+              res,
+              request,
+              text(index === 5 ? 'privacy-audit-complete' : 'human-receipt-accepted')
+            )
+        },
+        { PERMISSION_MODE: 'bypass' }
+      )
+      await fs.writeFile(
+        path.join(p.cwd, 'private.sh'),
+        'read -rs -p PRIVATE_READY value\nprintf "\\nPRIVATE_VALUE:%s\\n" "$value"\n'
+      )
+      for (const [index, secret] of secrets.entries()) {
+        const from = await send(p.session, `Start human session ${index + 1}.`)
+        await p.session.waitFor('Allow human terminal? [y/N]', from)
+        p.session.write('y\r')
+        await p.session.waitFor('PRIVATE_READY', from)
+        p.session.write(secret + '\r')
+        await p.session.waitFor(`PRIVATE_VALUE:${secret}`, from)
+        await p.session.waitFor('human-receipt-accepted', from)
+        await p.session.waitFor('你: ', from)
+        const handoff = p.session.output.slice(from)
+        expect(handoff).toContain('\x1b[?1049l')
+        expect(handoff).toContain('\x1b[?1049h')
+        const restoredScreen = handoff.slice(handoff.lastIndexOf('\x1b[?1049h'))
+        expect(restoredScreen).not.toContain(secret)
+        expect(restoredScreen).not.toContain('PRIVATE_VALUE')
+      }
+      const from = await send(p.session, 'Continue from the two public receipts.')
+      await p.session.waitFor('privacy-audit-complete', from)
+      expect(p.requests).toHaveLength(5)
+      const finalRequest = JSON.stringify(p.requests.at(-1))
+      const allRequests = JSON.stringify(p.requests)
+      for (const secret of secrets) expect(allRequests).not.toContain(secret)
+      expect(allRequests).not.toContain('PRIVATE_VALUE')
+      expect(allRequests).not.toContain('PRIVATE_READY')
+      expect(finalRequest.match(/human-controlled completed/g)).toHaveLength(2)
       await quit(p.session)
     })
 
