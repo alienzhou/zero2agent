@@ -1,0 +1,33 @@
+.authoring/site/chapters/epic03-story003/author.cjs
+  s_08884e0d462e65::t_f5e6669ca656a9 14,23-24,46,77,143,146,151,153-154,161,166
+site/chapters/epic03-story003/01-cover.html
+  s_08884e0d462e65::t_166d588f7c074f 1
+site/chapters/epic03-story003/04-products.html
+  s_08884e0d462e65::t_55d250b8dfb967 1
+site/chapters/epic03-story003/07-turn-state.html
+  s_08884e0d462e65::t_d456e6b2e9c7bc 1
+site/chapters/epic03-story003/12-evidence.html
+  s_08884e0d462e65::t_4493e23f37c83c 1
+site/chapters/epic03-story003/15-details.html
+  s_08884e0d462e65::t_cf4e25e3b6f7e8 1
+site/chapters/epic03-story003/16-handoff.html
+  s_08884e0d462e65::t_1f3a46f981d05d 1
+site/chapters/epic03-story003/17-practice.html
+  s_08884e0d462e65::t_752869ddcb7824 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "889ed9b00ef8fe9acae39c4bd0b229aa78a975fd",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
