@@ -37,7 +37,7 @@ const STATUS: Record<string, string> = {
 }
 const COMMANDS = ['/new', '/compact', '/terminal', '/help']
 const HELP =
-  '输入编辑：← → / Home End 移动，↑ ↓ 在多行中移动或查看历史，Ctrl-U 清空前文，Ctrl-W 删除词。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -64,6 +64,7 @@ export class RuntimeTui {
   private history: string[] = []
   private historyIndex = 0
   private draft = ''
+  private killedText = ''
   private scroll = 0
   private expanded = new Set<string>()
   private selectedTool?: string
@@ -369,17 +370,27 @@ export class RuntimeTui {
       }
     } else if (key.ctrl && key.name === 'd' && !this.buffer && !this.busy) void this.close()
     else if (key.ctrl && key.name === 'u') {
+      const killed = chars.slice(0, this.cursor).join('')
+      if (killed) this.killedText = killed
       this.buffer = chars.slice(this.cursor).join('')
       this.cursor = 0
+    } else if (key.ctrl && key.name === 'k') {
+      const killed = chars.slice(this.cursor, lineEnd).join('')
+      if (killed) this.killedText = killed
+      this.buffer = chars.slice(0, this.cursor).join('') + chars.slice(lineEnd).join('')
+    } else if (key.ctrl && key.name === 'y') {
+      this.insert(this.killedText)
     } else if (key.ctrl && key.name === 'w') {
-      const left = chars
-        .slice(0, this.cursor)
-        .join('')
-        .replace(/\S*\s*$/, '')
+      const previous = chars.slice(0, this.cursor).join('')
+      const left = previous.replace(/\S*\s*$/, '')
+      const killed = previous.slice(left.length)
+      if (killed) this.killedText = killed
       this.buffer = left + chars.slice(this.cursor).join('')
       this.cursor = graphemes(left).length
-    } else if (key.name === 'left') this.cursor = Math.max(0, this.cursor - 1)
-    else if (key.name === 'right') this.cursor = Math.min(chars.length, this.cursor + 1)
+    } else if (key.name === 'left' || (key.ctrl && key.name === 'b'))
+      this.cursor = Math.max(0, this.cursor - 1)
+    else if (key.name === 'right' || (key.ctrl && key.name === 'f'))
+      this.cursor = Math.min(chars.length, this.cursor + 1)
     else if (key.name === 'home' || (key.ctrl && key.name === 'a')) this.cursor = lineStart
     else if (key.name === 'end' || (key.ctrl && key.name === 'e')) this.cursor = lineEnd
     else if (key.name === 'backspace') {
@@ -387,7 +398,7 @@ export class RuntimeTui {
         chars.splice(--this.cursor, 1)
         this.buffer = chars.join('')
       }
-    } else if (key.name === 'delete') {
+    } else if (key.name === 'delete' || (key.ctrl && key.name === 'd')) {
       chars.splice(this.cursor, 1)
       this.buffer = chars.join('')
     } else if (key.name === 'up' || key.name === 'down') {

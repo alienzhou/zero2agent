@@ -471,6 +471,19 @@ describe.skipIf(process.platform === 'win32')(
       await quit(p.session)
     })
 
+    it('preserves readline-style cut and yank shortcuts without splitting Unicode graphemes', async () => {
+      const p = await start((res, request) => reply(res, request, text('shortcut-answer')))
+      let from = p.session.output.length
+      p.session.write('中文e\u0301🙂\x01\x06\x0b\x19\x05\x15\x19\r')
+      await p.session.waitFor('shortcut-answer', from)
+      expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('中文e\u0301🙂')
+      from = p.session.output.length
+      p.session.write('保留 词🙂\x17\x19\x01\x06\x04\r')
+      await p.session.waitFor('shortcut-answer', from)
+      expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('保 词🙂')
+      await quit(p.session)
+    })
+
     it('restores screen modes on SIGTERM while the provider is pending', async () => {
       const p = await start(() => {})
       await send(p.session, 'pending')
@@ -603,14 +616,12 @@ describe.skipIf(process.platform === 'win32')(
               call('before-error', 'write_file', { path: 'evidence.txt', content: 'keep this' })
             )
           else if (index === 2)
-            res
-              .writeHead(400, { 'content-type': 'application/json' })
-              .end(
-                JSON.stringify({
-                  type: 'error',
-                  error: { type: 'invalid_request_error', message: 'transport-test-failure' },
-                })
-              )
+            res.writeHead(400, { 'content-type': 'application/json' }).end(
+              JSON.stringify({
+                type: 'error',
+                error: { type: 'invalid_request_error', message: 'transport-test-failure' },
+              })
+            )
           else reply(res, request, text('recovered-next-turn'))
         },
         { PERMISSION_MODE: 'accept-edits' }
