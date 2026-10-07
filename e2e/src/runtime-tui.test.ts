@@ -480,5 +480,150 @@ describe.skipIf(process.platform === 'win32')(
       expect(p.session.output).toContain('\x1b[?1049l')
       expect(p.session.output).toContain('\x1b[?2004l')
     })
+
+    it.each([
+      ['read-only', {}, false],
+      ['accept-edits', {}, true],
+      ['bypass', {}, true],
+      [
+        'accept-edits',
+        { PERMISSION_RULES: JSON.stringify([{ tool: 'write_file', action: 'deny' }]) },
+        false,
+      ],
+    ] as const)(
+      'preserves %s permission policy and exact rules through the default TUI (%#)',
+      async (mode, extra, allowed) => {
+        const p = await start(
+          (res, request, index) =>
+            reply(
+              res,
+              request,
+              index === 1
+                ? call('policy-write', 'write_file', {
+                    path: 'policy.txt',
+                    content: 'policy evidence',
+                  })
+                : text('policy-checked')
+            ),
+          { PERMISSION_MODE: mode, ...extra }
+        )
+        const from = await send(p.session, 'try a policy write')
+        await p.session.waitFor('policy-checked', from)
+        expect(p.session.output.slice(from)).not.toContain('允许这次操作')
+        if (allowed)
+          expect(await fs.readFile(path.join(p.cwd, 'policy.txt'), 'utf8')).toBe('policy evidence')
+        else await expect(fs.access(path.join(p.cwd, 'policy.txt'))).rejects.toThrow()
+        await quit(p.session)
+      }
+    )
+
+    it('opens the default human shell and routes Ctrl-D back to the TUI before quitting', async () => {
+      const p = await start((res, request) => reply(res, request, text('unused')))
+      const from = await send(p.session, '/terminal')
+      await p.session.waitFor('Allow human terminal? [y/N]', from)
+      p.session.write('y\r')
+      await p.session.waitFor('Human terminal active', from)
+      p.session.write("printf 'DEFAULT_SHELL_OK\\n'\r")
+      await p.session.waitFor('DEFAULT_SHELL_OK', from)
+      p.session.write('\x04')
+      await p.session.waitFor('你: ', from)
+      expect(p.requests).toHaveLength(0)
+      p.session.write('quit\r')
+      expect(await p.session.waitExit()).toBe(0)
+    })
+
+    it('keeps Ctrl-X tool cancellation, Ctrl-S backgrounding and exit cleanup functional', async () => {
+      const p = await start(
+        (res, request, index) =>
+          reply(
+            res,
+            request,
+            index === 1
+              ? call('foreground', 'terminal', { command: 'echo $$ > foreground.pid; sleep 300' })
+              : index === 3
+                ? call('background', 'terminal', { command: 'echo $$ > background.pid; sleep 300' })
+                : text(index === 2 ? 'foreground-stopped-continue' : 'background-left-running')
+          ),
+        { PERMISSION_MODE: 'bypass' }
+      )
+      const pids: number[] = []
+      cleanups.push(async () => {
+        for (const pid of pids) {
+          try {
+            process.kill(-pid, 'SIGKILL')
+          } catch {
+            /* already gone */
+          }
+        }
+      })
+      const alive = (pid: number): boolean => {
+        try {
+          process.kill(pid, 0)
+          return true
+        } catch {
+          return false
+        }
+      }
+      let from = await send(p.session, 'start foreground task')
+      await expect
+        .poll(async () => fs.readFile(path.join(p.cwd, 'foreground.pid'), 'utf8').catch(() => ''))
+        .not.toBe('')
+      pids.push(Number(await fs.readFile(path.join(p.cwd, 'foreground.pid'), 'utf8')))
+      p.session.write('\x18')
+      await p.session.waitFor('foreground-stopped-continue', from)
+      expect(p.requests).toHaveLength(2)
+      await expect.poll(() => alive(pids[0])).toBe(false)
+      from = await send(p.session, 'start another task for background')
+      await expect
+        .poll(async () => fs.readFile(path.join(p.cwd, 'background.pid'), 'utf8').catch(() => ''))
+        .not.toBe('')
+      pids.push(Number(await fs.readFile(path.join(p.cwd, 'background.pid'), 'utf8')))
+      await p.session.waitFor('Ctrl-S 跳过', from)
+      p.session.write('\x13')
+      await p.session.waitFor('background-left-running', from)
+      expect(alive(pids[1])).toBe(true)
+      from = await send(p.session, '/new')
+      await p.session.waitFor('已开始新对话', from)
+      expect(alive(pids[1])).toBe(true)
+      expect(p.requests).toHaveLength(4)
+      from = await send(p.session, 'exit')
+      await p.session.waitFor('要一并结束吗？(y/N)', from)
+      p.session.write('y\r')
+      expect(await p.session.waitExit()).toBe(0)
+      await expect.poll(() => alive(pids[1])).toBe(false)
+    })
+
+    it('retains completed tool evidence after a transport error and accepts another turn', async () => {
+      const p = await start(
+        (res, request, index) => {
+          if (index === 1)
+            reply(
+              res,
+              request,
+              call('before-error', 'write_file', { path: 'evidence.txt', content: 'keep this' })
+            )
+          else if (index === 2)
+            res
+              .writeHead(400, { 'content-type': 'application/json' })
+              .end(
+                JSON.stringify({
+                  type: 'error',
+                  error: { type: 'invalid_request_error', message: 'transport-test-failure' },
+                })
+              )
+          else reply(res, request, text('recovered-next-turn'))
+        },
+        { PERMISSION_MODE: 'accept-edits' }
+      )
+      let from = await send(p.session, 'write before error')
+      await p.session.waitFor('transport-test-failure', from)
+      await p.session.waitFor('你: ', from)
+      expect(await fs.readFile(path.join(p.cwd, 'evidence.txt'), 'utf8')).toBe('keep this')
+      from = await send(p.session, 'recover')
+      await p.session.waitFor('recovered-next-turn', from)
+      expect(JSON.stringify(p.requests.at(-1))).toContain('before-error')
+      expect(JSON.stringify(p.requests.at(-1))).toContain('Created evidence.txt')
+      await quit(p.session)
+    })
   }
 )
