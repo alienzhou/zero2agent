@@ -14,8 +14,8 @@ zero2agent-research/ux-codex-5JH1Mp/home/.codex"))
   /permissions - choose what Codex is allowed to do
   /model - choose what model and reasoning effort to use
   /review - review any changes and find issues
- 
-› /model         choose what model and reasoning effort to use                                      
+
+› /model         choose what model and reasoning effort to use
   /ide           include current selection, open files, and other context from your IDE
   /permissions   choose what Codex is allowed to do
   /keymap        remap TUI shortcuts
@@ -23,10 +23,7 @@ zero2agent-research/ux-codex-5JH1Mp/home/.codex"))
   /experimental  toggle experimental features
   /approve       approve one retry of a recent auto-review denial
   /memories      configure memory use and generation
- 
+
 › /
- 
+
   ui-observation default · /private/tmp/zero2agent-research/ux-codex-5JH1Mp/work
-
-
-

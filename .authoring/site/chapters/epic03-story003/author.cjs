@@ -20,7 +20,7 @@ page('01-cover.html','运行状态与 TUI','Agent 正在运行\n你能看见，�
 box(46,28,860,595,C.ink,C.ink,14)+dot(79,59,7,C.red)+dot(102,59,7,C.amber)+dot(125,59,7,C.green)+
 t(80,123,'◓ 等待模型 · 3.2s',35,C.paper,650)+line('M80 155H872','#C9CDC2')+
 t(80,215,'Agent › 已检查文件，准备验证。',31,C.paper)+
-box(78,256,795,83,'#314035','#6B806C')+t(104,308,'✓ write_file  · second · 已完成',31,C.paper,600,true)+
+box(78,256,795,83,'#314035','#6B806C')+t(104,308,'✓ write_file  · second · 已完成',31,C.paper,600)+
 box(78,356,795,83,'#452F2B','#9B635C')+t(104,408,'◇ write_file  · first  · 已拒绝',31,'#F2C7BD',500)+
 line('M80 481H872','#C9CDC2')+t(80,530,'草稿 › 下一步请检查测试结果',32,C.paper)+t(80,581,'Ctrl-C 取消   ·   Ctrl-O 工具详情',27,'#C8D4C5')+
 line('M166 624V683',C.green,true)+line('M476 624V683',C.amber,true)+line('M786 624V683',C.red,true)+
@@ -64,7 +64,7 @@ box(28,368,355,120,C.greenBg,C.green)+t(57,415,'write_file',34,C.green,650,'star
 line('M397 267H524',C.red,true)+line('M397 425H524',C.green,true)+chip(546,235,360,'first → 已拒绝','red')+chip(546,392,360,'second → 已完成')+
 t(534,342,'名称相同，结果各自归属',30,C.muted)+
 box(0,531,952,125,C.soft,C.line)+t(28,579,'Turn B · first',33,C.ink,650,'start',true)+t(28,625,'即使调用 ID 再出现，也属于新的运行。',31,C.muted)+
-line('M68 722H881',C.ink,true)+[1,2,3,4].map((n,i)=>ring(125+i*220,722,23,C.paper,C.ink)+t(125+i*220,731,n,26,C.ink,650,'middle')).join('')+t(476,783,'seq：同一轮内递增，过滤重复或迟到事件',29,C.muted,400,'middle')),
+line('M68 722H881',C.ink,true)+[1,2,3,4].map((n,i)=>ring(125+i*220,722,23,C.paper,C.ink)+t(125+i*220,731,n,26,C.ink,650,'middle')).join('')+t(476,773,'seq：同一轮内递增，过滤重复或迟到事件',29,C.muted,400,'middle')),
 'turnId 确定运行，toolCallId 确定工具，seq 确定已处理顺序。三者解决的问题不同。',['C02','C04']);
 
 page('07-turn-state.html','整轮状态','一次运行，\n会多次回到模型请求','状态栏跟随实际阶段，最终由 turn-end 收束。',svg('准备后请求模型，模型可输出文字并提出工具，工具完成后回到模型请求，只有turn-end才进入终态',
@@ -72,12 +72,12 @@ chip(350,3,253,'turn-start')+line('M476 54V105',C.green,true)+
 box(277,116,398,83,C.soft,C.ink)+t(476,169,'准备请求 · preparing',32,C.ink,650,'middle')+line('M476 201V258',C.green,true)+
 box(277,270,398,91,C.ink,C.ink)+t(476,328,'等待模型 · requesting',32,C.paper,650,'middle')+
 line('M476 364V421',C.green,true)+box(277,433,398,87,C.white,C.green)+t(476,488,'文本输出 · streaming',32,C.green,650,'middle')+
-line('M677 471H765V314H686',C.green,true)+t(852,398,'更多',30,C.green,650,'middle')+t(852,441,'工具轮次',30,C.green,650,'middle')+
+line('M936 566H947V314H686',C.green,true)+t(822,405,'工具完成后',29,C.green,650,'middle')+
 box(744,518,192,93,C.greenBg,C.green)+t(840,559,'执行工具',30,C.green,650,'middle')+t(840,600,'tools',28,C.green,400,'middle',true)+line('M676 484H840V507',C.green,true)+
 line('M278 474H146V622H474',C.ink,true)+t(137,544,'无需工具',28,C.muted,400,'middle')+
 box(277,635,398,78,C.ink,C.ink)+t(476,685,'turn-end',35,C.paper,650,'middle',true)+
 [[135,'completed','green'],[476,'failed','red'],[817,'cancelled','amber']].map(([x,s,tone])=>line(`M476 715V731H${x}V744`,C[tone],false)+t(x,784,s,30,C[tone],650,'middle',true)).join('')),
-'工具结束只是循环中的一步。失败或取消也要有终态；不是出现最后一段文字就默认完成。',['C02','C03']);
+'工具结束后还可能继续请求模型。失败或取消可从在途阶段进入终态；最终以 turn-end 为准。',['C02','C03']);
 
 page('08-tool-state.html','工具状态','审批等待期间，\n工具还没有运行','先识别调用，再等权限，通过后才进入 running。',svg('工具主路径pending到approval到running到completed，审批拒绝进入denied，执行失败进入error，未开始且取消进入cancelled',
 [[103,115,'pending','已收到调用','soft','ink'],[387,115,'approval','等待用户回答','amberBg','amber'],[672,115,'running','实际开始执行','greenBg','green']].map(([x,y,a,b,bg,tone])=>box(x-86,y,251,124,C[bg],C[tone])+t(x+40,y+53,a,32,C[tone],650,'middle',true)+t(x+40,y+100,b,29,C.muted,400,'middle')).join('')+
@@ -95,7 +95,7 @@ t(30,322,'参数（完整 JSON）',29,'#BAC8B8')+
 ls(40,377,['{','  "path": "first.txt",','  "content": "Hello from lesson.\\n"','}'],30,C.paper,400,'start',49,true)+
 t(30,601,'↑↓ / PgUp PgDn 查看全部参数',28,'#BAC8B8')+
 line('M266 643V685',C.green,true)+line('M686 643V685',C.red,true)+chip(30,695,431,'y：仅批准本次')+chip(490,695,432,'n / Enter：拒绝本次','red')+
-t(476,784,'请求失效后，晚到的回答不能放行下一次。',31,C.muted,500,'middle')),
+t(476,773,'请求失效后，晚到的回答不能放行下一次。',31,C.muted,500,'middle')),
 '教学重排示意，字段来自本课实现。requestId 关联这一次决定；超时、取消和 EOF 都必须结束等待。',['C03','C04','C07']);
 
 page('10-focus.html','输入所有权','同一个 stdin，\n同一时刻只给一个接收者','你输入的 y，究竟是草稿、批准，还是终端内容？',svg('输入所有权从普通草稿切换为审批再切换为人工PTY，每阶段仅一个消费者活动，结束后恢复原草稿',
@@ -126,12 +126,12 @@ doc(92,636,73,111,'green')+t(209,683,'saved.txt 仍在磁盘上',36,C.green,650)
 page('13-draft.html','运行中的输入','Agent 工作时，\n你可以继续写下一条','草稿不被状态重绘、详情查看或取消过程吞掉。',svg('运行中编辑的草稿在取消后仍保留，等本轮结束再按Enter发送；上下历史也保存当前草稿',
 smallTerminal(0,8,952,239,['◓ 等待模型 · 3.2s','','草稿 › 请检查空文件的情况'], 'Ctrl-C 取消本轮  ·  草稿可以继续编辑')+
 line('M476 249V312',C.red,true)+chip(332,324,288,'Ctrl-C → 收尾','red')+line('M476 377V443',C.green,true)+
-smallTerminal(0,457,952,218,['■ 已取消','','你 › 请检查空文件的情况'],'Enter 发送  ·  ↑↓ 输入历史')+
-line('M477 677V721',C.green,true)+t(477,767,'本轮真正结束后，手动 Enter 发送草稿。',33,C.green,650,'middle')),
+smallTerminal(0,457,952,246,['■ 已取消','','你 › 请检查空文件的情况'],'Enter 发送  ·  ↑↓ 输入历史')+
+line('M477 706V735',C.green,true)+t(477,779,'本轮真正结束后，手动 Enter 发送草稿。',33,C.green,650,'middle')),
 '本课忙时允许编辑，不自动排队执行。浏览输入历史前保存草稿；回到最新位置后还能继续写。',['C04','C07','R05']);
 
 page('14-input.html','输入编辑','粘贴三行，\n不应该发送三次','把文本编辑与提交动作分开，才能安心输入代码。',svg('三行粘贴作为一个输入片段进入草稿，只有用户按Enter才发送；slash与Tab补全提供命令入口',
-box(0,15,385,237,C.white,C.ink)+t(24,63,'剪贴板',33,C.ink,650)+ls(24,126,['检查这段代码：','if (value) {','  return result','}'],27,C.muted,400,'start',35,true)+
+box(0,15,385,237,C.white,C.ink)+t(24,63,'剪贴板',33,C.ink,650)+ls(24,126,['if (value) {','  return result','}'],30,C.muted,400,'start',47,true)+
 line('M403 139H545',C.green,true)+t(473,90,'整块粘贴',29,C.green,600,'middle')+
 box(566,15,386,237,C.greenBg,C.green)+t(590,63,'输入缓冲区',33,C.green,650)+ls(590,126,['保留换行','仍可移动、删除','等待你明确提交'],30,C.ink,400,'start',45)+
 line('M758 254V315H473',C.green,true)+chip(223,292,256,'Enter：发送')+

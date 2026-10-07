@@ -25,8 +25,8 @@
 
   Token usage:         0 total  (0 input + 0 output)
   Limits:              data not available yet
- 
- 
+
+
 › Ask Codex to do anything
- 
+
   ui-observation default · /private/tmp/zero2agent-research/ux-codex-5JH1Mp/work

@@ -8,7 +8,7 @@
 
 Codex CLI 为应用自带 **0.160.1**。OpenCode 使用官方 `opencode-ai` npm 包，临时安装在 `/tmp/zero2agent-research/ux-opencode`，实际版本 **1.18.35**；未全局安装。该安装版本与固定源码 HEAD 不保证完全对应，报告分别引用，不把源码当作该二进制的精确构建证明。
 
-[observer-used.mjs](./observer-used.mjs)是本次实际使用的捕获驱动，保留当时路径以追溯；不是面向用户的通用安装脚本。每个目录的 `metadata.json`记录启动参数、尺寸、动作和进程退出信息；`terminal.ansi.gz`保留原始输出；编号 txt 是逐次观察。复现需要修改驱动中的本机二进制/依赖路径，并重新创建隔离目录，不应指向个人配置。
+[observer-used.mjs](./observer-used.mjs)保留本次捕获驱动与当时路径，随后仅给派生文字导出加入逐行尾空白规范化；不是面向用户的通用安装脚本。每个目录的 `metadata.json`记录启动参数、尺寸、动作和进程退出信息；`terminal.ansi.gz`保留原始输出；编号 txt 是逐次观察。复现需要修改驱动中的本机二进制/依赖路径，并重新创建隔离目录，不应指向个人配置。
 
 ## 已实际观察
 
@@ -30,3 +30,5 @@ Codex CLI 为应用自带 **0.160.1**。OpenCode 使用官方 `opencode-ai` npm 
 ## 未覆盖
 
 没有执行竞品模型请求、工具、批准/拒绝、忙时输入、真实进程取消或 PTY 工具接管。那些机制来自官方文档与固定源码，不属于本次实机结论。Claude Code、Gemini CLI 未安装/启动进行本轮实机观察。
+
+派生 txt 已规范化行尾空格与文末空行，原始 terminal.ansi.gz 保持捕获字节不变。未对派生帧声明像素截图或逐字原始输出。

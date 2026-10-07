@@ -1,3 +1,4 @@
+// Export-only normalization added after the initial run: trim derived text frames. Raw ANSI capture is unchanged.
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -26,7 +27,7 @@ let raw='';let seq=0;let dead=false;
 const metadata={product,executable,args,cwd,taskHome,initialSize:{cols:100,rows:32},started:new Date().toISOString(),actions:[]};
 child.onData(data=>{raw+=data;terminal.write(data);if(data.includes('\x1b]11;?'))child.write('\x1b]11;rgb:0000/0000/0000\x07');});
 terminal.onData(data=>child.write(data));
-function frame(label){const rows=[];for(let y=0;y<terminal.rows;y++)rows.push(terminal.buffer.active.getLine(terminal.buffer.active.viewportY+y)?.translateToString(true)??'');const text=rows.join('\n');fs.writeFileSync(path.join(taskRoot,`${String(seq++).padStart(2,'0')}-${label}.txt`),text+'\n');fs.writeFileSync(path.join(taskRoot,'terminal.ansi'),raw);fs.writeFileSync(path.join(taskRoot,'metadata.json'),JSON.stringify(metadata,null,2));console.log(JSON.stringify({taskRoot,label,frame:text}));}
+function frame(label){const rows=[];for(let y=0;y<terminal.rows;y++)rows.push(terminal.buffer.active.getLine(terminal.buffer.active.viewportY+y)?.translateToString(true)??'');const text=rows.map(row=>row.trimEnd()).join('\n').trimEnd();fs.writeFileSync(path.join(taskRoot,`${String(seq++).padStart(2,'0')}-${label}.txt`),text+'\n');fs.writeFileSync(path.join(taskRoot,'terminal.ansi'),raw);fs.writeFileSync(path.join(taskRoot,'metadata.json'),JSON.stringify(metadata,null,2));console.log(JSON.stringify({taskRoot,label,frame:text}));}
 child.onExit(e=>{dead=true;metadata.exit=e;frame('exit');setTimeout(()=>process.exit(0),100);});
 await new Promise(r=>setTimeout(r,2200));frame('startup');
 const input=readline.createInterface({input:process.stdin});

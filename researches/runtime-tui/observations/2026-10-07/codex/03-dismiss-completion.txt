@@ -14,19 +14,8 @@ zero2agent-research/ux-codex-5JH1Mp/home/.codex"))
   /permissions - choose what Codex is allowed to do
   /model - choose what model and reasoning effort to use
   /review - review any changes and find issues
- 
- 
+
+
 › /stat
- 
+
   ui-observation default · /private/tmp/zero2agent-research/ux-codex-5JH1Mp/work
-
-
-
-
-
-
-
-
-
-
-

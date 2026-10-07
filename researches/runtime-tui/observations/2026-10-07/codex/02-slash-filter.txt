@@ -14,19 +14,10 @@ zero2agent-research/ux-codex-5JH1Mp/home/.codex"))
   /permissions - choose what Codex is allowed to do
   /model - choose what model and reasoning effort to use
   /review - review any changes and find issues
- 
-› /status      show current session configuration and token usage                                   
+
+› /status      show current session configuration and token usage
   /statusline  configure which items appear in the status line
- 
+
 › /stat
- 
+
   ui-observation default · /private/tmp/zero2agent-research/ux-codex-5JH1Mp/work
-
-
-
-
-
-
-
-
-
