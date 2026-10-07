@@ -1,0 +1,37 @@
+researches/runtime-tui/acceptance/screens/01-idle.txt
+  s_08884e0d462e65::t_145d4e1f3aad1f 2,30
+researches/runtime-tui/acceptance/screens/02-completion.txt
+  s_08884e0d462e65::t_facd0bdda1a63a 2,30
+researches/runtime-tui/acceptance/screens/03-approval.txt
+  s_08884e0d462e65::t_d04feecf381e21 2,5,30
+researches/runtime-tui/acceptance/screens/04-second-approval.txt
+  s_08884e0d462e65::t_8a44a280c3056e 1-2,5,30
+researches/runtime-tui/acceptance/screens/05-tools.txt
+  s_08884e0d462e65::t_c3019f92884211 2,5-6,10,17,19-21,27,30
+researches/runtime-tui/acceptance/screens/06-running-draft.txt
+  s_08884e0d462e65::t_3eaf77d07b6d2f 2,5-6,10,17,19-21,27,30
+researches/runtime-tui/acceptance/screens/07-cancelled.txt
+  s_08884e0d462e65::t_c53377adb1a820 2,5-6,10,17,19-21,27,30
+researches/runtime-tui/acceptance/screens/08-narrow.txt
+  s_08884e0d462e65::t_3256a30f932f7f 1-8,13,15-18
+researches/runtime-tui/acceptance/screens/capture.json
+  s_08884e0d462e65::t_fb0e7eee32c460 12-17
+scripts/e03-s003-tui-capture.mjs
+  s_08884e0d462e65::t_54920519960011 6-7,29,45-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "02f7332ab2b2189ad5ca2638fc8c5a54c040a867",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
