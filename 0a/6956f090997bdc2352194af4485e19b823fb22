@@ -1,0 +1,23 @@
+researches/runtime-tui/acceptance/README.md
+  s_08884e0d462e65::t_63dbb950267b55 26-27
+retros/E03-S003-runtime-tui.md
+  s_08884e0d462e65::t_3a22600970bce6 27-32
+specs/E03-product-foundations/S003-runtime-tui/follow-along.md
+  s_08884e0d462e65::t_640bfa82e11169 34-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0a6956f090997bdc2352194af4485e19b823fb22",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
