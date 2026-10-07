@@ -10,6 +10,7 @@ import { resolve } from 'node:path'
 import { PermissionController, type PermissionOptions } from './permissions.js'
 import { Session } from './session.js'
 import type Anthropic from '@anthropic-ai/sdk'
+import { TurnCancelledError } from './runtime.js'
 
 export interface AgentOptions {
   config?: LLMConfig
@@ -29,6 +30,7 @@ export class Agent {
   private options: AgentOptions
   private session = new Session()
   private permissions: PermissionController
+  private active?: AbortController
 
   constructor(options: AgentOptions = {}) {
     this.permissions = new PermissionController(options.permissions)
@@ -39,7 +41,10 @@ export class Agent {
    * 运行 Agent 处理用户消息
    */
   async run(message: string): Promise<string> {
-    return runLoop(message, {
+    const controller = this.beginOperation()
+    try {
+      return await runLoop(message, {
+      signal: controller.signal,
       config: this.options.config,
       context: this.options.context,
       tools: this.options.tools,
@@ -48,11 +53,40 @@ export class Agent {
       cwd: this.options.cwd,
       session: this.session,
       permissionController: this.permissions,
-    })
+      })
+    } finally {
+      this.active = undefined
+    }
   }
 
   async compact(): Promise<boolean> {
-    return this.session.compact(() => createCompactionRuntime(this.options, this.session))
+    const controller = this.beginOperation()
+    try {
+      const result = await this.session.compact(() => createCompactionRuntime(this.options, this.session))
+      if (controller.signal.aborted) throw new TurnCancelledError()
+      return result
+    } catch (error) {
+      if (controller.signal.aborted) throw new TurnCancelledError()
+      throw error
+    } finally {
+      this.active = undefined
+    }
+  }
+
+  /** Stop the current operation; tools that ignore signal must settle before it releases. */
+  cancelTurn(): boolean {
+    if (!this.active) return false
+    this.active.abort(new TurnCancelledError())
+    this.permissions.cancelPending()
+    this.session.cancelCompaction()
+    return true
+  }
+
+  private beginOperation(): AbortController {
+    if (this.active) throw new Error('Session is already running. Wait before running or resetting.')
+    const controller = new AbortController()
+    this.active = controller
+    return controller
   }
 
   getContext(): Anthropic.MessageParam[] {
