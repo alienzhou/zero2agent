@@ -2,6 +2,7 @@ import * as readline from 'node:readline'
 import { terminalTool } from '@zero2agent/core'
 import type { Agent, ApprovalRequest, ApprovalResponse, LoopEventHandlers, TerminalInterruptController } from '@zero2agent/core'
 import { appendEntry, compactionLabel, initialState, reduceRuntime } from './runtime-state.js'
+import type { TimelineEntry } from './runtime-state.js'
 import { clipText, graphemes, safeText, textWidth, wrapText } from './display-text.js'
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 import { runHumanTerminal } from './human-terminal.js'
@@ -17,6 +18,7 @@ const STATUS: Record<string, string> = {
 }
 const COMMANDS = ['/new', '/compact', '/terminal', '/help']
 const HELP = '输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。\n粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+const toolKey = (call: { turnId: string; toolCallId: string }): string => `${call.turnId}:${call.toolCallId}`
 
 interface PendingApproval {
   request: ApprovalRequest
@@ -44,6 +46,9 @@ export class RuntimeTui {
   private scroll = 0
   private expanded = new Set<string>()
   private selectedTool?: string
+  private cachedEntries?: TimelineEntry[]
+  private cachedSignature = ''
+  private cachedTimeline: string[] = []
   private approval?: PendingApproval
   private terminalController?: TerminalInterruptController
   private renderTimer?: NodeJS.Timeout
@@ -222,15 +227,16 @@ export class RuntimeTui {
     }
     if (key.ctrl && key.name === 'end') { this.scroll = 0; this.schedule(); return }
     const tools = this.state.entries.filter(entry => entry.kind === 'tool')
-    const selected = tools.findIndex(entry => entry.call.toolCallId === this.selectedTool)
+    const selected = tools.findIndex(entry => toolKey(entry.call) === this.selectedTool)
     if (key.meta && (key.name === 'up' || key.name === 'down') && tools.length) {
       const index = Math.max(0, Math.min(tools.length - 1, (selected < 0 ? tools.length - 1 : selected) + (key.name === 'up' ? -1 : 1)))
-      this.selectedTool = tools[index].call.toolCallId
+      this.selectedTool = toolKey(tools[index].call)
       this.schedule()
       return
     }
     if (key.ctrl && key.name === 'o') {
-      const id = this.selectedTool ?? tools.at(-1)?.call.toolCallId
+      const last = tools.at(-1)
+      const id = this.selectedTool ?? (last ? toolKey(last.call) : undefined)
       if (id) {
         if (this.expanded.has(id)) this.expanded.delete(id)
         else this.expanded.add(id)
@@ -375,17 +381,20 @@ export class RuntimeTui {
       lines.push(clipText('允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝', width))
       this.approval.displayed = true
     } else {
-      const timeline: string[] = []
+      let timeline: string[] = []
       const lastTool = this.state.entries.filter(entry => entry.kind === 'tool').at(-1)
-      const visibleToolIds = new Set(this.state.entries.filter(entry => entry.kind === 'tool').map(entry => entry.call.toolCallId))
+      const visibleToolIds = new Set(this.state.entries.filter(entry => entry.kind === 'tool').map(entry => toolKey(entry.call)))
       for (const id of this.expanded) if (!visibleToolIds.has(id)) this.expanded.delete(id)
       if (this.selectedTool && !visibleToolIds.has(this.selectedTool)) this.selectedTool = undefined
+      const signature = `${width}:${this.selectedTool}:${[...this.expanded].join(',')}`
+      if (this.cachedEntries === this.state.entries && signature === this.cachedSignature) timeline = this.cachedTimeline
+      else {
       if (this.state.discarded) timeline.push(`[较早的 ${this.state.discarded} 条显示记录已移除]`)
       for (const entry of this.state.entries) {
         if (entry.kind === 'tool') {
           const call = entry.call
-          const isSelected = call.toolCallId === (this.selectedTool ?? lastTool?.call.toolCallId)
-          const expanded = this.expanded.has(call.toolCallId)
+          const isSelected = toolKey(call) === (this.selectedTool ?? (lastTool ? toolKey(lastTool.call) : undefined))
+          const expanded = this.expanded.has(toolKey(call))
           timeline.push(...wrapText(`┌ ${isSelected ? '◆' : '◇'} ${call.toolName} · ${STATUS[call.status]} · ${call.toolCallId}${call.durationMs !== undefined ? ` · ${call.durationMs}ms` : ''}`, width))
           if (call.input) {
             const inputLines = wrapText(`│ ${JSON.stringify(call.input, null, expanded ? 2 : undefined)}`, width)
@@ -403,6 +412,10 @@ export class RuntimeTui {
           const label = entry.kind === 'user' ? '你 › ' : entry.kind === 'notice' ? '· ' : 'Agent › '
           timeline.push(...wrapText(label + entry.text, width))
         }
+      }
+      this.cachedEntries = this.state.entries
+      this.cachedSignature = signature
+      this.cachedTimeline = timeline
       }
       this.scroll = Math.min(this.scroll, Math.max(0, timeline.length - bodyHeight))
       const end = Math.max(bodyHeight, timeline.length - this.scroll)
