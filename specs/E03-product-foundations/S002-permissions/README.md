@@ -65,4 +65,4 @@ CLI 在 TTY 显示工具和完整 JSON 参数，`y` 批准本次，其余回答�
 
 1. [批准与隔离，各自限制什么](./deep-dive/01-approval-and-isolation.md)：从一次命令授权推导持久范围、规则优先级和系统边界的不同职责。
 
-上一篇：[E03-S001 多轮会话与压缩](../S001-multi-turn/README.md) | 下一篇：E03-S003 运行状态与 TUI（待设计）
+上一篇：[E03-S001 多轮会话与压缩](../S001-multi-turn/README.md) | 下一篇：[E03-S003 运行状态与 TUI](../S003-runtime-tui/README.md)

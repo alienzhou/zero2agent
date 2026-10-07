@@ -21,7 +21,9 @@ This directory contains retrospective notes and lessons learned.
 
 | Retro | Iteration | Notes |
 |---|---|---|
-| [E03-S002-permissions-approval.md](./E03-S002-permissions-approval.md) | E03-S002 权限与一次审批 | 整批快照、有限等待、路径变化、SSE/PTY 与真实模型验收；候选待人工审阅和合并，课程未发布 |
+| [E03-S002-permissions-approval.md](./E03-S002-permissions-approval.md) | E03-S002 权限与一次审批 | 整批快照、有限等待、路径变化、SSE/PTY 与真实模型验收；已通过 PR #17 合入 main，课程未发布 |
+
+| [E03-S003-runtime-tui.md](./E03-S003-runtime-tui.md) | E03-S003 运行状态与 TUI | 事件与控制、取消证据、连续输入体验与跨模式验收；本地实现，当前验收见课程 |
 
 ## Directory structure
 

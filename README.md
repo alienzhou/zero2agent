@@ -111,7 +111,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | ---- | ---- | ---- |
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S002 权限与 Approval 本地完成，未发布](./specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S002 已合入；S003 运行状态与 TUI](./specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理异常、长上下文和复杂运行情况 | Planned |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
 
@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S002：执行前，先判断是否允许](./specs/E03-product-foundations/S002-permissions/README.md)已完成三态权限、一次审批、TTY 交互和真实路径重查，候选待人工审阅与合入。已有 463 项离线与本机 50 项真实 MiniMax-M2.7 验收证据（本课 22 项、旧功能 28 项），固定跟练版本为 `E03-S002-permissions-approval-verified`。16 页图解已纳入[在线教程](./docs/site.md)，内容在本仓库维护；未对外发布。[验收证据](./researches/permissions/acceptance/README.md)与[跟练](./specs/E03-product-foundations/S002-permissions/follow-along.md)说明版本和范围；[本机实测记录](./researches/permissions/acceptance/runtime-audit/README.md)保留未测平台与原始失败记录。下一课：E03-S003 运行状态与 TUI。
+**最新更新**：[E03-S003：运行状态与 TUI](./specs/E03-product-foundations/S003-runtime-tui/README.md)实现带身份的运行事件、完整 Turn 取消，以及可编辑草稿、审批、工具详情和人工终端交接的 TUI。先用[离线跟练](./specs/E03-product-foundations/S003-runtime-tui/follow-along.md)体验，再对照[验收清单](./specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md)查看已验证范围。课程编辑源和[在线教程](./docs/site.md)均在本仓库维护；新课验收与审阅进度以清单为准。此前 S002 已通过 [PR #17](https://github.com/alienzhou/zero2agent/pull/17) 合入 main。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -174,7 +174,8 @@ zero2agent/
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
 | [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | Done，已合入 main、已打 Tag，未对外发布 |
-| [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | 权限与一次 Approval | 实现及课程候选完成，待人工审阅与合并，未发布 |
+| [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | 权限与一次 Approval | Done，已合入 main，已打 Tag |
+| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | 运行事件、Turn 取消与交互 TUI | 本地实现，验收与审阅见课程 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 
