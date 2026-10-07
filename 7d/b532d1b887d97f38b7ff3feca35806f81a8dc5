@@ -1,0 +1,31 @@
+CHANGELOG.md
+  s_08884e0d462e65::t_d986a588193b2b 80-92
+README.en.md
+  s_08884e0d462e65::t_258edf21d26914 110,160,173-174
+README.md
+  s_08884e0d462e65::t_fadb01da365df3 114,164,177-178
+docs/roadmap/README.md
+  s_08884e0d462e65::t_03b8f47244aebb 21,31
+retros/README.md
+  s_08884e0d462e65::t_99056cf7e543e9 24-26
+specs/E03-product-foundations/README.md
+  s_08884e0d462e65::t_68df805a242bd4 9,16-17,35
+specs/E03-product-foundations/S002-permissions/README.md
+  s_08884e0d462e65::t_c6c94de916ae64 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7db532d1b887d97f38b7ff3feca35806f81a8dc5",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
