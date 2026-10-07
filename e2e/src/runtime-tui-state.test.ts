@@ -76,6 +76,17 @@ describe('E03-S003: terminal projection and safe text cells', () => {
       expect(last.text.length).toBeLessThan(MAX_ENTRY_TEXT + 100)
       expect(last.text).toContain('显示历史已截短')
     }
+    state = reduceRuntime(state, {
+      type: 'tool-state',
+      turnId: 'a',
+      seq: 3,
+      toolCallId: 'long-error',
+      toolName: 'terminal',
+      status: 'error',
+      reason: 'r'.repeat(1_000_000),
+    })
+    const error = state.entries.at(-1)
+    expect(error?.kind === 'tool' && error.call.reason!.length).toBeLessThan(MAX_ENTRY_TEXT + 100)
   })
 
   it('renders escape, OSC, C1 and bidi controls as visible inert text', () => {

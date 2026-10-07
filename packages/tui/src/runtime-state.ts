@@ -30,7 +30,11 @@ function bounded(text: string): string {
 
 function entrySize(entry: TimelineEntry): number {
   return entry.kind === 'tool'
-    ? (entry.call.output?.length ?? 0) + JSON.stringify(entry.call.input ?? {}).length
+    ? (entry.call.output?.length ?? 0) +
+        (entry.call.reason?.length ?? 0) +
+        entry.call.toolName.length +
+        entry.call.toolCallId.length +
+        JSON.stringify(entry.call.input ?? {}).length
     : entry.text.length
 }
 
@@ -113,6 +117,7 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       if (old?.kind === 'tool' && old.call.status !== event.status && event.reason === undefined)
         delete call.reason
       if (call.output) call.output = bounded(call.output)
+      if (call.reason) call.reason = bounded(call.reason)
       if (call.input) {
         const encoded = JSON.stringify(call.input)
         if (encoded.length > MAX_ENTRY_TEXT)

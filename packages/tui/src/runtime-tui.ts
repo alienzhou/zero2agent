@@ -562,7 +562,7 @@ export class RuntimeTui {
             const expanded = this.expanded.has(toolKey(call))
             timeline.push(
               ...wrapText(
-                `┌ ${isSelected ? '◆' : '◇'} ${call.toolName} · ${STATUS[call.status]} · ${call.toolCallId}${call.durationMs !== undefined ? ` · ${call.durationMs}ms` : ''}`,
+                `┌ ${isSelected ? '◆' : '◇'} ${call.toolName.slice(0, 100)} · ${STATUS[call.status]} · ${call.toolCallId.slice(0, 100)}${call.durationMs !== undefined ? ` · ${call.durationMs}ms` : ''}`,
                 width
               )
             )

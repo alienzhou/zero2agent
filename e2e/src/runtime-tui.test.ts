@@ -276,6 +276,8 @@ describe.skipIf(process.platform === 'win32')(
       )
       const detailsFrom = p.session.output.length
       p.session.write('\x0f')
+      await p.session.waitFor('FIRST-LINE', detailsFrom)
+      p.session.write('\x1b[1;5F')
       await p.session.waitFor('TOOL-DETAIL-END', detailsFrom)
       p.session.write('\x15')
       await quit(p.session)
@@ -317,6 +319,48 @@ describe.skipIf(process.platform === 'win32')(
       reply(summary!.res, summary!.request, text('Summary: important observations retained.'))
       await p.session.waitFor('已压缩工作上下文', from)
       await p.session.waitFor('你: ', from)
+      await quit(p.session)
+    })
+
+    it('clears an idle draft before exiting and supports explicit multiline editing', async () => {
+      const p = await start((res, request) => reply(res, request, text('edited-answer')))
+      let from = p.session.output.length
+      p.session.write('discard-me')
+      await p.session.waitFor('你: discard-me', from)
+      p.session.write('\x03')
+      await p.session.waitFor('草稿已清空', from)
+      from = p.session.output.length
+      p.session.write('first\nsecond\x1b[A\x01X\x1b[B\x05Y\r')
+      await p.session.waitFor('edited-answer', from)
+      expect(p.requests[0].messages.at(-1)?.content).toBe('Xfirst\nsecondY')
+      await quit(p.session)
+    })
+
+    it('ends an interrupted paste at human-PTY ownership handoff and restores the draft', async () => {
+      let first: { res: ServerResponse; request: Request } | undefined
+      const p = await start(
+        (res, request, index) => {
+          if (index === 1) first = { res, request }
+          else reply(res, request, text(index === 2 ? 'handoff-returned' : 'draft-sent'))
+        },
+        { PERMISSION_MODE: 'bypass' }
+      )
+      const from = await send(p.session, 'ask for private terminal')
+      await expect.poll(() => Boolean(first)).toBe(true)
+      p.session.write('\x1b[200~draft-start')
+      await p.session.waitFor('草稿: draft-start', from)
+      reply(
+        first!.res,
+        first!.request,
+        call('handoff', 'terminal', { command: 'echo SHOULD_NOT_RUN', interactive: true })
+      )
+      await p.session.waitFor('Allow human terminal? [y/N]', from)
+      p.session.write('\x1b[201~')
+      await p.session.waitFor('handoff-returned', from)
+      await p.session.waitFor('你: draft-start', from)
+      p.session.write('after\r')
+      await p.session.waitFor('draft-sent', from)
+      expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('draft-startafter')
       await quit(p.session)
     })
 
