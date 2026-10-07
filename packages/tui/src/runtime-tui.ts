@@ -536,14 +536,23 @@ export class RuntimeTui {
             )
             if (call.input) {
               const inputLines = wrapText(
-                `│ ${JSON.stringify(call.input, null, expanded ? 2 : undefined)}`,
-                width
+                JSON.stringify(call.input, null, expanded ? 2 : undefined),
+                Math.max(1, width - 2)
               )
-              timeline.push(...(expanded ? inputLines : inputLines.slice(0, 2)))
+              timeline.push(
+                ...(expanded ? inputLines : inputLines.slice(0, 2)).map(line =>
+                  clipText(`│ ${line}`, width)
+                )
+              )
               if (!expanded && inputLines.length > 2)
                 timeline.push(clipText('│ … 参数已折叠 · Ctrl-O 展开', width))
             }
-            if (call.reason) timeline.push(...wrapText(`│ ${call.reason}`, width))
+            if (call.reason && !call.output?.includes(call.reason))
+              timeline.push(
+                ...wrapText(call.reason, Math.max(1, width - 2)).map(line =>
+                  clipText(`│ ${line}`, width)
+                )
+              )
             if (call.output) {
               const output = wrapText(call.output, Math.max(1, width - 2))
               timeline.push(
@@ -587,8 +596,12 @@ export class RuntimeTui {
           matches.length
             ? `Tab 补全: ${matches.join('  ')}`
             : this.busy
-              ? 'Ctrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键'
-              : 'Enter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help',
+              ? width < 60
+                ? 'Ctrl-C 取消 · 草稿保留 · /help'
+                : 'Ctrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键'
+              : width < 60
+                ? 'Enter 发送 · /help'
+                : 'Enter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help',
           width
         )
       )
@@ -611,7 +624,13 @@ export class RuntimeTui {
                 : line.startsWith('Agent ›')
                   ? '\x1b[36m'
                   : line.startsWith('┌')
-                    ? '\x1b[1m'
+                    ? line.includes('· 完成')
+                      ? '\x1b[1;32m'
+                      : line.includes('· 失败') || line.includes('· 已拒绝')
+                        ? '\x1b[1;31m'
+                        : line.includes('· 待审批') || line.includes('· 已取消')
+                          ? '\x1b[1;33m'
+                          : '\x1b[1;36m'
                     : line.startsWith('· ') || line.startsWith('│')
                       ? '\x1b[2m'
                       : ''

@@ -82,7 +82,7 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
   }
   if (event.turnId !== previous.turnId || event.seq <= previous.seq || previous.finished)
     return previous
-  let state = { ...previous, seq: event.seq, entries: [...previous.entries] }
+  const state = { ...previous, seq: event.seq, entries: [...previous.entries] }
   switch (event.type) {
     case 'phase':
       state.phase = event.phase
@@ -110,6 +110,8 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       const old = state.entries[index]
       // Full approval input lives in the controller; the bounded timeline keeps only a preview.
       const call: ToolState = { ...(old?.kind === 'tool' ? old.call : {}), ...event }
+      if (old?.kind === 'tool' && old.call.status !== event.status && event.reason === undefined)
+        delete call.reason
       if (call.output) call.output = bounded(call.output)
       if (call.input) {
         const encoded = JSON.stringify(call.input)

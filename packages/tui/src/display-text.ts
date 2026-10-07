@@ -6,6 +6,8 @@ export function graphemes(text: string): string[] {
 }
 
 export function safeText(text: string): string {
+  // Match control bytes deliberately: they must never reach the terminal interpreter.
+  // eslint-disable-next-line no-control-regex
   return text.replace(/[\u0000-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/g, char => {
     if (char === '\n') return '\n'
     if (char === '\t') return '    '
@@ -15,7 +17,7 @@ export function safeText(text: string): string {
 
 /** Terminal width convention: combining clusters 0/1, East Asian and emoji clusters 2. */
 export function cellWidth(cluster: string): number {
-  if (/^[\p{Mark}\u200d\ufe0f]+$/u.test(cluster)) return 0
+  if (/^(?:\p{Mark}|\u200d|\ufe0f)+$/u.test(cluster)) return 0
   if (/\p{Extended_Pictographic}|\p{Regional_Indicator}|\u20e3/u.test(cluster)) return 2
   const cp = cluster.codePointAt(0) ?? 0
   return cp >= 0x1100 &&

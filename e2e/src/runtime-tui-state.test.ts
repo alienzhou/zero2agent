@@ -20,6 +20,7 @@ describe('E03-S003: terminal projection and safe text cells', () => {
       toolName: 'read_file',
       status: 'pending',
       input: { path: '测试.ts' },
+      reason: 'Approval required',
     })
     state = reduceRuntime(state, {
       type: 'tool-state',
@@ -37,6 +38,7 @@ describe('E03-S003: terminal projection and safe text cells', () => {
       call: { status: 'completed', input: { path: '测试.ts' }, durationMs: 20 },
     })
     expect(state.phase).toBe('preparing')
+    expect(state.entries[0].kind === 'tool' && state.entries[0].call.reason).toBeUndefined()
   })
 
   it('ignores old-turn and duplicate sequence events without corrupting the next turn', () => {
