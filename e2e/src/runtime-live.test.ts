@@ -9,29 +9,32 @@ async function closeWithEvidence(
   name: string,
   p: Awaited<ReturnType<typeof startLivePty>>
 ): Promise<void> {
+  let closeFailure: { error: unknown } | undefined
   try {
     await p.close()
-  } finally {
-    const dir = process.env.E2E_EVIDENCE_DIR
-    if (dir) {
-      const evidence = JSON.stringify(
-        {
-          name,
-          capturedAt: new Date().toISOString(),
-          platform: process.platform,
-          requests: p.requests,
-          responses: p.responses,
-          output: p.session.output,
-        },
-        null,
-        2
-      )
-      if (process.env.ANTHROPIC_API_KEY && evidence.includes(process.env.ANTHROPIC_API_KEY))
-        throw new Error('Credential appeared in evidence; refusing to save')
-      await mkdir(dir, { recursive: true })
-      await writeFile(join(dir, name + '.json.gz'), gzipSync(evidence))
-    }
+  } catch (error) {
+    closeFailure = { error }
   }
+  const dir = process.env.E2E_EVIDENCE_DIR
+  if (dir) {
+    const evidence = JSON.stringify(
+      {
+        name,
+        capturedAt: new Date().toISOString(),
+        platform: process.platform,
+        requests: p.requests,
+        responses: p.responses,
+        output: p.session.output,
+      },
+      null,
+      2
+    )
+    if (process.env.ANTHROPIC_API_KEY && evidence.includes(process.env.ANTHROPIC_API_KEY))
+      throw new Error('Credential appeared in evidence; refusing to save')
+    await mkdir(dir, { recursive: true })
+    await writeFile(join(dir, name + '.json.gz'), gzipSync(evidence))
+  }
+  if (closeFailure) throw closeFailure.error
 }
 
 const exists = async (path: string): Promise<boolean> =>
@@ -46,6 +49,28 @@ async function type(p: Awaited<ReturnType<typeof startLivePty>>, input: string):
   const from = p.session.output.length
   p.session.write(input + '\r')
   return from
+}
+
+/** Permit one real conversational confirmation, never substitute prose for host approval. */
+async function awaitApproval(
+  p: Awaited<ReturnType<typeof startLivePty>>,
+  from: number,
+  confirmation: string
+): Promise<void> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await expect
+      .poll(
+        () => {
+          const tail = p.session.output.slice(from)
+          return tail.includes('[y/N]') || tail.includes('zero2agent · 已完成')
+        },
+        { timeout: 75_000 }
+      )
+      .toBe(true)
+    if (p.session.output.slice(from).includes('[y/N]')) return
+    if (attempt === 0) from = await type(p, confirmation)
+  }
+  throw new Error('Model did not request the real tool approval after one confirmation')
 }
 
 describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI and PTY', () => {
@@ -92,7 +117,11 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
         p,
         'Call write_file exactly once to create decision.txt containing HELLO_RUNTIME. If denied, stop without retrying or calling other tools.'
       )
-      await p.session.waitFor('[y/N]', from)
+      await awaitApproval(
+        p,
+        from,
+        'Confirmed: actually call write_file now to create decision.txt containing HELLO_RUNTIME. This requests the host approval; do not wait for approval in prose.'
+      )
       expect(await exists(join(p.cwd, 'decision.txt'))).toBe(false)
       p.session.write('n')
       await idle(p, p.session.output.length)
@@ -101,7 +130,11 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
         p,
         'The previous decision.txt request remains denied. I now authorize a separate, different request: call write_file exactly once to create approved.txt containing HELLO_RUNTIME. The host will ask me for this new approval. Do not retry decision.txt and do not use other tools.'
       )
-      await p.session.waitFor('[y/N]', from)
+      await awaitApproval(
+        p,
+        from,
+        'Confirmed: I authorize the separate approved.txt request now. Actually invoke write_file to create approved.txt containing HELLO_RUNTIME; the previous decision.txt denial remains unchanged. Do not just acknowledge this in prose.'
+      )
       p.session.write('y')
       await idle(p, p.session.output.length)
       expect(await exists(join(p.cwd, 'decision.txt'))).toBe(false)
