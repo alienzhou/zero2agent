@@ -1,0 +1,29 @@
+packages/core/src/agent.ts
+  s_08884e0d462e65::t_84415fc0c37e28 13,33,44-47,56-59,63-89
+packages/core/src/loop.ts
+  s_08884e0d462e65::t_6f989572158c5f 6-7,69-70,73-85,87-98,100-104,106-131,160-165,167-183,185,222-223,227-233,235,239,243-244,246-247,249-254,256-261,264-266,269,272-273,282-283,285,322,325,333
+packages/core/src/permissions.ts
+  s_08884e0d462e65::t_81f9705aa44bf0 158,164-166,183,218
+packages/core/src/runtime.ts
+  s_08884e0d462e65::t_616150d8d47cbd 29-77
+packages/core/src/tools/terminal-runtime.ts
+  s_08884e0d462e65::t_96625dbeb5f199 9
+packages/core/src/tools/terminal.ts
+  s_08884e0d462e65::t_2015f1ab7f2e79 227-228,300-301,328-329,578,586,609
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eda7fba5170c9663701aa1a869ae15d9f09b6b98",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
