@@ -1,0 +1,77 @@
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/completion-audit.md
+  s_08884e0d462e65::t_c1de38a1cb84fb 1-19
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/dialogue.md
+  s_08884e0d462e65::t_1719a0f29a4a7a 10-11
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/failures.md
+  s_08884e0d462e65::t_fcc73bbc15a0d1 25-26
+researches/file-checkpoints/acceptance/README.md
+  s_08884e0d462e65::t_bed71ba7196e19 1-15
+researches/file-checkpoints/acceptance/benchmark-first.json
+  s_08884e0d462e65::t_815631cff74543 1-59
+researches/file-checkpoints/acceptance/benchmark.json
+  s_08884e0d462e65::t_0dea0f5780db4e 2,13,17-20,31-34,45-48
+researches/file-checkpoints/acceptance/build.txt
+  s_08884e0d462e65::t_df2e69c18ff6c2 1-13
+researches/file-checkpoints/acceptance/checkpoint-benchmark.txt
+  s_08884e0d462e65::t_c0d2c499414701 1-3
+researches/file-checkpoints/acceptance/format.txt
+  s_08884e0d462e65::t_7a3eeba2a4ab9a 1-2
+researches/file-checkpoints/acceptance/live-evidence/session-resume.json
+  s_08884e0d462e65::t_c6d9d353f731c8 1-451
+researches/file-checkpoints/acceptance/live-results.json
+  s_08884e0d462e65::t_2ea6559fe77f4b 1
+researches/file-checkpoints/acceptance/logging-demo.txt
+  s_08884e0d462e65::t_7fc0d2129dcfdc 1-50
+researches/file-checkpoints/acceptance/runtime-demo.txt
+  s_08884e0d462e65::t_10beaf9ba7249c 1-114
+researches/file-checkpoints/acceptance/screens/01-session-with-checkpoint.txt
+  s_08884e0d462e65::t_343f450765a48d 1-30
+researches/file-checkpoints/acceptance/screens/02-file-list.txt
+  s_08884e0d462e65::t_65440ab576b60e 1-30
+researches/file-checkpoints/acceptance/screens/03-file-diff.txt
+  s_08884e0d462e65::t_be0e724df4c661 1-30
+researches/file-checkpoints/acceptance/screens/04-restore-preview.txt
+  s_08884e0d462e65::t_cffa943b7d0db2 1-30
+researches/file-checkpoints/acceptance/screens/05-narrow-restore-preview.txt
+  s_08884e0d462e65::t_c4c384e35e7680 1-18
+researches/file-checkpoints/acceptance/screens/06-restored.txt
+  s_08884e0d462e65::t_d1e5d4d172fa8a 1-30
+researches/file-checkpoints/acceptance/session-demo.txt
+  s_08884e0d462e65::t_7e64185d00e1d4 1-14
+researches/file-checkpoints/acceptance/site-build.txt
+  s_08884e0d462e65::t_487240fd786c83 1-11
+researches/file-checkpoints/acceptance/site-check.txt
+  s_08884e0d462e65::t_28b9b06da2102a 1-5
+researches/file-checkpoints/acceptance/summary.json
+  s_08884e0d462e65::t_966a7526178c45 1-463
+researches/file-checkpoints/acceptance/terminal-restore.txt
+  s_08884e0d462e65::t_2474e9b7cdc16d 1-27
+researches/file-checkpoints/acceptance/third-summary.json
+  s_08884e0d462e65::t_e47f50c086df8a 1-438
+scripts/e03-s006-acceptance-report.mjs
+  s_08884e0d462e65::t_eb901d99902476 78
+specs/E03-product-foundations/README.md
+  s_08884e0d462e65::t_7854b144abf804 35
+specs/E03-product-foundations/S006-file-checkpoints/README.md
+  s_08884e0d462e65::t_b1ae3f2c70b844 5-6
+specs/E03-product-foundations/S006-file-checkpoints/details/02-task-list.md
+  s_08884e0d462e65::t_64446c17d8ef67 11
+specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md
+  s_08884e0d462e65::t_3bab555c0b8a98 5-7,11,13-29,31,33,35,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9d57d5ff040b8f14eb6a72c05a86b99982e757d4",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
