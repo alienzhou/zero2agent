@@ -1,0 +1,139 @@
+.authoring/site/README.md
+  s_08884e0d462e65::t_8bb3fd19b8daf7 19
+.authoring/site/chapters/epic03-story006/author.cjs
+  s_08884e0d462e65::t_0190fd47dda200 1-138
+.authoring/site/chapters/epic03-story006/content-plan.md
+  s_08884e0d462e65::t_0e288dba634d98 1-28
+.authoring/site/chapters/epic03-story006/review.md
+  s_08884e0d462e65::t_a9c9e1696e2e5e 1-9
+.authoring/site/chapters/epic03-story006/sources.md
+  s_08884e0d462e65::t_5e4a49e5f48618 1-19
+.authoring/site/chapters/epic03-story006/verification/browser-checks.json
+  s_08884e0d462e65::t_f112beaa269b8f 1-180
+.authoring/site/chapters/epic03-story006/verification/initial-failure.json
+  s_08884e0d462e65::t_e99540683adc60 1-160
+.authoring/site/chapters/epic03-story006/verify.mjs
+  s_08884e0d462e65::t_a51a2294ea76dd 1-108
+.authoring/site/course.json
+  s_08884e0d462e65::t_17d6fed07852fd 114-120
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/compatibility.md
+  s_08884e0d462e65::t_2d314f3c497009 1-15
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/dialogue.md
+  s_08884e0d462e65::t_3942e7e265322a 6-9
+AGENTS.md
+  s_08884e0d462e65::t_4e17f2e0d271d8 101-107
+CHANGELOG.md
+  s_08884e0d462e65::t_bb86b822dcacf7 82-92
+README.md
+  s_08884e0d462e65::t_9d26c3d1dfcaac 114,164,181
+docs/architecture.md
+  s_08884e0d462e65::t_4d53b04aa158c8 159-168
+docs/getting-started.md
+  s_08884e0d462e65::t_fedbe5344e186a 142-161
+docs/roadmap/README.md
+  s_08884e0d462e65::t_9698c37ea27fc2 21,31
+packages/core/README.md
+  s_08884e0d462e65::t_24257d4eb19880 44-49
+researches/file-checkpoints/README.md
+  s_08884e0d462e65::t_9ebb3a7464fdd2 1-28
+researches/file-checkpoints/claude-code.md
+  s_08884e0d462e65::t_7fa4fec058c8c0 1-17
+researches/file-checkpoints/gemini-cli.md
+  s_08884e0d462e65::t_70945d748ce317 1-23
+researches/file-checkpoints/opencode.md
+  s_08884e0d462e65::t_68e1211cad4081 1-23
+retros/E03-S006-file-checkpoints.md
+  s_08884e0d462e65::t_280b83206cc20f 1-15
+retros/README.md
+  s_08884e0d462e65::t_89e81a0e586676 21-22,24,28
+scripts/e03-s006-acceptance-report.mjs
+  s_08884e0d462e65::t_bedcd94b8e718b 1-93
+scripts/e03-s006-tui-capture.mjs
+  s_08884e0d462e65::t_55d22367fab859 1-48
+site/chapters/epic03-story006/01-cover.html
+  s_08884e0d462e65::t_b14e7c5975026d 1
+site/chapters/epic03-story006/02-boundary.html
+  s_08884e0d462e65::t_e6c18e6caf0cd8 1
+site/chapters/epic03-story006/03-options.html
+  s_08884e0d462e65::t_04bee8e5128764 1
+site/chapters/epic03-story006/04-boundary-hook.html
+  s_08884e0d462e65::t_32a2c9d251aa93 1
+site/chapters/epic03-story006/05-scope.html
+  s_08884e0d462e65::t_2a74888c80615e 1
+site/chapters/epic03-story006/06-chunks.html
+  s_08884e0d462e65::t_a07990a9a693a6 1
+site/chapters/epic03-story006/07-algorithm.html
+  s_08884e0d462e65::t_1f5f9315a5c70e 1
+site/chapters/epic03-story006/08-manifest.html
+  s_08884e0d462e65::t_048146185cfc75 1
+site/chapters/epic03-story006/09-bounds.html
+  s_08884e0d462e65::t_c546d52b4f4056 1
+site/chapters/epic03-story006/10-gc.html
+  s_08884e0d462e65::t_72bde2b9f41a22 1
+site/chapters/epic03-story006/11-pending.html
+  s_08884e0d462e65::t_d9c06897b2d6ed 1
+site/chapters/epic03-story006/12-conflict.html
+  s_08884e0d462e65::t_2ae9985172fc86 1
+site/chapters/epic03-story006/13-restore.html
+  s_08884e0d462e65::t_3b026d818d470b 1
+site/chapters/epic03-story006/14-paths.html
+  s_08884e0d462e65::t_36d6c569ce81a5 1
+site/chapters/epic03-story006/15-tui.html
+  s_08884e0d462e65::t_b8cb8718081935 1
+site/chapters/epic03-story006/16-cli.html
+  s_08884e0d462e65::t_3c4a6777b0ef99 1
+site/chapters/epic03-story006/17-evidence.html
+  s_08884e0d462e65::t_c73c48880b9947 1
+site/chapters/epic03-story006/18-benchmark.html
+  s_08884e0d462e65::t_580f3eff1736de 1
+site/chapters/epic03-story006/19-practice.html
+  s_08884e0d462e65::t_8497afe2cc775f 1-2
+site/chapters/epic03-story006/20-next.html
+  s_08884e0d462e65::t_74ec8dddfd7682 1
+site/chapters/epic03-story006/course.css
+  s_08884e0d462e65::t_e9b1f63050e291 1-20
+site/chapters/epic03-story006/pages.json
+  s_08884e0d462e65::t_8ded88bda3a3b3 1-190
+site/course.json
+  s_08884e0d462e65::t_dd72ad52c4c483 4908-5385,5388
+specs/E03-product-foundations/README.md
+  s_08884e0d462e65::t_43e9a918138e8a 20,35
+specs/E03-product-foundations/S005-runtime-logging/README.md
+  s_08884e0d462e65::t_c8316ae5cb589c 110
+specs/E03-product-foundations/S006-file-checkpoints/README.md
+  s_08884e0d462e65::t_e1abc2267ff3a4 1-103
+specs/E03-product-foundations/S006-file-checkpoints/deep-dive/01-patches-and-chunks.md
+  s_08884e0d462e65::t_5d045c70f53557 1-35
+specs/E03-product-foundations/S006-file-checkpoints/deep-dive/02-recovery-is-a-write.md
+  s_08884e0d462e65::t_783df006ad9d8c 1-33
+specs/E03-product-foundations/S006-file-checkpoints/details/00-overview.md
+  s_08884e0d462e65::t_5885f8cbfdb5a7 1-9
+specs/E03-product-foundations/S006-file-checkpoints/details/01-technical-design.md
+  s_08884e0d462e65::t_46fe62d07b8705 1-59
+specs/E03-product-foundations/S006-file-checkpoints/details/02-task-list.md
+  s_08884e0d462e65::t_6e9935da3ec3fc 1-13
+specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md
+  s_08884e0d462e65::t_97b3ad13736782 1-26
+specs/E03-product-foundations/S006-file-checkpoints/details/04-backlog.md
+  s_08884e0d462e65::t_60cad9431410aa 1-18
+specs/E03-product-foundations/S006-file-checkpoints/follow-along.md
+  s_08884e0d462e65::t_9b0da8d447ac04 1-59
+specs/README.md
+  s_08884e0d462e65::t_4fe0a4e1fbdd7a 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f775cba68012dd5a57bc1d85c8c31023ad9750a5",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
