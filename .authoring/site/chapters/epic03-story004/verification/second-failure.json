@@ -46,9 +46,13 @@
     },
     {
       "file": "07-save-twice.html",
-      "sha256": "a41cf2c32d2d32f7f1a0be2e6ac05e5ccf870a717d79fd2ba85057b56770f87b",
+      "sha256": "55ddd250714e027507b95169c7adcaf77c74ffde7dcb1f252d858e646788b015",
       "overflow": [],
-      "svgTextOverflow": [],
+      "svgTextOverflow": [
+        {
+          "text": "正常完成 / 取消 / 失败：都要记录已结算结果。"
+        }
+      ],
       "textOverlaps": []
     },
     {
@@ -171,10 +175,12 @@
       "errors": []
     }
   ],
-  "failures": [],
+  "failures": [
+    "07-save-twice.html"
+  ],
   "sources": {
-    "author.cjs": "604153a8b7c8b2e77edf86989cbd5b2e6e349edc65c3ac2cb113c195ac200cde",
+    "author.cjs": "44785ddf8704f74332c50895eaedb0898be19ad7df0976b5dc11443fe5533287",
     "course.css": "19ddb438fe1bbfff3448978b1b15f9ecfd3cbfe67b01386f22e326397304451f"
   },
-  "passed": true
+  "passed": false
 }
