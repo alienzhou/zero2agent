@@ -4,7 +4,14 @@
  */
 import type Anthropic from '@anthropic-ai/sdk'
 import { randomUUID } from 'node:crypto'
-import { RuntimeEmitter, TurnCancelledError, assertNotCancelled, waitForAbort, notifyObserver, type RuntimeEvent } from './runtime.js'
+import {
+  RuntimeEmitter,
+  TurnCancelledError,
+  assertNotCancelled,
+  waitForAbort,
+  notifyObserver,
+  type RuntimeEvent,
+} from './runtime.js'
 import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
 import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
 import { Session } from './session.js'
@@ -72,13 +79,26 @@ export async function executeToolCalls(
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
   for (const block of calls) {
-    emitter?.emit({ type: 'tool-state', toolCallId: block.id, toolName: block.name,
-      status: 'pending', input: block.input as Record<string, unknown> })
+    emitter?.emit({
+      type: 'tool-state',
+      toolCallId: block.id,
+      toolName: block.name,
+      status: 'pending',
+      input: block.input as Record<string, unknown>,
+    })
   }
   for (const block of calls) {
-    const state = (status: Extract<RuntimeEvent, { type: 'tool-state' }>['status'],
-      detail: { output?: string; reason?: string; durationMs?: number } = {}) =>
-      emitter?.emit({ type: 'tool-state', toolCallId: block.id, toolName: block.name, status, ...detail })
+    const state = (
+      status: Extract<RuntimeEvent, { type: 'tool-state' }>['status'],
+      detail: { output?: string; reason?: string; durationMs?: number } = {}
+    ) =>
+      emitter?.emit({
+        type: 'tool-state',
+        toolCallId: block.id,
+        toolName: block.name,
+        status,
+        ...detail,
+      })
     let start: number | undefined
     let denied = false
     try {
@@ -112,23 +132,36 @@ export async function executeToolCalls(
       const durationMs = Date.now() - start
       const cancelled = /^Status: (?:human-controlled )?cancelled/m.test(output)
       state(cancelled ? 'cancelled' : output.startsWith('Error:') ? 'error' : 'completed', {
-        output, durationMs,
-        ...(ctx.signal?.aborted && !cancelled ? { reason: 'Tool settled after cancellation was requested; its result is retained.' } : {}),
+        output,
+        durationMs,
+        ...(ctx.signal?.aborted && !cancelled
+          ? { reason: 'Tool settled after cancellation was requested; its result is retained.' }
+          : {}),
       })
       notifyObserver(() => events?.onToolEnd?.(block.name, output, durationMs))
-      results.push({ type: 'tool_result', tool_use_id: block.id, content: output,
-        ...((output.startsWith('Error:') || cancelled) && { is_error: true }) })
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: output,
+        ...((output.startsWith('Error:') || cancelled) && { is_error: true }),
+      })
     } catch (error) {
       const cancelled = ctx.signal?.aborted || error instanceof TurnCancelledError
       const errorMessage = cancelled
         ? 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
         : `Error: ${describeToolError(error)}`
       state(cancelled ? 'cancelled' : denied ? 'denied' : 'error', {
-        output: errorMessage, reason: errorMessage,
+        output: errorMessage,
+        reason: errorMessage,
         ...(start === undefined ? {} : { durationMs: Date.now() - start }),
       })
       notifyObserver(() => events?.onToolError?.(block.name, errorMessage))
-      results.push({ type: 'tool_result', tool_use_id: block.id, content: errorMessage, is_error: true })
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: errorMessage,
+        is_error: true,
+      })
     }
   }
   return results
@@ -176,8 +209,11 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   } catch (error) {
     if (started) {
       const cancelled = options.signal?.aborted || error instanceof TurnCancelledError
-      emitter.emit({ type: 'turn-end', status: cancelled ? 'cancelled' : 'error',
-        ...(cancelled ? {} : { error: describeToolError(error) }) })
+      emitter.emit({
+        type: 'turn-end',
+        status: cancelled ? 'cancelled' : 'error',
+        ...(cancelled ? {} : { error: describeToolError(error) }),
+      })
       if (cancelled) throw new TurnCancelledError()
     }
     throw error
@@ -224,15 +260,24 @@ async function runTurnLoop(
 ): Promise<string> {
   const { tools = allTools, events, cwd } = options
   const session = options.session!
-  const runtime = createCompactionRuntime({ ...options, events: {
-    ...events,
-    onCompaction: event => {
-      emitter.emit({ type: 'compaction', event })
-      notifyObserver(() => events?.onCompaction?.(structuredClone(event)))
+  const runtime = createCompactionRuntime(
+    {
+      ...options,
+      events: {
+        ...events,
+        onCompaction: event => {
+          emitter.emit({ type: 'compaction', event })
+          notifyObserver(() => events?.onCompaction?.(structuredClone(event)))
+        },
+      },
     },
-  } }, session)
+    session
+  )
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
-  const ctx: ToolContext = { cwd: cwd ?? process.cwd(), ...(options.signal && { signal: options.signal }) }
+  const ctx: ToolContext = {
+    cwd: cwd ?? process.cwd(),
+    ...(options.signal && { signal: options.signal }),
+  }
   let iterations = 0
 
   while (iterations < MAX_ITERATIONS) {
@@ -258,6 +303,7 @@ async function runTurnLoop(
             streaming = true
             emitter.emit({ type: 'phase', phase: 'streaming' })
           }
+          if (options.signal?.aborted) return
           emitter.emit({ type: 'text-delta', text })
           notifyObserver(() => events?.onText?.(text))
         })
@@ -280,7 +326,14 @@ async function runTurnLoop(
       }
       messages.push({ role: 'assistant', content: structuredClone(response.content) })
       emitter.emit({ type: 'phase', phase: 'tools' })
-      const toolResults = await executeToolCalls(response.content, tools, ctx, events, permissions, emitter)
+      const toolResults = await executeToolCalls(
+        response.content,
+        tools,
+        ctx,
+        events,
+        permissions,
+        emitter
+      )
       messages.push({ role: 'user', content: toolResults })
       assertNotCancelled(options.signal)
       continue
@@ -306,6 +359,17 @@ async function runTurnLoop(
       content: response.content.length ? structuredClone(response.content) : emptyNotice,
     })
     if (calls.length) {
+      for (const call of calls) {
+        emitter.emit({
+          type: 'tool-state',
+          toolCallId: call.id,
+          toolName: call.name,
+          status: 'error',
+          input: call.input as Record<string, unknown>,
+          output: notice,
+          reason: notice,
+        })
+      }
       // Even skipped calls need a matching result before a later user turn can be sent.
       messages.push({
         role: 'user',

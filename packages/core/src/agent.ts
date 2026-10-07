@@ -44,15 +44,15 @@ export class Agent {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
-      signal: controller.signal,
-      config: this.options.config,
-      context: this.options.context,
-      tools: this.options.tools,
-      systemPrompt: this.options.systemPrompt,
-      events: this.options.events,
-      cwd: this.options.cwd,
-      session: this.session,
-      permissionController: this.permissions,
+        signal: controller.signal,
+        config: this.options.config,
+        context: this.options.context,
+        tools: this.options.tools,
+        systemPrompt: this.options.systemPrompt,
+        events: this.options.events,
+        cwd: this.options.cwd,
+        session: this.session,
+        permissionController: this.permissions,
       })
     } finally {
       this.active = undefined
@@ -62,7 +62,9 @@ export class Agent {
   async compact(): Promise<boolean> {
     const controller = this.beginOperation()
     try {
-      const result = await this.session.compact(() => createCompactionRuntime(this.options, this.session))
+      const result = await this.session.compact(() =>
+        createCompactionRuntime(this.options, this.session)
+      )
       if (controller.signal.aborted) throw new TurnCancelledError()
       return result
     } catch (error) {
@@ -83,7 +85,8 @@ export class Agent {
   }
 
   private beginOperation(): AbortController {
-    if (this.active) throw new Error('Session is already running. Wait before running or resetting.')
+    if (this.active)
+      throw new Error('Session is already running. Wait before running or resetting.')
     const controller = new AbortController()
     this.active = controller
     return controller
@@ -103,6 +106,8 @@ export class Agent {
 
   /** Start a new conversation without undoing files or stopping background processes. */
   reset(): void {
+    if (this.active)
+      throw new Error('Session is already running. Wait before running or resetting.')
     this.session.reset()
   }
 

@@ -224,7 +224,11 @@ function sleep(ms: number): Promise<void> {
 
 // ── 核心执行 ───────────────────────────────────────
 
-export async function runCommand(userCommand: string, cwd: string, turnSignal?: AbortSignal): Promise<RunResult> {
+export async function runCommand(
+  userCommand: string,
+  cwd: string,
+  turnSignal?: AbortSignal
+): Promise<RunResult> {
   turnSignal?.throwIfAborted()
   const wrapped = wrapCommand(userCommand)
   const sink = new OutputSink()
@@ -583,7 +587,11 @@ export const terminalTool: Tool = {
       }
 
       try {
-        const result = await runtime.runInteractive({ command, cwd: workdirResult.path, ...(ctx.signal && { signal: ctx.signal }) })
+        const result = await runtime.runInteractive({
+          command,
+          cwd: workdirResult.path,
+          ...(ctx.signal && { signal: ctx.signal }),
+        })
         // Only status metadata crosses back to the model; never echo host output or input.
         const parts = [`Status: human-controlled ${result.status}`]
         if (result.exitCode !== undefined) parts.push(`Exit code: ${result.exitCode}`)

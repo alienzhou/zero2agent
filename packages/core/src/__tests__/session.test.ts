@@ -162,7 +162,8 @@ describe('in-memory sessions', () => {
       expect.objectContaining({
         model: 'custom-model',
         system: 'Keep this instruction',
-      })
+      }),
+      { signal: expect.any(AbortSignal) }
     )
     expect(onToolEnd).toHaveBeenCalledWith('echo', 'observed-result', expect.any(Number))
   })
@@ -270,7 +271,10 @@ describe('in-memory sessions', () => {
     expect(agent.getHistory()).toEqual([])
     await agent.run('new')
     expect(requests[1]).toEqual([{ role: 'user', content: 'new' }])
-    expect(execute).toHaveBeenCalledWith({ message: 'value' }, { cwd: '/tmp/session-project' })
+    expect(execute).toHaveBeenCalledWith(
+      { message: 'value' },
+      { cwd: '/tmp/session-project', signal: expect.any(AbortSignal) }
+    )
   })
 
   it('returns a deep snapshot, including nested tool inputs', async () => {
@@ -321,7 +325,10 @@ describe('in-memory sessions', () => {
     const agent = new Agent({ tools: [{ ...echo, execute }] })
     cwd.mockReturnValue('/tmp/project-b')
     await agent.run('inspect')
-    expect(execute).toHaveBeenCalledWith(expect.anything(), { cwd: '/tmp/project-a' })
+    expect(execute).toHaveBeenCalledWith(expect.anything(), {
+      cwd: '/tmp/project-a',
+      signal: expect.any(AbortSignal),
+    })
   })
 })
 
