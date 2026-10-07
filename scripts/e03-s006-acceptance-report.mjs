@@ -75,7 +75,7 @@ for (const [name, command, args] of commands.slice(report.checks.length)) {
       text += '\nLive gate requires all six tests to execute and pass; skipped tests do not satisfy it.\n';
     }
   }
-  const log = name + (['offline', 'lint', 'live'].includes(name) ? '.txt.gz' : '.txt');
+  const log = name + (['offline', 'lint', 'live', 'checkpoint-demo'].includes(name) ? '.txt.gz' : '.txt');
   assertPrivate(text);
   await writeFile(path.join(out, log), log.endsWith('.gz') ? gzipSync(text) : text);
   report.checks.push({ name, command: [command, ...args], exitCode, elapsedMs: Date.now() - start, log });

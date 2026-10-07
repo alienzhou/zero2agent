@@ -32,4 +32,4 @@
 
 从 [E03-S001：让 Agent 接着聊，也能控制上下文长度](./S001-multi-turn/README.md)开始：先看两轮续聊与大工具结果的场景，理解历史和工作上下文，再读自动层级与并发，最后按[分步跟练](./S001-multi-turn/follow-along.md)用本地测试验证预算和手动命令。真实模型练习会产生费用，需单独选择。
 
-最新课为 [E03-S006：文件 Checkpoint 与回退](./S006-file-checkpoints/README.md)。先用[离线演示](./S006-file-checkpoints/follow-along.md)真实修改、查看和回退文件，再看分块复用、容量回收、冲突与崩溃恢复。S006 交付候选尚未合入 main；这节完成后进入 Epic 4 的探索与规划能力。
+最新课为 [E03-S006：文件 Checkpoint 与回退](./S006-file-checkpoints/README.md)。先用[离线演示](./S006-file-checkpoints/follow-along.md)真实修改、查看和回退文件，再看分块复用、容量回收、冲突与崩溃恢复。S006 交付候选尚未合入 main；这节完成后进入 Epic 4 健壮性与上下文管理（规划）。

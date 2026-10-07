@@ -1,0 +1,30 @@
+● zero2agent · 文件差异
+会话: b0e39d65 · 已保存 r2 · 日志 6112eb81 · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /
+文件改动 · b098d48c-7ab5-4514-92b4-293005a1ab0a
+仅保护 write_file / replace_in_file / delete；shell、人工终端与外部服务不自动回退。
+状态: ready · 调用: write_file · 会话: b0e39d65-bec7-4303-a0f1-35294dc6ab8a
+
+--- settings.txt
++++ settings.txt
+12 → 11 bytes · mode 644 → 644
+SHA256 b022915d7586f8d822418e213f9a28b0cae7103f615d800ce82f0c746d7bdf56 → 45bda1367db3f855baa6b
+cd0618b5505572318bc00f4185cb6b01455d0dba48b
+@@ -1,2 +1,2 @@
+-theme=light
++theme=dark
+
+
+
+
+
+
+
+
+
+
+
+
+
+行 1–13 / 13 · r 预览回退
+↑↓ / PgUp PgDn / Home End 翻阅
+Esc / Ctrl-C 返回文件列表 · 草稿保留

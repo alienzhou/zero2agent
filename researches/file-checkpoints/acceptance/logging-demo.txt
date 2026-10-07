@@ -1,0 +1,50 @@
+临时工作目录：/var/folders/6k/vw7xftb52498z7x1w28zl4hh0000gn/T/zero2agent-s005-demo-adRA7N（退出自动删除）
+离线夹具；不调用真实模型。生产 CLI / SDK / 工具 / 日志都真实执行。
+[2m  ⚡ write_file(path: "trace-demo.txt", content: "DEMO-ONLY")[0m
+Checkpoint 8ca7b89a-27a4-46b9-a307-b54adb6ea0d5 · 1 个文件
+[2m  [32m✓[0m[2m Created trace-demo.txt (9 bytes written) (41ms)[0m
+
+本地夹具已返回；请用 /logs 或 /log 查看真实宿主记录。
+
+无 API key 的只读浏览：
+6681abac-3917-4b1b-a426-1e0c70cfe534  2026-10-07T16:25:12.801Z  运行 6681abac · 2026-10-07T16:25
+运行日志 6681abac-3917-4b1b-a426-1e0c70cfe534
+共 24 条；展示 17 条
+#5 operation/start · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#6 phase/preparing · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#7 request/start · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · model · lesson-fixture
+#8 phase/requesting · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#9 request/completed · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · model · 20ms · in=12 · out=8
+#10 phase/tools · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#11 tool/pending · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · tool=write_file · call=demo-write
+#12 permission/initial · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · tool=write_file · call=demo-write · allow
+#13 permission/resolved · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · tool=write_file · call=demo-write · allow
+#14 tool/running · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · tool=write_file · call=demo-write
+#15 tool/completed · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=9ae04d92-3a53-4605-a4fb-b993c868fee1 · tool=write_file · call=demo-write · 41ms
+#16 phase/preparing · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#17 request/start · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=ec61a5a5-4fe5-4872-96af-702ce410a444 · model · lesson-fixture
+#18 phase/requesting · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#19 phase/streaming · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4
+#20 request/completed · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · req=ec61a5a5-4fe5-4872-96af-702ce410a444 · model · 3ms · in=12 · out=8
+#21 operation/completed · op=229d5565-db50-431f-87cc-54734141ff29 · session=6218895a-9648-46bb-bf4c-f5ceb8162fd4 · 68ms
+
+模拟服务失败：实际本地 HTTP 401，错误正文不进入日志。
+
+执行出错: 401 {"type":"error","error":{"type":"authentication_error","message":"Local teaching fixture: an intentional HTTP 401"}}
+运行日志 4ac7ca14-da2c-4b35-8e4e-0ae32443c9a2
+共 13 条；展示 13 条
+#1 host/start · pid=77831
+#2 host/session-new · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525
+#3 host/save-start · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · r0
+#4 host/save-completed · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · r1
+#5 operation/start · op=0866650f-634a-49da-810e-03f87fc44ef2 · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525
+#6 phase/preparing · op=0866650f-634a-49da-810e-03f87fc44ef2 · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525
+#7 request/start · op=0866650f-634a-49da-810e-03f87fc44ef2 · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · req=f178c244-e94d-4f84-8e75-d358bc1ebd52 · model · lesson-fixture
+#8 phase/requesting · op=0866650f-634a-49da-810e-03f87fc44ef2 · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525
+#9 request/error · op=0866650f-634a-49da-810e-03f87fc44ef2 · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · req=f178c244-e94d-4f84-8e75-d358bc1ebd52 · model · 18ms · error=auth · http=401
+#10 operation/error · op=0866650f-634a-49da-810e-03f87fc44ef2 · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · 19ms · error=auth · http=401
+#11 host/save-start · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · r1
+#12 host/save-completed · session=d9a0b5a5-8ff1-449d-84ee-3da6cecdb525 · r2
+#13 host/end · exit=1
+
+PASS：文件效果、请求/工具关联、无密钥只读与 HTTP 错误分类已核对。

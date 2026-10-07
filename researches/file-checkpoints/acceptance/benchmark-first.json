@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-07T16:25:06.456Z",
+  "recordedAt": "2026-10-07T15:43:42.261Z",
   "node": "v22.15.1",
   "platform": "darwin",
   "arch": "arm64",
@@ -10,14 +10,14 @@
     "unrelatedFiles": 1000,
     "unrelatedBytes": 4096000
   },
-  "scope": "All modes save only the same target file before and after a mutation. Filesystem writes included; timings are warm local runs, not a universal performance claim. Copy and whole-file baselines do not implement locks, full validation, conflict checks or fsync, so these are storage baselines, not equivalent durability or throughput implementations. Naive whole-workspace copies are an arithmetic estimate only. Git pack/delta is not benchmarked.",
+  "scope": "All modes save only the same target file before and after a mutation. Filesystem writes included; timings are warm local runs, not a universal performance claim. Naive whole-workspace copies are an arithmetic estimate only. Git pack/delta is not benchmarked.",
   "results": [
     {
       "mode": "full-file-copy",
-      "saveTotalMs": 79.41245800000002,
-      "saveP50Ms": 3.712999999999994,
-      "saveP95Ms": 5.420874999999995,
-      "restoreMs": 1.767959000000019,
+      "saveTotalMs": 83.86066499999993,
+      "saveP50Ms": 3.9812919999999963,
+      "saveP95Ms": 6.1970409999999845,
+      "restoreMs": 1.7322079999999858,
       "storageBeforeRestore": {
         "logical": 167784160,
         "allocated": 167931904,
@@ -28,10 +28,10 @@
     },
     {
       "mode": "whole-file-compressed-CAS",
-      "saveTotalMs": 1330.4534989999997,
-      "saveP50Ms": 63.336874999999964,
-      "saveP95Ms": 120.82779200000004,
-      "restoreMs": 4.446667000000161,
+      "saveTotalMs": 1342.9151259999996,
+      "saveP50Ms": 63.80879200000004,
+      "saveP95Ms": 124.63120800000002,
+      "restoreMs": 4.4898339999999735,
       "storageBeforeRestore": {
         "logical": 88109241,
         "allocated": 88166400,
@@ -42,10 +42,10 @@
     },
     {
       "mode": "content-defined-compressed-CAS",
-      "saveTotalMs": 3824.883418999998,
-      "saveP50Ms": 166.90374999999995,
-      "saveP95Ms": 666.0022499999998,
-      "restoreMs": 348.58741700000064,
+      "saveTotalMs": 3660.742,
+      "saveP50Ms": 162.17345799999975,
+      "saveP95Ms": 588.7282909999999,
+      "restoreMs": 328.46170900000016,
       "storageBeforeRestore": {
         "logical": 6007126,
         "allocated": 6283264,
