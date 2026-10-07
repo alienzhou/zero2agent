@@ -36,8 +36,10 @@ const STATUS: Record<string, string> = {
   cancelled: '已取消',
 }
 const COMMANDS = ['/new', '/compact', '/terminal', '/help']
+const MAX_DRAFT_LENGTH = 16_384
+const DRAFT_LIMIT_NOTICE = '输入上限 16,384 个 UTF-16 单元；本次输入或整段粘贴未加入，原草稿保留。'
 const HELP =
-  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -61,6 +63,9 @@ export class RuntimeTui {
   private buffer = ''
   private cursor = 0
   private paste = false
+  private pasteText = ''
+  private pasteTooLong = false
+  private pasteBlocked = false
   private history: string[] = []
   private historyIndex = 0
   private draft = ''
@@ -185,6 +190,8 @@ export class RuntimeTui {
 
   private suspend(): void {
     if (!this.active) return
+    // Keep the public draft typed before handoff; private lease bytes never enter this buffer.
+    this.finishPaste()
     this.active = false
     // A PTY lease consumes its own bytes, including a pending paste-end marker.
     this.paste = false
@@ -263,14 +270,28 @@ export class RuntimeTui {
     if (!this.active || this.closed) return
     if (key.sequence === '\x1b[200~') {
       this.paste = true
+      this.pasteText = ''
+      this.pasteTooLong = false
+      this.pasteBlocked = !!this.approval
       return
     }
     if (key.sequence === '\x1b[201~') {
-      this.paste = false
+      this.finishPaste()
       return
     }
     if (this.paste) {
-      if (!this.approval && text) this.insert(safeText(text.replaceAll('\r', '\n')))
+      if (this.approval) this.pasteBlocked = true
+      if (text && !this.pasteBlocked && !this.pasteTooLong) {
+        const fragment = safeText(text.replaceAll('\r', '\n'))
+        if (this.buffer.length + this.pasteText.length + fragment.length > MAX_DRAFT_LENGTH) {
+          this.pasteTooLong = true
+          this.pasteText = ''
+          this.notice(DRAFT_LIMIT_NOTICE)
+        } else {
+          this.pasteText += fragment
+          this.schedule()
+        }
+      }
       return
     }
     if (key.ctrl && key.name === 'c') {
@@ -434,10 +455,25 @@ export class RuntimeTui {
     const chars = graphemes(this.buffer)
     const left = chars.slice(0, this.cursor).join('') + text
     const next = left + chars.slice(this.cursor).join('')
-    if (next.length > 16_384) return
+    if (next.length > MAX_DRAFT_LENGTH) {
+      this.notice(DRAFT_LIMIT_NOTICE)
+      return
+    }
     this.buffer = next
     this.cursor = graphemes(left).length
     this.schedule()
+  }
+
+  private finishPaste(): void {
+    if (!this.paste) return
+    const text = this.pasteText
+    const rejected = this.pasteTooLong || this.pasteBlocked || !!this.approval
+    this.paste = false
+    this.pasteText = ''
+    this.pasteTooLong = false
+    this.pasteBlocked = false
+    if (!rejected && text) this.insert(text)
+    else this.schedule()
   }
 
   private async submit(input: string): Promise<void> {
@@ -496,8 +532,9 @@ export class RuntimeTui {
   private composer(width: number): { lines: string[]; column: number; row: number } {
     const prefix = clipText(this.busy ? '草稿: ' : '你: ', Math.max(0, width - 1))
     const chars = graphemes(this.buffer)
-    const before = prefix + chars.slice(0, this.cursor).join('')
-    const wrapped = wrapText(prefix + this.buffer, width)
+    const preview = this.paste && !this.pasteTooLong && !this.pasteBlocked ? this.pasteText : ''
+    const before = prefix + chars.slice(0, this.cursor).join('') + preview
+    const wrapped = wrapText(before + chars.slice(this.cursor).join(''), width)
     const cursorLines = wrapText(before, width)
     let row = cursorLines.length - 1
     let column = textWidth(cursorLines.at(-1) ?? '')
