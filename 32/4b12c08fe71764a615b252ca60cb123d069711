@@ -1,0 +1,37 @@
+.vibecoding/2026-10-07/e03-s004-session-persistence/failures.md
+  s_08884e0d462e65::t_78989fdf6d60df 1-9
+e2e/session-test-setup.ts
+  s_08884e0d462e65::t_51d21fb5ad329f 1-12
+e2e/src/runtime-tui.test.ts
+  s_08884e0d462e65::t_af56a6c59caa33 110-112,239,241-242,485
+e2e/src/session-persistence.test.ts
+  s_08884e0d462e65::t_5c132f8b8846fa 1-272
+e2e/src/session-store.test.ts
+  s_08884e0d462e65::t_4ab190367691ec 129-160
+e2e/vitest.config.ts
+  s_08884e0d462e65::t_ce9800a203abc5 14
+packages/tui/src/cli.ts
+  s_08884e0d462e65::t_5a69f5b7b5ce00 13-15,125-137,164-182,184-188,225-229,231,236,239,252-253,255,291-297,311,313-325,327,339,343
+packages/tui/src/conversations.ts
+  s_08884e0d462e65::t_efab01ac5a3b31 2,13-14,23,38-43,47,56-57,62-70,74-81,112-115,125,133
+packages/tui/src/runtime-state.ts
+  s_08884e0d462e65::t_73e3a55f6592a9 142-195
+packages/tui/src/runtime-tui.ts
+  s_08884e0d462e65::t_b76e9918f86046 15-17,41-50,54,70-71,143,145-147,168,247-251,264,272-279,281,288,306,314,351-374,525,546,551-566,570,583,639-642,648-655,671-694,830-833
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "324b12c08fe71764a615b252ca60cb123d069711",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
