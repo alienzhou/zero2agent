@@ -1,0 +1,61 @@
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/failures.md
+  s_08884e0d462e65::t_5f8e9959863015 1-8
+e2e/src/checkpoint-live.test.ts
+  s_08884e0d462e65::t_56f4865128e1de 1-93
+e2e/src/checkpoint-runtime.test.ts
+  s_08884e0d462e65::t_0a429edb5c2e5d 1-237
+e2e/src/checkpoint-store.test.ts
+  s_08884e0d462e65::t_b486e5b7539fca 1-284
+e2e/src/helpers/human-terminal.ts
+  s_08884e0d462e65::t_5cd097d84b8127 61-63
+e2e/src/helpers/session-test-setup.ts
+  s_08884e0d462e65::t_099fc9eefb235e 10
+packages/core/src/__tests__/file-mutations.test.ts
+  s_08884e0d462e65::t_521e785cf91bc9 1-125
+packages/core/src/agent.ts
+  s_08884e0d462e65::t_335a375911cc74 1,23,57
+packages/core/src/file-mutations.ts
+  s_08884e0d462e65::t_a71d786d48356c 1-14
+packages/core/src/index.ts
+  s_08884e0d462e65::t_7876745b79a409 74-75
+packages/core/src/loop.ts
+  s_08884e0d462e65::t_eab0f3a035b8a0 1,86-88,167-192,238,425-427
+packages/core/src/tools/delete.ts
+  s_08884e0d462e65::t_f3f8c4f850fffc 27
+packages/core/src/tools/replace-in-file.ts
+  s_08884e0d462e65::t_daffee4d32d634 23
+packages/core/src/tools/types.ts
+  s_08884e0d462e65::t_9b8866f0bf1717 32-33
+packages/core/src/tools/write-file.ts
+  s_08884e0d462e65::t_66dcd5714fc2df 22
+packages/tui/src/checkpoint-store.ts
+  s_08884e0d462e65::t_425e2891f7a5f7 1-845
+packages/tui/src/checkpoint-view.ts
+  s_08884e0d462e65::t_d7184d71ddf765 1-99
+packages/tui/src/cli.ts
+  s_08884e0d462e65::t_f6e6041c3d3e9d 16-21,192-195,208-241,259-292,345,365,399-400,403,459-475
+packages/tui/src/conversations.ts
+  s_08884e0d462e65::t_eab9e35a800c34 1-3,24-26,48-101
+packages/tui/src/runtime-tui.ts
+  s_08884e0d462e65::t_c06f2fca2f577e 15-16,52-57,62,90,97-98,130-134,188,412-414,418-421,431-452,660-716,812,816,857,862-865,879,885-888
+scripts/e03-s006-checkpoint-benchmark.mjs
+  s_08884e0d462e65::t_f5cdd84fd343e5 1-46
+scripts/e03-s006-checkpoint-demo.mjs
+  s_08884e0d462e65::t_42c9de71e463c4 1-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1c588fc2a519fb13c467a2bf3396a828dd766fc1",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
