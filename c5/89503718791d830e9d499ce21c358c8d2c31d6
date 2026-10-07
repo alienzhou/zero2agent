@@ -1,0 +1,21 @@
+e2e/src/helpers/live-pty.ts
+  s_08884e0d462e65::t_92630c81506df3 28-29,109-115
+e2e/src/runtime-live.test.ts
+  s_08884e0d462e65::t_64dfd96ba2a64f 1-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c589503718791d830e9d499ce21c358c8d2c31d6",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
