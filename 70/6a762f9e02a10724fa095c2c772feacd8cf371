@@ -1,0 +1,21 @@
+packages/tui/src/runtime-tui.ts
+  s_08884e0d462e65::t_3d5eb1547f7a05 25,84,205-206,376,380-382
+e2e/src/runtime-tui.test.ts
+  s_08884e0d462e65::t_3d5eb1547f7a05 78,80-81,86-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "706a762f9e02a10724fa095c2c772feacd8cf371",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
