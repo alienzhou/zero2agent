@@ -1,0 +1,27 @@
+.authoring/site/chapters/epic03-story004/author.cjs
+  s_08884e0d462e65::t_383995d2cd4548 66
+.authoring/site/chapters/epic03-story004/review.md
+  s_08884e0d462e65::t_8c5c21b865fbc7 7,9
+.authoring/site/chapters/epic03-story004/verification/browser-checks.json
+  s_08884e0d462e65::t_185b7617d536ed 49,51,174,176,179
+.authoring/site/chapters/epic03-story004/verification/second-failure.json
+  s_08884e0d462e65::t_e5d8403eb7974b 1-186
+site/chapters/epic03-story004/07-save-twice.html
+  s_08884e0d462e65::t_ebe6da3b6aff71 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3248bd968bca54a9a3952bf3d4474dc39985a67a",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
