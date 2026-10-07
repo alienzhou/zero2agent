@@ -11,6 +11,12 @@ import { Agent, TurnCancelledError } from '../packages/core/dist/index.js';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const cwd = await mkdtemp(join(tmpdir(), 'zero2agent-runtime-'));
 const requests = [];
+let agent;
+async function within(work, label) {
+  let timer;
+  try { return await Promise.race([work, new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Timed out: ' + label)), 10_000); })]); }
+  finally { clearTimeout(timer); }
+}
 let slowResponse;
 let slowReady;
 const slowStarted = new Promise(resolve => { slowReady = resolve; });
@@ -79,13 +85,13 @@ try {
     await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', code => { process.exitCode = code ?? 1; resolve(); }); });
   } else {
     const events = [];
-    const agent = new Agent({
+    agent = new Agent({
       cwd, config: { apiKey: 'offline-fixture', baseURL, model: 'offline-fixture' },
       context: { contextWindow: 200000 },
       permissions: { requestApproval: async request => ({ requestId: request.id, decision: request.input.path === 'first.txt' ? 'deny' : 'allow' }) },
       events: { onEvent: event => events.push(event) },
     });
-    await agent.run('repeat');
+    await within(agent.run('repeat'), 'tool round');
     await assert.rejects(readFile(join(cwd, 'first.txt')));
     assert.equal(await readFile(join(cwd, 'second.txt'), 'utf8'), 'Hello from the runtime lesson.\n');
     assert(events.some(e => e.type === 'tool-state' && e.toolCallId === 'first' && e.status === 'denied'));
@@ -94,12 +100,12 @@ try {
     assert.deepEqual(pairs.map(p => p.tool_use_id), ['first', 'second']);
     const running = agent.run('slow');
     const cancellation = assert.rejects(running, TurnCancelledError);
-    await slowStarted;
+    await within(slowStarted, 'slow HTTP request');
     const countAtCancel = requests.length;
     const disconnected = new Promise(resolve => slowResponse.once('close', resolve));
     assert.equal(agent.cancelTurn(), true);
-    await cancellation;
-    await disconnected;
+    await within(cancellation, 'cancelled Agent');
+    await within(disconnected, 'HTTP disconnect');
     assert.equal(requests.length, countAtCancel);
     assert.equal(events.at(-1).type, 'turn-end');
     assert.equal(events.at(-1).status, 'cancelled');
@@ -107,6 +113,8 @@ try {
     console.log(JSON.stringify({ fixture: 'local SSE; real SDK/Core/tools', cases: ['deny first write', 'approve second write', 'pair both results', 'cancel live HTTP stream', 'no subsequent request', 'release after cancellation'], passed: true, events: events.map(e => ({ type: e.type, seq: e.seq, ...(e.status && { status: e.status }), ...(e.toolCallId && { toolCallId: e.toolCallId }) })) }, null, 2));
   }
 } finally {
+  agent?.cancelTurn();
+  agent?.cancelCompaction();
   server.closeAllConnections();
   await new Promise(resolve => server.close(resolve));
   await rm(cwd, { recursive: true, force: true });

@@ -36,5 +36,5 @@ try {
  assert(raw.slice(from).includes('\x1b[?1049l'));
  assert(raw.slice(from).includes('\x1b[?25h'));
  await writeFile(out+'/raw-pty.txt',raw);
- await writeFile(out+'/capture.json',JSON.stringify({platform:process.platform,viewport:[96,30],narrow:[42,18],fixture:'local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0',head:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),capturedAt:new Date().toISOString(),restored:true},null,2));
+ await writeFile(out+'/capture.json',JSON.stringify({platform:process.platform,viewport:[96,30],narrow:[42,18],fixture:'local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0',head:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),capturedAt:new Date().toISOString(),restorationEscapesObserved:true},null,2));
 } finally { if(!exited)pty.kill('SIGKILL');await browser.close(); }

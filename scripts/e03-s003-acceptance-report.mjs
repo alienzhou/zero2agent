@@ -16,7 +16,7 @@ async function sourceHashes(dir, result = {}) {
   }
   return result;
 }
-const report = { startedAt: new Date().toISOString(), head: git('rev-parse', 'HEAD'), platform: process.platform, arch: process.arch, node: process.version, sourceHashes: { ...await sourceHashes('packages/core/src'), ...await sourceHashes('packages/tui/src') }, checks: [] };
+const report = { startedAt: new Date().toISOString(), head: git('rev-parse', 'HEAD'), platform: process.platform, arch: process.arch, node: process.version, sourceHashes: { ...await sourceHashes('packages/core/src'), ...await sourceHashes('packages/tui/src'), ...await sourceHashes('e2e/src') }, passed: false, checks: [] };
 const changedTs = git('diff', '--name-only', 'caa47ea', '--', 'packages', 'e2e').split('\n').filter(name => name.endsWith('.ts'));
 const commands = [
   ['build', 'pnpm', ['build']],
@@ -30,13 +30,25 @@ const commands = [
   ['whitespace', 'git', ['diff', '--check', 'caa47ea']],
   ...(process.argv.includes('--live') ? [['live', 'pnpm', ['--filter', '@zero2agent/e2e', 'exec', 'vitest', 'run', 'src/runtime-live.test.ts']]] : []),
 ];
+await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');
 for (const [name, command, args] of commands) {
   const start = Date.now();
   let text = '';
   const child = spawn(command, args, { cwd: root, env: { ...process.env, E2E_LIVE: name === 'live' ? '1' : '0', E2E_EVIDENCE_DIR: name === 'live' ? path.join(out, 'live-evidence') : '', NO_COLOR: '1' } });
   child.stdout.on('data', data => { text += data; });
   child.stderr.on('data', data => { text += data; });
-  const exitCode = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', code => resolve(code ?? 1)); });
+  let timedOut = false;
+  let forceKill;
+  const deadline = setTimeout(() => {
+    timedOut = true;
+    child.kill('SIGTERM');
+    forceKill = setTimeout(() => child.kill('SIGKILL'), 3000);
+  }, name === 'offline' ? 600_000 : name === 'live' ? 360_000 : 120_000);
+  let exitCode;
+  try {
+    exitCode = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', code => resolve(code ?? 1)); });
+  } finally { clearTimeout(deadline); clearTimeout(forceKill); }
+  if (timedOut) { exitCode = 124; text += '\nAcceptance command timed out.\n'; }
   await writeFile(path.join(out, name + '.txt'), text);
   report.checks.push({ name, command: [command, ...args], exitCode, elapsedMs: Date.now() - start, log: name + '.txt' });
   await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');
@@ -44,5 +56,8 @@ for (const [name, command, args] of commands) {
   if (exitCode !== 0) { console.log(text.slice(-6000)); process.exitCode = 1; break; }
 }
 report.completedAt = new Date().toISOString();
-report.passed = report.checks.length === commands.length && report.checks.every(check => check.exitCode === 0);
+report.finalSourceHashes = { ...await sourceHashes('packages/core/src'), ...await sourceHashes('packages/tui/src'), ...await sourceHashes('e2e/src') };
+report.sourceStable = JSON.stringify(report.sourceHashes) === JSON.stringify(report.finalSourceHashes);
+report.passed = report.sourceStable && report.checks.length === commands.length && report.checks.every(check => check.exitCode === 0);
 await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');
+if (!report.passed) process.exitCode = 1;
