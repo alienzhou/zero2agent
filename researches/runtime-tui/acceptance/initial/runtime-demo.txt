@@ -1,0 +1,114 @@
+{
+  "fixture": "local SSE; real SDK/Core/tools",
+  "cases": [
+    "deny first write",
+    "approve second write",
+    "pair both results",
+    "cancel live HTTP stream",
+    "no subsequent request",
+    "release after cancellation"
+  ],
+  "passed": true,
+  "events": [
+    {
+      "type": "turn-start",
+      "seq": 1
+    },
+    {
+      "type": "phase",
+      "seq": 2
+    },
+    {
+      "type": "phase",
+      "seq": 3
+    },
+    {
+      "type": "phase",
+      "seq": 4
+    },
+    {
+      "type": "tool-state",
+      "seq": 5,
+      "status": "pending",
+      "toolCallId": "first"
+    },
+    {
+      "type": "tool-state",
+      "seq": 6,
+      "status": "pending",
+      "toolCallId": "second"
+    },
+    {
+      "type": "tool-state",
+      "seq": 7,
+      "status": "approval",
+      "toolCallId": "first"
+    },
+    {
+      "type": "tool-state",
+      "seq": 8,
+      "status": "denied",
+      "toolCallId": "first"
+    },
+    {
+      "type": "tool-state",
+      "seq": 9,
+      "status": "approval",
+      "toolCallId": "second"
+    },
+    {
+      "type": "tool-state",
+      "seq": 10,
+      "status": "running",
+      "toolCallId": "second"
+    },
+    {
+      "type": "tool-state",
+      "seq": 11,
+      "status": "completed",
+      "toolCallId": "second"
+    },
+    {
+      "type": "phase",
+      "seq": 12
+    },
+    {
+      "type": "phase",
+      "seq": 13
+    },
+    {
+      "type": "phase",
+      "seq": 14
+    },
+    {
+      "type": "text-delta",
+      "seq": 15
+    },
+    {
+      "type": "turn-end",
+      "seq": 16,
+      "status": "completed"
+    },
+    {
+      "type": "turn-start",
+      "seq": 1
+    },
+    {
+      "type": "phase",
+      "seq": 2
+    },
+    {
+      "type": "phase",
+      "seq": 3
+    },
+    {
+      "type": "phase",
+      "seq": 4
+    },
+    {
+      "type": "turn-end",
+      "seq": 5,
+      "status": "cancelled"
+    }
+  ]
+}

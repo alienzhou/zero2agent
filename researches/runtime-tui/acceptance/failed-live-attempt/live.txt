@@ -1,0 +1,39 @@
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e03-s003/e2e
+
+ ❯ src/runtime-live.test.ts (3 tests | 1 failed) 85608ms
+     × cancels a real model-selected foreground terminal and keeps completed evidence 75127ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/runtime-live.test.ts > E03-S003 real provider through production TUI and PTY > cancels a real model-selected foreground terminal and keeps completed evidence
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/runtime-live.test.ts:136:86
+    134|         'Use terminal once to run exactly: printf started > ready.txt;…
+    135|       )
+    136|       await expect.poll(() => exists(join(p.cwd, 'ready.txt')), { time…
+       |                                                                                      ^
+    137|       const count = p.requests.length
+    138|       p.session.write('\x03')
+
+Caused by: Error: Matcher did not succeed in time.
+ ❯ src/runtime-live.test.ts:136:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  13:16:25
+   Duration  85.74s (transform 28ms, setup 0ms, import 56ms, tests 85.61s, environment 0ms)
+
+undefined
+/Users/zhouhongxuan/program/works/zero2agent-e03-s003/e2e:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run src/runtime-live.test.ts

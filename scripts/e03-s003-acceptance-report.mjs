@@ -2,6 +2,7 @@
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdir, readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { gzipSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -57,8 +58,9 @@ for (const [name, command, args] of commands) {
       text += '\nLive gate requires all three tests to execute and pass; skipped tests do not satisfy it.\n';
     }
   }
-  await writeFile(path.join(out, name + '.txt'), text);
-  report.checks.push({ name, command: [command, ...args], exitCode, elapsedMs: Date.now() - start, log: name + '.txt' });
+  const log = name + (['offline', 'lint'].includes(name) ? '.txt.gz' : '.txt');
+  await writeFile(path.join(out, log), log.endsWith('.gz') ? gzipSync(text) : text);
+  report.checks.push({ name, command: [command, ...args], exitCode, elapsedMs: Date.now() - start, log });
   await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(`${name}: ${exitCode === 0 ? 'PASS' : 'FAIL'} (${Date.now() - start}ms)`);
   if (exitCode !== 0) { console.log(text.slice(-6000)); process.exitCode = 1; break; }

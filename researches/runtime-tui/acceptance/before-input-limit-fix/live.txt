@@ -1,0 +1,14 @@
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e03-s003/e2e
+
+ ✓ src/runtime-live.test.ts (3 tests) 29620ms
+     ✓ reads a real file, renders the answer and starts a fresh conversation  3333ms
+     ✓ denies and then approves distinct real write requests  10027ms
+     ✓ cancels a real model-selected foreground terminal and keeps completed evidence  16258ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  13:27:28
+   Duration  29.74s (transform 25ms, setup 0ms, import 49ms, tests 29.62s, environment 0ms)
+
+JSON report written to /Users/zhouhongxuan/program/works/zero2agent-e03-s003/researches/runtime-tui/acceptance/live-results.json
