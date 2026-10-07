@@ -1,0 +1,25 @@
+.vibecoding/2026-10-07/e03-s005-runtime-logging/failures.md
+  s_08884e0d462e65::t_9c102b70cd0173 12-13
+e2e/src/runtime-tui.test.ts
+  s_08884e0d462e65::t_0c7514f0a55e29 610,621
+researches/runtime-logging/acceptance/second-offline-build.txt
+  s_08884e0d462e65::t_c0b975a342453d 1-13
+researches/runtime-logging/acceptance/second-offline-summary.json
+  s_08884e0d462e65::t_fec6654e5a0d17 1-276
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bb184b146a169b46390c023de68453f410d000e7",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
