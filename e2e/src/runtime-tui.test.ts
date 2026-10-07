@@ -164,4 +164,71 @@ describe.skipIf(process.platform === 'win32')('E03-S003: default TUI over real S
     expect(p.requests).toHaveLength(0)
     await quit(p.session)
   })
+
+  it('approves only an explicit decision, preserves draft input and expands tool details', async () => {
+    let first: { res: ServerResponse; request: Request } | undefined
+    const p = await start((res, request, index) => {
+      if (index === 1) first = { res, request }
+      else reply(res, request, text('approved-operation-finished'))
+    })
+    const from = await send(p.session, 'please write')
+    await expect.poll(() => Boolean(first)).toBe(true)
+    p.session.write('next-draft')
+    await p.session.waitFor('草稿: next-draft', from)
+    reply(first!.res, first!.request, call('write-allowed', 'write_file', { path: 'allowed.txt', content: 'FIRST-LINE\n'.repeat(30) + 'TOOL-DETAIL-END' }))
+    await p.session.waitFor('允许这次操作', from)
+    p.session.write('\x1b[200~y\r\x1b[201~')
+    await new Promise(resolve => setTimeout(resolve, 100))
+    await expect(fs.access(path.join(p.cwd, 'allowed.txt'))).rejects.toThrow()
+    p.session.write('y')
+    await p.session.waitFor('approved-operation-finished', from)
+    await p.session.waitFor('你: next-draft', from)
+    expect(await fs.readFile(path.join(p.cwd, 'allowed.txt'), 'utf8')).toContain('TOOL-DETAIL-END')
+    const detailsFrom = p.session.output.length
+    p.session.write('\x0f')
+    await p.session.waitFor('TOOL-DETAIL-END', detailsFrom)
+    p.session.write('\x15')
+    await quit(p.session)
+  })
+
+  it('cancels an approval without side effects and ignores its late answer', async () => {
+    const p = await start((res, request, index) => reply(res, request, index === 1 ? call('cancel-approval', 'write_file', { path: 'never.txt', content: 'forbidden' }) : text('next-answer')))
+    const from = await send(p.session, 'request approval')
+    await p.session.waitFor('允许这次操作', from)
+    p.session.write('\x03')
+    await p.session.waitFor('本轮已取消', from)
+    await p.session.waitFor('你: ', from)
+    await expect(fs.access(path.join(p.cwd, 'never.txt'))).rejects.toThrow()
+    expect(p.requests).toHaveLength(1)
+    await send(p.session, 'continue')
+    await p.session.waitFor('next-answer', from)
+    await quit(p.session)
+  })
+
+  it('shows explicit compaction progress and returns to the composer', async () => {
+    let summary: { res: ServerResponse; request: Request } | undefined
+    const p = await start((res, request) => {
+      if (!request.stream) summary = { res, request }
+      else reply(res, request, text('a useful observation with sufficient history. '.repeat(80)))
+    })
+    let from = await send(p.session, 'first question')
+    await p.session.waitFor('你: ', from)
+    from = await send(p.session, '/compact')
+    await expect.poll(() => Boolean(summary)).toBe(true)
+    await p.session.waitFor('正在压缩上下文', from)
+    reply(summary!.res, summary!.request, text('Summary: important observations retained.'))
+    await p.session.waitFor('已压缩工作上下文', from)
+    await p.session.waitFor('你: ', from)
+    await quit(p.session)
+  })
+
+  it('restores screen modes on SIGTERM while the provider is pending', async () => {
+    const p = await start(() => {})
+    await send(p.session, 'pending')
+    await expect.poll(() => p.requests.length).toBe(1)
+    p.session.signal('SIGTERM')
+    expect(await p.session.waitExit()).toBe(143)
+    expect(p.session.output).toContain('\x1b[?1049l')
+    expect(p.session.output).toContain('\x1b[?2004l')
+  })
 })
