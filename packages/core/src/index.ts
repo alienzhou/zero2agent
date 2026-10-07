@@ -7,6 +7,8 @@
 export { Agent } from './agent.js'
 export type { AgentOptions } from './agent.js'
 export { Session } from './session.js'
+export { validateSessionSnapshot } from './session-snapshot.js'
+export type { SessionSnapshot } from './session-snapshot.js'
 export { ContextBudgetError } from './context-budget.js'
 export type { ContextOptions } from './context-budget.js'
 export type { CompactionEvent } from './context-manager.js'

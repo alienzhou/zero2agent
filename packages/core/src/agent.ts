@@ -11,6 +11,7 @@ import { PermissionController, type PermissionOptions } from './permissions.js'
 import { Session } from './session.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { TurnCancelledError } from './runtime.js'
+import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
   config?: LLMConfig
@@ -114,6 +115,19 @@ export class Agent {
   /** Inspect a detached snapshot, never the writable session history. */
   getHistory(): Anthropic.MessageParam[] {
     return this.session.getHistory()
+  }
+
+  snapshot(): SessionSnapshot {
+    if (this.active) throw new Error('Wait for the running operation before saving.')
+    return this.session.snapshot()
+  }
+
+  restore(snapshot: unknown): void {
+    if (this.active) throw new Error('Wait for the running operation before restoring.')
+    this.session.restore(snapshot)
+    // Approval state is process-local and never inherited from a saved conversation.
+    this.permissions.cancelPending()
+    this.permissions = new PermissionController(this.options.permissions)
   }
 
   /**
