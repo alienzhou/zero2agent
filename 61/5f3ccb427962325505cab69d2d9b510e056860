@@ -1,0 +1,24 @@
+packages/tui/src/human-terminal.ts
+  s_08884e0d462e65::t_56db470a1aa48b 337-339,412
+packages/tui/src/index.ts
+  s_08884e0d462e65::t_56db470a1aa48b 1-2
+packages/tui/src/cli.ts
+  s_08884e0d462e65::t_56db470a1aa48b 12,147-153,164,166,180-183
+  s_08884e0d462e65::t_00895a6918e094 184
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "615f3ccb427962325505cab69d2d9b510e056860",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
