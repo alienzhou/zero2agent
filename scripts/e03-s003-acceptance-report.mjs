@@ -25,6 +25,7 @@ const commands = [
   ['lint', 'pnpm', ['lint']],
   ['format', 'pnpm', ['exec', 'prettier', '--check', ...changedTs]],
   ['runtime-demo', process.execPath, ['scripts/e03-s003-runtime-demo.mjs']],
+  ['terminal-restore', process.execPath, ['scripts/e03-s003-terminal-restore.mjs']],
   ['site-build', 'pnpm', ['site:build']],
   ['site-check', 'pnpm', ['site:check']],
   ['whitespace', 'git', ['diff', '--check', 'caa47ea']],

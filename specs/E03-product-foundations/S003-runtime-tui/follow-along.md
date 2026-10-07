@@ -2,9 +2,10 @@
 
 [课程](./README.md) | [设计](./details/01-technical-design.md) | [验收](./details/03-verification-checklist.md)
 
-需要 Node >=22、pnpm >=9，以及能运行项目 PTY 依赖的终端。从仓库根目录开始：
+需要 Node >=22、pnpm >=9，以及能运行项目 PTY 依赖的终端。从本课固定版本、仓库根目录开始：
 
 ```sh
+git checkout E03-S003-runtime-tui
 pnpm install --frozen-lockfile
 pnpm build
 node scripts/e03-s003-runtime-demo.mjs
@@ -53,10 +54,11 @@ SDK 宿主可使用 events.onEvent 渲染自己的界面，用 permissions.reque
 ## 运行测试
 
 ```sh
-pnpm test
-pnpm lint
-pnpm site:build
-pnpm site:check
+pnpm test:runtime
+# 已配置模型时，额外验证真实模型 + 生产 TUI + PTY 的三条流程
+pnpm test:runtime --live
 ```
+
+门禁依次执行构建、完整离线回归、类型、lint、改动 TypeScript 的格式检查、确定性 demo、真实终端恢复和课程检查。日志与源码哈希保存到 `researches/runtime-tui/acceptance/`，再次运行会更新该目录。验收保留既往失败归档，当前结果单独记录。
 
 真实模型默认跳过。针对本课的精确测试、运行环境和结果见[验收清单](./details/03-verification-checklist.md)。
