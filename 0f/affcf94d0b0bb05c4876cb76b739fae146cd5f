@@ -1,0 +1,31 @@
+researches/runtime-tui/README.md
+  s_08884e0d462e65::t_ac4a45b9e8498d 1-49
+researches/runtime-tui/claude-code.md
+  s_08884e0d462e65::t_a0f8801d6db826 1-38
+researches/runtime-tui/codex.md
+  s_08884e0d462e65::t_a422fc972b2559 1-38
+researches/runtime-tui/gemini-cli.md
+  s_08884e0d462e65::t_2c17b6c59d854d 1-40
+researches/runtime-tui/implementation-options.md
+  s_08884e0d462e65::t_e042b23f81c4b7 1-43
+researches/runtime-tui/opencode.md
+  s_08884e0d462e65::t_32eb3cab2d013f 1-40
+researches/runtime-tui/source-pins.json
+  s_08884e0d462e65::t_342cb49ace4efb 1-290
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0faffcf94d0b0bb05c4876cb76b739fae146cd5f",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
