@@ -27,6 +27,10 @@ node packages/tui/dist/cli.js --no-save
 
 `--list-sessions` 不需要 API key。`--continue` 选择当前工作目录最近更新的会话；损坏或仍在运行时会明确失败，不偷偷退回较旧记录。`--no-save` 使用临时会话，不能同时列出或恢复。
 
+![会话选择器的真实 PTY 输出](../../../researches/session-persistence/acceptance/screens/02-selector.png)
+
+上图来自本课离线演示的真实 CLI/PTY 输出，经 xterm 重放；不是竞品截图。
+
 ## 哪些数据值得跨越进程边界
 
 | 数据 | 保存内容 | 重启后的处理 |

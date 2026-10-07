@@ -40,6 +40,7 @@ async function cli(args, interactive = false) {
   return output;
 }
 try {
+  console.log(`临时工作目录：${cwd}（退出自动删除）`);
   console.log('进程 A：保存识别码。');
   await cli(['请记住 ALPHA-42，稍后我会再次询问。']);
   const store = await SessionStore.open(cwd, env.ZERO2AGENT_SESSION_DIR);

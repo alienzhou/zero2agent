@@ -18,7 +18,7 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新课程：[E03-S003：运行状态与 TUI](../../specs/E03-product-foundations/S003-runtime-tui/README.md)。从结构化事件、运行取消到可连续操作的终端界面，包含草稿、粘贴、历史、工具详情、审批和人工 PTY 交接。先做[离线跟练](../../specs/E03-product-foundations/S003-runtime-tui/follow-along.md)，再看[验收范围](../../specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md)。此前 S002 与在线课程站点已分别通过 PR #17、#18 合入 main；新课代码、完整课程和验收已通过 [PR #19](https://github.com/alienzhou/zero2agent/pull/19) 交付，固定版本 `E03-S003-runtime-tui`，待人工审查与合并，未部署站点。
+最新课程：[E03-S004：会话落盘与恢复](../../specs/E03-product-foundations/S004-session-persistence/README.md)。将原始消息与已采用摘要保存到磁盘，通过列表找到会话，重启后继续对话。先做[离线跟练](../../specs/E03-product-foundations/S004-session-persistence/follow-along.md)，再看[验收范围](../../specs/E03-product-foundations/S004-session-persistence/details/03-verification-checklist.md)。S003 已通过 PR #19 合入 main；新课交付状态以验收页为准，在线站点尚未部署本章。
 
 ---
 
@@ -28,7 +28,7 @@
 |------|----------|--------------------|------|------|
 | Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | ✅ Done | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001/S002 已合入；S003 运行状态与 TUI | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S003 已合入；S004 会话恢复 | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理复杂异常与长上下文问题 | 理解异常处理、上下文管理与稳定性优化 | 📝 Planned | Coming soon |
 | Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解 AGENTS、Skills、MCP、Hooks 等扩展能力 | 📝 Planned | Coming soon |
 

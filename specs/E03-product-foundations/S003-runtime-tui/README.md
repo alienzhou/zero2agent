@@ -4,7 +4,7 @@
 
 [Epic 3](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
-固定跟练版本：`E03-S003-runtime-tui`。[PR #19](https://github.com/alienzhou/zero2agent/pull/19) 已交付，等待人工审查与合并；在线站点尚未部署本章。
+固定跟练版本：`E03-S003-runtime-tui`。[PR #19](https://github.com/alienzhou/zero2agent/pull/19) 已合入 main；在线站点尚未部署本章。
 
 ## 终端停住了，它是在思考还是等你回答
 
@@ -78,4 +78,4 @@ Ctrl-C 触发 Agent.cancelTurn()，界面先显示“正在取消”。模型请
 
 [总览](./details/00-overview.md) | [Backlog](./details/04-backlog.md) | [竞品研究](../../../researches/runtime-tui/README.md)
 
-上一篇：[E03-S002 权限与 Approval](../S002-permissions/README.md) | 下一篇：E03-S004 会话落盘与恢复（待实现）
+上一篇：[E03-S002 权限与 Approval](../S002-permissions/README.md) | 下一篇：[E03-S004 会话落盘与恢复](../S004-session-persistence/README.md)

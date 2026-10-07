@@ -17,13 +17,14 @@ This directory contains retrospective notes and lessons learned.
 | [E03-S001-multi-turn.md](./E03-S001-multi-turn.md) | E03-S001 进程内多轮会话与上下文压缩 | 历史所有权、工具副作用证据、预算闸门与分级压缩；已合入 main、已打 Tag，未对外发布 |
 | [E02-S004-human-terminal.md](./E02-S004-human-terminal.md) | E02-S004 人工交互终端 | 输入所有权、PTY 恢复、进程组清理和真实断连；两项试用通过，脱敏历史已合入 main，未打 Tag |
 
+| [E03-S002-permissions-approval.md](./E03-S002-permissions-approval.md) | E03-S002 权限与一次审批 | 整批快照、有限等待、路径变化、SSE/PTY 与真实模型验收；已通过 PR #17 合入 main，课程未发布 |
+| [E03-S003-runtime-tui.md](./E03-S003-runtime-tui.md) | E03-S003 运行状态与 TUI | 事件与控制、取消证据、连续输入体验与跨模式验收；已通过 PR #19 合入 main，原验收证据保留 |
+
 ## Local implementation, not released
 
 | Retro | Iteration | Notes |
 |---|---|---|
-| [E03-S002-permissions-approval.md](./E03-S002-permissions-approval.md) | E03-S002 权限与一次审批 | 整批快照、有限等待、路径变化、SSE/PTY 与真实模型验收；已通过 PR #17 合入 main，课程未发布 |
-
-| [E03-S003-runtime-tui.md](./E03-S003-runtime-tui.md) | E03-S003 运行状态与 TUI | 事件与控制、取消证据、连续输入体验与跨模式验收；本地实现，当前验收见课程 |
+| [E03-S004-session-persistence.md](./E03-S004-session-persistence.md) | E03-S004 会话落盘与恢复 | 快照边界、冲突与失败反馈、跨进程验收及富图文课程 |
 
 ## Directory structure
 

@@ -107,7 +107,7 @@ The course content is organized into four layers:
 | ---- | ---- | ---- |
 | [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
 | Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
-| Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S002 merged; S003 runtime and TUI |
+| Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S003 merged; S004 session persistence |
 | Epic 4: Robustness and Context Management | Handle failures, long context, and complex runtime situations | Planned |
 | Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
 
@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: [E03-S003: Runtime visibility and TUI](./specs/E03-product-foundations/S003-runtime-tui/README.md) adds identified runtime events, turn cancellation, editable drafts, tool details, approvals, and human terminal handoff. Try the [offline walkthrough](./specs/E03-product-foundations/S003-runtime-tui/follow-along.md) and inspect the [verification checklist](./specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md) for current evidence and review status. Course sources and the [online lessons](./docs/site.md) are maintained in this repository. S002 was merged through [PR #17](https://github.com/alienzhou/zero2agent/pull/17).
+**Latest update**: [E03-S004: Session persistence and resume](./specs/E03-product-foundations/S004-session-persistence/README.md) adds automatic saving, a session picker, cross-process resume, and explicit failure/conflict handling while preserving existing interactions. Includes 20 illustrated pages and an [offline walkthrough](./specs/E03-product-foundations/S004-session-persistence/follow-along.md). See the [verification checklist](./specs/E03-product-foundations/S004-session-persistence/details/03-verification-checklist.md) for evidence and human review status. S003 was merged through [PR #19](https://github.com/alienzhou/zero2agent/pull/19).
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -171,7 +171,8 @@ zero2agent/
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | Human Bash / PTY Handoff | Done; merged into main |
 | [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | Multi-turn sessions and context compaction | Done; merged and tagged |
 | [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | Permissions and single-call Approval | Done; merged and tagged |
-| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | Runtime events, turn cancellation and interactive TUI | Implemented and verified; awaiting merge to main |
+| [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | Runtime events, turn cancellation and interactive TUI | Done; merged into main |
+| [E03-S004](./specs/E03-product-foundations/S004-session-persistence/README.md) | Automatic saving, session browser and resume | Implemented; verification and review tracked in the lesson |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

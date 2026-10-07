@@ -77,9 +77,19 @@ git checkout main
 
 ## [Unreleased]
 
-### E03-S003-runtime-tui（实现与验收完成，待合入 main）
+### E03-S004-session-persistence（实现完成，验收与审阅见课程）
 
-[PR #19](https://github.com/alienzhou/zero2agent/pull/19)；固定跟练 Tag：`E03-S003-runtime-tui`。人工审查与合并待完成，站点未部署。
+所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S004-session-persistence/README.md)
+
+- 保存版本化完整消息与已采用摘要；按真实工作目录隔离，独占发布不可变 revision，显式报告损坏与冲突。
+- 运行前 pending、结算后保存；中断恢复只还原上次结算历史，不重放旧工具、旧审批或旧进程。
+- TUI 会话列表、历史工具投影与保存状态；/resume、/session、/save、--resume、--continue、--list-sessions 和 --no-save，plain/单次/管道共用控制器。
+- 保留旧交互并增加跨进程、真实 PTY SIGKILL 与真实服务回忆验证，结果与平台见[验收](./specs/E03-product-foundations/S004-session-persistence/details/03-verification-checklist.md)。
+- 20 页图文课程、五篇 Spec、离线演示、延伸阅读与 [复盘](./retros/E03-S004-session-persistence.md)；AGENTS.md 补充持久化的长期规则。
+
+### E03-S003-runtime-tui（Done，已合入 main）
+
+[PR #19](https://github.com/alienzhou/zero2agent/pull/19)；固定跟练 Tag：`E03-S003-runtime-tui`。已合入 main，站点未部署本章。
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S003-runtime-tui/README.md)
 
