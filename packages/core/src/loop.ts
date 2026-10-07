@@ -3,6 +3,7 @@
  * Reasoning + Acting 的核心逻辑，支持流式输出
  */
 import type Anthropic from '@anthropic-ai/sdk'
+import type { RuntimeEvent } from './runtime.js'
 import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
 import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
 import { Session } from './session.js'
@@ -42,6 +43,8 @@ function notifyObserver(notify: () => unknown): void {
  * 通知不参与控制：忽略同步异常和异步拒绝，不等待异步回调完成。
  */
 export interface LoopEventHandlers {
+  /** Structured presentation events; observers cannot alter execution. */
+  onEvent?: (event: RuntimeEvent) => void
   /** 模型文本片段及 Harness 状态提示 */
   onText?: (text: string) => void
   /** 工具开始执行 */
@@ -128,6 +131,7 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  signal?: AbortSignal
   /** Omit for a one-shot run; reuse explicitly for a multi-turn conversation. */
   session?: Session
   permissions?: PermissionOptions

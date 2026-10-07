@@ -60,3 +60,6 @@ export type {
   ApprovalRequest,
   ApprovalResponse,
 } from './permissions.js'
+
+export { TurnCancelledError } from './runtime.js'
+export type { RuntimeEvent } from './runtime.js'
