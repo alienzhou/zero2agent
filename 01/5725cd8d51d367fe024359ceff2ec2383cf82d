@@ -1,0 +1,99 @@
+.authoring/site/README.md
+  s_08884e0d462e65::t_71a0bff1fb2dff 19
+.vibecoding/2026-10-07/e03-s004-session-persistence/dialogue.md
+  s_08884e0d462e65::t_cc3a0f5c0c63b4 9-13
+.vibecoding/2026-10-07/e03-s004-session-persistence/failures.md
+  s_08884e0d462e65::t_dade21c06339dc 12-13
+.vibecoding/2026-10-07/e03-s004-session-persistence/interaction-compatibility.md
+  s_08884e0d462e65::t_74a417766a4384 1-21
+CHANGELOG.md
+  s_08884e0d462e65::t_2c8043ab60cc6f 80,82-92
+README.en.md
+  s_08884e0d462e65::t_fdc66f0e64aa27 110,160,174-175
+README.md
+  s_08884e0d462e65::t_f2e3aa8f19a959 114,164,178-179
+docs/roadmap/README.md
+  s_08884e0d462e65::t_e22e19b35159a9 21,31
+researches/session-persistence/acceptance/build.txt
+  s_08884e0d462e65::t_099321c6446c25 1-13
+researches/session-persistence/acceptance/final-verdict.json
+  s_08884e0d462e65::t_cd71a7f07f84bc 1-131
+researches/session-persistence/acceptance/first-live-run/live-evidence/session-resume.json
+  s_08884e0d462e65::t_b1b98d06211e7e 1-451
+researches/session-persistence/acceptance/first-live-run/live-results.json
+  s_08884e0d462e65::t_47514c6b32a9ca 1
+researches/session-persistence/acceptance/first-live-run/summary.json
+  s_08884e0d462e65::t_fea92c7fbb1b1e 1-398
+researches/session-persistence/acceptance/format.txt
+  s_08884e0d462e65::t_2180d0e2cbb916 1-2
+researches/session-persistence/acceptance/live-evidence/session-resume.json
+  s_08884e0d462e65::t_92b3f69e00a783 1-451
+researches/session-persistence/acceptance/live-results.json
+  s_08884e0d462e65::t_7201ed01251d1b 1
+researches/session-persistence/acceptance/runtime-demo.txt
+  s_08884e0d462e65::t_c9359ec2d48d44 1-114
+researches/session-persistence/acceptance/screens/01-restored.txt
+  s_08884e0d462e65::t_d415ef8fd62d33 1-30
+researches/session-persistence/acceptance/screens/02-selector.txt
+  s_08884e0d462e65::t_b8f1683238ea47 1-30
+researches/session-persistence/acceptance/screens/03-narrow-selector.txt
+  s_08884e0d462e65::t_6acf03266a2bd8 1-18
+researches/session-persistence/acceptance/screens/04-history.txt
+  s_08884e0d462e65::t_610a9f9c43c148 1-30
+researches/session-persistence/acceptance/screens/05-new-session.txt
+  s_08884e0d462e65::t_aca0ea248683e7 1-30
+researches/session-persistence/acceptance/screens/06-old-record-remains.txt
+  s_08884e0d462e65::t_09fe3053e189d6 1-30
+researches/session-persistence/acceptance/screens/07-resumed-again.txt
+  s_08884e0d462e65::t_fabc60b6514b75 1-30
+researches/session-persistence/acceptance/screens/08-continued.txt
+  s_08884e0d462e65::t_49690da3065d99 1-30
+researches/session-persistence/acceptance/screens/capture.json
+  s_08884e0d462e65::t_dd029aa59addec 1-17
+researches/session-persistence/acceptance/session-demo.txt
+  s_08884e0d462e65::t_a564293af02010 1-13
+researches/session-persistence/acceptance/site-build.txt
+  s_08884e0d462e65::t_2aa30ddb5fb734 1-9
+researches/session-persistence/acceptance/site-check.txt
+  s_08884e0d462e65::t_f0b895519c4ad5 1-5
+researches/session-persistence/acceptance/summary.json
+  s_08884e0d462e65::t_5506121de6775d 1-398
+researches/session-persistence/acceptance/terminal-restore.txt
+  s_08884e0d462e65::t_7742fb82af77da 1-27
+retros/E03-S004-session-persistence.md
+  s_08884e0d462e65::t_9870e1a62141ff 1-25
+retros/README.md
+  s_08884e0d462e65::t_b39bb9077a7c51 20-22,27
+review.md
+  s_08884e0d462e65::t_29d448a6dbbda0 1-26
+scripts/e03-s004-session-demo.mjs
+  s_08884e0d462e65::t_e5593ff05dc83a 43
+scripts/e03-s004-tui-capture.mjs
+  s_08884e0d462e65::t_843c97477a8697 1-48
+specs/E03-product-foundations/README.md
+  s_08884e0d462e65::t_6276a5ff359a2b 9,17-18,35
+specs/E03-product-foundations/S003-runtime-tui/README.md
+  s_08884e0d462e65::t_0c92096a31cbac 7,81
+specs/E03-product-foundations/S004-session-persistence/README.md
+  s_08884e0d462e65::t_2ba35ce6b535b7 30-33
+specs/E03-product-foundations/S004-session-persistence/details/02-task-list.md
+  s_08884e0d462e65::t_3d6cb3fae4a037 3-11
+specs/E03-product-foundations/S004-session-persistence/details/03-verification-checklist.md
+  s_08884e0d462e65::t_8325a209068878 1-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "015725cd8d51d367fe024359ceff2ec2383cf82d",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
