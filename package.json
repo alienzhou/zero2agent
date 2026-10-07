@@ -29,7 +29,8 @@
     "lint:fix": "eslint packages e2e --ext .ts,.tsx --fix",
     "format": "prettier --write 'packages/**/*.ts' 'e2e/**/*.ts'",
     "format:check": "prettier --check 'packages/**/*.ts' 'e2e/**/*.ts'",
-    "clean": "pnpm -r clean"
+    "clean": "pnpm -r clean",
+    "test:runtime": "node scripts/e03-s003-acceptance-report.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
