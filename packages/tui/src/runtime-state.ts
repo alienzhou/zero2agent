@@ -139,3 +139,57 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
   }
   return trimState(state)
 }
+
+/** Rebuild a bounded view from data. This does not emit events or execute historical calls. */
+export function restoreTimeline(
+  snapshot: import('@zero2agent/core').SessionSnapshot
+): RuntimeState {
+  let state = initialState()
+  for (let i = 0; i < snapshot.messages.length; i++) {
+    const message = snapshot.messages[i]
+    if (typeof message.content === 'string') {
+      state = appendEntry(state, {
+        kind: message.role === 'user' ? 'user' : 'text',
+        text: bounded(message.content),
+      })
+      continue
+    }
+    for (const block of message.content) {
+      if (block.type === 'text')
+        state = appendEntry(state, {
+          kind: message.role === 'user' ? 'user' : 'text',
+          text: bounded(block.text),
+        })
+      if (block.type !== 'tool_use') continue
+      const next = snapshot.messages[i + 1]?.content
+      const result = Array.isArray(next)
+        ? next.find(b => b.type === 'tool_result' && b.tool_use_id === block.id)
+        : undefined
+      const encoded = JSON.stringify(block.input)
+      const output =
+        result?.type === 'tool_result'
+          ? typeof result.content === 'string'
+            ? result.content
+            : JSON.stringify(result.content)
+          : ''
+      state = appendEntry(state, {
+        kind: 'tool',
+        call: {
+          type: 'tool-state',
+          turnId: `restored:${i}`,
+          seq: 0,
+          toolCallId: block.id,
+          toolName: block.name,
+          status: result?.type === 'tool_result' && result.is_error ? 'error' : 'completed',
+          reason: '历史记录 · 未重新执行',
+          input:
+            encoded.length > MAX_ENTRY_TEXT
+              ? { preview: encoded.slice(0, MAX_ENTRY_TEXT), truncated: true }
+              : (block.input as Record<string, unknown>),
+          output: bounded(output),
+        },
+      })
+    }
+  }
+  return state
+}

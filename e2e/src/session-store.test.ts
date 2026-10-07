@@ -126,6 +126,38 @@ describe('local session store and operation boundaries', () => {
     await conversations.save()
     expect((await store.load(conversations.id!)).state).toEqual(state)
   })
+  it('cancels during pending disk publication before calling the model and serializes session changes', async () => {
+    const { store } = await setup()
+    const agent = new Agent()
+    const conversations = new Conversations(agent, store)
+    const run = vi.spyOn(agent, 'run')
+    const original = store.save.bind(store)
+    let entered!: () => void
+    let release!: () => void
+    const started = new Promise<void>(resolve => {
+      entered = resolve
+    })
+    const gate = new Promise<void>(resolve => {
+      release = resolve
+    })
+    vi.spyOn(store, 'save').mockImplementation(async (current, snapshot, pending) => {
+      if (pending) {
+        entered()
+        await gate
+      }
+      return original(current, snapshot, pending)
+    })
+    const turn = conversations.run('cancel before HTTP')
+    await started
+    await expect(conversations.newSession()).rejects.toThrow('Wait')
+    await expect(conversations.save()).rejects.toThrow('Wait')
+    conversations.cancelTurn()
+    release()
+    await expect(turn).rejects.toThrow('Turn cancelled')
+    expect(run).not.toHaveBeenCalled()
+    expect((await store.load(conversations.id!)).pending).toBeUndefined()
+  })
+
   it('preserves current state when the requested resume is invalid and --no-save stays in memory', async () => {
     const agent = new Agent()
     agent.restore(state)

@@ -12,6 +12,9 @@ import type { TimelineEntry } from './runtime-state.js'
 import { clipText, graphemes, safeText, textWidth, wrapText } from './display-text.js'
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 import { runHumanTerminal } from './human-terminal.js'
+import { Conversations } from './conversations.js'
+import type { SessionItem } from './session-store.js'
+import { restoreTimeline } from './runtime-state.js'
 
 const ENTER_SCREEN = '\x1b[?1049h\x1b[?2004h\x1b[?25l'
 const LEAVE_SCREEN = '\x1b[0m\x1b[?2004l\x1b[?25h\x1b[?1049l'
@@ -35,11 +38,20 @@ const STATUS: Record<string, string> = {
   error: '失败',
   cancelled: '已取消',
 }
-const COMMANDS = ['/new', '/compact', '/terminal', '/help']
+const COMMANDS = [
+  '/new',
+  '/compact',
+  '/terminal',
+  '/help',
+  '/sessions',
+  '/resume',
+  '/session',
+  '/save',
+]
 const MAX_DRAFT_LENGTH = 16_384
 const DRAFT_LIMIT_NOTICE = '输入上限 16,384 个 UTF-16 单元；本次输入或整段粘贴未加入，原草稿保留。'
 const HELP =
-  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -55,6 +67,8 @@ interface PendingApproval {
 export class RuntimeTui {
   private state = initialState()
   private agent?: Agent
+  private conversations?: Conversations
+  private selector?: { items: SessionItem[]; index: number; displayed: boolean }
   private active = false
   private closed = false
   private busy = false
@@ -126,8 +140,11 @@ export class RuntimeTui {
     })
   }
 
-  async run(agent: Agent): Promise<void> {
+  async run(agent: Agent, conversations = new Conversations(agent), resumed = ''): Promise<void> {
     this.agent = agent
+    this.conversations = conversations
+    this.state = restoreTimeline(agent.snapshot())
+    if (resumed) this.notice(resumed)
     this.originalRaw = process.stdin.isRaw ?? false
     setupTerminalRuntime(undefined, {
       quiet: true,
@@ -148,7 +165,7 @@ export class RuntimeTui {
       },
     })
     this.notice(
-      '输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出'
+      '输入你的问题。/new 新建对话 · /sessions 会话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出'
     )
     const done = new Promise<void>(resolve => {
       this.done = resolve
@@ -227,6 +244,11 @@ export class RuntimeTui {
     this.render()
   }
   private onInterrupt = (): void => {
+    if (this.selector) {
+      this.selector = undefined
+      this.schedule()
+      return
+    }
     if (!this.busy) {
       if (this.buffer) {
         this.buffer = ''
@@ -239,7 +261,7 @@ export class RuntimeTui {
       void this.close()
       return
     }
-    this.agent?.cancelTurn()
+    this.conversations?.cancelTurn()
     this.approval?.finish(false, 'Turn cancelled by user')
     this.state = { ...this.state, phase: 'cancelling' }
     this.schedule()
@@ -247,14 +269,23 @@ export class RuntimeTui {
 
   private async close(exitCode?: number): Promise<void> {
     if (this.closed) return
+    if (!this.busy && exitCode === undefined) {
+      try {
+        await this.conversations?.save()
+      } catch (error) {
+        this.notice(`退出前保存失败，当前会话仍保留: ${String(error)}`)
+        return
+      }
+    }
     this.closed = true
-    this.agent?.cancelTurn()
+    this.conversations?.cancelTurn()
     this.agent?.cancelCompaction()
     this.agent?.cancelPendingApprovals()
     this.approval?.finish(false, 'Input closed')
     this.suspend()
     try {
       await this.operation
+      await this.conversations?.save()
       if (exitCode === undefined) await cleanupBackgroundOnExit()
       process.stdout.write('再见！\n')
       if (exitCode !== undefined) process.exitCode = exitCode
@@ -272,7 +303,7 @@ export class RuntimeTui {
       this.paste = true
       this.pasteText = ''
       this.pasteTooLong = false
-      this.pasteBlocked = !!this.approval
+      this.pasteBlocked = !!this.approval || !!this.selector
       return
     }
     if (key.sequence === '\x1b[201~') {
@@ -280,7 +311,7 @@ export class RuntimeTui {
       return
     }
     if (this.paste) {
-      if (this.approval) this.pasteBlocked = true
+      if (this.approval || this.selector) this.pasteBlocked = true
       if (text && !this.pasteBlocked && !this.pasteTooLong) {
         const fragment = safeText(text.replaceAll('\r', '\n'))
         if (this.buffer.length + this.pasteText.length + fragment.length > MAX_DRAFT_LENGTH) {
@@ -314,6 +345,30 @@ export class RuntimeTui {
       else if (text?.toLowerCase() === 'n' || key.name === 'return' || key.name === 'escape')
         approval.finish(false, 'User denied this call')
       approval.offset = Math.max(0, Math.min(Math.max(0, total - page), approval.offset))
+      this.schedule()
+      return
+    }
+    if (this.selector) {
+      const selector = this.selector
+      if (!selector.displayed) return
+      if (key.name === 'escape') this.selector = undefined
+      else if (key.name === 'up' || key.name === 'pageup')
+        selector.index -= key.name === 'up' ? 1 : Math.max(1, Math.floor(page / 2))
+      else if (key.name === 'down' || key.name === 'pagedown')
+        selector.index += key.name === 'down' ? 1 : Math.max(1, Math.floor(page / 2))
+      else if (key.name === 'home') selector.index = 0
+      else if (key.name === 'end') selector.index = selector.items.length - 1
+      else if (key.name === 'return') {
+        const item = selector.items[selector.index]
+        if (item?.error) {
+          this.notice(`无法恢复: ${item.error}`)
+          this.selector = undefined
+        } else if (item) {
+          this.selector = undefined
+          this.operation = this.submit(`/resume ${item.id}`)
+        }
+      }
+      selector.index = Math.max(0, Math.min(selector.items.length - 1, selector.index))
       this.schedule()
       return
     }
@@ -467,7 +522,7 @@ export class RuntimeTui {
   private finishPaste(): void {
     if (!this.paste) return
     const text = this.pasteText
-    const rejected = this.pasteTooLong || this.pasteBlocked || !!this.approval
+    const rejected = this.pasteTooLong || this.pasteBlocked || !!this.approval || !!this.selector
     this.paste = false
     this.pasteText = ''
     this.pasteTooLong = false
@@ -488,15 +543,31 @@ export class RuntimeTui {
     this.schedule()
     try {
       if (input === '/new') {
-        this.agent!.reset()
+        await this.conversations!.newSession()
         this.state = initialState()
         this.expanded.clear()
         this.selectedTool = undefined
         this.notice('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。')
+      } else if (input === '/sessions' || input === '/resume') {
+        const items = await this.conversations!.list()
+        if (!items.length) this.notice('当前工作目录没有已保存会话。')
+        else this.selector = { items, index: 0, displayed: false }
+        this.state.phase = 'idle'
+      } else if (input.startsWith('/resume ')) {
+        const message = await this.conversations!.resume(input.slice(8).trim())
+        this.state = restoreTimeline(this.agent!.snapshot())
+        this.expanded.clear()
+        this.selectedTool = undefined
+        this.notice(message)
+      } else if (input === '/session') {
+        this.notice(this.conversations!.status)
+      } else if (input === '/save') {
+        await this.conversations!.save()
+        this.notice(this.conversations!.status)
       } else if (input === '/compact') {
         this.compacting = true
         this.state.phase = 'preparing'
-        const changed = await this.agent!.compact()
+        const changed = await this.conversations!.compact()
         this.notice(changed ? '已压缩工作上下文，完整会话记录保留。' : '当前没有可压缩的历史。')
         this.state.phase = 'completed'
       } else if (input === '/help') {
@@ -509,7 +580,7 @@ export class RuntimeTui {
           await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })
         )
         this.state.phase = 'completed'
-      } else await this.agent!.run(input)
+      } else await this.conversations!.run(input)
     } catch (error) {
       const cancelled = error instanceof Error && error.name === 'TurnCancelledError'
       this.state.phase = cancelled ? 'cancelled' : 'error'
@@ -565,14 +636,23 @@ export class RuntimeTui {
     const width = this.width()
     const rows = Math.max(1, process.stdout.rows || 24)
     const composer = this.composer(width)
-    const bodyHeight = Math.max(1, rows - 4 - (this.approval ? 1 : composer.lines.length))
+    const bodyHeight = Math.max(
+      1,
+      rows - 4 - (this.approval || this.selector ? 1 : composer.lines.length)
+    )
     const elapsed =
       this.busy && this.state.startedAt
         ? ` · ${((Date.now() - this.state.startedAt) / 1000).toFixed(1)}s`
         : ''
     const spinner = this.busy ? ['◐', '◓', '◑', '◒'][Math.floor(Date.now() / 250) % 4] : '●'
-    const header = `${spinner} zero2agent · ${this.approval ? '等待审批' : (PHASE[this.state.phase] ?? this.state.phase)}${elapsed}`
-    const lines = [clipText(header, width), clipText(`工作目录: ${process.cwd()}`, width)]
+    const header = `${spinner} zero2agent · ${this.approval ? '等待审批' : this.selector ? '选择会话' : this.busy && this.state.finished ? '正在保存会话' : (PHASE[this.state.phase] ?? this.state.phase)}${elapsed}`
+    const lines = [
+      clipText(header, width),
+      clipText(
+        `会话: ${(this.conversations?.status ?? '').replace(this.conversations?.id ?? '\0', this.conversations?.id?.slice(0, 8) ?? '')} · 工作目录: ${process.cwd()}`,
+        width
+      ),
+    ]
     let cursorRow = rows
     if (this.approval) {
       const all = wrapText(this.approval.text, width)
@@ -588,6 +668,30 @@ export class RuntimeTui {
       lines.push(clipText('↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮', width))
       lines.push(clipText('允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝', width))
       this.approval.displayed = true
+    } else if (this.selector) {
+      const { items, index } = this.selector
+      const count = Math.max(1, Math.floor(bodyHeight / 2))
+      const start = Math.max(0, Math.min(index, items.length - count))
+      for (let i = start; i < Math.min(items.length, start + count); i++) {
+        const item = items[i]
+        lines.push(
+          clipText(
+            `${i === index ? '›' : ' '} ${item.title}${item.error ? ' [损坏]' : item.pending ? ' [未结算]' : ''}`,
+            width
+          )
+        )
+        lines.push(
+          clipText(
+            `  ${item.id} · ${item.updatedAt.slice(0, 16)}${item.id === this.conversations?.id ? ' · 当前' : ''}`,
+            width
+          )
+        )
+      }
+      while (lines.length < 2 + bodyHeight) lines.push('')
+      lines.push(clipText(`会话 ${index + 1}/${items.length} · 仅当前工作目录`, width))
+      lines.push(clipText('↑↓ / PgUp PgDn 选择 · Enter 恢复', width))
+      lines.push(clipText('Esc / Ctrl-C 返回 · 草稿保留', width))
+      this.selector.displayed = true
     } else {
       let timeline: string[] = []
       const lastTool = this.state.entries.filter(entry => entry.kind === 'tool').at(-1)
@@ -723,9 +827,10 @@ export class RuntimeTui {
         return `\x1b[2K${style}${clipText(line, width)}\x1b[0m`
       })
       .join('\r\n')
-    const cursor = !this.approval
-      ? `\x1b[${Math.max(1, cursorRow - Math.max(0, lines.length - rows))};${composer.column}H\x1b[?25h`
-      : '\x1b[?25l'
+    const cursor =
+      !this.approval && !this.selector
+        ? `\x1b[${Math.max(1, cursorRow - Math.max(0, lines.length - rows))};${composer.column}H\x1b[?25h`
+        : '\x1b[?25l'
     process.stdout.write(`\x1b[?25l\x1b[H${frame}\x1b[J${cursor}`)
   }
 }

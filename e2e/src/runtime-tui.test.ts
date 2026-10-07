@@ -107,6 +107,9 @@ describe.skipIf(process.platform === 'win32')(
     }
 
     async function quit(session: Session): Promise<void> {
+      await expect
+        .poll(() => session.output.slice(session.output.lastIndexOf('\x1b[H')).includes('你: '))
+        .toBe(true)
       session.write('exit\r')
       expect(await session.waitExit()).toBe(0)
       expect(session.output).toContain('\x1b[?1049l')
@@ -233,8 +236,10 @@ describe.skipIf(process.platform === 'win32')(
         '/terminal read -r -p PRIVATE_READY value; printf "PRIVATE_OUTPUT:%s\\n" "$value"'
       )
       await p.session.waitFor('Allow human terminal? [y/N]', from)
+      const approvalFrom = p.session.output.length
       p.session.write('y\r')
-      await p.session.waitFor('PRIVATE_READY', from)
+      await p.session.waitFor('Human terminal active', approvalFrom)
+      await p.session.waitFor('PRIVATE_READY', approvalFrom)
       const privateFrom = p.session.output.length
       p.session.write('private-key\r')
       await p.session.waitFor('你: ', privateFrom)
@@ -477,6 +482,7 @@ describe.skipIf(process.platform === 'win32')(
       p.session.write('中文e\u0301🙂\x01\x06\x0b\x19\x05\x15\x19\r')
       await p.session.waitFor('shortcut-answer', from)
       expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('中文e\u0301🙂')
+      await p.session.waitFor('你: ', from)
       from = p.session.output.length
       p.session.write('保留 词🙂\x17\x19\x01\x06\x04\r')
       await p.session.waitFor('shortcut-answer', from)

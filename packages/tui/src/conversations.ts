@@ -1,5 +1,5 @@
 import { hostname } from 'node:os'
-import type { Agent } from '@zero2agent/core'
+import { TurnCancelledError, type Agent } from '@zero2agent/core'
 import { SessionStore, type SessionItem, type StoredSession } from './session-store.js'
 
 export const RECOVERY_NOTICE =
@@ -10,6 +10,8 @@ export class Conversations {
   private current?: StoredSession
   private dirty = false
   private busy = false
+  private cancelled = false
+  private writing = false
   constructor(
     readonly agent: Agent,
     private store?: SessionStore
@@ -18,7 +20,7 @@ export class Conversations {
   }
   get status(): string {
     return this.current
-      ? `${this.current.id} · ${this.dirty ? '尚未保存 /save 重试' : this.current.revision ? `已保存 r${this.current.revision}` : '新会话'}`
+      ? `${this.current.id} · ${this.writing ? '正在保存' : this.dirty ? '尚未保存 /save 重试' : this.current.pending ? `本轮未结算 r${this.current.revision}` : this.current.revision ? `已保存 r${this.current.revision}` : '新会话'}`
       : '临时会话（未启用保存）'
   }
   get id(): string | undefined {
@@ -33,10 +35,16 @@ export class Conversations {
   }
   async save(): Promise<void> {
     this.assertIdle()
-    await this.flush()
+    this.busy = true
+    try {
+      await this.flush()
+    } finally {
+      this.busy = false
+    }
   }
   private async flush(pending?: StoredSession['pending'], force = false): Promise<void> {
     if (!this.store || !this.current || (!this.dirty && !pending && !force)) return
+    this.writing = true
     try {
       this.current = await this.store.save(this.current, this.agent.snapshot(), pending)
       this.dirty = false
@@ -45,17 +53,32 @@ export class Conversations {
       throw new Error(
         `会话尚未保存，内存保留；/save 可重试。${error instanceof Error ? error.message : String(error)}`
       )
+    } finally {
+      this.writing = false
     }
   }
   async newSession(): Promise<void> {
     this.assertIdle()
-    await this.flush()
-    this.agent.reset()
-    this.current = this.store?.fresh()
-    this.dirty = false
+    this.busy = true
+    try {
+      await this.flush()
+      this.agent.reset()
+      this.current = this.store?.fresh()
+      this.dirty = false
+    } finally {
+      this.busy = false
+    }
   }
   async resume(id: string): Promise<string> {
     this.assertIdle()
+    this.busy = true
+    try {
+      return await this.load(id)
+    } finally {
+      this.busy = false
+    }
+  }
+  private async load(id: string): Promise<string> {
     if (!this.store) throw new Error('当前使用 --no-save，无法恢复。')
     await this.flush()
     const candidate = await this.store.load(id)
@@ -86,6 +109,10 @@ export class Conversations {
     if (!latest) throw new Error('当前工作目录没有已保存会话。')
     return this.resume(latest.id)
   }
+  cancelTurn(): void {
+    if (this.busy) this.cancelled = true
+    this.agent.cancelTurn()
+  }
   run(message: string): Promise<string> {
     return this.perform('turn', () => this.agent.run(message))
   }
@@ -95,6 +122,7 @@ export class Conversations {
   private async perform<T>(kind: 'turn' | 'compact', execute: () => Promise<T>): Promise<T> {
     this.assertIdle()
     this.busy = true
+    this.cancelled = false
     try {
       await this.flush()
       // Reserve the next generation before any provider or tool can produce effects.
@@ -102,6 +130,7 @@ export class Conversations {
       let result: T | undefined
       let failure: unknown
       try {
+        if (this.cancelled) throw new TurnCancelledError()
         result = await execute()
       } catch (error) {
         failure = error
