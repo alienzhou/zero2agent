@@ -1,0 +1,33 @@
+researches/runtime-tui/acceptance/screens/01-idle.txt
+  s_08884e0d462e65::t_44fa579713c2ed 2
+researches/runtime-tui/acceptance/screens/02-completion.txt
+  s_08884e0d462e65::t_6527d9ef8fcca0 2
+researches/runtime-tui/acceptance/screens/03-approval.txt
+  s_08884e0d462e65::t_158e3149369a2d 1-2,5
+researches/runtime-tui/acceptance/screens/04-second-approval.txt
+  s_08884e0d462e65::t_17261f24a5c74a 1-2,5
+researches/runtime-tui/acceptance/screens/05-tools.txt
+  s_08884e0d462e65::t_d09188fd509904 2,5-6
+researches/runtime-tui/acceptance/screens/06-running-draft.txt
+  s_08884e0d462e65::t_b75ecc3797454a 1-2,5-6
+researches/runtime-tui/acceptance/screens/07-cancelled.txt
+  s_08884e0d462e65::t_76250596287c32 2,5-6
+researches/runtime-tui/acceptance/screens/capture.json
+  s_08884e0d462e65::t_7be2320eac120f 12-14,16-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a0e13540ef646cd4eb2706a7f210ec4a14e33283",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
