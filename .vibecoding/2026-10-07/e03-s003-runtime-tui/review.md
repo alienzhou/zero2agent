@@ -29,7 +29,7 @@
 
 - 本审阅者独立执行 `vitest run src/runtime-tui.test.ts -t 'expires approval|two human PTYs|interrupted paste'`：3 项通过。另直接执行 reducer 的旧 Turn、结束后事件和超长 reason 断言，均通过。
 - 独立执行 `node scripts/e03-s003-terminal-restore.mjs`：正常 exit、SIGTERM、SIGHUP 三条路径均通过。脚本在真实外层 PTY 中运行生产 TUI，逐次比较 `/bin/stty -g`，退出前后完全相同；随后由父进程 readline 成功接收 `canonical-input`。生产 TUI 退出码为 0/143/129。
-- 已读取最终离线日志 [offline.txt](../../../researches/runtime-tui/acceptance/offline.txt)：shared 1 项、Core 28 文件/394 项、E2E 9 文件/105 项通过；53 项 live 测试按默认规则跳过。此项为读取主代理的完整运行证据，不冒充本审阅者重新运行全量。
+- 审查当时已读取离线日志 [offline.txt](../../../researches/runtime-tui/acceptance/failed-live-attempt/offline.txt)：shared 1 项、Core 28 文件/394 项、E2E 9 文件/105 项通过；53 项 live 测试按默认规则跳过。此项为读取主代理的完整运行证据，不冒充本审阅者重新运行全量。
 - [summary.json](../../../researches/runtime-tui/acceptance/summary.json) 记录构建、离线回归、E2E 类型、lint、变更 TS 格式、runtime-demo、site build/check、whitespace 的结果。`sourceStable` 只比较 Core、TUI、E2E 三个源码目录的前后哈希，不代表全部课程素材或脚本已冻结。
 - 已读取实际 TUI [capture.json](../../../researches/runtime-tui/acceptance/screens/capture.json)，查看审批和窄屏 PNG，并核对录屏脚本通过生产 CLI、真实 PTY、确定性本地 SSE 获取输出，再交给 xterm.js 渲染。截图并非真实模型生成证据；原始字节与派生屏幕各自保留。
 
