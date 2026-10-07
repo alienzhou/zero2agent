@@ -15,6 +15,8 @@ const PHASE: Record<string, string> = {
 const STATUS: Record<string, string> = {
   pending: '等待', approval: '待审批', running: '运行中', completed: '完成', denied: '已拒绝', error: '失败', cancelled: '已取消',
 }
+const COMMANDS = ['/new', '/compact', '/terminal', '/help']
+const HELP = '输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。\n粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 
 interface PendingApproval {
   request: ApprovalRequest
@@ -39,6 +41,8 @@ export class RuntimeTui {
   private historyIndex = 0
   private draft = ''
   private scroll = 0
+  private expanded = new Set<string>()
+  private selectedTool?: string
   private approval?: PendingApproval
   private terminalController?: TerminalInterruptController
   private renderTimer?: NodeJS.Timeout
@@ -99,7 +103,7 @@ export class RuntimeTui {
         finally { if (!this.closed) this.acquire() }
       },
     })
-    this.notice('输入你的问题；/new 新建对话；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出')
+    this.notice('输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出')
     const done = new Promise<void>(resolve => { this.done = resolve })
     process.once('exit', this.restoreOnExit)
     try {
@@ -189,11 +193,11 @@ export class RuntimeTui {
     if (key.sequence === '\x1b[200~') { this.paste = true; return }
     if (key.sequence === '\x1b[201~') { this.paste = false; return }
     if (this.paste) {
-      if (!this.busy && !this.approval && text) this.insert(safeText(text).replaceAll('\n', ' '))
+      if (!this.approval && text) this.insert(safeText(text.replaceAll('\r', '\n')))
       return
     }
     if (key.ctrl && key.name === 'c') { this.onInterrupt(); return }
-    const page = Math.max(1, (process.stdout.rows || 24) - 5)
+    const page = Math.max(1, (process.stdout.rows || 24) - 7)
     if (this.approval) {
       const approval = this.approval
       const total = wrapText(approval.text, this.width()).length
@@ -212,13 +216,31 @@ export class RuntimeTui {
       this.schedule()
       return
     }
-    if (this.busy) {
-      if (key.ctrl && key.name === 'x') this.terminalController?.signalCancel()
-      if (key.ctrl && key.name === 's') this.terminalController?.signalSkip()
+    if (key.ctrl && key.name === 'end') { this.scroll = 0; this.schedule(); return }
+    const tools = this.state.entries.filter(entry => entry.kind === 'tool')
+    const selected = tools.findIndex(entry => entry.call.toolCallId === this.selectedTool)
+    if (key.meta && (key.name === 'up' || key.name === 'down') && tools.length) {
+      const index = Math.max(0, Math.min(tools.length - 1, (selected < 0 ? tools.length - 1 : selected) + (key.name === 'up' ? -1 : 1)))
+      this.selectedTool = tools[index].call.toolCallId
+      this.schedule()
       return
+    }
+    if (key.ctrl && key.name === 'o') {
+      const id = this.selectedTool ?? tools.at(-1)?.call.toolCallId
+      if (id) {
+        if (this.expanded.has(id)) this.expanded.delete(id)
+        else this.expanded.add(id)
+      }
+      this.schedule()
+      return
+    }
+    if (this.busy) {
+      if (key.ctrl && key.name === 'x') { this.terminalController?.signalCancel(); return }
+      if (key.ctrl && key.name === 's') { this.terminalController?.signalSkip(); return }
     }
     const chars = graphemes(this.buffer)
     if (key.name === 'return') {
+      if (this.busy) { this.notice('本轮仍在运行，草稿已保留；完成后按 Enter 发送。'); return }
       const input = this.buffer.trim()
       this.buffer = ''
       this.cursor = 0
@@ -228,7 +250,10 @@ export class RuntimeTui {
         this.draft = ''
         this.operation = this.submit(input)
       }
-    } else if (key.ctrl && key.name === 'd' && !this.buffer) void this.close()
+    } else if (key.name === 'tab') {
+      const matches = COMMANDS.filter(command => command.startsWith(this.buffer))
+      if (matches.length === 1) { this.buffer = matches[0]; this.cursor = graphemes(this.buffer).length }
+    } else if (key.ctrl && key.name === 'd' && !this.buffer && !this.busy) void this.close()
     else if (key.ctrl && key.name === 'u') { this.buffer = chars.slice(this.cursor).join(''); this.cursor = 0 }
     else if (key.ctrl && key.name === 'w') {
       const left = chars.slice(0, this.cursor).join('').replace(/\S*\s*$/, '')
@@ -265,11 +290,14 @@ export class RuntimeTui {
     this.busy = true
     this.scroll = 0
     this.state = appendEntry(this.state, { kind: 'user', text: input })
+    this.state.startedAt = Date.now()
     this.schedule()
     try {
       if (input === '/new') {
         this.agent!.reset()
         this.state = initialState()
+        this.expanded.clear()
+        this.selectedTool = undefined
         this.notice('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。')
       } else if (input === '/compact') {
         this.compacting = true
@@ -277,6 +305,9 @@ export class RuntimeTui {
         const changed = await this.agent!.compact()
         this.notice(changed ? '已压缩工作上下文，完整会话记录保留。' : '当前没有可压缩的历史。')
         this.state.phase = 'completed'
+      } else if (input === '/help') {
+        this.notice(HELP)
+        this.state.phase = 'idle'
       } else if (input === '/terminal' || input.startsWith('/terminal ')) {
         const command = input.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
         this.notice(await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() }))
@@ -295,6 +326,24 @@ export class RuntimeTui {
 
   private width(): number { return Math.max(1, (process.stdout.columns || 80) - 1) }
 
+  private composer(width: number): { lines: string[]; column: number; row: number } {
+    const prefix = clipText(this.busy ? '草稿: ' : '你: ', Math.max(0, width - 1))
+    const chars = graphemes(this.buffer)
+    const before = prefix + chars.slice(0, this.cursor).join('')
+    const wrapped = wrapText(prefix + this.buffer, width)
+    const cursorLines = wrapText(before, width)
+    let row = cursorLines.length - 1
+    let column = textWidth(cursorLines.at(-1) ?? '')
+    if (column === width) {
+      row++
+      column = 0
+      if (wrapped.length <= row) wrapped.push('')
+    }
+    const height = Math.min(3, wrapped.length)
+    const start = Math.max(0, Math.min(row, wrapped.length - height))
+    return { lines: wrapped.slice(start, start + height), row: row - start, column: column + 1 }
+  }
+
   private schedule(): void {
     if (!this.active || this.renderTimer) return
     this.renderTimer = setTimeout(() => { this.renderTimer = undefined; this.render() }, 25)
@@ -305,11 +354,13 @@ export class RuntimeTui {
     if (process.stdout.writableLength > 262_144) { this.schedule(); return }
     const width = this.width()
     const rows = Math.max(1, process.stdout.rows || 24)
-    const bodyHeight = Math.max(1, rows - 5)
+    const composer = this.composer(width)
+    const bodyHeight = Math.max(1, rows - 4 - (this.approval ? 1 : composer.lines.length))
     const elapsed = this.busy && this.state.startedAt ? ` · ${((Date.now() - this.state.startedAt) / 1000).toFixed(1)}s` : ''
-    const header = `zero2agent · ${this.approval ? '等待审批' : PHASE[this.state.phase] ?? this.state.phase}${elapsed}`
+    const spinner = this.busy ? ['◐', '◓', '◑', '◒'][Math.floor(Date.now() / 250) % 4] : '●'
+    const header = `${spinner} zero2agent · ${this.approval ? '等待审批' : PHASE[this.state.phase] ?? this.state.phase}${elapsed}`
     const lines = [clipText(header, width), clipText(`工作目录: ${process.cwd()}`, width)]
-    let cursorColumn = 1
+    let cursorRow = rows
     if (this.approval) {
       const all = wrapText(this.approval.text, width)
       this.approval.offset = Math.min(this.approval.offset, Math.max(0, all.length - bodyHeight))
@@ -317,20 +368,26 @@ export class RuntimeTui {
       while (lines.length < 2 + bodyHeight) lines.push('')
       lines.push(clipText(`详情 ${this.approval.offset + 1}–${Math.min(all.length, this.approval.offset + bodyHeight)} / ${all.length} 行（可滚动查看全部参数）`, width))
       lines.push(clipText('↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮', width))
-      lines.push(clipText('允许这次操作？[y/N]: ', width))
+      lines.push(clipText('允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝', width))
     } else {
       const timeline: string[] = []
       if (this.state.discarded) timeline.push(`[较早的 ${this.state.discarded} 条显示记录已移除]`)
       for (const entry of this.state.entries) {
         if (entry.kind === 'tool') {
           const call = entry.call
-          timeline.push(...wrapText(`┌ ${call.toolName} · ${STATUS[call.status]} · ${call.toolCallId}${call.durationMs !== undefined ? ` · ${call.durationMs}ms` : ''}`, width))
-          if (call.input) timeline.push(...wrapText(`│ ${JSON.stringify(call.input)}`, width).slice(0, 3))
+          const isSelected = call.toolCallId === (this.selectedTool ?? this.state.entries.findLast(entry => entry.kind === 'tool')?.call.toolCallId)
+          const expanded = this.expanded.has(call.toolCallId)
+          timeline.push(...wrapText(`┌ ${isSelected ? '◆' : '◇'} ${call.toolName} · ${STATUS[call.status]} · ${call.toolCallId}${call.durationMs !== undefined ? ` · ${call.durationMs}ms` : ''}`, width))
+          if (call.input) {
+            const inputLines = wrapText(`│ ${JSON.stringify(call.input, null, expanded ? 2 : undefined)}`, width)
+            timeline.push(...(expanded ? inputLines : inputLines.slice(0, 2)))
+            if (!expanded && inputLines.length > 2) timeline.push(clipText('│ … 参数已折叠 · Ctrl-O 展开', width))
+          }
           if (call.reason) timeline.push(...wrapText(`│ ${call.reason}`, width))
           if (call.output) {
             const output = wrapText(call.output, Math.max(1, width - 2))
-            timeline.push(...output.slice(0, 4).map(line => clipText(`│ ${line}`, width)))
-            if (output.length > 4) timeline.push(clipText(`│ … 结果共 ${output.length} 行（完整结果在会话中）`, width))
+            timeline.push(...(expanded ? output : output.slice(0, 3)).map(line => clipText(`│ ${line}`, width)))
+            if (!expanded && output.length > 3) timeline.push(clipText(`│ … 结果共 ${output.length} 行 · Ctrl-O 展开`, width))
           }
           timeline.push(clipText('└', width))
         } else {
@@ -342,24 +399,19 @@ export class RuntimeTui {
       const end = Math.max(bodyHeight, timeline.length - this.scroll)
       lines.push(...timeline.slice(Math.max(0, end - bodyHeight), end))
       while (lines.length < 2 + bodyHeight) lines.push('')
-      lines.push('─'.repeat(width))
-      lines.push(clipText(this.busy ? 'Ctrl-C 取消本轮 · Ctrl-X 停止命令 · Ctrl-S 转后台 · PgUp/PgDn 查看' : 'Enter 发送 · ↑↓ 输入历史 · PgUp/PgDn 查看 · Ctrl-C 退出', width))
-      if (this.busy) lines.push(clipText(`运行中…${this.scroll ? `（历史向上 ${this.scroll} 行）` : ''}`, width))
-      else {
-        const chars = graphemes(this.buffer)
-        const prefix = clipText('你: ', Math.max(0, width - 1))
-        const available = Math.max(1, width - textWidth(prefix))
-        let start = this.cursor
-        let used = 0
-        while (start > 0 && used + cellWidth(chars[start - 1]) < available) used += cellWidth(chars[--start])
-        lines.push(prefix + clipText(chars.slice(start).join(''), available))
-        cursorColumn = Math.min(width, textWidth(prefix) + used + 1)
-      }
+      lines.push(clipText(`─ ${this.busy ? '运行中 · 可编辑草稿' : '输入'} ${this.scroll ? `· 向上 ${this.scroll} 行 · Ctrl-End 回到底部 ` : ''}`.padEnd(width, '─'), width))
+      const matches = this.buffer.startsWith('/') && !this.buffer.includes(' ') ? COMMANDS.filter(command => command.startsWith(this.buffer)) : []
+      lines.push(clipText(matches.length ? `Tab 补全: ${matches.join('  ')}` : this.busy ? 'Ctrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键' : 'Enter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help', width))
+      cursorRow = lines.length + composer.row + 1
+      lines.push(...composer.lines)
     }
     // Very short windows still expose the active focus; no row extends outside the viewport.
     const visible = lines.length > rows ? lines.slice(-rows) : lines
-    const frame = visible.map(line => `\x1b[2K${clipText(line, width)}`).join('\r\n')
-    const cursor = !this.busy && !this.approval ? `\x1b[${visible.length};${cursorColumn}H\x1b[?25h` : '\x1b[?25l'
+    const frame = visible.map((line, index) => {
+      const style = index === 0 ? (this.approval ? '\x1b[1;33m' : '\x1b[1;36m') : index === 1 ? '\x1b[2m' : line.startsWith('你 ›') ? '\x1b[32m' : line.startsWith('Agent ›') ? '\x1b[36m' : line.startsWith('┌') ? '\x1b[1m' : line.startsWith('· ') || line.startsWith('│') ? '\x1b[2m' : ''
+      return `\x1b[2K${style}${clipText(line, width)}\x1b[0m`
+    }).join('\r\n')
+    const cursor = !this.approval ? `\x1b[${Math.max(1, cursorRow - Math.max(0, lines.length - rows))};${composer.column}H\x1b[?25h` : '\x1b[?25l'
     process.stdout.write(`\x1b[?25l\x1b[H${frame}\x1b[J${cursor}`)
   }
 }
