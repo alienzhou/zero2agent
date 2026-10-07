@@ -1,0 +1,121 @@
+researches/runtime-tui/README.md
+  s_08884e0d462e65::t_764185ea48e7e7 7
+researches/runtime-tui/acceptance/screens/01-idle.txt
+  s_08884e0d462e65::t_c775c13a16fd3b 1-30
+researches/runtime-tui/acceptance/screens/02-completion.txt
+  s_08884e0d462e65::t_9603e964038f84 1-30
+researches/runtime-tui/acceptance/screens/03-approval.txt
+  s_08884e0d462e65::t_c6590c38538495 1-30
+researches/runtime-tui/acceptance/screens/04-second-approval.txt
+  s_08884e0d462e65::t_0c51fdab52c49a 1-30
+researches/runtime-tui/acceptance/screens/05-tools.txt
+  s_08884e0d462e65::t_f9c897b8cf9298 1-30
+researches/runtime-tui/acceptance/screens/06-running-draft.txt
+  s_08884e0d462e65::t_2211a7433023c3 1-30
+researches/runtime-tui/acceptance/screens/07-cancelled.txt
+  s_08884e0d462e65::t_347a632a162b78 1-30
+researches/runtime-tui/acceptance/screens/08-narrow.txt
+  s_08884e0d462e65::t_e425700f9d3445 1-18
+researches/runtime-tui/acceptance/screens/capture.json
+  s_08884e0d462e65::t_c1afe7d288cd5e 1-13
+researches/runtime-tui/acceptance/screens/raw-pty.txt
+  s_08884e0d462e65::t_7407c8889ca4f7 1-427
+researches/runtime-tui/codex.md
+  s_08884e0d462e65::t_f1607001edbe3b 39-40
+researches/runtime-tui/interaction-design.md
+  s_08884e0d462e65::t_fb0f18b7ff162b 1-31
+researches/runtime-tui/observations/2026-10-07/README.md
+  s_08884e0d462e65::t_f89f22d6e289e4 1-32
+researches/runtime-tui/observations/2026-10-07/codex/00-startup.txt
+  s_08884e0d462e65::t_f7dfe8bb7cc8a9 1-32
+researches/runtime-tui/observations/2026-10-07/codex/01-slash-menu.txt
+  s_08884e0d462e65::t_48868d4d05eb75 1-32
+researches/runtime-tui/observations/2026-10-07/codex/02-slash-filter.txt
+  s_08884e0d462e65::t_3aac1386fb8698 1-32
+researches/runtime-tui/observations/2026-10-07/codex/03-dismiss-completion.txt
+  s_08884e0d462e65::t_982be004406ebb 1-32
+researches/runtime-tui/observations/2026-10-07/codex/04-multiline-paste.txt
+  s_08884e0d462e65::t_0316ec92184a56 1-32
+researches/runtime-tui/observations/2026-10-07/codex/05-narrow-with-draft.txt
+  s_08884e0d462e65::t_1b1fc9cd41eb95 1-18
+researches/runtime-tui/observations/2026-10-07/codex/06-edit-line-start.txt
+  s_08884e0d462e65::t_bf04b2e967428c 1-18
+researches/runtime-tui/observations/2026-10-07/codex/07-history-search.txt
+  s_08884e0d462e65::t_bbc6da88deb154 1-18
+researches/runtime-tui/observations/2026-10-07/codex/08-restore-draft.txt
+  s_08884e0d462e65::t_84c2da3b47ab1f 1-18
+researches/runtime-tui/observations/2026-10-07/codex/09-wide-restored.txt
+  s_08884e0d462e65::t_ba6e175440526e 1-32
+researches/runtime-tui/observations/2026-10-07/codex/10-clear-draft.txt
+  s_08884e0d462e65::t_ae3b5bd5cc52b4 1-32
+researches/runtime-tui/observations/2026-10-07/codex/11-local-status-command.txt
+  s_08884e0d462e65::t_fa523dc473dc2e 1-32
+researches/runtime-tui/observations/2026-10-07/codex/12-history-up.txt
+  s_08884e0d462e65::t_745af186f46e24 1-32
+researches/runtime-tui/observations/2026-10-07/codex/13-execute-local-status.txt
+  s_08884e0d462e65::t_e460600c2557fe 1-32
+researches/runtime-tui/observations/2026-10-07/codex/14-close-status.txt
+  s_08884e0d462e65::t_b7db5378b62d43 1-32
+researches/runtime-tui/observations/2026-10-07/codex/15-recall-local-history.txt
+  s_08884e0d462e65::t_5b3bcea6520692 1-32
+researches/runtime-tui/observations/2026-10-07/codex/16-clear-before-exit.txt
+  s_08884e0d462e65::t_926e7d52cd49d3 1-32
+researches/runtime-tui/observations/2026-10-07/codex/17-exit.txt
+  s_08884e0d462e65::t_2eb74292dc9f31 1-32
+researches/runtime-tui/observations/2026-10-07/codex/metadata.json
+  s_08884e0d462e65::t_2aeb6fb3bee345 1-122
+researches/runtime-tui/observations/2026-10-07/observer-used.mjs
+  s_08884e0d462e65::t_8b7f49ab98db76 1-33
+researches/runtime-tui/observations/2026-10-07/opencode/00-startup.txt
+  s_08884e0d462e65::t_94fd7e2d5926e2 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/01-ready.txt
+  s_08884e0d462e65::t_bf0de2df5f32f5 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/02-dismiss-provider.txt
+  s_08884e0d462e65::t_a58518bb6ee743 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/03-slash-menu.txt
+  s_08884e0d462e65::t_2952bc035bfa8f 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/04-slash-filter.txt
+  s_08884e0d462e65::t_abc7713fd49d28 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/05-clear-input.txt
+  s_08884e0d462e65::t_bb929c08ac1617 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/06-multiline-paste.txt
+  s_08884e0d462e65::t_044b97c396ba05 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/07-clear-draft-separate.txt
+  s_08884e0d462e65::t_15bd3ab8090f6c 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/08-two-line-paste.txt
+  s_08884e0d462e65::t_fd5fee02e22b45 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/09-narrow-with-draft.txt
+  s_08884e0d462e65::t_c014e74b685786 1-18
+researches/runtime-tui/observations/2026-10-07/opencode/10-wide-restored.txt
+  s_08884e0d462e65::t_f122845d6fa29f 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/11-command-palette-with-draft.txt
+  s_08884e0d462e65::t_22920e95bc8b41 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/12-restore-draft.txt
+  s_08884e0d462e65::t_152e797320003b 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/13-clear-before-exit.txt
+  s_08884e0d462e65::t_3f465b5312afe3 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/14-exit.txt
+  s_08884e0d462e65::t_fd8bf2827d64f2 1-32
+researches/runtime-tui/observations/2026-10-07/opencode/metadata.json
+  s_08884e0d462e65::t_d07a82da3531e0 1-93
+researches/runtime-tui/opencode.md
+  s_08884e0d462e65::t_76845b21648681 41-42
+researches/runtime-tui/source-pins.json
+  s_08884e0d462e65::t_17712d55b34dba 241-280,329-342
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "913a30f41b0e4ba31f79f132eaa83d317bf2d169",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
