@@ -1,0 +1,21 @@
+e2e/src/runtime-tui.test.ts
+  s_08884e0d462e65::t_01555dd5a2acae 487-503
+.vibecoding/2026-10-07/e03-s003-runtime-tui/interaction-compatibility.md
+  s_08884e0d462e65::t_01555dd5a2acae 3,37,50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7ebf9e0260053f737ee23528d5c7ec16e978232f",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
