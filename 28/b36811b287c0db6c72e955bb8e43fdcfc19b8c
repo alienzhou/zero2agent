@@ -1,0 +1,30 @@
+.authoring/site/chapters/epic03-story003/verify.mjs
+  s_08884e0d462e65::t_751b0df9eabd71 1-103
+  s_08884e0d462e65::t_be6b1355733d4a 104-105
+.authoring/site/chapters/epic03-story003/CONTENT-PLAN.md
+  s_08884e0d462e65::t_db2f783d910aeb 21
+.authoring/site/chapters/epic03-story003/review.md
+  s_08884e0d462e65::t_acd35d40398b47 1-48
+.authoring/site/chapters/epic03-story003/sources.md
+  s_08884e0d462e65::t_c1f6b88ed923ae 23
+.authoring/site/chapters/epic03-story003/verification/browser-checks.json
+  s_08884e0d462e65::t_8c6c4fb8254d58 1-166
+site/course.json
+  s_08884e0d462e65::t_5ebff2e26ff156 3432,3824,3826,3828-3829,3835,3847-3848,3861,3888
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "28b36811b287c0db6c72e955bb8e43fdcfc19b8c",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
