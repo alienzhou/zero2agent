@@ -194,7 +194,10 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   const session = options.session ?? new Session()
   const emitter = new RuntimeEmitter(randomUUID(), options.events?.onEvent)
   let started = false
+  let cancellationNotified = false
   const cancel = () => {
+    if (cancellationNotified) return
+    cancellationNotified = true
     emitter.emit({ type: 'phase', phase: 'cancelling' })
     session.cancelCompaction()
   }

@@ -153,7 +153,7 @@ describe('cancellation through the real Anthropic SDK', () => {
           contextWindow: 12000,
           maxInputTokens: 10000,
           maxOutputTokens: 128,
-          summaryTokens: 64,
+          summaryTokens: 128,
           safetyTokens: 256,
         },
       })
