@@ -1,8 +1,38 @@
 import { describe, it, expect } from 'vitest'
-import { access, readFile } from 'node:fs/promises'
+import { access, readFile, mkdir, writeFile } from 'node:fs/promises'
+import { gzipSync } from 'node:zlib'
 import { join } from 'node:path'
 import { startLivePty } from './helpers/live-pty.js'
 import { isLiveEnabled } from './helpers/cli.js'
+
+async function closeWithEvidence(
+  name: string,
+  p: Awaited<ReturnType<typeof startLivePty>>
+): Promise<void> {
+  try {
+    await p.close()
+  } finally {
+    const dir = process.env.E2E_EVIDENCE_DIR
+    if (dir) {
+      const evidence = JSON.stringify(
+        {
+          name,
+          capturedAt: new Date().toISOString(),
+          platform: process.platform,
+          requests: p.requests,
+          responses: p.responses,
+          output: p.session.output,
+        },
+        null,
+        2
+      )
+      if (process.env.ANTHROPIC_API_KEY && evidence.includes(process.env.ANTHROPIC_API_KEY))
+        throw new Error('Credential appeared in evidence; refusing to save')
+      await mkdir(dir, { recursive: true })
+      await writeFile(join(dir, name + '.json.gz'), gzipSync(evidence))
+    }
+  }
+}
 
 const exists = async (path: string): Promise<boolean> =>
   access(path).then(
@@ -50,7 +80,7 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
       expect(p.requests.length).toBe(count)
       expect(p.session.output).toContain('\x1b[?1049h')
     } finally {
-      await p.close()
+      await closeWithEvidence('read-and-reset', p)
     }
   })
 
@@ -87,7 +117,7 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
         true
       )
     } finally {
-      await p.close()
+      await closeWithEvidence('deny-then-approve', p)
     }
   })
 
@@ -116,7 +146,7 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
       expect(messages).toContain('cancelled')
       expect(await readFile(join(p.cwd, 'ready.txt'), 'utf8')).toBe('started')
     } finally {
-      await p.close()
+      await closeWithEvidence('cancel-and-continue', p)
     }
   })
 })

@@ -33,7 +33,7 @@ const commands = [
 for (const [name, command, args] of commands) {
   const start = Date.now();
   let text = '';
-  const child = spawn(command, args, { cwd: root, env: { ...process.env, E2E_LIVE: name === 'live' ? '1' : '0', NO_COLOR: '1' } });
+  const child = spawn(command, args, { cwd: root, env: { ...process.env, E2E_LIVE: name === 'live' ? '1' : '0', E2E_EVIDENCE_DIR: name === 'live' ? path.join(out, 'live-evidence') : '', NO_COLOR: '1' } });
   child.stdout.on('data', data => { text += data; });
   child.stderr.on('data', data => { text += data; });
   const exitCode = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', code => resolve(code ?? 1)); });
