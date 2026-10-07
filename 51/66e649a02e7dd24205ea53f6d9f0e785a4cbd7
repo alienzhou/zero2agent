@@ -1,0 +1,167 @@
+.authoring/site/chapters/epic03-story005/content-plan.md
+  s_08884e0d462e65::t_c903716cb737d9 1-17
+.authoring/site/chapters/epic03-story005/review.md
+  s_08884e0d462e65::t_c903716cb737d9 1-11
+researches/runtime-logging/acceptance/README.md
+  s_08884e0d462e65::t_40abd3270d33df 1-20
+specs/E03-product-foundations/S005-runtime-logging/README.md
+  s_08884e0d462e65::t_40abd3270d33df 1-108
+.authoring/site/chapters/epic03-story005/author.cjs
+  s_08884e0d462e65::t_1c584076e44760 1-169
+retros/E03-S005-runtime-logging.md
+  s_08884e0d462e65::t_c903716cb737d9 1-35
+.authoring/site/chapters/epic03-story005/sources.md
+  s_08884e0d462e65::t_c903716cb737d9 1-16
+specs/E03-product-foundations/S005-runtime-logging/details/03-verification-checklist.md
+  s_08884e0d462e65::t_263eef798fa81b 5-52
+.vibecoding/2026-10-07/e03-s005-runtime-logging/completion-audit.md
+  s_08884e0d462e65::t_40abd3270d33df 1-21
+.authoring/site/README.md
+  s_08884e0d462e65::t_f6e22c1e2855ad 19,42
+.authoring/site/chapters/epic03-story005/verification/browser-checks.json
+  s_08884e0d462e65::t_2971cc9b6e2f20 1-180
+.authoring/site/chapters/epic03-story005/verify.mjs
+  s_08884e0d462e65::t_d85156bb48cfaa 1-108
+.authoring/site/course.json
+  s_08884e0d462e65::t_5afb55339f14c7 107-113
+.discuss/2026-10-07/e03-s005-runtime-logging/outline.md
+  s_08884e0d462e65::t_a458694146e74a 5,17-22,25-26
+.vibecoding/2026-10-07/e03-s005-runtime-logging/dialogue.md
+  s_08884e0d462e65::t_3277f69debfd5c 6-16
+.vibecoding/2026-10-07/e03-s005-runtime-logging/interaction-compatibility.md
+  s_08884e0d462e65::t_bcf4a47efdc406 1-17
+AGENTS.md
+  s_08884e0d462e65::t_9a9148a51f0756 95-100
+CHANGELOG.md
+  s_08884e0d462e65::t_83b027d2bf7af8 80,82-95
+README.md
+  s_08884e0d462e65::t_c36a2c7af51308 114,164,179-180
+docs/architecture.md
+  s_08884e0d462e65::t_53e2f24cd349e6 151-158
+docs/getting-started.md
+  s_08884e0d462e65::t_ed7aed958c19d8 125-141
+docs/roadmap/README.md
+  s_08884e0d462e65::t_dc1c58f27f965c 21,31
+researches/runtime-logging/acceptance/build.txt
+  s_08884e0d462e65::t_b669e969fbf827 1-13
+researches/runtime-logging/acceptance/format.txt
+  s_08884e0d462e65::t_3a83f1f236d189 1-2
+researches/runtime-logging/acceptance/live-evidence/session-resume.json
+  s_08884e0d462e65::t_4c58f5cb6a47f6 1-451
+researches/runtime-logging/acceptance/live-results.json
+  s_08884e0d462e65::t_70a98bf765e3ca 1
+researches/runtime-logging/acceptance/logging-demo.txt
+  s_08884e0d462e65::t_cbd63297f8c92b 1-49
+researches/runtime-logging/acceptance/runtime-demo.txt
+  s_08884e0d462e65::t_57ba7c855fa3f8 1-114
+researches/runtime-logging/acceptance/screens/01-session-with-log-status.txt
+  s_08884e0d462e65::t_efa4c998acc47f 1-30
+researches/runtime-logging/acceptance/screens/02-log-list.txt
+  s_08884e0d462e65::t_360412041ebb18 1-30
+researches/runtime-logging/acceptance/screens/03-narrow-log-list.txt
+  s_08884e0d462e65::t_56c945a544b14a 1-18
+researches/runtime-logging/acceptance/screens/04-select-completed-run.txt
+  s_08884e0d462e65::t_7fa916df9664eb 1-30
+researches/runtime-logging/acceptance/screens/05-readonly-viewer.txt
+  s_08884e0d462e65::t_0da4c5c24148e0 1-30
+researches/runtime-logging/acceptance/screens/06-viewer-end.txt
+  s_08884e0d462e65::t_1e30949596084a 1-30
+researches/runtime-logging/acceptance/screens/07-narrow-viewer.txt
+  s_08884e0d462e65::t_48df781a18d107 1-18
+researches/runtime-logging/acceptance/screens/08-back-to-list.txt
+  s_08884e0d462e65::t_1459d43c287572 1-30
+researches/runtime-logging/acceptance/screens/capture.json
+  s_08884e0d462e65::t_395bd367627f26 1-24
+researches/runtime-logging/acceptance/session-demo.txt
+  s_08884e0d462e65::t_45c6a6590c7c68 1-14
+researches/runtime-logging/acceptance/site-build.txt
+  s_08884e0d462e65::t_00c725942f4796 1-10
+researches/runtime-logging/acceptance/site-check.txt
+  s_08884e0d462e65::t_f4cda1880f3f60 1-5
+researches/runtime-logging/acceptance/summary.json
+  s_08884e0d462e65::t_d3ca80b09998b0 1-427
+researches/runtime-logging/acceptance/terminal-restore.txt
+  s_08884e0d462e65::t_bc8f3250538cd0 1-27
+scripts/e03-s005-tui-capture.mjs
+  s_08884e0d462e65::t_c8da758a7a8af9 1-49
+site/chapters/epic03-story005/01-cover.html
+  s_08884e0d462e65::t_7edf078f7a9624 1
+site/chapters/epic03-story005/02-carriers.html
+  s_08884e0d462e65::t_a037235156c933 1
+site/chapters/epic03-story005/03-evidence.html
+  s_08884e0d462e65::t_0937ac262c38a2 1
+site/chapters/epic03-story005/04-identity.html
+  s_08884e0d462e65::t_21918ed259897b 1
+site/chapters/epic03-story005/05-clock.html
+  s_08884e0d462e65::t_7e2133d1b3a414 1
+site/chapters/epic03-story005/06-request.html
+  s_08884e0d462e65::t_00b37c6143cd19 1
+site/chapters/epic03-story005/07-auxiliary.html
+  s_08884e0d462e65::t_4fab493ddfa1fd 1
+site/chapters/epic03-story005/08-tool.html
+  s_08884e0d462e65::t_67701978e5c067 1
+site/chapters/epic03-story005/09-background.html
+  s_08884e0d462e65::t_2e13ca1577235e 1
+site/chapters/epic03-story005/10-privacy.html
+  s_08884e0d462e65::t_791e33157cd7b6 1
+site/chapters/epic03-story005/11-files.html
+  s_08884e0d462e65::t_a8122154c7c161 1
+site/chapters/epic03-story005/12-writer.html
+  s_08884e0d462e65::t_0c829b540e0170 1
+site/chapters/epic03-story005/13-crash.html
+  s_08884e0d462e65::t_8c6d114409e8ab 1
+site/chapters/epic03-story005/14-reader.html
+  s_08884e0d462e65::t_697f8f5f4db663 1
+site/chapters/epic03-story005/15-tui.html
+  s_08884e0d462e65::t_e295f46b819171 1
+site/chapters/epic03-story005/16-cli.html
+  s_08884e0d462e65::t_02d71f393bca73 1
+site/chapters/epic03-story005/17-triage.html
+  s_08884e0d462e65::t_8f1cbbacf41504 1
+site/chapters/epic03-story005/18-practice.html
+  s_08884e0d462e65::t_b23015beac1b22 1-2
+site/chapters/epic03-story005/19-limits.html
+  s_08884e0d462e65::t_9c307bb03b66d1 1
+site/chapters/epic03-story005/20-next.html
+  s_08884e0d462e65::t_8cd00ec0fc214f 1
+site/chapters/epic03-story005/course.css
+  s_08884e0d462e65::t_665c6a3776ddd9 1-20
+site/chapters/epic03-story005/pages.json
+  s_08884e0d462e65::t_ad732a47ccfa22 1-201
+site/course.json
+  s_08884e0d462e65::t_0c9c8cd6530ec1 4426-4907,4910
+specs/E03-product-foundations/README.md
+  s_08884e0d462e65::t_c6df57454b8457 9,18-19,35
+specs/E03-product-foundations/S004-session-persistence/README.md
+  s_08884e0d462e65::t_f85e93b22acd56 95
+specs/E03-product-foundations/S005-runtime-logging/deep-dive/01-logs-and-side-effects.md
+  s_08884e0d462e65::t_f8beb22cf97854 1-33
+specs/E03-product-foundations/S005-runtime-logging/deep-dive/02-log-and-trace.md
+  s_08884e0d462e65::t_fcf45513c43dca 1-23
+specs/E03-product-foundations/S005-runtime-logging/details/01-technical-design.md
+  s_08884e0d462e65::t_75f84d398ebdc8 17
+specs/E03-product-foundations/S005-runtime-logging/details/02-task-list.md
+  s_08884e0d462e65::t_b6dee11d5ffa69 3-11,13-14
+specs/E03-product-foundations/S005-runtime-logging/details/04-backlog.md
+  s_08884e0d462e65::t_c790bad61fbce3 7,12
+specs/E03-product-foundations/S005-runtime-logging/follow-along.md
+  s_08884e0d462e65::t_d1132b267a27dd 1-67
+specs/README.md
+  s_08884e0d462e65::t_5384f084049aa5 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5166e649a02e7dd24205ea53f6d9f0e785a4cbd7",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
