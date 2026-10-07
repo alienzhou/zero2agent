@@ -20,7 +20,7 @@
 zero2agent/
 ├── packages/           # 代码
 │   ├── core/           # Agent Harness 核心逻辑
-│   ├── tui/            # CLI 界面
+│   ├── tui/            # 交互 TUI 与 plain / 单次 CLI 宿主
 │   └── shared/         # 共享工具和类型
 ├── specs/              # 设计文档 (每个迭代的 spec)
 ├── retros/             # 复盘笔记 (每个迭代的反思)
@@ -79,6 +79,20 @@ AI 生成的代码需要人工审查，关注：
 - 是否过度设计
 - 是否有明显 bug
 
+### 运行状态与交互兼容
+
+- Core 通过结构化运行事件报告事实；取消、权限审批和人工终端交接使用各自的控制接口。不要依赖控制台文本推断状态，也不要把展示通知写进模型消息历史。
+- 修改交互宿主时，对照既有命令、参数、权限、会话、上下文压缩及人工终端功能建立兼容检查；同时保留单次调用、管道和 `--plain` 路径。具体快捷键与当前能力放在课程及使用文档中。
+- stdin、raw mode、屏幕和审批焦点同一时刻只能由一个交互接收者拥有。取消要等执行与清理完成，再开放下一轮；测试正常退出、异常和信号后的终端恢复。
+- 工具调用与结果必须配对。取消不能抹掉已完成的副作用；人工终端的私密输入、输出与凭据不得进入模型请求或验收附件。
+
+### 验收与证据
+
+- 分别记录单元测试、确定性 SDK 响应、真实 PTY、真实模型服务与人工审查。只按实际运行的层级、版本和平台标记通过；AI 交叉审阅不能替代人工审查。
+- 验证文件效果、请求正文、进程清理等可观察结果，不能仅凭模型的文字声明判定工具执行成功。失败重验应保留原始失败记录并说明修正原因。
+- 实机与竞品调研记录版本、平台、命令、时间、来源和固定源码版本。源码引用与实测二进制版本分别注明，不推断二者来自同一次构建。
+- 原始终端证据无损保存；需要清理控制码或空白的展示副本，注明它是派生内容。保存前检查凭据与私密内容；报告应标明被验证源码的版本或哈希。
+
 ---
 
 ## 迭代流程
@@ -112,7 +126,7 @@ AI 生成的代码需要人工审查，关注：
 
 Zero2Agent 的课程内容在本仓库闭环维护。HTML、CSS 与小节顺序放在 site/chapters/；章节元信息、图解生成源、内容计划和来源审阅资料放在 .authoring/site/。content-generator/zero2agent-xhs 是迁移前的历史材料，后续课程不在那里制作后再复制回来。
 
-遵循 [.authoring/site/README.md](./.authoring/site/README.md)：修改编辑源后运行 pnpm site:build 和 pnpm site:check，再通过 pnpm site:preview 检查 PC 与 H5。只部署 site/；生成源与部署产物在同一提交保存。
+遵循 [.authoring/site/README.md](./.authoring/site/README.md)：修改编辑源后运行 pnpm site:build 和 pnpm site:check，再通过 pnpm site:preview 检查 PC 与 H5，包括逐页可读性、导航、图解放大和文字内容。课程涉及交互界面时，还须验证实际交互与对应源码，不能只检查静态截图。只部署 site/；生成源与部署产物在同一提交保存。
 
 ---
 
@@ -229,14 +243,9 @@ git push origin E01-S001-react-basic
 <!-- [ABC:agent-better-checkpoint:start] -->
 ### Checkpoint Commit Rule
 
-After completing any file edit (write_to_file, replace_in_file, multi_replace_in_file, or similar),
-you MUST:
+每完成一组有意义的文件修改，按本文件的 Story / Conventional Commit 规范创建 checkpoint，再继续下一项工作。
 
-1. Load the "agent-better-checkpoint" skill (if not already loaded)
-2. Follow its instructions to create a checkpoint commit
-3. Do NOT proceed to the next task until the commit is done
-
-This ensures every meaningful code change is tracked with a semantic Git commit.
+若 `agent-better-checkpoint` skill 可用，先读取并遵循它；若不存在，说明缺失并直接按本仓库规则提交，不因缺少辅助 skill 中断已获授权的工作。仅提交自己负责的文件，保留用户与其他协作者尚未提交的修改。
 <!-- [ABC:agent-better-checkpoint:end] -->
 
 ---
