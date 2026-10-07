@@ -18,4 +18,4 @@
 - [x] 在线图解、内容计划、来源、逐页视觉审阅及 PC/H5 检查。
 - [x] 复盘、AI 协作记录、README 中英文、Epic、Roadmap、上下课互链、CHANGELOG。
 - [x] AI 独立交叉审阅、修复与复验；人工审阅未代签。
-- [ ] 固定 Tag、推送及 PR 收尾。
+- [x] 固定跟练版本 `E03-S003-runtime-tui`、推送及 [PR #19](https://github.com/alienzhou/zero2agent/pull/19)；待人工审查与合并。

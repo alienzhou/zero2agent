@@ -79,6 +79,8 @@ git checkout main
 
 ### E03-S003-runtime-tui（实现与验收完成，待合入 main）
 
+[PR #19](https://github.com/alienzhou/zero2agent/pull/19)；固定跟练 Tag：`E03-S003-runtime-tui`。人工审查与合并待完成，站点未部署。
+
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S003-runtime-tui/README.md)
 
 - RuntimeEvent 为每轮分配 turnId 与递增 seq，工具状态关联调用 ID；模型文本、Harness 通知和压缩状态分开，观察者不能影响执行。

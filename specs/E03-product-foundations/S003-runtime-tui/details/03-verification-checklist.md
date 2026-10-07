@@ -20,7 +20,7 @@
 | R10 | 真实模型实际 CLI 流程 | 独立 live 测试与脱敏记录 | 通过 |
 | R11 | 四竞品固定来源、五篇 Spec、正文、跟练、复盘及导航 | 逐项文档审阅与链接检查 | 通过 |
 | R12 | 在线图解、来源对应、PC/H5 可读性 | site:build/site:check、逐页审阅 | 通过 |
-| R13 | 提交、PR、固定跟练版本 | Git、远端 PR 与 Tag | 待推送 |
+| R13 | 提交、PR、固定跟练版本 | [PR #19](https://github.com/alienzhou/zero2agent/pull/19)、`E03-S003-runtime-tui` Tag | 交付完成；待人工审查/合并 |
 
 平台范围按实测记录；未执行的平台或人工审阅不能标成已通过。
 
