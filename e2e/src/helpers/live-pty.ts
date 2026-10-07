@@ -25,7 +25,8 @@ export interface LivePtySession {
 /** Records request bodies, never credentials; every response comes from the real provider. */
 export async function startLivePty(
   files: Record<string, string> = {},
-  hostEnv: Record<string, string> = {}
+  hostEnv: Record<string, string> = {},
+  options: { ui?: 'plain' | 'tui' } = {}
 ): Promise<LivePtySession> {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('Missing live API configuration')
   const workspace = await makeTempWorkspace(files)
@@ -105,7 +106,13 @@ export async function startLivePty(
     CONTEXT_COUNTING: 'conservative',
     ...hostEnv,
   }
-  const session = startHumanTerminal(CLI_ENTRY, ['--plain'], workspace.dir, true, { env, timeoutMs: 90_000 })
+  const session = startHumanTerminal(
+    CLI_ENTRY,
+    options.ui === 'tui' ? [] : ['--plain'],
+    workspace.dir,
+    true,
+    { env, timeoutMs: 90_000 }
+  )
   return {
     session,
     env,
