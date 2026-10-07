@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-07T05:41:58.083578+00:00",
-  "head": "fbb12cf2612b2a2fbe38ae547b9324c154ce20a4",
+  "checkedAt": "2026-10-07T05:43:44.491617+00:00",
+  "head": "f16370e488373158ac6a76b6e84a8b24825794e8",
   "mode": "Full offline gates plus targeted live recheck; not a second full-suite run",
   "fullRun": "provider-dialogue-attempt/summary.json",
   "fullRunNonLivePassed": true,
@@ -19,7 +19,7 @@
   "liveResult": "live-recheck/results.json",
   "livePassed": 3,
   "liveSkipped": 0,
-  "liveTestSourceSha256": "dacb424b13c90b9ce0f768a719e27ee954fd6d823aed4d8caac2ba018f55d856",
+  "liveTestSourceSha256": "b7c8cf0bc022d539ab847ce1b7bd281c6cadfd856200928c3772011504d30298",
   "followupChecks": {
     "e2eTypecheck": {
       "command": "pnpm --filter @zero2agent/e2e exec tsc --noEmit",
@@ -36,5 +36,12 @@
   },
   "coursePagesMatchedReview": 18,
   "terminalRestorePathsPassed": 3,
-  "passed": true
+  "passed": true,
+  "resumedAssistantAnswerObserved": true,
+  "liveReplyEvidence": {
+    "requests": 3,
+    "responses": 3,
+    "marker": "Agent › READY_TO_CONTINUE"
+  },
+  "missingLocalMarkdownLinks": 0
 }
