@@ -1,0 +1,21 @@
+packages/tui/src/setup-terminal-runtime.ts
+  s_08884e0d462e65::t_5c12baf2eb6bf7 6,16-18,33,36,38,65
+packages/tui/src/runtime-tui.ts
+  s_08884e0d462e65::t_5c12baf2eb6bf7 1-365
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e6c101bc62904de5ae46da82878999ed291bf849",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
