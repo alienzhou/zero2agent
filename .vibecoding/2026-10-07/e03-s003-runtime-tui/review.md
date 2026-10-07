@@ -58,3 +58,14 @@
 3. TUI 保留有限条目、字符和最近退役 Turn；工具详情只能展开保留的预览，审批参数另有完整滚动路径。Reducer 不是任意久远事件的持久化回放系统。
 4. 终端恢复的实际证明覆盖上述 exit/SIGTERM/SIGHUP 路径；capture 的转义码字段本身不证明 stty 状态。SIGKILL 或宿主崩溃不在这些正常清理证明之内。
 5. 本记录不声称真实模型永远服从工具调用要求，不把 AI 审查当成人工签收，不声称新 PR 已合并或站点已部署。固定跟练 Tag、PR 可审阅状态及最终 R01–R13 结果由主代理在最终交付时核对。
+
+## 真实模型对话适配及续聊证据的最终复审
+
+追加审查 `983dfaa`、`fbb12cf` 和 `f16370e`，仅涉及真实模型验收方式，不修改生产实现。
+
+- 已独立读取 [provider-dialogue-attempt](../../../researches/runtime-tui/acceptance/provider-dialogue-attempt/) 和 [live-dialogue-recheck](../../../researches/runtime-tui/acceptance/live-dialogue-recheck/) 的结果。模型在拒绝后继续等待自然语言确认，长命令也可能先询问一次；这些失败记录被保留，没有覆盖成通过。
+- 对话适配没有放宽文件效果：拒绝的 `decision.txt` 始终必须不存在；新批准请求改为独立 `approved.txt`，仍须读取其实际内容，并在后续请求里找到拒绝和成功的 `tool_result`。每次场景最多通过同一 TUI 补充一次明确确认，随后仍须出现真实宿主审批，不能用模型文字替代 y/n 控制。
+- 取消场景仍必须等真实 `ready.txt` 出现才发送 Ctrl-C；仍断言 `late.txt` 不存在、取消期间没有新增请求、下一请求含取消回执、`ready.txt` 的已完成写入保留。`closeWithEvidence` 在清理失败后仍尝试保存证据，拒绝保存含 API key 的内容，并在保存结束后重抛清理失败；没有吞掉该失败。
+- 这次审查额外发现原续聊断言的确切缺口：`READY_TO_CONTINUE` 同时存在于用户提示词，等待这个子串可被输入回显满足。[before-continuation-answer-check](../../../researches/runtime-tui/acceptance/before-continuation-answer-check/) 中取消场景虽然测试显示通过，但仅有两个请求、一个响应，唯一 token 位于“你 ›”一行，末屏仍在等待模型。该旧结果不能证明模型已完成续聊。
+- `f16370e` 改为等待 `Agent › READY_TO_CONTINUE`，再等待该回答之后的空闲输入框。独立审计修复后 [live-recheck](../../../researches/runtime-tui/acceptance/live-recheck/)：3 项实际执行并通过；取消证据时间为 `2026-10-07T05:42:54.715Z`，三个请求均有 HTTP 200 响应，最后请求包含同 ID 的 terminal `tool_use` 与 cancelled `tool_result`，最后屏幕确有 Agent 回答及其后的“你: ”。此次模型先调用了一次 list_directory，再运行 terminal；证据证明取消与续聊，不证明它严格遵循“只调用一个工具”的提示词。
+- 独立将当前源码与 `provider-dialogue-attempt/summary.json` 的结束哈希逐项比较，唯一变化为 `e2e/src/runtime-live.test.ts`。该次完整离线日志实际为 shared 1 + Core 394 + E2E 114，共 509 项通过；生产代码与其他测试未变化。本轮没有重跑全库，真实模型重验、类型、lint、格式与原完整离线结果应按各自版本合并记录，不将原完整门禁中的 live 失败抹去。
