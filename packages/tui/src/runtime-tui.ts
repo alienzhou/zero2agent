@@ -22,6 +22,7 @@ interface PendingApproval {
   request: ApprovalRequest
   text: string
   offset: number
+  displayed: boolean
   finish: (allow: boolean, reason: string) => void
 }
 
@@ -80,6 +81,7 @@ export class RuntimeTui {
         request,
         text: `Approval · ${request.toolName}\n调用: ${request.toolCallId}\n工作目录: ${request.cwd}\n原因: ${request.reason}\n参数（完整 JSON）:\n${JSON.stringify(request.input, null, 2)}`,
         offset: 0,
+        displayed: false,
         finish,
       }
       request.signal.addEventListener('abort', onAbort, { once: true })
@@ -200,6 +202,8 @@ export class RuntimeTui {
     const page = Math.max(1, (process.stdout.rows || 24) - 7)
     if (this.approval) {
       const approval = this.approval
+      // Typeahead from the composer cannot approve a dialog that has not been painted yet.
+      if (!approval.displayed) return
       const total = wrapText(approval.text, this.width()).length
       if (key.name === 'up' || key.name === 'pageup') approval.offset -= key.name === 'up' ? 1 : page
       else if (key.name === 'down' || key.name === 'pagedown') approval.offset += key.name === 'down' ? 1 : page
@@ -369,9 +373,13 @@ export class RuntimeTui {
       lines.push(clipText(`详情 ${this.approval.offset + 1}–${Math.min(all.length, this.approval.offset + bodyHeight)} / ${all.length} 行（可滚动查看全部参数）`, width))
       lines.push(clipText('↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮', width))
       lines.push(clipText('允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝', width))
+      this.approval.displayed = true
     } else {
       const timeline: string[] = []
       const lastTool = this.state.entries.filter(entry => entry.kind === 'tool').at(-1)
+      const visibleToolIds = new Set(this.state.entries.filter(entry => entry.kind === 'tool').map(entry => entry.call.toolCallId))
+      for (const id of this.expanded) if (!visibleToolIds.has(id)) this.expanded.delete(id)
+      if (this.selectedTool && !visibleToolIds.has(this.selectedTool)) this.selectedTool = undefined
       if (this.state.discarded) timeline.push(`[较早的 ${this.state.discarded} 条显示记录已移除]`)
       for (const entry of this.state.entries) {
         if (entry.kind === 'tool') {

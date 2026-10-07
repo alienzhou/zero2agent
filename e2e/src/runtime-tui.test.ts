@@ -75,15 +75,16 @@ describe.skipIf(process.platform === 'win32')('E03-S003: default TUI over real S
     p.session.write('\x1b[200~第一行\n第二行🙂\x1b[201~')
     await p.session.waitFor('第二行🙂', from)
     expect(p.requests).toHaveLength(0)
+    const submittedFrom = p.session.output.length
     p.session.write('\x7f!\r')
-    await p.session.waitFor('你: ', from)
+    await p.session.waitFor('回答 中文', submittedFrom)
+    await p.session.waitFor('你: ', submittedFrom)
     expect(p.requests[0].messages.at(-1)?.content).toBe('第一行\n第二行!')
     expect(p.session.output).not.toContain('\x1b]52;')
     expect(p.session.output).toContain('\\u001b]52;c;unsafe\\u0007')
     const historyFrom = p.session.output.length
-    p.session.write('\x1b[A\x01\x15/new\r')
-    // Ctrl-U at Home clears no content: test explicit End then Ctrl-U instead.
-    await p.session.waitFor('你: ', historyFrom)
+    p.session.write('\x1b[A\x05\x15/new\r')
+    await p.session.waitFor('已开始新对话', historyFrom)
     const newFrom = p.session.output.length
     p.session.write('/ne\t\r')
     await p.session.waitFor('已开始新对话', newFrom)
