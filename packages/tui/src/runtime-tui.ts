@@ -37,7 +37,7 @@ const STATUS: Record<string, string> = {
 }
 const COMMANDS = ['/new', '/compact', '/terminal', '/help']
 const HELP =
-  '输入编辑：← → / Home End 移动，↑ ↓ 输入历史，Ctrl-U 清空前文，Ctrl-W 删除词。\n粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Home End 移动，↑ ↓ 在多行中移动或查看历史，Ctrl-U 清空前文，Ctrl-W 删除词。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -67,6 +67,7 @@ export class RuntimeTui {
   private scroll = 0
   private expanded = new Set<string>()
   private selectedTool?: string
+  private revealSelected = false
   private cachedEntries?: TimelineEntry[]
   private cachedSignature = ''
   private cachedTimeline: string[] = []
@@ -219,6 +220,14 @@ export class RuntimeTui {
   }
   private onInterrupt = (): void => {
     if (!this.busy) {
+      if (this.buffer) {
+        this.buffer = ''
+        this.cursor = 0
+        this.draft = ''
+        this.historyIndex = this.history.length
+        this.notice('草稿已清空；空草稿时 Ctrl-C 退出。')
+        return
+      }
       void this.close()
       return
     }
@@ -307,6 +316,7 @@ export class RuntimeTui {
         )
       )
       this.selectedTool = toolKey(tools[index].call)
+      this.revealSelected = true
       this.schedule()
       return
     }
@@ -316,6 +326,7 @@ export class RuntimeTui {
       if (id) {
         if (this.expanded.has(id)) this.expanded.delete(id)
         else this.expanded.add(id)
+        this.revealSelected = true
       }
       this.schedule()
       return
@@ -331,6 +342,9 @@ export class RuntimeTui {
       }
     }
     const chars = graphemes(this.buffer)
+    const lineStart = chars.lastIndexOf('\n', Math.max(0, this.cursor - 1)) + 1
+    const nextBreak = chars.indexOf('\n', this.cursor)
+    const lineEnd = nextBreak < 0 ? chars.length : nextBreak
     if (key.name === 'return') {
       if (this.busy) {
         this.notice('本轮仍在运行，草稿已保留；完成后按 Enter 发送。')
@@ -345,6 +359,8 @@ export class RuntimeTui {
         this.draft = ''
         this.operation = this.submit(input)
       }
+    } else if (key.name === 'enter' || (key.ctrl && key.name === 'j')) {
+      this.insert('\n')
     } else if (key.name === 'tab') {
       const matches = COMMANDS.filter(command => command.startsWith(this.buffer))
       if (matches.length === 1) {
@@ -364,8 +380,8 @@ export class RuntimeTui {
       this.cursor = graphemes(left).length
     } else if (key.name === 'left') this.cursor = Math.max(0, this.cursor - 1)
     else if (key.name === 'right') this.cursor = Math.min(chars.length, this.cursor + 1)
-    else if (key.name === 'home' || (key.ctrl && key.name === 'a')) this.cursor = 0
-    else if (key.name === 'end' || (key.ctrl && key.name === 'e')) this.cursor = chars.length
+    else if (key.name === 'home' || (key.ctrl && key.name === 'a')) this.cursor = lineStart
+    else if (key.name === 'end' || (key.ctrl && key.name === 'e')) this.cursor = lineEnd
     else if (key.name === 'backspace') {
       if (this.cursor) {
         chars.splice(--this.cursor, 1)
@@ -375,6 +391,22 @@ export class RuntimeTui {
       chars.splice(this.cursor, 1)
       this.buffer = chars.join('')
     } else if (key.name === 'up' || key.name === 'down') {
+      if (key.name === 'up' && lineStart > 0) {
+        const previousEnd = lineStart - 1
+        const previousStart = chars.lastIndexOf('\n', previousEnd - 1) + 1
+        this.cursor = Math.min(previousEnd, previousStart + this.cursor - lineStart)
+        this.schedule()
+        return
+      }
+      if (key.name === 'down' && lineEnd < chars.length) {
+        const nextEnd = chars.indexOf('\n', lineEnd + 1)
+        this.cursor = Math.min(
+          nextEnd < 0 ? chars.length : nextEnd,
+          lineEnd + 1 + this.cursor - lineStart
+        )
+        this.schedule()
+        return
+      }
       if (this.historyIndex === this.history.length) this.draft = this.buffer
       this.historyIndex = Math.max(
         0,
@@ -575,6 +607,12 @@ export class RuntimeTui {
         this.cachedTimeline = timeline
       }
       this.scroll = Math.min(this.scroll, Math.max(0, timeline.length - bodyHeight))
+      if (this.revealSelected) {
+        const selectedLine = timeline.findIndex(line => line.startsWith('┌ ◆'))
+        if (selectedLine >= 0)
+          this.scroll = Math.max(0, timeline.length - bodyHeight - selectedLine)
+        this.revealSelected = false
+      }
       const end = Math.max(bodyHeight, timeline.length - this.scroll)
       lines.push(...timeline.slice(Math.max(0, end - bodyHeight), end))
       while (lines.length < 2 + bodyHeight) lines.push('')
