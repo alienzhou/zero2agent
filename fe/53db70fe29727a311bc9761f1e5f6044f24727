@@ -1,0 +1,67 @@
+.vibecoding/2026-10-07/e03-s003-runtime-tui/review.md
+  s_08884e0d462e65::t_0525ddcd9ee8ff 32
+researches/runtime-tui/acceptance/README.md
+  s_08884e0d462e65::t_0b677c40792f44 11,28-29
+researches/runtime-tui/acceptance/before-input-limit-fix/build.txt
+  s_08884e0d462e65::t_c0db99d62198df 1-13
+researches/runtime-tui/acceptance/before-input-limit-fix/format.txt
+  s_08884e0d462e65::t_b25d9cfc40ff9b 1-2
+researches/runtime-tui/acceptance/before-input-limit-fix/live-results.json
+  s_08884e0d462e65::t_0543b2a72b6907 1
+researches/runtime-tui/acceptance/before-input-limit-fix/live.txt
+  s_08884e0d462e65::t_6ee484f10b123c 1-14
+researches/runtime-tui/acceptance/before-input-limit-fix/runtime-demo.txt
+  s_08884e0d462e65::t_56b902e74f522e 1-114
+researches/runtime-tui/acceptance/before-input-limit-fix/site-build.txt
+  s_08884e0d462e65::t_cf96ccda7caabd 1-8
+researches/runtime-tui/acceptance/before-input-limit-fix/site-check.txt
+  s_08884e0d462e65::t_ac0197c4005378 1-5
+researches/runtime-tui/acceptance/before-input-limit-fix/summary.json
+  s_08884e0d462e65::t_00b7d581ea6c50 1-383
+researches/runtime-tui/acceptance/before-input-limit-fix/terminal-restore.txt
+  s_08884e0d462e65::t_a5360d2e233da2 1-27
+researches/runtime-tui/acceptance/failed-live-attempt/build.txt
+  s_08884e0d462e65::t_5dcc5e47693193 1-13
+researches/runtime-tui/acceptance/failed-live-attempt/format.txt
+  s_08884e0d462e65::t_66e4a0ce6e1950 1-2
+researches/runtime-tui/acceptance/failed-live-attempt/live.txt
+  s_08884e0d462e65::t_42f548bcd201d3 1-39
+researches/runtime-tui/acceptance/failed-live-attempt/runtime-demo.txt
+  s_08884e0d462e65::t_15ab61871641ec 1-114
+researches/runtime-tui/acceptance/failed-live-attempt/site-build.txt
+  s_08884e0d462e65::t_c88daa7bf59f5e 1-8
+researches/runtime-tui/acceptance/failed-live-attempt/site-check.txt
+  s_08884e0d462e65::t_00f8c8e3546ca2 1-5
+researches/runtime-tui/acceptance/failed-live-attempt/summary.json
+  s_08884e0d462e65::t_a1ad9b4a3f3edb 1-370
+researches/runtime-tui/acceptance/initial/build.txt
+  s_08884e0d462e65::t_077538a3ca48be 1-13
+researches/runtime-tui/acceptance/initial/format.txt
+  s_08884e0d462e65::t_e1a3a3847423d7 1-2
+researches/runtime-tui/acceptance/initial/runtime-demo.txt
+  s_08884e0d462e65::t_792868c69b0b20 1-114
+researches/runtime-tui/acceptance/initial/site-build.txt
+  s_08884e0d462e65::t_f95c79332e40f3 1-7
+researches/runtime-tui/acceptance/initial/site-check.txt
+  s_08884e0d462e65::t_24b63af5102852 1-5
+researches/runtime-tui/acceptance/initial/summary.json
+  s_08884e0d462e65::t_b1b6416c19950c 1-356
+scripts/e03-s003-acceptance-report.mjs
+  s_08884e0d462e65::t_54be7388f6d2ff 5,61-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fe53db70fe29727a311bc9761f1e5f6044f24727",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
