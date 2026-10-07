@@ -11,7 +11,7 @@ it.skipIf(!isLiveEnabled() || process.platform === 'win32')(
   'E03-S006 live: real write_file effect, durable checkpoint, keyless undo/redo and no tool replay',
   async () => {
     const before = `BEFORE-${randomUUID()}\n`,
-      after = `AFTER-${randomUUID()}\n`
+      after = `AFTER-${randomUUID()}`
     const p = await startLivePty(
       { 'checkpoint-probe.txt': before },
       { PERMISSION_MODE: 'accept-edits' },
@@ -20,7 +20,7 @@ it.skipIf(!isLiveEnabled() || process.platform === 'win32')(
     try {
       await p.session.waitFor('你: ')
       p.session.write(
-        `Use write_file exactly once to replace checkpoint-probe.txt with the following exact UTF-8 content including its final newline: ${JSON.stringify(after)}. Do not run shell commands. Then say done.\r`
+        `Use write_file exactly once to replace checkpoint-probe.txt with the following exact UTF-8 content with no trailing newline: ${JSON.stringify(after)}. Do not run shell commands. Then say done.\r`
       )
       await p.session.waitFor('已保存 r2')
       expect(await readFile(path.join(p.cwd, 'checkpoint-probe.txt'), 'utf8')).toBe(after)
