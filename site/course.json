@@ -3414,7 +3414,7 @@
       "title": "运行状态与 TUI",
       "description": "用结构化事件、审批焦点和取消收尾，做出可编辑、可查看、可控制的终端界面。",
       "code": "E03-S003",
-      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e03-s003-runtime-tui/specs/E03-product-foundations/S003-runtime-tui",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S003-runtime-tui/specs/E03-product-foundations/S003-runtime-tui",
       "pages": [
         {
           "id": "01-cover",
@@ -3826,7 +3826,7 @@
             "保留的参数 / 执行结果",
             "path: src/main.ts",
             "读取结果…… [超长内容已截短]",
-            "完整会话由 Core 保留",
+            "模型会话由 Core 管理",
             "100 列 · 运行中",
             "草稿 › 检查中文与 🙂",
             "44 列 · 运行中",

@@ -96,7 +96,7 @@
       "epic": "epic03",
       "title": "运行状态与 TUI",
       "description": "用结构化事件、审批焦点和取消收尾，做出可编辑、可查看、可控制的终端界面。",
-      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e03-s003-runtime-tui/specs/E03-product-foundations/S003-runtime-tui"
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S003-runtime-tui/specs/E03-product-foundations/S003-runtime-tui"
     }
   ]
 }

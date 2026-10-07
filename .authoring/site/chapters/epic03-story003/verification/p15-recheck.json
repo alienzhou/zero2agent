@@ -1,0 +1,20 @@
+{
+  "chapter": "epic03-story003",
+  "browser": "154.0.8037.98",
+  "pages": [
+    {
+      "file": "15-details.html",
+      "sha256": "39a2c3ff4c8ad758ec028092f7e715601eb75ed19d05dc5d55d1490ba76dbfc1",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    }
+  ],
+  "reader": [],
+  "failures": [],
+  "sources": {
+    "author.cjs": "1d15446890426715718b0515d3e5dcf5a7d5e5e40f4af4e32d8fec538ccabfc9",
+    "course.css": "19ddb438fe1bbfff3448978b1b15f9ecfd3cbfe67b01386f22e326397304451f"
+  },
+  "passed": true
+}

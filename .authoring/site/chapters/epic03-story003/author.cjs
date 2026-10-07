@@ -143,7 +143,7 @@ t(0,459,'常用输入操作',36,C.ink,650)+
 page('15-details.html','详情与尺寸','默认看摘要，\n需要时再展开证据','有限的屏幕里，让关键状态与当前输入始终可达。',svg('工具摘要展开保留的参数和结果，超长内容会截短；终端缩窄时重排并保留中文与emoji草稿',
 box(0,7,952,100,C.ink,C.ink)+t(26,68,'✓ read_file · call-3 · 已完成 · 12ms',33,C.paper,650)+
 line('M476 110V163',C.green,true)+chip(324,173,303,'Ctrl-O 展开详情')+
-box(0,253,952,235,C.white,C.green)+t(28,306,'保留的参数 / 执行结果',32,C.green,650)+ls(28,365,['path: src/main.ts','读取结果…… [超长内容已截短]','完整会话由 Core 保留'],29,C.ink,400,'start',45,true)+
+box(0,253,952,235,C.white,C.green)+t(28,306,'保留的参数 / 执行结果',32,C.green,650)+ls(28,365,['path: src/main.ts','读取结果…… [超长内容已截短]','模型会话由 Core 管理'],29,C.ink,400,'start',45,true)+
 line('M0 536H951',C.line)+
 box(0,578,490,157,C.ink,C.ink)+ls(25,629,['100 列 · 运行中','草稿 › 检查中文与 🙂'],29,C.paper,400,'start',55)+
 line('M505 651H590',C.green,true)+

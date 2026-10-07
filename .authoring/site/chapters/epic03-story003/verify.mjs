@@ -1,6 +1,7 @@
 // Optional browser QA for this chapter. No dependency is added to the course site.
 // PLAYWRIGHT_MODULE selects an existing Playwright module; CHROME_PATH is optional.
 // SITE_BASE_URL enables reader checks against a running `pnpm site:preview` server.
+// COURSE_QA_PAGE optionally limits diagram checks to one exact manifest filename.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -16,6 +17,8 @@ const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(path.isAbsolute(moduleName) ? pathToFileURL(moduleName).href : moduleName);
 const browser = await chromium.launch({headless: true, ...(process.env.CHROME_PATH ? {executablePath: process.env.CHROME_PATH} : {})});
 const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'pages.json')));
+const selectedPages = manifest.pages.filter(page => !process.env.COURSE_QA_PAGE || page.file === process.env.COURSE_QA_PAGE);
+if (!selectedPages.length) throw new Error('COURSE_QA_PAGE does not match a manifest page');
 const results = {chapter, browser: browser.version(), pages: [], reader: [], failures: []};
 const hash = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 results.sources = Object.fromEntries(['author.cjs'].map(file => [file, hash(new URL(file, import.meta.url))]));
@@ -23,7 +26,7 @@ results.sources['course.css'] = hash(path.join(dir, 'course.css'));
 
 try {
   const page = await browser.newPage({viewport: {width: 1080, height: 1440}, deviceScaleFactor: 1});
-  for (const entry of manifest.pages) {
+  for (const entry of selectedPages) {
     await page.goto(pathToFileURL(path.join(dir, entry.file)).href);
     await page.evaluate(() => document.fonts.ready);
     const check = await page.evaluate(() => {
@@ -51,8 +54,8 @@ try {
     if (Object.values(check).some(items => items.length)) results.failures.push(entry.file);
     await page.screenshot({path: path.join(output, entry.file.replace('.html', '.png'))});
   }
-  for (let sheet = 0; sheet < Math.ceil(manifest.pages.length / 9); sheet++) {
-    const images = manifest.pages.slice(sheet * 9, sheet * 9 + 9).map(p => `<img src="${pathToFileURL(path.join(output, p.file.replace('.html', '.png'))).href}">`).join('');
+  for (let sheet = 0; sheet < Math.ceil(selectedPages.length / 9); sheet++) {
+    const images = selectedPages.slice(sheet * 9, sheet * 9 + 9).map(p => `<img src="${pathToFileURL(path.join(output, p.file.replace('.html', '.png'))).href}">`).join('');
     const contact = path.join(output, `contact-${sheet + 1}.html`);
     fs.writeFileSync(contact, `<style>body{margin:0;background:#ccc;display:grid;grid-template-columns:repeat(3,360px);gap:8px}img{width:360px;height:480px}</style>${images}`);
     await page.setViewportSize({width: 1096, height: 1456});
