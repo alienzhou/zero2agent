@@ -1,0 +1,25 @@
+.authoring/site/chapters/epic03-story003/CONTENT-PLAN.md
+  s_08884e0d462e65::t_d4c00eb7176f08 1-26
+.authoring/site/chapters/epic03-story003/brief.md
+  s_08884e0d462e65::t_65560771943a00 1-11
+.authoring/site/chapters/epic03-story003/post-copy.md
+  s_08884e0d462e65::t_1d834c9f266de7 1-21
+.authoring/site/chapters/epic03-story003/sources.md
+  s_08884e0d462e65::t_3894a3adc191e9 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "44060d1e0b4e01a176fa98032666cbcbc0561577",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
