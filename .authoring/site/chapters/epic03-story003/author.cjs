@@ -11,7 +11,7 @@ const ring=(x,y,r=34,fill=C.paper,stroke=C.ink)=>`<circle cx="${x}" cy="${y}" r=
 const chip=(x,y,w,s,tone='green')=>box(x,y,w,50,C[tone+'Bg'],C[tone],25)+t(x+w/2,y+35,s,28,C[tone],650,'middle');
 const num=(x,y,n)=>ring(x,y,24,C.ink,C.ink)+t(x,y+10,n,28,C.paper,700,'middle');
 const smallTerminal=(x,y,w,h,content,status='')=>box(x,y,w,h,C.ink,C.ink,12)+dot(x+22,y+22,4,C.red)+dot(x+38,y+22,4,C.amber)+dot(x+54,y+22,4,C.green)+ls(x+24,y+68,content,29,C.paper,400,'start',47,true)+(status?t(x+24,y+h-25,status,26,'#BAC8B8'): '');
-const doc=(x,y,w=90,h=118,tone='ink')=>`<path d="M${x} ${y}h${w-22}l22 22v${h-22}h-${w}Z M${x+w-22} ${y}v22h22" fill="${C.white}" stroke="${C[tone]}" stroke-width="3"/>`+line(`M${x+18} ${y+50}h${w-36}M${x+18} ${y+72}h${w-36}M${x+18} ${y+94}h${w-48}`,C[tone]);
+const doc=(x,y,w=90,h=118,tone='ink')=>`<path d="M${x} ${y}h${w-22}l22 22v${h-22}h-${w}Z M${x+w-22} ${y}v22h22" fill="${C.white}" stroke="${C[tone]}" stroke-width="3"/>`+line(`M${x+18} ${y+h*.40}h${w-36}M${x+18} ${y+h*.58}h${w-36}M${x+18} ${y+h*.76}h${w-48}`,C[tone]);
 const svg=(label,body,h=790)=>`<svg class="diagram" viewBox="0 0 952 ${h}" width="952" height="${h}" role="img" aria-label="${esc(label)}"><title>${esc(label)}</title><defs>${Object.entries(C).map(([k,v])=>`<marker id="${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="${v}"/></marker>`).join('')}</defs>${body}</svg>`;
 const pages=[];
 const page=(file,section,title,deck,body,note,sources,extra='')=>pages.push({file,section,title,deck,body,note,sources,extra});
@@ -20,8 +20,8 @@ page('01-cover.html','运行状态与 TUI','Agent 正在运行\n你能看见，�
 box(46,28,860,595,C.ink,C.ink,14)+dot(79,59,7,C.red)+dot(102,59,7,C.amber)+dot(125,59,7,C.green)+
 t(80,123,'◓ 等待模型 · 3.2s',35,C.paper,650)+line('M80 155H872','#C9CDC2')+
 t(80,215,'Agent › 已检查文件，准备验证。',31,C.paper)+
-box(78,256,795,83,'#314035','#6B806C')+t(104,308,'✓ write_file  · second · 已完成',31,C.paper,600)+
-box(78,356,795,83,'#452F2B','#9B635C')+t(104,408,'◇ write_file  · first  · 已拒绝',31,'#F2C7BD',500)+
+box(78,256,795,83,'#452F2B','#9B635C')+t(104,308,'◇ write_file  · first  · 已拒绝',31,'#F2C7BD',500)+
+box(78,356,795,83,'#314035','#6B806C')+t(104,408,'✓ write_file  · second · 已完成',31,C.paper,600)+
 line('M80 481H872','#C9CDC2')+t(80,530,'草稿 › 下一步请检查测试结果',32,C.paper)+t(80,581,'Ctrl-C 取消   ·   Ctrl-O 工具详情',27,'#C8D4C5')+
 line('M166 624V683',C.green,true)+line('M476 624V683',C.amber,true)+line('M786 624V683',C.red,true)+
 t(166,740,'看状态',37,C.green,650,'middle')+t(476,740,'审操作',37,C.amber,650,'middle')+t(786,740,'控运行',37,C.red,650,'middle')),'',['C01','C04'],'cover');
@@ -43,7 +43,7 @@ line('M28 578H600','#6B806C')+t(28,625,'运行中 · 可编辑草稿',29,'#BAC8B
 page('04-products.html','竞品启发','借鉴交互原则，\n不照搬一套快捷键','2026-10-07：四款产品的官方文档与固定源码对照。',svg('四个不同的小图分别表达Codex事件关联、Gemini工具到整轮聚合、OpenCode焦点切换和Claude Code输入排队',
 box(0,8,452,363)+t(28,57,'Codex',37,C.ink,700)+chip(29,95,114,'开始')+line('M151 119H183',C.green,true)+chip(196,95,113,'增量')+line('M316 119H337',C.green,true)+chip(344,95,82,'结束')+
 line('M60 178H395',C.red)+t(224,218,'用同一个 call_id 串起来',29,C.red,650,'middle')+ls(28,282,['事件告诉界面发生了什么，','工具完成不等于整轮结束。'],29,C.muted,400,'start',43)+
-box(500,8,452,363)+t(528,57,'Gemini CLI',37,C.ink,700)+t(536,123,'模型响应',29)+t(773,123,'工具状态',29)+line('M601 145V176H725',C.green,true)+line('M834 145V176H725',C.green,true)+chip(634,199,186,'整轮状态')+ls(528,282,['工具结果尚未交回模型，','界面仍属于 responding。'],29,C.muted,400,'start',43)+
+box(500,8,452,363)+t(528,57,'Gemini CLI',37,C.ink,700)+t(536,123,'模型响应',29)+t(773,123,'工具状态',29)+line('M601 145V176H834V145',C.green)+line('M727 176V197',C.green,true)+chip(634,199,186,'整轮状态')+ls(528,282,['工具结果尚未交回模型，','界面仍属于 responding。'],29,C.muted,400,'start',43)+
 box(0,414,452,363)+t(28,463,'OpenCode',37,C.ink,700)+t(36,533,'输入区',31,C.muted)+line('M168 523H269',C.amber,true)+box(290,490,131,68,C.amberBg,C.amber)+t(355,534,'弹层',31,C.amber,650,'middle')+line('M355 560V598H119V560',C.green,true)+ls(28,687,['打开弹层先移交焦点，','关闭后归还草稿。'],29,C.muted,400,'start',43)+
 box(500,414,452,363)+t(528,463,'Claude Code',37,C.ink,700)+box(528,495,396,62,C.ink,C.ink)+t(551,537,'任务正在运行……',30,C.paper)+doc(552,594,61,90)+doc(636,594,61,90)+line('M723 638H880',C.green,true)+ls(528,730,['运行中提交的消息可排队。'],29,C.muted)),
 '实机仅检查 Codex 0.160.1 与 OpenCode 1.18.35 的编辑、菜单和缩放；未运行竞品模型任务。其他行为来自文档或源码。',['R01','R02','R03','R04','R05']);
@@ -74,7 +74,7 @@ box(277,270,398,91,C.ink,C.ink)+t(476,328,'等待模型 · requesting',32,C.pape
 line('M476 364V421',C.green,true)+box(277,433,398,87,C.white,C.green)+t(476,488,'文本输出 · streaming',32,C.green,650,'middle')+
 line('M936 566H947V314H686',C.green,true)+t(822,405,'工具完成后',29,C.green,650,'middle')+
 box(744,518,192,93,C.greenBg,C.green)+t(840,559,'执行工具',30,C.green,650,'middle')+t(840,600,'tools',28,C.green,400,'middle',true)+line('M676 484H840V507',C.green,true)+
-line('M278 474H146V622H474',C.ink,true)+t(137,544,'无需工具',28,C.muted,400,'middle')+
+line('M278 474H146V622H474',C.ink,true)+t(80,544,'无需工具',28,C.muted,400,'middle')+
 box(277,635,398,78,C.ink,C.ink)+t(476,685,'turn-end',35,C.paper,650,'middle',true)+
 [[135,'completed','green'],[476,'failed','red'],[817,'cancelled','amber']].map(([x,s,tone])=>line(`M476 715V731H${x}V744`,C[tone],false)+t(x,784,s,30,C[tone],650,'middle',true)).join('')),
 '工具结束后还可能继续请求模型。失败或取消可从在途阶段进入终态；最终以 turn-end 为准。',['C02','C03']);
@@ -140,30 +140,30 @@ t(0,459,'常用输入操作',36,C.ink,650)+
 [[35,512,'Ctrl-J','插入换行'],[502,512,'↑ ↓','多行移动 / 输入历史'],[35,635,'/ + Tab','发现与补全命令'],[502,635,'Home / End','当前行首尾']].map(([x,y,a,b])=>box(x,y,414,96,C.white,C.line)+t(x+21,y+39,a,30,C.red,650,'start',true)+t(x+21,y+79,b,28,C.ink)).join('')),
 'bracketed paste 把粘贴识别为完整片段。按键含义还受焦点影响；审批与人工终端使用自己的输入规则。',['C04','R05']);
 
-page('15-details.html','详情与尺寸','默认看摘要，\n需要时再展开证据','有限的屏幕里，让关键状态与当前输入始终可达。',svg('工具摘要展开为完整参数和结果，终端缩窄时重排并保留中文与emoji草稿，输出控制码转为可见字符',
+page('15-details.html','详情与尺寸','默认看摘要，\n需要时再展开证据','有限的屏幕里，让关键状态与当前输入始终可达。',svg('工具摘要展开保留的参数和结果，超长内容会截短；终端缩窄时重排并保留中文与emoji草稿',
 box(0,7,952,100,C.ink,C.ink)+t(26,68,'✓ read_file · call-3 · 已完成 · 12ms',33,C.paper,650)+
 line('M476 110V163',C.green,true)+chip(324,173,303,'Ctrl-O 展开详情')+
-box(0,253,952,235,C.white,C.green)+t(28,306,'参数 / 执行结果',32,C.green,650)+ls(28,365,['path: src/main.ts','读取结果……','PgUp / PgDn 查看，Ctrl-End 回到底部'],29,C.ink,400,'start',45,true)+
+box(0,253,952,235,C.white,C.green)+t(28,306,'保留的参数 / 执行结果',32,C.green,650)+ls(28,365,['path: src/main.ts','读取结果…… [超长内容已截短]','完整会话由 Core 保留'],29,C.ink,400,'start',45,true)+
 line('M0 536H951',C.line)+
 box(0,578,490,157,C.ink,C.ink)+ls(25,629,['100 列 · 运行中','草稿 › 检查中文与 🙂'],29,C.paper,400,'start',55)+
 line('M505 651H590',C.green,true)+
 box(609,578,342,157,C.ink,C.ink)+ls(633,621,['44 列 · 运行中','草稿 › 检查中文','与 🙂'],27,C.paper,400,'start',42)),
-'窗口变化后按显示宽度重排。中文、组合字符和 emoji 不能按字符串长度裁剪；外部控制码转为可见文字。',['C04','C08','R05']);
+'详情按 PgUp / PgDn 滚动。窗口变化后按显示宽度重排；中文和 emoji 不按字符串长度裁剪，外部控制码转为可见文字。',['C04','C08','R05']);
 
-page('16-handoff.html','人工终端','交给人操作时，\nTUI 先让出键盘和屏幕','通用执行批准与人工终端交接，仍然是两层确认。',svg('普通TUI先经过权限与交接确认，再暂停绘制和输入交给人工PTY，结束状态返回Core，原界面恢复',
-box(0,19,952,91,C.soft,C.ink)+t(476,76,'通用权限批准 → 人工交接确认',36,C.ink,650,'middle')+
+page('16-handoff.html','人工终端','交给人操作时，\nTUI 先让出键盘和屏幕','模型发起时先做权限判断，再请求人工交接。',svg('模型发起先做权限判断，权限允许后人工确认交接；普通TUI暂停绘制和输入交给人工PTY，结束后恢复',
+box(0,19,952,91,C.soft,C.ink)+t(476,76,'模型发起：权限判断 → 人工交接确认',36,C.ink,650,'middle')+
 line('M476 113V170',C.amber,true)+
 box(0,183,367,317,C.white,C.line)+t(183,242,'Agent TUI',37,C.ink,700,'middle')+ls(183,321,['暂停输入监听','暂停界面重绘','保存草稿'],33,C.muted,400,'middle',65)+
 line('M382 337H571',C.amber,true)+t(476,283,'独占交接',30,C.amber,650,'middle')+
 box(586,183,366,317,C.ink,C.ink)+t(769,242,'Human PTY',37,C.paper,700,'middle')+ls(769,321,['人直接输入','人查看终端正文','结束后退出'],33,C.paper,400,'middle',65)+
 line('M769 503V575H183V509',C.green,true)+t(476,559,'恢复终端模式、重绘、归还草稿',30,C.green,650,'middle')+
 box(0,646,952,126,C.redBg,C.red)+t(31,694,'模型只收到终端状态摘要',36,C.red,650)+t(31,743,'人工输入、密码和完整终端正文不进入模型对话。',30,C.ink)),
-'交接期间 Ctrl-C 等字节属于人工终端规则。两个输入监听器同时读取，会吞字、误操作，甚至泄露私密输入。',['C05','C07']);
+'权限可自动允许，不保证出现两次弹窗。直接输入 /terminal 只做人机交接确认。交接期间 Ctrl-C 等字节属于人工终端规则。',['C05','C07']);
 
 page('17-practice.html','动手跟练','拒绝一次，批准一次，\n再取消一次等待','用本地固定模型响应，稳定复现完整交互。',
 `<div class="terminal" data-block><p class="mini">仓库根目录 · 不需要 API key</p><pre>pnpm install --frozen-lockfile\npnpm build\nnode scripts/e03-s003-runtime-demo.mjs --tui</pre></div>`+
 svg('输入重复会出现两个write_file审批，先拒绝first后批准second；输入慢速可编辑草稿并取消；输入终端练习交接',
-[[60,30,'重复',['第一份按 n，第二份按 y。','first.txt 不生成；second.txt 写入。'],'amber'],[60,218,'慢速',['等待模型时编辑下一条草稿。','Ctrl-C 取消，结束后再发送。'],'red'],[60,405,'终端',['完成权限批准与人工接管确认。','输入虚构文本，退出后继续聊天。'],'green']].map(([x,y,a,b,tone],i)=>num(x,y+28,i+1)+t(x+57,y+40,a,38,C[tone],700)+ls(x+57,y+96,b,31,C.ink,400,'start',48)).join(''),574),
+[[60,30,'重复',['第一份按 n，第二份按 y。','first.txt 不生成；second.txt 写入。'],'amber'],[60,218,'慢速',['等待模型时编辑下一条草稿。','Ctrl-C 取消，结束后再发送。'],'red'],[60,405,'终端',['权限允许后，确认人工接管。','输入虚构文本，退出后继续聊天。'],'green']].map(([x,y,a,b,tone],i)=>num(x,y+28,i+1)+t(x+57,y+40,a,38,C[tone],700)+ls(x+57,y+96,b,31,C.ink,400,'start',48)).join(''),574),
 '演示经过生产 CLI、SDK 和工具，模型内容来自本地夹具。退出后临时目录删除；更多步骤见源码入口里的 follow-along.md。',['C07'],'practice');
 
 page('18-next.html','本课完成什么','把执行过程，\n变成可以持续使用的产品','E03-S003 · 运行状态与 TUI',svg('本课把运行事件、状态界面和用户控制连成闭环，下一课在此基础上保存会话并恢复',
