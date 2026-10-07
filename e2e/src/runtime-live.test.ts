@@ -131,7 +131,7 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
       await idle(p, 0)
       const from = await type(
         p,
-        'Use terminal once to run exactly: printf started > ready.txt; sleep 30; printf late > late.txt . Do not set interactive=true. Do not run other tools.'
+        'This is a real filesystem integration check. You MUST invoke the terminal tool now; a prose answer or simulated execution is not sufficient. Pass this exact command string: "printf started > ready.txt; sleep 30; printf late > late.txt". Use foreground execution with interactive=false. Invoke no other tools. Wait for the real tool result before describing the outcome.'
       )
       await expect.poll(() => exists(join(p.cwd, 'ready.txt')), { timeout: 75_000 }).toBe(true)
       const count = p.requests.length
