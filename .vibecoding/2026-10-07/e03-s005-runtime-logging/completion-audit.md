@@ -16,6 +16,8 @@
 
 最终自动门禁的生产/测试源码：6ab631a12d8d21349b3e77c116dcba7381c6c4c5；13 项全部通过，555 离线通过 / 55 跳过，5 真实服务执行通过 / 0 跳过。课程和终端回放各有文件哈希；源码检查、链接、凭据扫描与最终 Git 状态在交付前核对。
 
-独立未完成项：人工代码审查/教学审阅/用户签收、合并、网站部署、其他平台实机验证，以及 S006 文件 Checkpoint。它们没有被记为自动验证通过。本次完整交付的边界是已实现、已验证、可跟练的课程候选与草稿 PR。
+独立未完成项：人工代码审查/教学审阅/用户签收、网站部署、其他平台实机验证，以及 S006 文件 Checkpoint。它们没有被记为自动验证通过。初次交付为已实现、已验证、可跟练的课程候选与草稿 PR；随后用户明确授权检查后合并。
 
-固定 Tag：`E03-S005-runtime-logging`。草稿 [PR #21](https://github.com/alienzhou/zero2agent/pull/21)，验收页同步链接。凭据扫描：153 个新增/修改文件通过（gzip 解压后检查）；34 篇 Markdown 文件链接通过；全部生产/测试、课程生成源/20 页 HTML/CSS 与 PTY 哈希相符。主 checkout 仍仅保留原有 `.discuss/.snapshot.yaml` 与 `review.md` 修改。
+固定 Tag：`E03-S005-runtime-logging`。[PR #21](https://github.com/alienzhou/zero2agent/pull/21) 已按用户授权合入 main（4ce87d2），验收页同步状态。凭据扫描：153 个新增/修改文件通过（gzip 解压后检查）；34 篇 Markdown 文件链接通过；全部生产/测试、课程生成源/20 页 HTML/CSS 与 PTY 哈希相符。主 checkout 仍仅保留原有 `.discuss/.snapshot.yaml` 与 `review.md` 修改。
+
+2026-10-07 合并补记：在远端 CLEAN / MERGEABLE 且 HEAD 与验收候选一致时复核实现和证据，没有发现阻塞问题。按用户“如果确实没问题就合入主干”的指示，转 ready 并以 merge commit 合并，不移动固定 Tag，不部署课程网站。用户授权合并和 AI 复核不冒充未执行的人工专项审查。

@@ -79,9 +79,9 @@ git checkout main
 
 <a id="e03-s005"></a>
 
-### E03-S005-runtime-logging（实现与验收完成，草稿 PR 待人工审阅）
+### E03-S005-runtime-logging（已合入 main）
 
-[PR #21](https://github.com/alienzhou/zero2agent/pull/21) 草稿；固定跟练 Tag `E03-S005-runtime-logging`。尚未合并或部署。
+2026-10-07，[PR #21](https://github.com/alienzhou/zero2agent/pull/21) 按用户授权合入 main（`4ce87d2`），保留逐步提交历史。固定跟练 Tag `E03-S005-runtime-logging` 保持 `1976e72`，课程网站尚未部署。
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S005-runtime-logging/README.md)
 

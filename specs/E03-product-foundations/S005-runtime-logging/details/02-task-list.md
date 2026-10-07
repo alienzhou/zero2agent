@@ -11,4 +11,4 @@
 - [x] 教材：Story、五篇 details、跟练、延伸阅读、20 页图文与来源。
 - [x] 交付：导航、AGENTS 长期约束、复盘、验收、固定 Tag、草稿 PR。
 
-实现、验证、教材与交付已完成；固定 Tag `E03-S005-runtime-logging` 随最终交付提交发布，草稿 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 待审阅。人工审阅独立记录，不由任务勾选代替。
+实现、验证、教材与交付已完成；固定 Tag `E03-S005-runtime-logging` 随最终交付提交发布，[PR #21](https://github.com/alienzhou/zero2agent/pull/21) 已按用户授权合入 main（4ce87d2）。人工审阅独立记录，不由任务勾选代替。

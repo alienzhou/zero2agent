@@ -2,6 +2,8 @@
 
 [Epic 3](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md#e03-s005)
 
+2026-10-07 已通过 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 合入 main（4ce87d2）；固定跟练 Tag `E03-S005-runtime-logging` 保持原交付版本。
+
 ## 对话能继续，不代表故障能追查
 
 上一课让你重启后接着聊。但是，模型说「执行完成」，不足以回答另一个问题：它实际请求了几次？文件写入前有没有审批？取消时哪个工具已经启动？
