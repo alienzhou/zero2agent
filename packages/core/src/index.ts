@@ -32,6 +32,7 @@ export type {
   HumanTerminalRequest,
   HumanTerminalResult,
   TerminalRuntimeHooks,
+  TerminalInterruptController,
 } from './tools/index.js'
 
 // Prompt 构建器

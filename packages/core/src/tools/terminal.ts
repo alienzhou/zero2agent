@@ -240,6 +240,7 @@ export async function runCommand(
   let signal: string | undefined
   let incompleteNote = false
   let cancelled = false
+  let cancellationCleanup: Promise<void> | undefined
   let skipped = false
   let drainTimedOut = false
   let spawnError: string | null = null
@@ -307,6 +308,7 @@ export async function runCommand(
     }
 
     let detached = false
+    let detachRaw: (() => void) | undefined
 
     function detachOnce(): void {
       if (detached) return
@@ -318,7 +320,8 @@ export async function runCommand(
       signalCancel: () => {
         if (cancelled || skipped) return
         cancelled = true
-        void killProcessTree(child).then(finish)
+        cancellationCleanup = killProcessTree(child)
+        void cancellationCleanup.then(finish)
       },
       signalSkip: () => {
         if (!skipAvailable || cancelled || skipped) return
@@ -328,7 +331,7 @@ export async function runCommand(
       },
     }
 
-    const detachRaw = runtime.attachInterrupts?.(interruptController)
+    detachRaw = runtime.attachInterrupts?.(interruptController)
     turnSignal?.addEventListener('abort', interruptController.signalCancel, { once: true })
     if (turnSignal?.aborted) interruptController.signalCancel()
 
@@ -383,6 +386,7 @@ export async function runCommand(
       skippedAt: Date.now(),
     })
   } else if (cancelled) {
+    await cancellationCleanup
     outcome = 'cancelled'
     const raced = await Promise.race([closePromise, sleep(READ_DRAIN_TIMEOUT_MS).then(() => null)])
     if (raced === null) {

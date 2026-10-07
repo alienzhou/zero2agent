@@ -20,6 +20,7 @@ export type {
   HumanTerminalRequest,
   HumanTerminalResult,
   TerminalRuntimeHooks,
+  TerminalInterruptController,
 } from './terminal-runtime.js'
 
 import { readFileTool } from './read-file.js'
