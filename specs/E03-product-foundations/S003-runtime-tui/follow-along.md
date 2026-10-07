@@ -31,6 +31,20 @@ node scripts/e03-s003-runtime-demo.mjs --tui
 
 模型内容来自固定夹具，输入任意普通文字会提议创建 lesson.txt；“重复”“慢速”“报错”“终端”用于触发各场景。这不是智能问答模型。工作目录显示在启动信息和界面中，退出演示后自动删除。
 
+## 常用操作
+
+| 场景 | 操作 |
+|---|---|
+| 编辑与历史 | 方向键、Home/End、Ctrl-A/E、Ctrl-B/F；上下键先移动多行，再浏览历史 |
+| 剪切与恢复 | Ctrl-U/K/W 剪切前文、行尾、前词；Ctrl-Y 恢复最近剪切 |
+| 多行 | Ctrl-J 换行；支持 bracketed paste，结束后手动 Enter 发送 |
+| 查看过程 | PgUp/PgDn 滚动、Ctrl-End 回到底部；Ctrl-O 展开工具、Alt-上下选择工具 |
+| 审批 | 查看完整参数后 y 允许本次；n、Enter、Esc 拒绝；普通输入草稿保留 |
+| 运行控制 | Ctrl-C 取消整轮；Ctrl-X 停止当前前台命令；满足既有等待条件后 Ctrl-S 转后台 |
+| 会话与终端 | `/new`、`/compact`、`/terminal [command]`；`exit` 或 `quit` 退出 |
+
+草稿最多 16,384 个 UTF-16 单元。超长粘贴整段拒绝并提示，原草稿和光标保留，不会截掉后半段后发送。界面历史和工具预览有显示容量上限，审批参数另有完整查看路径。高级 readline 编辑和作业控制习惯可继续使用 `--plain`；完整对照见[交互兼容矩阵](../../../.vibecoding/2026-10-07/e03-s003-runtime-tui/interaction-compatibility.md)。
+
 ## 比较 plain 与自动降级
 
 ```sh
