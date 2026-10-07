@@ -1,6 +1,11 @@
 /**
  * Agent 类 - 封装 ReACT 循环的简化入口
  */
+import {
+  DiagnosticEmitter,
+  type DiagnosticObserver,
+  type DiagnosticContext,
+} from './diagnostics.js'
 import { runLoop, createCompactionRuntime } from './loop.js'
 import type { ContextOptions } from './context-budget.js'
 import type { LoopEventHandlers } from './loop.js'
@@ -14,6 +19,7 @@ import { TurnCancelledError } from './runtime.js'
 import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  diagnostics?: DiagnosticObserver
   config?: LLMConfig
   context?: ContextOptions
   permissions?: PermissionOptions
@@ -41,11 +47,13 @@ export class Agent {
   /**
    * 运行 Agent 处理用户消息
    */
-  async run(message: string): Promise<string> {
+  async run(message: string, diagnosticContext?: DiagnosticContext): Promise<string> {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
         signal: controller.signal,
+        diagnostics: this.options.diagnostics,
+        diagnosticContext,
         config: this.options.config,
         context: this.options.context,
         tools: this.options.tools,
@@ -60,15 +68,37 @@ export class Agent {
     }
   }
 
-  async compact(): Promise<boolean> {
+  async compact(diagnosticContext?: DiagnosticContext): Promise<boolean> {
     const controller = this.beginOperation()
+    const diagnostics = new DiagnosticEmitter(this.options.diagnostics, diagnosticContext)
+    diagnostics.start('compact')
     try {
       const result = await this.session.compact(() =>
-        createCompactionRuntime(this.options, this.session)
+        createCompactionRuntime(
+          {
+            ...this.options,
+            events: {
+              ...this.options.events,
+              onCompaction: event => {
+                diagnostics.compaction(event)
+                this.options.events?.onCompaction?.(event)
+              },
+            },
+          },
+          this.session,
+          diagnostics
+        )
       )
       if (controller.signal.aborted) throw new TurnCancelledError()
+      diagnostics.end('completed', 'compact')
       return result
     } catch (error) {
+      diagnostics.end(
+        controller.signal.aborted ? 'cancelled' : 'error',
+        'compact',
+        error,
+        controller.signal
+      )
       if (controller.signal.aborted) throw new TurnCancelledError()
       throw error
     } finally {

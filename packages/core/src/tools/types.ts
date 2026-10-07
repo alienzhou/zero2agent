@@ -4,7 +4,15 @@ import type Anthropic from '@anthropic-ai/sdk'
  * 工具执行上下文
  * 框架注入给每次工具调用，包含 Agent 级别的配置
  */
+export interface ToolExecutionMetadata {
+  terminalOutcome: 'completed' | 'cancelled' | 'declined' | 'skipped' | 'drain-timeout'
+  exitCode?: number
+  pid?: number
+  signal?: string | number
+}
 export interface ToolContext {
+  /** Native result metadata only; no command or terminal bytes. Notification, never control. */
+  onResultMetadata?: (metadata: ToolExecutionMetadata) => void
   /** Cooperatively stop active work when the host cancels the turn. */
   signal?: AbortSignal
   /** Agent 工作目录的绝对路径，所有相对路径基于此解析 */

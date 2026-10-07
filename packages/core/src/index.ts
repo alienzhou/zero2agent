@@ -66,3 +66,6 @@ export type {
 
 export { TurnCancelledError } from './runtime.js'
 export type { RuntimeEvent } from './runtime.js'
+
+export { DiagnosticEmitter, diagnosticLabel, diagnosticNumber } from './diagnostics.js'
+export type { DiagnosticEvent, DiagnosticObserver, DiagnosticContext } from './diagnostics.js'

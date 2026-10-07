@@ -2,8 +2,14 @@
  * ReACT 循环实现
  * Reasoning + Acting 的核心逻辑，支持流式输出
  */
+import {
+  DiagnosticEmitter,
+  diagnosticLabel,
+  diagnosticNumber,
+  type DiagnosticObserver,
+  type DiagnosticContext,
+} from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
-import { randomUUID } from 'node:crypto'
 import {
   RuntimeEmitter,
   TurnCancelledError,
@@ -15,6 +21,7 @@ import {
 import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
 import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
 import { Session } from './session.js'
+import type { ToolExecutionMetadata } from './tools/types.js'
 import type { ContextOptions } from './context-budget.js'
 import { createContextSummarizer } from './context-summary.js'
 import type { CompactionEvent, CompactionRuntime } from './context-manager.js'
@@ -74,7 +81,8 @@ export async function executeToolCalls(
   ctx: ToolContext,
   events?: LoopEventHandlers,
   permissions = new PermissionController(),
-  emitter?: RuntimeEmitter
+  emitter?: RuntimeEmitter,
+  diagnostics?: DiagnosticEmitter
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -106,11 +114,28 @@ export async function executeToolCalls(
       const tool = tools.find(t => t.name === block.name)
       if (!tool) throw new Error(`Unknown tool: ${block.name}`)
       const input = structuredClone(block.input) as Record<string, unknown>
-      const callCtx = Object.freeze({ ...ctx })
+      const callCtx: ToolContext = Object.freeze({
+        ...ctx,
+        onResultMetadata: (metadata: ToolExecutionMetadata) => {
+          diagnostics?.emit('tool', 'metadata', {
+            requestId: diagnostics.latestModelRequestId,
+            toolCallId: diagnosticLabel(block.id),
+            toolName: diagnosticLabel(block.name),
+            terminalOutcome: metadata.terminalOutcome,
+            exitCode: diagnosticNumber(metadata.exitCode),
+            pid: diagnosticNumber(metadata.pid),
+            signal:
+              metadata.signal === undefined ? undefined : diagnosticLabel(String(metadata.signal)),
+          })
+          notifyObserver(() => ctx.onResultMetadata?.(structuredClone(metadata)))
+        },
+      })
       const initial = permissions.evaluate(tool, input, callCtx)
+      diagnostics?.permission('initial', block.id, block.name, initial.action)
       if (initial.action === 'ask') state('approval', { reason: initial.reason })
       assertNotCancelled(ctx.signal)
       const decision = await permissions.authorize(block.id, tool, input, callCtx)
+      diagnostics?.permission('resolved', block.id, block.name, decision.action)
       notifyObserver(() => events?.onPermission?.(block.id, { ...decision }))
       assertNotCancelled(ctx.signal)
       if (decision.action !== 'allow') {
@@ -120,6 +145,7 @@ export async function executeToolCalls(
       // Awaiting the host can change the filesystem. Check hard boundaries again.
       const boundary = permissions.checkWorkspace(tool, input, callCtx)
       if (boundary?.action === 'deny') {
+        diagnostics?.permission('boundary', block.id, block.name, 'deny')
         denied = true
         throw new Error(`Permission denied: ${boundary.reason}`)
       }
@@ -174,6 +200,8 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  diagnostics?: DiagnosticObserver
+  diagnosticContext?: DiagnosticContext
   signal?: AbortSignal
   /** Omit for a one-shot run; reuse explicitly for a multi-turn conversation. */
   session?: Session
@@ -196,7 +224,11 @@ export interface RunLoopOptions {
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
   const session = options.session ?? new Session()
-  const emitter = new RuntimeEmitter(randomUUID(), options.events?.onEvent)
+  const diagnostics = new DiagnosticEmitter(options.diagnostics, options.diagnosticContext)
+  const emitter = new RuntimeEmitter(diagnostics.operationId, event => {
+    diagnostics.runtime(event)
+    notifyObserver(() => options.events?.onEvent?.(event))
+  })
   let started = false
   let cancellationNotified = false
   const cancel = (): void => {
@@ -208,13 +240,15 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   try {
     const result = await session.runTurn(userMessage, async messages => {
       started = true
+      diagnostics.start('turn')
       options.signal?.addEventListener('abort', cancel, { once: true })
       emitter.emit({ type: 'turn-start' })
       if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
-      return runTurnLoop(messages, { ...options, session }, emitter)
+      return runTurnLoop(messages, { ...options, session }, emitter, diagnostics)
     })
     emitter.emit({ type: 'turn-end', status: 'completed' })
+    diagnostics.end('completed', 'turn')
     return result
   } catch (error) {
     if (started) {
@@ -224,6 +258,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
         status: cancelled ? 'cancelled' : 'error',
         ...(cancelled ? {} : { error: describeToolError(error) }),
       })
+      diagnostics.end(cancelled ? 'cancelled' : 'error', 'turn', error, options.signal)
       if (cancelled) throw new TurnCancelledError()
     }
     throw error
@@ -235,7 +270,8 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
 
 export function createCompactionRuntime(
   options: RunLoopOptions,
-  session: Session
+  session: Session,
+  diagnostics?: DiagnosticEmitter
 ): CompactionRuntime {
   const client = createAnthropicClient(options.config ?? {})
   const model = getModelName(options.config ?? {})
@@ -243,6 +279,7 @@ export function createCompactionRuntime(
   return {
     client,
     budget,
+    diagnostics,
     request: messages =>
       structuredClone({
         model,
@@ -251,7 +288,7 @@ export function createCompactionRuntime(
         tools: (options.tools ?? allTools).map(toAnthropicTool),
         ...(options.systemPrompt && { system: options.systemPrompt }),
       }),
-    summarize: createContextSummarizer(client, model, budget),
+    summarize: createContextSummarizer(client, model, budget, diagnostics),
     onCompaction: options.events?.onCompaction,
   }
 }
@@ -266,7 +303,8 @@ function isContextOverflow(error: unknown): boolean {
 async function runTurnLoop(
   messages: Anthropic.MessageParam[],
   options: RunLoopOptions,
-  emitter: RuntimeEmitter
+  emitter: RuntimeEmitter,
+  diagnostics: DiagnosticEmitter
 ): Promise<string> {
   const { tools = allTools, events, cwd } = options
   const session = options.session!
@@ -281,7 +319,8 @@ async function runTurnLoop(
         },
       },
     },
-    session
+    session,
+    diagnostics
   )
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const ctx: ToolContext = {
@@ -300,6 +339,7 @@ async function runTurnLoop(
       const request = await session.prepareRequest(messages, runtime)
       assertNotCancelled(options.signal)
       let acceptingText = true
+      const requestSpan = diagnostics.request('model', request)
       try {
         emitter.emit({ type: 'phase', phase: 'requesting' })
         assertNotCancelled(options.signal)
@@ -308,6 +348,7 @@ async function runTurnLoop(
           : runtime.client.messages.stream(request)
         let streaming = false
         stream.on('text', text => {
+          requestSpan.text(text)
           if (!acceptingText || options.signal?.aborted) return
           if (!streaming) {
             streaming = true
@@ -319,9 +360,11 @@ async function runTurnLoop(
         })
         // Partial stream events belong to display, not to the committed transcript.
         response = await waitForAbort(stream.finalMessage(), options.signal)
+        requestSpan.complete(response)
         assertNotCancelled(options.signal)
         break
       } catch (error) {
+        requestSpan.fail(error, options.signal)
         assertNotCancelled(options.signal)
         if (!isContextOverflow(error) || recovery >= 2) throw error
         if (!(await session.recoverContext(messages, runtime))) throw error
@@ -342,7 +385,8 @@ async function runTurnLoop(
         ctx,
         events,
         permissions,
-        emitter
+        emitter,
+        diagnostics
       )
       messages.push({ role: 'user', content: toolResults })
       assertNotCancelled(options.signal)

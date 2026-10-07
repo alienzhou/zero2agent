@@ -1,3 +1,4 @@
+import type { DiagnosticEmitter } from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { mkdtemp, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -17,6 +18,7 @@ export interface CompactionEvent {
 }
 
 export interface CompactionRuntime {
+  diagnostics?: DiagnosticEmitter
   budget: ContextBudget
   client: Anthropic
   request: (messages: Message[]) => ContextRequest
@@ -106,7 +108,10 @@ export class ContextManager {
         abort = () => reject(signal.reason)
         signal.addEventListener('abort', abort, { once: true })
       })
-      return await Promise.race([runtime.budget.count(request, runtime.client, signal), cancelled])
+      return await Promise.race([
+        runtime.budget.count(request, runtime.client, signal, runtime.diagnostics),
+        cancelled,
+      ])
     } finally {
       if (abort) signal.removeEventListener('abort', abort)
     }

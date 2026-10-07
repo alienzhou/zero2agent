@@ -1,3 +1,4 @@
+import { notifyObserver } from '../runtime.js'
 import { spawn, type ChildProcess } from 'node:child_process'
 import * as crypto from 'node:crypto'
 import * as fs from 'node:fs'
@@ -596,6 +597,13 @@ export const terminalTool: Tool = {
           cwd: workdirResult.path,
           ...(ctx.signal && { signal: ctx.signal }),
         })
+        notifyObserver(() =>
+          ctx.onResultMetadata?.({
+            terminalOutcome: result.status,
+            exitCode: result.exitCode,
+            signal: result.signal,
+          })
+        )
         // Only status metadata crosses back to the model; never echo host output or input.
         const parts = [`Status: human-controlled ${result.status}`]
         if (result.exitCode !== undefined) parts.push(`Exit code: ${result.exitCode}`)
@@ -627,6 +635,14 @@ export const terminalTool: Tool = {
       return `Error: Failed to execute command: ${msg}`
     }
 
+    notifyObserver(() =>
+      ctx.onResultMetadata?.({
+        terminalOutcome: result.outcome,
+        exitCode: result.exitCode,
+        pid: result.pid,
+        signal: result.signal,
+      })
+    )
     return formatReceipt(result, envFailureNotice, completionNotices)
   },
 }

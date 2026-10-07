@@ -1,3 +1,4 @@
+import type { DiagnosticEmitter } from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ContextBudget, ContextBudgetError, type ContextRequest } from './context-budget.js'
 
@@ -70,7 +71,8 @@ function completedText(response: Anthropic.Message, source: string): string {
 export function createContextSummarizer(
   client: Anthropic,
   model: string,
-  budget: ContextBudget
+  budget: ContextBudget,
+  diagnostics?: DiagnosticEmitter
 ): ContextSummarizer {
   return async (messages, signal) => {
     signal.throwIfAborted()
@@ -84,7 +86,7 @@ export function createContextSummarizer(
     const countRequest = async (request: ContextRequest): Promise<number> => {
       signal.throwIfAborted()
       if (++counts > 2048) throw new ContextBudgetError('Summary token-count call budget exhausted')
-      return budget.count(request, client, signal)
+      return budget.count(request, client, signal, diagnostics)
     }
     const count = async (text: string): Promise<boolean> => {
       return (
@@ -140,18 +142,22 @@ export function createContextSummarizer(
           // Keep the timeout source alive while its composed signal is in flight.
           const timeout = AbortSignal.timeout(budget.timeoutMs)
           const timed = AbortSignal.any([signal, timeout])
+          const summaryRequest = requestFor(model, budget, piece)
+          const span = diagnostics?.request('summary', summaryRequest)
           try {
-            const response = await client.messages.create(requestFor(model, budget, piece), {
+            const response = await client.messages.create(summaryRequest, {
               maxRetries: 0,
               timeout: budget.timeoutMs,
               signal: timed,
             })
+            span?.complete(response)
             timeout.throwIfAborted()
             timed.throwIfAborted()
             result = completedText(response, piece)
             await validateSummary(result)
             break
           } catch (error) {
+            span?.fail(error, timed)
             timeout.throwIfAborted()
             timed.throwIfAborted()
             if (!inputTooLong(error) || retry === 4 || length < 2) throw error
