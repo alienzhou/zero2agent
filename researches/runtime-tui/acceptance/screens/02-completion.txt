@@ -1,5 +1,5 @@
 ● zero2agent · 等待输入
-工作目录: /private/tmp/zero2agent-runtime-JB4rML
+工作目录: /private/tmp/zero2agent-runtime-ieWcbB
 · 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出
 
 

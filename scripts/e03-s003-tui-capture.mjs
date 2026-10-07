@@ -3,6 +3,8 @@ import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
+import { gzipSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 const root = fileURLToPath(new URL('../', import.meta.url)).replace(/\/$/, '');
 const auditDeps = process.env.TUI_AUDIT_DEPS;
 if (!auditDeps) throw new Error('Set TUI_AUDIT_DEPS to a directory with @xterm/xterm installed.');
@@ -24,7 +26,7 @@ pty.onData(data => raw += data);
 const exit = new Promise(resolve => pty.onExit(event => { exited = true; resolve(event); }));
 async function waitExit(ms = 10_000) { let timer; try { return await Promise.race([exit, new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Demo did not exit')), ms); })]); } finally { clearTimeout(timer); } }
 async function until(marker, from=0) { const deadline=Date.now()+15000; while(!raw.slice(from).includes(marker)) { if(Date.now()>deadline || exited) throw Error('Missing '+marker+'\n'+raw.slice(-3500)); await new Promise(r=>setTimeout(r,25)); } }
-async function paint(name) { await new Promise(r=>setTimeout(r,140)); const data=raw.slice(pos);pos=raw.length; await page.evaluate(data => new Promise(r=>window.term.write(data,r)),data); await page.locator('#terminal').screenshot({path:out+'/'+name+'.png'}); const screen=await page.evaluate(()=>Array.from({length:window.term.rows},(_,i)=>window.term.buffer.active.getLine(i)?.translateToString(true, 0, window.term.cols)??'').join('\n')); await writeFile(out+'/'+name+'.txt',screen); console.log('Captured ' + name); }
+async function paint(name) { await new Promise(r=>setTimeout(r,140)); const data=raw.slice(pos);pos=raw.length; await page.evaluate(data => new Promise(r=>window.term.write(data,r)),data); await page.locator('#terminal').screenshot({path:out+'/'+name+'.png'}); const screen=await page.evaluate(()=>Array.from({length:window.term.rows},(_,i)=>window.term.buffer.active.getLine(i)?.translateToString(true, 0, window.term.cols)??'').join('\n')); await writeFile(out+'/'+name+'.txt',screen.split('\n').map(line=>line.trimEnd()).join('\n').trimEnd()+'\n'); console.log('Captured ' + name); }
 try {
  await until('你: '); await paint('01-idle');
  pty.write('/he\t'); await until('/help'); await paint('02-completion'); pty.write('\r'); await new Promise(r=>setTimeout(r,100));
@@ -40,7 +42,7 @@ try {
  assert.equal(await access(workspace).then(() => true, () => false), false);
  assert(raw.slice(from).includes('\x1b[?1049l'));
  assert(raw.slice(from).includes('\x1b[?25h'));
- await writeFile(out+'/raw-pty.txt',raw);
- await writeFile(out+'/capture.json',JSON.stringify({platform:process.platform,viewport:[96,30],narrow:[42,18],fixture:'local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0',head:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),capturedAt:new Date().toISOString(),restorationEscapesObserved:true,demoWorkspaceRemoved:true},null,2));
+ await writeFile(out+'/raw-pty.ansi.gz',gzipSync(raw));
+ await writeFile(out+'/capture.json',JSON.stringify({platform:process.platform,viewport:[96,30],narrow:[42,18],fixture:'local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0',head:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),capturedAt:new Date().toISOString(),rawSha256:createHash('sha256').update(raw).digest('hex'),restorationEscapesObserved:true,demoWorkspaceRemoved:true},null,2));
 } finally { if(!exited) { pty.kill('SIGTERM'); try { await waitExit(); } catch { pty.kill('SIGKILL'); await waitExit(); } } }
 } finally { await browser.close(); }

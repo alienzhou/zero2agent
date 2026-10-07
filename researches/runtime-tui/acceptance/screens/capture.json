@@ -9,5 +9,9 @@
     18
   ],
   "fixture": "local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0",
-  "restored": true
+  "head": "220354081688e89d17f40ed71c8885f91e3d31fb",
+  "capturedAt": "2026-10-07T05:12:09.148Z",
+  "restorationEscapesObserved": true,
+  "demoWorkspaceRemoved": true,
+  "rawSha256": "9ddb1037362569fa827bb25bb1a0a7ec94621412ac902801d86e5e28f2d465c7"
 }
