@@ -18,7 +18,7 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新课程：[E03-S005：运行日志与问题追查](../../specs/E03-product-foundations/S005-runtime-logging/README.md)。把真实请求、工具与后台元信息串起来，使用 TUI 独立查看器或无密钥 CLI 定位问题。先做[离线跟练](../../specs/E03-product-foundations/S005-runtime-logging/follow-along.md)，再看[验收范围](../../specs/E03-product-foundations/S005-runtime-logging/details/03-verification-checklist.md)。S001–S005 已合入 main；本课 PR #21 合并提交为 4ce87d2，验收范围以验收页为准，在线站点尚未部署本章。
+最新课程：[E03-S006：文件 Checkpoint 与回退](../../specs/E03-product-foundations/S006-file-checkpoints/README.md)。从受控文件写入边界开始，实现内容定义分块、压缩去重、容量回收、差异预览与可恢复回退；对照空间实测理解可靠性的成本。先做[离线跟练](../../specs/E03-product-foundations/S006-file-checkpoints/follow-along.md)，再看[验收范围](../../specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md)。S001–S005 已合入 main；S006 为交付候选，尚未合入或部署。
 
 ---
 
@@ -28,7 +28,7 @@
 |------|----------|--------------------|------|------|
 | Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | ✅ Done | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S005 已合入；S006 待实现 | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S005 已合入；S006 交付候选 | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理复杂异常与长上下文问题 | 理解异常处理、上下文管理与稳定性优化 | 📝 Planned | Coming soon |
 | Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解 AGENTS、Skills、MCP、Hooks 等扩展能力 | 📝 Planned | Coming soon |
 

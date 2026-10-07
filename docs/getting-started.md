@@ -139,6 +139,26 @@ node packages/tui/dist/cli.js --no-save --no-log
 
 ---
 
+## 文件 Checkpoint 与回退
+
+在包含 S006 的版本中，专用文件工具默认保存改动前后版本。TUI 输入 `/checkpoints`，选择记录按 Enter 看差异，再按 r 预览恢复范围、y 确认；Esc 返回并保留输入草稿。回退要求 Agent 空闲且已登记后台命令结束。
+
+```bash
+node packages/tui/dist/cli.js --checkpoints
+node packages/tui/dist/cli.js --checkpoint <UUID>
+node packages/tui/dist/cli.js --undo <UUID>
+# 阅读预览，复制本次令牌后确认
+node packages/tui/dist/cli.js --undo <UUID> --confirm <预览令牌>
+node packages/tui/dist/cli.js --checkpoint-stats
+node packages/tui/dist/cli.js --checkpoint-prune
+```
+
+这些管理命令不需要 API key。`--no-checkpoints` 单独关闭新文件保护，`--no-save` / `--no-log` 不会关闭它。文件正文压缩去重后放在工作区之外，默认目录为 `~/.zero2agent/checkpoints`；可用 `ZERO2AGENT_CHECKPOINT_DIR` 指定其他外部目录，内容不加密。默认保留最多 50 条完成记录、30 天、256 MiB，有未结算记录时先检查实际文件，再通过 `--recover <UUID>` 预览和确认恢复。
+
+保护范围为 write_file、replace_in_file、delete 的目标文件，不包括 shell、人工终端和外部系统。若文件在快照后被改过，回退报告冲突。恢复只影响文件；独立 CLI 不改写其他已保存会话。完整限制、固定版本和无需密钥的演示见 [S006 跟练](../specs/E03-product-foundations/S006-file-checkpoints/follow-along.md)。
+
+---
+
 ## 项目结构速览
 
 ```

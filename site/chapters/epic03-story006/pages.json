@@ -1,0 +1,190 @@
+{
+  "title": "Zero2Agent · E03-S006 文件 Checkpoint 与回退",
+  "date": "2026-10-07",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 20,
+  "edition": "v1-file-checkpoints",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "改错了，怎样安全退回？",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "02-boundary.html",
+      "title": "文件退回去了，世界并没有一起倒退",
+      "number": 2,
+      "sources": [
+        "D01",
+        "S01"
+      ]
+    },
+    {
+      "file": "03-options.html",
+      "title": "空间小、保存快、恢复稳，往往需要取舍",
+      "number": 3,
+      "sources": [
+        "R01",
+        "R02",
+        "D01"
+      ]
+    },
+    {
+      "file": "04-boundary-hook.html",
+      "title": "通知可以丢，写入前的保护必须等待",
+      "number": 4,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-scope.html",
+      "title": "改一个文件，不用扫描整个仓库",
+      "number": 5,
+      "sources": [
+        "S01",
+        "R03"
+      ]
+    },
+    {
+      "file": "06-chunks.html",
+      "title": "前面插入一行，后面的块还能复用",
+      "number": 6,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "07-algorithm.html",
+      "title": "先限制块大小，再计算内容地址",
+      "number": 7,
+      "sources": [
+        "S02"
+      ]
+    },
+    {
+      "file": "08-manifest.html",
+      "title": "只保存内容块，还不够恢复一个文件",
+      "number": 8,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "09-bounds.html",
+      "title": "有去重，也要有上限",
+      "number": 9,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "10-gc.html",
+      "title": "删掉记录后，才能判断哪些块不用了",
+      "number": 10,
+      "sources": [
+        "S02"
+      ]
+    },
+    {
+      "file": "11-pending.html",
+      "title": "少了一份 after，不能推断文件没变",
+      "number": 11,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "12-conflict.html",
+      "title": "用户后来又改了文件，回退必须先停下来",
+      "number": 12,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "13-restore.html",
+      "title": "先写恢复意图，再逐个替换文件",
+      "number": 13,
+      "sources": [
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "14-paths.html",
+      "title": "可恢复数据本身，也需要保护",
+      "number": 14,
+      "sources": [
+        "S02",
+        "D01"
+      ]
+    },
+    {
+      "file": "15-tui.html",
+      "title": "看清差异，再决定是否回退",
+      "number": 15,
+      "sources": [
+        "S03",
+        "T03"
+      ]
+    },
+    {
+      "file": "16-cli.html",
+      "title": "把回退拆成预览和确认两次命令",
+      "number": 16,
+      "sources": [
+        "S03",
+        "T03"
+      ]
+    },
+    {
+      "file": "17-evidence.html",
+      "title": "会话、日志、Checkpoint，各保留自己的事实",
+      "number": 17,
+      "sources": [
+        "S03",
+        "T03"
+      ]
+    },
+    {
+      "file": "18-benchmark.html",
+      "title": "占用降下来，不代表每项指标都更快",
+      "number": 18,
+      "sources": [
+        "B01"
+      ]
+    },
+    {
+      "file": "19-practice.html",
+      "title": "先真的改一个文件，再验证能退回和重做",
+      "number": 19,
+      "sources": [
+        "D02",
+        "T03"
+      ]
+    },
+    {
+      "file": "20-next.html",
+      "title": "让错误有机会修正，也让保证有明确边界",
+      "number": 20,
+      "sources": [
+        "D01",
+        "D03"
+      ]
+    }
+  ]
+}
