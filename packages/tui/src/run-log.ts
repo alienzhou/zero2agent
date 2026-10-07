@@ -140,6 +140,8 @@ function validateRecord(value: unknown, runId: string): LogRecord {
     !EVENTS[r.kind]?.includes(r.event)
   )
     throw new Error('日志版本或字段无效')
+  if (r.purpose !== undefined && !['model', 'summary', 'count'].includes(r.purpose))
+    throw new Error('日志请求用途无效')
   for (const k of LABELS)
     if (r[k] !== undefined && !diagnosticLabel(r[k])) throw new Error('日志字符串字段无效')
   for (const k of NUMBERS)
@@ -161,7 +163,14 @@ function validateRecord(value: unknown, runId: string): LogRecord {
     action: ['allow', 'ask', 'deny'],
     trigger: ['auto', 'manual', 'overflow'],
     operation: ['turn', 'compact'],
-    terminalOutcome: ['completed', 'cancelled', 'declined', 'skipped', 'drain-timeout'],
+    terminalOutcome: [
+      'completed',
+      'cancelled',
+      'declined',
+      'skipped',
+      'drain-timeout',
+      'background-completed',
+    ],
     errorKind: [
       'cancelled',
       'timeout',
@@ -437,6 +446,7 @@ export class LogStore {
       throw new Error('日志不存在或文件不可安全读取')
     }
     const report: LogReport = { id, records: [], count: 0, omitted: 0, warnings: [] }
+    const backgrounds = new Set<number>()
     const operations = new Set<string>(),
       requests = new Set<string>(),
       tools = new Set<string>()
@@ -471,12 +481,16 @@ export class LogStore {
         if (r.event === 'start') requests.add(r.requestId)
         else requests.delete(r.requestId)
       }
+      if (r.kind === 'tool' && r.event === 'metadata' && r.pid !== undefined) {
+        if (r.terminalOutcome === 'skipped') backgrounds.add(r.pid)
+        else if (r.terminalOutcome === 'background-completed') backgrounds.delete(r.pid)
+      }
       if (r.kind === 'tool') {
         const key = `${r.operationId}:${r.requestId}:${r.toolCallId}`
         if (['pending', 'approval', 'running'].includes(r.event)) tools.add(key)
         else if (r.event !== 'metadata') tools.delete(key)
       }
-      if (operations.size + requests.size + tools.size > LOG_LIMITS.identities)
+      if (operations.size + requests.size + tools.size + backgrounds.size > LOG_LIMITS.identities)
         throw new Error('日志未结束身份数量超限')
       if (!operationId || r.operationId === operationId) {
         matched++
@@ -509,9 +523,9 @@ export class LogStore {
         report.warnings.push(
           '未见进程退出记录：仍在运行、强制终止或日志故障，不能据此判定没有副作用。'
         )
-      if (operations.size || requests.size || tools.size)
+      if (operations.size || requests.size || tools.size || backgrounds.size)
         report.warnings.push(
-          `未闭环：操作 ${operations.size}，请求 ${requests.size}，工具 ${tools.size}。`
+          `未闭环：操作 ${operations.size}，请求 ${requests.size}，工具 ${tools.size}，后台进程 ${backgrounds.size}。`
         )
       report.omitted = matched - report.records.length
       if (operationId && !matched) report.warnings.push('没有这个操作的记录。')

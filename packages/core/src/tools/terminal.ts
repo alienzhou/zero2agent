@@ -13,7 +13,7 @@ import {
 } from './process-registry.js'
 import { buildSpawnEnv, consumeShellEnvFailureNotice } from './shell-env.js'
 import { getTerminalRuntimeHooks } from './terminal-runtime.js'
-import type { Tool, ToolContext } from './types.js'
+import type { Tool, ToolContext, ToolExecutionMetadata } from './types.js'
 
 // ── 常量（定稿 spec / D01-D05） ─────────────────────
 
@@ -228,7 +228,8 @@ function sleep(ms: number): Promise<void> {
 export async function runCommand(
   userCommand: string,
   cwd: string,
-  turnSignal?: AbortSignal
+  turnSignal?: AbortSignal,
+  onResultMetadata?: (metadata: ToolExecutionMetadata) => void
 ): Promise<RunResult> {
   turnSignal?.throwIfAborted()
   const wrapped = wrapCommand(userCommand)
@@ -374,7 +375,15 @@ export async function runCommand(
   if (skipped) {
     outcome = 'skipped'
     child.unref()
-    child.on('close', () => {
+    child.on('close', (code, sig) => {
+      notifyObserver(() =>
+        onResultMetadata?.({
+          terminalOutcome: 'background-completed',
+          exitCode: code ?? 1,
+          pid,
+          signal: sig ?? undefined,
+        })
+      )
       unregisterBackgroundProcess(pid)
       queueCompletionNotice(userCommand, pid)
       void sink.closeStream()
@@ -626,7 +635,7 @@ export const terminalTool: Tool = {
 
     let result: RunResult
     try {
-      result = await runCommand(command, workdirResult.path, ctx.signal)
+      result = await runCommand(command, workdirResult.path, ctx.signal, ctx.onResultMetadata)
     } catch (err) {
       const msg = (err as Error).message
       if (msg.includes('ENOENT')) {

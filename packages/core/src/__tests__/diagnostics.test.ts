@@ -230,4 +230,107 @@ describe('runtime diagnostics through the actual SDK', () => {
       operationId: diagnostics.operationId,
     })
   })
+  it('traces manual Agent compaction without adding diagnostic facts to history', async () => {
+    const config = await provider((_body, response) => {
+      response.writeHead(200, { 'content-type': 'application/json' })
+      response.end(
+        JSON.stringify({
+          id: 'summary',
+          type: 'message',
+          role: 'assistant',
+          model: 'claude-sonnet-4-20250514',
+          stop_reason: 'end_turn',
+          content: [{ type: 'text', text: 'short handoff' }],
+          usage: { input_tokens: 20, output_tokens: 3 },
+        })
+      )
+    })
+    const records: DiagnosticEvent[] = []
+    const agent = new Agent({
+      config,
+      diagnostics: e => records.push(e),
+      context: { contextWindow: 100000, maxInputTokens: 80000 },
+    })
+    const messages = Array.from({ length: 8 }, (_, i) => ({
+      role: i % 2 ? ('assistant' as const) : ('user' as const),
+      content: 'historical-private-body '.repeat(100),
+    }))
+    agent.restore({ messages, context: { through: 0, summary: '' } })
+    expect(await agent.compact({ sessionId: 'compact-session' })).toBe(true)
+    expect(records[0]).toMatchObject({ kind: 'operation', event: 'start', operation: 'compact' })
+    expect(records.some(e => e.purpose === 'summary' && e.event === 'completed')).toBe(true)
+    expect(records.some(e => e.kind === 'compaction' && e.trigger === 'manual')).toBe(true)
+    expect(records.at(-1)).toMatchObject({ kind: 'operation', event: 'completed' })
+    expect(agent.getHistory()).toEqual(messages)
+    expect(JSON.stringify(records)).not.toContain('historical-private-body')
+  })
+  it('preserves the identity of a real background summary that ends after subsequent turns', async () => {
+    let summaryResponse: ServerResponse | undefined
+    let summaryStarted!: () => void
+    const started = new Promise<void>(resolve => {
+      summaryStarted = resolve
+    })
+    const config = await provider((body, response) => {
+      if (body.stream) sse(response)
+      else {
+        summaryResponse = response
+        summaryStarted()
+      }
+    })
+    const records: DiagnosticEvent[] = []
+    const agent = new Agent({
+      config,
+      diagnostics: e => records.push(e),
+      tools: [],
+      context: {
+        contextWindow: 100000,
+        maxInputTokens: 40000,
+        summaryTokens: 2048,
+        maxOutputTokens: 4096,
+        targetRatio: 0.2,
+        backgroundRatio: 0.3,
+        foregroundRatio: 0.9,
+      },
+    })
+    agent.restore({
+      messages: Array.from({ length: 6 }, (_, i) => ({
+        role: i % 2 ? ('assistant' as const) : ('user' as const),
+        content: 'history-private '.repeat(180),
+      })),
+      context: { through: 0, summary: '' },
+    })
+    await agent.run('first', { sessionId: 'original-session' })
+    await started
+    const summaryStart = records.find(e => e.purpose === 'summary' && e.event === 'start')!
+    expect(
+      records.some(
+        e =>
+          e.operationId === summaryStart.operationId &&
+          e.kind === 'operation' &&
+          e.event === 'completed'
+      )
+    ).toBe(true)
+    await agent.run('second', { sessionId: 'later-session' })
+    summaryResponse!.writeHead(200, { 'content-type': 'application/json' })
+    summaryResponse!.end(
+      JSON.stringify({
+        id: 'summary',
+        type: 'message',
+        role: 'assistant',
+        model: 'claude-sonnet-4-20250514',
+        stop_reason: 'end_turn',
+        content: [{ type: 'text', text: 'short handoff' }],
+        usage: { input_tokens: 20, output_tokens: 3 },
+      })
+    )
+    await expect
+      .poll(() =>
+        records.some(e => e.requestId === summaryStart.requestId && e.event === 'completed')
+      )
+      .toBe(true)
+    expect(
+      records.find(e => e.requestId === summaryStart.requestId && e.event === 'completed')
+    ).toMatchObject({ sessionId: 'original-session', operationId: summaryStart.operationId })
+    agent.cancelCompaction()
+  })
 })

@@ -1,4 +1,4 @@
-export type { Tool, ToolContext } from './types.js'
+export type { Tool, ToolContext, ToolExecutionMetadata } from './types.js'
 export { toAnthropicTool } from './types.js'
 export { readFileTool } from './read-file.js'
 export { listDirectoryTool } from './list-directory.js'

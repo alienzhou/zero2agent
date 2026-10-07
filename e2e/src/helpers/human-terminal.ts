@@ -58,6 +58,9 @@ export function startHumanTerminal(
       TMPDIR: cwd,
       TERM: 'xterm-256color',
       ZERO2AGENT_SKIP_LOCAL_ENV: '1',
+      ...(process.env.ZERO2AGENT_LOG_DIR
+        ? { ZERO2AGENT_LOG_DIR: process.env.ZERO2AGENT_LOG_DIR }
+        : {}),
       ...(repl
         ? { ANTHROPIC_API_KEY: 'fake-contract-key', ANTHROPIC_BASE_URL: 'http://127.0.0.1:1' }
         : {}),

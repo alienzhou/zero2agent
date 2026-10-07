@@ -31,6 +31,8 @@ export {
 } from './tools/index.js'
 export type {
   Tool,
+  ToolContext,
+  ToolExecutionMetadata,
   HumanTerminalRequest,
   HumanTerminalResult,
   TerminalRuntimeHooks,

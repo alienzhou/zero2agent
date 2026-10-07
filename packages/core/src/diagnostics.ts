@@ -47,7 +47,13 @@ export interface DiagnosticEvent {
   httpStatus?: number
   toolCallId?: string
   toolName?: string
-  terminalOutcome?: 'completed' | 'cancelled' | 'declined' | 'skipped' | 'drain-timeout'
+  terminalOutcome?:
+    | 'completed'
+    | 'cancelled'
+    | 'declined'
+    | 'skipped'
+    | 'drain-timeout'
+    | 'background-completed'
   exitCode?: number
   pid?: number
   signal?: string

@@ -265,4 +265,104 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
       expect(p.requests).toHaveLength(1)
     }
   )
+  it.skipIf(process.platform === 'win32')(
+    'keeps a background completion attached to its original request after later turns',
+    async () => {
+      const p = await fixture((res, _body, count) =>
+        sendSSEReply(
+          res,
+          count === 1
+            ? [
+                {
+                  type: 'tool_use',
+                  id: 'background-command',
+                  name: 'terminal',
+                  input: {
+                    command: 'sleep 12; printf done > background-marker.txt',
+                    interactive: false,
+                  },
+                },
+              ]
+            : [{ type: 'text', text: 'private-model-answer' }],
+          count === 1 ? 'tool_use' : 'end_turn'
+        )
+      )
+      const tty = startHumanTerminal(CLI_ENTRY, [], p.cwd, true, {
+        env: { ...p.env, PERMISSION_MODE: 'bypass' },
+        timeoutMs: 20000,
+      })
+      cleanups.push(() => tty.close())
+      tty.resize(110, 32)
+      await tty.waitFor('等待输入')
+      const start = tty.output.length
+      tty.write('background test\r')
+      await tty.waitFor(/运行中 10s/, start)
+      tty.write('\x13')
+      await tty.waitFor('zero2agent · 已完成', start)
+      const next = tty.output.length
+      tty.write('next turn\r')
+      await tty.waitFor('zero2agent · 已完成', next)
+      await until(async () => {
+        const [item] = await p.logs.list()
+        if (!item) return false
+        return (await p.logs.read(item.id)).records.some(
+          r => r.terminalOutcome === 'background-completed'
+        )
+      })
+      const [item] = await p.logs.list(),
+        report = await p.logs.read(item.id)
+      const skipped = report.records.find(r => r.terminalOutcome === 'skipped')!,
+        completed = report.records.find(r => r.terminalOutcome === 'background-completed')!
+      expect(completed).toMatchObject({
+        operationId: skipped.operationId,
+        requestId: skipped.requestId,
+        toolCallId: skipped.toolCallId,
+        pid: skipped.pid,
+        exitCode: 0,
+      })
+      expect(
+        report.records.filter(r => r.kind === 'operation' && r.event === 'start')
+      ).toHaveLength(2)
+      expect(await fs.readFile(path.join(p.cwd, 'background-marker.txt'), 'utf8')).toBe('done')
+      tty.write('exit\r')
+      expect(await tty.waitExit()).toBe(0)
+      expect((await p.logs.read(item.id)).warnings).toEqual([])
+    }
+  )
+  it.skipIf(process.platform === 'win32')(
+    'records only native results from the private human terminal',
+    async () => {
+      const p = await fixture()
+      await fs.writeFile(
+        path.join(p.cwd, 'human-private.sh'),
+        'read -rs -p "PRIVATE_READY" token\nprintf "%s" "$token" > human-private.txt\n'
+      )
+      const tty = startHumanTerminal(
+        CLI_ENTRY,
+        ['--terminal', 'bash ./human-private.sh'],
+        p.cwd,
+        false,
+        { env: p.env }
+      )
+      cleanups.push(() => tty.close())
+      await tty.waitFor('Allow human terminal? [y/N]')
+      tty.write('y\r')
+      await tty.waitFor('PRIVATE_READY')
+      tty.write('private-human-token\r')
+      expect(await tty.waitExit()).toBe(0)
+      expect(await fs.readFile(path.join(p.cwd, 'human-private.txt'), 'utf8')).toBe(
+        'private-human-token'
+      )
+      const [item] = await p.logs.list(),
+        report = await p.logs.read(item.id)
+      expect(report.warnings).toEqual([])
+      expect(report.records.find(r => r.event === 'terminal-completed')).toMatchObject({
+        terminalOutcome: 'completed',
+        exitCode: 0,
+      })
+      expect(JSON.stringify(report)).not.toContain('private-human-token')
+      expect(JSON.stringify(report)).not.toContain('human-private.sh')
+      expect(p.requests).toHaveLength(0)
+    }
+  )
 })

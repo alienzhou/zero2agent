@@ -5,7 +5,13 @@ import type Anthropic from '@anthropic-ai/sdk'
  * 框架注入给每次工具调用，包含 Agent 级别的配置
  */
 export interface ToolExecutionMetadata {
-  terminalOutcome: 'completed' | 'cancelled' | 'declined' | 'skipped' | 'drain-timeout'
+  terminalOutcome:
+    | 'completed'
+    | 'cancelled'
+    | 'declined'
+    | 'skipped'
+    | 'drain-timeout'
+    | 'background-completed'
   exitCode?: number
   pid?: number
   signal?: string | number

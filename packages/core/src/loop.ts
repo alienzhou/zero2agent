@@ -114,11 +114,12 @@ export async function executeToolCalls(
       const tool = tools.find(t => t.name === block.name)
       if (!tool) throw new Error(`Unknown tool: ${block.name}`)
       const input = structuredClone(block.input) as Record<string, unknown>
+      const originatingRequestId = diagnostics?.latestModelRequestId
       const callCtx: ToolContext = Object.freeze({
         ...ctx,
         onResultMetadata: (metadata: ToolExecutionMetadata) => {
           diagnostics?.emit('tool', 'metadata', {
-            requestId: diagnostics.latestModelRequestId,
+            requestId: originatingRequestId,
             toolCallId: diagnosticLabel(block.id),
             toolName: diagnosticLabel(block.name),
             terminalOutcome: metadata.terminalOutcome,
