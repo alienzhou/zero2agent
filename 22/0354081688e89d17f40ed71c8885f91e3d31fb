@@ -1,0 +1,63 @@
+.authoring/site/chapters/epic03-story003/author.cjs
+  s_08884e0d462e65::t_71528b91f40679 1-183
+.authoring/site/course.json
+  s_08884e0d462e65::t_aacfc8e641331f 20,92-99
+site/chapters/epic03-story003/01-cover.html
+  s_08884e0d462e65::t_b90200b3318cdf 1
+site/chapters/epic03-story003/02-silence.html
+  s_08884e0d462e65::t_73bc2f0d2a67bb 1
+site/chapters/epic03-story003/03-layout.html
+  s_08884e0d462e65::t_868988703da7b4 1
+site/chapters/epic03-story003/04-products.html
+  s_08884e0d462e65::t_1e166a70adfd14 1
+site/chapters/epic03-story003/05-channels.html
+  s_08884e0d462e65::t_6d3a915f88b894 1
+site/chapters/epic03-story003/06-identity.html
+  s_08884e0d462e65::t_00625f85b1a3c2 1
+site/chapters/epic03-story003/07-turn-state.html
+  s_08884e0d462e65::t_07ea389ab425cf 1
+site/chapters/epic03-story003/08-tool-state.html
+  s_08884e0d462e65::t_833db93517ed94 1
+site/chapters/epic03-story003/09-approval.html
+  s_08884e0d462e65::t_1dda422cb84184 1
+site/chapters/epic03-story003/10-focus.html
+  s_08884e0d462e65::t_1134d4d5b406f7 1
+site/chapters/epic03-story003/11-cancel.html
+  s_08884e0d462e65::t_1ce6b31d59b919 1
+site/chapters/epic03-story003/12-evidence.html
+  s_08884e0d462e65::t_b9d05e831c407d 1
+site/chapters/epic03-story003/13-draft.html
+  s_08884e0d462e65::t_2f8bc7c2217f9a 1
+site/chapters/epic03-story003/14-input.html
+  s_08884e0d462e65::t_0305f4d046942e 1
+site/chapters/epic03-story003/15-details.html
+  s_08884e0d462e65::t_a3aa34e8571736 1
+site/chapters/epic03-story003/16-handoff.html
+  s_08884e0d462e65::t_470ee1e1ac8922 1
+site/chapters/epic03-story003/17-practice.html
+  s_08884e0d462e65::t_e34201c4b418b7 1-3
+site/chapters/epic03-story003/18-next.html
+  s_08884e0d462e65::t_931206e4991250 1
+site/chapters/epic03-story003/course.css
+  s_08884e0d462e65::t_dbddba35e1272b 1-2
+site/chapters/epic03-story003/pages.json
+  s_08884e0d462e65::t_028f18d2b6a487 1-183
+site/course.json
+  s_08884e0d462e65::t_43ca9d3ae59b33 20,2937,3409-3917,3920
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "220354081688e89d17f40ed71c8885f91e3d31fb",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
