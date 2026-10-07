@@ -18,3 +18,7 @@
 ## 恢复意图交接的崩溃窗口
 
 最终源码自查发现：恢复 pending tool 时，新 restore intent 已落盘而原 pending 尚未移除；若此处中断，两条 pending 会互相阻塞。增加精确持久边界故障注入，先记录失败 `handoff-initial.txt.gz`（Another checkpoint is pending），再修正恢复协议：仅允许继续恢复的 intent 清理 sourceId 指向且路径/全部目标版本匹配的旧 tool pending，其余 pending 仍拒绝。回归测试验证中断后重开存储、缺少关联时拒绝且不删记录、正确关联后恢复、反向撤销；原真实 SIGKILL 跨进程用例继续保留。本次窗口测试是故障注入，不宣称额外一次真实 SIGKILL。
+
+## 旧 readline PTY 用例的观察竞态
+
+修正恢复交接后的全量运行中，Core 413 / CDP 1 通过，E2E 160 通过、1 失败、56 跳过。旧剪切/粘贴用例两轮回复都叫 shortcut-answer；TUI 重画第一轮内容时第二次 waitFor 提前返回，此时请求数组仍只有第一轮。原记录见 `readline-initial-offline.txt.gz` 和 summary。用例改为逐轮不同回复，第一轮答复之后查找空闲提示，第二轮精确等待新答复并增加请求数为 2 的断言；剪切/Unicode 的实际请求内容断言保持不变，生产编辑器代码未修改。
