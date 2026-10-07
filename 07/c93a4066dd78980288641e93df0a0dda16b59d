@@ -1,0 +1,21 @@
+researches/runtime-tui/acceptance/terminal-restore.json
+  s_08884e0d462e65::t_03cca9774a5091 1-27
+scripts/e03-s003-terminal-restore.mjs
+  s_08884e0d462e65::t_31f874914f18f6 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "07c93a4066dd78980288641e93df0a0dda16b59d",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
