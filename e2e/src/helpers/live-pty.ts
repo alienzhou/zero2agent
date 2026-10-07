@@ -105,7 +105,7 @@ export async function startLivePty(
     CONTEXT_COUNTING: 'conservative',
     ...hostEnv,
   }
-  const session = startHumanTerminal(CLI_ENTRY, [], workspace.dir, true, { env, timeoutMs: 90_000 })
+  const session = startHumanTerminal(CLI_ENTRY, ['--plain'], workspace.dir, true, { env, timeoutMs: 90_000 })
   return {
     session,
     env,

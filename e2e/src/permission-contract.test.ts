@@ -69,7 +69,7 @@ describe('permissions through built CLI, SDK SSE and real PTY', () => {
       'default',
       kind === 'timeout' ? { APPROVAL_TIMEOUT_MS: '150' } : {}
     )
-    const pty = startHumanTerminal(CLI_ENTRY, [], f.workspace.dir, true, { env: f.env })
+    const pty = startHumanTerminal(CLI_ENTRY, ['--plain'], f.workspace.dir, true, { env: f.env })
     try {
       await pty.waitFor('你: ')
       const from = pty.output.length
@@ -94,7 +94,7 @@ describe('permissions through built CLI, SDK SSE and real PTY', () => {
   })
   it('requires a separate approval for every same-tool call and pairs all results', async () => {
     const f = await setup([write('one', 'one.txt'), write('two', 'two.txt')])
-    const pty = startHumanTerminal(CLI_ENTRY, [], f.workspace.dir, true, { env: f.env })
+    const pty = startHumanTerminal(CLI_ENTRY, ['--plain'], f.workspace.dir, true, { env: f.env })
     try {
       await pty.waitFor('你: ')
       const from = pty.output.length
@@ -130,7 +130,7 @@ describe('permissions through built CLI, SDK SSE and real PTY', () => {
       join(f.workspace.dir, 'private.sh'),
       'read -p TOKEN_READY token\nprintf "private-%s" "$token"\n'
     )
-    const pty = startHumanTerminal(CLI_ENTRY, [], f.workspace.dir, true, { env: f.env })
+    const pty = startHumanTerminal(CLI_ENTRY, ['--plain'], f.workspace.dir, true, { env: f.env })
     try {
       await pty.waitFor('你: ')
       const from = pty.output.length

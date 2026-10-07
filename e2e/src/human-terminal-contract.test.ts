@@ -484,7 +484,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
 
   it('accepts two /terminal commands followed by exit in the actual CLI REPL', async () => {
     const cwd = await workspace({ 'secret.sh': secretScript })
-    const session = start(cwd, [], true)
+    const session = start(cwd, ['--plain'], true)
     let from = 0
     for (let round = 1; round <= 2; round++) {
       await session.waitFor('你: ', from)
@@ -505,7 +505,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 human terminal: real PTY
 
   it('Ctrl-D exits the default bash and then the host REPL', async () => {
     const cwd = await workspace()
-    const session = start(cwd, [], true)
+    const session = start(cwd, ['--plain'], true)
     await session.waitFor('你: ')
     const from = session.output.length
     session.write('/terminal\r')
