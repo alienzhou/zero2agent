@@ -3,6 +3,7 @@ import {
   listBackgroundProcesses,
   setTerminalRuntimeHooks,
 } from '@zero2agent/core'
+import type { TerminalRuntimeHooks } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import { runHumanTerminal } from './human-terminal.js'
 
@@ -12,6 +13,9 @@ const RESET = '\x1b[0m'
 export interface SetupTerminalRuntimeOptions {
   /** 测试 harness 可挂接状态行，不改变生产 onStatus 行为 */
   onStatusLine?: (line: string) => void
+  quiet?: boolean
+  runInteractive?: TerminalRuntimeHooks['runInteractive']
+  attachInterrupts?: TerminalRuntimeHooks['attachInterrupts']
 }
 
 /**
@@ -26,12 +30,12 @@ export function setupTerminalRuntime(
 
   setTerminalRuntimeHooks({
     isTTY,
-    runInteractive: request => runHumanTerminal(request, rl),
+    runInteractive: options?.runInteractive ?? (request => runHumanTerminal(request, rl)),
     onStatus: line => {
       options?.onStatusLine?.(line)
-      process.stdout.write(`${DIM}${line}${RESET}\n`)
+      if (!options?.quiet) process.stdout.write(`${DIM}${line}${RESET}\n`)
     },
-    attachInterrupts: controller => {
+    attachInterrupts: options?.attachInterrupts ?? (controller => {
       if (!isTTY) return () => {}
 
       readline.emitKeypressEvents(process.stdin)
@@ -58,7 +62,7 @@ export function setupTerminalRuntime(
         if (process.stdin.isTTY) process.stdin.setRawMode(wasRaw ?? false)
         rl?.resume()
       }
-    },
+    }),
     promptBackgroundCleanup: async entries => {
       if (!isTTY || entries.length === 0) return false
       console.log(`\n还有 ${entries.length} 个后台命令在运行：`)
