@@ -82,7 +82,14 @@ try {
         MODEL_NAME: 'offline-fixture', CONTEXT_WINDOW: '200000', PERMISSION_MODE: 'default',
       },
     });
-    await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', code => { process.exitCode = code ?? 1; resolve(); }); });
+    const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'];
+    const handlers = signals.map(signal => { const handler = () => child.kill(signal); process.on(signal, handler); return [signal, handler]; });
+    try {
+      await new Promise((resolve, reject) => {
+        child.once('error', reject);
+        child.once('exit', (code, signal) => { process.exitCode = code ?? ({ SIGINT: 130, SIGTERM: 143, SIGHUP: 129 }[signal] ?? 1); resolve(); });
+      });
+    } finally { for (const [signal, handler] of handlers) process.off(signal, handler); }
   } else {
     const events = [];
     agent = new Agent({
