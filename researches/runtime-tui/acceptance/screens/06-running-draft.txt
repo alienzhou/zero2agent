@@ -1,8 +1,9 @@
-◓ zero2agent · 等待模型 · 0.1s
-工作目录: /private/tmp/zero2agent-runtime-ieWcbB
+◑ zero2agent · 等待模型 · 0.1s
+工作目录: /private/tmp/zero2agent-runtime-xzCd8E
 · 输入你的问题。/new 新建对话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退出
 你 › /help
-· 输入编辑：← → / Home End 移动，↑ ↓ 在多行中移动或查看历史，Ctrl-U 清空前文，Ctrl-W 删除词。
+· 输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。
+剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。
 Ctrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。
 查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。
 审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。
@@ -23,7 +24,6 @@ Ctrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可
 └
 Agent › 工具回执已收到。这是本地固定响应；可继续输入“重复”“慢速”“报错”或 exit。
 你 › 慢速
-
 
 ─ 运行中 · 可编辑草稿 ─────────────────────────────────────────────────────────────────────────
 Ctrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键

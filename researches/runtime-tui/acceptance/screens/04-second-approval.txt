@@ -1,8 +1,8 @@
-◒ zero2agent · 等待审批 · 0.5s
-工作目录: /private/tmp/zero2agent-runtime-ieWcbB
+◒ zero2agent · 等待审批 · 0.3s
+工作目录: /private/tmp/zero2agent-runtime-xzCd8E
 Approval · write_file
 调用: second
-工作目录: /private/tmp/zero2agent-runtime-ieWcbB
+工作目录: /private/tmp/zero2agent-runtime-xzCd8E
 原因: Approval required for write tool
 参数（完整 JSON）:
 {
