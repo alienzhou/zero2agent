@@ -159,9 +159,14 @@ describe('bounded content-addressed file checkpoints', () => {
       expect(ran).toBe(false)
     }
     expect(await fs.readFile(path.join(p.root, 'outside'), 'utf8')).toBe('safe')
-    await expect(CheckpointStore.open(p.cwd, { directory: p.file('inside') })).rejects.toThrow(
-      'outside'
-    )
+    const inside = await CheckpointStore.open(p.cwd, { directory: p.file('inside') })
+    expect(await inside.list()).toEqual([])
+    await expect(
+      inside.capture(
+        { cwd: p.cwd, paths: ['new'], toolName: 'test', toolCallId: 'test' },
+        async () => 'bad'
+      )
+    ).rejects.toThrow('outside')
   })
   it('keeps a pending before-image on post-effect failure and requires explicit recovery', async () => {
     let fail = true

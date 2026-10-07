@@ -1,0 +1,13 @@
+file:///Users/zhouhongxuan/program/works/zero2agent-e03-s006/scripts/e03-s003-terminal-restore.mjs:34
+        if (ended || Date.now() > until) throw new Error('Missing ' + marker + '\n' + output.slice(-2000));
+                                               ^
+
+Error: Missing 你: 
+CHILD_PID=15945
+启动失败: Checkpoint storage must be outside the workspace
+RESTORED_MODE=true EXIT_CODE=1 SIGNAL=null
+[1G[0JECHO_READY> [13G
+    at wait (file:///Users/zhouhongxuan/program/works/zero2agent-e03-s006/scripts/e03-s003-terminal-restore.mjs:34:48)
+    at async file:///Users/zhouhongxuan/program/works/zero2agent-e03-s006/scripts/e03-s003-terminal-restore.mjs:39:7
+
+Node.js v22.15.1

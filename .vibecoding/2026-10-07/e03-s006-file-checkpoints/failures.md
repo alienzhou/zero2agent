@@ -6,3 +6,5 @@
 4. 首轮完整离线：Core 413、CDP 1 通过；E2E 159 通过、1 失败、56 跳过。新 Checkpoint 成功通知错误地发往 stderr，破坏原多轮契约。修正成功通知走 stdout，失败才走 stderr；不削弱原断言。原始输出见 researches/file-checkpoints/acceptance/initial-*.txt.gz。
 
 初始基准：4 MiB 高熵文件，20 次前部插入，CAS 存储 6007126 B、分配 6283264 B；保护保存 P50 162 ms。基线没有完整锁、校验和 fsync 协议，因此耗时不代表同保证下的算法胜负。
+
+5. 第二轮完整离线 574 通过、56 跳过；后续旧 S003 终端恢复脚本失败，因为 HOME 与 cwd 相同，Checkpoint 打开阶段过早拒绝工作区内存储。把限制放到实际初始化写入时，只读和 --no-checkpoints 启动不再被无关存储配置阻断；真正写入仍须外部存储。原终端输出与 second-summary.json 保留。

@@ -162,8 +162,6 @@ export class CheckpointStore {
         path.join(homedir(), '.zero2agent', 'checkpoints')
     )
     const directory = path.join(base, workspace)
-    if (directory === root || directory.startsWith(root + path.sep))
-      throw new Error('Checkpoint storage must be outside the workspace')
     // Opening a reader creates no state and does not run GC.
     return new CheckpointStore(root, directory, workspace, options)
   }
@@ -178,6 +176,10 @@ export class CheckpointStore {
     }
   }
   private async initialize(): Promise<void> {
+    if (this.directory === this.cwd || this.directory.startsWith(this.cwd + path.sep))
+      throw new Error(
+        'Checkpoint storage must be outside the workspace; set ZERO2AGENT_CHECKPOINT_DIR'
+      )
     await fs.mkdir(this.directory, { recursive: true, mode: 0o700 })
     if ((await fs.lstat(this.directory)).isSymbolicLink())
       throw new Error('Symlink checkpoint directory refused')
