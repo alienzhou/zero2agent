@@ -484,6 +484,23 @@ describe.skipIf(process.platform === 'win32')(
       await quit(p.session)
     })
 
+    it('rejects an oversized bracketed paste as a whole and keeps the original draft and cursor', async () => {
+      const p = await start((res, request) => reply(res, request, text('original-draft-preserved')))
+      const from = p.session.output.length
+      p.session.write('原稿🙂\x01\x06')
+      await p.session.waitFor('你: 原稿🙂', from)
+      const pasteFrom = p.session.output.length
+      p.session.write('\x1b[200~' + 'x'.repeat(17_000) + '\x1b[201~')
+      await p.session.waitFor('输入上限 16,384', pasteFrom)
+      await p.session.waitFor('你: 原稿🙂', pasteFrom)
+      expect(p.requests).toHaveLength(0)
+      const submitFrom = p.session.output.length
+      p.session.write('新\r')
+      await p.session.waitFor('original-draft-preserved', submitFrom)
+      expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('原新稿🙂')
+      await quit(p.session)
+    })
+
     it('restores screen modes on SIGTERM while the provider is pending', async () => {
       const p = await start(() => {})
       await send(p.session, 'pending')
