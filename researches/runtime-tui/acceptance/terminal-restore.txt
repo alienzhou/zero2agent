@@ -1,0 +1,27 @@
+{
+  "platform": "darwin",
+  "node": "v22.15.1",
+  "capturedAt": "2026-10-07T05:32:49.202Z",
+  "fixture": "Real outer PTY; production TUI; /bin/stty before/after; parent readline after child exit",
+  "passed": true,
+  "results": [
+    {
+      "kind": "exit",
+      "sttyModeRestored": true,
+      "canonicalInputRestored": true,
+      "tuiExitCode": 0
+    },
+    {
+      "kind": "SIGTERM",
+      "sttyModeRestored": true,
+      "canonicalInputRestored": true,
+      "tuiExitCode": 143
+    },
+    {
+      "kind": "SIGHUP",
+      "sttyModeRestored": true,
+      "canonicalInputRestored": true,
+      "tuiExitCode": 129
+    }
+  ]
+}

@@ -156,7 +156,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 + E03-S001: real CLI/SDK
   }
 
   function start(cwd: string, env: Record<string, string>): Session {
-    const session = startHumanTerminal(CLI_ENTRY, [], cwd, true, { env })
+    const session = startHumanTerminal(CLI_ENTRY, ['--plain'], cwd, true, { env })
     cleanups.push(async () => {
       try {
         session.signal('SIGTERM')

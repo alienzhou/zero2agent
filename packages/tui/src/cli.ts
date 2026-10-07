@@ -9,6 +9,7 @@ import path from 'node:path'
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 
 import { createApprovalHandler, permissionOptionsFromEnv } from './approval.js'
+import { RuntimeTui } from './runtime-tui.js'
 
 // ── 环境变量 ───────────────────────────────────────
 
@@ -143,7 +144,18 @@ async function main() {
   }
   loadLocalEnv()
 
-  const messageArg = process.argv[2]
+  const args = process.argv.slice(2)
+  const plain = args[0] === '--plain'
+  if (plain) args.shift()
+  const messageArg = args[0]
+  const tui =
+    !messageArg &&
+    !plain &&
+    process.stdin.isTTY &&
+    process.stdout.isTTY &&
+    process.env.TERM !== 'dumb'
+      ? new RuntimeTui()
+      : undefined
 
   if (!process.env.ANTHROPIC_API_KEY) {
     console.error('错误: 请设置 ANTHROPIC_API_KEY 环境变量')
@@ -154,9 +166,11 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
-    permissions: permissionOptionsFromEnv(createApprovalHandler(() => approvalReadline.current)),
+    permissions: permissionOptionsFromEnv(
+      tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)
+    ),
     systemPrompt: buildSystemPrompt(),
-    events,
+    events: tui?.events ?? events,
     cwd: process.cwd(),
     context: {
       contextWindow: process.env.CONTEXT_WINDOW ? Number(process.env.CONTEXT_WINDOW) : undefined,
@@ -169,6 +183,11 @@ async function main() {
       counting: process.env.CONTEXT_COUNTING === 'provider' ? 'provider' : 'conservative',
     },
   })
+
+  if (tui) {
+    await tui.run(agent)
+    return
+  }
 
   if (messageArg) {
     try {

@@ -1,0 +1,28 @@
+  >_ OpenAI Codex (v0.160.1)
+     /private/tmp/zero2agent-research/ux-codex-5JH1Mp/work
+
+  The prompt is yours.
+
+  To get started, describe a task or try one of these commands:
+
+  /init - create an AGENTS.md file with instructions for Codex
+  /status - show current session configuration
+  /permissions - choose what Codex is allowed to do
+  /model - choose what model and reasoning effort to use
+  /review - review any changes and find issues
+
+/status
+
+  >_ OpenAI Codex (v0.160.1)
+
+  Model:               ui-observation (reasoning none, summaries auto)
+  Model provider:      observation
+  Directory:           /private/tmp/zero2agent-research/ux-codex-5JH1Mp/work
+  Permissions:         Read Only (never)
+  Agents.md:           <none>
+  Collaboration mode:  Default
+  Session:             01a114bc-e595-7f72-8578-f782cb276d8f
+
+  Token usage:         0 total  (0 input + 0 output)
+  Limits:              data not available yet
+Session ID: 01a114bc-e595-7f72-8578-f782cb276d8f

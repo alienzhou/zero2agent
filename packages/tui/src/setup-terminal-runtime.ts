@@ -3,6 +3,7 @@ import {
   listBackgroundProcesses,
   setTerminalRuntimeHooks,
 } from '@zero2agent/core'
+import type { TerminalRuntimeHooks } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import { runHumanTerminal } from './human-terminal.js'
 
@@ -12,6 +13,9 @@ const RESET = '\x1b[0m'
 export interface SetupTerminalRuntimeOptions {
   /** 测试 harness 可挂接状态行，不改变生产 onStatus 行为 */
   onStatusLine?: (line: string) => void
+  quiet?: boolean
+  runInteractive?: TerminalRuntimeHooks['runInteractive']
+  attachInterrupts?: TerminalRuntimeHooks['attachInterrupts']
 }
 
 /**
@@ -26,39 +30,41 @@ export function setupTerminalRuntime(
 
   setTerminalRuntimeHooks({
     isTTY,
-    runInteractive: request => runHumanTerminal(request, rl),
+    runInteractive: options?.runInteractive ?? (request => runHumanTerminal(request, rl)),
     onStatus: line => {
       options?.onStatusLine?.(line)
-      process.stdout.write(`${DIM}${line}${RESET}\n`)
+      if (!options?.quiet) process.stdout.write(`${DIM}${line}${RESET}\n`)
     },
-    attachInterrupts: controller => {
-      if (!isTTY) return () => {}
+    attachInterrupts:
+      options?.attachInterrupts ??
+      (controller => {
+        if (!isTTY) return () => {}
 
-      readline.emitKeypressEvents(process.stdin)
-      const wasRaw = process.stdin.isRaw
-      if (process.stdin.isTTY) process.stdin.setRawMode(true)
-      rl?.pause()
+        readline.emitKeypressEvents(process.stdin)
+        const wasRaw = process.stdin.isRaw
+        if (process.stdin.isTTY) process.stdin.setRawMode(true)
+        rl?.pause()
 
-      const onKeypress = (_str: string, key: readline.Key) => {
-        if (!key) return
-        if (key.ctrl && key.name === 'x') controller.signalCancel()
-        if (key.ctrl && key.name === 's') controller.signalSkip()
-        // Ctrl-C 保持默认语义，不吞掉
-        if (key.ctrl && key.name === 'c') {
+        const onKeypress = (_str: string, key: readline.Key) => {
+          if (!key) return
+          if (key.ctrl && key.name === 'x') controller.signalCancel()
+          if (key.ctrl && key.name === 's') controller.signalSkip()
+          // Ctrl-C 保持默认语义，不吞掉
+          if (key.ctrl && key.name === 'c') {
+            process.stdin.removeListener('keypress', onKeypress)
+            if (process.stdin.isTTY) process.stdin.setRawMode(wasRaw ?? false)
+            rl?.resume()
+            process.kill(process.pid, 'SIGINT')
+          }
+        }
+        process.stdin.on('keypress', onKeypress)
+
+        return () => {
           process.stdin.removeListener('keypress', onKeypress)
           if (process.stdin.isTTY) process.stdin.setRawMode(wasRaw ?? false)
           rl?.resume()
-          process.kill(process.pid, 'SIGINT')
         }
-      }
-      process.stdin.on('keypress', onKeypress)
-
-      return () => {
-        process.stdin.removeListener('keypress', onKeypress)
-        if (process.stdin.isTTY) process.stdin.setRawMode(wasRaw ?? false)
-        rl?.resume()
-      }
-    },
+      }),
     promptBackgroundCleanup: async entries => {
       if (!isTTY || entries.length === 0) return false
       console.log(`\n还有 ${entries.length} 个后台命令在运行：`)

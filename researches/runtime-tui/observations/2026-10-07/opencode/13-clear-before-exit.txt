@@ -1,0 +1,31 @@
+
+
+
+
+
+
+
+
+
+                                                                ▄
+                               █▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█
+                               █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀
+                               ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+
+
+             ┃
+             ┃  Ask anything… "Fix broken tests"
+             ┃
+             ┃  Build · No provider selected Connect a provider
+             ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                                                             tab agents  ctrl+p commands
+
+
+
+                      ● Tip Run /connect to add an AI provider and start coding
+
+
+
+
+
+  /private/tmp/zero2agent-research/ux-opencode-0KD6BU/work                                 1.18.35

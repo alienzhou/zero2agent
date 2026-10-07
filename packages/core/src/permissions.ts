@@ -155,11 +155,15 @@ export class PermissionController {
     input: Record<string, unknown>,
     ctx: ToolContext
   ): Promise<PermissionDecision> {
+    if (ctx.signal?.aborted) return { action: 'deny', reason: 'Turn cancelled' }
     const decision = this.evaluate(tool, input, ctx)
     if (decision.action !== 'ask') return decision
     if (!this.handler) return { action: 'deny', reason: 'Approval unavailable: no host handler' }
     const controller = new AbortController()
     this.pending.add(controller)
+    const cancelTurn = (): void => controller.abort('Turn cancelled')
+    ctx.signal?.addEventListener('abort', cancelTurn, { once: true })
+    if (ctx.signal?.aborted) cancelTurn()
     const id = randomUUID()
     const request: ApprovalRequest = Object.freeze({
       id,
@@ -176,6 +180,7 @@ export class PermissionController {
       const aborted = new Promise<PermissionDecision>(resolve => {
         onAbort = () => resolve({ action: 'deny', reason: String(controller.signal.reason) })
         controller.signal.addEventListener('abort', onAbort, { once: true })
+        if (controller.signal.aborted) onAbort()
         timer = setTimeout(() => controller.abort('Approval timed out'), this.timeout)
       })
       const answer = Promise.resolve()
@@ -210,6 +215,7 @@ export class PermissionController {
     } finally {
       if (timer) clearTimeout(timer)
       controller.signal.removeEventListener('abort', onAbort)
+      ctx.signal?.removeEventListener('abort', cancelTurn)
       this.pending.delete(controller)
       controller.abort('Approval settled')
     }

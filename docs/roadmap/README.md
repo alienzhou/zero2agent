@@ -18,7 +18,7 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新本地课程候选：[E03-S002：执行前，先判断是否允许](../../specs/E03-product-foundations/S002-permissions/README.md)。统一工具权限、一次审批和路径重查已实现，463 项离线与本机 50 项真实模型验收通过（权限 22 项、旧功能 28 项）；16 页图文本地成稿、双 ZIP 验证完成。先做[离线跟练](../../specs/E03-product-foundations/S002-permissions/follow-along.md)，再看[验收证据](../../researches/permissions/acceptance/README.md)。补验 Tag 为 `E03-S002-permissions-approval-verified`；候选待人工审阅与合并，课程未对外发布。下一课 E03-S003：运行状态与 TUI。
+最新课程：[E03-S003：运行状态与 TUI](../../specs/E03-product-foundations/S003-runtime-tui/README.md)。从结构化事件、运行取消到可连续操作的终端界面，包含草稿、粘贴、历史、工具详情、审批和人工 PTY 交接。先做[离线跟练](../../specs/E03-product-foundations/S003-runtime-tui/follow-along.md)，再看[验收范围](../../specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md)。此前 S002 与在线课程站点已分别通过 PR #17、#18 合入 main；新课代码、完整课程和验收已通过 [PR #19](https://github.com/alienzhou/zero2agent/pull/19) 交付，固定版本 `E03-S003-runtime-tui`，待人工审查与合并，未部署站点。
 
 ---
 
@@ -28,7 +28,7 @@
 |------|----------|--------------------|------|------|
 | Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | ✅ Done | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001 已合入；S002 实现与课程候选完成，待审阅，未发布 | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001/S002 已合入；S003 运行状态与 TUI | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理复杂异常与长上下文问题 | 理解异常处理、上下文管理与稳定性优化 | 📝 Planned | Coming soon |
 | Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解 AGENTS、Skills、MCP、Hooks 等扩展能力 | 📝 Planned | Coming soon |
 

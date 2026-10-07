@@ -272,6 +272,7 @@ export class ContextManager {
         const interruption = new Promise<never>((_, reject) => {
           aborted = () => reject(controller.signal.reason)
           controller.signal.addEventListener('abort', aborted, { once: true })
+          if (controller.signal.aborted) aborted()
           timeout = setTimeout(
             () => controller.abort(new Error('Compaction timed out.')),
             runtime.budget.timeoutMs

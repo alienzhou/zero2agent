@@ -6,6 +6,7 @@ export interface TerminalInterruptController {
 }
 
 export interface HumanTerminalRequest {
+  signal?: AbortSignal
   command: string
   cwd: string
 }

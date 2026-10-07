@@ -1,0 +1,344 @@
+{
+  "retrieved": "2026-10-07",
+  "timezone": "Asia/Shanghai",
+  "scope": "E03-S003 runtime state and TUI",
+  "notes": [
+    "Source files compared byte-for-byte to git show at pinned commits.",
+    "Claude Code runtime source not inspected; documentation has no source SHA.",
+    "Dynamic documentation can differ from pinned development commits.",
+    "No framework benchmarks or competitor runtime tests in this source research batch."
+  ],
+  "sources": [
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/protocol/src/protocol.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/protocol/src/protocol.rs",
+      "sha256": "54f175eeb1410f1b1937df7466da2dc73258ccc5e2b6f09bd6172868a19c23b7",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/src/bottom_pane/mod.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/src/bottom_pane/mod.rs",
+      "sha256": "31d34f075b652b8b229e5988c9b601d46b9e102f05ac71c0cbfa8eaa96d2fb2d",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/src/keymap.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/src/keymap.rs",
+      "sha256": "c5b45b1a11cf1ddb9514de8a7a78e3244c0af40902b7c335596a1471cba5f0aa",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/src/bottom_pane/approval_overlay.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/src/bottom_pane/approval_overlay.rs",
+      "sha256": "561af57234a09c5c2e654ee147366948eeb1b9c4e6c981ac6cc99789252df2d5",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/src/tui.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/src/tui.rs",
+      "sha256": "b710c24972a6e6c56d244ab3c43ebe2e22dd1fba0cee0a7f6b7428cfeda8a4b6",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/Cargo.toml",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/Cargo.toml",
+      "sha256": "545a0f5b9f492935b7a8523e57ff1ec4c9c67f6055ff5c95f7ec643b60334163",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/core/src/scheduler/types.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/core/src/scheduler/types.ts",
+      "sha256": "cd64b3ae429325ad56ac933659fbc99c901eaa1727a26436e71bb623fb0a565c",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/types.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/types.ts",
+      "sha256": "29837e8e4d42170d35ee8a3f8f83e2d80b83ef225d887da5460ff571d48e7217",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/hooks/useGeminiStream.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/hooks/useGeminiStream.ts",
+      "sha256": "4df738c6266cadeaefccb871f6c91e719de2cc68836f97a7ac892fa051cd9159",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/components/messages/ToolMessage.tsx",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/components/messages/ToolMessage.tsx",
+      "sha256": "a0b2f61578a0ac662e0e67e5883ab81f64e22ad70bec5cd99a02cf61ed16f79b",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/components/ShellInputPrompt.tsx",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/components/ShellInputPrompt.tsx",
+      "sha256": "c850a3e2b8cdfc422e9b8b0cbea53aafd49a684bbb3e4923fb8a07a693a2e1b7",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/package.json",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/package.json",
+      "sha256": "6f2f6501c9aca73d5ba4410d786b1b8ec0cae54d443fa7ee51c34aab5c7ca339",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/schema/src/session-status-event.ts",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/schema/src/session-status-event.ts",
+      "sha256": "cd830c1b76da63431dd59eee7965fa5b9f14cb5d3cea6823f542c4717b3a16ff",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/schema/src/session-message.ts",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/schema/src/session-message.ts",
+      "sha256": "96f5ecaf45a8be46485df65d6b2d22b9e6538144e2cd5b28251fb54e13aa85fc",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/tui/src/context/sync.tsx",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/src/context/sync.tsx",
+      "sha256": "452035470d52b6bb3cfd58eea9df612942510126e8f759279c46c1de4899a2ab",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/tui/src/routes/session/permission.tsx",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/src/routes/session/permission.tsx",
+      "sha256": "c4074d9189a9ba12754bbe043abf0ee6bbd2fc459d1d97a27fc1802ce2632086",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/tui/src/config/keybind.ts",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/src/config/keybind.ts",
+      "sha256": "fa7e49ea9617cf116685629b245455b78b33a6e6c6fbc388c8f7ad3b2fbf4bf2",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/tui/src/component/prompt/index.tsx",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/src/component/prompt/index.tsx",
+      "sha256": "e8c0153b5b9dcf5b00e334d6063126dfffe5cb41333b55621d92f54e8d18639c",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/tui/src/editor.ts",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/src/editor.ts",
+      "sha256": "1f5300489534f59c1e59fa387de3b8ad48199ca891e23991de9d5469840299fc",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "anomalyco/opencode",
+      "sha": "ecc4916b5a9608c30e6dd58a67f2137b594407ca",
+      "commitDate": "2026-10-06T15:32:45-07:00",
+      "path": "packages/tui/package.json",
+      "url": "https://github.com/anomalyco/opencode/blob/ecc4916b5a9608c30e6dd58a67f2137b594407ca/packages/tui/package.json",
+      "sha256": "fb788922f5a9a74cae6812c50edb125225aab0b40daafa7c85b1a0fd673e2975",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "vadimdemedes/ink",
+      "sha": "26d2c3f83008142061c22267482489588cc3823c",
+      "commitDate": "2026-10-03T18:21:06+07:00",
+      "path": "readme.md",
+      "url": "https://github.com/vadimdemedes/ink/blob/26d2c3f83008142061c22267482489588cc3823c/readme.md",
+      "sha256": "ff640953913933f6dbe72f39a2ca8c50bc2afdac47877e100e1daa46055b5c92",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "vadimdemedes/ink",
+      "sha": "26d2c3f83008142061c22267482489588cc3823c",
+      "commitDate": "2026-10-03T18:21:06+07:00",
+      "path": "src/ink.tsx",
+      "url": "https://github.com/vadimdemedes/ink/blob/26d2c3f83008142061c22267482489588cc3823c/src/ink.tsx",
+      "sha256": "bfa0bd158ccd23c0258dca6c958a7351b0abc376d897f529ff580fffc3921295",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "vadimdemedes/ink",
+      "sha": "26d2c3f83008142061c22267482489588cc3823c",
+      "commitDate": "2026-10-03T18:21:06+07:00",
+      "path": "src/hooks/use-input.ts",
+      "url": "https://github.com/vadimdemedes/ink/blob/26d2c3f83008142061c22267482489588cc3823c/src/hooks/use-input.ts",
+      "sha256": "f966c145fb098ad854872d6fabff377ea4f4c1b54c2325e5ea2074dd7fddbe2d",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "openai/codex",
+      "sha": "5a3140176e668a2f72f3c098490eb7f7052d9d85",
+      "commitDate": "2026-10-07T04:24:56Z",
+      "path": "codex-rs/tui/src/bottom_pane/chat_composer.rs",
+      "url": "https://github.com/openai/codex/blob/5a3140176e668a2f72f3c098490eb7f7052d9d85/codex-rs/tui/src/bottom_pane/chat_composer.rs",
+      "sha256": "e9451d5905445bc6420747182faa9ca2bed24a6fdfee6ef8b617b36aaca56c1b",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/components/InputPrompt.tsx",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/components/InputPrompt.tsx",
+      "sha256": "18876a05ab4f404132a105be960c9cf28eb57b5ae296e4b00aa612a72e1ac7f3",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/hooks/useInputHistory.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/hooks/useInputHistory.ts",
+      "sha256": "abc71b40aa4491c5deb9a82c5ad2f9f5b42e0bdd4dcefb7f8625e756d2a90518",
+      "evidence": "static-source-inspection"
+    },
+    {
+      "kind": "source",
+      "repo": "google-gemini/gemini-cli",
+      "sha": "ef59c532f07fbb3a58dd68bac024ae217e9c73ce",
+      "commitDate": "2026-10-06T22:11:30Z",
+      "path": "packages/cli/src/ui/hooks/useTerminalSize.ts",
+      "url": "https://github.com/google-gemini/gemini-cli/blob/ef59c532f07fbb3a58dd68bac024ae217e9c73ce/packages/cli/src/ui/hooks/useTerminalSize.ts",
+      "sha256": "0b84c0464586373a98bc59d55fcb17874dfa1ca62b8bb7645c10e73b7cf02b92",
+      "evidence": "static-source-inspection"
+    }
+  ],
+  "documents": [
+    {
+      "kind": "official-documentation",
+      "url": "https://code.claude.com/docs/en/interactive-mode",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://code.claude.com/docs/en/permissions",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://code.claude.com/docs/en/how-claude-code-works",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://learn.chatgpt.com/docs/codex/cli",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://geminicli.com/docs/reference/keyboard-shortcuts/",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://opencode.ai/docs/tui/",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://opencode.ai/docs/keybinds/",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://nodejs.org/download/release/v22.0.0/docs/api/tty.html",
+      "retrieved": "2026-10-07"
+    },
+    {
+      "kind": "official-documentation",
+      "url": "https://nodejs.org/download/release/v22.0.0/docs/api/readline.html",
+      "retrieved": "2026-10-07"
+    }
+  ],
+  "observations": [
+    {
+      "product": "Codex CLI",
+      "version": "0.160.1",
+      "evidence": "observations/2026-10-07/codex/metadata.json",
+      "scope": "isolated PTY composer, local status, history search and resize; no model task"
+    },
+    {
+      "product": "OpenCode",
+      "version": "1.18.35",
+      "evidence": "observations/2026-10-07/opencode/metadata.json",
+      "scope": "isolated PTY composer, slash menu, paste, palette and resize; no provider configured"
+    }
+  ]
+}

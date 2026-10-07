@@ -1,0 +1,30 @@
+◐ zero2agent · 等待审批 · 0.5s
+工作目录: /private/tmp/zero2agent-runtime-Aq3p9i
+Approval · write_file
+调用: second
+工作目录: /private/tmp/zero2agent-runtime-Aq3p9i
+原因: Approval required for write tool
+参数（完整 JSON）:
+{
+  "path": "second.txt",
+  "content": "Hello from the runtime lesson.\n"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+详情 1–9 / 9 行（可滚动查看全部参数）
+↑↓ / PgUp PgDn / Home End 查看 · Ctrl-C 取消本轮
+允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝

@@ -3,6 +3,15 @@
  * Reasoning + Acting 的核心逻辑，支持流式输出
  */
 import type Anthropic from '@anthropic-ai/sdk'
+import { randomUUID } from 'node:crypto'
+import {
+  RuntimeEmitter,
+  TurnCancelledError,
+  assertNotCancelled,
+  waitForAbort,
+  notifyObserver,
+  type RuntimeEvent,
+} from './runtime.js'
 import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
 import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
 import { Session } from './session.js'
@@ -26,22 +35,14 @@ function describeToolError(error: unknown): string {
   }
 }
 
-/** Display observers cannot change execution results or leave unmatched tool calls. */
-function notifyObserver(notify: () => unknown): void {
-  try {
-    // TypeScript also permits async functions for void callbacks. Observe rejection without waiting.
-    void Promise.resolve(notify()).catch(() => {})
-  } catch {
-    /* The host owns presentation failures. */
-  }
-}
-
 /**
  * 循环过程中的事件回调
  * TUI/上层通过这些回调控制展示，core 层不直接输出
  * 通知不参与控制：忽略同步异常和异步拒绝，不等待异步回调完成。
  */
 export interface LoopEventHandlers {
+  /** Structured presentation events; observers cannot alter execution. */
+  onEvent?: (event: RuntimeEvent) => void
   /** 模型文本片段及 Harness 状态提示 */
   onText?: (text: string) => void
   /** 工具开始执行 */
@@ -72,62 +73,108 @@ export async function executeToolCalls(
   tools: Tool[],
   ctx: ToolContext,
   events?: LoopEventHandlers,
-  permissions = new PermissionController()
+  permissions = new PermissionController(),
+  emitter?: RuntimeEmitter
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
-
-  for (const block of structuredClone(content)) {
-    if (block.type === 'tool_use') {
+  const calls = structuredClone(content).filter(block => block.type === 'tool_use')
+  for (const block of calls) {
+    emitter?.emit({
+      type: 'tool-state',
+      toolCallId: block.id,
+      toolName: block.name,
+      status: 'pending',
+      input: block.input as Record<string, unknown>,
+    })
+  }
+  for (const block of calls) {
+    const state = (
+      status: Extract<RuntimeEvent, { type: 'tool-state' }>['status'],
+      detail: { output?: string; reason?: string; durationMs?: number } = {}
+    ): void =>
+      emitter?.emit({
+        type: 'tool-state',
+        toolCallId: block.id,
+        toolName: block.name,
+        status,
+        ...detail,
+      })
+    let start: number | undefined
+    let denied = false
+    try {
+      assertNotCancelled(ctx.signal)
       const tool = tools.find(t => t.name === block.name)
-
-      if (!tool) {
-        const errorMsg = `Error: Unknown tool: ${block.name}`
-        notifyObserver(() => events?.onToolError?.(block.name, errorMsg))
-        results.push({
-          type: 'tool_result',
-          tool_use_id: block.id,
-          content: errorMsg,
-          is_error: true,
-        })
-        continue
+      if (!tool) throw new Error(`Unknown tool: ${block.name}`)
+      const input = structuredClone(block.input) as Record<string, unknown>
+      const callCtx = Object.freeze({ ...ctx })
+      const initial = permissions.evaluate(tool, input, callCtx)
+      if (initial.action === 'ask') state('approval', { reason: initial.reason })
+      assertNotCancelled(ctx.signal)
+      const decision = await permissions.authorize(block.id, tool, input, callCtx)
+      notifyObserver(() => events?.onPermission?.(block.id, { ...decision }))
+      assertNotCancelled(ctx.signal)
+      if (decision.action !== 'allow') {
+        denied = true
+        throw new Error(`Permission denied: ${decision.reason}`)
       }
-
-      try {
-        const input = structuredClone(block.input) as Record<string, unknown>
-        const callCtx = Object.freeze({ ...ctx })
-        const decision = await permissions.authorize(block.id, tool, input, callCtx)
-        notifyObserver(() => events?.onPermission?.(block.id, { ...decision }))
-        if (decision.action !== 'allow') throw new Error(`Permission denied: ${decision.reason}`)
-        // Awaiting the host can change the filesystem. Check hard boundaries again.
-        const boundary = permissions.checkWorkspace(tool, input, callCtx)
-        if (boundary?.action === 'deny') throw new Error(`Permission denied: ${boundary.reason}`)
-        notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
-        const start = Date.now()
-        const output = await tool.execute(input, callCtx)
-        notifyObserver(() => events?.onToolEnd?.(block.name, output, Date.now() - start))
-        results.push({
-          type: 'tool_result',
-          tool_use_id: block.id,
-          content: output,
-          ...(output.startsWith('Error:') && { is_error: true }),
-        })
-      } catch (error) {
-        const errorMessage = `Error: ${describeToolError(error)}`
-        notifyObserver(() => events?.onToolError?.(block.name, errorMessage))
-        results.push({
-          type: 'tool_result',
-          tool_use_id: block.id,
-          content: errorMessage,
-          is_error: true,
-        })
+      // Awaiting the host can change the filesystem. Check hard boundaries again.
+      const boundary = permissions.checkWorkspace(tool, input, callCtx)
+      if (boundary?.action === 'deny') {
+        denied = true
+        throw new Error(`Permission denied: ${boundary.reason}`)
       }
+      state('running')
+      notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
+      assertNotCancelled(ctx.signal)
+      start = Date.now()
+      // Never race a tool against cancellation: it may finish a write despite ignoring signal.
+      const output = await tool.execute(input, callCtx)
+      const durationMs = Date.now() - start
+      const cancelled =
+        block.name === 'terminal' &&
+        /^(?:Note: could not load your shell profile; PATH may be incomplete\.\n)?Status: (?:human-controlled )?cancelled(?: by user|\n|$)/.test(
+          output
+        )
+      state(cancelled ? 'cancelled' : output.startsWith('Error:') ? 'error' : 'completed', {
+        output,
+        durationMs,
+        ...(ctx.signal?.aborted && !cancelled
+          ? { reason: 'Tool settled after cancellation was requested; its result is retained.' }
+          : {}),
+      })
+      notifyObserver(() => events?.onToolEnd?.(block.name, output, durationMs))
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: output,
+        ...((output.startsWith('Error:') || cancelled) && { is_error: true }),
+      })
+    } catch (error) {
+      const cancelled = ctx.signal?.aborted || error instanceof TurnCancelledError
+      const errorMessage = cancelled
+        ? start === undefined
+          ? 'Error: Turn cancelled before this tool started; it was not executed.'
+          : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
+        : `Error: ${describeToolError(error)}`
+      state(cancelled ? 'cancelled' : denied ? 'denied' : 'error', {
+        output: errorMessage,
+        reason: errorMessage,
+        ...(start === undefined ? {} : { durationMs: Date.now() - start }),
+      })
+      notifyObserver(() => events?.onToolError?.(block.name, errorMessage))
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: errorMessage,
+        is_error: true,
+      })
     }
   }
-
   return results
 }
 
 export interface RunLoopOptions {
+  signal?: AbortSignal
   /** Omit for a one-shot run; reuse explicitly for a multi-turn conversation. */
   session?: Session
   permissions?: PermissionOptions
@@ -149,11 +196,39 @@ export interface RunLoopOptions {
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
   const session = options.session ?? new Session()
+  const emitter = new RuntimeEmitter(randomUUID(), options.events?.onEvent)
+  let started = false
+  let cancellationNotified = false
+  const cancel = (): void => {
+    if (cancellationNotified) return
+    cancellationNotified = true
+    emitter.emit({ type: 'phase', phase: 'cancelling' })
+    session.cancelCompaction()
+  }
   try {
-    return await session.runTurn(userMessage, messages =>
-      runTurnLoop(messages, { ...options, session })
-    )
+    const result = await session.runTurn(userMessage, async messages => {
+      started = true
+      options.signal?.addEventListener('abort', cancel, { once: true })
+      emitter.emit({ type: 'turn-start' })
+      if (options.signal?.aborted) cancel()
+      assertNotCancelled(options.signal)
+      return runTurnLoop(messages, { ...options, session }, emitter)
+    })
+    emitter.emit({ type: 'turn-end', status: 'completed' })
+    return result
+  } catch (error) {
+    if (started) {
+      const cancelled = options.signal?.aborted || error instanceof TurnCancelledError
+      emitter.emit({
+        type: 'turn-end',
+        status: cancelled ? 'cancelled' : 'error',
+        ...(cancelled ? {} : { error: describeToolError(error) }),
+      })
+      if (cancelled) throw new TurnCancelledError()
+    }
+    throw error
   } finally {
+    options.signal?.removeEventListener('abort', cancel)
     if (!options.session) session.cancelCompaction()
   }
 }
@@ -190,31 +265,68 @@ function isContextOverflow(error: unknown): boolean {
 
 async function runTurnLoop(
   messages: Anthropic.MessageParam[],
-  options: RunLoopOptions
+  options: RunLoopOptions,
+  emitter: RuntimeEmitter
 ): Promise<string> {
   const { tools = allTools, events, cwd } = options
   const session = options.session!
-  const runtime = createCompactionRuntime(options, session)
+  const runtime = createCompactionRuntime(
+    {
+      ...options,
+      events: {
+        ...events,
+        onCompaction: event => {
+          emitter.emit({ type: 'compaction', event })
+          notifyObserver(() => events?.onCompaction?.(structuredClone(event)))
+        },
+      },
+    },
+    session
+  )
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
-  const ctx: ToolContext = { cwd: cwd ?? process.cwd() }
+  const ctx: ToolContext = {
+    cwd: cwd ?? process.cwd(),
+    ...(options.signal && { signal: options.signal }),
+  }
   let iterations = 0
 
   while (iterations < MAX_ITERATIONS) {
+    assertNotCancelled(options.signal)
     iterations++
     let response: Anthropic.Message
     for (let recovery = 0; ; recovery++) {
+      emitter.emit({ type: 'phase', phase: 'preparing' })
+      assertNotCancelled(options.signal)
       const request = await session.prepareRequest(messages, runtime)
+      assertNotCancelled(options.signal)
+      let acceptingText = true
       try {
-        const stream = runtime.client.messages.stream(request)
+        emitter.emit({ type: 'phase', phase: 'requesting' })
+        assertNotCancelled(options.signal)
+        const stream = options.signal
+          ? runtime.client.messages.stream(request, { signal: options.signal })
+          : runtime.client.messages.stream(request)
+        let streaming = false
         stream.on('text', text => {
+          if (!acceptingText || options.signal?.aborted) return
+          if (!streaming) {
+            streaming = true
+            emitter.emit({ type: 'phase', phase: 'streaming' })
+          }
+          if (options.signal?.aborted) return
+          emitter.emit({ type: 'text-delta', text })
           notifyObserver(() => events?.onText?.(text))
         })
-        // Partial stream events belong to the display, not to the committed transcript.
-        response = await stream.finalMessage()
+        // Partial stream events belong to display, not to the committed transcript.
+        response = await waitForAbort(stream.finalMessage(), options.signal)
+        assertNotCancelled(options.signal)
         break
       } catch (error) {
+        assertNotCancelled(options.signal)
         if (!isContextOverflow(error) || recovery >= 2) throw error
         if (!(await session.recoverContext(messages, runtime))) throw error
+      } finally {
+        acceptingText = false
       }
     }
 
@@ -223,8 +335,17 @@ async function runTurnLoop(
         throw new Error('Model stopped for tool_use without any tool calls.')
       }
       messages.push({ role: 'assistant', content: structuredClone(response.content) })
-      const toolResults = await executeToolCalls(response.content, tools, ctx, events, permissions)
+      emitter.emit({ type: 'phase', phase: 'tools' })
+      const toolResults = await executeToolCalls(
+        response.content,
+        tools,
+        ctx,
+        events,
+        permissions,
+        emitter
+      )
       messages.push({ role: 'user', content: toolResults })
+      assertNotCancelled(options.signal)
       continue
     }
 
@@ -248,6 +369,17 @@ async function runTurnLoop(
       content: response.content.length ? structuredClone(response.content) : emptyNotice,
     })
     if (calls.length) {
+      for (const call of calls) {
+        emitter.emit({
+          type: 'tool-state',
+          toolCallId: call.id,
+          toolName: call.name,
+          status: 'error',
+          input: call.input as Record<string, unknown>,
+          output: notice,
+          reason: notice,
+        })
+      }
       // Even skipped calls need a matching result before a later user turn can be sent.
       messages.push({
         role: 'user',
@@ -261,15 +393,20 @@ async function runTurnLoop(
     }
     if (notice) {
       messages.push({ role: 'assistant', content: notice })
+      emitter.emit({ type: 'notice', text: notice })
       notifyObserver(() => events?.onText?.(`\n${notice}\n`))
     } else if (emptyNotice) {
+      emitter.emit({ type: 'notice', text: emptyNotice })
       notifyObserver(() => events?.onText?.(`\n${emptyNotice}\n`))
     }
+    assertNotCancelled(options.signal)
     return text || notice || emptyNotice
   }
 
   const limit = 'Error: Maximum iterations reached. The task may be too complex.'
   messages.push({ role: 'assistant', content: `[Harness] ${limit}` })
+  emitter.emit({ type: 'notice', text: `[Harness] ${limit}` })
   notifyObserver(() => events?.onText?.(`\n[Harness] ${limit}\n`))
+  assertNotCancelled(options.signal)
   return limit
 }

@@ -5,6 +5,8 @@ import type Anthropic from '@anthropic-ai/sdk'
  * 框架注入给每次工具调用，包含 Agent 级别的配置
  */
 export interface ToolContext {
+  /** Cooperatively stop active work when the host cancels the turn. */
+  signal?: AbortSignal
   /** Agent 工作目录的绝对路径，所有相对路径基于此解析 */
   cwd: string
 }

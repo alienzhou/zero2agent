@@ -224,7 +224,12 @@ function sleep(ms: number): Promise<void> {
 
 // ── 核心执行 ───────────────────────────────────────
 
-export async function runCommand(userCommand: string, cwd: string): Promise<RunResult> {
+export async function runCommand(
+  userCommand: string,
+  cwd: string,
+  turnSignal?: AbortSignal
+): Promise<RunResult> {
+  turnSignal?.throwIfAborted()
   const wrapped = wrapCommand(userCommand)
   const sink = new OutputSink()
   const startAt = Date.now()
@@ -235,6 +240,7 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
   let signal: string | undefined
   let incompleteNote = false
   let cancelled = false
+  let cancellationCleanup: Promise<void> | undefined
   let skipped = false
   let drainTimedOut = false
   let spawnError: string | null = null
@@ -296,10 +302,13 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       if (settled) return
       settled = true
       if (drainTimer) clearTimeout(drainTimer)
+      turnSignal?.removeEventListener('abort', interruptController.signalCancel)
+      detachOnce()
       resolve()
     }
 
     let detached = false
+    let detachRaw: (() => void) | undefined = undefined
 
     function detachOnce(): void {
       if (detached) return
@@ -311,7 +320,8 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       signalCancel: () => {
         if (cancelled || skipped) return
         cancelled = true
-        void killProcessTree(child).then(finish)
+        cancellationCleanup = killProcessTree(child)
+        void cancellationCleanup.then(finish)
       },
       signalSkip: () => {
         if (!skipAvailable || cancelled || skipped) return
@@ -321,7 +331,9 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       },
     }
 
-    const detachRaw = runtime.attachInterrupts?.(interruptController)
+    detachRaw = runtime.attachInterrupts?.(interruptController)
+    turnSignal?.addEventListener('abort', interruptController.signalCancel, { once: true })
+    if (turnSignal?.aborted) interruptController.signalCancel()
 
     child.on('exit', (code, sig) => {
       exitCode = code ?? exitCode
@@ -374,6 +386,7 @@ export async function runCommand(userCommand: string, cwd: string): Promise<RunR
       skippedAt: Date.now(),
     })
   } else if (cancelled) {
+    await cancellationCleanup
     outcome = 'cancelled'
     const raced = await Promise.race([closePromise, sleep(READ_DRAIN_TIMEOUT_MS).then(() => null)])
     if (raced === null) {
@@ -570,6 +583,7 @@ export const terminalTool: Tool = {
       return `Error: workdir not found: ${workdir ?? '.'}`
     }
 
+    ctx.signal?.throwIfAborted()
     if (interactive) {
       const runtime = getTerminalRuntimeHooks()
       if (!runtime.isTTY || !runtime.runInteractive) {
@@ -577,7 +591,11 @@ export const terminalTool: Tool = {
       }
 
       try {
-        const result = await runtime.runInteractive({ command, cwd: workdirResult.path })
+        const result = await runtime.runInteractive({
+          command,
+          cwd: workdirResult.path,
+          ...(ctx.signal && { signal: ctx.signal }),
+        })
         // Only status metadata crosses back to the model; never echo host output or input.
         const parts = [`Status: human-controlled ${result.status}`]
         if (result.exitCode !== undefined) parts.push(`Exit code: ${result.exitCode}`)
@@ -600,7 +618,7 @@ export const terminalTool: Tool = {
 
     let result: RunResult
     try {
-      result = await runCommand(command, workdirResult.path)
+      result = await runCommand(command, workdirResult.path, ctx.signal)
     } catch (err) {
       const msg = (err as Error).message
       if (msg.includes('ENOENT')) {

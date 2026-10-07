@@ -17,7 +17,7 @@
       "id": "epic03",
       "number": 3,
       "title": "从循环到产品",
-      "description": "接上多轮对话、上下文压缩和执行权限。"
+      "description": "接上多轮对话、上下文压缩、执行权限与可操作的 TUI。"
     }
   ],
   "chapters": [
@@ -89,7 +89,14 @@
       "epic": "epic03",
       "title": "执行权限与 Approval",
       "description": "在执行之前接入三态权限判断，明确一次授权的对象、范围与有效期。",
-      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e03-s002-permissions/specs/E03-product-foundations/S002-permissions"
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/main/specs/E03-product-foundations/S002-permissions"
+    },
+    {
+      "id": "epic03-story003",
+      "epic": "epic03",
+      "title": "运行状态与 TUI",
+      "description": "用结构化事件、审批焦点和取消收尾，做出可编辑、可查看、可控制的终端界面。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S003-runtime-tui/specs/E03-product-foundations/S003-runtime-tui"
     }
   ]
 }

@@ -1,0 +1,183 @@
+{
+  "title": "Zero2Agent · E03-S003 运行状态与 TUI",
+  "date": "2026-10-07",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "v1-runtime-tui",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "Agent 正在运行你能看见，也能控制",
+      "number": 1,
+      "sources": [
+        "C01",
+        "C04"
+      ]
+    },
+    {
+      "file": "02-silence.html",
+      "title": "屏幕安静了十秒，Agent 到底在等什么？",
+      "number": 2,
+      "sources": [
+        "C01",
+        "C04"
+      ]
+    },
+    {
+      "file": "03-layout.html",
+      "title": "一块终端，同时回答四个问题",
+      "number": 3,
+      "sources": [
+        "C01",
+        "C04"
+      ]
+    },
+    {
+      "file": "04-products.html",
+      "title": "借鉴交互原则，不照搬一套快捷键",
+      "number": 4,
+      "sources": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05"
+      ]
+    },
+    {
+      "file": "05-channels.html",
+      "title": "屏幕收到的是事实，用户发出的是决定",
+      "number": 5,
+      "sources": [
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "file": "06-identity.html",
+      "title": "别用工具名称，去更新一张工具卡",
+      "number": 6,
+      "sources": [
+        "C02",
+        "C04"
+      ]
+    },
+    {
+      "file": "07-turn-state.html",
+      "title": "一次运行，会多次回到模型请求",
+      "number": 7,
+      "sources": [
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "file": "08-tool-state.html",
+      "title": "审批等待期间，工具还没有运行",
+      "number": 8,
+      "sources": [
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "file": "09-approval.html",
+      "title": "确认的是这次调用，不是同名工具的所有操作",
+      "number": 9,
+      "sources": [
+        "C03",
+        "C04",
+        "C07"
+      ]
+    },
+    {
+      "file": "10-focus.html",
+      "title": "同一个 stdin，同一时刻只给一个接收者",
+      "number": 10,
+      "sources": [
+        "C04",
+        "C05",
+        "R02",
+        "R04"
+      ]
+    },
+    {
+      "file": "11-cancel.html",
+      "title": "按下取消，先收尾，再开放下一轮",
+      "number": 11,
+      "sources": [
+        "C02",
+        "C03",
+        "C06"
+      ]
+    },
+    {
+      "file": "12-evidence.html",
+      "title": "停止后续操作，不抹掉已经发生的结果",
+      "number": 12,
+      "sources": [
+        "C02",
+        "C03",
+        "C06"
+      ]
+    },
+    {
+      "file": "13-draft.html",
+      "title": "Agent 工作时，你可以继续写下一条",
+      "number": 13,
+      "sources": [
+        "C04",
+        "C07",
+        "R05"
+      ]
+    },
+    {
+      "file": "14-input.html",
+      "title": "粘贴三行，不应该发送三次",
+      "number": 14,
+      "sources": [
+        "C04",
+        "R05"
+      ]
+    },
+    {
+      "file": "15-details.html",
+      "title": "默认看摘要，需要时再展开证据",
+      "number": 15,
+      "sources": [
+        "C04",
+        "C08",
+        "R05"
+      ]
+    },
+    {
+      "file": "16-handoff.html",
+      "title": "交给人操作时，TUI 先让出键盘和屏幕",
+      "number": 16,
+      "sources": [
+        "C05",
+        "C07"
+      ]
+    },
+    {
+      "file": "17-practice.html",
+      "title": "拒绝一次，批准一次，再取消一次等待",
+      "number": 17,
+      "sources": [
+        "C07"
+      ]
+    },
+    {
+      "file": "18-next.html",
+      "title": "把执行过程，变成可以持续使用的产品",
+      "number": 18,
+      "sources": [
+        "C01",
+        "C06"
+      ]
+    }
+  ]
+}

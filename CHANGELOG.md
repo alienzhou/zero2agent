@@ -77,7 +77,23 @@ git checkout main
 
 ## [Unreleased]
 
-### E03-S002-permissions-approval（本地候选，待人工审阅与合并）
+### E03-S003-runtime-tui（实现与验收完成，待合入 main）
+
+[PR #19](https://github.com/alienzhou/zero2agent/pull/19)；固定跟练 Tag：`E03-S003-runtime-tui`。人工审查与合并待完成，站点未部署。
+
+所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S003-runtime-tui/README.md)
+
+- RuntimeEvent 为每轮分配 turnId 与递增 seq，工具状态关联调用 ID；模型文本、Harness 通知和压缩状态分开，观察者不能影响执行。
+- cancelTurn 中断模型、审批、压缩与前台终端，停止后续调度，等待已启动工具收尾；已发生副作用与配对结果保留。
+- TTY 默认使用交互界面：多行草稿、粘贴、编辑历史、slash 补全、工具详情、完整审批参数、滚动、尺寸变化和人工 PTY 交接；保留 --plain、单次及管道行为。
+- 保留旧命令、权限、会话、压缩、前后台终端与退出清理；补齐常用编辑键，超长粘贴整段拒绝并保留草稿。AGENTS.md 固化兼容、输入所有权与证据要求。
+- 最终 509 项离线及本课 3 项真实模型复验通过，27 项 TUI 测试包含在离线总数中；18 页在线图解与 PC/H5 阅读检查完成。
+- 四竞品官方/源码调研及 Codex/OpenCode 的隔离 PTY 观察；本地 SSE、真实生产 CLI/PTY、真实模型三层验证。具体数字和当前源版本见[验收](./specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md)。
+- [五篇 Spec](./specs/E03-product-foundations/S003-runtime-tui/details/00-overview.md)、读者跟练、延伸阅读、在线图解与[复盘](./retros/E03-S003-runtime-tui.md)在本仓库维护。下一课 S004 负责会话落盘与恢复。
+
+### E03-S002-permissions-approval（已合入 main）
+
+2026-10-06 已通过 [PR #17](https://github.com/alienzhou/zero2agent/pull/17) 合入 main（`caa47ea`）。以下保留开发与验收历史；其中当时的“待合并”状态不再代表当前主干。
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S002-permissions/README.md)
 

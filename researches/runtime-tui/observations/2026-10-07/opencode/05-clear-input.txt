@@ -1,0 +1,31 @@
+
+
+
+
+
+
+
+             ┃ /help       Help                                                        ┃
+             ┃ /themes     Switch theme                                                ┃
+             ┃ /exit       Exit the app                                                ┃
+             ┃ /move       Move to another project dir                                 ┃
+             ┃ /sessions   Switch session                                              ┃
+             ┃ /agents     Switch agent                                                ┃
+             ┃ /models     Switch model                                                ┃
+             ┃ /review     review changes [commit|branch|pr], defaults to uncommitted  ┃
+             ┃
+             ┃  /he
+             ┃
+             ┃  Build · No provider selected Connect a provider
+             ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                                                             tab agents  ctrl+p commands
+
+
+
+                      ● Tip Run /connect to add an AI provider and start coding
+
+
+
+
+
+  /private/tmp/zero2agent-research/ux-opencode-0KD6BU/work                                 1.18.35
