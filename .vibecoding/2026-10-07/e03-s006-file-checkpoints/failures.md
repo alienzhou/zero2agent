@@ -14,3 +14,7 @@
 ## 真实服务首次验收：末尾换行
 
 6 项真实服务验证中 5 项通过，S006 在首次写入后逐字节断言失败：模型正确写入随机标记，但省略了指令要求的末尾换行，尚未进入撤销阶段。保留 `live-initial-summary.json`、`live-initial-live-results.json` 与无损 `live-initial-live.txt.gz`。将用例中的目标设为明确不带末尾换行的随机字符串，仍严格比较实际文件字节；before 保留换行，撤销和重做继续分别要求完全一致，不使用 trim 放宽恢复验证。
+
+## 恢复意图交接的崩溃窗口
+
+最终源码自查发现：恢复 pending tool 时，新 restore intent 已落盘而原 pending 尚未移除；若此处中断，两条 pending 会互相阻塞。增加精确持久边界故障注入，先记录失败 `handoff-initial.txt.gz`（Another checkpoint is pending），再修正恢复协议：仅允许继续恢复的 intent 清理 sourceId 指向且路径/全部目标版本匹配的旧 tool pending，其余 pending 仍拒绝。回归测试验证中断后重开存储、缺少关联时拒绝且不删记录、正确关联后恢复、反向撤销；原真实 SIGKILL 跨进程用例继续保留。本次窗口测试是故障注入，不宣称额外一次真实 SIGKILL。

@@ -78,7 +78,7 @@ export interface CheckpointOptions {
   onStatus?: (message: string) => void
   /** Fault injection for durability tests; not a production configuration. */
   fault?: (
-    point: 'prepared' | 'effect' | 'restore-intent' | 'restored-file'
+    point: 'prepared' | 'effect' | 'recovery-intent' | 'restore-intent' | 'restored-file'
   ) => void | Promise<void>
 }
 const hash = (data: string | Uint8Array): string => createHash('sha256').update(data).digest('hex')
@@ -765,10 +765,29 @@ export class CheckpointStore {
         throw new Error('Checkpoint or files changed after preview; preview again')
       if (plan.changes.some(c => c.conflict))
         throw new Error('File conflict: refusing to overwrite later edits')
-      const pending = (await this.list()).filter(r => r.state === 'pending' && r.id !== id)
-      if (pending.length) throw new Error('Another checkpoint is pending; inspect it first')
-      await this.collect(this.limits.records - 1, id)
       const source = await this.read(id)
+      const pending = (await this.list()).filter(r => r.state === 'pending' && r.id !== id)
+      // A crash can leave both the new restore intent and its old pending tool record.
+      // Retire only the predecessor whose complete before-image is held by this intent.
+      const predecessor = plan.resume
+        ? pending.find(
+            r =>
+              r.kind === 'tool' &&
+              r.id === source.sourceId &&
+              r.changes.length === source.changes.length &&
+              r.changes.every(
+                (c, i) =>
+                  c.path === source.changes[i].path && equal(c.before, source.changes[i].after)
+              )
+          )
+        : undefined
+      if (pending.some(r => r !== predecessor))
+        throw new Error('Another checkpoint is pending; inspect it first')
+      if (predecessor) {
+        await fs.unlink(path.join(this.directory, 'records', predecessor.id + '.json'))
+        await this.syncDirectory(path.join(this.directory, 'records'))
+      }
+      await this.collect(this.limits.records - 1, id)
       let record: Checkpoint
       if (plan.resume) record = source
       else {
@@ -785,6 +804,7 @@ export class CheckpointStore {
         })
         await this.write(record)
         if (source.state === 'pending') {
+          await this.options.fault?.('recovery-intent')
           await fs.unlink(path.join(this.directory, 'records', source.id + '.json'))
           await this.syncDirectory(path.join(this.directory, 'records'))
         }

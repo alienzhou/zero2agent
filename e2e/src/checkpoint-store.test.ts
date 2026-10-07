@@ -263,6 +263,44 @@ describe('bounded content-addressed file checkpoints', () => {
     await first
     expect(await fs.readFile(p.file('a'), 'utf8')).toBe('first')
   })
+  it('resumes recovery interrupted after publishing intent but before retiring its pending source', async () => {
+    const p = await fixture({
+      fault: point => {
+        if (point === 'effect') throw new Error('post-effect failure')
+      },
+    })
+    await fs.writeFile(p.file('a'), 'old')
+    await expect(p.capture(['a'], () => fs.writeFile(p.file('a'), 'effect'))).rejects.toThrow(
+      'may have completed'
+    )
+    const [source] = await p.store.list()
+    // Fail at the persisted handoff boundary, then reopen the store as a new host instance.
+    const interrupted = await CheckpointStore.open(p.cwd, {
+      directory: p.directory,
+      fault: point => {
+        if (point === 'recovery-intent') throw new Error('handoff interrupted')
+      },
+    })
+    await expect(undo(interrupted, source.id, true)).rejects.toThrow('handoff interrupted')
+    const records = await p.store.list()
+    expect(records).toHaveLength(2)
+    expect(records.every(r => r.state === 'pending')).toBe(true)
+    const intent = records.find(r => r.kind === 'restore')!
+    expect(intent.sourceId).toBe(source.id)
+    expect(await fs.readFile(p.file('a'), 'utf8')).toBe('effect')
+    const fresh = await CheckpointStore.open(p.cwd, { directory: p.directory })
+    const intentFile = path.join(fresh.directory, 'records', intent.id + '.json')
+    await fs.writeFile(intentFile, JSON.stringify({ ...intent, sourceId: undefined }))
+    await expect(undo(fresh, intent.id, true)).rejects.toThrow('Another checkpoint is pending')
+    expect(await fs.readFile(p.file('a'), 'utf8')).toBe('effect')
+    expect(await fresh.list()).toHaveLength(2)
+    await fs.writeFile(intentFile, JSON.stringify(intent))
+    const restored = await undo(fresh, intent.id, true)
+    expect(await fs.readFile(p.file('a'), 'utf8')).toBe('old')
+    expect((await fresh.list()).map(r => r.id)).toEqual([restored.id])
+    await undo(fresh, restored.id)
+    expect(await fs.readFile(p.file('a'), 'utf8')).toBe('effect')
+  })
   it('recovers a real killed writer across processes without replaying its tool', async () => {
     const p = await fixture()
     await fs.writeFile(p.file('a'), 'old')
