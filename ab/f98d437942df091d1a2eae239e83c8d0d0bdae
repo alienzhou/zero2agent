@@ -1,0 +1,99 @@
+.authoring/site/chapters/epic03-story003/author.cjs
+  s_08884e0d462e65::t_ae4c55dcccf4a8 23,67,75,80,98,129-130,134
+researches/runtime-tui/observations/2026-10-07/README.md
+  s_08884e0d462e65::t_468b5d7e312066 11,33-34
+researches/runtime-tui/observations/2026-10-07/codex/00-startup.txt
+  s_08884e0d462e65::t_47a714f6ada4ae 19,21
+researches/runtime-tui/observations/2026-10-07/codex/01-slash-menu.txt
+  s_08884e0d462e65::t_ebe76461a05e73 17-18,27,29
+researches/runtime-tui/observations/2026-10-07/codex/02-slash-filter.txt
+  s_08884e0d462e65::t_571d749a26832b 18-19,21,23
+researches/runtime-tui/observations/2026-10-07/codex/03-dismiss-completion.txt
+  s_08884e0d462e65::t_e5eb991e1861b4 19,21
+researches/runtime-tui/observations/2026-10-07/codex/04-multiline-paste.txt
+  s_08884e0d462e65::t_8f2ee5a34cf274 17-18,23
+researches/runtime-tui/observations/2026-10-07/codex/05-narrow-with-draft.txt
+  s_08884e0d462e65::t_986bc5aed0b875 12-13,17
+researches/runtime-tui/observations/2026-10-07/codex/06-edit-line-start.txt
+  s_08884e0d462e65::t_62533a56c97d4e 12-13,17
+researches/runtime-tui/observations/2026-10-07/codex/07-history-search.txt
+  s_08884e0d462e65::t_81453c40427182 12-13,17-18
+researches/runtime-tui/observations/2026-10-07/codex/08-restore-draft.txt
+  s_08884e0d462e65::t_4873054644c633 12-13,17
+researches/runtime-tui/observations/2026-10-07/codex/09-wide-restored.txt
+  s_08884e0d462e65::t_e80e896faab386 14-15,20
+researches/runtime-tui/observations/2026-10-07/codex/10-clear-draft.txt
+  s_08884e0d462e65::t_b0f4161789d753 16,18
+researches/runtime-tui/observations/2026-10-07/codex/11-local-status-command.txt
+  s_08884e0d462e65::t_76e92406c69498 16,19
+researches/runtime-tui/observations/2026-10-07/codex/12-history-up.txt
+  s_08884e0d462e65::t_b9bc9fb4cfd82b 15-16,18,21
+researches/runtime-tui/observations/2026-10-07/codex/13-execute-local-status.txt
+  s_08884e0d462e65::t_a5489ec541c72a 28-29,31
+researches/runtime-tui/observations/2026-10-07/codex/14-close-status.txt
+  s_08884e0d462e65::t_851278328a3837 28-29,31
+researches/runtime-tui/observations/2026-10-07/codex/15-recall-local-history.txt
+  s_08884e0d462e65::t_525fa31fc70539 28-29,31
+researches/runtime-tui/observations/2026-10-07/codex/16-clear-before-exit.txt
+  s_08884e0d462e65::t_821658acc804ba 28-29,31
+researches/runtime-tui/observations/2026-10-07/observer-used.mjs
+  s_08884e0d462e65::t_1b0324116a54ae 1,30
+researches/runtime-tui/observations/2026-10-07/opencode/00-startup.txt
+  s_08884e0d462e65::t_bddc6664bdfe0a 1
+researches/runtime-tui/observations/2026-10-07/opencode/01-ready.txt
+  s_08884e0d462e65::t_e0c67cf1c888c4 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/02-dismiss-provider.txt
+  s_08884e0d462e65::t_4d856c61db786f 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/03-slash-menu.txt
+  s_08884e0d462e65::t_ac99dbb77ad9b6 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/04-slash-filter.txt
+  s_08884e0d462e65::t_553f65723d4975 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/05-clear-input.txt
+  s_08884e0d462e65::t_7ee9178cf4d2f1 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/06-multiline-paste.txt
+  s_08884e0d462e65::t_7bb3e31580ce6c 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/07-clear-draft-separate.txt
+  s_08884e0d462e65::t_fd0b545b4eccaa 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/08-two-line-paste.txt
+  s_08884e0d462e65::t_a9d662602c3de8 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/09-narrow-with-draft.txt
+  s_08884e0d462e65::t_9ffef01cbe8780 1-18
+researches/runtime-tui/observations/2026-10-07/opencode/10-wide-restored.txt
+  s_08884e0d462e65::t_5470a1c1ecda93 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/11-command-palette-with-draft.txt
+  s_08884e0d462e65::t_ebbb0b131e6f71 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/12-restore-draft.txt
+  s_08884e0d462e65::t_903bfdbd1c03e0 1-31
+researches/runtime-tui/observations/2026-10-07/opencode/13-clear-before-exit.txt
+  s_08884e0d462e65::t_4c92cd3dc12d54 1-31
+site/chapters/epic03-story003/01-cover.html
+  s_08884e0d462e65::t_157d96f05a1a1f 1
+site/chapters/epic03-story003/06-identity.html
+  s_08884e0d462e65::t_b947cbb06c8f90 1
+site/chapters/epic03-story003/07-turn-state.html
+  s_08884e0d462e65::t_62afc967f93ec6 1
+site/chapters/epic03-story003/09-approval.html
+  s_08884e0d462e65::t_b381bf743d4386 1
+site/chapters/epic03-story003/13-draft.html
+  s_08884e0d462e65::t_b7e6edded29165 1
+site/chapters/epic03-story003/14-input.html
+  s_08884e0d462e65::t_6d050a2f3436e2 1
+site/course.json
+  s_08884e0d462e65::t_7cd47a590daff7 3614,3622
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "abf98d437942df091d1a2eae239e83c8d0d0bdae",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
