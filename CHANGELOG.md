@@ -77,7 +77,9 @@ git checkout main
 
 ## [Unreleased]
 
-### E03-S004-session-persistence（实现完成，验收与审阅见课程）
+### E03-S004-session-persistence（实现与验收完成，PR 待人工审阅）
+
+[PR #20](https://github.com/alienzhou/zero2agent/pull/20) 草稿；固定跟练 Tag `E03-S004-session-persistence`。未自动合并或部署。
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S004-session-persistence/README.md)
 

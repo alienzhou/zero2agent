@@ -4,7 +4,7 @@
 
 [Epic 3](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
-固定跟练版本：`E03-S004-session-persistence`。交付与实测状态见[验收清单](details/03-verification-checklist.md)。
+固定跟练版本：`E03-S004-session-persistence`。[PR #20](https://github.com/alienzhou/zero2agent/pull/20) 已交付为草稿，等待人工审查；未自动合并，站点尚未部署本章。实测状态见[验收清单](details/03-verification-checklist.md)。
 
 ## 昨天的文件还在，对话为什么没了
 

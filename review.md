@@ -24,3 +24,5 @@
 3. 20 页内容的教学节奏和读者动手体验。
 
 不自动合并，不把这份自查当作用户签收。Linux/Windows、网络卷和断电场景没有实机通过声明。
+
+交付：[PR #20](https://github.com/alienzhou/zero2agent/pull/20) 草稿；固定跟练 Tag `E03-S004-session-persistence`。

@@ -7,5 +7,5 @@
 - [x] 单元、SDK、真实 PTY 与真实服务验证，保留失败证据。
 - [x] 20 页富图文课程、PC/H5 检查、导航与复盘。
 - [x] 交互兼容矩阵与 AGENTS.md 长期规则。
-- [ ] Tag 和 PR（交付时补链接）。
+- [x] 固定 Tag `E03-S004-session-persistence` 与 [PR #20](https://github.com/alienzhou/zero2agent/pull/20) 草稿交付。
 - [ ] 人工代码审查和教学签收（需人工完成，不由 AI 标记）。
