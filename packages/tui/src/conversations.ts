@@ -1,3 +1,6 @@
+import { CheckpointStore, type RestorePlan, type Checkpoint } from './checkpoint-store.js'
+import { formatCheckpointDiff, formatCheckpointUsage } from './checkpoint-view.js'
+import { listBackgroundProcesses } from '@zero2agent/core'
 import { hostname } from 'node:os'
 import { terminalTool, TurnCancelledError, type Agent } from '@zero2agent/core'
 import { LogStore, RunJournal, formatLog, type LogItem } from './run-log.js'
@@ -18,7 +21,9 @@ export class Conversations {
     readonly agent: Agent,
     private store?: SessionStore,
     private logs?: LogStore,
-    private journal?: RunJournal
+    private journal?: RunJournal,
+    readonly checkpoints?: CheckpointStore,
+    private captureEnabled = true
   ) {
     this.current = store?.fresh()
     this.journal?.host('session-new', { sessionId: this.id })
@@ -39,6 +44,60 @@ export class Conversations {
   }
   get logFailed(): boolean {
     return !!this.journal?.failure
+  }
+  get checkpointStatus(): string {
+    return this.captureEnabled ? (this.checkpoints?.status ?? '文件保护未配置') : '文件保护关闭'
+  }
+  private checkpointStore(): CheckpointStore {
+    if (!this.checkpoints) throw new Error('此宿主没有文件 Checkpoint 存储。')
+    return this.checkpoints
+  }
+  async listCheckpoints(): Promise<Checkpoint[]> {
+    return this.checkpointStore().list()
+  }
+  async checkpointDiff(id: string): Promise<string> {
+    return formatCheckpointDiff(this.checkpointStore(), id)
+  }
+  async checkpointUsage(prune = false): Promise<string> {
+    this.assertIdle()
+    return formatCheckpointUsage(
+      prune ? await this.checkpointStore().prune() : await this.checkpointStore().usage()
+    )
+  }
+  private assertFilesIdle(): void {
+    this.assertIdle()
+    if (listBackgroundProcesses().length) throw new Error('先停止后台命令，再预览或回退文件。')
+  }
+  async previewUndo(id?: string, recovery = false): Promise<RestorePlan> {
+    this.assertFilesIdle()
+    const store = this.checkpointStore()
+    id ??= (await store.list())[0]?.id
+    if (!id) throw new Error('当前工作目录没有文件 Checkpoint。')
+    return store.preview(id, recovery)
+  }
+  async undo(id: string, token: string, recovery = false): Promise<string> {
+    this.assertFilesIdle()
+    this.busy = true
+    const work = (async () => {
+      try {
+        await this.flush()
+        const restored = await this.checkpointStore().restore(id, token, recovery)
+        // This is a settled filesystem fact, not display state or a fabricated tool result.
+        const state = this.agent.snapshot()
+        state.messages.push({
+          role: 'assistant',
+          content: `[Harness] The user restored files from checkpoint ${id}. Conversation and previous tool results are retained as historical evidence. Re-read files before continuing; do not assume old file contents are current.`,
+        })
+        this.agent.restore(state)
+        this.dirty = !!this.store
+        await this.flush()
+        return `已回退 ${restored.changes.length} 个文件；原史保留。撤销这次回退: /undo ${restored.id}`
+      } finally {
+        this.busy = false
+      }
+    })()
+    this.operation = work
+    return work
   }
   async listLogs(): Promise<LogItem[]> {
     await this.journal?.flush()

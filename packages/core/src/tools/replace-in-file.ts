@@ -20,6 +20,7 @@ interface ReplaceInFileInput {
  * - 目标路径必须落在工作区（cwd）内，越界硬拒绝
  */
 export const replaceInFileTool: Tool = {
+  checkpointPaths: ['path'],
   permission: { effect: 'write', paths: ['path'] },
   name: 'replace_in_file',
   description:

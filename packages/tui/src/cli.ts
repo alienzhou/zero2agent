@@ -13,6 +13,12 @@ import { RuntimeTui } from './runtime-tui.js'
 import { Conversations } from './conversations.js'
 import { SessionStore, type SessionItem } from './session-store.js'
 import { LogStore, RunJournal, formatLog } from './run-log.js'
+import { CheckpointStore, CHECKPOINT_SCOPE } from './checkpoint-store.js'
+import {
+  formatCheckpoints,
+  formatCheckpointDiff,
+  formatCheckpointUsage,
+} from './checkpoint-view.js'
 import { safeText } from './display-text.js'
 
 // ── 环境变量 ───────────────────────────────────────
@@ -183,6 +189,10 @@ async function main() {
   loadLocalEnv()
 
   const args = process.argv.slice(2)
+  let noCheckpoints = process.env.ZERO2AGENT_NO_CHECKPOINTS === '1'
+  let checkpointAction: 'list' | 'diff' | 'undo' | 'recover' | 'stats' | 'prune' | undefined
+  let checkpointId: string | undefined
+  let confirmCheckpoint: string | undefined
   let noLog = process.env.ZERO2AGENT_NO_LOG === '1'
   let listLogs = false
   let readLog: string | undefined
@@ -195,7 +205,40 @@ async function main() {
   while (args[0]?.startsWith('--')) {
     const flag = args.shift()
     if (flag === '--') break
-    if (flag === '--plain') plain = true
+    if (flag === '--no-checkpoints') noCheckpoints = true
+    else if (flag === '--confirm') {
+      confirmCheckpoint = args.shift()
+      if (!confirmCheckpoint || !/^[0-9a-f]{64}$/.test(confirmCheckpoint))
+        throw new Error('--confirm requires the preview token')
+    } else if (
+      [
+        '--checkpoints',
+        '--checkpoint',
+        '--undo',
+        '--recover',
+        '--checkpoint-stats',
+        '--checkpoint-prune',
+      ].includes(flag!)
+    ) {
+      if (checkpointAction) throw new Error('Use one checkpoint action at a time')
+      checkpointAction =
+        flag === '--checkpoints'
+          ? 'list'
+          : flag === '--checkpoint'
+            ? 'diff'
+            : flag === '--undo'
+              ? 'undo'
+              : flag === '--recover'
+                ? 'recover'
+                : flag === '--checkpoint-stats'
+                  ? 'stats'
+                  : 'prune'
+      if (['diff', 'undo', 'recover'].includes(checkpointAction)) {
+        checkpointId = args.shift()
+        if (!checkpointId || checkpointId.startsWith('--'))
+          throw new Error(`${flag} requires a UUID`)
+      }
+    } else if (flag === '--plain') plain = true
     else if (flag === '--no-log') noLog = true
     else if (flag === '--logs') listLogs = true
     else if (flag === '--log' || flag === '--log-operation') {
@@ -213,6 +256,40 @@ async function main() {
   }
   if ((noSave && (list || resume || latest)) || (resume && latest))
     throw new Error('--no-save cannot restore/list sessions; use either --resume or --continue.')
+  if (confirmCheckpoint && !['undo', 'recover'].includes(checkpointAction ?? ''))
+    throw new Error('--confirm requires --undo or --recover')
+  const checkpoints = await CheckpointStore.open(process.cwd(), {
+    onStatus: message => {
+      if (tui) tui.checkpointNotice(message)
+      else if (message.startsWith('文件保护失败')) console.error(safeText(message))
+      else console.log(safeText(message))
+    },
+  })
+  if (checkpointAction) {
+    if (args.length || list || resume || latest || listLogs || readLog || logOperation)
+      throw new Error('Checkpoint actions cannot run a task or another action')
+    if (checkpointAction === 'list') console.log(formatCheckpoints(await checkpoints.list()))
+    else if (checkpointAction === 'diff')
+      console.log(await formatCheckpointDiff(checkpoints, checkpointId!))
+    else if (checkpointAction === 'stats' || checkpointAction === 'prune')
+      console.log(
+        formatCheckpointUsage(
+          checkpointAction === 'prune' ? await checkpoints.prune() : await checkpoints.usage()
+        )
+      )
+    else {
+      const recovery = checkpointAction === 'recover'
+      if (confirmCheckpoint) {
+        const record = await checkpoints.restore(checkpointId!, confirmCheckpoint, recovery)
+        console.log(`已回退文件；撤销这次回退: --undo ${record.id}`)
+      } else {
+        const plan = await checkpoints.preview(checkpointId!, recovery)
+        console.log(safeText(plan.text))
+        console.log(`确认执行: --${checkpointAction} ${plan.id} --confirm ${plan.token}`)
+      }
+    }
+    return
+  }
   const logs = await LogStore.open(process.cwd(), {
     onFailure: () => {
       if (tui) tui.logFailure()
@@ -265,6 +342,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    fileMutations: noCheckpoints ? undefined : checkpoints.capture,
     diagnostics: journal ? event => journal.diagnostic(event) : undefined,
     permissions: permissionOptionsFromEnv(
       tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)
@@ -284,7 +362,7 @@ async function main() {
     },
   })
 
-  const conversations = new Conversations(agent, store, logs, journal)
+  const conversations = new Conversations(agent, store, logs, journal, checkpoints, !noCheckpoints)
   let resumed = ''
   if (resume) resumed = await conversations.resume(resume)
   else if (latest) resumed = await conversations.resumeLatest()
@@ -318,9 +396,11 @@ async function main() {
   console.log('zero2agent - Agent Harness（文件读写演示）')
   console.log(safeText(conversations.status))
   console.log(safeText(conversations.logStatus))
+  console.log(safeText(conversations.checkpointStatus))
+  console.log(CHECKPOINT_SCOPE)
   if (resumed) console.log(resumed)
   console.log(
-    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；exit 退出\n'
+    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
   )
 
   const rl = readline.createInterface({
@@ -376,7 +456,23 @@ async function main() {
 
       try {
         resetStreamState()
-        if (trimmed === '/new') {
+        if (trimmed === '/checkpoints') {
+          console.log(formatCheckpoints(await conversations.listCheckpoints()))
+        } else if (trimmed.startsWith('/diff ')) {
+          console.log(await conversations.checkpointDiff(trimmed.slice(6).trim()))
+        } else if (trimmed === '/checkpoint-stats' || trimmed === '/checkpoint-prune') {
+          console.log(await conversations.checkpointUsage(trimmed === '/checkpoint-prune'))
+        } else if (/^\/(undo|recover)(?:\s|$)/.test(trimmed)) {
+          const [command, id, token, ...extra] = trimmed.split(/\s+/)
+          if (extra.length) throw new Error('Use /undo UUID [token] or /recover UUID [token]')
+          const recovery = command === '/recover'
+          if (token) console.log(await conversations.undo(id, token, recovery))
+          else {
+            const plan = await conversations.previewUndo(id, recovery)
+            console.log(safeText(plan.text))
+            console.log(`确认执行: ${command} ${plan.id} ${plan.token}`)
+          }
+        } else if (trimmed === '/new') {
           await conversations.newSession()
           process.stdout.write('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。\n')
         } else if (trimmed === '/sessions') {

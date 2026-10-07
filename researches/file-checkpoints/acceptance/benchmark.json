@@ -1,0 +1,59 @@
+{
+  "recordedAt": "2026-10-07T15:43:42.261Z",
+  "node": "v22.15.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "iterations": 20,
+  "corpus": {
+    "kind": "fixed-seed high-entropy 4 MiB; each iteration inserts 30 bytes at the front",
+    "sha256": "182074f7596ae0838210258c807820450e3c605b28ec8e43b89d43d54740b85c",
+    "unrelatedFiles": 1000,
+    "unrelatedBytes": 4096000
+  },
+  "scope": "All modes save only the same target file before and after a mutation. Filesystem writes included; timings are warm local runs, not a universal performance claim. Naive whole-workspace copies are an arithmetic estimate only. Git pack/delta is not benchmarked.",
+  "results": [
+    {
+      "mode": "full-file-copy",
+      "saveTotalMs": 83.86066499999993,
+      "saveP50Ms": 3.9812919999999963,
+      "saveP95Ms": 6.1970409999999845,
+      "restoreMs": 1.7322079999999858,
+      "storageBeforeRestore": {
+        "logical": 167784160,
+        "allocated": 167931904,
+        "files": 40
+      },
+      "logicalHistoryBytes": 167784160,
+      "verifiedRestore": true
+    },
+    {
+      "mode": "whole-file-compressed-CAS",
+      "saveTotalMs": 1342.9151259999996,
+      "saveP50Ms": 63.80879200000004,
+      "saveP95Ms": 124.63120800000002,
+      "restoreMs": 4.4898339999999735,
+      "storageBeforeRestore": {
+        "logical": 88109241,
+        "allocated": 88166400,
+        "files": 21
+      },
+      "logicalHistoryBytes": 167784160,
+      "verifiedRestore": true
+    },
+    {
+      "mode": "content-defined-compressed-CAS",
+      "saveTotalMs": 3660.742,
+      "saveP50Ms": 162.17345799999975,
+      "saveP95Ms": 588.7282909999999,
+      "restoreMs": 328.46170900000016,
+      "storageBeforeRestore": {
+        "logical": 6007126,
+        "allocated": 6283264,
+        "files": 99
+      },
+      "logicalHistoryBytes": 167784160,
+      "verifiedRestore": true
+    }
+  ],
+  "naiveWholeWorkspaceCopiesEstimateBytes": 331612160
+}

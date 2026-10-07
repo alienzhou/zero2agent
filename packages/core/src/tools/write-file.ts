@@ -19,6 +19,7 @@ interface WriteFileInput {
  * - 目标路径必须落在工作区（cwd）内，越界硬拒绝
  */
 export const writeFileTool: Tool = {
+  checkpointPaths: ['path'],
   permission: { effect: 'write', paths: ['path'] },
   name: 'write_file',
   description:

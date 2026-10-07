@@ -1,3 +1,4 @@
+import type { FileMutationHandler } from './file-mutations.js'
 /**
  * ReACT 循环实现
  * Reasoning + Acting 的核心逻辑，支持流式输出
@@ -82,7 +83,9 @@ export async function executeToolCalls(
   events?: LoopEventHandlers,
   permissions = new PermissionController(),
   emitter?: RuntimeEmitter,
-  diagnostics?: DiagnosticEmitter
+  diagnostics?: DiagnosticEmitter,
+  fileMutations?: FileMutationHandler,
+  sessionId?: string
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -161,7 +164,32 @@ export async function executeToolCalls(
       assertNotCancelled(ctx.signal)
       start = Date.now()
       // Never race a tool against cancellation: it may finish a write despite ignoring signal.
-      const output = await tool.execute(input, callCtx)
+      const execute = (): Promise<string> => {
+        assertNotCancelled(ctx.signal)
+        return tool.execute(input, callCtx)
+      }
+      const output =
+        fileMutations && tool.checkpointPaths
+          ? await fileMutations(
+              {
+                cwd: ctx.cwd,
+                paths: tool.checkpointPaths.flatMap(key => {
+                  const value = input[key]
+                  return typeof value === 'string'
+                    ? [value]
+                    : Array.isArray(value)
+                      ? value.filter((item): item is string => typeof item === 'string')
+                      : []
+                }),
+                toolName: tool.name,
+                toolCallId: block.id,
+                operationId: diagnostics?.operationId,
+                sessionId,
+                signal: ctx.signal,
+              },
+              execute
+            )
+          : await execute()
       const durationMs = Date.now() - start
       const cancelled =
         block.name === 'terminal' &&
@@ -207,6 +235,7 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  fileMutations?: FileMutationHandler
   diagnostics?: DiagnosticObserver
   diagnosticContext?: DiagnosticContext
   signal?: AbortSignal
@@ -393,7 +422,9 @@ async function runTurnLoop(
         events,
         permissions,
         emitter,
-        diagnostics
+        diagnostics,
+        options.fileMutations,
+        options.diagnosticContext?.sessionId
       )
       messages.push({ role: 'user', content: toolResults })
       assertNotCancelled(options.signal)
