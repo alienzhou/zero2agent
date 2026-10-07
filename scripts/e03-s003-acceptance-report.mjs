@@ -58,7 +58,7 @@ for (const [name, command, args] of commands) {
       text += '\nLive gate requires all three tests to execute and pass; skipped tests do not satisfy it.\n';
     }
   }
-  const log = name + (['offline', 'lint'].includes(name) ? '.txt.gz' : '.txt');
+  const log = name + (['offline', 'lint', 'live'].includes(name) ? '.txt.gz' : '.txt');
   await writeFile(path.join(out, log), log.endsWith('.gz') ? gzipSync(text) : text);
   report.checks.push({ name, command: [command, ...args], exitCode, elapsedMs: Date.now() - start, log });
   await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');

@@ -99,12 +99,13 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
       expect(await exists(join(p.cwd, 'decision.txt'))).toBe(false)
       from = await type(
         p,
-        'New request: use write_file exactly once to create decision.txt containing HELLO_RUNTIME. Do not use any other tool.'
+        'The previous decision.txt request remains denied. I now authorize a separate, different request: call write_file exactly once to create approved.txt containing HELLO_RUNTIME. The host will ask me for this new approval. Do not retry decision.txt and do not use other tools.'
       )
       await p.session.waitFor('[y/N]', from)
       p.session.write('y')
       await idle(p, p.session.output.length)
-      expect(await readFile(join(p.cwd, 'decision.txt'), 'utf8')).toContain('HELLO_RUNTIME')
+      expect(await exists(join(p.cwd, 'decision.txt'))).toBe(false)
+      expect(await readFile(join(p.cwd, 'approved.txt'), 'utf8')).toContain('HELLO_RUNTIME')
       const receipts = p.requests.flatMap(r =>
         r.messages.flatMap(m =>
           Array.isArray(m.content) ? m.content.filter(b => b.type === 'tool_result') : []
@@ -113,7 +114,7 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
       expect(
         receipts.some(b => b.is_error && String(b.content).includes('Permission denied'))
       ).toBe(true)
-      expect(receipts.some(b => !b.is_error && String(b.content).includes('decision.txt'))).toBe(
+      expect(receipts.some(b => !b.is_error && String(b.content).includes('approved.txt'))).toBe(
         true
       )
     } finally {
@@ -129,10 +130,26 @@ describe.skipIf(!isLiveEnabled())('E03-S003 real provider through production TUI
     )
     try {
       await idle(p, 0)
-      const from = await type(
+      let from = await type(
         p,
-        'This is a real filesystem integration check. You MUST invoke the terminal tool now; a prose answer or simulated execution is not sufficient. Pass this exact command string: "printf started > ready.txt; sleep 30; printf late > late.txt". Use foreground execution with interactive=false. Invoke no other tools. Wait for the real tool result before describing the outcome.'
+        'This is a real filesystem integration check. You MUST invoke the terminal tool now; a prose answer or simulated execution is not sufficient. Pass this exact command string: "printf started > ready.txt; sleep 30; printf late > late.txt". Use foreground execution with interactive=false in the current workspace. I authorize the temporary files and the 30-second wait; no further confirmation is needed. Invoke no other tools. Wait for the real tool result before describing the outcome.'
       )
+      // A real model may ask for confirmation before invoking the tool. Answer once,
+      // through the same public UI; execution/file/cancellation assertions stay mandatory.
+      await expect
+        .poll(
+          async () =>
+            (await exists(join(p.cwd, 'ready.txt'))) ||
+            p.session.output.slice(from).includes('zero2agent · 已完成'),
+          { timeout: 75_000 }
+        )
+        .toBe(true)
+      if (!(await exists(join(p.cwd, 'ready.txt')))) {
+        from = await type(
+          p,
+          'Confirmed: run exactly that command once with terminal, interactive=false, in the current workspace. I authorize creating ready.txt and late.txt and the 30-second wait. Please invoke the real tool now.'
+        )
+      }
       await expect.poll(() => exists(join(p.cwd, 'ready.txt')), { timeout: 75_000 }).toBe(true)
       const count = p.requests.length
       p.session.write('\x03')
