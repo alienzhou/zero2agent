@@ -104,6 +104,13 @@
       "title": "会话落盘与恢复",
       "description": "保存完整历史与已采用摘要，浏览、恢复并继续会话；正确处理未结算操作、保存失败与并发冲突。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S004-session-persistence/specs/E03-product-foundations/S004-session-persistence"
+    },
+    {
+      "id": "epic03-story005",
+      "epic": "epic03",
+      "title": "运行日志与问题追查",
+      "description": "把真实请求、工具与后台结果串起来，用只读日志定位失败；明确隐私、写入失败和崩溃边界。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S005-runtime-logging/specs/E03-product-foundations/S005-runtime-logging"
     }
   ]
 }

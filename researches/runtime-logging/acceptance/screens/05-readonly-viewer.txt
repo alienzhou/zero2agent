@@ -1,0 +1,30 @@
+● zero2agent · 查看运行日志
+会话: 41604f2a · 已保存 r2 · 日志 c1979481 · 记录中 · 工作目录: /private/tmp/zero2agent-s005-de
+日志 c1979481 · 记录中
+运行日志 638ecf28-127b-47c3-acf9-b889bc6a976d
+共 24 条；展示 24 条
+#1 host/start · pid=26092
+#2 host/session-new · session=41604f2a-c8e7-40e5-b47c-2fc5e0167614
+#3 host/save-start · session=41604f2a-c8e7-40e5-b47c-2fc5e0167614 · r0
+#4 host/save-completed · session=41604f2a-c8e7-40e5-b47c-2fc5e0167614 · r1
+#5 operation/start · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47c-
+2fc5e0167614
+#6 phase/preparing · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47c-
+2fc5e0167614
+#7 request/start · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47c-2f
+c5e0167614 · req=4b4c57ec-f6f9-49fe-b2de-306bb91c9f25 · model · lesson-fixture
+#8 phase/requesting · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47c
+-2fc5e0167614
+#9 request/completed · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47
+c-2fc5e0167614 · req=4b4c57ec-f6f9-49fe-b2de-306bb91c9f25 · model · 25ms · in=12 · out=8
+#10 phase/tools · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47c-2fc
+5e0167614
+#11 tool/pending · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b47c-2f
+c5e0167614 · req=4b4c57ec-f6f9-49fe-b2de-306bb91c9f25 · tool=write_file · call=demo-write
+#12 permission/initial · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-b
+47c-2fc5e0167614 · req=4b4c57ec-f6f9-49fe-b2de-306bb91c9f25 · tool=write_file · call=demo-write
+ · allow
+#13 permission/resolved · op=b6c6dcbc-6b3b-4ef4-a5a8-c00fd78999da · session=41604f2a-c8e7-40e5-
+行 1–25 / 47 · 只读快照
+↑↓ / PgUp PgDn / Home End 翻阅
+Esc / Ctrl-C 返回日志列表 · 草稿保留

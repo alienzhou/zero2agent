@@ -12,6 +12,7 @@ import { createApprovalHandler, permissionOptionsFromEnv } from './approval.js'
 import { RuntimeTui } from './runtime-tui.js'
 import { Conversations } from './conversations.js'
 import { SessionStore, type SessionItem } from './session-store.js'
+import { LogStore, RunJournal, formatLog } from './run-log.js'
 import { safeText } from './display-text.js'
 
 // ── 环境变量 ───────────────────────────────────────
@@ -80,6 +81,7 @@ function formatToolInput(input: Record<string, unknown>): string {
 
 // ── 事件处理 ───────────────────────────────────────
 
+let activeJournal: RunJournal | undefined
 let hasStreamedText = false
 
 function resetStreamState() {
@@ -138,14 +140,33 @@ function printSessions(items: SessionItem[]): void {
 async function main() {
   if (process.argv[2] === '--terminal') {
     setupTerminalRuntime()
+    const logs = await LogStore.open(process.cwd(), {
+      onFailure: () => console.error('日志记录不可用；任务继续。'),
+    })
+    const journal = process.env.ZERO2AGENT_NO_LOG === '1' ? undefined : await logs.start()
+    activeJournal = journal
+    journal?.host('terminal-start')
     const command = process.argv.slice(3).join(' ') || 'exec /bin/bash --noprofile --norc -i'
+    let observed = false
     const result = await terminalTool.execute(
       { command, interactive: true },
-      { cwd: process.cwd() }
+      {
+        cwd: process.cwd(),
+        onResultMetadata: metadata => {
+          observed = true
+          journal?.host(
+            metadata.terminalOutcome === 'cancelled' || metadata.terminalOutcome === 'declined'
+              ? 'terminal-cancelled'
+              : 'terminal-completed',
+            metadata
+          )
+        },
+      }
     )
     process.stdout.write(result + '\n')
     const code = result.match(/^Exit code: (\d+)$/m)
     const signal = result.match(/^Signal: (\d+)$/m)
+    if (!observed) journal?.host('terminal-error')
     process.exitCode =
       result.startsWith('Error:') || result.includes('human-controlled declined')
         ? 1
@@ -156,11 +177,16 @@ async function main() {
             : code
               ? Number(code[1])
               : 0
+    await journal?.close(Number(process.exitCode ?? 0))
     return
   }
   loadLocalEnv()
 
   const args = process.argv.slice(2)
+  let noLog = process.env.ZERO2AGENT_NO_LOG === '1'
+  let listLogs = false
+  let readLog: string | undefined
+  let logOperation: string | undefined
   let plain = false
   let noSave = process.env.ZERO2AGENT_NO_SAVE === '1'
   let list = false
@@ -170,7 +196,14 @@ async function main() {
     const flag = args.shift()
     if (flag === '--') break
     if (flag === '--plain') plain = true
-    else if (flag === '--no-save') noSave = true
+    else if (flag === '--no-log') noLog = true
+    else if (flag === '--logs') listLogs = true
+    else if (flag === '--log' || flag === '--log-operation') {
+      const value = args.shift()
+      if (!value || value.startsWith('--')) throw new Error(`${flag} requires a UUID.`)
+      if (flag === '--log') readLog = value
+      else logOperation = value
+    } else if (flag === '--no-save') noSave = true
     else if (flag === '--list-sessions') list = true
     else if (flag === '--continue') latest = true
     else if (flag === '--resume') {
@@ -180,6 +213,32 @@ async function main() {
   }
   if ((noSave && (list || resume || latest)) || (resume && latest))
     throw new Error('--no-save cannot restore/list sessions; use either --resume or --continue.')
+  const logs = await LogStore.open(process.cwd(), {
+    onFailure: () => {
+      if (tui) tui.logFailure()
+      else console.error('日志记录不可用；任务继续，使用 /log 查看状态。')
+    },
+  })
+  if ((listLogs && readLog) || (logOperation && !readLog))
+    throw new Error('Use --logs or --log UUID; --log-operation requires --log.')
+  if (listLogs || readLog) {
+    if (args.length || list || resume || latest)
+      throw new Error('Log reading cannot run a task or restore a session.')
+    if (listLogs) {
+      const items = await logs.list()
+      console.log(
+        items.length
+          ? items
+              .map(
+                item =>
+                  `${item.id}  ${item.updatedAt}  ${item.title}${item.error ? ` [${item.error}]` : ''}`
+              )
+              .join('\n')
+          : '当前工作目录没有运行日志。'
+      )
+    } else console.log(safeText(formatLog(await logs.read(readLog!, logOperation))))
+    return
+  }
   const messageArg = args[0]
   const store = noSave ? undefined : await SessionStore.open(process.cwd())
   if (list) {
@@ -201,9 +260,12 @@ async function main() {
   }
 
   setupTerminalRuntime()
+  const journal = noLog ? undefined : await logs.start()
+  activeJournal = journal
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    diagnostics: journal ? event => journal.diagnostic(event) : undefined,
     permissions: permissionOptionsFromEnv(
       tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)
     ),
@@ -222,13 +284,17 @@ async function main() {
     },
   })
 
-  const conversations = new Conversations(agent, store)
+  const conversations = new Conversations(agent, store, logs, journal)
   let resumed = ''
   if (resume) resumed = await conversations.resume(resume)
   else if (latest) resumed = await conversations.resumeLatest()
 
   if (tui) {
-    await tui.run(agent, conversations, resumed)
+    try {
+      await tui.run(agent, conversations, resumed)
+    } finally {
+      await conversations.closeLogs(Number(process.exitCode ?? 0))
+    }
     return
   }
 
@@ -243,6 +309,7 @@ async function main() {
       process.exitCode = 1
     } finally {
       agent.cancelCompaction()
+      await conversations.closeLogs(Number(process.exitCode ?? 0))
     }
     return
   }
@@ -250,9 +317,10 @@ async function main() {
   // 交互模式
   console.log('zero2agent - Agent Harness（文件读写演示）')
   console.log(safeText(conversations.status))
+  console.log(safeText(conversations.logStatus))
   if (resumed) console.log(resumed)
   console.log(
-    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出\n'
+    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；exit 退出\n'
   )
 
   const rl = readline.createInterface({
@@ -274,7 +342,8 @@ async function main() {
         console.error('退出清理失败:', error instanceof Error ? error.message : String(error))
         process.exitCode = 1
       })
-      .finally(() => {
+      .finally(async () => {
+        await conversations.closeLogs(Number(process.exitCode ?? 0))
         // readline.close() only pauses a pipe; release it after cleanup so exit needs no EOF.
         // Keep TTY handling intact: background cleanup may need a final interactive answer.
         if (!process.stdin.isTTY) process.stdin.destroy()
@@ -323,6 +392,18 @@ async function main() {
         } else if (trimmed === '/save') {
           await conversations.save()
           console.log(safeText(conversations.status))
+        } else if (trimmed === '/logs') {
+          const items = await conversations.listLogs()
+          console.log(
+            items.length
+              ? items
+                  .map(item => `${item.id} ${item.title}${item.error ? ` [${item.error}]` : ''}`)
+                  .join('\n')
+              : '当前工作目录没有运行日志。'
+          )
+        } else if (trimmed === '/log' || trimmed.startsWith('/log ')) {
+          const [, id, operationId] = trimmed.split(/\s+/)
+          console.log(safeText(await conversations.readLog(id, operationId)))
         } else if (trimmed === '/compact') {
           const changed = await conversations.compact()
           process.stdout.write(
@@ -331,10 +412,7 @@ async function main() {
         } else if (trimmed === '/terminal' || trimmed.startsWith('/terminal ')) {
           const command =
             trimmed.slice('/terminal'.length).trim() || 'exec /bin/bash --noprofile --norc -i'
-          process.stdout.write(
-            (await terminalTool.execute({ command, interactive: true }, { cwd: process.cwd() })) +
-              '\n'
-          )
+          process.stdout.write((await conversations.terminal(command)) + '\n')
         } else {
           await conversations.run(trimmed)
         }
@@ -350,7 +428,8 @@ async function main() {
   prompt()
 }
 
-main().catch(error => {
+main().catch(async error => {
   console.error('启动失败:', error instanceof Error ? error.message : String(error))
   process.exitCode = 1
+  await activeJournal?.close(1)
 })

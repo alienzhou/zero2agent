@@ -1,3 +1,4 @@
+import { notifyObserver } from '../runtime.js'
 import { spawn, type ChildProcess } from 'node:child_process'
 import * as crypto from 'node:crypto'
 import * as fs from 'node:fs'
@@ -12,7 +13,7 @@ import {
 } from './process-registry.js'
 import { buildSpawnEnv, consumeShellEnvFailureNotice } from './shell-env.js'
 import { getTerminalRuntimeHooks } from './terminal-runtime.js'
-import type { Tool, ToolContext } from './types.js'
+import type { Tool, ToolContext, ToolExecutionMetadata } from './types.js'
 
 // ── 常量（定稿 spec / D01-D05） ─────────────────────
 
@@ -227,7 +228,8 @@ function sleep(ms: number): Promise<void> {
 export async function runCommand(
   userCommand: string,
   cwd: string,
-  turnSignal?: AbortSignal
+  turnSignal?: AbortSignal,
+  onResultMetadata?: (metadata: ToolExecutionMetadata) => void
 ): Promise<RunResult> {
   turnSignal?.throwIfAborted()
   const wrapped = wrapCommand(userCommand)
@@ -373,7 +375,15 @@ export async function runCommand(
   if (skipped) {
     outcome = 'skipped'
     child.unref()
-    child.on('close', () => {
+    child.on('close', (code, sig) => {
+      notifyObserver(() =>
+        onResultMetadata?.({
+          terminalOutcome: 'background-completed',
+          exitCode: code ?? 1,
+          pid,
+          signal: sig ?? undefined,
+        })
+      )
       unregisterBackgroundProcess(pid)
       queueCompletionNotice(userCommand, pid)
       void sink.closeStream()
@@ -596,6 +606,13 @@ export const terminalTool: Tool = {
           cwd: workdirResult.path,
           ...(ctx.signal && { signal: ctx.signal }),
         })
+        notifyObserver(() =>
+          ctx.onResultMetadata?.({
+            terminalOutcome: result.status,
+            exitCode: result.exitCode,
+            signal: result.signal,
+          })
+        )
         // Only status metadata crosses back to the model; never echo host output or input.
         const parts = [`Status: human-controlled ${result.status}`]
         if (result.exitCode !== undefined) parts.push(`Exit code: ${result.exitCode}`)
@@ -618,7 +635,7 @@ export const terminalTool: Tool = {
 
     let result: RunResult
     try {
-      result = await runCommand(command, workdirResult.path, ctx.signal)
+      result = await runCommand(command, workdirResult.path, ctx.signal, ctx.onResultMetadata)
     } catch (err) {
       const msg = (err as Error).message
       if (msg.includes('ENOENT')) {
@@ -627,6 +644,14 @@ export const terminalTool: Tool = {
       return `Error: Failed to execute command: ${msg}`
     }
 
+    notifyObserver(() =>
+      ctx.onResultMetadata?.({
+        terminalOutcome: result.outcome,
+        exitCode: result.exitCode,
+        pid: result.pid,
+        signal: result.signal,
+      })
+    )
     return formatReceipt(result, envFailureNotice, completionNotices)
   },
 }

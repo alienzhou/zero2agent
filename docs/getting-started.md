@@ -122,6 +122,23 @@ node packages/tui/dist/cli.js
 
 ---
 
+## 运行日志与故障追查
+
+S005 默认把请求、工具、权限与保存元信息写入本地日志。构建后用 `/logs` 选择运行，Enter 进入独立查看器，方向键、Page、Home/End 滚动，Esc 返回并保留草稿。
+
+```bash
+node packages/tui/dist/cli.js --logs
+node packages/tui/dist/cli.js --log <run-UUID>
+node packages/tui/dist/cli.js --log <run-UUID> --log-operation <operation-UUID>
+node packages/tui/dist/cli.js --no-save --no-log
+```
+
+列表和查看不需要 API key，不执行旧工具。`--no-save` 与 `--no-log` 分别关闭新快照和新日志；日志根目录可用 `ZERO2AGENT_LOG_DIR` 设置。运行记录不包含问题、回复、文件或工具正文及人工终端字节；缺少结束记录时，先检查实际效果再继续。
+
+完整体验与固定版本获取见 [S005 跟练](../specs/E03-product-foundations/S005-runtime-logging/follow-along.md)。
+
+---
+
 ## 项目结构速览
 
 ```

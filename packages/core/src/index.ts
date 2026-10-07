@@ -31,6 +31,8 @@ export {
 } from './tools/index.js'
 export type {
   Tool,
+  ToolContext,
+  ToolExecutionMetadata,
   HumanTerminalRequest,
   HumanTerminalResult,
   TerminalRuntimeHooks,
@@ -66,3 +68,6 @@ export type {
 
 export { TurnCancelledError } from './runtime.js'
 export type { RuntimeEvent } from './runtime.js'
+
+export { DiagnosticEmitter, diagnosticLabel, diagnosticNumber } from './diagnostics.js'
+export type { DiagnosticEvent, DiagnosticObserver, DiagnosticContext } from './diagnostics.js'

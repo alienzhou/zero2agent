@@ -77,9 +77,24 @@ git checkout main
 
 ## [Unreleased]
 
-### E03-S004-session-persistence（实现与验收完成，PR 待人工审阅）
+<a id="e03-s005"></a>
 
-[PR #20](https://github.com/alienzhou/zero2agent/pull/20) 草稿；固定跟练 Tag `E03-S004-session-persistence`。未自动合并或部署。
+### E03-S005-runtime-logging（实现与验收完成，草稿 PR 待人工审阅）
+
+[PR #21](https://github.com/alienzhou/zero2agent/pull/21) 草稿；固定跟练 Tag `E03-S005-runtime-logging`。尚未合并或部署。
+
+所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S005-runtime-logging/README.md)
+
+- Core 以 operation / request / tool 身份关联真实模型、摘要、计数、权限与原生工具结果；后台完成保留启动时的身份，诊断 observer 故障不改变执行结果。
+- 宿主默认按工作区隔离写独占 JSONL，只存元信息；有界队列、文件限额、正常结算刷新与可见降级，强制终止后的前缀明确标为未闭环。
+- 增加 `/logs`、可滚动与返回的 TUI 独立查看器、无密钥 `--logs` / `--log`、操作过滤与 `--no-log`；与快照保存分开配置，保留原交互。
+- 真实服务追查发现旧 Prompt 把一次拒绝的范围描述得不够明确，补充“先发起调用进入宿主审批”和不同目标新请求的边界；权限判断保持原样。
+- 增加 SDK/HTTP、文件效果、真实 PTY、日志故障和真实服务关联验证；结果与范围见[验收页](./specs/E03-product-foundations/S005-runtime-logging/details/03-verification-checklist.md)，原失败证据保留。
+- 提供 20 页原创图解、五篇 Spec、离线演示、两篇延伸阅读、固定版本调研与[复盘](./retros/E03-S005-runtime-logging.md)；AGENTS.md 补充元信息白名单、后台归属和未闭环的长期约束。
+
+### E03-S004-session-persistence（已合入 main）
+
+[PR #20](https://github.com/alienzhou/zero2agent/pull/20) 已按用户指示合入 main（bf89513）；固定跟练 Tag `E03-S004-session-persistence` 保持原候选，课程网站尚未部署。
 
 所属 Epic：[Epic 3](./specs/E03-product-foundations/README.md) | [Story 与跟练](./specs/E03-product-foundations/S004-session-persistence/README.md)
 

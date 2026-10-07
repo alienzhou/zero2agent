@@ -1,0 +1,8 @@
+{
+  "sourceHead": "1c077ca",
+  "scope": "initial recursive offline command stopped after Core failure; E2E not run",
+  "corePassed": 405,
+  "coreFailed": 4,
+  "coreTotal": 409,
+  "reason": "default ToolContext gained an optional callback even without diagnostics; exact old assertions retained"
+}

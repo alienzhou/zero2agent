@@ -1,3 +1,4 @@
+import type { DiagnosticEmitter } from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
 
 export type ContextOptions = {
@@ -141,22 +142,30 @@ export class ContextBudget {
     return integer('estimated input tokens', Buffer.byteLength(serialized, 'utf8') + overhead)
   }
 
-  async count(request: ContextRequest, client: Anthropic, signal?: AbortSignal): Promise<number> {
+  async count(
+    request: ContextRequest,
+    client: Anthropic,
+    signal?: AbortSignal,
+    diagnostics?: DiagnosticEmitter
+  ): Promise<number> {
     signal?.throwIfAborted()
     if (this.counting === 'conservative') return this.estimate(request)
     const timed = AbortSignal.timeout(this.timeoutMs)
     const combined = signal ? AbortSignal.any([signal, timed]) : timed
     const { max_tokens: _output, ...input } = request
+    const span = diagnostics?.request('count', request)
     try {
       const result = await client.messages.countTokens(input, {
         maxRetries: 0,
         timeout: this.timeoutMs,
         signal: combined,
       })
+      span?.complete(result)
       timed.throwIfAborted()
       combined.throwIfAborted()
       return integer('provider input_tokens', result.input_tokens, 0)
     } catch (error) {
+      span?.fail(error, combined)
       timed.throwIfAborted()
       combined.throwIfAborted()
       throw new ContextBudgetError('Provider token counting failed; refusing an unsafe fallback', {

@@ -1,5 +1,6 @@
 import { hostname } from 'node:os'
-import { TurnCancelledError, type Agent } from '@zero2agent/core'
+import { terminalTool, TurnCancelledError, type Agent } from '@zero2agent/core'
+import { LogStore, RunJournal, formatLog, type LogItem } from './run-log.js'
 import { SessionStore, type SessionItem, type StoredSession } from './session-store.js'
 
 export const RECOVERY_NOTICE =
@@ -12,11 +13,15 @@ export class Conversations {
   private busy = false
   private cancelled = false
   private writing = false
+  private operation?: Promise<unknown>
   constructor(
     readonly agent: Agent,
-    private store?: SessionStore
+    private store?: SessionStore,
+    private logs?: LogStore,
+    private journal?: RunJournal
   ) {
     this.current = store?.fresh()
+    this.journal?.host('session-new', { sessionId: this.id })
   }
   get status(): string {
     return this.current
@@ -25,6 +30,64 @@ export class Conversations {
   }
   get id(): string | undefined {
     return this.current?.id
+  }
+  get logStatus(): string {
+    return this.journal?.status ?? '日志记录已关闭'
+  }
+  get logId(): string | undefined {
+    return this.journal?.id
+  }
+  get logFailed(): boolean {
+    return !!this.journal?.failure
+  }
+  async listLogs(): Promise<LogItem[]> {
+    await this.journal?.flush()
+    if (!this.logs) throw new Error('此宿主没有日志浏览器。')
+    return this.logs.list()
+  }
+  async readLog(id = this.logId, operationId?: string): Promise<string> {
+    await this.journal?.flush()
+    if (!this.logs || !id) throw new Error('没有当前运行日志；使用 /logs 查看以前的运行。')
+    return `${this.logStatus}\n${this.journal?.id === id ? this.journal.file + '\n' : ''}${formatLog(await this.logs.read(id, operationId))}`
+  }
+  async closeLogs(exitCode = 0): Promise<void> {
+    try {
+      await this.operation
+    } catch {
+      /* Execution error has its own reporting path. */
+    }
+    await this.journal?.close(exitCode)
+  }
+  async terminal(command: string): Promise<string> {
+    this.assertIdle()
+    this.busy = true
+    this.journal?.host('terminal-start', { sessionId: this.id })
+    let observed = false
+    try {
+      const result = await terminalTool.execute(
+        { command, interactive: true },
+        {
+          cwd: process.cwd(),
+          onResultMetadata: metadata => {
+            observed = true
+            this.journal?.host(
+              metadata.terminalOutcome === 'cancelled' || metadata.terminalOutcome === 'declined'
+                ? 'terminal-cancelled'
+                : 'terminal-completed',
+              { sessionId: this.id, ...metadata }
+            )
+          },
+        }
+      )
+      if (!observed) this.journal?.host('terminal-error', { sessionId: this.id })
+      return result
+    } catch (error) {
+      this.journal?.host('terminal-error', { sessionId: this.id })
+      throw error
+    } finally {
+      await this.journal?.flush()
+      this.busy = false
+    }
   }
   private assertIdle(): void {
     if (this.busy) throw new Error('Wait for the running operation before switching sessions.')
@@ -45,11 +108,14 @@ export class Conversations {
   private async flush(pending?: StoredSession['pending'], force = false): Promise<void> {
     if (!this.store || !this.current || (!this.dirty && !pending && !force)) return
     this.writing = true
+    this.journal?.host('save-start', { sessionId: this.id, revision: this.current.revision })
     try {
       this.current = await this.store.save(this.current, this.agent.snapshot(), pending)
       this.dirty = false
+      this.journal?.host('save-completed', { sessionId: this.id, revision: this.current.revision })
     } catch (error) {
       this.dirty = true
+      this.journal?.host('save-error', { sessionId: this.id })
       throw new Error(
         `会话尚未保存，内存保留；/save 可重试。${error instanceof Error ? error.message : String(error)}`
       )
@@ -64,6 +130,7 @@ export class Conversations {
       await this.flush()
       this.agent.reset()
       this.current = this.store?.fresh()
+      this.journal?.host('session-new', { sessionId: this.id })
       this.dirty = false
     } finally {
       this.busy = false
@@ -94,6 +161,7 @@ export class Conversations {
         candidate.state.messages.push({ role: 'assistant', content: RECOVERY_NOTICE })
         this.agent.restore(candidate.state)
         this.current = candidate
+        this.journal?.host('session-resume', { sessionId: this.id, revision: candidate.revision })
         this.dirty = true
         return '已恢复上次结算的历史。上次运行中断，工具可能已修改文件；继续前请检查工作区。'
       }
@@ -101,6 +169,7 @@ export class Conversations {
     }
     this.agent.restore(candidate.state)
     this.current = candidate
+    this.journal?.host('session-resume', { sessionId: this.id, revision: candidate.revision })
     this.dirty = false
     return '已恢复会话。历史工具只供查看；新操作使用当前权限与模型配置。'
   }
@@ -114,10 +183,14 @@ export class Conversations {
     this.agent.cancelTurn()
   }
   run(message: string): Promise<string> {
-    return this.perform('turn', () => this.agent.run(message))
+    const work = this.perform('turn', () => this.agent.run(message, { sessionId: this.id }))
+    this.operation = work
+    return work
   }
   compact(): Promise<boolean> {
-    return this.perform('compact', () => this.agent.compact())
+    const work = this.perform('compact', () => this.agent.compact({ sessionId: this.id }))
+    this.operation = work
+    return work
   }
   private async perform<T>(kind: 'turn' | 'compact', execute: () => Promise<T>): Promise<T> {
     this.assertIdle()
@@ -149,6 +222,7 @@ export class Conversations {
       if (failure) throw failure
       return result as T
     } finally {
+      await this.journal?.flush()
       this.busy = false
     }
   }
