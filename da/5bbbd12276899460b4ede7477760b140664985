@@ -1,0 +1,45 @@
+.discuss/2026-10-05/e03-s003-tui/outline.md
+  s_08884e0d462e65::t_085e1dcf38165a 1-32
+.discuss/2026-10-07/e03-s003-runtime-tui/decisions/D01-events-and-control.md
+  s_08884e0d462e65::t_60eb4d46b79da4 1-21
+.discuss/2026-10-07/e03-s003-runtime-tui/outline.md
+  s_08884e0d462e65::t_894f50f4ef19e3 1-21
+.vibecoding/2026-10-07/e03-s003-runtime-tui/dialogue.md
+  s_08884e0d462e65::t_1119c3563d5133 1-8
+.vibecoding/2026-10-07/e03-s003-runtime-tui/prompt.md
+  s_08884e0d462e65::t_56c5777effbc91 1-5
+e2e/src/helpers/live-pty.ts
+  s_08884e0d462e65::t_506dd5dc30f7d1 108
+e2e/src/human-terminal-contract.test.ts
+  s_08884e0d462e65::t_28c3f8b6fd0202 487,508
+e2e/src/human-terminal-session-e2e.test.ts
+  s_08884e0d462e65::t_4ebec2453d6e38 159
+e2e/src/permission-contract.test.ts
+  s_08884e0d462e65::t_c9cd13e08f1216 72,97,133
+specs/E03-product-foundations/S003-runtime-tui/details/00-overview.md
+  s_08884e0d462e65::t_bb6bae5ebfa435 1-33
+specs/E03-product-foundations/S003-runtime-tui/details/01-technical-design.md
+  s_08884e0d462e65::t_1b13a440cb350e 1-50
+specs/E03-product-foundations/S003-runtime-tui/details/02-task-list.md
+  s_08884e0d462e65::t_2e1ddee5d86ae9 1-20
+specs/E03-product-foundations/S003-runtime-tui/details/03-verification-checklist.md
+  s_08884e0d462e65::t_69e44c96aa2176 1-23
+specs/E03-product-foundations/S003-runtime-tui/details/04-backlog.md
+  s_08884e0d462e65::t_b2e3ef716bb0e3 1-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "da5bbbd12276899460b4ede7477760b140664985",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
