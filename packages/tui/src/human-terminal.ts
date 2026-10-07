@@ -334,6 +334,9 @@ export async function runHumanTerminal(
   let terminalVanished = false
   let externalSignal: 'SIGINT' | 'SIGTERM' | 'SIGHUP' | undefined
   const controller = new AbortController()
+  const onTurnAbort = (): void => { controller.abort(request.signal?.reason) }
+  request.signal?.addEventListener('abort', onTurnAbort, { once: true })
+  if (request.signal?.aborted) onTurnAbort()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
   const handlers = signals.map(signal => {
     const handler = (): void => {
@@ -406,6 +409,7 @@ export async function runHumanTerminal(
       }
     }
     process.off('exit', onExit)
+    request.signal?.removeEventListener('abort', onTurnAbort)
     for (const [signal, handler] of handlers) process.off(signal, handler)
     const disconnected = process.stdin.readableEnded || process.stdin.destroyed
     try {
