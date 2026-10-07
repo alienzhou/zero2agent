@@ -342,7 +342,7 @@ export class RuntimeTui {
       }
     }
     const chars = graphemes(this.buffer)
-    const lineStart = chars.lastIndexOf('\n', Math.max(0, this.cursor - 1)) + 1
+    const lineStart = this.cursor === 0 ? 0 : chars.lastIndexOf('\n', this.cursor - 1) + 1
     const nextBreak = chars.indexOf('\n', this.cursor)
     const lineEnd = nextBreak < 0 ? chars.length : nextBreak
     if (key.name === 'return') {
@@ -393,7 +393,7 @@ export class RuntimeTui {
     } else if (key.name === 'up' || key.name === 'down') {
       if (key.name === 'up' && lineStart > 0) {
         const previousEnd = lineStart - 1
-        const previousStart = chars.lastIndexOf('\n', previousEnd - 1) + 1
+        const previousStart = previousEnd === 0 ? 0 : chars.lastIndexOf('\n', previousEnd - 1) + 1
         this.cursor = Math.min(previousEnd, previousStart + this.cursor - lineStart)
         this.schedule()
         return

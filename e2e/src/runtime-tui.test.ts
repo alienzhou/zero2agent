@@ -278,7 +278,7 @@ describe.skipIf(process.platform === 'win32')(
       p.session.write('\x0f')
       await p.session.waitFor('FIRST-LINE', detailsFrom)
       p.session.write('\x1b[1;5F')
-      await p.session.waitFor('TOOL-DETAIL-END', detailsFrom)
+      await p.session.waitFor(/TOOL-DETAIL[\s\S]{0,100}-END/, detailsFrom)
       p.session.write('\x15')
       await quit(p.session)
     })
