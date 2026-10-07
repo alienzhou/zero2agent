@@ -5,6 +5,7 @@ import { join } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { ContextBudget, ContextBudgetError, type ContextRequest } from './context-budget.js'
 import type { ContextSummarizer } from './context-summary.js'
+import type { SessionSnapshot } from './session-snapshot.js'
 
 type Message = Anthropic.MessageParam
 
@@ -66,6 +67,17 @@ export class ContextManager {
   private failedThrough = -1
   private replacements = new Map<number, Message>()
   private artifactDirectory?: string
+
+  snapshot(): SessionSnapshot['context'] {
+    return { through: this.through, summary: this.summary }
+  }
+
+  /** Caller validates the boundary against raw history before applying it. */
+  restore(snapshot: SessionSnapshot['context']): void {
+    this.reset()
+    this.through = snapshot.through
+    this.summary = snapshot.summary
+  }
 
   reset(): void {
     this.cancel()

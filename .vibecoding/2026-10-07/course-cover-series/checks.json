@@ -1,0 +1,536 @@
+{
+  "date": "2026-10-07",
+  "artboards": [
+    {
+      "chapter": 4,
+      "items": [
+        {
+          "font": "80px",
+          "name": "series-title",
+          "rect": {
+            "bottom": 265,
+            "height": 96,
+            "left": 90,
+            "right": 990,
+            "top": 169,
+            "width": 900,
+            "x": 90,
+            "y": 169
+          },
+          "text": "从零到一做 Agent"
+        },
+        {
+          "font": "28px",
+          "name": "series-description",
+          "rect": {
+            "bottom": 319,
+            "height": 42,
+            "left": 90,
+            "right": 990,
+            "top": 277,
+            "width": 900,
+            "x": 90,
+            "y": 277
+          },
+          "text": "亲手实现 Coding Agent · 开源实战课程"
+        },
+        {
+          "font": "49px",
+          "name": "lesson-title",
+          "rect": {
+            "bottom": 409.6953125,
+            "height": 63.6953125,
+            "left": 90,
+            "right": 990,
+            "top": 346,
+            "width": 900,
+            "x": 90,
+            "y": 346
+          },
+          "text": "会话落盘与恢复"
+        },
+        {
+          "font": "29px",
+          "name": "lesson-promise",
+          "rect": {
+            "bottom": 461.1953125,
+            "height": 43.5,
+            "left": 90,
+            "right": 990,
+            "top": 417.6953125,
+            "width": 900,
+            "x": 90,
+            "y": 417.6953125
+          },
+          "text": "关掉程序，下次还能接着聊"
+        },
+        {
+          "font": "16px",
+          "name": "diagram",
+          "rect": {
+            "bottom": 1183.4453125,
+            "height": 650,
+            "left": 90,
+            "right": 990,
+            "top": 533.4453125,
+            "width": 900,
+            "x": 90,
+            "y": 533.4453125
+          },
+          "text": "上方终端保存识别码，中间磁盘文件跨过进程关闭的断点，下方新终端恢复同一会话并继续回答你 › 记住 ALPHA-"
+        },
+        {
+          "font": "26px",
+          "name": "explain",
+          "rect": {
+            "bottom": 1241.7421875,
+            "height": 40.296875,
+            "left": 90,
+            "right": 990,
+            "top": 1201.4453125,
+            "width": 900,
+            "x": 90,
+            "y": 1201.4453125
+          },
+          "text": "教学示意：保存历史，重启后用当前配置继续对话。"
+        },
+        {
+          "font": "25px",
+          "name": "cover-tags",
+          "rect": {
+            "bottom": 1351,
+            "height": 55,
+            "left": 90,
+            "right": 990,
+            "top": 1296,
+            "width": 900,
+            "x": 90,
+            "y": 1296
+          },
+          "text": "工程实战交互设计开源课程"
+        }
+      ],
+      "overflow": []
+    },
+    {
+      "chapter": 3,
+      "items": [
+        {
+          "font": "80px",
+          "name": "series-title",
+          "rect": {
+            "bottom": 265,
+            "height": 96,
+            "left": 90,
+            "right": 990,
+            "top": 169,
+            "width": 900,
+            "x": 90,
+            "y": 169
+          },
+          "text": "从零到一做 Agent"
+        },
+        {
+          "font": "28px",
+          "name": "series-description",
+          "rect": {
+            "bottom": 319,
+            "height": 42,
+            "left": 90,
+            "right": 990,
+            "top": 277,
+            "width": 900,
+            "x": 90,
+            "y": 277
+          },
+          "text": "亲手实现 Coding Agent · 开源实战课程"
+        },
+        {
+          "font": "49px",
+          "name": "lesson-title",
+          "rect": {
+            "bottom": 409.6953125,
+            "height": 63.6953125,
+            "left": 90,
+            "right": 990,
+            "top": 346,
+            "width": 900,
+            "x": 90,
+            "y": 346
+          },
+          "text": "运行状态与 TUI"
+        },
+        {
+          "font": "29px",
+          "name": "lesson-promise",
+          "rect": {
+            "bottom": 461.1953125,
+            "height": 43.5,
+            "left": 90,
+            "right": 990,
+            "top": 417.6953125,
+            "width": 900,
+            "x": 90,
+            "y": 417.6953125
+          },
+          "text": "让 Agent 的运行过程看得见、控得住"
+        },
+        {
+          "font": "16px",
+          "name": "diagram",
+          "rect": {
+            "bottom": 1212.59375,
+            "height": 650,
+            "left": 90,
+            "right": 990,
+            "top": 562.59375,
+            "width": 900,
+            "x": 90,
+            "y": 562.59375
+          },
+          "text": "终端上方显示当前状态，中部记录两个同名工具的不同结果，下方保留用户草稿◓ 等待模型 · 3.2sAgent ›"
+        },
+        {
+          "font": "25px",
+          "name": "cover-tags",
+          "rect": {
+            "bottom": 1351,
+            "height": 55,
+            "left": 90,
+            "right": 990,
+            "top": 1296,
+            "width": 900,
+            "x": 90,
+            "y": 1296
+          },
+          "text": "工程实战交互设计开源课程"
+        }
+      ],
+      "overflow": []
+    },
+    {
+      "chapter": 2,
+      "items": [
+        {
+          "font": "80px",
+          "name": "series-title",
+          "rect": {
+            "bottom": 265,
+            "height": 96,
+            "left": 90,
+            "right": 990,
+            "top": 169,
+            "width": 900,
+            "x": 90,
+            "y": 169
+          },
+          "text": "从零到一做 Agent"
+        },
+        {
+          "font": "28px",
+          "name": "series-description",
+          "rect": {
+            "bottom": 319,
+            "height": 42,
+            "left": 90,
+            "right": 990,
+            "top": 277,
+            "width": 900,
+            "x": 90,
+            "y": 277
+          },
+          "text": "亲手实现 Coding Agent · 开源实战课程"
+        },
+        {
+          "font": "49px",
+          "name": "lesson-title",
+          "rect": {
+            "bottom": 409.6953125,
+            "height": 63.6953125,
+            "left": 90,
+            "right": 990,
+            "top": 346,
+            "width": 900,
+            "x": 90,
+            "y": 346
+          },
+          "text": "执行权限与 Approval"
+        },
+        {
+          "font": "29px",
+          "name": "lesson-promise",
+          "rect": {
+            "bottom": 461.1953125,
+            "height": 43.5,
+            "left": 90,
+            "right": 990,
+            "top": 417.6953125,
+            "width": 900,
+            "x": 90,
+            "y": 417.6953125
+          },
+          "text": "Agent 执行前，先过权限关"
+        },
+        {
+          "font": "16px",
+          "name": "cover-hero",
+          "rect": {
+            "bottom": 1296,
+            "height": 804.8046875,
+            "left": 90,
+            "right": 990,
+            "top": 491.1953125,
+            "width": 900,
+            "x": 90,
+            "y": 491.1953125
+          },
+          "text": "模型提出工具调用，由宿主权限判断分为允许、询问与拒绝模型提出工具调用宿主检查权限规则 · 模式 · 工作区边界"
+        },
+        {
+          "font": "16px",
+          "name": "diagram",
+          "rect": {
+            "bottom": 1218.59375,
+            "height": 650,
+            "left": 91.5,
+            "right": 988.5,
+            "top": 568.59375,
+            "width": 897,
+            "x": 91.5,
+            "y": 568.59375
+          },
+          "text": "模型提出工具调用，由宿主权限判断分为允许、询问与拒绝模型提出工具调用宿主检查权限规则 · 模式 · 工作区边界"
+        },
+        {
+          "font": "25px",
+          "name": "cover-tags",
+          "rect": {
+            "bottom": 1351,
+            "height": 55,
+            "left": 90,
+            "right": 990,
+            "top": 1296,
+            "width": 900,
+            "x": 90,
+            "y": 1296
+          },
+          "text": "工程实战真实经验开源项目"
+        }
+      ],
+      "overflow": []
+    },
+    {
+      "chapter": 1,
+      "items": [
+        {
+          "font": "80px",
+          "name": "series-title",
+          "rect": {
+            "bottom": 265,
+            "height": 96,
+            "left": 90,
+            "right": 990,
+            "top": 169,
+            "width": 900,
+            "x": 90,
+            "y": 169
+          },
+          "text": "从零到一做 Agent"
+        },
+        {
+          "font": "28px",
+          "name": "series-description",
+          "rect": {
+            "bottom": 319,
+            "height": 42,
+            "left": 90,
+            "right": 990,
+            "top": 277,
+            "width": 900,
+            "x": 90,
+            "y": 277
+          },
+          "text": "亲手实现 Coding Agent · 开源实战课程"
+        },
+        {
+          "font": "49px",
+          "name": "lesson-title",
+          "rect": {
+            "bottom": 409.6953125,
+            "height": 63.6953125,
+            "left": 90,
+            "right": 990,
+            "top": 346,
+            "width": 900,
+            "x": 90,
+            "y": 346
+          },
+          "text": "多轮会话与上下文压缩"
+        },
+        {
+          "font": "29px",
+          "name": "lesson-promise",
+          "rect": {
+            "bottom": 461.1953125,
+            "height": 43.5,
+            "left": 90,
+            "right": 990,
+            "top": 417.6953125,
+            "width": 900,
+            "x": 90,
+            "y": 417.6953125
+          },
+          "text": "接着上一轮聊，也要管住请求长度"
+        },
+        {
+          "font": "16px",
+          "name": "cover-hero",
+          "rect": {
+            "bottom": 1296,
+            "height": 804.8046875,
+            "left": 90,
+            "right": 990,
+            "top": 491.1953125,
+            "width": 900,
+            "x": 90,
+            "y": 491.1953125
+          },
+          "text": "自动分级压缩 + /compact教学情景示意 · 非模型实测第一轮 · 你先看看这个项目该补哪些测试。第二轮"
+        },
+        {
+          "font": "25px",
+          "name": "cover-tags",
+          "rect": {
+            "bottom": 1351,
+            "height": 55,
+            "left": 90,
+            "right": 990,
+            "top": 1296,
+            "width": 900,
+            "x": 90,
+            "y": 1296
+          },
+          "text": "工程实战真实经验开源项目"
+        }
+      ],
+      "overflow": []
+    }
+  ],
+  "readers": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "chapter": 1,
+      "frameWidth": 837,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "chapter": 2,
+      "frameWidth": 837,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "chapter": 3,
+      "frameWidth": 837,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "chapter": 4,
+      "frameWidth": 837,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "chapter": 1,
+      "frameWidth": 352,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "chapter": 2,
+      "frameWidth": 352,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "chapter": 3,
+      "frameWidth": 352,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "chapter": 4,
+      "frameWidth": 352,
+      "horizontalOverflow": false,
+      "paragraphs": true
+    }
+  ],
+  "interactions": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "zoomOpen": "true",
+      "zoomClosed": "false",
+      "textOpen": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "zoomOpen": "true",
+      "zoomClosed": "false",
+      "textOpen": true
+    }
+  ],
+  "baselineCommit": "e9f4359f11a37ccb48aca92a42521df4df15d277",
+  "sourceHashes": {
+    "site/chapters/epic03-story001/01-cover.html": "8b7d3023e8e36187c176d0449373db2493454855ada6898e5c501627eec23d77",
+    "site/chapters/epic03-story001/course.css": "20a507d1d49c13394b3b6d775b95035a752e00f9cf53aa88072a6c88a6ea9703",
+    "site/chapters/epic03-story002/01-cover.html": "b9a0d9b73f1777f197d26926dcfb0e7cc07b3e928d83ae2ed06184416451b3df",
+    "site/chapters/epic03-story002/course.css": "9d1e423e3ce115c6c5b4405a2f1c4e3c4ceddb0de5d9d03daf27ee80823c45ef",
+    ".authoring/site/chapters/epic03-story002/author.cjs": "158fff925415fffdbfc2ab060c8257bda9a9ed072c019b7f882ede01203fb117",
+    "site/chapters/epic03-story003/01-cover.html": "dab896208dcedc4a22002c091b7f3c6f99defc9fb52f198d6f12ab22245cbac1",
+    "site/chapters/epic03-story003/course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e",
+    ".authoring/site/chapters/epic03-story003/author.cjs": "32bf1d06c98ac45bcb2741f1ee0a28a389f72de1e21abae469dd511e0465a8e0",
+    "site/chapters/epic03-story004/01-cover.html": "efe8b453c275170e517ce4625e54b37d4d75ed6613531ab056670446cc15952b",
+    "site/chapters/epic03-story004/course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e",
+    ".authoring/site/chapters/epic03-story004/author.cjs": "b617da1f86aed93876432a7647942515837c69886b2e2125aacfc8279840940c"
+  },
+  "passed": true
+}

@@ -1,0 +1,191 @@
+{
+  "chapter": "epic03-story004",
+  "browser": "154.0.8037.98",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "sha256": "86d1c574e6956180bd20446340236b562a3c0618f4897e2302b123d596c0e701",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "02-lifetimes.html",
+      "sha256": "45164eceb39205898ae0711d0c4cec2de07c6c718fc1d532d64a00a94a8e6dc1",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "03-three-views.html",
+      "sha256": "87e5a22a04c58dc342b9ddbce6d747fbebba9c57c1185a9ff6eba34d221936ea",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "04-research.html",
+      "sha256": "0b5158a62d8e05ce65dbb99dc790a7e97e3ddc9d12f397e38ea053677617138a",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "05-boundary.html",
+      "sha256": "c01f4264f8b51d3297dc4fe2fd60595af51c269c5c9ea53bf04d7d45bcf90f90",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "06-directory.html",
+      "sha256": "e0c84535d32d169a83dae570445941064f8ee5a91464b9061e2a012be22dd7fc",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "07-save-twice.html",
+      "sha256": "f16d747af4f370e379bb08508e588c8e881be7f01d56d3e87d4e64eb5e495909",
+      "overflow": [],
+      "svgTextOverflow": [
+        {
+          "text": "正常完成 / 取消 / 失败：都要记录已结算结果。"
+        }
+      ],
+      "textOverlaps": [
+        [
+          "草稿在等待期间保留",
+          "正常完成 / 取消 / 失败：都要记录已结算结果。"
+        ]
+      ]
+    },
+    {
+      "file": "08-publish.html",
+      "sha256": "dc526b9818b587485c5df50152fe792b49b2d2b4ea9b076d5bfa9f7ff6b1f86e",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "09-concurrency.html",
+      "sha256": "6f407d2527ebdd669714d1c9f0cb49809017d3d512443eb84c017990a4137153",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "10-crash.html",
+      "sha256": "634d0cf52ecf0cbb7f76a2df06b703f8929d45c95ca38d1c06a8fcca7e66c5fe",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "11-pairs.html",
+      "sha256": "cce019b9fd93b30b6eeed775a42e21c28e26d7f47771d133c906e60d64a75a42",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "12-context.html",
+      "sha256": "38c8c39bf137726ae59fd77cd59d8946f0dfbac7798eba1e3e613d0ddddc90c5",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "13-validate.html",
+      "sha256": "1ecca056b393e5200b796fa44e99499b804c0db1727bcd071ace9905c2d271cc",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "14-picker.html",
+      "sha256": "1b853eddab45ed9483a328d825e920c9e60cb367dbd9b367adddf3d14d01911e",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "15-commands.html",
+      "sha256": "af738c9b4d7ea76f5dded9e22004f970da402f8d6baa5cf84cc333c7eb9e29f9",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "16-failure.html",
+      "sha256": "8fc03aa1500f78b6072d5e145c1075280a2046a54237f9b1b43b371c86d71fa1",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "17-compatibility.html",
+      "sha256": "814729f1539661077f4505b8eedaea7b7ec298691773389d60cb931246a0aa46",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "18-practice.html",
+      "sha256": "8c2a7f0f491a1a34a57a6fe4716ea29ed8a605963ea1a52ea627a39c9e0bfe05",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "19-costs.html",
+      "sha256": "9ccb0a7b0071bbbd330c1e51f053e9e9fd70beeb8aba5c22854326da42632abb",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "20-next.html",
+      "sha256": "7fef9d4d688dae934045a62adafa6b482ffd3a6070b1737d3c3c1cef39420816",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sections": 20,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sections": 20,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    }
+  ],
+  "failures": [
+    "07-save-twice.html"
+  ],
+  "sources": {
+    "author.cjs": "8e5399f83a21ab8da401b3f42974ebbefddd5472a8ba472ac7b71d217bec9c2d",
+    "course.css": "19ddb438fe1bbfff3448978b1b15f9ecfd3cbfe67b01386f22e326397304451f"
+  },
+  "passed": false
+}

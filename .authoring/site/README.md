@@ -16,7 +16,7 @@ Zero2Agent 的课程 HTML、图内文案和制作资料，从本仓库维护。c
 ## 更新已有章节
 
 1. 根据 specs/ 中的课程文档和 packages/ 中的实现，核实内容与来源。
-2. 修改对应章节的编辑源。E03-S002 的图解与图内文案在 chapters/epic03-story002/author.cjs，生成的 HTML 不要另行修改；其他现有章节直接维护 site/chapters/ 内的 HTML。
+2. 修改对应章节的编辑源。E03-S002、S003、S004 的图解与图内文案由各自 chapters/epic03-storyXXX/author.cjs 生成；有 author.cjs 的章节不要另行修改产物 HTML，其他章节直接维护 site/chapters/ 内的 HTML。
 3. 需要改标题或顺序时更新 pages.json；有生成器的章节由生成器更新标题。
 4. 在仓库根目录运行 pnpm site:build，生成图解 HTML、课程目录、搜索文字并检查资源。
 5. 运行 pnpm site:preview，检查 PC 三栏、手机目录、图解放大及文字内容。编辑后再运行 site:build，并刷新页面。
@@ -39,6 +39,7 @@ Zero2Agent 的课程 HTML、图内文案和制作资料，从本仓库维护。c
 
 ## 图解规范
 
+- 封面必须独立表达系列主题：将「从零到一做 Agent」作为最大标题，并写明「亲手实现 Coding Agent」。再展示 Story 编号、本课主题与具体学习收益；不能只保留小字 Zero2Agent 或单课问题。最近四课采用同一层级，详见 [封面规范](templates/cover.md)。
 - 保留 1080 × 1440 画布。流程图使用 HTML 内的 SVG，文字保持可选中。
 - 使用米白背景、深色正文和少量红色强调；内容页靠留白组织信息。
 - 标题说明当前小节讲什么，正文给出事实、实例或判断依据。

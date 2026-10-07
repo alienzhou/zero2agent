@@ -1,6 +1,7 @@
 import type Anthropic from '@anthropic-ai/sdk'
 import { ContextManager, type CompactionRuntime } from './context-manager.js'
 import { ContextBudget, type ContextOptions, type ContextRequest } from './context-budget.js'
+import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
 
 const INTERRUPTED =
   '[Harness] This turn was interrupted. Completed tool results are retained; no file changes were rolled back. Re-check the workspace before continuing.'
@@ -56,6 +57,20 @@ export class Session {
   /** Last committed snapshot; the running turn is not visible until it finishes. */
   getHistory(): Anthropic.MessageParam[] {
     return structuredClone(this.messages)
+  }
+
+  snapshot(): SessionSnapshot {
+    this.assertIdle()
+    return { messages: this.getHistory(), context: this.context.snapshot() }
+  }
+
+  restore(value: unknown): void {
+    this.assertIdle()
+    const snapshot = validateSessionSnapshot(value)
+    this.context.restore(snapshot.context)
+    this.messages = snapshot.messages
+    this.budget = undefined
+    this.budgetKey = ''
   }
 
   /** Reject while running: reset is neither cancellation nor rollback. */

@@ -97,6 +97,13 @@
       "title": "运行状态与 TUI",
       "description": "用结构化事件、审批焦点和取消收尾，做出可编辑、可查看、可控制的终端界面。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S003-runtime-tui/specs/E03-product-foundations/S003-runtime-tui"
+    },
+    {
+      "id": "epic03-story004",
+      "epic": "epic03",
+      "title": "会话落盘与恢复",
+      "description": "保存完整历史与已采用摘要，浏览、恢复并继续会话；正确处理未结算操作、保存失败与并发冲突。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S004-session-persistence/specs/E03-product-foundations/S004-session-persistence"
     }
   ]
 }

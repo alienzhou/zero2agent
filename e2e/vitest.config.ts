@@ -11,6 +11,7 @@ try {
 
 export default defineConfig({
   test: {
+    globalSetup: ['./src/helpers/session-test-setup.ts'],
     // E2E 会 spawn 真实进程、真实 LLM 层还要等网络，给足超时
     testTimeout: 120_000,
     hookTimeout: 60_000,

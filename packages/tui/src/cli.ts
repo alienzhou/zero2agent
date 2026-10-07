@@ -10,6 +10,9 @@ import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-
 
 import { createApprovalHandler, permissionOptionsFromEnv } from './approval.js'
 import { RuntimeTui } from './runtime-tui.js'
+import { Conversations } from './conversations.js'
+import { SessionStore, type SessionItem } from './session-store.js'
+import { safeText } from './display-text.js'
 
 // ── 环境变量 ───────────────────────────────────────
 
@@ -119,6 +122,19 @@ const events: LoopEventHandlers = {
   },
 }
 
+function printSessions(items: SessionItem[]): void {
+  if (!items.length) {
+    console.log('当前工作目录没有已保存会话。')
+    return
+  }
+  for (const item of items)
+    console.log(
+      safeText(
+        `${item.id}  ${item.updatedAt}  ${item.title}${item.error ? ` [无法恢复: ${item.error}]` : item.pending ? ' [上次运行未结算]' : ''}`
+      )
+    )
+}
+
 async function main() {
   if (process.argv[2] === '--terminal') {
     setupTerminalRuntime()
@@ -145,9 +161,31 @@ async function main() {
   loadLocalEnv()
 
   const args = process.argv.slice(2)
-  const plain = args[0] === '--plain'
-  if (plain) args.shift()
+  let plain = false
+  let noSave = process.env.ZERO2AGENT_NO_SAVE === '1'
+  let list = false
+  let resume: string | undefined
+  let latest = false
+  while (args[0]?.startsWith('--')) {
+    const flag = args.shift()
+    if (flag === '--') break
+    if (flag === '--plain') plain = true
+    else if (flag === '--no-save') noSave = true
+    else if (flag === '--list-sessions') list = true
+    else if (flag === '--continue') latest = true
+    else if (flag === '--resume') {
+      resume = args.shift()
+      if (!resume || resume.startsWith('--')) throw new Error('--resume requires a session UUID.')
+    } else throw new Error(`Unknown option: ${flag}`)
+  }
+  if ((noSave && (list || resume || latest)) || (resume && latest))
+    throw new Error('--no-save cannot restore/list sessions; use either --resume or --continue.')
   const messageArg = args[0]
+  const store = noSave ? undefined : await SessionStore.open(process.cwd())
+  if (list) {
+    printSessions(await store!.list())
+    return
+  }
   const tui =
     !messageArg &&
     !plain &&
@@ -184,15 +222,21 @@ async function main() {
     },
   })
 
+  const conversations = new Conversations(agent, store)
+  let resumed = ''
+  if (resume) resumed = await conversations.resume(resume)
+  else if (latest) resumed = await conversations.resumeLatest()
+
   if (tui) {
-    await tui.run(agent)
+    await tui.run(agent, conversations, resumed)
     return
   }
 
   if (messageArg) {
+    if (resumed) console.error(resumed)
     try {
       resetStreamState()
-      await agent.run(messageArg)
+      await conversations.run(messageArg)
       console.log()
     } catch (error) {
       console.error('\n执行出错:', (error as Error).message)
@@ -205,8 +249,10 @@ async function main() {
 
   // 交互模式
   console.log('zero2agent - Agent Harness（文件读写演示）')
+  console.log(safeText(conversations.status))
+  if (resumed) console.log(resumed)
   console.log(
-    '输入你的问题；/new 新建对话；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出\n'
+    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/compact 压缩上下文；/terminal [bash命令] 交给人操作；exit 退出\n'
   )
 
   const rl = readline.createInterface({
@@ -242,6 +288,13 @@ async function main() {
       const trimmed = input.trim()
 
       if (trimmed === 'exit' || trimmed === 'quit') {
+        try {
+          await conversations.save()
+        } catch (error) {
+          console.error(safeText(String(error)))
+          prompt()
+          return
+        }
         console.log('再见！')
         rl.close()
         return
@@ -255,10 +308,23 @@ async function main() {
       try {
         resetStreamState()
         if (trimmed === '/new') {
-          agent.reset()
+          await conversations.newSession()
           process.stdout.write('已开始新对话。仅清空对话历史；文件、日志与后台进程保持不变。\n')
+        } else if (trimmed === '/sessions') {
+          printSessions(await conversations.list())
+        } else if (trimmed.startsWith('/resume ')) {
+          console.log(await conversations.resume(trimmed.slice(8).trim()))
+          console.log(safeText(conversations.status))
+        } else if (trimmed === '/resume') {
+          printSessions(await conversations.list())
+          console.log('使用 /resume UUID 恢复所选会话。')
+        } else if (trimmed === '/session') {
+          console.log(safeText(conversations.status))
+        } else if (trimmed === '/save') {
+          await conversations.save()
+          console.log(safeText(conversations.status))
         } else if (trimmed === '/compact') {
-          const changed = await agent.compact()
+          const changed = await conversations.compact()
           process.stdout.write(
             changed ? '已压缩工作上下文，完整会话记录保留。\n' : '当前没有可压缩的历史。\n'
           )
@@ -270,11 +336,11 @@ async function main() {
               '\n'
           )
         } else {
-          await agent.run(trimmed)
+          await conversations.run(trimmed)
         }
         console.log('\n')
       } catch (error) {
-        console.error('\n错误:', (error as Error).message, '\n')
+        console.error('\n错误:', safeText((error as Error).message), '\n')
       }
 
       prompt()

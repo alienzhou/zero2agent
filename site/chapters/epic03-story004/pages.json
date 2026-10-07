@@ -1,0 +1,194 @@
+{
+  "title": "Zero2Agent · E03-S004 会话落盘与恢复",
+  "date": "2026-10-07",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 20,
+  "edition": "v1-session-persistence",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "关掉程序，下次还能接着聊",
+      "number": 1,
+      "sources": [
+        "D01",
+        "S04"
+      ]
+    },
+    {
+      "file": "02-lifetimes.html",
+      "title": "文件还在，为什么 Agent 却忘了？",
+      "number": 2,
+      "sources": [
+        "S01"
+      ]
+    },
+    {
+      "file": "03-three-views.html",
+      "title": "历史、上下文、运行状态，不能装进同一个文件",
+      "number": 3,
+      "sources": [
+        "S01",
+        "S02",
+        "S04"
+      ]
+    },
+    {
+      "file": "04-research.html",
+      "title": "记录方式可以不同，恢复边界必须清楚",
+      "number": 4,
+      "sources": [
+        "R01",
+        "R02"
+      ]
+    },
+    {
+      "file": "05-boundary.html",
+      "title": "打开行李箱：哪些东西需要带到下次？",
+      "number": 5,
+      "sources": [
+        "S01",
+        "S03",
+        "S04"
+      ]
+    },
+    {
+      "file": "06-directory.html",
+      "title": "一个工作目录，一组自己的会话",
+      "number": 6,
+      "sources": [
+        "S03"
+      ]
+    },
+    {
+      "file": "07-save-twice.html",
+      "title": "一轮对话，为什么要保存两次？",
+      "number": 7,
+      "sources": [
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "08-publish.html",
+      "title": "先写完字节，再让读取者看见文件",
+      "number": 8,
+      "sources": [
+        "S03"
+      ]
+    },
+    {
+      "file": "09-concurrency.html",
+      "title": "都从 r4 出发，谁能发布 r5？",
+      "number": 9,
+      "sources": [
+        "S03",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "10-crash.html",
+      "title": "消息没保存完，文件却可能已经改了",
+      "number": 10,
+      "sources": [
+        "S04",
+        "T02"
+      ]
+    },
+    {
+      "file": "11-pairs.html",
+      "title": "工具调用与结果，恢复时必须成对出现",
+      "number": 11,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "12-context.html",
+      "title": "完整历史留在磁盘，请求仍使用压缩后的上下文",
+      "number": 12,
+      "sources": [
+        "S01",
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "13-validate.html",
+      "title": "先确认整份快照可用，再替换眼前的对话",
+      "number": 13,
+      "sources": [
+        "S01",
+        "S03",
+        "S04"
+      ]
+    },
+    {
+      "file": "14-picker.html",
+      "title": "从“知道 UUID”，到“能找到昨天的会话”",
+      "number": 14,
+      "sources": [
+        "S05",
+        "T02"
+      ]
+    },
+    {
+      "file": "15-commands.html",
+      "title": "TUI、plain、单次调用，接到同一份会话逻辑",
+      "number": 15,
+      "sources": [
+        "S05",
+        "T02"
+      ]
+    },
+    {
+      "file": "16-failure.html",
+      "title": "一份内存，两种状态：已保存，或仍待处理",
+      "number": 16,
+      "sources": [
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "17-compatibility.html",
+      "title": "恢复会话之后，以前的操作仍然可用",
+      "number": 17,
+      "sources": [
+        "S05",
+        "T02"
+      ]
+    },
+    {
+      "file": "18-practice.html",
+      "title": "让两个进程，共享同一个对话事实",
+      "number": 18,
+      "sources": [
+        "D01",
+        "T02",
+        "T03"
+      ]
+    },
+    {
+      "file": "19-costs.html",
+      "title": "完整快照很直观，长期存储需要后续治理",
+      "number": 19,
+      "sources": [
+        "S03",
+        "S04"
+      ]
+    },
+    {
+      "file": "20-next.html",
+      "title": "今天的对话，成为下次运行的起点",
+      "number": 20,
+      "sources": [
+        "S04"
+      ]
+    }
+  ]
+}

@@ -52,3 +52,7 @@ node .authoring/site/chapters/epic03-story003/verify.mjs
 主代理独立 H5 审阅指出“完整会话由 Core 保留”可能让人误以为压缩后仍保存完整历史，现改为“模型会话由 Core 管理”。只变更这一行文字，布局不变；源文件、生成页和课程检索文字同步更新。使用 `COURSE_QA_PAGE=15-details.html` 定向执行浏览器检查并打开 1080×1440 截图复看，通过越界与文字相交检查；报告为 `verification/p15-recheck.json`。其余 17 页与上一轮完整检查的 SHA-256 一致，没有重跑无关交互。
 
 同时仅将本课 sourceURL 改为固定 Tag `E03-S003-runtime-tui`，由主流程在完整验收后创建；其他章节 sourceURL 没有变化。`pnpm site:build` 和资源检查通过。
+
+## 2026-10-07 封面系列识别修订
+
+封面改为「从零到一做 Agent」的统一层级；本课内容与正文页保持原样。原报告描述修订前版本，新封面检查与源文件哈希见[本次验证记录](../../../../.vibecoding/2026-10-07/course-cover-series/review.md)。

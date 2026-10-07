@@ -1,0 +1,17 @@
+{
+  "platform": "darwin",
+  "viewport": [
+    96,
+    30
+  ],
+  "narrow": [
+    42,
+    18
+  ],
+  "fixture": "local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0",
+  "head": "3248bd968bca54a9a3952bf3d4474dc39985a67a",
+  "capturedAt": "2026-10-07T06:26:20.130Z",
+  "rawSha256": "732326683028e3b23510bde296c24ba5b659f638968c50097039378dfd985a76",
+  "restorationEscapesObserved": true,
+  "demoWorkspaceRemoved": true
+}
