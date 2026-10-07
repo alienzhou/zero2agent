@@ -1,0 +1,23 @@
+scripts/e03-s003-acceptance-report.mjs
+  s_08884e0d462e65::t_1116e7aba8ef33 19,33,40-51,59-61,63
+scripts/e03-s003-runtime-demo.mjs
+  s_08884e0d462e65::t_350c517836dfbd 14-19,88,94,103,107-108,116-117
+scripts/e03-s003-tui-capture.mjs
+  s_08884e0d462e65::t_084ffc93d1e601 39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dd01b60a37fcdb1b6474eab46fca99ae851dd116",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
