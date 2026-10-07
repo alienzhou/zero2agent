@@ -1,0 +1,33 @@
+AGENTS.md
+  s_08884e0d462e65::t_7b316650c0e300 89-94
+researches/session-persistence/README.md
+  s_08884e0d462e65::t_71b7daec84d8db 1-11
+researches/session-persistence/codex.md
+  s_08884e0d462e65::t_f9839cca2ec8fc 1-24
+scripts/e03-s004-acceptance-report.mjs
+  s_08884e0d462e65::t_648841d19da363 28
+scripts/e03-s004-session-demo.mjs
+  s_08884e0d462e65::t_10fcf64f98fcdd 1-62
+specs/E03-product-foundations/S004-session-persistence/README.md
+  s_08884e0d462e65::t_30ee1a30467740 1-91
+specs/E03-product-foundations/S004-session-persistence/deep-dive/01-snapshot-and-journal.md
+  s_08884e0d462e65::t_d69ece41d85294 1-25
+specs/E03-product-foundations/S004-session-persistence/follow-along.md
+  s_08884e0d462e65::t_c955fb2b46e639 1-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1ca613dafc3d7fd5ae215ccf22529b3e5c647568",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
