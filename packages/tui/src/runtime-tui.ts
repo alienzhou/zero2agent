@@ -2,7 +2,7 @@ import * as readline from 'node:readline'
 import { terminalTool } from '@zero2agent/core'
 import type { Agent, ApprovalRequest, ApprovalResponse, LoopEventHandlers, TerminalInterruptController } from '@zero2agent/core'
 import { appendEntry, compactionLabel, initialState, reduceRuntime } from './runtime-state.js'
-import { cellWidth, clipText, graphemes, safeText, textWidth, wrapText } from './display-text.js'
+import { clipText, graphemes, safeText, textWidth, wrapText } from './display-text.js'
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 import { runHumanTerminal } from './human-terminal.js'
 
@@ -371,11 +371,12 @@ export class RuntimeTui {
       lines.push(clipText('允许这次操作？[y/N]: y 本次允许 · Enter 默认拒绝', width))
     } else {
       const timeline: string[] = []
+      const lastTool = this.state.entries.filter(entry => entry.kind === 'tool').at(-1)
       if (this.state.discarded) timeline.push(`[较早的 ${this.state.discarded} 条显示记录已移除]`)
       for (const entry of this.state.entries) {
         if (entry.kind === 'tool') {
           const call = entry.call
-          const isSelected = call.toolCallId === (this.selectedTool ?? this.state.entries.findLast(entry => entry.kind === 'tool')?.call.toolCallId)
+          const isSelected = call.toolCallId === (this.selectedTool ?? lastTool?.call.toolCallId)
           const expanded = this.expanded.has(call.toolCallId)
           timeline.push(...wrapText(`┌ ${isSelected ? '◆' : '◇'} ${call.toolName} · ${STATUS[call.status]} · ${call.toolCallId}${call.durationMs !== undefined ? ` · ${call.durationMs}ms` : ''}`, width))
           if (call.input) {
