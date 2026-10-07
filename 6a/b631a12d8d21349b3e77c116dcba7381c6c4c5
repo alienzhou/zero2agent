@@ -1,0 +1,33 @@
+packages/core/src/prompt/system.ts
+  s_08884e0d462e65::t_04750c2d44dfba 43-45
+.vibecoding/2026-10-07/e03-s005-runtime-logging/failures.md
+  s_08884e0d462e65::t_6e302813354164 14-17
+researches/runtime-logging/acceptance/approval-clarified-results.json
+  s_08884e0d462e65::t_25ada70b83178c 1
+researches/runtime-logging/acceptance/first-live-evidence/session-resume.json
+  s_08884e0d462e65::t_11d9f5ea3c1d20 1-451
+researches/runtime-logging/acceptance/first-live-live-results.json
+  s_08884e0d462e65::t_0772b9869f252c 1
+researches/runtime-logging/acceptance/first-live-summary.json
+  s_08884e0d462e65::t_c0fb679f78d714 1-426
+researches/runtime-logging/acceptance/live-retest-evidence/session-resume.json
+  s_08884e0d462e65::t_6b6eeef88a55cd 1-451
+researches/runtime-logging/acceptance/live-retest-results.json
+  s_08884e0d462e65::t_ac748225f38a1f 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6ab631a12d8d21349b3e77c116dcba7381c6c4c5",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
