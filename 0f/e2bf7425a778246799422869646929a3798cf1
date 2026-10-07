@@ -1,0 +1,31 @@
+packages/core/src/__tests__/runtime.test.ts
+  s_08884e0d462e65::t_44496b1ae84602 1-376
+packages/core/src/__tests__/session.test.ts
+  s_08884e0d462e65::t_4e4514c3e11c85 165-166,274-277,328-331
+packages/core/src/agent.ts
+  s_08884e0d462e65::t_88f514e17b5b18 47-55,65-67,88-89,109-110
+packages/core/src/context-manager.ts
+  s_08884e0d462e65::t_e3bbdab2a2f8dc 275
+packages/core/src/loop.ts
+  s_08884e0d462e65::t_f53144a3e1ee14 7-14,82-88,91-101,135-139,142-147,154-155,159-164,212-216,263-272,274-275,277-280,306,329-336,362-372
+packages/core/src/tools/__tests__/terminal-cancellation.test.ts
+  s_08884e0d462e65::t_ba5d371f28db5e 1-43
+packages/core/src/tools/terminal.ts
+  s_08884e0d462e65::t_675617b9cd0829 227-231,590-594
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0fe2bf7425a778246799422869646929a3798cf1",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
