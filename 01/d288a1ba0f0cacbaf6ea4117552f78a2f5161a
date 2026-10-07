@@ -1,0 +1,39 @@
+packages/core/src/session-snapshot.ts
+  s_08884e0d462e65::t_299cfd09eacdc2 1-68
+  s_08884e0d462e65::t_5a19d2446c80e0 69-103
+packages/core/src/context-manager.ts
+  s_08884e0d462e65::t_299cfd09eacdc2 8,71-80
+  s_08884e0d462e65::t_2b87416e640946 81
+packages/core/src/index.ts
+  s_08884e0d462e65::t_299cfd09eacdc2 10-11
+packages/core/src/session.ts
+  s_08884e0d462e65::t_299cfd09eacdc2 4,62-74
+  s_08884e0d462e65::t_d49edeffc99a78 75
+packages/core/src/agent.ts
+  s_08884e0d462e65::t_299cfd09eacdc2 14,120-131
+  s_08884e0d462e65::t_272f61d379e34b 132
+e2e/src/session-store.test.ts
+  s_08884e0d462e65::t_06c13b606d1b95 1-141
+packages/core/src/__tests__/session-snapshot.test.ts
+  s_08884e0d462e65::t_40f9f780dd24f3 1-77
+packages/tui/src/conversations.ts
+  s_08884e0d462e65::t_6eb449598fb646 1-126
+packages/tui/src/session-store.ts
+  s_08884e0d462e65::t_57badee811b754 1-249
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "01d288a1ba0f0cacbaf6ea4117552f78a2f5161a",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
