@@ -1,0 +1,21 @@
+e2e/src/runtime-live.test.ts
+  s_08884e0d462e65::t_87dee6af5f1c19 12,15-35,37,54-75,120-124,133-137
+researches/runtime-tui/acceptance/live-dialogue-recheck/results.json
+  s_08884e0d462e65::t_87b9939e9760c8 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fbb12cf2612b2a2fbe38ae547b9324c154ce20a4",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
