@@ -29,7 +29,7 @@ const commands = [
   ['site-build', 'pnpm', ['site:build']],
   ['site-check', 'pnpm', ['site:check']],
   ['whitespace', 'git', ['diff', '--check', 'caa47ea']],
-  ...(process.argv.includes('--live') ? [['live', 'pnpm', ['--filter', '@zero2agent/e2e', 'exec', 'vitest', 'run', 'src/runtime-live.test.ts']]] : []),
+  ...(process.argv.includes('--live') ? [['live', 'pnpm', ['--filter', '@zero2agent/e2e', 'exec', 'vitest', 'run', 'src/runtime-live.test.ts', '--reporter=default', '--reporter=json', '--outputFile.json=' + path.join(out, 'live-results.json')]]] : []),
 ];
 await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');
 for (const [name, command, args] of commands) {
@@ -50,6 +50,13 @@ for (const [name, command, args] of commands) {
     exitCode = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', code => resolve(code ?? 1)); });
   } finally { clearTimeout(deadline); clearTimeout(forceKill); }
   if (timedOut) { exitCode = 124; text += '\nAcceptance command timed out.\n'; }
+  if (name === 'live' && exitCode === 0) {
+    const result = JSON.parse(await readFile(path.join(out, 'live-results.json'), 'utf8'));
+    if (result.numPassedTests !== 3 || result.numPendingTests !== 0) {
+      exitCode = 1;
+      text += '\nLive gate requires all three tests to execute and pass; skipped tests do not satisfy it.\n';
+    }
+  }
   await writeFile(path.join(out, name + '.txt'), text);
   report.checks.push({ name, command: [command, ...args], exitCode, elapsedMs: Date.now() - start, log: name + '.txt' });
   await writeFile(path.join(out, 'summary.json'), JSON.stringify(report, null, 2) + '\n');
