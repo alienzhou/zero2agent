@@ -40,7 +40,10 @@ export function appendEntry(state: RuntimeState, entry: TimelineEntry): RuntimeS
 
 function trimState(state: RuntimeState): RuntimeState {
   let size = state.entries.reduce((sum, entry) => sum + entrySize(entry), 0)
-  while (state.entries.length > MAX_ENTRIES || (size > MAX_HISTORY_TEXT && state.entries.length > 1)) {
+  while (
+    state.entries.length > MAX_ENTRIES ||
+    (size > MAX_HISTORY_TEXT && state.entries.length > 1)
+  ) {
     const removed = state.entries.shift()!
     size -= entrySize(removed)
     state.discarded++
@@ -62,11 +65,23 @@ export function compactionLabel(event: CompactionEvent): string {
 /** The renderer is a projection; stale turns and replayed events cannot overwrite new state. */
 export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): RuntimeState {
   if (event.type === 'turn-start') {
-    if (previous.turnId === event.turnId || previous.retiredTurnIds.includes(event.turnId)) return previous
-    const retiredTurnIds = previous.turnId ? [...previous.retiredTurnIds, previous.turnId].slice(-MAX_ENTRIES) : previous.retiredTurnIds
-    return { ...previous, turnId: event.turnId, seq: event.seq, phase: 'preparing', startedAt: Date.now(), retiredTurnIds, finished: false }
+    if (previous.turnId === event.turnId || previous.retiredTurnIds.includes(event.turnId))
+      return previous
+    const retiredTurnIds = previous.turnId
+      ? [...previous.retiredTurnIds, previous.turnId].slice(-MAX_ENTRIES)
+      : previous.retiredTurnIds
+    return {
+      ...previous,
+      turnId: event.turnId,
+      seq: event.seq,
+      phase: 'preparing',
+      startedAt: Date.now(),
+      retiredTurnIds,
+      finished: false,
+    }
   }
-  if (event.turnId !== previous.turnId || event.seq <= previous.seq || previous.finished) return previous
+  if (event.turnId !== previous.turnId || event.seq <= previous.seq || previous.finished)
+    return previous
   let state = { ...previous, seq: event.seq, entries: [...previous.entries] }
   switch (event.type) {
     case 'phase':
@@ -74,7 +89,11 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       break
     case 'text-delta': {
       const last = state.entries.at(-1)
-      if (last?.kind === 'text') state.entries[state.entries.length - 1] = { kind: 'text', text: bounded(last.text.replace(TRUNCATED + '\n', '') + event.text) }
+      if (last?.kind === 'text')
+        state.entries[state.entries.length - 1] = {
+          kind: 'text',
+          text: bounded(last.text.replace(TRUNCATED + '\n', '') + event.text),
+        }
       else state.entries.push({ kind: 'text', text: bounded(event.text) })
       break
     }
@@ -82,14 +101,20 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       state.entries.push({ kind: 'notice', text: bounded(event.text) })
       break
     case 'tool-state': {
-      const index = state.entries.findIndex(entry => entry.kind === 'tool' && entry.call.toolCallId === event.toolCallId && entry.call.turnId === event.turnId)
+      const index = state.entries.findIndex(
+        entry =>
+          entry.kind === 'tool' &&
+          entry.call.toolCallId === event.toolCallId &&
+          entry.call.turnId === event.turnId
+      )
       const old = state.entries[index]
       // Full approval input lives in the controller; the bounded timeline keeps only a preview.
       const call: ToolState = { ...(old?.kind === 'tool' ? old.call : {}), ...event }
       if (call.output) call.output = bounded(call.output)
       if (call.input) {
         const encoded = JSON.stringify(call.input)
-        if (encoded.length > MAX_ENTRY_TEXT) call.input = { preview: encoded.slice(0, MAX_ENTRY_TEXT), truncated: true }
+        if (encoded.length > MAX_ENTRY_TEXT)
+          call.input = { preview: encoded.slice(0, MAX_ENTRY_TEXT), truncated: true }
       }
       const entry: TimelineEntry = { kind: 'tool', call }
       if (index < 0) state.entries.push(entry)

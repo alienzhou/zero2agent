@@ -148,9 +148,14 @@ async function main() {
   const plain = args[0] === '--plain'
   if (plain) args.shift()
   const messageArg = args[0]
-  const tui = !messageArg && !plain && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== 'dumb'
-    ? new RuntimeTui()
-    : undefined
+  const tui =
+    !messageArg &&
+    !plain &&
+    process.stdin.isTTY &&
+    process.stdout.isTTY &&
+    process.env.TERM !== 'dumb'
+      ? new RuntimeTui()
+      : undefined
 
   if (!process.env.ANTHROPIC_API_KEY) {
     console.error('错误: 请设置 ANTHROPIC_API_KEY 环境变量')
@@ -161,7 +166,9 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
-    permissions: permissionOptionsFromEnv(tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)),
+    permissions: permissionOptionsFromEnv(
+      tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)
+    ),
     systemPrompt: buildSystemPrompt(),
     events: tui?.events ?? events,
     cwd: process.cwd(),

@@ -334,7 +334,9 @@ export async function runHumanTerminal(
   let terminalVanished = false
   let externalSignal: 'SIGINT' | 'SIGTERM' | 'SIGHUP' | undefined
   const controller = new AbortController()
-  const onTurnAbort = (): void => { controller.abort(request.signal?.reason) }
+  const onTurnAbort = (): void => {
+    controller.abort(request.signal?.reason)
+  }
   request.signal?.addEventListener('abort', onTurnAbort, { once: true })
   if (request.signal?.aborted) onTurnAbort()
   const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'] as const
