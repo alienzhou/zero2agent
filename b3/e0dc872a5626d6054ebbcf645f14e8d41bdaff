@@ -1,0 +1,27 @@
+.vibecoding/2026-10-08/e04-s001-failure-recovery/completion-audit.md
+  s_58249cd92a0ae1::t_6714f5cfe600f6 21-22,25-33
+.vibecoding/2026-10-08/e04-s001-failure-recovery/dialogue.md
+  s_58249cd92a0ae1::t_c726d89e984fe7 14-15
+.vibecoding/2026-10-08/e04-s001-failure-recovery/failures.md
+  s_58249cd92a0ae1::t_94726c530e9f56 19-20
+specs/E04-reliability-and-context/S001-failure-recovery/README.md
+  s_58249cd92a0ae1::t_6894784da70a69 9
+specs/E04-reliability-and-context/S001-failure-recovery/details/02-task-list.md
+  s_58249cd92a0ae1::t_c35dfa8cbc4170 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b3e0dc872a5626d6054ebbcf645f14e8d41bdaff",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
