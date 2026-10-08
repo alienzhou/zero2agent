@@ -1,0 +1,174 @@
+.authoring/site/chapters/epic04-story001/verify.mjs
+  s_58249cd92a0ae1::t_9a2e9b4f4822c7 36,53-54
+  s_58249cd92a0ae1::t_3a4b4c83eee67e 27
+.gitattributes
+  s_58249cd92a0ae1::t_79086096eccb54 1-4
+.authoring/site/chapters/epic04-story001/author.cjs
+  s_58249cd92a0ae1::t_32e00a2a741a31 101,151
+  s_58249cd92a0ae1::t_7df930c4949d79 1-2,4-15,17-100,102-150,152-167,172-173
+  s_58249cd92a0ae1::t_85255bd69d815f 175
+.authoring/site/README.md
+  s_58249cd92a0ae1::t_d0e615d807c2c5 19
+.authoring/site/chapters/epic04-story001/content-plan.md
+  s_58249cd92a0ae1::t_fbf48777e99918 1,3,5-24,26
+.authoring/site/chapters/epic04-story001/review.md
+  s_58249cd92a0ae1::t_0a4b85a5c00f90 1,3-13
+.authoring/site/chapters/epic04-story001/sources.md
+  s_58249cd92a0ae1::t_459bf190461775 3,15,19
+.authoring/site/chapters/epic04-story001/verification-final/checks.json
+  s_58249cd92a0ae1::t_22cb6d3ab04620 1-187
+.authoring/site/chapters/epic04-story001/verification-final/contact-1.html
+  s_58249cd92a0ae1::t_842b092270efa5 1
+.authoring/site/chapters/epic04-story001/verification-final/contact-2.html
+  s_58249cd92a0ae1::t_6d0fbd56aa9568 1
+.authoring/site/chapters/epic04-story001/verification-release/checks.json
+  s_58249cd92a0ae1::t_efe41b32ecbd98 1-186
+.authoring/site/chapters/epic04-story001/verification-release/contact-1.html
+  s_58249cd92a0ae1::t_c77d360790b43d 1
+.authoring/site/chapters/epic04-story001/verification-release/contact-2.html
+  s_58249cd92a0ae1::t_2bd22a37b3d633 1
+.authoring/site/chapters/epic04-story001/verification-v2-final/checks.json
+  s_58249cd92a0ae1::t_4c07c872d5be32 1-168
+.authoring/site/chapters/epic04-story001/verification-v2-final/contact-1.html
+  s_58249cd92a0ae1::t_5880284ab2bef4 1
+.authoring/site/chapters/epic04-story001/verification-v2-final/contact-2.html
+  s_58249cd92a0ae1::t_96da7f7e2219cd 1
+.authoring/site/chapters/epic04-story001/verification-v2-repaired/checks.json
+  s_58249cd92a0ae1::t_b44f8d18188d40 1-168
+.authoring/site/chapters/epic04-story001/verification-v2-repaired/contact-1.html
+  s_58249cd92a0ae1::t_c65400dc6cb35a 1
+.authoring/site/chapters/epic04-story001/verification-v2-repaired/contact-2.html
+  s_58249cd92a0ae1::t_01652781e50383 1
+.authoring/site/chapters/epic04-story001/verification-v2/checks.json
+  s_58249cd92a0ae1::t_62fe76ff83b8e3 1-205
+.authoring/site/chapters/epic04-story001/verification-v2/contact-1.html
+  s_58249cd92a0ae1::t_79ff9e1917ec27 1
+.authoring/site/chapters/epic04-story001/verification-v2/contact-2.html
+  s_58249cd92a0ae1::t_32a50b8913363e 1
+.discuss/2026-10-08/e04-course-plan/outline.md
+  s_58249cd92a0ae1::t_3c16f6f3c759f8 64-67
+.vibecoding/2026-10-08/e04-s001-failure-recovery/completion-audit.md
+  s_58249cd92a0ae1::t_9a39f776021250 1-24
+.vibecoding/2026-10-08/e04-s001-failure-recovery/dialogue.md
+  s_58249cd92a0ae1::t_740bc9cb5676ec 10-13
+.vibecoding/2026-10-08/e04-s001-failure-recovery/failures.md
+  s_58249cd92a0ae1::t_5f12f616c6ac77 11-18
+.vibecoding/2026-10-08/e04-s001-failure-recovery/learnings.md
+  s_58249cd92a0ae1::t_08e5b5e62b7520 4-7
+AGENTS.md
+  s_58249cd92a0ae1::t_481341bd89fda7 89-94
+CHANGELOG.md
+  s_58249cd92a0ae1::t_f05cd880c6d907 50-61
+README.md
+  s_58249cd92a0ae1::t_2b1b3b5dfaec13 115
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_1c9bc6b37f51c1 21-23,34
+e2e/src/failure-recovery-live.test.ts
+  s_58249cd92a0ae1::t_db79ead49761ec 62-67
+researches/failure-recovery/acceptance/build-final.txt
+  s_58249cd92a0ae1::t_d9304272dfad19 1-13
+researches/failure-recovery/acceptance/core-bounded-rerun.txt
+  s_58249cd92a0ae1::t_e65fe41100e6ac 1-3
+researches/failure-recovery/acceptance/e2e-final.txt
+  s_58249cd92a0ae1::t_91880159923975 1-13
+researches/failure-recovery/acceptance/format-final.txt
+  s_58249cd92a0ae1::t_d00a0a16c400db 1-3
+researches/failure-recovery/acceptance/format-rerun.txt
+  s_58249cd92a0ae1::t_bc4fd614c74adc 1-2
+researches/failure-recovery/acceptance/lint-final.txt
+  s_58249cd92a0ae1::t_567346cd177900 1-59
+researches/failure-recovery/acceptance/offline-confirmed.txt
+  s_58249cd92a0ae1::t_a7871dee13fc1c 1-27
+researches/failure-recovery/acceptance/site-build-final.txt
+  s_58249cd92a0ae1::t_d2fd20b44e2c31 1-12
+researches/failure-recovery/acceptance/site-check-final.txt
+  s_58249cd92a0ae1::t_40773b8b496005 1-5
+researches/failure-recovery/acceptance/source-hashes.json
+  s_58249cd92a0ae1::t_e7e8143160bd04 1-76
+researches/failure-recovery/acceptance/terminal-p0-rerun.txt
+  s_58249cd92a0ae1::t_de38c060776753 1-14
+retros/E04-S001-failure-recovery.md
+  s_58249cd92a0ae1::t_71104ccea97554 1-31
+retros/README.md
+  s_58249cd92a0ae1::t_ef81ad459c9ba4 25-28
+site/chapters/epic04-story001/01-cover.html
+  s_58249cd92a0ae1::t_7460c7198d3b6a 1
+site/chapters/epic04-story001/02-written-before-failure.html
+  s_58249cd92a0ae1::t_cbf7712343ab13 1
+site/chapters/epic04-story001/03-three-failures.html
+  s_58249cd92a0ae1::t_7934a80bb9e49a 1
+site/chapters/epic04-story001/04-error-matrix.html
+  s_58249cd92a0ae1::t_9efa3ab2925436 1
+site/chapters/epic04-story001/05-one-retry-owner.html
+  s_58249cd92a0ae1::t_787ab820ae83dd 1
+site/chapters/epic04-story001/06-attempt-identity.html
+  s_58249cd92a0ae1::t_ba7930978f4fee 1
+site/chapters/epic04-story001/07-backoff.html
+  s_58249cd92a0ae1::t_aed315af6a4539 1
+site/chapters/epic04-story001/08-timeouts.html
+  s_58249cd92a0ae1::t_e2120b5656f1e5 1
+site/chapters/epic04-story001/09-cancel-wait.html
+  s_58249cd92a0ae1::t_9130355d2d9eb8 1-14
+site/chapters/epic04-story001/10-stream-end.html
+  s_58249cd92a0ae1::t_8d162684c9b881 1
+site/chapters/epic04-story001/11-tool-correction.html
+  s_58249cd92a0ae1::t_5c33c5049c0cc6 1
+site/chapters/epic04-story001/12-approval.html
+  s_58249cd92a0ae1::t_35471e1b684352 1
+site/chapters/epic04-story001/13-budgets.html
+  s_58249cd92a0ae1::t_cdb54b61e58a25 1
+site/chapters/epic04-story001/14-batch-pairing.html
+  s_58249cd92a0ae1::t_918962c8aacd32 1
+site/chapters/epic04-story001/15-native-outcomes.html
+  s_58249cd92a0ae1::t_b4f6032b73b5d3 1
+site/chapters/epic04-story001/16-settlement.html
+  s_58249cd92a0ae1::t_0922d425f3bbf5 1
+site/chapters/epic04-story001/17-configuration.html
+  s_58249cd92a0ae1::t_2c6d0866e68386 1
+site/chapters/epic04-story001/18-practice.html
+  s_58249cd92a0ae1::t_cdcf0721d092d1 1
+site/chapters/epic04-story001/course.css
+  s_58249cd92a0ae1::t_43be6ae22cc295 21-22
+site/chapters/epic04-story001/pages.json
+  s_58249cd92a0ae1::t_5e0588b2a9d2e9 4,9,18-19,24,33,43,53,63,67,73,82,92,96,102,111,120,130,134,140,149,159,169,179
+site/course.json
+  s_58249cd92a0ae1::t_17df5aedb8896b 5367-5380,5387,5389-5412,5419-5438,5445-5463,5465-5470,5477-5497,5504-5530,5537-5557,5564-5583,5590-5612,5619-5638,5645,5647-5659,5666-5684,5691-5698,5700-5710,5712-5714,5721,5723-5742,5749-5771,5778,5780-5796,5803-5810,5813-5815,5818-5820,5827,5829-5833,5836-5846
+specs/E03-product-foundations/README.md
+  s_58249cd92a0ae1::t_8b2aa6a64047d9 35
+specs/E03-product-foundations/S006-file-checkpoints/README.md
+  s_58249cd92a0ae1::t_7f25b12f0a65db 105
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_d87275fce48d01 9
+specs/E04-reliability-and-context/S001-failure-recovery/README.md
+  s_58249cd92a0ae1::t_0a361c97a690f6 9,73-77
+specs/E04-reliability-and-context/S001-failure-recovery/deep-dive/01-retry-and-effects.md
+  s_58249cd92a0ae1::t_dd05cb70c9364e 1-30
+specs/E04-reliability-and-context/S001-failure-recovery/deep-dive/02-deadline-and-settlement.md
+  s_58249cd92a0ae1::t_0be242ad06dac4 1-28
+specs/E04-reliability-and-context/S001-failure-recovery/details/01-technical-design.md
+  s_58249cd92a0ae1::t_d59d1c4fa75d2c 7
+specs/E04-reliability-and-context/S001-failure-recovery/details/02-task-list.md
+  s_58249cd92a0ae1::t_f1e22a2d8e186a 5-14
+specs/E04-reliability-and-context/S001-failure-recovery/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_35cc0505fff526 1-47
+specs/E04-reliability-and-context/S001-failure-recovery/details/04-backlog.md
+  s_58249cd92a0ae1::t_6bfee1f1cb74da 7
+specs/E04-reliability-and-context/S001-failure-recovery/follow-along.md
+  s_58249cd92a0ae1::t_13fe67a71ea2c3 5-10,32,52-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "21e946dae8208e5391edc14ff3321ae26e2fd114",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
