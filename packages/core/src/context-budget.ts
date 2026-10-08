@@ -1,5 +1,6 @@
 import type { DiagnosticEmitter } from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
+import type { RequestExecutor } from './request-executor.js'
 
 export type ContextOptions = {
   contextWindow?: number
@@ -146,20 +147,31 @@ export class ContextBudget {
     request: ContextRequest,
     client: Anthropic,
     signal?: AbortSignal,
-    diagnostics?: DiagnosticEmitter
+    diagnostics?: DiagnosticEmitter,
+    executor?: RequestExecutor
   ): Promise<number> {
     signal?.throwIfAborted()
     if (this.counting === 'conservative') return this.estimate(request)
     const timed = AbortSignal.timeout(this.timeoutMs)
     const combined = signal ? AbortSignal.any([signal, timed]) : timed
     const { max_tokens: _output, ...input } = request
-    const span = diagnostics?.request('count', request)
+    const span = executor ? undefined : diagnostics?.request('count', request)
     try {
-      const result = await client.messages.countTokens(input, {
-        maxRetries: 0,
-        timeout: this.timeoutMs,
-        signal: combined,
-      })
+      const send = (signal: AbortSignal) =>
+        client.messages.countTokens(input, {
+          maxRetries: 0,
+          timeout: this.timeoutMs,
+          signal,
+        })
+      const result = executor
+        ? await executor.run(
+            'count',
+            request,
+            attempt => send(attempt.signal),
+            combined,
+            this.timeoutMs
+          )
+        : await send(combined)
       span?.complete(result)
       timed.throwIfAborted()
       combined.throwIfAborted()

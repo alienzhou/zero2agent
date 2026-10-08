@@ -5,3 +5,5 @@
 读取固定 npm SDK 0.52.0 源码与 Anthropic 官方错误文档、Gemini CLI 固定源码。确认主模型使用 SDK 默认两次重试，摘要/计数显式关闭；SDK fetch 超时与整个流生命周期不同，message_stop 必须单独验证。使用仓库 repo-research 取证格式，不启动子代理。
 
 agent-better-checkpoint 辅助 skill 仍缺失，按 AGENTS.md 普通 Story 提交保存阶段结果。完整实现和最终交付状态随后补充。
+
+已实现共享 RunBudget、请求执行器和完整流校验；统一计数、摘要与主模型尝试，记录逻辑与传输身份。工具错误保留配对，批次限额后其余调用不执行；重复失败和重复拒绝停止。CLI 参数/环境变量、plain/TUI 草稿标记和重试通知、日志白名单已接入。新真实 HTTP/SSE 故障专项通过，Core 全量 439 项、build 通过；宿主故障矩阵与课程仍待完成。

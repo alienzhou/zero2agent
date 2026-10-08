@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
+import { messageStream } from './helpers/message-stream.js'
 import { Agent } from '../agent.js'
 import { runLoop } from '../loop.js'
 import { Session } from '../session.js'
@@ -50,15 +51,12 @@ function transport(...outcomes: Array<Reply | Error | (() => Promise<Reply>)>) {
   const stream = vi.fn((params: { messages: Message[] }) => {
     requests.push(structuredClone(params.messages))
     const next = outcomes.shift()
-    return {
-      on: vi.fn(),
-      finalMessage: async () => {
-        if (next instanceof Error) throw next
-        if (typeof next === 'function') return next()
-        if (!next) throw new Error('Unexpected model request')
-        return next
-      },
-    }
+    return messageStream(async () => {
+      if (next instanceof Error) throw next
+      if (typeof next === 'function') return next()
+      if (!next) throw new Error('Unexpected model request')
+      return next
+    })
   })
   vi.mocked(createAnthropicClient).mockReturnValue({ messages: { stream } } as unknown as Anthropic)
   return requests
@@ -163,7 +161,7 @@ describe('in-memory sessions', () => {
         model: 'custom-model',
         system: 'Keep this instruction',
       }),
-      { signal: expect.any(AbortSignal) }
+      { signal: expect.any(AbortSignal), maxRetries: 0, timeout: 120000 }
     )
     expect(onToolEnd).toHaveBeenCalledWith('echo', 'observed-result', expect.any(Number))
   })
@@ -475,7 +473,9 @@ describe('failed and incomplete turns', () => {
     vi.mocked(createAnthropicClient).mockReturnValue({
       messages: {
         stream: () => ({
-          on: (_event: string, callback: (text: string) => void) => callback('unfinished-fragment'),
+          on: (event: string, callback: (text: string) => void) => {
+            if (event === 'text') callback('unfinished-fragment')
+          },
           finalMessage: async () => {
             throw new Error('connection lost')
           },
@@ -557,7 +557,7 @@ describe('failed and incomplete turns', () => {
       answer('next')
     )
     const agent = new Agent({ tools: [echo] })
-    expect(await agent.run('loop')).toContain('Maximum iterations')
+    await expect(agent.run('loop')).rejects.toMatchObject({ limitReason: 'iterations' })
     expectPaired(agent.getHistory())
     expect(agent.getHistory().at(-1)?.content).toContain('[Harness]')
     await agent.run('next')

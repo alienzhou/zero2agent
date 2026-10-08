@@ -10,14 +10,15 @@ import {
   type DiagnosticObserver,
   type DiagnosticContext,
 } from './diagnostics.js'
-import type Anthropic from '@anthropic-ai/sdk'
+import Anthropic from '@anthropic-ai/sdk'
 import {
   RuntimeEmitter,
   TurnCancelledError,
+  RunBudgetError,
   assertNotCancelled,
-  waitForAbort,
   notifyObserver,
   type RuntimeEvent,
+  type RequestNotice,
 } from './runtime.js'
 import { createAnthropicClient, getModelName, type LLMConfig } from './llm/index.js'
 import { allTools, toAnthropicTool, type Tool, type ToolContext } from './tools/index.js'
@@ -26,14 +27,14 @@ import type { ToolExecutionMetadata } from './tools/types.js'
 import type { ContextOptions } from './context-budget.js'
 import { createContextSummarizer } from './context-summary.js'
 import type { CompactionEvent, CompactionRuntime } from './context-manager.js'
+import { RunBudget, type RunLimits } from './run-budget.js'
+import { RequestExecutor, IncompleteStreamError } from './request-executor.js'
 
 import {
   PermissionController,
   type PermissionOptions,
   type PermissionDecision,
 } from './permissions.js'
-
-const MAX_ITERATIONS = 20
 
 function describeToolError(error: unknown): string {
   try {
@@ -49,6 +50,8 @@ function describeToolError(error: unknown): string {
  * 通知不参与控制：忽略同步异常和异步拒绝，不等待异步回调完成。
  */
 export interface LoopEventHandlers {
+  /** Plain hosts and manual compaction receive safe request status without owning a Turn timeline. */
+  onRequestNotice?: (notice: RequestNotice) => void
   /** Structured presentation events; observers cannot alter execution. */
   onEvent?: (event: RuntimeEvent) => void
   /** 模型文本片段及 Harness 状态提示 */
@@ -85,7 +88,8 @@ export async function executeToolCalls(
   emitter?: RuntimeEmitter,
   diagnostics?: DiagnosticEmitter,
   fileMutations?: FileMutationHandler,
-  sessionId?: string
+  sessionId?: string,
+  budget?: RunBudget
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -112,7 +116,10 @@ export async function executeToolCalls(
       })
     let start: number | undefined
     let denied = false
+    let consumed = false
     try {
+      budget?.consumeTool(block.name, block.input)
+      consumed = true
       assertNotCancelled(ctx.signal)
       const tool = tools.find(t => t.name === block.name)
       if (!tool) throw new Error(`Unknown tool: ${block.name}`)
@@ -210,13 +217,19 @@ export async function executeToolCalls(
         content: output,
         ...((output.startsWith('Error:') || cancelled) && { is_error: true }),
       })
+      budget?.settleTool(block.name, block.input, output.startsWith('Error:') || cancelled, false)
     } catch (error) {
-      const cancelled = ctx.signal?.aborted || error instanceof TurnCancelledError
-      const errorMessage = cancelled
-        ? start === undefined
-          ? 'Error: Turn cancelled before this tool started; it was not executed.'
-          : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
-        : `Error: ${describeToolError(error)}`
+      const limited =
+        error instanceof RunBudgetError || ctx.signal?.reason instanceof RunBudgetError
+      const cancelled = !limited && (ctx.signal?.aborted || error instanceof TurnCancelledError)
+      const errorMessage =
+        limited && start === undefined
+          ? `Error: Run stopped before this tool started; it was not executed (${(ctx.signal?.reason as RunBudgetError | undefined)?.limitReason ?? (error as RunBudgetError).limitReason}).`
+          : cancelled
+            ? start === undefined
+              ? 'Error: Turn cancelled before this tool started; it was not executed.'
+              : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
+            : `Error: ${describeToolError(error)}`
       state(cancelled ? 'cancelled' : denied ? 'denied' : 'error', {
         output: errorMessage,
         reason: errorMessage,
@@ -229,12 +242,15 @@ export async function executeToolCalls(
         content: errorMessage,
         is_error: true,
       })
+      if (consumed && !limited && !cancelled)
+        budget?.settleTool(block.name, block.input, true, denied)
     }
   }
   return results
 }
 
 export interface RunLoopOptions {
+  limits?: RunLimits
   fileMutations?: FileMutationHandler
   diagnostics?: DiagnosticObserver
   diagnosticContext?: DiagnosticContext
@@ -259,12 +275,20 @@ export interface RunLoopOptions {
  * @returns 最终的文本响应
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
+  const budget = new RunBudget(options.limits, options.signal)
+  options = { ...options, signal: budget.signal }
   const session = options.session ?? new Session()
   const diagnostics = new DiagnosticEmitter(options.diagnostics, options.diagnosticContext)
   const emitter = new RuntimeEmitter(diagnostics.operationId, event => {
     diagnostics.runtime(event)
     notifyObserver(() => options.events?.onEvent?.(event))
+    if (
+      !options.events?.onEvent &&
+      (event.type === 'request-retry' || event.type === 'request-abandoned')
+    )
+      notifyObserver(() => options.events?.onRequestNotice?.(event))
   })
+  const executor = new RequestExecutor(budget, diagnostics, emitter)
   let started = false
   let cancellationNotified = false
   const cancel = (): void => {
@@ -281,14 +305,17 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       emitter.emit({ type: 'turn-start' })
       if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
-      return runTurnLoop(messages, { ...options, session }, emitter, diagnostics)
+      return runTurnLoop(messages, { ...options, session }, emitter, diagnostics, budget, executor)
     })
     emitter.emit({ type: 'turn-end', status: 'completed' })
     diagnostics.end('completed', 'turn')
     return result
   } catch (error) {
+    if (options.signal?.reason instanceof RunBudgetError) error = options.signal.reason
     if (started) {
-      const cancelled = options.signal?.aborted || error instanceof TurnCancelledError
+      const cancelled =
+        !(error instanceof RunBudgetError) &&
+        (options.signal?.aborted || error instanceof TurnCancelledError)
       emitter.emit({
         type: 'turn-end',
         status: cancelled ? 'cancelled' : 'error',
@@ -299,6 +326,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     }
     throw error
   } finally {
+    budget.close()
     options.signal?.removeEventListener('abort', cancel)
     if (!options.session) session.cancelCompaction()
   }
@@ -307,7 +335,8 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
 export function createCompactionRuntime(
   options: RunLoopOptions,
   session: Session,
-  diagnostics?: DiagnosticEmitter
+  diagnostics?: DiagnosticEmitter,
+  executor?: RequestExecutor
 ): CompactionRuntime {
   const client = createAnthropicClient(options.config ?? {})
   const model = getModelName(options.config ?? {})
@@ -316,6 +345,7 @@ export function createCompactionRuntime(
     client,
     budget,
     diagnostics,
+    executor,
     request: messages =>
       structuredClone({
         model,
@@ -324,7 +354,7 @@ export function createCompactionRuntime(
         tools: (options.tools ?? allTools).map(toAnthropicTool),
         ...(options.systemPrompt && { system: options.systemPrompt }),
       }),
-    summarize: createContextSummarizer(client, model, budget, diagnostics),
+    summarize: createContextSummarizer(client, model, budget, diagnostics, executor),
     onCompaction: options.events?.onCompaction,
   }
 }
@@ -340,7 +370,9 @@ async function runTurnLoop(
   messages: Anthropic.MessageParam[],
   options: RunLoopOptions,
   emitter: RuntimeEmitter,
-  diagnostics: DiagnosticEmitter
+  diagnostics: DiagnosticEmitter,
+  budget: RunBudget,
+  executor: RequestExecutor
 ): Promise<string> {
   const { tools = allTools, events, cwd } = options
   const session = options.session!
@@ -356,56 +388,77 @@ async function runTurnLoop(
       },
     },
     session,
-    diagnostics
+    diagnostics,
+    executor
   )
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const ctx: ToolContext = {
     cwd: cwd ?? process.cwd(),
     ...(options.signal && { signal: options.signal }),
   }
-  let iterations = 0
-
-  while (iterations < MAX_ITERATIONS) {
+  while (true) {
     assertNotCancelled(options.signal)
-    iterations++
+    budget.consumeIteration()
     let response: Anthropic.Message
     for (let recovery = 0; ; recovery++) {
       emitter.emit({ type: 'phase', phase: 'preparing' })
       assertNotCancelled(options.signal)
       const request = await session.prepareRequest(messages, runtime)
       assertNotCancelled(options.signal)
-      let acceptingText = true
-      const requestSpan = diagnostics.request('model', request)
       try {
         emitter.emit({ type: 'phase', phase: 'requesting' })
         assertNotCancelled(options.signal)
-        const stream = options.signal
-          ? runtime.client.messages.stream(request, { signal: options.signal })
-          : runtime.client.messages.stream(request)
-        let streaming = false
-        stream.on('text', text => {
-          requestSpan.text(text)
-          if (!acceptingText || options.signal?.aborted) return
-          if (!streaming) {
-            streaming = true
-            emitter.emit({ type: 'phase', phase: 'streaming' })
-          }
-          if (options.signal?.aborted) return
-          emitter.emit({ type: 'text-delta', text })
-          notifyObserver(() => events?.onText?.(text))
-        })
-        // Partial stream events belong to display, not to the committed transcript.
-        response = await waitForAbort(stream.finalMessage(), options.signal)
-        requestSpan.complete(response)
+        response = await executor.run(
+          'model',
+          request,
+          async attempt => {
+            let acceptingText = true
+            let stopped = false
+            let streaming = false
+            const stream = runtime.client.messages.stream(request, {
+              signal: attempt.signal,
+              timeout: attempt.timeoutMs,
+              maxRetries: 0,
+            })
+            stream.on('streamEvent', event => {
+              if (event.type === 'message_stop') stopped = true
+            })
+            stream.on('text', text => {
+              if (!acceptingText || attempt.signal.aborted) return
+              attempt.span?.text(text)
+              if (!streaming) {
+                streaming = true
+                emitter.emit({ type: 'phase', phase: 'streaming' })
+              }
+              emitter.emit({ type: 'text-delta', text })
+              notifyObserver(() => events?.onText?.(text))
+            })
+            try {
+              const complete = await stream.finalMessage()
+              if (!stopped) throw new IncompleteStreamError()
+              return complete
+            } catch (error) {
+              if (
+                !stopped &&
+                error instanceof Anthropic.AnthropicError &&
+                /^(?:stream ended without producing a Message with role=assistant|request ended without sending any chunks)$/.test(
+                  error.message
+                )
+              )
+                throw new IncompleteStreamError()
+              throw error
+            } finally {
+              acceptingText = false
+            }
+          },
+          options.signal
+        )
         assertNotCancelled(options.signal)
         break
       } catch (error) {
-        requestSpan.fail(error, options.signal)
         assertNotCancelled(options.signal)
         if (!isContextOverflow(error) || recovery >= 2) throw error
         if (!(await session.recoverContext(messages, runtime))) throw error
-      } finally {
-        acceptingText = false
       }
     }
 
@@ -424,9 +477,11 @@ async function runTurnLoop(
         emitter,
         diagnostics,
         options.fileMutations,
-        options.diagnosticContext?.sessionId
+        options.diagnosticContext?.sessionId,
+        budget
       )
       messages.push({ role: 'user', content: toolResults })
+      budget.check()
       assertNotCancelled(options.signal)
       continue
     }
@@ -484,11 +539,4 @@ async function runTurnLoop(
     assertNotCancelled(options.signal)
     return text || notice || emptyNotice
   }
-
-  const limit = 'Error: Maximum iterations reached. The task may be too complex.'
-  messages.push({ role: 'assistant', content: `[Harness] ${limit}` })
-  emitter.emit({ type: 'notice', text: `[Harness] ${limit}` })
-  notifyObserver(() => events?.onText?.(`\n[Harness] ${limit}\n`))
-  assertNotCancelled(options.signal)
-  return limit
 }

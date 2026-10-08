@@ -2,7 +2,7 @@
 /**
  * zero2agent CLI 入口
  */
-import { Agent, buildSystemPrompt, terminalTool } from '@zero2agent/core'
+import { Agent, buildSystemPrompt, terminalTool, validateRunLimits } from '@zero2agent/core'
 import type { LoopEventHandlers } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import path from 'node:path'
@@ -20,6 +20,8 @@ import {
   formatCheckpointUsage,
 } from './checkpoint-view.js'
 import { safeText } from './display-text.js'
+import { RUN_LIMIT_FLAGS, limitValue, runLimitsFromEnv } from './run-options.js'
+import { requestNoticeLabel } from './runtime-state.js'
 
 // ── 环境变量 ───────────────────────────────────────
 
@@ -95,6 +97,10 @@ function resetStreamState() {
 }
 
 const events: LoopEventHandlers = {
+  onRequestNotice: notice => {
+    process.stdout.write(`\n${DIM}${requestNoticeLabel(notice)}${RESET}\n`)
+    hasStreamedText = false
+  },
   onText: text => {
     if (!hasStreamedText) {
       process.stdout.write('\n')
@@ -189,6 +195,7 @@ async function main() {
   loadLocalEnv()
 
   const args = process.argv.slice(2)
+  let limits = runLimitsFromEnv()
   let noCheckpoints = process.env.ZERO2AGENT_NO_CHECKPOINTS === '1'
   let checkpointAction: 'list' | 'diff' | 'undo' | 'recover' | 'stats' | 'prune' | undefined
   let checkpointId: string | undefined
@@ -205,7 +212,10 @@ async function main() {
   while (args[0]?.startsWith('--')) {
     const flag = args.shift()
     if (flag === '--') break
-    if (flag === '--no-checkpoints') noCheckpoints = true
+    if (flag && Object.hasOwn(RUN_LIMIT_FLAGS, flag)) {
+      const key = RUN_LIMIT_FLAGS[flag as keyof typeof RUN_LIMIT_FLAGS]
+      limits = validateRunLimits({ ...limits, [key]: limitValue(flag, args.shift()) })
+    } else if (flag === '--no-checkpoints') noCheckpoints = true
     else if (flag === '--confirm') {
       confirmCheckpoint = args.shift()
       if (!confirmCheckpoint || !/^[0-9a-f]{64}$/.test(confirmCheckpoint))
@@ -342,6 +352,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    limits,
     fileMutations: noCheckpoints ? undefined : checkpoints.capture,
     diagnostics: journal ? event => journal.diagnostic(event) : undefined,
     permissions: permissionOptionsFromEnv(

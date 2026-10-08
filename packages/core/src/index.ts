@@ -66,8 +66,10 @@ export type {
   ApprovalResponse,
 } from './permissions.js'
 
-export { TurnCancelledError } from './runtime.js'
-export type { RuntimeEvent } from './runtime.js'
+export { TurnCancelledError, RunBudgetError } from './runtime.js'
+export { DEFAULT_RUN_LIMITS, validateRunLimits } from './run-budget.js'
+export type { RunLimits } from './run-budget.js'
+export type { RuntimeEvent, RequestNotice } from './runtime.js'
 
 export { DiagnosticEmitter, diagnosticLabel, diagnosticNumber } from './diagnostics.js'
 export type { DiagnosticEvent, DiagnosticObserver, DiagnosticContext } from './diagnostics.js'

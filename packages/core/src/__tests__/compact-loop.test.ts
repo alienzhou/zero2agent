@@ -7,6 +7,7 @@ import type { CompactionEvent } from '../context-manager.js'
 import { createAnthropicClient } from '../llm/index.js'
 import { ContextBudget, type ContextRequest } from '../context-budget.js'
 import type { Tool } from '../tools/types.js'
+import { messageStream } from './helpers/message-stream.js'
 
 vi.mock('../llm/index.js', () => ({
   createAnthropicClient: vi.fn(),
@@ -41,14 +42,11 @@ function provider(
       stream: vi.fn((request: ContextRequest) => {
         requests.push(structuredClone(request))
         const next = replies.shift()
-        return {
-          on: vi.fn(),
-          finalMessage: async () => {
-            if (next instanceof Error) throw next
-            if (!next) throw new Error('Unexpected main request')
-            return next
-          },
-        }
+        return messageStream(async () => {
+          if (next instanceof Error) throw next
+          if (!next) throw new Error('Unexpected main request')
+          return next
+        })
       }),
       create: vi.fn(async (request: ContextRequest) => {
         summaries.push(structuredClone(request))
@@ -92,17 +90,13 @@ describe('compaction across the real loop and session', () => {
         }
       )
       client.messages.stream
-        .mockImplementationOnce(() => ({
-          on: vi.fn(),
-          finalMessage: async () => reply,
-        }))
-        .mockImplementationOnce(() => ({
-          on: vi.fn(),
-          finalMessage: async () => {
+        .mockImplementationOnce(() => messageStream(async () => reply))
+        .mockImplementationOnce(() =>
+          messageStream(async () => {
             await vi.waitFor(() => expect(signal).toBeDefined())
             return text('completed')
-          },
-        }))
+          })
+        )
       const options = { tools: [tool], context }
       expect(
         await (entry === 'static' ? Agent.run('task', options) : runLoop('task', options))
@@ -260,20 +254,17 @@ describe('compaction across the real loop and session', () => {
     client.messages.stream.mockImplementation(request => {
       requests.push(structuredClone(request))
       const index = requests.length
-      return {
-        on: vi.fn(),
-        finalMessage: async () => {
-          if (index === 1) return batch
-          if (index === 2) return tail
-          if (index === 3) {
-            tailRequest.resolve()
-            await failModel.promise
-            throw networkError
-          }
-          if (index === 4) return text('resumed without repeating tools')
-          throw new Error('Unexpected main request')
-        },
-      }
+      return messageStream(async () => {
+        if (index === 1) return batch
+        if (index === 2) return tail
+        if (index === 3) {
+          tailRequest.resolve()
+          await failModel.promise
+          throw networkError
+        }
+        if (index === 4) return text('resumed without repeating tools')
+        throw new Error('Unexpected main request')
+      })
     })
     const agent = new Agent({
       tools,
@@ -464,13 +455,14 @@ describe('compaction across the real loop and session', () => {
   it('rejects manual compaction while a normal model request is running', async () => {
     const { client } = provider([text('unused')])
     let finish!: (message: Anthropic.Message) => void
-    client.messages.stream.mockImplementationOnce(() => ({
-      on: vi.fn(),
-      finalMessage: () =>
-        new Promise(resolve => {
-          finish = resolve
-        }),
-    }))
+    client.messages.stream.mockImplementationOnce(() =>
+      messageStream(
+        () =>
+          new Promise(resolve => {
+            finish = resolve
+          })
+      )
+    )
     const agent = new Agent({ tools: [], context })
     const operation = agent.run('first')
     await vi.waitFor(() => expect(finish).toBeTypeOf('function'))

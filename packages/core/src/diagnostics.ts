@@ -4,6 +4,7 @@ import type Anthropic from '@anthropic-ai/sdk'
 import type { ContextRequest } from './context-budget.js'
 import type { RuntimeEvent } from './runtime.js'
 import { notifyObserver } from './runtime.js'
+import { RunBudgetError } from './runtime.js'
 
 export interface DiagnosticContext {
   sessionId?: string
@@ -18,6 +19,7 @@ export type DiagnosticError =
   | 'http'
   | 'network'
   | 'other'
+  | 'budget'
 
 /** Explicit metadata only. No prompts, tool arguments/results, headers or exception text. */
 export interface DiagnosticEvent {
@@ -29,6 +31,10 @@ export interface DiagnosticEvent {
   sessionId?: string
   operation?: 'turn' | 'compact'
   requestId?: string
+  logicalRequestId?: string
+  attempt?: number
+  delayMs?: number
+  limitReason?: string
   purpose?: RequestPurpose
   model?: string
   messageCount?: number
@@ -81,7 +87,7 @@ export function diagnosticNumber(value: unknown): number | undefined {
 export function diagnosticError(
   error: unknown,
   signal?: AbortSignal
-): Pick<DiagnosticEvent, 'errorKind' | 'httpStatus'> {
+): Pick<DiagnosticEvent, 'errorKind' | 'httpStatus' | 'limitReason'> {
   let status: number | undefined
   let name = ''
   let message = ''
@@ -99,26 +105,34 @@ export function diagnosticError(
     /* An exception object is untrusted data, not part of logging control. */
   }
   const errorKind: DiagnosticError =
-    signal?.aborted && signal.reason?.name !== 'TimeoutError'
-      ? 'cancelled'
-      : /timeout/i.test(name) || signal?.reason?.name === 'TimeoutError'
-        ? 'timeout'
-        : /abort|cancel/i.test(name)
-          ? 'cancelled'
-          : status === 401 || status === 403
-            ? 'auth'
-            : status === 429
-              ? 'rate-limit'
-              : /prompt is too long|context[_ ](?:length|overflow|window)|too many (?:input )?tokens/i.test(
-                    message
-                  )
-                ? 'context'
-                : status
-                  ? 'http'
-                  : /connection|network/i.test(name)
-                    ? 'network'
-                    : 'other'
-  return { errorKind, ...(status === undefined ? {} : { httpStatus: status }) }
+    error instanceof RunBudgetError
+      ? 'budget'
+      : signal?.aborted &&
+          signal.reason?.name !== 'TimeoutError' &&
+          signal.reason?.name !== 'RequestTimeoutError'
+        ? 'cancelled'
+        : /timeout/i.test(name) || signal?.reason?.name === 'TimeoutError'
+          ? 'timeout'
+          : /abort|cancel/i.test(name)
+            ? 'cancelled'
+            : status === 401 || status === 403
+              ? 'auth'
+              : status === 429
+                ? 'rate-limit'
+                : /prompt is too long|context[_ ](?:length|overflow|window)|too many (?:input )?tokens/i.test(
+                      message
+                    )
+                  ? 'context'
+                  : status
+                    ? 'http'
+                    : /connection|network|IncompleteStream/i.test(name)
+                      ? 'network'
+                      : 'other'
+  return {
+    errorKind,
+    ...(error instanceof RunBudgetError ? { limitReason: error.limitReason } : {}),
+    ...(status === undefined ? {} : { httpStatus: status }),
+  }
 }
 
 /** Captures identity once, so a late background summary keeps its original session/operation. */
@@ -210,10 +224,14 @@ export class DiagnosticEmitter {
       after: diagnosticNumber(event.after),
     })
   }
-  request(purpose: RequestPurpose, request: ContextRequest): RequestSpan {
+  request(
+    purpose: RequestPurpose,
+    request: ContextRequest,
+    identity?: { logicalRequestId: string; attempt: number }
+  ): RequestSpan {
     const requestId = randomUUID()
     if (purpose === 'model') this.modelRequestId = requestId
-    return new RequestSpan(this, requestId, purpose, request)
+    return new RequestSpan(this, requestId, purpose, request, identity)
   }
 }
 
@@ -226,7 +244,8 @@ export class RequestSpan {
     private emitter: DiagnosticEmitter,
     readonly requestId: string,
     private purpose: RequestPurpose,
-    request: ContextRequest
+    request: ContextRequest,
+    private identity?: { logicalRequestId: string; attempt: number }
   ) {
     emitter.emit('request', 'start', {
       requestId,
@@ -235,12 +254,25 @@ export class RequestSpan {
       messageCount: request.messages.length,
       toolCount: request.tools?.length ?? 0,
       maxOutputTokens: request.max_tokens,
+      ...identity,
     })
   }
   text(text: string): void {
     if (this.finished) return
     this.firstTextMs ??= Math.round(performance.now() - this.startedAt)
     this.textChars += text.length
+  }
+  get displayChars(): number {
+    return this.textChars
+  }
+  retry(delayMs: number, errorKind: DiagnosticError | undefined): void {
+    this.emitter.emit('request', 'retry', {
+      requestId: this.requestId,
+      purpose: this.purpose,
+      ...this.identity,
+      delayMs,
+      errorKind,
+    })
   }
   complete(response: Anthropic.Message | { input_tokens: number }): void {
     if (this.finished) return
@@ -249,6 +281,7 @@ export class RequestSpan {
     this.emitter.emit('request', 'completed', {
       requestId: this.requestId,
       purpose: this.purpose,
+      ...this.identity,
       durationMs: Math.round(performance.now() - this.startedAt),
       firstTextMs: this.firstTextMs,
       textChars: this.textChars,
@@ -269,6 +302,7 @@ export class RequestSpan {
     this.emitter.emit('request', details.errorKind === 'cancelled' ? 'cancelled' : 'error', {
       requestId: this.requestId,
       purpose: this.purpose,
+      ...this.identity,
       durationMs: Math.round(performance.now() - this.startedAt),
       firstTextMs: this.firstTextMs,
       textChars: this.textChars,

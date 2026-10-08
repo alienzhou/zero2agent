@@ -16,6 +16,8 @@ export const LOG_LIMITS = {
   list: 500,
 }
 const NUMBERS = [
+  'attempt',
+  'delayMs',
   'messageCount',
   'toolCount',
   'maxOutputTokens',
@@ -36,6 +38,8 @@ const NUMBERS = [
   'exitCode',
 ] as const
 const LABELS = [
+  'logicalRequestId',
+  'limitReason',
   'sessionId',
   'requestId',
   'model',
@@ -65,7 +69,7 @@ const EVENTS: Record<string, string[]> = {
     'terminal-error',
   ],
   operation: ['start', 'completed', 'cancelled', 'error'],
-  request: ['start', 'completed', 'cancelled', 'error'],
+  request: ['start', 'completed', 'cancelled', 'error', 'retry'],
   tool: ['metadata', 'pending', 'approval', 'running', 'completed', 'denied', 'error', 'cancelled'],
   permission: ['initial', 'resolved', 'boundary'],
   phase: ['preparing', 'requesting', 'streaming', 'tools', 'cancelling'],
@@ -159,6 +163,13 @@ function validateRecord(value: unknown, runId: string): LogRecord {
       !['model', 'summary', 'count'].includes(r.purpose ?? ''))
   )
     throw new Error('日志请求身份无效')
+  if (
+    r.logicalRequestId !== undefined &&
+    (!UUID.test(r.logicalRequestId) || !r.attempt || r.attempt > 11)
+  )
+    throw new Error('日志请求尝试身份无效')
+  if (r.event === 'retry' && (!r.logicalRequestId || r.delayMs === undefined || !r.errorKind))
+    throw new Error('日志重试证据不完整')
   const enums: Record<string, string[]> = {
     action: ['allow', 'ask', 'deny'],
     trigger: ['auto', 'manual', 'overflow'],
@@ -180,6 +191,7 @@ function validateRecord(value: unknown, runId: string): LogRecord {
       'http',
       'network',
       'other',
+      'budget',
     ],
   }
   for (const [key, values] of Object.entries(enums))
@@ -555,6 +567,10 @@ export function formatLog(report: LogReport): string {
         r.operationId && `op=${r.operationId}`,
         r.sessionId && `session=${r.sessionId}`,
         r.requestId && `req=${r.requestId}`,
+        r.logicalRequestId && `logical=${r.logicalRequestId}`,
+        r.attempt !== undefined && `attempt=${r.attempt}`,
+        r.delayMs !== undefined && `wait=${r.delayMs}ms`,
+        r.limitReason && `limit=${r.limitReason}`,
         r.purpose,
         r.model,
         r.toolName && `tool=${r.toolName}`,

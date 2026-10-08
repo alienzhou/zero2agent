@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
 import { extractTextContent, executeToolCalls, runLoop } from '../loop.js'
 import type { Tool, ToolContext } from '../tools/types.js'
+import { messageStream } from './helpers/message-stream.js'
 
 // 测试用的 ToolContext
 const testCtx: ToolContext = { cwd: '/tmp/test' }
@@ -131,12 +132,7 @@ const mockCreate = vi.mocked(createAnthropicClient)
  * 构建 mock 流对象，模拟 client.messages.stream() 的返回值
  */
 function buildMockStream(response: Anthropic.Message) {
-  return {
-    on: vi.fn(function (this: unknown) {
-      return this
-    }),
-    finalMessage: vi.fn(async () => response),
-  }
+  return messageStream(async () => response)
 }
 
 function buildMockClient(responses: Anthropic.Message[]) {
@@ -255,7 +251,7 @@ describe('runLoop', () => {
     expect(result).toBe('partial...')
   })
 
-  it('达到最大迭代次数时返回错误信息', async () => {
+  it('达到最大迭代次数时停止并报告预算错误', async () => {
     const noop: Tool = {
       permission: { effect: 'read' },
       name: 'noop',
@@ -268,8 +264,9 @@ describe('runLoop', () => {
     const client = buildMockClient(infiniteResponses)
     mockCreate.mockReturnValue(client)
 
-    const result = await runLoop('loop forever', { tools: [noop] })
-    expect(result).toMatch(/Maximum iterations/)
+    await expect(runLoop('loop forever', { tools: [noop] })).rejects.toThrow(
+      /Run budget stopped: iterations/
+    )
   })
 
   it('events.onText 通过 stream.on("text") 注册', async () => {
