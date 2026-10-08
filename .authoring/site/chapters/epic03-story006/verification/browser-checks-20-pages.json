@@ -1,7 +1,5 @@
 {
   "chapter": "epic03-story006",
-  "pageLimit": 18,
-  "includesCover": true,
   "browser": "154.0.8037.98",
   "pages": [
     {
@@ -13,7 +11,7 @@
     },
     {
       "file": "02-boundary.html",
-      "sha256": "df46f8f1f00de73acae84b9c82b7c5a1379e5b2a0919191a06e2f9ed9e4180d7",
+      "sha256": "37178c83c8e58a90f884d84d96368f96e42318a6a88336cbca7aae9d974a18b8",
       "overflow": [],
       "svgTextOverflow": [],
       "textOverlaps": []
@@ -117,15 +115,29 @@
       "textOverlaps": []
     },
     {
-      "file": "17-benchmark.html",
-      "sha256": "3dfe97244c2f30fa0bf2e23733d1322c8e53332cdf7d1b7c426b212016ed0034",
+      "file": "17-evidence.html",
+      "sha256": "e6329679a518d3fae85c6e3222cd4826c66a6a57b2328bff078b985a9740b2b5",
       "overflow": [],
       "svgTextOverflow": [],
       "textOverlaps": []
     },
     {
-      "file": "18-practice.html",
-      "sha256": "70bfcd27199eeebeedbc62ea9b13577961ff213dfbc4de132cbe3b4636e7bbe5",
+      "file": "18-benchmark.html",
+      "sha256": "215d28bbd4587ab8d7fc01f376c8c1eb1c65a2354f7f990c36fe8a5757e0ddf8",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "19-practice.html",
+      "sha256": "1c81ff6a728a72c06bd1a675627e6c5913181de28c14a54fcd038f8e199af2ed",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "20-next.html",
+      "sha256": "07ecde9a02c6d5ca773914160c2dd244e2219f05cd81db5547c6b4a09d7f0cb5",
       "overflow": [],
       "svgTextOverflow": [],
       "textOverlaps": []
@@ -137,7 +149,7 @@
         "width": 1440,
         "height": 1000
       },
-      "sections": 18,
+      "sections": 20,
       "overflow": false,
       "textOpen": true,
       "zoomOpen": true,
@@ -150,7 +162,7 @@
         "width": 390,
         "height": 844
       },
-      "sections": 18,
+      "sections": 20,
       "overflow": false,
       "textOpen": true,
       "zoomOpen": true,
@@ -161,7 +173,7 @@
   ],
   "failures": [],
   "sources": {
-    "author.cjs": "30e4c1c78f852dc240b1b2e9eb27f1511195c2bc32cde11bdc96960d09c7e32e",
+    "author.cjs": "e25b09a8af611d57a46479149ff1cf600a3fd73b5796fc523026b7bdbb2971f2",
     "course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e"
   },
   "passed": true

@@ -6,7 +6,7 @@
 
 ```bash
 git fetch origin --tags
-git switch --detach E03-S006-file-checkpoints
+git switch --detach E03-S006-file-checkpoints-18p
 pnpm install --frozen-lockfile
 pnpm build
 node scripts/e03-s006-checkpoint-demo.mjs

@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S006：文件 Checkpoint 与回退](./specs/E03-product-foundations/S006-file-checkpoints/README.md)为受控文件工具增加分块去重、压缩、差异预览、冲突检查与可恢复回退，不创建额外 Git 仓库。提供 [20 页图解课程](./docs/site.md)、[离线跟练](./specs/E03-product-foundations/S006-file-checkpoints/follow-along.md)和[空间实验](./researches/file-checkpoints/README.md)。本课为交付候选，尚未合入 main 或部署；分层结果与人工审阅状态见[验收清单](./specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md)。S005 已通过 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 合入 main。
+**最新更新**：[E03-S006：文件 Checkpoint 与回退](./specs/E03-product-foundations/S006-file-checkpoints/README.md)为受控文件工具增加分块去重、压缩、差异预览、冲突检查与可恢复回退，不创建额外 Git 仓库。提供 [18 页图解课程（含封面）](./docs/site.md)、[离线跟练](./specs/E03-product-foundations/S006-file-checkpoints/follow-along.md)和[空间实验](./researches/file-checkpoints/README.md)。本课为交付候选，尚未合入 main 或部署；分层结果与人工审阅状态见[验收清单](./specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md)。S005 已通过 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 合入 main。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |

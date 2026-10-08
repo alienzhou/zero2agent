@@ -81,12 +81,14 @@ git checkout main
 
 ### E03-S006-file-checkpoints（交付候选）
 
+2026-10-08 课程修订：按用户小红书单篇 18 页上限，将 20 页合并为 18 页（含封面）。文件/会话/日志边界合为一页，跟练与下一阶段合为末页；新增制作规范和页数检查。原固定 Tag 保留，18 页修订使用 `E03-S006-file-checkpoints-18p`。
+
 2026-10-08，完成 [文件 Checkpoint 与回退](./specs/E03-product-foundations/S006-file-checkpoints/README.md)实现和课程；尚未合入 main、人工审阅或部署网站。固定版本与验证证据见[验收页](./specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md)。
 
 - Core 在权限后通过 awaited 控制接口保护 write_file、replace_in_file、delete 的声明路径；宿主保存实际 before/after 文件版本，不扫描整个工作区、不创建 shadow/shallow Git。
 - 内容定义分块、SHA-256 去重及压缩降低局部修改历史的增长；限制空间与数量，保留 pending 证据，按共享引用回收。提供含真实空间、耗时和恢复哈希的[可复现基准](./researches/file-checkpoints/README.md)。
 - TUI 列表、差异、两步确认与无密钥 CLI 支持安全回退；预览令牌、全路径冲突检查、恢复意图及反向记录处理过期确认、部分失败与撤销回退。原始对话、审批、压缩、会话、日志和人工终端路径保留。
-- 新增存储、故障、并发、真实 SIGKILL/PTY、真实模型文件效果验证，以及 20 页图解、五篇 Spec、跟练、两篇延伸、研究与复盘；AGENTS.md 记录长期协议与证据边界。
+- 新增存储、故障、并发、真实 SIGKILL/PTY、真实模型文件效果验证，以及 18 页图解（含封面）、五篇 Spec、跟练、两篇延伸、研究与复盘；AGENTS.md 记录长期协议与证据边界。
 - 范围为每次受控文件工具调用；不自动撤销 shell、人工终端或外部系统，不提供整轮 rewind。空间收益不代表在同等保证下速度更快。
 
 

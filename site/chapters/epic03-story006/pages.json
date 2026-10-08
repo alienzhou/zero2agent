@@ -1,12 +1,12 @@
 {
   "title": "Zero2Agent · E03-S006 文件 Checkpoint 与回退",
-  "date": "2026-10-07",
+  "date": "2026-10-08",
   "draft": false,
   "publicationStatus": "unpublished",
   "width": 1080,
   "height": 1440,
-  "maxImages": 20,
-  "edition": "v1-file-checkpoints",
+  "maxImages": 18,
+  "edition": "v2-18-pages",
   "pages": [
     {
       "file": "01-cover.html",
@@ -19,11 +19,13 @@
     },
     {
       "file": "02-boundary.html",
-      "title": "文件退回去了，世界并没有一起倒退",
+      "title": "文件退回去了，其他状态怎样处理？",
       "number": 2,
       "sources": [
         "D01",
-        "S01"
+        "S01",
+        "S03",
+        "T03"
       ]
     },
     {
@@ -152,36 +154,20 @@
       ]
     },
     {
-      "file": "17-evidence.html",
-      "title": "会话、日志、Checkpoint，各保留自己的事实",
-      "number": 17,
-      "sources": [
-        "S03",
-        "T03"
-      ]
-    },
-    {
-      "file": "18-benchmark.html",
+      "file": "17-benchmark.html",
       "title": "占用降下来，不代表每项指标都更快",
-      "number": 18,
+      "number": 17,
       "sources": [
         "B01"
       ]
     },
     {
-      "file": "19-practice.html",
+      "file": "18-practice.html",
       "title": "先真的改一个文件，再验证能退回和重做",
-      "number": 19,
+      "number": 18,
       "sources": [
         "D02",
-        "T03"
-      ]
-    },
-    {
-      "file": "20-next.html",
-      "title": "让错误有机会修正，也让保证有明确边界",
-      "number": 20,
-      "sources": [
+        "T03",
         "D01",
         "D03"
       ]

@@ -147,6 +147,8 @@ Zero2Agent 的课程内容在本仓库闭环维护。HTML、CSS 与小节顺序�
 
 遵循 [.authoring/site/README.md](./.authoring/site/README.md)：修改编辑源后运行 pnpm site:build 和 pnpm site:check，再通过 pnpm site:preview 检查 PC 与 H5，包括逐页可读性、导航、图解放大和文字内容。课程涉及交互界面时，还须验证实际交互与对应源码，不能只检查静态截图。只部署 site/；生成源与部署产物在同一提交保存。
 
+面向小红书的单篇图文课程最多 **18 页（包括封面）**，即最多 1 页封面加 17 页内容。内容计划先分配页数，超出时合并相近主题或下沉到跟练/延伸阅读，不缩小字号硬塞。新课与重制稿须同时检查生成源、pages.json 和实际 HTML 总数；网站历史长章不代表可直接单篇发布。
+
 封面脱离课程网站后也要能辨认「从零到一做 Agent」的系列主题；遵循[封面层级与缩略图检查规范](./.authoring/site/templates/cover.md)，不要让单课功能标题替代系列身份。
 
 ---

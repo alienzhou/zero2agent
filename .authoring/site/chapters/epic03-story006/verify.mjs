@@ -19,7 +19,8 @@ const browser = await chromium.launch({headless: true, ...(process.env.CHROME_PA
 const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'pages.json')));
 const selectedPages = manifest.pages.filter(page => !process.env.COURSE_QA_PAGE || page.file === process.env.COURSE_QA_PAGE);
 if (!selectedPages.length) throw new Error('COURSE_QA_PAGE does not match a manifest page');
-const results = {chapter, browser: browser.version(), pages: [], reader: [], failures: []};
+if (manifest.pages.length > 18 || manifest.maxImages !== 18) throw new Error('Expected at most 18 pages including cover');
+const results = {chapter, pageLimit: 18, includesCover: true, browser: browser.version(), pages: [], reader: [], failures: []};
 const hash = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 results.sources = Object.fromEntries(['author.cjs'].map(file => [file, hash(new URL(file, import.meta.url))]));
 results.sources['course.css'] = hash(path.join(dir, 'course.css'));
@@ -95,7 +96,7 @@ try {
       const targetReachable = await reader.locator(`[id="${entry.pages[8].id}"]`).evaluate(el => Math.abs(el.getBoundingClientRect().top) < 170);
       const check = {viewport, sections: await reader.locator('.lesson-section').count(), overflow, textOpen, zoomOpen, zoomClosed, targetReachable, errors};
       results.reader.push(check);
-      if (overflow || !textOpen || !zoomOpen || !zoomClosed || !targetReachable || errors.length || check.sections !== 20) results.failures.push(`reader-${viewport.width}`);
+      if (overflow || !textOpen || !zoomOpen || !zoomClosed || !targetReachable || errors.length || check.sections !== manifest.pages.length) results.failures.push(`reader-${viewport.width}`);
       await reader.close();
     }
   }

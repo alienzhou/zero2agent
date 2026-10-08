@@ -117,7 +117,7 @@
       "epic": "epic03",
       "title": "文件 Checkpoint 与回退",
       "description": "用内容分块、压缩去重和有界存储保护文件修改，预览冲突后回退，并正确处理未结算状态。",
-      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S006-file-checkpoints/specs/E03-product-foundations/S006-file-checkpoints"
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S006-file-checkpoints-18p/specs/E03-product-foundations/S006-file-checkpoints"
     }
   ]
 }

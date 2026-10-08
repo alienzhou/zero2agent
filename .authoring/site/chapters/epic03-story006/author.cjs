@@ -23,9 +23,10 @@ line('M236 469V533H476V583',C.green,true)+line('M718 469V533H476',C.green)+
 box(123,606,706,140,C.greenBg,C.green)+t(476,664,'只保存 A、B、C、D 四个块',38,C.green,700,'middle')+t(476,718,'预览 → 检查冲突 → 回退',32,C.ink,550,'middle')),
 '教学示意：实际块按内容分界。只捕获受控文件工具，任意 shell 与外部副作用不在范围内。',['S01','S02'],'cover');
 
-page('02-boundary.html','先划清恢复范围','文件退回去了，\n世界并没有一起倒退','会话、文件、进程与外部系统是不同状态。',svg('文件回退只作用于受控路径，历史证据保留，进程与外部服务不随之撤销',
-[[70,'文件内容与权限','恢复捕获的 before 版本','green'],[248,'会话与工具回执','保留历史，提醒重新读取文件','ink'],[426,'命令与人工终端','不捕获任意 shell 的改动','amber'],[604,'外部 API 与服务','没有文件快照能撤销已发请求','red']].map(([y,a,b,c],i)=>num(27,y,i+1)+t(84,y+10,a,38,C[c],700)+t(84,y+75,b,31,C.muted)+line(`M84 ${y+119}H952`,C.line)).join('')),
-'本课按一次文件工具调用建立记录，不把它命名为完整工作区的时间点。/new、取消和恢复会话仍不会回退文件。',['D01','S01']);
+page('02-boundary.html','先划清恢复范围','文件退回去了，\n其他状态怎样处理？','文件、会话与日志关联；进程和外部状态不随之回退。',svg('文件清单保存前后版本，会话保留工具调用回执并追加恢复事实，日志只记录元信息，命令进程与外部请求不被回退',
+[[66,'文件 Checkpoint','保存 before / after，只恢复受控路径','green'],[230,'会话与工具回执','保留原史，追加恢复事实并重新读文件','ink'],[394,'运行日志','调用 ID 关联元信息，不写入文件正文','ink'],[558,'命令、人工终端与外部服务','不捕获任意 shell，也不撤销外部请求','red']].map(([y,a,b,c],i)=>num(27,y,i+1)+t(84,y+10,a,37,C[c],700)+t(84,y+75,b,30,C.muted)+line(`M84 ${y+118}H952`,C.line)).join('')+
+t(0,756,'按一次文件工具调用记录，不是整轮时间旅行。',31,C.green,650)),
+'三类记录通过 operationId / toolCallId 关联。独立 CLI 回退不改写其他会话；/new、取消与恢复会话也不会回退文件。',['D01','S01','S03','T03']);
 
 page('03-options.html','比较存储方案','空间小、保存快、恢复稳，\n往往需要取舍','先看工作负载，再选存储结构。',svg('整仓副本、隐藏Git、文本补丁和分块内容寻址四种设计对比',
 [[67,'整仓副本','无关文件也复制；空间随仓库增长。'],[236,'隐藏 Git 仓库','有成熟对象模型；仍需扫描与维护。'],[405,'仅存文本补丁','小改动紧凑；依赖基础版本与补丁链。'],[574,'按路径分块 CAS','只读涉及文件；块可复用，校验有成本。']].map(([y,a,b],i)=>num(28,y,i+1)+t(85,y+12,a,37,i===3?C.green:C.ink,700)+t(85,y+75,b,29,C.muted)+line(`M85 ${y+125}H952`,C.line)).join('')),
@@ -105,28 +106,17 @@ page('16-cli.html','无密钥也能恢复','把回退拆成\n预览和确认两�
 [[58,'--checkpoints','列出当前工作区的记录'],[200,'--checkpoint UUID','查看保存的 before / after 差异'],[342,'--undo UUID','打印回退计划与确认令牌'],[484,'--undo UUID --confirm HASH','重新校验令牌并执行'],[626,'--checkpoint-stats','逻辑量 / 存储量 / 分配占用']].map(([y,a,b])=>t(0,y,a,30,C.ink,700,'start',true)+t(0,y+60,b,30,C.muted)+line(`M0 ${y+102}H952`,C.line)).join('')),
 '--recover UUID 处理未结算记录；--checkpoint-prune 清理过期历史。命令返回前完成文件操作，不会调用模型、旧工具或恢复旧进程。',['S03','T03']);
 
-page('17-evidence.html','关联但不混合','会话、日志、Checkpoint，\n各保留自己的事实','通过调用身份关联，避免把文件正文写进日志。',svg('同一toolCallId关联模型历史工具回执诊断元信息和beforeafter文件清单，回退后添加已发生文件恢复语义事实',
-chip(224,16,504,'operationId + toolCallId')+
-line('M476 88V151H148V205',C.green,true)+line('M476 151V205',C.green,true)+line('M476 151H804V205',C.green,true)+
-[[0,'会话','调用与回执'],[330,'运行日志','起止与耗时'],[660,'Checkpoint','文件前后像']].map(([x,a,b])=>box(x,226,292,197,C.white,C.line)+t(x+146,297,a,34,C.ink,700,'middle')+t(x+146,371,b,28,C.muted,500,'middle')).join('')+
-box(0,530,952,227,C.greenBg,C.green)+t(29,595,'回退后，旧工具回执仍是历史证据。',35,C.green,700)+ls(29,658,['当前交互会话追加一次恢复事实说明。','下一轮重新读取文件，避免使用过期内容。'],31,C.ink,400,'start',61)),
-'文件回退不删除或重写旧会话。无密钥独立 CLI 回退不替其他进程改写会话；其他运行中的写入者仍需由用户协调。',['S03','T03']);
-
-page('18-benchmark.html','用数据检验取舍','占用降下来，\n不代表每项指标都更快','4 MiB 高熵文件，连续 20 次前部插入。',svg('三个柱形条显示全量文件副本160MiB整文件压缩CAS84MiB分块CAS约5.7MiB，保存耗时不做同保证横比',
+page('17-benchmark.html','用数据检验取舍','占用降下来，\n不代表每项指标都更快','4 MiB 高熵文件，连续 20 次前部插入。',svg('三个柱形条显示全量文件副本160MiB整文件压缩CAS84MiB分块CAS约5.7MiB，保存耗时不做同保证横比',
 [[103,'整文件副本',790,'160.0 MiB'],[303,'整文件压缩 CAS',414,'84.0 MiB'],[503,'内容分块 CAS',29,'约 5.7 MiB']].map(([y,a,w,b],i)=>t(0,y,a,34,C.ink,700)+box(0,y+30,w,51,i===2?C.green:C.soft,i===2?C.green:C.line,0)+t(950,y+70,b,30,i===2?C.green:C.muted,650,'end')).join('')+
 ls(0,695,['本机分块保护保存中位约 0.16 秒。','基线无同等校验与同步保证，不作吞吐胜负。'],29,C.muted,400,'start',55)),
 '这是首轮固定语料实测，数值随环境变化；分配占用约 6.0 MiB。未测 Git pack、网络卷和断电，完整参数及重跑结果见基准 JSON。',['B01']);
 
-page('19-practice.html','从效果开始跟练','先真的改一个文件，\n再验证能退回和重做','无需密钥；使用生产 SDK 和真实文件工具。',
+page('18-practice.html','跟练与下一阶段','先真的改一个文件，\n再验证能退回和重做','无需密钥；真实文件闭环收束 Epic 3。',
 '<div class="terminal" data-block><p class="mini">构建后运行 · 临时目录自动清理</p><pre>node scripts/e03-s006-checkpoint-demo.mjs\nnode scripts/e03-s006-checkpoint-demo.mjs --tui</pre></div>'+svg('练习步骤是执行修改观察差异回退再撤销回退最后用手工修改制造冲突',
-[[65,'A 修改 settings.txt','light → dark，核对真实字节。'],[212,'B 预览与回退','确认令牌后恢复 light；再撤销回退。'],[359,'C 制造手工修改','改成 human，旧令牌必须失败。']].map(([y,a,b],i)=>num(28,y,i+1)+t(84,y+11,a,36,C.ink,700)+t(84,y+72,b,30,C.muted)).join('')+t(0,537,'跟练固定 Tag：E03-S006-file-checkpoints',30,C.green,650),578),
-'离线夹具与真实模型验收分开。不能只看模型说“修改成功”，还要验证文件字节、历史记录与无新增请求。',['D02','T03']);
+[[65,'A 修改 settings.txt','light → dark，核对真实字节。'],[212,'B 预览与回退','确认令牌后恢复 light；再撤销回退。'],[359,'C 制造手工修改','改成 human，旧令牌必须失败。']].map(([y,a,b],i)=>num(28,y,i+1)+t(84,y+11,a,36,C.ink,700)+t(84,y+72,b,30,C.muted)).join('')+t(0,537,'固定 Tag：E03-S006-file-checkpoints-18p',30,C.green,650),578),
+'核对文件字节与无新增请求；离线夹具不等于真实模型验收。Epic 3 已串起可见、可控、可续、可查、可退；下一阶段为 Epic 4 健壮性与上下文管理（规划）。',['D02','T03','D01','D03']);
 
-page('20-next.html','从产品能力走向健壮性','让错误有机会修正，\n也让保证有明确边界','Epic 3 的最后一课，把恢复责任讲清楚。',svg('可见可控可续可查可退五项基础产品能力汇合，下一阶段计划健壮性和上下文管理，继续处理一致性成本和质量',
-[[0,'可见'],[197,'可控'],[394,'可续'],[591,'可查'],[788,'可退']].map(([x,s])=>box(x,51,164,105,C.greenBg,C.green)+t(x+82,118,s,40,C.green,700,'middle')).join('')+
-box(0,254,952,196,C.white,C.ink)+t(29,320,'本课得到：有界、可查验的文件恢复',39,C.ink,700)+t(29,393,'保留证据 · 不覆盖后续修改 · 不重放工具',30,C.muted)+
-box(0,555,952,216,C.ink,C.ink)+t(29,615,'下一阶段 · Epic 4（规划）',31,C.paper,650)+t(29,686,'健壮性与上下文管理',43,C.paper,700)+t(29,742,'异常、长期运行与更严格的质量验证。',29,C.paper)),
-'文件回退不是外部系统事务，也不是版本控制替代品。延伸阅读继续讨论补丁链、分块、文件系统竞争与恢复协议。',['D01','D03']);
+if(pages.length > 18) throw new Error('Single image post allows at most 18 pages, including cover');
 for(const [i,p] of pages.entries()){
  const number=String(i+1).padStart(2,'0');
  const header=`<header class="page-header"><span>Zero2Agent · ${p.section}</span><span class="page-number">${number}</span></header>`;
@@ -135,4 +125,4 @@ for(const [i,p] of pages.entries()){
  const inner=i===0?`<div class="cover-frame"><header class="page-header"><span>Zero2Agent · 从循环到产品</span><span class="page-number">E03-S006</span></header><div class="series-masthead" data-block><h1 class="series-title">从零到一做 <span>Agent</span></h1><p class="series-description" data-prose>亲手实现 Coding Agent · 开源实战课程</p><h2 class="lesson-title">${esc(p.section)}</h2><p class="lesson-promise" data-prose>改错可退回，存储有上限</p></div><div class="series-body">${p.body}<p class="explain" data-block data-prose>${esc(p.note)}</p></div><div class="cover-tags"><span>工程实战</span><span>交互设计</span><span>开源课程</span></div></div>`:header+heading+content;
  fs.writeFileSync(p.file,`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${esc(p.title.replaceAll('\n',''))}</title><link rel="stylesheet" href="course.css"></head><body><main class="sheet ${p.extra}${i===0?' series-cover':''}" data-page="${number}">${inner}</main></body></html>\n`);
 }
-fs.writeFileSync('pages.json',JSON.stringify({title:'Zero2Agent · E03-S006 文件 Checkpoint 与回退',date:'2026-10-07',draft:false,publicationStatus:'unpublished',width:1080,height:1440,maxImages:20,edition:'v1-file-checkpoints',pages:pages.map((p,i)=>({file:p.file,title:p.title.replaceAll('\n',''),number:i+1,sources:p.sources}))},null,2)+'\n');
+fs.writeFileSync('pages.json',JSON.stringify({title:'Zero2Agent · E03-S006 文件 Checkpoint 与回退',date:'2026-10-08',draft:false,publicationStatus:'unpublished',width:1080,height:1440,maxImages:18,edition:'v2-18-pages',pages:pages.map((p,i)=>({file:p.file,title:p.title.replaceAll('\n',''),number:i+1,sources:p.sources}))},null,2)+'\n');

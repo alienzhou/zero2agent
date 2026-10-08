@@ -17,3 +17,7 @@
 最终门禁 `8fde2fe`：575 离线通过 / 56 默认跳过；另外 6 项真实服务通过 / 0 跳过。build/types/format/whitespace、演示、终端恢复及课程 QA 通过；lint 44 warnings / 0 errors。验收 SHA-256 绑定代码与测试，后续交付提交只变文档/附件。
 
 人工审阅未完成；未合入 main、未部署。macOS 一个平台，不声称网络文件系统、断电或任意外部写入者隔离已验证。主检出 .discuss/.snapshot.yaml 与 review.md 的用户修改保留。
+
+## 2026-10-08 页数修订
+
+用户明确小红书单篇最多 18 页（含封面）。本课合并为 18 页，P02 合并状态关联与边界，P18 合并跟练与后续规划；AGENTS.md、制作规范、模板、检查脚本同步。新课程 QA 覆盖 18 页及 PC/H5，原 20 页报告留存。`E03-S006-file-checkpoints` 保留初版，新增 `E03-S006-file-checkpoints-18p` 固定修订版；PR #22 继续为 draft，未合入或部署。

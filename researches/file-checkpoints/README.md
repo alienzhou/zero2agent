@@ -14,7 +14,7 @@
 
 ## 实测
 
-[benchmark.json](./acceptance/benchmark.json)保存最后一轮；[benchmark-first.json](./acceptance/benchmark-first.json)保存课程 P18 引用的第一轮。macOS arm64、Node 22.15.1，固定种子 4 MiB 高熵数据，连续 20 次前部插入 30 字节，另有 1000 个无关 4 KiB 文件验证范围。
+[benchmark.json](./acceptance/benchmark.json)保存最后一轮；[benchmark-first.json](./acceptance/benchmark-first.json)保存课程 P17 引用的第一轮。macOS arm64、Node 22.15.1，固定种子 4 MiB 高熵数据，连续 20 次前部插入 30 字节，另有 1000 个无关 4 KiB 文件验证范围。
 
 三个存储模式都只记录目标文件：前后整文件副本、整文件压缩 CAS、生产内容分块 CAS。基准确认恢复后完整哈希，不只是计时。全目录副本量仅按公式估算，未实际跑；Git pack、reflink 和其他文件系统未测。
 
