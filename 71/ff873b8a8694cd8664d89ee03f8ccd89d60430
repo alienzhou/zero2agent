@@ -1,0 +1,25 @@
+.vibecoding/2026-10-08/e04-course-plan/learnings.md
+  s_58249cd92a0ae1::t_3adacda6052fbf 7
+.vibecoding/2026-10-08/e04-course-plan/prompt.md
+  s_58249cd92a0ae1::t_3adacda6052fbf 6-11
+.vibecoding/2026-10-08/e04-course-plan/dialogue.md
+  s_58249cd92a0ae1::t_3adacda6052fbf 16-23
+.discuss/2026-10-08/e04-course-plan/outline.md
+  s_58249cd92a0ae1::t_3adacda6052fbf 3,9-14,23,27-30,32,34,38,40-42,46-48,50,52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71ff873b8a8694cd8664d89ee03f8ccd89d60430",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
