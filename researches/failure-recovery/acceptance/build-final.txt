@@ -1,0 +1,13 @@
+
+> zero2agent@0.0.0 build /Users/zhouhongxuan/program/works/zero2agent-e04-s001
+> pnpm -r build
+
+Scope: 5 of 6 workspace projects
+packages/cdp-debug build$ tsc
+packages/shared build$ tsc
+packages/shared build: Done
+packages/cdp-debug build: Done
+packages/core build$ tsc
+packages/core build: Done
+packages/tui build$ tsc
+packages/tui build: Done

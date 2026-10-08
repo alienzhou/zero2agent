@@ -6,7 +6,13 @@ import type {
   LoopEventHandlers,
   TerminalInterruptController,
 } from '@zero2agent/core'
-import { appendEntry, compactionLabel, initialState, reduceRuntime } from './runtime-state.js'
+import {
+  appendEntry,
+  compactionLabel,
+  initialState,
+  reduceRuntime,
+  applyRequestNotice,
+} from './runtime-state.js'
 import type { TimelineEntry } from './runtime-state.js'
 import { clipText, graphemes, safeText, textWidth, wrapText } from './display-text.js'
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
@@ -139,6 +145,10 @@ export class RuntimeTui {
   }
 
   readonly events: LoopEventHandlers = {
+    onRequestNotice: notice => {
+      this.state = applyRequestNotice(this.state, notice)
+      this.schedule()
+    },
     onEvent: event => {
       this.state = reduceRuntime(this.state, event)
       this.schedule()

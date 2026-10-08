@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
+import { messageStream } from './helpers/message-stream.js'
 import { Agent } from '../agent.js'
 import { runLoop } from '../loop.js'
 import { Session } from '../session.js'
@@ -44,16 +45,16 @@ function deferred<T>() {
 }
 function transport(...replies: Array<Anthropic.Message | Promise<Anthropic.Message>>) {
   const texts: Array<(text: string) => void> = []
-  const stream = vi.fn((_request: unknown, _options?: { signal?: AbortSignal }) => ({
-    on: (_name: string, listener: (text: string) => void) => {
-      texts.push(listener)
-    },
-    finalMessage: async () => {
-      const next = replies.shift()
-      if (!next) throw new Error('Unexpected model request')
-      return next
-    },
-  }))
+  const stream = vi.fn((_request: unknown, _options?: { signal?: AbortSignal }) =>
+    messageStream(
+      async () => {
+        const next = replies.shift()
+        if (!next) throw new Error('Unexpected model request')
+        return next
+      },
+      listener => texts.push(listener)
+    )
+  )
   const client = { messages: { stream, create: vi.fn(), countTokens: vi.fn() } }
   vi.mocked(createAnthropicClient).mockReturnValue(client as unknown as Anthropic)
   return { stream, texts, client }

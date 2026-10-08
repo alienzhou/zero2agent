@@ -47,6 +47,18 @@ git checkout main
 
 ---
 
+## E04-S001：失败恢复与运行预算（2026-10-08）
+
+[课程](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) · [跟练](./specs/E04-reliability-and-context/S001-failure-recovery/follow-along.md) · [复盘](./retros/E04-S001-failure-recovery.md) · [验收](./specs/E04-reliability-and-context/S001-failure-recovery/details/03-verification-checklist.md)
+
+模型请求遇到临时故障后有限恢复，已经完成的工具和文件效果不重放。SDK自动重试关闭，主模型、摘要和计数共用尝试预算；HTTP/SSE完整结束后才提交回复。工具修正重新授权，批次额度耗尽仍保留完整配对，重复失败/拒绝停止。
+
+单次、管道、plain和TUI提供统一配置、草稿与重试显示，诊断记录关联逻辑请求和每次attempt。18页课程以故障时间线、日志拆解、回执单和预测实验讲解。真实服务故障注入、生产CLI/PTY、文件效果及原有日志/回退回归分别取证，范围见验收页。
+
+状态：可审阅分支，未合入main、未部署网站。课程固定版本为 `E04-S001-failure-recovery`，以实际远端Tag为准；人工审查与合并是后续发布步骤。
+
+---
+
 ## 进度跟踪
 
 ### Epic 1: 基础 POC

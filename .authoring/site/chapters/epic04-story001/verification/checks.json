@@ -1,0 +1,168 @@
+{
+  "chapter": "epic04-story001",
+  "pageLimit": 18,
+  "includesCover": true,
+  "browser": "154.0.8037.98",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "sha256": "1cc343ff9c467c50cdadbeb48d5d5fd2edb11324494a4e3b34f4b02e7b6c59a8",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "02-written-before-failure.html",
+      "sha256": "566273db8e99bc8f0825b2bd9fc7df12d000484a73431a335b7b83931de56b59",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "03-three-failures.html",
+      "sha256": "d204849e6be5fa026962b23f9bc15322d39d7130bdf36260bd900105a410bf5b",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "04-error-matrix.html",
+      "sha256": "31fda4b655a7ddc3b89bc57b98e7395a30c0e5fa6a06e02363e72f5c995c7aa4",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "05-one-retry-owner.html",
+      "sha256": "75ce105ce7b830b413176044c4ef2af22bb48f122e740578002ebea5a4303869",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "06-attempt-identity.html",
+      "sha256": "4045a761d49da9b9fa9d9ecee40a2471019a76edadc12aab626e924d4b5910f0",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "07-backoff.html",
+      "sha256": "3df9ff6d91a65205a68d9209e894616ac353a440086c78c174bb052b9ed8dbfb",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "08-timeouts.html",
+      "sha256": "5a6843acf33d9a6816862e83e2c187c020e5bdf8cd742c818f3d252cc082ffc6",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "09-cancel-wait.html",
+      "sha256": "60749e9ef41bd913de14331c93f8aaedce6a6662de3e89035a430b6758a4cedc",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "10-stream-end.html",
+      "sha256": "9a7947d458eec5ef3a46d06796712f73233faa6b3a17773747163d6d461de960",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "11-tool-correction.html",
+      "sha256": "3da46457dd5ee0b9ab9230df66e2ce6a7d6cdae81663d30150464bad890b1475",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "12-approval.html",
+      "sha256": "0983818ce1ffd39d9e2d86a42ec2a670b386665a1b56ecef5cf5b0ed31f70b69",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "13-budgets.html",
+      "sha256": "87b7161b636d8fd624b42cf5f930f4d6ff76a45b6c6364970829ae3160c8c44a",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "14-batch-pairing.html",
+      "sha256": "c77b0a3d42febf3e1a292a47cd8171a8ecaff1d514e0f060c23bc254849e4afc",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "15-native-outcomes.html",
+      "sha256": "3c7a80fc653bb8b19d57187dc64fe55e6094f2c305f2ea58e55df694356661c5",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "16-settlement.html",
+      "sha256": "b767d109292093fe283a35f07c5669d1bebe32a59df9bbc3ac5f80be2932cdde",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "17-configuration.html",
+      "sha256": "8411dc5f326ddbec0d891d8a41121a72b7732f35689957eecac9e700105b6ac9",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "18-practice.html",
+      "sha256": "ef69654cbd18bf6ac07c6fd457fe7b6ddf1199a1b902c947a114460ac1dd27e5",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sections": 18,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sections": 18,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    }
+  ],
+  "failures": [],
+  "sources": {
+    "author.cjs": "5f0104a1c19363f5c74ea312323f3df17675709180434fbddce79ceb234b537b",
+    "course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e"
+  },
+  "passed": true
+}

@@ -1,6 +1,7 @@
 import type { DiagnosticEmitter } from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ContextBudget, ContextBudgetError, type ContextRequest } from './context-budget.js'
+import type { RequestExecutor } from './request-executor.js'
 
 export type ContextSummarizer = (
   messages: Anthropic.MessageParam[],
@@ -72,7 +73,8 @@ export function createContextSummarizer(
   client: Anthropic,
   model: string,
   budget: ContextBudget,
-  diagnostics?: DiagnosticEmitter
+  diagnostics?: DiagnosticEmitter,
+  executor?: RequestExecutor
 ): ContextSummarizer {
   return async (messages, signal) => {
     signal.throwIfAborted()
@@ -86,7 +88,7 @@ export function createContextSummarizer(
     const countRequest = async (request: ContextRequest): Promise<number> => {
       signal.throwIfAborted()
       if (++counts > 2048) throw new ContextBudgetError('Summary token-count call budget exhausted')
-      return budget.count(request, client, signal, diagnostics)
+      return budget.count(request, client, signal, diagnostics, executor)
     }
     const count = async (text: string): Promise<boolean> => {
       return (
@@ -143,13 +145,23 @@ export function createContextSummarizer(
           const timeout = AbortSignal.timeout(budget.timeoutMs)
           const timed = AbortSignal.any([signal, timeout])
           const summaryRequest = requestFor(model, budget, piece)
-          const span = diagnostics?.request('summary', summaryRequest)
+          const span = executor ? undefined : diagnostics?.request('summary', summaryRequest)
           try {
-            const response = await client.messages.create(summaryRequest, {
-              maxRetries: 0,
-              timeout: budget.timeoutMs,
-              signal: timed,
-            })
+            const send = (signal: AbortSignal): Promise<Anthropic.Message> =>
+              client.messages.create(summaryRequest, {
+                maxRetries: 0,
+                timeout: budget.timeoutMs,
+                signal,
+              })
+            const response = executor
+              ? await executor.run(
+                  'summary',
+                  summaryRequest,
+                  attempt => send(attempt.signal),
+                  timed,
+                  budget.timeoutMs
+                )
+              : await send(timed)
             span?.complete(response)
             timeout.throwIfAborted()
             timed.throwIfAborted()

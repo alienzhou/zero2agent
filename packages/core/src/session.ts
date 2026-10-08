@@ -2,6 +2,7 @@ import type Anthropic from '@anthropic-ai/sdk'
 import { ContextManager, type CompactionRuntime } from './context-manager.js'
 import { ContextBudget, type ContextOptions, type ContextRequest } from './context-budget.js'
 import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
+import { RunBudgetError } from './runtime.js'
 
 const INTERRUPTED =
   '[Harness] This turn was interrupted. Completed tool results are retained; no file changes were rolled back. Re-check the workspace before continuing.'
@@ -98,7 +99,10 @@ export class Session {
       return await execute(messages)
     } catch (error) {
       // Keep completed tool evidence, but never inject raw transport errors into context.
-      messages.push({ role: 'assistant', content: INTERRUPTED })
+      messages.push({
+        role: 'assistant',
+        content: error instanceof RunBudgetError ? `${INTERRUPTED}\n${error.message}` : INTERRUPTED,
+      })
       throw error
     } finally {
       try {

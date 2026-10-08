@@ -1,0 +1,188 @@
+{
+  "title": "Zero2Agent · E04-S001 失败恢复与运行预算",
+  "date": "2026-10-08",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "v2-case-and-lab",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "失败后，怎样继续？",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S02",
+        "S03",
+        "D01"
+      ]
+    },
+    {
+      "file": "02-written-before-failure.html",
+      "title": "文件写好了，500 出现在下一步",
+      "number": 2,
+      "sources": [
+        "T01",
+        "D01"
+      ]
+    },
+    {
+      "file": "03-three-failures.html",
+      "title": "选错恢复位置，就可能重复副作用",
+      "number": 3,
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "file": "04-error-matrix.html",
+      "title": "看到失败，先看状态与异常类型",
+      "number": 4,
+      "sources": [
+        "R01",
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-one-retry-owner.html",
+      "title": "外层重试 × SDK 重试，次数会相乘",
+      "number": 5,
+      "sources": [
+        "R01",
+        "S02",
+        "S04"
+      ]
+    },
+    {
+      "file": "06-attempt-identity.html",
+      "title": "逻辑请求没变，每次传输各有身份",
+      "number": 6,
+      "sources": [
+        "S05",
+        "D01",
+        "T02"
+      ]
+    },
+    {
+      "file": "07-backoff.html",
+      "title": "等多久，也要有明确上限",
+      "number": 7,
+      "sources": [
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "08-timeouts.html",
+      "title": "建立连接，不代表请求已经结束",
+      "number": 8,
+      "sources": [
+        "S01",
+        "S02",
+        "S04"
+      ]
+    },
+    {
+      "file": "09-cancel-wait.html",
+      "title": "等待恢复时，你仍然可以取消",
+      "number": 9,
+      "sources": [
+        "T02",
+        "T03",
+        "S06"
+      ]
+    },
+    {
+      "file": "10-stream-end.html",
+      "title": "参数看起来完整，工具也不能马上执行",
+      "number": 10,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "11-tool-correction.html",
+      "title": "失败参数不重放，修正参数才是新调用",
+      "number": 11,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "12-approval.html",
+      "title": "拒绝一次，不该反复弹窗求批准",
+      "number": 12,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "13-budgets.html",
+      "title": "四种消耗，分别计数",
+      "number": 13,
+      "sources": [
+        "S01",
+        "S02",
+        "S05"
+      ]
+    },
+    {
+      "file": "14-batch-pairing.html",
+      "title": "只剩一个工具额度，三个调用怎样收尾？",
+      "number": 14,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "15-native-outcomes.html",
+      "title": "命令没写 Error:，退出 7 仍然是失败",
+      "number": 15,
+      "sources": [
+        "S03",
+        "T02",
+        "S05"
+      ]
+    },
+    {
+      "file": "16-settlement.html",
+      "title": "时间到达，也不能假装工具没写入",
+      "number": 16,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "17-configuration.html",
+      "title": "把运行限制写清，再用日志核对",
+      "number": 17,
+      "sources": [
+        "S05",
+        "S06",
+        "T02"
+      ]
+    },
+    {
+      "file": "18-practice.html",
+      "title": "先预测结果，再运行一次故障实验",
+      "number": 18,
+      "sources": [
+        "D01",
+        "T01",
+        "T02"
+      ]
+    }
+  ]
+}

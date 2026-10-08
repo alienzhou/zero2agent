@@ -1,0 +1,3 @@
+ ERROR  Unknown option: 'maxWorkers'
+Did you mean 'reporter'? Use "--config.unknown=value" to force an unknown option.
+For help, run: pnpm help test

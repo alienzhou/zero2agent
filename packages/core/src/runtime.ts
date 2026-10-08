@@ -5,6 +5,22 @@ export type RuntimeEvent = { turnId: string; seq: number } & (
   | { type: 'turn-start' }
   | { type: 'phase'; phase: 'preparing' | 'requesting' | 'streaming' | 'tools' | 'cancelling' }
   | { type: 'text-delta'; text: string }
+  | {
+      type: 'request-abandoned'
+      purpose: 'model' | 'summary' | 'count'
+      requestId: string
+      discardedChars: number
+    }
+  | {
+      type: 'request-retry'
+      purpose: 'model' | 'summary' | 'count'
+      logicalRequestId: string
+      requestId: string
+      attempt: number
+      delayMs: number
+      discardedChars: number
+      errorKind: string
+    }
   | { type: 'notice'; text: string }
   | {
       type: 'tool-state'
@@ -20,10 +36,32 @@ export type RuntimeEvent = { turnId: string; seq: number } & (
   | { type: 'turn-end'; status: 'completed' | 'cancelled' | 'error'; error?: string }
 )
 
+export type RequestNotice =
+  | Omit<Extract<RuntimeEvent, { type: 'request-retry' }>, 'turnId' | 'seq'>
+  | Omit<Extract<RuntimeEvent, { type: 'request-abandoned' }>, 'turnId' | 'seq'>
+
 export class TurnCancelledError extends Error {
   constructor() {
     super('Turn cancelled. Completed tool results are retained; file changes were not rolled back.')
     this.name = 'TurnCancelledError'
+  }
+}
+
+export type RunLimitReason =
+  | 'iterations'
+  | 'requests'
+  | 'tools'
+  | 'duration'
+  | 'repeated-tool-failure'
+  | 'repeated-denial'
+  | 'retry-delay'
+
+export class RunBudgetError extends Error {
+  constructor(readonly limitReason: RunLimitReason) {
+    super(
+      `Run budget stopped: ${limitReason}. Completed results are retained; effects were not rolled back.`
+    )
+    this.name = 'RunBudgetError'
   }
 }
 
@@ -57,7 +95,10 @@ export class RuntimeEmitter {
 }
 
 export function assertNotCancelled(signal?: AbortSignal): void {
-  if (signal?.aborted) throw new TurnCancelledError()
+  if (signal?.aborted) {
+    if (signal.reason instanceof RunBudgetError) throw signal.reason
+    throw new TurnCancelledError()
+  }
 }
 
 /** Only interrupt waits whose late completion cannot create an unrecorded side effect. */

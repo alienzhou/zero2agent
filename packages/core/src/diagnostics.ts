@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto'
 import { performance } from 'node:perf_hooks'
-import type Anthropic from '@anthropic-ai/sdk'
+import Anthropic from '@anthropic-ai/sdk'
 import type { ContextRequest } from './context-budget.js'
 import type { RuntimeEvent } from './runtime.js'
 import { notifyObserver } from './runtime.js'
+import { RunBudgetError } from './runtime.js'
 
 export interface DiagnosticContext {
   sessionId?: string
@@ -18,6 +19,8 @@ export type DiagnosticError =
   | 'http'
   | 'network'
   | 'other'
+  | 'budget'
+  | 'service'
 
 /** Explicit metadata only. No prompts, tool arguments/results, headers or exception text. */
 export interface DiagnosticEvent {
@@ -29,6 +32,10 @@ export interface DiagnosticEvent {
   sessionId?: string
   operation?: 'turn' | 'compact'
   requestId?: string
+  logicalRequestId?: string
+  attempt?: number
+  delayMs?: number
+  limitReason?: string
   purpose?: RequestPurpose
   model?: string
   messageCount?: number
@@ -81,10 +88,12 @@ export function diagnosticNumber(value: unknown): number | undefined {
 export function diagnosticError(
   error: unknown,
   signal?: AbortSignal
-): Pick<DiagnosticEvent, 'errorKind' | 'httpStatus'> {
+): Pick<DiagnosticEvent, 'errorKind' | 'httpStatus' | 'limitReason'> {
   let status: number | undefined
   let name = ''
   let message = ''
+  let serviceType = ''
+  let network = false
   try {
     if (error && typeof error === 'object') {
       const candidate = error as { status?: unknown; name?: unknown; message?: unknown }
@@ -94,31 +103,64 @@ export function diagnosticError(
           : undefined
       name = typeof candidate.name === 'string' ? candidate.name : ''
       message = typeof candidate.message === 'string' ? candidate.message.slice(0, 16384) : ''
+      if (error instanceof Anthropic.APIError) {
+        const body = error.error as { type?: string; error?: { type?: string } } | undefined
+        serviceType = body?.error?.type ?? body?.type ?? ''
+      }
+      let cause: unknown = error
+      for (let depth = 0; depth < 5 && cause && typeof cause === 'object'; depth++) {
+        const data = cause as { code?: unknown; cause?: unknown }
+        if (
+          typeof data.code === 'string' &&
+          /^(?:ECONNRESET|ECONNREFUSED|ETIMEDOUT|EPIPE|EAI_AGAIN|UND_ERR_SOCKET|UND_ERR_CONNECT_TIMEOUT)$/.test(
+            data.code
+          )
+        )
+          network = true
+        cause = data.cause
+      }
     }
   } catch {
     /* An exception object is untrusted data, not part of logging control. */
   }
   const errorKind: DiagnosticError =
-    signal?.aborted && signal.reason?.name !== 'TimeoutError'
-      ? 'cancelled'
-      : /timeout/i.test(name) || signal?.reason?.name === 'TimeoutError'
-        ? 'timeout'
-        : /abort|cancel/i.test(name)
-          ? 'cancelled'
-          : status === 401 || status === 403
-            ? 'auth'
-            : status === 429
-              ? 'rate-limit'
-              : /prompt is too long|context[_ ](?:length|overflow|window)|too many (?:input )?tokens/i.test(
-                    message
-                  )
-                ? 'context'
-                : status
-                  ? 'http'
-                  : /connection|network/i.test(name)
-                    ? 'network'
-                    : 'other'
-  return { errorKind, ...(status === undefined ? {} : { httpStatus: status }) }
+    error instanceof RunBudgetError
+      ? 'budget'
+      : signal?.aborted &&
+          signal.reason?.name !== 'TimeoutError' &&
+          signal.reason?.name !== 'RequestTimeoutError'
+        ? 'cancelled'
+        : error instanceof Anthropic.APIConnectionTimeoutError ||
+            /timeout/i.test(name) ||
+            signal?.reason?.name === 'TimeoutError'
+          ? 'timeout'
+          : error instanceof Anthropic.APIUserAbortError || /abort|cancel/i.test(name)
+            ? 'cancelled'
+            : status === 401 ||
+                status === 403 ||
+                serviceType === 'authentication_error' ||
+                serviceType === 'permission_error'
+              ? 'auth'
+              : status === 429 || serviceType === 'rate_limit_error'
+                ? 'rate-limit'
+                : /prompt is too long|context[_ ](?:length|overflow|window)|too many (?:input )?tokens/i.test(
+                      message
+                    )
+                  ? 'context'
+                  : status
+                    ? 'http'
+                    : serviceType === 'api_error' || serviceType === 'overloaded_error'
+                      ? 'service'
+                      : error instanceof Anthropic.APIConnectionError ||
+                          network ||
+                          /connection|network|IncompleteStream/i.test(name)
+                        ? 'network'
+                        : 'other'
+  return {
+    errorKind,
+    ...(error instanceof RunBudgetError ? { limitReason: error.limitReason } : {}),
+    ...(status === undefined ? {} : { httpStatus: status }),
+  }
 }
 
 /** Captures identity once, so a late background summary keeps its original session/operation. */
@@ -210,10 +252,14 @@ export class DiagnosticEmitter {
       after: diagnosticNumber(event.after),
     })
   }
-  request(purpose: RequestPurpose, request: ContextRequest): RequestSpan {
+  request(
+    purpose: RequestPurpose,
+    request: ContextRequest,
+    identity?: { logicalRequestId: string; attempt: number }
+  ): RequestSpan {
     const requestId = randomUUID()
     if (purpose === 'model') this.modelRequestId = requestId
-    return new RequestSpan(this, requestId, purpose, request)
+    return new RequestSpan(this, requestId, purpose, request, identity)
   }
 }
 
@@ -226,7 +272,8 @@ export class RequestSpan {
     private emitter: DiagnosticEmitter,
     readonly requestId: string,
     private purpose: RequestPurpose,
-    request: ContextRequest
+    request: ContextRequest,
+    private identity?: { logicalRequestId: string; attempt: number }
   ) {
     emitter.emit('request', 'start', {
       requestId,
@@ -235,12 +282,25 @@ export class RequestSpan {
       messageCount: request.messages.length,
       toolCount: request.tools?.length ?? 0,
       maxOutputTokens: request.max_tokens,
+      ...identity,
     })
   }
   text(text: string): void {
     if (this.finished) return
     this.firstTextMs ??= Math.round(performance.now() - this.startedAt)
     this.textChars += text.length
+  }
+  get displayChars(): number {
+    return this.textChars
+  }
+  retry(delayMs: number, errorKind: DiagnosticError | undefined): void {
+    this.emitter.emit('request', 'retry', {
+      requestId: this.requestId,
+      purpose: this.purpose,
+      ...this.identity,
+      delayMs,
+      errorKind,
+    })
   }
   complete(response: Anthropic.Message | { input_tokens: number }): void {
     if (this.finished) return
@@ -249,6 +309,7 @@ export class RequestSpan {
     this.emitter.emit('request', 'completed', {
       requestId: this.requestId,
       purpose: this.purpose,
+      ...this.identity,
       durationMs: Math.round(performance.now() - this.startedAt),
       firstTextMs: this.firstTextMs,
       textChars: this.textChars,
@@ -269,6 +330,7 @@ export class RequestSpan {
     this.emitter.emit('request', details.errorKind === 'cancelled' ? 'cancelled' : 'error', {
       requestId: this.requestId,
       purpose: this.purpose,
+      ...this.identity,
       durationMs: Math.round(performance.now() - this.startedAt),
       firstTextMs: this.firstTextMs,
       textChars: this.textChars,
