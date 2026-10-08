@@ -1,0 +1,79 @@
+.authoring/site/chapters/epic04-story001/review.md
+  s_58249cd92a0ae1::t_7167c7ca0cde32 1-3
+.authoring/site/chapters/epic04-story001/author.cjs
+  s_58249cd92a0ae1::t_7167c7ca0cde32 1-71,79-137
+  s_58249cd92a0ae1::t_d6a328090e3718 72-77
+  s_58249cd92a0ae1::t_f607406fb540eb 78
+.authoring/site/chapters/epic04-story001/sources.md
+  s_58249cd92a0ae1::t_7167c7ca0cde32 1-18
+.authoring/site/chapters/epic04-story001/content-plan.md
+  s_58249cd92a0ae1::t_7167c7ca0cde32 1-26
+.authoring/site/chapters/epic04-story001/verification/checks.json
+  s_58249cd92a0ae1::t_387c06feeff9e5 1-168
+.authoring/site/chapters/epic04-story001/verification/contact-1.html
+  s_58249cd92a0ae1::t_9fa7cea14f7086 1
+.authoring/site/chapters/epic04-story001/verification/contact-2.html
+  s_58249cd92a0ae1::t_8924ea0e6dde3f 1
+.authoring/site/chapters/epic04-story001/verify.mjs
+  s_58249cd92a0ae1::t_0c866a54e08427 1-109
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_d22ad671960c73 21-26,127-133
+site/chapters/epic04-story001/01-cover.html
+  s_58249cd92a0ae1::t_93794af79b0569 1
+site/chapters/epic04-story001/02-written-before-failure.html
+  s_58249cd92a0ae1::t_15a342c14b6695 1
+site/chapters/epic04-story001/03-three-failures.html
+  s_58249cd92a0ae1::t_d743fe29274f20 1
+site/chapters/epic04-story001/04-error-matrix.html
+  s_58249cd92a0ae1::t_5525ad5733b481 1
+site/chapters/epic04-story001/05-one-retry-owner.html
+  s_58249cd92a0ae1::t_fba06d48fd9c55 1
+site/chapters/epic04-story001/06-attempt-identity.html
+  s_58249cd92a0ae1::t_a75529b8c0c9f2 1
+site/chapters/epic04-story001/07-backoff.html
+  s_58249cd92a0ae1::t_05101f1c489390 1
+site/chapters/epic04-story001/08-timeouts.html
+  s_58249cd92a0ae1::t_ee6aa1787faa9b 1
+site/chapters/epic04-story001/09-cancel-wait.html
+  s_58249cd92a0ae1::t_da881c83688680 1
+site/chapters/epic04-story001/10-stream-end.html
+  s_58249cd92a0ae1::t_34ce7f1a22a339 1
+site/chapters/epic04-story001/11-tool-correction.html
+  s_58249cd92a0ae1::t_1131edede15738 1
+site/chapters/epic04-story001/12-approval.html
+  s_58249cd92a0ae1::t_cdbd414f7a29fa 1
+site/chapters/epic04-story001/13-budgets.html
+  s_58249cd92a0ae1::t_b647bf49c9500d 1
+site/chapters/epic04-story001/14-batch-pairing.html
+  s_58249cd92a0ae1::t_3429968ae5b559 1
+site/chapters/epic04-story001/15-native-outcomes.html
+  s_58249cd92a0ae1::t_036664658503e7 1
+site/chapters/epic04-story001/16-settlement.html
+  s_58249cd92a0ae1::t_04ff9bb5574348 1
+site/chapters/epic04-story001/17-configuration.html
+  s_58249cd92a0ae1::t_73f1254959ec12 1
+site/chapters/epic04-story001/18-practice.html
+  s_58249cd92a0ae1::t_9cd076f3483097 1-2
+site/chapters/epic04-story001/course.css
+  s_58249cd92a0ae1::t_ef3abb6144cffc 1-20
+site/chapters/epic04-story001/pages.json
+  s_58249cd92a0ae1::t_f4e26433c7c04c 1-184
+site/course.json
+  s_58249cd92a0ae1::t_218f7802e39d3d 21-26,5347-5758,5761
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7a881ef8276604bac92526bacd3d8ded6a9bbbbb",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
