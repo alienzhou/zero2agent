@@ -6,7 +6,7 @@ Agent 已经写好了文件，下一次请求却遇到网络故障。重新问�
 
 本课把这两种失败放到同一个 Turn 中：请求可以有限重试，工具修正是新的受控调用，运行有明确的停止条件。**预算到达后停止新工作，已完成的文件效果和工具结果仍保留。**
 
-当前为开发分支的实现与验收候选，未合入 main；最终交付范围以[验收页](./details/03-verification-checklist.md)为准。
+本课实现、课程与验收已形成可审阅版本，未合入 main、未部署网站；具体证据与范围见[验收页](./details/03-verification-checklist.md)。
 
 ## 先看到效果
 
@@ -69,5 +69,10 @@ CLI 参数覆盖环境变量。Core 的 AgentOptions.limits 使用同一校验�
 4. [宿主配置](../../../packages/tui/src/run-options.ts)、[展示状态](../../../packages/tui/src/runtime-state.ts)和[日志](../../../packages/tui/src/run-log.ts)：事件投影与证据边界。
 
 技术资料：[总览](./details/00-overview.md) · [设计](./details/01-technical-design.md) · [任务](./details/02-task-list.md) · [验收](./details/03-verification-checklist.md) · [Backlog](./details/04-backlog.md)。
+
+## 深入了解
+
+1. [重试一次请求，不等于业务只发生一次](./deep-dive/01-retry-and-effects.md)：从缺失回复推导恢复范围，区别请求身份、幂等性和用量证据。
+2. [时间预算到了，为什么还要等工具结束](./deep-dive/02-deadline-and-settlement.md)：解释取消契约、晚到写入与输入所有权，以及硬隔离还需要的协议。
 
 上一篇：[E03-S006 文件 Checkpoint](../../E03-product-foundations/S006-file-checkpoints/README.md) | 下一篇：E04-S002 大工具结果按需读取（规划）

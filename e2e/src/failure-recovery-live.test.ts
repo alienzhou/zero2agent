@@ -59,14 +59,12 @@ it.skipIf(!isLiveEnabled())(
         observation.status = response.status
         if (!response.ok) {
           // Never retain or echo an upstream diagnostic body; it can contain credentials.
-          res
-            .writeHead(response.status, { 'content-type': 'application/json' })
-            .end(
-              JSON.stringify({
-                type: 'error',
-                error: { type: 'api_error', message: `Live upstream HTTP ${response.status}` },
-              })
-            )
+          res.writeHead(response.status, { 'content-type': 'application/json' }).end(
+            JSON.stringify({
+              type: 'error',
+              error: { type: 'api_error', message: `Live upstream HTTP ${response.status}` },
+            })
+          )
           return
         }
         res.writeHead(response.status, {

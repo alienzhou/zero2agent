@@ -102,4 +102,4 @@ TUI 列表按 Enter 看差异，按 r 进入回退预览；y 确认，n / Enter 
 1. [为什么不用一条很长的 patch 链](./deep-dive/01-patches-and-chunks.md)：从恢复依赖、字节真实性和工作负载理解分块的成本。
 2. [回退也是一次需要恢复的写入](./deep-dive/02-recovery-is-a-write.md)：用三方比较、持久化意图和故障点解释恢复协议，也解释它无法保证什么。
 
-上一篇：[E03-S005 运行日志与问题追查](../S005-runtime-logging/README.md) | 下一阶段：[Epic 4 健壮性与上下文管理（规划）](../../../docs/roadmap/README.md)
+上一篇：[E03-S005 运行日志与问题追查](../S005-runtime-logging/README.md) | 下一篇：[E04-S001 失败恢复与运行预算](../../E04-reliability-and-context/S001-failure-recovery/README.md)

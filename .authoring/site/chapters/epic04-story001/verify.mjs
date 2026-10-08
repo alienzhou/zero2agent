@@ -24,6 +24,7 @@ const results = {chapter, pageLimit: 18, includesCover: true, browser: browser.v
 const hash = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 results.sources = Object.fromEntries(['author.cjs'].map(file => [file, hash(new URL(file, import.meta.url))]));
 results.sources['course.css'] = hash(path.join(dir, 'course.css'));
+results.sources['pty-screen.txt'] = hash(path.join(root, 'researches/failure-recovery/acceptance/screens/02b-backoff-course.txt'));
 
 try {
   const page = await browser.newPage({viewport: {width: 1080, height: 1440}, deviceScaleFactor: 1});
@@ -32,7 +33,7 @@ try {
     await page.evaluate(() => document.fonts.ready);
     const check = await page.evaluate(() => {
       const sheet = document.querySelector('.sheet').getBoundingClientRect();
-      const overflow = [...document.querySelectorAll('h1,.deck,.explain,.diagram,.terminal')]
+      const overflow = [...document.querySelectorAll('h1,.deck,.explain,.diagram,.terminal,.runtime-shot,pre')]
         .map(el => ({kind: el.tagName, text: el.textContent.slice(0, 60), rect: el.getBoundingClientRect().toJSON()}))
         .filter(e => e.rect.bottom > sheet.bottom + 1 || e.rect.right > sheet.right + 1 || e.rect.left < sheet.left - 1);
       const svgTextOverflow = [...document.querySelectorAll('svg text')].flatMap(el => {
@@ -49,7 +50,8 @@ try {
           if (dx > 2 && dy > 2) textOverlaps.push([all[i].textContent, all[j].textContent]);
         }
       }
-      return {overflow, svgTextOverflow, textOverlaps};
+      const textBlockOverflow = [...document.querySelectorAll('pre')].filter(el => el.scrollWidth > el.clientWidth + 1).map(el => ({text: el.textContent.slice(0, 60), width: el.clientWidth, scrollWidth: el.scrollWidth}));
+      return {overflow, svgTextOverflow, textOverlaps, textBlockOverflow};
     });
     results.pages.push({file: entry.file, sha256: hash(path.join(dir, entry.file)), ...check});
     if (Object.values(check).some(items => items.length)) results.failures.push(entry.file);

@@ -18,3 +18,5 @@
 .series-cover .cover-tags{flex:none;font-size:25px;padding-top:20px}
 .series-cover .cover-tags span::before{color:var(--cover-accent)}
 .series-cover .cover-hero{margin-top:30px;min-height:0}
+
+.runtime-shot{margin:0;flex:none}.runtime-shot pre{width:952px;margin:0;padding:24px;background:#202622;color:#F4F1EA;border-radius:10px;font:27px/1.45 Menlo,"PingFang SC",monospace;white-space:pre}

@@ -1,0 +1,13 @@
+
+> @zero2agent/e2e@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e04-s001/e2e
+> vitest run
+
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s001/e2e
+
+
+ Test Files  16 passed | 14 skipped (30)
+      Tests  173 passed | 57 skipped (230)
+   Start at  18:02:04
+   Duration  77.50s (transform 381ms, setup 0ms, import 1.29s, tests 74.27s, environment 1ms)
+

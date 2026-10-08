@@ -6,7 +6,7 @@
 
 | Story | 主题 | 状态 |
 | --- | --- | --- |
-| [E04-S001](./S001-failure-recovery/README.md) | 失败恢复与运行预算 | 实现与验收进行中 |
+| [E04-S001](./S001-failure-recovery/README.md) | 失败恢复与运行预算 | 实现、课程与验收可审阅；未合入 main |
 | E04-S002 | 大工具结果按需读取 | Planned |
 | E04-S003 | 摘要质量与事实保留 | Planned |
 | E04-S004 | 中断后的安全续跑 | Planned |

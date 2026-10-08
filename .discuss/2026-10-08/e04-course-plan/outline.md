@@ -61,3 +61,7 @@ S001 图文先按 18 页分配：封面 1、失败场景与分类 3、请求重�
 - [E03 基础压缩后的 Backlog](../../../specs/E03-product-foundations/S001-multi-turn/details/04-backlog.md)
 - [会话恢复后的 Backlog](../../../specs/E03-product-foundations/S004-session-persistence/details/04-backlog.md)
 - [早期 E03–E05 分工](../../2026-03-14/zero2agent-course-roadmap/decisions/D05-stage3-to-stage5-preview.md)
+
+## 实施更新
+
+用户授权完整推进E04-S001。该课在独立分支完成实现、跟练、18页课程及分层验收，进入人工审阅；S002–S004保持规划状态，没有生成空白Story。

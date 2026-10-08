@@ -2,7 +2,12 @@
 
 [课程](./README.md) | [验收范围](./details/03-verification-checklist.md)
 
-需要 Node >=22、pnpm >=9。本课候选在 codex/e04-s001-failure-recovery；固定课程 Tag 在最终验收后补记。不要把未完成候选当成发布版本。
+需要 Node >=22、pnpm >=9。固定课程版本：`E04-S001-failure-recovery`。实现尚未合入main，课程网站未部署；版本状态与验收范围独立记录。
+
+```bash
+git fetch origin tag E04-S001-failure-recovery
+git switch --detach E04-S001-failure-recovery
+```
 
 ## 不用密钥的离线演示
 
@@ -24,7 +29,7 @@ node scripts/e04-s001-recovery-demo.mjs
 node scripts/e04-s001-recovery-demo.mjs --tui
 ```
 
-脚本先完成上述验证，再打开真实 TUI。输入“演示等待取消”，看到 20000ms 等待后按 Ctrl-C。等界面恢复输入，再输入“演示半截流”；比较未完成草稿与完整回复。用 `/logs` 查看运行，Enter 查看、Esc 返回；确认请求的 logical/attempt 字段。输入 exit 清理临时目录。
+脚本先完成上述验证，再打开真实 TUI。输入“演示等待取消”，看到 20000ms 等待后按 Ctrl-C。等界面恢复输入，再输入“演示半截流”；比较未完成草稿与完整回复。用 `/logs` 查看运行，Enter 查看，Esc先返回日志列表、再按Esc回到输入；确认请求的 logical/attempt 字段。输入 exit 清理临时目录。
 
 ## 改变运行限制
 
@@ -44,3 +49,19 @@ pnpm --filter @zero2agent/e2e test -- src/failure-recovery.test.ts
 ```
 
 Core 专项使用真实 SDK 与本地 HTTP/SSE；E2E 驱动生产构建和真实 CLI/PTY。它们分别核对流结束、请求次数、配对、参数覆盖、文件效果、日志隐私、取消及终端恢复，不证明真实供应商永远返回同样内容。
+
+## 对照实际终端证据
+
+[等待画面](../../../researches/failure-recovery/acceptance/screens/02-backoff.png)、[取消后](../../../researches/failure-recovery/acceptance/screens/03-cancelled.png)、[草稿与完整回复](../../../researches/failure-recovery/acceptance/screens/04-draft-and-recovered.png)和[尝试日志](../../../researches/failure-recovery/acceptance/screens/07-attempt-log.png)来自生产CLI的真实PTY字节，在xterm.js中重放为PNG。它们是本地确定性故障，不是自然供应商故障。
+
+[原始PTY](../../../researches/failure-recovery/acceptance/screens/raw-pty.ansi.gz)无损保存；屏幕txt和课程P09的文字显示为派生内容，课程显示只去行末空白。[取证元信息](../../../researches/failure-recovery/acceptance/screens/capture.json)列出平台、版本和源哈希。
+
+已运行的真实服务补验由本地代理分别在首请求、真实写入后的请求注入500/503，其余响应来自当前配置服务。核对4次本地HTTP、2次远端成功响应、1条写入Checkpoint；[证据](../../../researches/failure-recovery/acceptance/live/failure-recovery-live.json.gz)不含密钥，不能由此断言供应商自然故障频率或所有模型任务质量。
+
+有自己的服务配置时，可单独运行：
+
+```bash
+E2E_LIVE=1 pnpm --filter @zero2agent/e2e test src/failure-recovery-live.test.ts
+```
+
+该命令请求真实服务，会消耗实际token。离线脚本不依赖这个步骤。

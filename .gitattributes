@@ -1,0 +1,4 @@
+# Captured command output and terminal snapshots retain their observed whitespace.
+# Source files and generated teaching HTML still use the normal whitespace checks.
+/researches/failure-recovery/acceptance/*.txt whitespace=-blank-at-eol,-blank-at-eof
+/researches/failure-recovery/acceptance/screens/*.txt whitespace=-blank-at-eol,-blank-at-eof

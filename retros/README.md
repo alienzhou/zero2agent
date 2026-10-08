@@ -22,6 +22,10 @@ This directory contains retrospective notes and lessons learned.
 | [E03-S005-runtime-logging.md](./E03-S005-runtime-logging.md) | E03-S005 运行日志与问题追查 | 元信息归属、只读查看器、持久边界；已通过 PR #21 合入 main |
 | [E03-S006-file-checkpoints.md](./E03-S006-file-checkpoints.md) | E03-S006 文件 Checkpoint 与回退 | 受控写入、分块复用、空间与恢复保证、故障和分层验收；已通过 PR #22 合入 main |
 
+## Latest review candidate
+
+[E04-S001 失败恢复与运行预算](./E04-S001-failure-recovery.md)：请求与副作用分界、真实SDK/PTY/模型验收，以及18页课程重写。尚未合入main。
+
 ## Directory structure
 
 ```
