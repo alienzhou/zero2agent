@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-10-08T09:32:08.913Z",
+  "head": "7a881ef8276604bac92526bacd3d8ded6a9bbbbb",
+  "platform": "darwin",
+  "node": "v22.15.1",
+  "browser": "154.0.8037.98",
+  "xterm": "6.0.0",
+  "viewport": [
+    96,
+    30
+  ],
+  "narrow": [
+    42,
+    18
+  ],
+  "fixture": "local HTTP/SSE; production CLI and real PTY; actual bytes replayed through xterm.js",
+  "sourceHashes": {
+    "scripts/e04-s001-recovery-demo.mjs": "2249473e61b5c8c7dd7ff998904adbdaeaa02af8f63d22fff975608e171a58a0",
+    "packages/core/src/loop.ts": "bd7df01c18bfbfd6af563ca039cfed41ea660dfce385cb883d75e7cdaa6b96d4",
+    "packages/core/src/request-executor.ts": "a0beae4e2046119eaf17b10daf973b775e68aa15e7ac07c4dbebbf94ead0aa02",
+    "packages/tui/src/runtime-state.ts": "db7006e3e2ec3cda739fa8146d02c4aef9c1618f3973cc30103335527396f3a1",
+    "packages/tui/src/runtime-tui.ts": "026ebff5c1cd7cb065cfb0e07190bea4f8f69ecef7f454e01b74033d120db25e",
+    "packages/tui/src/cli.ts": "06def9616db3ca2e714f095b2627b17d934e74b465d6a6ef37e8ccf70009c9f5"
+  },
+  "rawSha256": "aa26e5da3edc461b5ac072df0d8cd0176e7b3752b7c77af611f761f03e2f2257",
+  "screensAreDerived": true,
+  "rawLossless": true,
+  "terminalRestorationEscapes": true,
+  "demoWorkspaceRemoved": true
+}

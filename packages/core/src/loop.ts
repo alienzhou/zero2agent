@@ -118,6 +118,7 @@ export async function executeToolCalls(
     let denied = false
     let consumed = false
     let nativeFailed = false
+    let nativeDenied = false
     let metadataSettled = false
     try {
       budget?.consumeTool(block.name, block.input)
@@ -130,13 +131,15 @@ export async function executeToolCalls(
       const metadataObserver: ToolContext['onResultMetadata'] =
         diagnostics?.enabled || ctx.onResultMetadata || budget
           ? (metadata: ToolExecutionMetadata) => {
-              if (!metadataSettled)
+              if (!metadataSettled) {
+                nativeDenied ||= metadata.terminalOutcome === 'declined'
                 nativeFailed ||=
                   (metadata.exitCode !== undefined && metadata.exitCode !== 0) ||
                   metadata.signal !== undefined ||
                   ['cancelled', 'declined', 'skipped', 'drain-timeout'].includes(
                     metadata.terminalOutcome ?? ''
                   )
+              }
               diagnostics?.emit('tool', 'metadata', {
                 requestId: originatingRequestId,
                 toolCallId: diagnosticLabel(block.id),
@@ -214,7 +217,7 @@ export async function executeToolCalls(
           output
         )
       const failed = output.startsWith('Error:') || cancelled || nativeFailed
-      state(cancelled ? 'cancelled' : failed ? 'error' : 'completed', {
+      state(cancelled ? 'cancelled' : nativeDenied ? 'denied' : failed ? 'error' : 'completed', {
         output,
         durationMs,
         ...(ctx.signal?.aborted && !cancelled
@@ -228,7 +231,7 @@ export async function executeToolCalls(
         content: output,
         ...(failed && { is_error: true }),
       })
-      budget?.settleTool(block.name, block.input, failed, false)
+      budget?.settleTool(block.name, block.input, failed, nativeDenied)
     } catch (error) {
       metadataSettled = true
       const limited =

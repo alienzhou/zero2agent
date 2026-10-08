@@ -102,7 +102,10 @@ const events: LoopEventHandlers = {
   onEvent: event => {
     if (event.type === 'request-retry' || event.type === 'request-abandoned')
       events.onRequestNotice?.(event)
-    if (event.type === 'tool-state' && ['completed', 'error', 'cancelled'].includes(event.status))
+    if (
+      event.type === 'tool-state' &&
+      ['completed', 'error', 'cancelled', 'denied'].includes(event.status)
+    )
       toolFailures.set(event.toolName, event.status !== 'completed')
   },
   onRequestNotice: notice => {

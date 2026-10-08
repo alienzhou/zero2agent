@@ -453,6 +453,28 @@ describe('failure recovery through real HTTP and SDK', () => {
     expect(execute).not.toHaveBeenCalled()
     expect(results(agent)).toHaveLength(2)
   })
+  it('does not repeat a native human-terminal decline within the same turn', async () => {
+    const p = await provider((_body, res, index) => sse(res, [call(String(index))], 'tool_use'))
+    const execute = vi.fn<Tool['execute']>(async (_input, ctx) => {
+      ctx.onResultMetadata?.({ terminalOutcome: 'declined' })
+      return 'Status: human-controlled declined'
+    })
+    const tool = probe(execute)
+    const events: RuntimeEvent[] = []
+    const agent = new Agent({
+      config: p.config,
+      tools: [tool],
+      limits,
+      events: { onEvent: event => events.push(event) },
+    })
+    await expect(agent.run('inspect')).rejects.toMatchObject({ limitReason: 'repeated-denial' })
+    expect(execute).toHaveBeenCalledTimes(1)
+    expect(results(agent)).toHaveLength(2)
+    expect(results(agent).every(result => result.is_error)).toBe(true)
+    expect(events.some(event => event.type === 'tool-state' && event.status === 'denied')).toBe(
+      true
+    )
+  })
   it('counts provider token requests against the operation quota', async () => {
     const p = await provider((_body, res) => {
       res.writeHead(200, { 'content-type': 'application/json' })
