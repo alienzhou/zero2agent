@@ -29,6 +29,8 @@ export interface ToolContext {
  * 工具接口定义
  */
 export interface Tool {
+  /** Explicit host contract: these inputs identify every file this tool can mutate. */
+  checkpointPaths?: string[]
   /** Trusted host metadata; omitted tools require approval by default. */
   permission?: { effect: 'read' | 'write' | 'execute'; paths?: string[] }
   name: string

@@ -1,0 +1,30 @@
+● zero2agent · 等待输入
+会话: b0e39d65 · 已保存 r2 · 日志 6112eb81 · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /
+你 › 修改演示文件，把 light 改成 dark。
+┌ ◆ write_file · 完成 · demo-write
+│ {"path":"settings.txt","content":"theme=dark\n"}
+│ 历史记录 · 未重新执行
+│ Overwrote settings.txt (11 bytes written)
+└
+Agent › 演示修改已完成。用 /checkpoints 查看差异，再预览回退。
+· 已恢复会话。历史工具只供查看；新操作使用当前权限与模型配置。
+· 仅保护 write_file / replace_in_file / delete；shell、人工终端与外部服务不自动回退。
+· 输入你的问题。/new 新建对话 · /sessions 会话 · /compact 压缩 · /terminal 人工终端 · /help 快
+捷键 · exit 退出
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+─ 输入 ────────────────────────────────────────────────────────────────────────────────────────
+Enter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help
+你:

@@ -1,0 +1,59 @@
+{
+  "recordedAt": "2026-10-07T16:25:06.456Z",
+  "node": "v22.15.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "iterations": 20,
+  "corpus": {
+    "kind": "fixed-seed high-entropy 4 MiB; each iteration inserts 30 bytes at the front",
+    "sha256": "182074f7596ae0838210258c807820450e3c605b28ec8e43b89d43d54740b85c",
+    "unrelatedFiles": 1000,
+    "unrelatedBytes": 4096000
+  },
+  "scope": "All modes save only the same target file before and after a mutation. Filesystem writes included; timings are warm local runs, not a universal performance claim. Copy and whole-file baselines do not implement locks, full validation, conflict checks or fsync, so these are storage baselines, not equivalent durability or throughput implementations. Naive whole-workspace copies are an arithmetic estimate only. Git pack/delta is not benchmarked.",
+  "results": [
+    {
+      "mode": "full-file-copy",
+      "saveTotalMs": 79.41245800000002,
+      "saveP50Ms": 3.712999999999994,
+      "saveP95Ms": 5.420874999999995,
+      "restoreMs": 1.767959000000019,
+      "storageBeforeRestore": {
+        "logical": 167784160,
+        "allocated": 167931904,
+        "files": 40
+      },
+      "logicalHistoryBytes": 167784160,
+      "verifiedRestore": true
+    },
+    {
+      "mode": "whole-file-compressed-CAS",
+      "saveTotalMs": 1330.4534989999997,
+      "saveP50Ms": 63.336874999999964,
+      "saveP95Ms": 120.82779200000004,
+      "restoreMs": 4.446667000000161,
+      "storageBeforeRestore": {
+        "logical": 88109241,
+        "allocated": 88166400,
+        "files": 21
+      },
+      "logicalHistoryBytes": 167784160,
+      "verifiedRestore": true
+    },
+    {
+      "mode": "content-defined-compressed-CAS",
+      "saveTotalMs": 3824.883418999998,
+      "saveP50Ms": 166.90374999999995,
+      "saveP95Ms": 666.0022499999998,
+      "restoreMs": 348.58741700000064,
+      "storageBeforeRestore": {
+        "logical": 6007126,
+        "allocated": 6283264,
+        "files": 99
+      },
+      "logicalHistoryBytes": 167784160,
+      "verifiedRestore": true
+    }
+  ],
+  "naiveWholeWorkspaceCopiesEstimateBytes": 331612160
+}

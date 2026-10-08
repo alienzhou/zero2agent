@@ -1,0 +1,168 @@
+{
+  "chapter": "epic03-story006",
+  "pageLimit": 18,
+  "includesCover": true,
+  "browser": "154.0.8037.98",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "sha256": "82a56226648e84ae4252262accee60edce482664a3cebce95e39fb3e019d8fc4",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "02-boundary.html",
+      "sha256": "df46f8f1f00de73acae84b9c82b7c5a1379e5b2a0919191a06e2f9ed9e4180d7",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "03-options.html",
+      "sha256": "f235583304ca1581c989e538a0e4708d07b808669455fec1941234f52a8de4a5",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "04-boundary-hook.html",
+      "sha256": "23b4f0ff790e604310b44c0e4651000bd9de137b88c71151e1f4d57852776e66",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "05-scope.html",
+      "sha256": "e0ddc0822053ed6cc47d8356eb98a114511c3ff769069bf4fd25101c594c449e",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "06-chunks.html",
+      "sha256": "2ef9b92a34e62a032b53f009afe73dac788ca6a40473078e51b339cfe2fd110a",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "07-algorithm.html",
+      "sha256": "bdaaaf2f20801ca7f2ed30512616086c3de87974a03e63d2886d3d80536aa605",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "08-manifest.html",
+      "sha256": "a324912649df159ed7e0ded14fcf6d4f1801ae28b1f2d410d0a8ff2d953c3eca",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "09-bounds.html",
+      "sha256": "a6eb379341b97e18cf5bcfd1e5261083958ad82396c166fb98e39451b56c0174",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "10-gc.html",
+      "sha256": "2535b86f26a83a783fb9cfc5e741914039437eb683a68bbd82e7c4c8690180bf",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "11-pending.html",
+      "sha256": "055455f73aed6f73a4ccca0aeefecdd61f41eb56237a3b54485037f306dd75b2",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "12-conflict.html",
+      "sha256": "c24732c91dbc7e4a0ea3246ca76974c7acd0515ceee420e7f96950eba19c41c9",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "13-restore.html",
+      "sha256": "c423a9e70a78f271a3ce386c63c033119173805125b12eb7b5111b9411de55ef",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "14-paths.html",
+      "sha256": "08f4a52bbb06494186ca32ae33f03838d6022427eeef5e24295b16a46b799ba9",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "15-tui.html",
+      "sha256": "812aa1258ce377fc43f50181872da3545f1bff9fa61d83ab1847df51a7602ca5",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "16-cli.html",
+      "sha256": "c0623180074ce4578aad010d6474209f3bd76cff61946b577ddc782bdb65fa03",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "17-benchmark.html",
+      "sha256": "3dfe97244c2f30fa0bf2e23733d1322c8e53332cdf7d1b7c426b212016ed0034",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "18-practice.html",
+      "sha256": "70bfcd27199eeebeedbc62ea9b13577961ff213dfbc4de132cbe3b4636e7bbe5",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sections": 18,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sections": 18,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    }
+  ],
+  "failures": [],
+  "sources": {
+    "author.cjs": "30e4c1c78f852dc240b1b2e9eb27f1511195c2bc32cde11bdc96960d09c7e32e",
+    "course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e"
+  },
+  "passed": true
+}

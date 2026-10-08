@@ -477,15 +477,18 @@ describe.skipIf(process.platform === 'win32')(
     })
 
     it('preserves readline-style cut and yank shortcuts without splitting Unicode graphemes', async () => {
-      const p = await start((res, request) => reply(res, request, text('shortcut-answer')))
+      const p = await start((res, request, index) =>
+        reply(res, request, text(`shortcut-answer-${index}`))
+      )
       let from = p.session.output.length
       p.session.write('中文e\u0301🙂\x01\x06\x0b\x19\x05\x15\x19\r')
-      await p.session.waitFor('shortcut-answer', from)
+      await p.session.waitFor('shortcut-answer-1', from)
       expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('中文e\u0301🙂')
-      await p.session.waitFor('你: ', from)
+      await p.session.waitFor('你: ', p.session.output.indexOf('shortcut-answer-1', from))
       from = p.session.output.length
       p.session.write('保留 词🙂\x17\x19\x01\x06\x04\r')
-      await p.session.waitFor('shortcut-answer', from)
+      await p.session.waitFor('shortcut-answer-2', from)
+      expect(p.requests).toHaveLength(2)
       expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('保 词🙂')
       await quit(p.session)
     })

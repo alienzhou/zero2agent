@@ -156,6 +156,16 @@ Core 的 `DiagnosticEmitter` 创建操作和请求身份，在实际 SDK 调用�
 
 ---
 
+## 文件副作用与恢复
+
+Core 的 `FileMutationHandler` 是可等待的控制接口：工具权限通过并完成路径边界校验后，宿主先持久化 before/pending，再调用执行闭包，最后保存实际 after。`Tool.checkpointPaths` 来自受信任注册元数据，不能由模型自行扩展；裸 SDK 未配置该接口时保持原执行行为。
+
+TUI 宿主的 `CheckpointStore` 只读取声明目标，内容定义分块后按 SHA-256 压缩去重，独立版本清单引用块。锁、容量预算、引用回收和完整内容校验构成保存边界。回退先验证所有文件和确认令牌，再保存 from/to 意图、逐文件替换；部分完成可以按磁盘状态恢复，完成后新增一条反向记录。
+
+文件历史、对话快照、诊断日志分别保存各自证据。交互会话回退后追加恢复事实并要求重新读取文件，保留旧工具调用/结果对。普通 shell、人工终端和外部系统未进入此保护范围。详见 [S006 技术设计](../specs/E03-product-foundations/S006-file-checkpoints/details/01-technical-design.md)。
+
+---
+
 ## 下一步
 
 - 📖 [快速上手](./getting-started.md) - 先把项目跑起来

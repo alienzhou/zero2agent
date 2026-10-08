@@ -111,7 +111,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | ---- | ---- | ---- |
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
-| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S005 已合入；下一课 S006 文件 Checkpoint](./specs/E03-product-foundations/README.md) |
+| Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S005 已合入；S006 文件 Checkpoint 交付候选](./specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理异常、长上下文和复杂运行情况 | Planned |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
 
@@ -161,7 +161,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S005：运行日志与问题追查](./specs/E03-product-foundations/S005-runtime-logging/README.md)串联真实请求、权限、工具与后台结果，增加本地元信息日志、TUI 列表和独立只读查看器；保留既有交互。提供 [20 页图解课程](./docs/site.md)与[离线跟练](./specs/E03-product-foundations/S005-runtime-logging/follow-along.md)。本课已通过 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 合入 main。结果和审阅状态见[验收清单](./specs/E03-product-foundations/S005-runtime-logging/details/03-verification-checklist.md)。上一课 S004 已通过 [PR #20](https://github.com/alienzhou/zero2agent/pull/20) 合入 main。
+**最新更新**：[E03-S006：文件 Checkpoint 与回退](./specs/E03-product-foundations/S006-file-checkpoints/README.md)为受控文件工具增加分块去重、压缩、差异预览、冲突检查与可恢复回退，不创建额外 Git 仓库。提供 [18 页图解课程（含封面）](./docs/site.md)、[离线跟练](./specs/E03-product-foundations/S006-file-checkpoints/follow-along.md)和[空间实验](./researches/file-checkpoints/README.md)。本课为交付候选，尚未合入 main 或部署；分层结果与人工审阅状态见[验收清单](./specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md)。S005 已通过 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 合入 main。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -178,6 +178,7 @@ zero2agent/
 | [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | 运行事件、Turn 取消与交互 TUI | Done，已合入 main |
 | [E03-S004](./specs/E03-product-foundations/S004-session-persistence/README.md) | 自动保存、会话浏览与恢复 | Done，已合入 main |
 | [E03-S005](./specs/E03-product-foundations/S005-runtime-logging/README.md) | 关联运行日志、只读追查与诊断边界 | Done，已合入 main |
+| [E03-S006](./specs/E03-product-foundations/S006-file-checkpoints/README.md) | 受控文件分块去重、差异与可恢复回退 | 交付候选，待人工审阅 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

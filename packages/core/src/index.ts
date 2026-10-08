@@ -71,3 +71,5 @@ export type { RuntimeEvent } from './runtime.js'
 
 export { DiagnosticEmitter, diagnosticLabel, diagnosticNumber } from './diagnostics.js'
 export type { DiagnosticEvent, DiagnosticObserver, DiagnosticContext } from './diagnostics.js'
+
+export type { FileMutation, FileMutationHandler } from './file-mutations.js'

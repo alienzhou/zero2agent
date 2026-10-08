@@ -2,6 +2,16 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// Two pre-limit website chapters remain readable; they are not single-post exports.
+const legacyWebPageLimits = new Map([['epic03-story004', 20], ['epic03-story005', 20]]);
+export function checkImagePostPages(chapterId, manifest) {
+  const limit = legacyWebPageLimits.get(chapterId) ?? 18;
+  if (manifest.pages.length > limit || (manifest.maxImages !== undefined &&
+      (!Number.isInteger(manifest.maxImages) || manifest.maxImages < manifest.pages.length || manifest.maxImages > limit))) {
+    throw new Error(`Page limit exceeded: ${chapterId}; at most ${limit} pages including cover`);
+  }
+}
+
 async function filesUnder(directory) {
   const files = [];
   for (const entry of await readdir(directory, {withFileTypes: true})) {
@@ -60,6 +70,7 @@ export async function checkSite(directory) {
     chapterIds.add(chapter.id);
     if (!chapter.pages.length) throw new Error('Empty chapter: ' + chapter.id);
     const manifest = JSON.parse(await readFile(path.join(root, 'chapters', chapter.id, 'pages.json'), 'utf8'));
+    checkImagePostPages(chapter.id, manifest);
     if (manifest.pages.length !== chapter.pages.length) throw new Error('Stale catalog: ' + chapter.id);
     const pageFiles = new Set();
     for (const [index, page] of chapter.pages.entries()) {

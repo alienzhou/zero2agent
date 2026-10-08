@@ -1,0 +1,26 @@
+{
+  "platform": "darwin",
+  "viewport": [
+    96,
+    30
+  ],
+  "narrow": [
+    42,
+    18
+  ],
+  "fixture": "local SSE; production CLI in real node-pty; raw output replayed in xterm.js 6.0.0",
+  "head": "bbca278662d23dee09d5e8bbf3141d8b64607f32",
+  "capturedAt": "2026-10-07T16:18:30.814Z",
+  "sourceHashes": {
+    "packages/core/src/file-mutations.ts": "9674c671b6f328e4a0eacf7dee40c7a8f1605c63bbf97063b5574d91dc6e2746",
+    "packages/core/src/loop.ts": "2cf47c655cee96531a05cdb3039f712d7b34a23c55ad2cab88f6c91263d29146",
+    "packages/tui/src/checkpoint-store.ts": "44390a6a9616f099408e44f4501480fc6894eb1b653093b69aa1d0c06545a899",
+    "packages/tui/src/checkpoint-view.ts": "49fc3cec61b8dadebf0885b6d923c895ebcde865ed91e38c1878c8ab60924a04",
+    "packages/tui/src/conversations.ts": "c3a94aa15a0543cbb140031d30a52180b4c16f3b17e7bce844f71bdfeaaba425",
+    "packages/tui/src/runtime-tui.ts": "f50590ca1c5e54d39f16f06a6011319bce17cb9a6396b3f5dc085b9a2b0a02c7",
+    "packages/tui/src/cli.ts": "0dd724b709f31666bf84ad99190a8e6c35fe0c3942f7339fa13e4519c8901e53"
+  },
+  "rawSha256": "7080317bec5f020a6687b11f0ec1028c36a727b1aba4577c0c2cec231a127ecd",
+  "restorationEscapesObserved": true,
+  "demoWorkspaceRemoved": true
+}

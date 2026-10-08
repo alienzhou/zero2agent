@@ -1,0 +1,30 @@
+● zero2agent · 选择文件 Checkpoint
+会话: b0e39d65 · 已保存 r2 · 日志 6112eb81 · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /
+› write_file · 1 文件 · settings.txt
+  b098d48c-7ab5-4514-92b4-293005a1ab0a · 2026-10-07T16:18
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+文件 Checkpoint 1/1 · 仅当前工作目录
+↑↓ / PgUp PgDn 选择 · Enter 查看
+Esc / Ctrl-C 返回 · 草稿保留

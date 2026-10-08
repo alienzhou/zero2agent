@@ -1,0 +1,18 @@
+● zero2agent · 确认文件回退
+会话: b0e39d65 · 已保存 r2 · 日志 6112eb8
+回退文件 · b098d48c-7ab5-4514-92b4-293005
+a1ab0a
+仅保护 write_file / replace_in_file / del
+ete；shell、人工终端与外部服务不自动回退
+。
+会话原史与运行日志保留。确认后仍会重新校
+验磁盘；多文件逐个替换。
+替换  settings.txt  11 → 12 bytes
+确认令牌: a4c8a54908e0bfe2fa73ba7fefa1283
+9bae00a62b56ad525d28afc44efd4c128
+
+
+
+行 1–10 / 10 · y 确认回退 · n/Enter 取消
+↑↓ / PgUp PgDn / Home End 翻阅
+Esc / Ctrl-C 返回文件列表 · 草稿保留

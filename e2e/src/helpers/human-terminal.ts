@@ -58,6 +58,9 @@ export function startHumanTerminal(
       TMPDIR: cwd,
       TERM: 'xterm-256color',
       ZERO2AGENT_SKIP_LOCAL_ENV: '1',
+      ...(process.env.ZERO2AGENT_CHECKPOINT_DIR
+        ? { ZERO2AGENT_CHECKPOINT_DIR: process.env.ZERO2AGENT_CHECKPOINT_DIR }
+        : {}),
       ...(process.env.ZERO2AGENT_LOG_DIR
         ? { ZERO2AGENT_LOG_DIR: process.env.ZERO2AGENT_LOG_DIR }
         : {}),

@@ -107,4 +107,4 @@ node scripts/e03-s005-logging-demo.mjs
 
 [技术概述](details/00-overview.md) · [设计](details/01-technical-design.md) · [任务](details/02-task-list.md) · [验收](details/03-verification-checklist.md) · [Backlog](details/04-backlog.md)
 
-上一篇：[E03-S004 会话落盘与恢复](../S004-session-persistence/README.md) | 下一篇：E03-S006 文件 Checkpoint 与回退（待实现）
+上一篇：[E03-S004 会话落盘与恢复](../S004-session-persistence/README.md) | 下一篇：[E03-S006 文件 Checkpoint 与回退](../S006-file-checkpoints/README.md)

@@ -41,6 +41,12 @@ try {
 
 摘要可能增加模型费用，退出后会话丢失；临时结果不是持久化保证。更多预算参数、CLI 精确 `/compact` 与无真实模型测试见 [E03-S001](../../specs/E03-product-foundations/S001-multi-turn/README.md)。
 
+## 受控文件副作用
+
+`AgentOptions.fileMutations` 可接收 `FileMutationHandler`。受信任工具用 `Tool.checkpointPaths` 声明参数中代表写入路径的字段；权限允许和路径边界检查后，Core 等待 handler，由它在持久化前置数据后调用 `execute()`，并记录实际结果。接口带 cwd、paths、toolName、toolCallId 及可用的操作/会话身份和取消信号；该元数据不发送给模型。
+
+这是可阻止尚未开始写入的控制接口。handler 失败会形成配对的工具错误；执行后的保存失败可能已有文件效果，宿主需保留恢复证据并明确报告，不重试工具。SDK 默认不配置文件存储；生产 CLI 的实现与可靠性边界见 [S006](../../specs/E03-product-foundations/S006-file-checkpoints/README.md)。
+
 ## 测试
 
 ### 单元测试

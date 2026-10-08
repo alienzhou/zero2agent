@@ -24,6 +24,7 @@ interface FailedItem {
  *   - 部分成功 → 如实陈述成败，不带 Error: 前缀
  */
 export const deleteTool: Tool = {
+  checkpointPaths: ['paths'],
   permission: { effect: 'write', paths: ['paths'] },
   name: 'delete',
   description:

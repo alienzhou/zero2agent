@@ -12,6 +12,8 @@ import { clipText, graphemes, safeText, textWidth, wrapText } from './display-te
 import { cleanupBackgroundOnExit, setupTerminalRuntime } from './setup-terminal-runtime.js'
 import { runHumanTerminal } from './human-terminal.js'
 import { Conversations } from './conversations.js'
+import { checkpointTitle } from './checkpoint-view.js'
+import { CHECKPOINT_SCOPE } from './checkpoint-store.js'
 import { restoreTimeline } from './runtime-state.js'
 
 const ENTER_SCREEN = '\x1b[?1049h\x1b[?2004h\x1b[?25l'
@@ -47,11 +49,17 @@ const COMMANDS = [
   '/save',
   '/logs',
   '/log',
+  '/checkpoints',
+  '/diff',
+  '/undo',
+  '/recover',
+  '/checkpoint-stats',
+  '/checkpoint-prune',
 ]
 const MAX_DRAFT_LENGTH = 16_384
 const DRAFT_LIMIT_NOTICE = '输入上限 16,384 个 UTF-16 单元；本次输入或整段粘贴未加入，原草稿保留。'
 const HELP =
-  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/logs 运行日志列表，/log [UUID] [operationId] 查看日志；Esc 返回，↑↓ / PgUp/PgDn 翻阅。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/logs 运行日志列表，/log [UUID] [operationId] 查看日志；Esc 返回，↑↓ / PgUp/PgDn 翻阅。\n/checkpoints 文件列表，/diff UUID 差异，/undo [UUID] 回退预览，/recover UUID 检查中断写入。\n/checkpoint-stats 占用，/checkpoint-prune 清理过期记录。仅受控文件工具自动捕获，shell 和人工终端不捕获。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -79,12 +87,15 @@ export class RuntimeTui {
     index: number
     displayed: boolean
     logs?: boolean
+    checkpoints?: boolean
   }
   private viewer?: {
     text: string
     offset: number
     displayed: boolean
     back?: RuntimeTui['selector']
+    title?: string
+    checkpoint?: { id: string; recovery: boolean; token?: string }
   }
   private logBack?: RuntimeTui['selector']
   private active = false
@@ -115,6 +126,11 @@ export class RuntimeTui {
   private tick?: NodeJS.Timeout
   private operation?: Promise<void>
   private done: () => void = () => {}
+
+  checkpointNotice(message: string): void {
+    if (this.closed) process.stderr.write(safeText(message) + '\n')
+    else this.notice(message)
+  }
 
   logFailure(): void {
     const message = '日志记录不可用；任务继续，记录可能不完整。'
@@ -169,6 +185,7 @@ export class RuntimeTui {
     this.conversations = conversations
     this.state = restoreTimeline(agent.snapshot())
     if (resumed) this.notice(resumed)
+    if (conversations.checkpoints) this.notice(CHECKPOINT_SCOPE)
     this.originalRaw = process.stdin.isRaw ?? false
     setupTerminalRuntime(undefined, {
       quiet: true,
@@ -392,12 +409,16 @@ export class RuntimeTui {
       else if (key.name === 'return') {
         const item = selector.items[selector.index]
         if (item?.error) {
-          this.notice(`${selector.logs ? '无法读取日志' : '无法恢复'}: ${item.error}`)
+          this.notice(
+            `${selector.checkpoints ? '无法读取 Checkpoint' : selector.logs ? '无法读取日志' : '无法恢复'}: ${item.error}`
+          )
           this.selector = undefined
         } else if (item) {
           this.selector = undefined
-          if (selector.logs) this.logBack = selector
-          this.operation = this.submit(`${selector.logs ? '/log' : '/resume'} ${item.id}`)
+          if (selector.logs || selector.checkpoints) this.logBack = selector
+          this.operation = this.submit(
+            `${selector.checkpoints ? '/diff' : selector.logs ? '/log' : '/resume'} ${item.id}`
+          )
         }
       }
       selector.index = Math.max(0, Math.min(selector.items.length - 1, selector.index))
@@ -407,6 +428,28 @@ export class RuntimeTui {
     if (this.viewer) {
       const viewer = this.viewer
       if (!viewer.displayed) return
+      if (!this.busy && viewer.checkpoint) {
+        const checkpoint = viewer.checkpoint
+        if (!checkpoint.token && text?.toLowerCase() === 'r') {
+          this.logBack = viewer.back
+          this.viewer = undefined
+          this.operation = this.submit(
+            `${checkpoint.recovery ? '/recover' : '/undo'} ${checkpoint.id}`
+          )
+          return
+        }
+        if (checkpoint.token && text?.toLowerCase() === 'y') {
+          this.viewer = undefined
+          this.operation = this.submit(
+            `${checkpoint.recovery ? '/recover' : '/undo'} ${checkpoint.id} ${checkpoint.token}`
+          )
+          return
+        }
+        if (checkpoint.token && (text?.toLowerCase() === 'n' || key.name === 'return')) {
+          this.onInterrupt()
+          return
+        }
+      }
       const total = wrapText(viewer.text, this.width()).length
       if (key.name === 'escape') {
         this.onInterrupt()
@@ -614,6 +657,63 @@ export class RuntimeTui {
       } else if (input === '/save') {
         await this.conversations!.save()
         this.notice(this.conversations!.status)
+      } else if (input === '/checkpoints') {
+        const records = await this.conversations!.listCheckpoints()
+        if (!records.length) this.notice('当前工作目录没有文件 Checkpoint。')
+        else
+          this.selector = {
+            items: records.map(r => ({
+              id: r.id,
+              title: checkpointTitle(r),
+              updatedAt: r.createdAt,
+              pending: r.state === 'pending',
+            })),
+            index: 0,
+            displayed: false,
+            checkpoints: true,
+          }
+        this.state.phase = 'idle'
+      } else if (input.startsWith('/diff ')) {
+        const id = input.slice(6).trim()
+        const record = await this.conversations!.checkpoints!.read(id)
+        this.viewer = {
+          text: await this.conversations!.checkpointDiff(id),
+          offset: 0,
+          displayed: false,
+          back: this.logBack,
+          title: '文件差异',
+          checkpoint: { id, recovery: record.state === 'pending' },
+        }
+        this.logBack = undefined
+        this.state.phase = 'idle'
+      } else if (/^\/(undo|recover)(?:\s|$)/.test(input)) {
+        const [command, id, token, ...extra] = input.split(/\s+/)
+        if (extra.length) throw new Error('Use /undo UUID [token] or /recover UUID [token]')
+        const recovery = command === '/recover'
+        if (token) {
+          this.notice(await this.conversations!.undo(id, token, recovery))
+          this.state.phase = 'completed'
+        } else {
+          const plan = await this.conversations!.previewUndo(id, recovery)
+          this.viewer = {
+            text: plan.text,
+            offset: 0,
+            displayed: false,
+            back: this.logBack,
+            title: '确认文件回退',
+            checkpoint: { id: plan.id, recovery, token: plan.token },
+          }
+          this.logBack = undefined
+          this.state.phase = 'idle'
+        }
+      } else if (input === '/checkpoint-stats' || input === '/checkpoint-prune') {
+        this.viewer = {
+          text: await this.conversations!.checkpointUsage(input === '/checkpoint-prune'),
+          offset: 0,
+          displayed: false,
+          title: 'Checkpoint 占用',
+        }
+        this.state.phase = 'idle'
       } else if (input === '/logs') {
         const items = await this.conversations!.listLogs()
         if (!items.length) this.notice('当前工作目录没有运行日志。')
@@ -709,11 +809,11 @@ export class RuntimeTui {
         ? ` · ${((Date.now() - this.state.startedAt) / 1000).toFixed(1)}s`
         : ''
     const spinner = this.busy ? ['◐', '◓', '◑', '◒'][Math.floor(Date.now() / 250) % 4] : '●'
-    const header = `${spinner} zero2agent${this.conversations?.logFailed ? ' · 日志不可用' : ''} · ${this.approval ? '等待审批' : this.selector ? (this.selector.logs ? '选择运行日志' : '选择会话') : this.viewer ? '查看运行日志' : this.busy && this.state.finished ? '正在保存会话' : (PHASE[this.state.phase] ?? this.state.phase)}${elapsed}`
+    const header = `${spinner} zero2agent${this.conversations?.logFailed ? ' · 日志不可用' : ''} · ${this.approval ? '等待审批' : this.selector ? (this.selector.checkpoints ? '选择文件 Checkpoint' : this.selector.logs ? '选择运行日志' : '选择会话') : this.viewer ? (this.viewer.title ?? '查看运行日志') : this.busy && this.state.finished ? '正在保存会话' : (PHASE[this.state.phase] ?? this.state.phase)}${elapsed}`
     const lines = [
       clipText(header, width),
       clipText(
-        `会话: ${(this.conversations?.status ?? '').replace(this.conversations?.id ?? '\0', this.conversations?.id?.slice(0, 8) ?? '')} · ${this.conversations?.logStatus ?? ''} · 工作目录: ${process.cwd()}`,
+        `会话: ${(this.conversations?.status ?? '').replace(this.conversations?.id ?? '\0', this.conversations?.id?.slice(0, 8) ?? '')} · ${this.conversations?.logStatus ?? ''} · ${this.conversations?.checkpointStatus ?? ''} · 工作目录: ${process.cwd()}`,
         width
       ),
     ]
@@ -754,12 +854,15 @@ export class RuntimeTui {
       while (lines.length < 2 + bodyHeight) lines.push('')
       lines.push(
         clipText(
-          `${this.selector.logs ? '运行日志' : '会话'} ${index + 1}/${items.length} · 仅当前工作目录`,
+          `${this.selector.checkpoints ? '文件 Checkpoint' : this.selector.logs ? '运行日志' : '会话'} ${index + 1}/${items.length} · 仅当前工作目录`,
           width
         )
       )
       lines.push(
-        clipText(`↑↓ / PgUp PgDn 选择 · Enter ${this.selector.logs ? '查看' : '恢复'}`, width)
+        clipText(
+          `↑↓ / PgUp PgDn 选择 · Enter ${this.selector.logs || this.selector.checkpoints ? '查看' : '恢复'}`,
+          width
+        )
       )
       lines.push(clipText('Esc / Ctrl-C 返回 · 草稿保留', width))
       this.selector.displayed = true
@@ -773,13 +876,16 @@ export class RuntimeTui {
       while (lines.length < 2 + bodyHeight) lines.push('')
       lines.push(
         clipText(
-          `行 ${this.viewer.offset + 1}–${Math.min(all.length, this.viewer.offset + bodyHeight)} / ${all.length} · 只读快照`,
+          `行 ${this.viewer.offset + 1}–${Math.min(all.length, this.viewer.offset + bodyHeight)} / ${all.length} · ${this.viewer.checkpoint?.token ? 'y 确认回退 · n/Enter 取消' : this.viewer.checkpoint ? 'r 预览回退' : '只读快照'}`,
           width
         )
       )
       lines.push(clipText('↑↓ / PgUp PgDn / Home End 翻阅', width))
       lines.push(
-        clipText(`Esc / Ctrl-C ${this.viewer.back ? '返回日志列表' : '返回对话'} · 草稿保留`, width)
+        clipText(
+          `Esc / Ctrl-C ${this.viewer.back ? (this.viewer.back.checkpoints ? '返回文件列表' : '返回日志列表') : '返回对话'} · 草稿保留`,
+          width
+        )
       )
       this.viewer.displayed = true
     } else {

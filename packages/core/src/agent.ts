@@ -1,3 +1,4 @@
+import type { FileMutationHandler } from './file-mutations.js'
 /**
  * Agent 类 - 封装 ReACT 循环的简化入口
  */
@@ -19,6 +20,7 @@ import { TurnCancelledError } from './runtime.js'
 import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  fileMutations?: FileMutationHandler
   diagnostics?: DiagnosticObserver
   config?: LLMConfig
   context?: ContextOptions
@@ -52,6 +54,7 @@ export class Agent {
     try {
       return await runLoop(message, {
         signal: controller.signal,
+        fileMutations: this.options.fileMutations,
         diagnostics: this.options.diagnostics,
         diagnosticContext,
         config: this.options.config,
