@@ -4,7 +4,7 @@
 
 2026-10-08 完成交付门禁。被测代码/测试候选为 `8fde2fe`；最终交付只补充文档与证据，`summary.json` 保存全部 Core/TUI/E2E 源文件 SHA-256，开始/结束一致。生产恢复逻辑最后修改于 `bbca278`，readline 测试修正于 `8fde2fe`。
 
-分支 `codex/e03-s006-file-checkpoints`，草稿 [PR #22](https://github.com/alienzhou/zero2agent/pull/22)。初版 Tag `E03-S006-file-checkpoints` 保持不变，18 页课程修订使用 `E03-S006-file-checkpoints-18p`；main 仍为 `4f89f40`。本课尚未合入或部署。
+2026-10-08 按用户授权，将分支 `codex/e03-s006-file-checkpoints` 的 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 通过 merge commit `8a0d0e8` 合入 main，保留逐步提交历史。初版 Tag `E03-S006-file-checkpoints`（`9d57d5f`）及 18 页修订 Tag `E03-S006-file-checkpoints-18p`（`0d2a6a8`）保持不变。课程网站尚未部署。
 
 ## 验证矩阵
 
@@ -34,7 +34,7 @@
 
 实测 macOS arm64、Node v22.15.1。未验证 Windows/Linux、网络文件系统或突然断电。故障注入与真实 SIGKILL 分开记载。哈希是内容一致性校验，不是防篡改签名；多文件恢复不是原子事务，也不能隔离任意外部写入者。
 
-人工代码/教学审阅：尚未完成。AI 源码自查、故障注入、实际进程与自动页面检查均不能替代人工。网站未部署，PR 保持 draft；本课未执行合并。
+用户已明确授权合入主干；未新增独立人工逐行代码审阅记录。AI 源码自查、故障注入、实际进程与自动页面检查的结果按上表保留。合并前再次确认产品源码/测试和 18 页 HTML 哈希分别与验收报告及浏览器 QA 一致，site:check 通过；GitHub 未返回配置中的 CI 状态，不据此声称远端 CI 通过。网站尚未部署。
 
 ## 18 页发布约束修订
 

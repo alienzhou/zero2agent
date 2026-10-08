@@ -17,7 +17,7 @@
 | [E03-S003](./S003-runtime-tui/README.md) | 让运行过程看得见、控得住 | 结构化事件、完整 Turn 取消、草稿/审批/工具详情与人工 PTY 交接 | Done，已合入 main |
 | [E03-S004](./S004-session-persistence/README.md) | 关掉程序，下次还能接着聊 | 会话落盘、列表与恢复；恢复对话，不恢复旧进程 | Done，已合入 main |
 | [E03-S005](./S005-runtime-logging/README.md) | 出问题时，能还原发生了什么 | 关联请求、工具与后台原生结果；只读日志列表/查看器，明确失败和隐私边界 | Done，已合入 main |
-| [E03-S006](./S006-file-checkpoints/README.md) | 改错了，能退回去 | 受控文件分块去重、差异查看、冲突检查与可恢复回退 | 交付候选，待人工审阅 |
+| [E03-S006](./S006-file-checkpoints/README.md) | 改错了，能退回去 | 受控文件分块去重、差异查看、冲突检查与可恢复回退 | Done，已合入 main |
 
 ## 课程边界
 
@@ -32,4 +32,4 @@
 
 从 [E03-S001：让 Agent 接着聊，也能控制上下文长度](./S001-multi-turn/README.md)开始：先看两轮续聊与大工具结果的场景，理解历史和工作上下文，再读自动层级与并发，最后按[分步跟练](./S001-multi-turn/follow-along.md)用本地测试验证预算和手动命令。真实模型练习会产生费用，需单独选择。
 
-最新课为 [E03-S006：文件 Checkpoint 与回退](./S006-file-checkpoints/README.md)。先用[离线演示](./S006-file-checkpoints/follow-along.md)真实修改、查看和回退文件，再看分块复用、容量回收、冲突与崩溃恢复。S006 交付候选尚未合入 main；这节完成后进入 Epic 4 健壮性与上下文管理（规划）。
+最新课为 [E03-S006：文件 Checkpoint 与回退](./S006-file-checkpoints/README.md)。先用[离线演示](./S006-file-checkpoints/follow-along.md)真实修改、查看和回退文件，再看分块复用、容量回收、冲突与崩溃恢复。S006 已通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入 main；下一阶段为 Epic 4 健壮性与上下文管理（规划）。

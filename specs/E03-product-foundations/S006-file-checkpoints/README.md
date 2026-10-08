@@ -2,7 +2,7 @@
 
 [Epic 3](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
-交付候选：[PR #22](https://github.com/alienzhou/zero2agent/pull/22)，固定 Tag `E03-S006-file-checkpoints-18p`；尚未合入 main 或部署。[分层验收](./details/03-verification-checklist.md)已记录最终结果。
+2026-10-08 已通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入 main（`8a0d0e8`）。18 页课程固定 Tag `E03-S006-file-checkpoints-18p` 保持不变，课程网站尚未部署。[分层验收](./details/03-verification-checklist.md)已记录最终结果。
 
 你让 Agent 改了配置，运行后发现方向不对。能否退回去，取决于写入之前有没有保存旧内容，也取决于你后来是否又改过同一个文件。把对话删掉、把日志倒着读，都不能回答这两个问题。
 

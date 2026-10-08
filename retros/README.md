@@ -20,12 +20,7 @@ This directory contains retrospective notes and lessons learned.
 | [E03-S003-runtime-tui.md](./E03-S003-runtime-tui.md) | E03-S003 运行状态与 TUI | 事件与控制、取消证据、连续输入体验与跨模式验收；已通过 PR #19 合入 main，原验收证据保留 |
 | [E03-S004-session-persistence.md](./E03-S004-session-persistence.md) | E03-S004 会话落盘与恢复 | 快照边界、冲突与失败反馈、跨进程验收；已通过 PR #20 合入 main |
 | [E03-S005-runtime-logging.md](./E03-S005-runtime-logging.md) | E03-S005 运行日志与问题追查 | 元信息归属、只读查看器、持久边界；已通过 PR #21 合入 main |
-
-## New course candidate
-
-| Retro | Iteration | Notes |
-|---|---|---|
-| [E03-S006-file-checkpoints.md](./E03-S006-file-checkpoints.md) | E03-S006 文件 Checkpoint 与回退 | 受控写入、分块复用、空间与恢复保证、故障和分层验收 |
+| [E03-S006-file-checkpoints.md](./E03-S006-file-checkpoints.md) | E03-S006 文件 Checkpoint 与回退 | 受控写入、分块复用、空间与恢复保证、故障和分层验收；已通过 PR #22 合入 main |
 
 ## Directory structure
 
