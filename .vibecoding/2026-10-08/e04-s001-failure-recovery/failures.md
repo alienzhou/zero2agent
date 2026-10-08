@@ -7,3 +7,4 @@
 - E2E 首轮 28 项有 1 项旧日志断言失败：exitCode=7 的原生终端现在正确标记工具 error，原断言只从 completed 查身份。改为核对实际 error 终态和同一请求身份，保留退出码及正文排除断言；随后 28 项通过。新增 CLI/PTY 故障专项扩充后 12 项通过。
 - 离线跟练发现 plain 将返回 Error: 的工具显示为绿色 ✓。宿主改为从 Core 结构化 tool-state 读取终态，使用红色 ✗；不解析输出猜执行状态。
 - lint 发现两处重写 catch 参数，改用独立 const 选择预算原因。E2E tsc 改从含 TypeScript 依赖的 workspace 执行，根目录未安装该二进制不是类型错误。
+- 第一次保存原始全仓输出时，Core 440 通过、2 项 cwd 契约失败；为读取原生终态新增的 onResultMetadata 字段使旧精确对象断言失败。添加对该回调的显式断言，同时保留 cwd 固定、signal 和实际调用参数断言。原始失败保留在 acceptance/offline-initial.txt。

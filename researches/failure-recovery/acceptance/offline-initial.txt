@@ -1,0 +1,103 @@
+
+> zero2agent@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e04-s001
+> pnpm -r test
+
+Scope: 5 of 6 workspace projects
+packages/cdp-debug test$ vitest run
+packages/cdp-debug test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s001/packages/cdp-debug
+packages/cdp-debug test:  Test Files  1 passed (1)
+packages/cdp-debug test:       Tests  1 passed (1)
+packages/cdp-debug test:    Start at  12:51:48
+packages/cdp-debug test:    Duration  99ms (transform 13ms, setup 0ms, import 23ms, tests 5ms, environment 0ms)
+packages/cdp-debug test: Done
+packages/core test$ vitest run
+packages/core test: ◇ injected env (0) from ../../.env.local // tip: ⌁ auth for agents [www.vestauth.com]
+packages/core test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s001/packages/core
+packages/core test:  ❯ src/__tests__/session.test.ts (34 tests | 2 failed) 154ms
+packages/core test:      × reset removes history but retains tool configuration and cwd 5ms
+packages/core test:      × pins default cwd when the Agent is constructed 2ms
+packages/core test: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+packages/core test:  FAIL  src/__tests__/session.test.ts > in-memory sessions > reset removes history but retains tool configuration and cwd
+packages/core test: AssertionError: expected "vi.fn()" to be called with arguments: [ { message: 'value' }, { …(2) } ]
+packages/core test: Received:
+packages/core test:   1st vi.fn() call:
+packages/core test: @@ -2,8 +2,22 @@
+packages/core test:     {
+packages/core test:       "message": "value",
+packages/core test:     },
+packages/core test:     {
+packages/core test:       "cwd": "/tmp/session-project",
+packages/core test: -     "signal": Any<AbortSignal>,
+packages/core test: +     "onResultMetadata": [Function anonymous],
+packages/core test: +     "signal": AbortSignal {
+packages/core test: +       Symbol(kEvents): Map {},
+packages/core test: +       Symbol(events.maxEventTargetListeners): 0,
+packages/core test: +       Symbol(events.maxEventTargetListenersWarned): false,
+packages/core test: +       Symbol(kHandlers): Map {},
+packages/core test: +       Symbol(kAborted): false,
+packages/core test: +       Symbol(kReason): undefined,
+packages/core test: +       Symbol(kComposite): true,
+packages/core test: +       Symbol(kSourceSignals): Set {
+packages/core test: +         SafeWeakRef {},
+packages/core test: +         SafeWeakRef {},
+packages/core test: +       },
+packages/core test: +       Symbol(kDependantSignals): Set {},
+packages/core test: +     },
+packages/core test:     },
+packages/core test:   ]
+packages/core test: Number of calls: 1
+packages/core test:  ❯ src/__tests__/session.test.ts:272:21
+packages/core test:     270|     await agent.run('new')
+packages/core test:     271|     expect(requests[1]).toEqual([{ role: 'user', content: 'new' }])
+packages/core test:     272|     expect(execute).toHaveBeenCalledWith(
+packages/core test:        |                     ^
+packages/core test:     273|       { message: 'value' },
+packages/core test:     274|       { cwd: '/tmp/session-project', signal: expect.any(AbortSignal) }
+packages/core test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+packages/core test:  FAIL  src/__tests__/session.test.ts > in-memory sessions > pins default cwd when the Agent is constructed
+packages/core test: AssertionError: expected "vi.fn()" to be called with arguments: [ Anything, …(1) ]
+packages/core test: Received:
+packages/core test:   1st vi.fn() call:
+packages/core test:   [
+packages/core test: -   Anything,
+packages/core test: +   {
+packages/core test: +     "message": "value",
+packages/core test: +   },
+packages/core test:     {
+packages/core test:       "cwd": "/tmp/project-a",
+packages/core test: -     "signal": Any<AbortSignal>,
+packages/core test: +     "onResultMetadata": [Function anonymous],
+packages/core test: +     "signal": AbortSignal {
+packages/core test: +       Symbol(kEvents): Map {},
+packages/core test: +       Symbol(events.maxEventTargetListeners): 0,
+packages/core test: +       Symbol(events.maxEventTargetListenersWarned): false,
+packages/core test: +       Symbol(kHandlers): Map {},
+packages/core test: +       Symbol(kAborted): false,
+packages/core test: +       Symbol(kReason): undefined,
+packages/core test: +       Symbol(kComposite): true,
+packages/core test: +       Symbol(kSourceSignals): Set {
+packages/core test: +         SafeWeakRef {},
+packages/core test: +         SafeWeakRef {},
+packages/core test: +       },
+packages/core test: +       Symbol(kDependantSignals): Set {},
+packages/core test: +     },
+packages/core test:     },
+packages/core test:   ]
+packages/core test: Number of calls: 1
+packages/core test:  ❯ src/__tests__/session.test.ts:326:21
+packages/core test:     324|     cwd.mockReturnValue('/tmp/project-b')
+packages/core test:     325|     await agent.run('inspect')
+packages/core test:     326|     expect(execute).toHaveBeenCalledWith(expect.anything(), {
+packages/core test:        |                     ^
+packages/core test:     327|       cwd: '/tmp/project-a',
+packages/core test:     328|       signal: expect.any(AbortSignal),
+packages/core test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+packages/core test:  Test Files  1 failed | 31 passed (32)
+packages/core test:       Tests  2 failed | 440 passed (442)
+packages/core test:    Start at  12:51:48
+packages/core test:    Duration  44.46s (transform 992ms, setup 0ms, import 2.03s, tests 99.36s, environment 2ms)
+packages/core test: Failed
+/Users/zhouhongxuan/program/works/zero2agent-e04-s001/packages/core:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @zero2agent/core@0.0.0 test: `vitest run`
+Exit status 1
+ ELIFECYCLE  Test failed. See above for more details.

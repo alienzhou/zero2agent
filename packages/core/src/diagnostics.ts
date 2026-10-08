@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { performance } from 'node:perf_hooks'
-import type Anthropic from '@anthropic-ai/sdk'
+import Anthropic from '@anthropic-ai/sdk'
 import type { ContextRequest } from './context-budget.js'
 import type { RuntimeEvent } from './runtime.js'
 import { notifyObserver } from './runtime.js'
@@ -20,6 +20,7 @@ export type DiagnosticError =
   | 'network'
   | 'other'
   | 'budget'
+  | 'service'
 
 /** Explicit metadata only. No prompts, tool arguments/results, headers or exception text. */
 export interface DiagnosticEvent {
@@ -91,6 +92,8 @@ export function diagnosticError(
   let status: number | undefined
   let name = ''
   let message = ''
+  let serviceType = ''
+  let network = false
   try {
     if (error && typeof error === 'object') {
       const candidate = error as { status?: unknown; name?: unknown; message?: unknown }
@@ -100,6 +103,22 @@ export function diagnosticError(
           : undefined
       name = typeof candidate.name === 'string' ? candidate.name : ''
       message = typeof candidate.message === 'string' ? candidate.message.slice(0, 16384) : ''
+      if (error instanceof Anthropic.APIError) {
+        const body = error.error as { type?: string; error?: { type?: string } } | undefined
+        serviceType = body?.error?.type ?? body?.type ?? ''
+      }
+      let cause: unknown = error
+      for (let depth = 0; depth < 5 && cause && typeof cause === 'object'; depth++) {
+        const data = cause as { code?: unknown; cause?: unknown }
+        if (
+          typeof data.code === 'string' &&
+          /^(?:ECONNRESET|ECONNREFUSED|ETIMEDOUT|EPIPE|EAI_AGAIN|UND_ERR_SOCKET|UND_ERR_CONNECT_TIMEOUT)$/.test(
+            data.code
+          )
+        )
+          network = true
+        cause = data.cause
+      }
     }
   } catch {
     /* An exception object is untrusted data, not part of logging control. */
@@ -111,13 +130,18 @@ export function diagnosticError(
           signal.reason?.name !== 'TimeoutError' &&
           signal.reason?.name !== 'RequestTimeoutError'
         ? 'cancelled'
-        : /timeout/i.test(name) || signal?.reason?.name === 'TimeoutError'
+        : error instanceof Anthropic.APIConnectionTimeoutError ||
+            /timeout/i.test(name) ||
+            signal?.reason?.name === 'TimeoutError'
           ? 'timeout'
-          : /abort|cancel/i.test(name)
+          : error instanceof Anthropic.APIUserAbortError || /abort|cancel/i.test(name)
             ? 'cancelled'
-            : status === 401 || status === 403
+            : status === 401 ||
+                status === 403 ||
+                serviceType === 'authentication_error' ||
+                serviceType === 'permission_error'
               ? 'auth'
-              : status === 429
+              : status === 429 || serviceType === 'rate_limit_error'
                 ? 'rate-limit'
                 : /prompt is too long|context[_ ](?:length|overflow|window)|too many (?:input )?tokens/i.test(
                       message
@@ -125,9 +149,13 @@ export function diagnosticError(
                   ? 'context'
                   : status
                     ? 'http'
-                    : /connection|network|IncompleteStream/i.test(name)
-                      ? 'network'
-                      : 'other'
+                    : serviceType === 'api_error' || serviceType === 'overloaded_error'
+                      ? 'service'
+                      : error instanceof Anthropic.APIConnectionError ||
+                          network ||
+                          /connection|network|IncompleteStream/i.test(name)
+                        ? 'network'
+                        : 'other'
   return {
     errorKind,
     ...(error instanceof RunBudgetError ? { limitReason: error.limitReason } : {}),

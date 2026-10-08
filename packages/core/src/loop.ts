@@ -373,6 +373,13 @@ export function createCompactionRuntime(
 
 function isContextOverflow(error: unknown): boolean {
   if (!(error instanceof Error)) return false
+  const status = (error as { status?: number }).status
+  if (status !== undefined && status !== 400 && status !== 413) return false
+  if (status === undefined && error instanceof Anthropic.APIError) {
+    const body = error.error as { type?: string; error?: { type?: string } } | undefined
+    const type = body?.error?.type ?? body?.type
+    if (type && !['invalid_request_error', 'request_too_large'].includes(type)) return false
+  }
   return /prompt is too long|context[_ ](?:length[_ ]exceeded|overflow|window)|maximum context|too many (?:input )?tokens/i.test(
     error.message
   )

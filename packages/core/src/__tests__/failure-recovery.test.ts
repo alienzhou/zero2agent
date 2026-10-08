@@ -1,4 +1,7 @@
 import { createServer, type ServerResponse } from 'node:http'
+import { mkdtemp, writeFile, readFile, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import Anthropic from '@anthropic-ai/sdk'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Agent } from '../agent.js'
@@ -115,6 +118,69 @@ const results = (agent: Agent) =>
     )
 
 describe('failure recovery through real HTTP and SDK', () => {
+  it('recovers an actual mid-stream socket disconnect without committing its draft', async () => {
+    const p = await provider((_body, res, index) => {
+      if (index > 1) {
+        answer(res)
+        return
+      }
+      res.writeHead(200, { 'content-type': 'text/event-stream' })
+      res.write(
+        'event: message_start\ndata: {"type":"message_start","message":{"id":"broken","type":"message","role":"assistant","content":[],"model":"fixture","stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":1,"output_tokens":0}}}\n\n'
+      )
+      res.write(
+        'event: content_block_start\ndata: {"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}}\n\n'
+      )
+      res.write(
+        'event: content_block_delta\ndata: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"socket draft"}}\n\n'
+      )
+      setTimeout(() => res.destroy(), 20)
+    })
+    const records: DiagnosticEvent[] = []
+    const agent = new Agent({
+      config: p.config,
+      tools: [],
+      limits,
+      diagnostics: e => records.push(e),
+    })
+    expect(await agent.run('inspect')).toBe('completed')
+    expect(p.requests).toHaveLength(2)
+    expect(JSON.stringify(agent.getHistory())).not.toContain('socket draft')
+    expect(records.find(e => e.kind === 'request' && e.event === 'error')?.errorKind).toBe(
+      'network'
+    )
+  })
+  it('recovers a typed SSE service error without accepting its partial output', async () => {
+    const p = await provider((_body, res, index) => {
+      if (index > 1) {
+        answer(res)
+        return
+      }
+      res.writeHead(200, { 'content-type': 'text/event-stream' })
+      res.end(
+        'event: error\ndata: {"type":"error","error":{"type":"overloaded_error","message":"fixture overloaded"}}\n\n'
+      )
+    })
+    const agent = new Agent({ config: p.config, tools: [], limits })
+    expect(await agent.run('inspect')).toBe('completed')
+    expect(p.requests).toHaveLength(2)
+    expect(JSON.stringify(agent.getHistory())).not.toContain('fixture overloaded')
+  })
+  it('does not mistake authentication text for a context recovery request', async () => {
+    const p = await provider((_body, res, index) => {
+      if (index === 1) answer(res, 'historical evidence '.repeat(100))
+      else
+        res
+          .writeHead(401, { 'content-type': 'application/json' })
+          .end(
+            '{"type":"error","error":{"type":"authentication_error","message":"prompt is too long"}}'
+          )
+    })
+    const agent = new Agent({ config: p.config, tools: [], limits })
+    await agent.run('first')
+    await expect(agent.run('next')).rejects.toMatchObject({ status: 401 })
+    expect(p.requests).toHaveLength(2)
+  })
   it('recovers a connection closed before HTTP headers', async () => {
     const p = await provider((_body, res, index) => (index === 1 ? res.destroy() : answer(res)))
     expect(await new Agent({ config: p.config, tools: [], limits }).run('inspect')).toBe(
@@ -153,25 +219,23 @@ describe('failure recovery through real HTTP and SDK', () => {
       if (body.stream) answer(res, 'historical detail '.repeat(300))
       else if (++summaries === 1) httpError(res, 500)
       else
-        res
-          .writeHead(200, { 'content-type': 'application/json' })
-          .end(
-            JSON.stringify({
-              id: 'summary',
-              type: 'message',
-              role: 'assistant',
-              model: 'claude-sonnet-4-20250514',
-              content: [
-                {
-                  type: 'text',
-                  text: 'Observed historical details. Preserve the current user request.',
-                },
-              ],
-              stop_reason: 'end_turn',
-              stop_sequence: null,
-              usage: { input_tokens: 10, output_tokens: 10 },
-            })
-          )
+        res.writeHead(200, { 'content-type': 'application/json' }).end(
+          JSON.stringify({
+            id: 'summary',
+            type: 'message',
+            role: 'assistant',
+            model: 'claude-sonnet-4-20250514',
+            content: [
+              {
+                type: 'text',
+                text: 'Observed historical details. Preserve the current user request.',
+              },
+            ],
+            stop_reason: 'end_turn',
+            stop_sequence: null,
+            usage: { input_tokens: 10, output_tokens: 10 },
+          })
+        )
     })
     const records: DiagnosticEvent[] = [],
       notices: unknown[] = []
@@ -405,8 +469,10 @@ describe('failure recovery through real HTTP and SDK', () => {
     expect(p.urls.every(url => url.includes('count_tokens'))).toBe(true)
   })
   it('waits for a signal-ignoring tool to settle after a duration limit', async () => {
+    const cwd = await mkdtemp(join(tmpdir(), 'zero2agent-late-write-'))
+    cleanup.push(() => rm(cwd, { recursive: true, force: true }))
     const p = await provider((_body, res, index) =>
-      index === 1 ? sse(res, [call('write')], 'tool_use') : answer(res)
+      index === 1 ? sse(res, [call('write', { path: 'late.txt' })], 'tool_use') : answer(res)
     )
     let finish!: () => void, toolSignal: AbortSignal | undefined
     const tool = probe(async (_input, ctx) => {
@@ -414,9 +480,13 @@ describe('failure recovery through real HTTP and SDK', () => {
       await new Promise<void>(resolve => {
         finish = resolve
       })
+      await writeFile(join(ctx.cwd, 'late.txt'), 'EFFECT-AFTER-DEADLINE')
       return 'observed write after deadline'
     })
+    tool.permission = { effect: 'write', paths: ['path'] }
     const agent = new Agent({
+      cwd,
+      permissions: { mode: 'bypass' },
       config: p.config,
       tools: [tool],
       limits: { ...limits, maxDurationMs: 200 },
@@ -428,6 +498,7 @@ describe('failure recovery through real HTTP and SDK', () => {
     finish()
     await rejection
     expect(results(agent)[0].content).toBe('observed write after deadline')
+    expect(await readFile(join(cwd, 'late.txt'), 'utf8')).toBe('EFFECT-AFTER-DEADLINE')
     expect(await agent.run('next')).toBe('completed')
   })
 })

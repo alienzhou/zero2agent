@@ -271,7 +271,11 @@ describe('in-memory sessions', () => {
     expect(requests[1]).toEqual([{ role: 'user', content: 'new' }])
     expect(execute).toHaveBeenCalledWith(
       { message: 'value' },
-      { cwd: '/tmp/session-project', signal: expect.any(AbortSignal) }
+      {
+        cwd: '/tmp/session-project',
+        signal: expect.any(AbortSignal),
+        onResultMetadata: expect.any(Function),
+      }
     )
   })
 
@@ -326,6 +330,7 @@ describe('in-memory sessions', () => {
     expect(execute).toHaveBeenCalledWith(expect.anything(), {
       cwd: '/tmp/project-a',
       signal: expect.any(AbortSignal),
+      onResultMetadata: expect.any(Function),
     })
   })
 })

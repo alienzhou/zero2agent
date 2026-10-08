@@ -32,7 +32,8 @@ export function retryable(error: unknown): boolean {
     if (error.headers?.get('x-should-retry') === 'false') return false
     if (error.status !== undefined)
       return error.status === 408 || error.status === 429 || error.status >= 500
-    const type = (error.error as { type?: string } | undefined)?.type
+    const body = error.error as { type?: string; error?: { type?: string } } | undefined
+    const type = body?.error?.type ?? body?.type
     if (type) return ['overloaded_error', 'api_error', 'rate_limit_error'].includes(type)
   }
   if (error instanceof Anthropic.APIConnectionError) return true

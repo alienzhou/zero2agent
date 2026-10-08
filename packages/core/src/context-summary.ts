@@ -147,7 +147,7 @@ export function createContextSummarizer(
           const summaryRequest = requestFor(model, budget, piece)
           const span = executor ? undefined : diagnostics?.request('summary', summaryRequest)
           try {
-            const send = (signal: AbortSignal) =>
+            const send = (signal: AbortSignal): Promise<Anthropic.Message> =>
               client.messages.create(summaryRequest, {
                 maxRetries: 0,
                 timeout: budget.timeoutMs,

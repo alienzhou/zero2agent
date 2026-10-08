@@ -310,9 +310,9 @@ async function main() {
     return
   }
   const logs = await LogStore.open(process.cwd(), {
-    onFailure: () => {
+    onFailure: failure => {
       if (tui) tui.logFailure()
-      else console.error('日志记录不可用；任务继续，使用 /log 查看状态。')
+      else console.error(`日志记录不可用 (${failure})；任务继续，使用 /log 查看状态。`)
     },
   })
   if ((listLogs && readLog) || (logOperation && !readLog))

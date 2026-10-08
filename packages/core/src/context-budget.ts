@@ -157,7 +157,7 @@ export class ContextBudget {
     const { max_tokens: _output, ...input } = request
     const span = executor ? undefined : diagnostics?.request('count', request)
     try {
-      const send = (signal: AbortSignal) =>
+      const send = (signal: AbortSignal): Promise<{ input_tokens: number }> =>
         client.messages.countTokens(input, {
           maxRetries: 0,
           timeout: this.timeoutMs,

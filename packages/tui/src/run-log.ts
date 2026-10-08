@@ -192,6 +192,7 @@ function validateRecord(value: unknown, runId: string): LogRecord {
       'network',
       'other',
       'budget',
+      'service',
     ],
   }
   for (const [key, values] of Object.entries(enums))
