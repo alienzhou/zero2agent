@@ -1,0 +1,39 @@
+specs/E04-reliability-and-context/S001-failure-recovery/details/01-technical-design.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-11
+.discuss/2026-10-08/e04-s001-failure-recovery/outline.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-11
+specs/E04-reliability-and-context/S001-failure-recovery/details/00-overview.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-5
+.vibecoding/2026-10-08/e04-s001-failure-recovery/prompt.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-5
+.vibecoding/2026-10-08/e04-s001-failure-recovery/failures.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-3
+specs/E04-reliability-and-context/S001-failure-recovery/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-16
+specs/E04-reliability-and-context/S001-failure-recovery/details/04-backlog.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-7
+.vibecoding/2026-10-08/e04-s001-failure-recovery/dialogue.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-7
+.vibecoding/2026-10-08/e04-s001-failure-recovery/learnings.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-3
+.discuss/2026-10-08/e04-s001-failure-recovery/decisions/D01-request-and-effect-boundaries.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-13
+specs/E04-reliability-and-context/S001-failure-recovery/details/02-task-list.md
+  s_58249cd92a0ae1::t_556cfacff97a30 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "32b3437100605d80c1b432b85189d751850d7a2b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
