@@ -1,0 +1,61 @@
+e2e/src/multi-turn-contract.test.ts
+  s_58249cd92a0ae1::t_fc29f2421c0173 210
+packages/core/src/request-executor.ts
+  s_58249cd92a0ae1::t_fc29f2421c0173 35-36
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_731695498a9037 195
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_731695498a9037 3,23,95-96,106-121,133-135,137,139-142,144
+  s_58249cd92a0ae1::t_19d05d551da378 152-158
+.vibecoding/2026-10-08/e04-s001-failure-recovery/failures.md
+  s_58249cd92a0ae1::t_5a9157a7bc832c 10
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_5a9157a7bc832c 274
+  s_58249cd92a0ae1::t_5684fd51432f3e 275-278,333
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_f607406fb540eb 376-377
+  s_58249cd92a0ae1::t_731695498a9037 378-382
+packages/core/src/context-budget.ts
+  s_58249cd92a0ae1::t_fc29f2421c0173 160
+packages/core/src/__tests__/failure-recovery.test.ts
+  s_58249cd92a0ae1::t_f607406fb540eb 2-4,138,147,164,166-174,182,223-238,472
+  s_58249cd92a0ae1::t_731695498a9037 121-136,139-146,148
+  s_58249cd92a0ae1::t_fc29f2421c0173 137,149-163,165,222,473
+  s_58249cd92a0ae1::t_8866e5737606ad 175-181,183,475,483,486,488-489,501
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_fc29f2421c0173 150
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_fc29f2421c0173 313,315
+researches/failure-recovery/acceptance/lint-initial.txt
+  s_58249cd92a0ae1::t_204a58d57ebdc0 1-65
+researches/failure-recovery/acceptance/offline-initial.txt
+  s_58249cd92a0ae1::t_069949cc3b99fe 1-103
+researches/failure-recovery/acceptance/e2e-rerun.txt
+  s_ecc6a66fe9f84d::t_2d9710624d2890 1-13
+researches/failure-recovery/acceptance/offline-rerun.txt
+  s_ecc6a66fe9f84d::t_69be19d66b79c1 1-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "beff886ed6618c2a55b7bd24aa07d9fceab1af07",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_ecc6a66fe9f84d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198f-676e-7ac3-8138-c00c167953c1",
+        "model": "unknown"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
