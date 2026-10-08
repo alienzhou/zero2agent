@@ -6,7 +6,7 @@ Agent 已经写好了文件，下一次请求却遇到网络故障。重新问�
 
 本课把这两种失败放到同一个 Turn 中：请求可以有限重试，工具修正是新的受控调用，运行有明确的停止条件。**预算到达后停止新工作，已完成的文件效果和工具结果仍保留。**
 
-本课实现、课程与验收已形成可审阅版本，未合入 main、未部署网站；具体证据与范围见[验收页](./details/03-verification-checklist.md)。
+本课实现、课程与验收已形成[审阅 PR #23](https://github.com/alienzhou/zero2agent/pull/23)，固定Tag为E04-S001-failure-recovery。未合入 main、未部署网站；具体证据与范围见[验收页](./details/03-verification-checklist.md)。
 
 ## 先看到效果
 
