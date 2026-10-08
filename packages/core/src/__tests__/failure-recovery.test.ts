@@ -115,6 +115,83 @@ const results = (agent: Agent) =>
     )
 
 describe('failure recovery through real HTTP and SDK', () => {
+  it('recovers a connection closed before HTTP headers', async () => {
+    const p = await provider((_body, res, index) => (index === 1 ? res.destroy() : answer(res)))
+    expect(await new Agent({ config: p.config, tools: [], limits }).run('inspect')).toBe(
+      'completed'
+    )
+    expect(p.requests).toHaveLength(2)
+  })
+  it('retries provider counting through the same attempt protocol', async () => {
+    let counts = 0
+    const p = await provider((_body, res, _index, url) => {
+      if (url.includes('count_tokens')) {
+        if (++counts === 1) httpError(res, 429)
+        else res.writeHead(200, { 'content-type': 'application/json' }).end('{"input_tokens":10}')
+      } else answer(res)
+    })
+    const records: DiagnosticEvent[] = []
+    const agent = new Agent({
+      config: p.config,
+      tools: [],
+      context: { counting: 'provider' },
+      limits,
+      diagnostics: e => records.push(e),
+    })
+    expect(await agent.run('inspect')).toBe('completed')
+    expect(
+      records
+        .filter(e => e.purpose === 'count' && e.event === 'start')
+        .slice(0, 2)
+        .map(e => e.attempt)
+    ).toEqual([1, 2])
+    expect(p.urls.filter(url => !url.includes('count_tokens'))).toHaveLength(1)
+  })
+  it('retries a manual summary and preserves the raw evidence', async () => {
+    let summaries = 0
+    const p = await provider((body, res) => {
+      if (body.stream) answer(res, 'historical detail '.repeat(300))
+      else if (++summaries === 1) httpError(res, 500)
+      else
+        res
+          .writeHead(200, { 'content-type': 'application/json' })
+          .end(
+            JSON.stringify({
+              id: 'summary',
+              type: 'message',
+              role: 'assistant',
+              model: 'claude-sonnet-4-20250514',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Observed historical details. Preserve the current user request.',
+                },
+              ],
+              stop_reason: 'end_turn',
+              stop_sequence: null,
+              usage: { input_tokens: 10, output_tokens: 10 },
+            })
+          )
+    })
+    const records: DiagnosticEvent[] = [],
+      notices: unknown[] = []
+    const agent = new Agent({
+      config: p.config,
+      tools: [],
+      limits,
+      diagnostics: e => records.push(e),
+      events: { onRequestNotice: e => notices.push(e) },
+    })
+    await agent.run('first')
+    const history = agent.getHistory()
+    expect(await agent.compact()).toBe(true)
+    expect(agent.getHistory()).toEqual(history)
+    expect(
+      records.filter(e => e.purpose === 'summary' && e.event === 'start').map(e => e.attempt)
+    ).toEqual([1, 2])
+    expect(notices).toHaveLength(1)
+    expect(summaries).toBe(2)
+  })
   it.each([408, 429, 500, 529])(
     'recovers HTTP %i with visible attempts and no hidden SDK retries',
     async status => {

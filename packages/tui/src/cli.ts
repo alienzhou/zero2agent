@@ -91,12 +91,20 @@ function formatToolInput(input: Record<string, unknown>): string {
 
 let activeJournal: RunJournal | undefined
 let hasStreamedText = false
+const toolFailures = new Map<string, boolean>()
 
 function resetStreamState() {
   hasStreamedText = false
+  toolFailures.clear()
 }
 
 const events: LoopEventHandlers = {
+  onEvent: event => {
+    if (event.type === 'request-retry' || event.type === 'request-abandoned')
+      events.onRequestNotice?.(event)
+    if (event.type === 'tool-state' && ['completed', 'error', 'cancelled'].includes(event.status))
+      toolFailures.set(event.toolName, event.status !== 'completed')
+  },
   onRequestNotice: notice => {
     process.stdout.write(`\n${DIM}${requestNoticeLabel(notice)}${RESET}\n`)
     hasStreamedText = false
@@ -118,7 +126,8 @@ const events: LoopEventHandlers = {
   },
   onToolEnd: (name, output, durationMs) => {
     const summary = summarizeToolOutput(name, output)
-    process.stdout.write(`${DIM}  ${GREEN}✓${RESET}${DIM} ${summary} (${durationMs}ms)${RESET}\n`)
+    const status = toolFailures.get(name) ? `${RED}✗` : `${GREEN}✓`
+    process.stdout.write(`${DIM}  ${status}${RESET}${DIM} ${summary} (${durationMs}ms)${RESET}\n`)
   },
   onToolError: (_name, error) => {
     process.stdout.write(`${DIM}  ${RED}✗${RESET}${DIM} ${error}${RESET}\n`)

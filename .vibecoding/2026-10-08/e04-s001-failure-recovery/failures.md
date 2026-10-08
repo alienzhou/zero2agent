@@ -4,3 +4,6 @@
 - 远端查询找到实际 Tag `sdk-v0.52.0`，成功克隆到固定 Commit b7ebb908；报告同时注明安装包与源码版本。
 - 首次实现 build 因旧 waitForAbort import 未使用失败；移除后通过。
 - 首轮 104 项专项有 2 项旧断言失败：新增 SDK timeout/maxRetries 参数，以及迭代上限现在以预算错误停止。保留历史配对、实例复用和下一轮正常继续断言，调整对应选项/终态断言；随后 Core 全量 439 项通过。生产的 message_stop 检查没有放宽，旧完整响应 mock 改为真实发出结束证据。
+- E2E 首轮 28 项有 1 项旧日志断言失败：exitCode=7 的原生终端现在正确标记工具 error，原断言只从 completed 查身份。改为核对实际 error 终态和同一请求身份，保留退出码及正文排除断言；随后 28 项通过。新增 CLI/PTY 故障专项扩充后 12 项通过。
+- 离线跟练发现 plain 将返回 Error: 的工具显示为绿色 ✓。宿主改为从 Core 结构化 tool-state 读取终态，使用红色 ✗；不解析输出猜执行状态。
+- lint 发现两处重写 catch 参数，改用独立 const 选择预算原因。E2E tsc 改从含 TypeScript 依赖的 workspace 执行，根目录未安装该二进制不是类型错误。

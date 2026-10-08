@@ -117,6 +117,8 @@ export async function executeToolCalls(
     let start: number | undefined
     let denied = false
     let consumed = false
+    let nativeFailed = false
+    let metadataSettled = false
     try {
       budget?.consumeTool(block.name, block.input)
       consumed = true
@@ -126,8 +128,15 @@ export async function executeToolCalls(
       const input = structuredClone(block.input) as Record<string, unknown>
       const originatingRequestId = diagnostics?.latestModelRequestId
       const metadataObserver: ToolContext['onResultMetadata'] =
-        diagnostics?.enabled || ctx.onResultMetadata
+        diagnostics?.enabled || ctx.onResultMetadata || budget
           ? (metadata: ToolExecutionMetadata) => {
+              if (!metadataSettled)
+                nativeFailed ||=
+                  (metadata.exitCode !== undefined && metadata.exitCode !== 0) ||
+                  metadata.signal !== undefined ||
+                  ['cancelled', 'declined', 'skipped', 'drain-timeout'].includes(
+                    metadata.terminalOutcome ?? ''
+                  )
               diagnostics?.emit('tool', 'metadata', {
                 requestId: originatingRequestId,
                 toolCallId: diagnosticLabel(block.id),
@@ -198,12 +207,14 @@ export async function executeToolCalls(
             )
           : await execute()
       const durationMs = Date.now() - start
+      metadataSettled = true
       const cancelled =
         block.name === 'terminal' &&
         /^(?:Note: could not load your shell profile; PATH may be incomplete\.\n)?Status: (?:human-controlled )?cancelled(?: by user|\n|$)/.test(
           output
         )
-      state(cancelled ? 'cancelled' : output.startsWith('Error:') ? 'error' : 'completed', {
+      const failed = output.startsWith('Error:') || cancelled || nativeFailed
+      state(cancelled ? 'cancelled' : failed ? 'error' : 'completed', {
         output,
         durationMs,
         ...(ctx.signal?.aborted && !cancelled
@@ -215,10 +226,11 @@ export async function executeToolCalls(
         type: 'tool_result',
         tool_use_id: block.id,
         content: output,
-        ...((output.startsWith('Error:') || cancelled) && { is_error: true }),
+        ...(failed && { is_error: true }),
       })
-      budget?.settleTool(block.name, block.input, output.startsWith('Error:') || cancelled, false)
+      budget?.settleTool(block.name, block.input, failed, false)
     } catch (error) {
+      metadataSettled = true
       const limited =
         error instanceof RunBudgetError || ctx.signal?.reason instanceof RunBudgetError
       const cancelled = !limited && (ctx.signal?.aborted || error instanceof TurnCancelledError)
@@ -310,8 +322,8 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     emitter.emit({ type: 'turn-end', status: 'completed' })
     diagnostics.end('completed', 'turn')
     return result
-  } catch (error) {
-    if (options.signal?.reason instanceof RunBudgetError) error = options.signal.reason
+  } catch (caught) {
+    const error = options.signal?.reason instanceof RunBudgetError ? options.signal.reason : caught
     if (started) {
       const cancelled =
         !(error instanceof RunBudgetError) &&

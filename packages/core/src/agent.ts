@@ -111,8 +111,8 @@ export class Agent {
       if (controller.signal.aborted) throw new TurnCancelledError()
       diagnostics.end('completed', 'compact')
       return result
-    } catch (error) {
-      if (budget.signal.reason instanceof RunBudgetError) error = budget.signal.reason
+    } catch (caught) {
+      const error = budget.signal.reason instanceof RunBudgetError ? budget.signal.reason : caught
       diagnostics.end(
         controller.signal.aborted ? 'cancelled' : 'error',
         'compact',

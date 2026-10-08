@@ -3,7 +3,8 @@ export type SSEBlock = { type: string; [key: string]: unknown }
 export function sendSSEReply(
   res: ServerResponse,
   blocks: SSEBlock[],
-  stopReason = 'end_turn'
+  stopReason = 'end_turn',
+  complete = true
 ): void {
   res.writeHead(200, { 'content-type': 'text/event-stream' })
   const event = (type: string, value: object): boolean =>
@@ -42,6 +43,6 @@ export function sendSSEReply(
     delta: { stop_reason: stopReason, stop_sequence: null },
     usage: { output_tokens: 1 },
   })
-  event('message_stop', { type: 'message_stop' })
+  if (complete) event('message_stop', { type: 'message_stop' })
   res.end()
 }
