@@ -1,0 +1,51 @@
+packages/core/src/__tests__/failure-recovery.test.ts
+  s_58249cd92a0ae1::t_197111dad7a2c4 456-457,459-460,462-473,477
+  s_58249cd92a0ae1::t_edbffed523abb0 458,461,474-476
+scripts/e04-s001-tui-capture.mjs
+  s_58249cd92a0ae1::t_3ed39f8468b8e7 1-31,34-49
+  s_58249cd92a0ae1::t_edbffed523abb0 32-33
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_4fa271089569d5 105-108
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_4fa271089569d5 121,134-135,142,220,234
+e2e/src/failure-recovery-live.test.ts
+  s_58249cd92a0ae1::t_8e1b5bc981258a 1-183
+researches/failure-recovery/acceptance/screens/01-ready.txt
+  s_58249cd92a0ae1::t_9e48d58f1f7870 1-30
+researches/failure-recovery/acceptance/screens/02-backoff.txt
+  s_58249cd92a0ae1::t_d7bdd81e77c708 1-30
+researches/failure-recovery/acceptance/screens/02b-backoff-course.txt
+  s_58249cd92a0ae1::t_0c26ef35663953 1-14
+researches/failure-recovery/acceptance/screens/03-cancelled.txt
+  s_58249cd92a0ae1::t_f85735cb4ab24f 1-30
+researches/failure-recovery/acceptance/screens/04-draft-and-recovered.txt
+  s_58249cd92a0ae1::t_f8078de6ffafce 1-30
+researches/failure-recovery/acceptance/screens/05-narrow.txt
+  s_58249cd92a0ae1::t_871f0a8597b490 1-18
+researches/failure-recovery/acceptance/screens/06-log-list.txt
+  s_58249cd92a0ae1::t_05e48a8478495d 1-30
+researches/failure-recovery/acceptance/screens/07-attempt-log.txt
+  s_58249cd92a0ae1::t_02e2a5d9381d6e 1-30
+researches/failure-recovery/acceptance/screens/capture.json
+  s_58249cd92a0ae1::t_31e694bf219fe8 1-30
+researches/failure-recovery/acceptance/terminal-restore.json
+  s_58249cd92a0ae1::t_b5e89328416f5b 1-27
+scripts/e04-s001-terminal-restore.mjs
+  s_58249cd92a0ae1::t_947173f91b2d7e 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a99f7ebe2c9e3360fad659b0e5690b01716fc444",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
