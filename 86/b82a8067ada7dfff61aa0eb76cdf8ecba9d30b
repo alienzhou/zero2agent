@@ -1,0 +1,46 @@
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_955a3070987ff8 120-121,131,133,210,216-217,229,231,233
+  s_58249cd92a0ae1::t_e26047db992472 134-139,325-326
+scripts/e04-s001-recovery-demo.mjs
+  s_58249cd92a0ae1::t_c1cf59844288fe 71-72
+  s_58249cd92a0ae1::t_ac9fcc21efccec 1-70,73-92
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_ac9fcc21efccec 1-14
+e2e/src/failure-recovery.test.ts
+  s_58249cd92a0ae1::t_cab88e4fe5edd9 11-13,21-22,25-28,32-35,51-64,66-76,83-88,92-96,104-116,124-125,133-145,150-168,174-205
+  s_58249cd92a0ae1::t_bf83f40bc189e6 1-10,14-20,23-24,29-31,36-50,65,77-82,89-91,97-103,117-123,126-132,146-149,169-173,206
+  s_58249cd92a0ae1::t_1b45e3be589659 207-222
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_e26047db992472 114-115
+e2e/src/helpers/sse.ts
+  s_58249cd92a0ae1::t_cab88e4fe5edd9 6-7,46
+.vibecoding/2026-10-08/e04-s001-failure-recovery/failures.md
+  s_58249cd92a0ae1::t_c1cf59844288fe 7-9
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_a915f3f82b097c 94,98,102-107,129-130
+specs/E04-reliability-and-context/S001-failure-recovery/README.md
+  s_58249cd92a0ae1::t_ac9fcc21efccec 1-73
+packages/core/src/__tests__/failure-recovery.test.ts
+  s_58249cd92a0ae1::t_cab88e4fe5edd9 118-151,153
+  s_58249cd92a0ae1::t_6905ff9b1895a0 152,154-194
+e2e/src/runtime-logging.test.ts
+  s_58249cd92a0ae1::t_e26047db992472 191
+specs/E04-reliability-and-context/S001-failure-recovery/follow-along.md
+  s_58249cd92a0ae1::t_ac9fcc21efccec 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "86b82a8067ada7dfff61aa0eb76cdf8ecba9d30b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
