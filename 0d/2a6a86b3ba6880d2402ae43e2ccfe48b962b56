@@ -1,0 +1,75 @@
+specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md
+  s_08884e0d462e65::t_5cbc826e5175d9 7,20,38-43
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/dialogue.md
+  s_08884e0d462e65::t_b18a6cd62fe598 3-4
+.authoring/site/chapters/epic03-story006/review.md
+  s_08884e0d462e65::t_5cbc826e5175d9 5-8
+.vibecoding/2026-10-07/e03-s006-file-checkpoints/completion-audit.md
+  s_08884e0d462e65::t_5cbc826e5175d9 20-23
+retros/E03-S006-file-checkpoints.md
+  s_08884e0d462e65::t_b18a6cd62fe598 3-4
+researches/file-checkpoints/acceptance/README.md
+  s_08884e0d462e65::t_5cbc826e5175d9 9,11
+.authoring/site/README.md
+  s_08884e0d462e65::t_191b09ebcc16d4 40-45
+.authoring/site/chapters/epic03-story006/author.cjs
+  s_08884e0d462e65::t_52a87726db50b6 26-29,109,114,116-119,128
+.authoring/site/chapters/epic03-story006/content-plan.md
+  s_08884e0d462e65::t_06ebeeaeadaedc 3,8,23-24
+.authoring/site/chapters/epic03-story006/sources.md
+  s_08884e0d462e65::t_c9a9306a6d5682 11,19
+.authoring/site/chapters/epic03-story006/verification/browser-checks-20-pages.json
+  s_08884e0d462e65::t_caee650dedb8d7 1-180
+.authoring/site/chapters/epic03-story006/verification/browser-checks.json
+  s_08884e0d462e65::t_ab4e904cd6905d 3-4,16,120-121,127-128,140,153,164
+.authoring/site/chapters/epic03-story006/verify.mjs
+  s_08884e0d462e65::t_1cb951af5a4b70 22-23,99
+.authoring/site/course.json
+  s_08884e0d462e65::t_c84d8c6d869910 120
+.authoring/site/templates/pages.json
+  s_08884e0d462e65::t_a82225c7138050 11-12
+.authoring/story-checklist.md
+  s_08884e0d462e65::t_fbd237dd077994 48-49
+AGENTS.md
+  s_08884e0d462e65::t_60df011ec99aa8 150-151
+CHANGELOG.md
+  s_08884e0d462e65::t_5023458cb14046 84-85,91
+README.md
+  s_08884e0d462e65::t_0ea049e99f40f3 164
+researches/file-checkpoints/README.md
+  s_08884e0d462e65::t_6eb4406111eaac 17
+scripts/check-site.mjs
+  s_08884e0d462e65::t_709768209c56bb 5-14,73
+site/chapters/epic03-story006/02-boundary.html
+  s_08884e0d462e65::t_40f7ae59ea71e5 1
+site/chapters/epic03-story006/17-benchmark.html
+  s_08884e0d462e65::t_c3ba961c0cba70 1
+site/chapters/epic03-story006/18-practice.html
+  s_08884e0d462e65::t_3a21461bab2edc 1-2
+site/chapters/epic03-story006/pages.json
+  s_08884e0d462e65::t_07ac23fb639e90 3,8-9,22,26-28,157,159,165,167,170
+site/course.json
+  s_08884e0d462e65::t_015df157b2c904 4916,4945,4949-4953,4956,4958-4959,4961-4964,5294-5295,5299,5315-5317,5320,5323,5336-5337,5343
+specs/E03-product-foundations/S006-file-checkpoints/README.md
+  s_08884e0d462e65::t_78f6994db3fb44 5
+specs/E03-product-foundations/S006-file-checkpoints/details/02-task-list.md
+  s_08884e0d462e65::t_46450924c7df55 10
+specs/E03-product-foundations/S006-file-checkpoints/follow-along.md
+  s_08884e0d462e65::t_f53cfd493ee879 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0d2a6a86b3ba6880d2402ae43e2ccfe48b962b56",
+  "prompts": {},
+  "sessions": {
+    "s_08884e0d462e65": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a111f4-a5c7-7703-8822-defd621cb627",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
