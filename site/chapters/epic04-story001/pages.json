@@ -1,0 +1,184 @@
+{
+  "title": "Zero2Agent · E04-S001 失败恢复与运行预算",
+  "date": "2026-10-08",
+  "draft": true,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "v1",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "失败后，怎样继续？",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "file": "02-written-before-failure.html",
+      "title": "文件已经改了，请求却失败了",
+      "number": 2,
+      "sources": [
+        "T01",
+        "D01"
+      ]
+    },
+    {
+      "file": "03-three-failures.html",
+      "title": "失败发生在哪一层，决定由谁继续",
+      "number": 3,
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "file": "04-error-matrix.html",
+      "title": "先分类，再决定是否重发",
+      "number": 4,
+      "sources": [
+        "R01",
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-one-retry-owner.html",
+      "title": "SDK 也在重试，外层再试会发生什么？",
+      "number": 5,
+      "sources": [
+        "R01",
+        "S02",
+        "S04"
+      ]
+    },
+    {
+      "file": "06-attempt-identity.html",
+      "title": "同一个逻辑请求，每次尝试各有身份",
+      "number": 6,
+      "sources": [
+        "S05",
+        "T02"
+      ]
+    },
+    {
+      "file": "07-backoff.html",
+      "title": "退避逐步变长，仍要服从剩余预算",
+      "number": 7,
+      "sources": [
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "08-timeouts.html",
+      "title": "请求时限管响应，整轮时限管新工作",
+      "number": 8,
+      "sources": [
+        "S01",
+        "S02",
+        "S04"
+      ]
+    },
+    {
+      "file": "09-cancel-wait.html",
+      "title": "不想再等，就取消这一轮",
+      "number": 9,
+      "sources": [
+        "T02",
+        "S06"
+      ]
+    },
+    {
+      "file": "10-stream-end.html",
+      "title": "看到参数，还不能执行工具",
+      "number": 10,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "11-tool-correction.html",
+      "title": "错误先交回模型，修正是一次新调用",
+      "number": 11,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "12-approval.html",
+      "title": "一次拒绝，不能反复弹窗求批准",
+      "number": 12,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "13-budgets.html",
+      "title": "一次 Turn，分别数四种消耗",
+      "number": 13,
+      "sources": [
+        "S01",
+        "S05"
+      ]
+    },
+    {
+      "file": "14-batch-pairing.html",
+      "title": "额度在中途耗尽，其余调用怎么处理？",
+      "number": 14,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "15-native-outcomes.html",
+      "title": "命令退出 7，即使没有 Error: 也失败",
+      "number": 15,
+      "sources": [
+        "S03",
+        "T02",
+        "S05"
+      ]
+    },
+    {
+      "file": "16-settlement.html",
+      "title": "时间到了，为什么还不能立刻再问？",
+      "number": 16,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "17-configuration.html",
+      "title": "限制改了多少，日志里就该看见多少",
+      "number": 17,
+      "sources": [
+        "S05",
+        "S06",
+        "T02"
+      ]
+    },
+    {
+      "file": "18-practice.html",
+      "title": "真的制造一次失败，再核对怎样继续",
+      "number": 18,
+      "sources": [
+        "D01",
+        "T01",
+        "T02"
+      ]
+    }
+  ]
+}
