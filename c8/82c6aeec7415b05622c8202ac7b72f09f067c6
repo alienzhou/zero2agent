@@ -1,0 +1,102 @@
+packages/core/src/__tests__/runtime.test.ts
+  s_58249cd92a0ae1::t_2f67f1ceceb5c0 3,48-52
+  s_58249cd92a0ae1::t_b4d2861d0b0d29 53-57
+researches/failure-recovery/anthropic-sdk.md
+  s_58249cd92a0ae1::t_c4ebe99eedc655 1-21
+.vibecoding/2026-10-08/e04-s001-failure-recovery/dialogue.md
+  s_58249cd92a0ae1::t_c4ebe99eedc655 8-9
+packages/core/src/__tests__/loop.test.ts
+  s_58249cd92a0ae1::t_2f67f1ceceb5c0 5,135,254,267
+  s_58249cd92a0ae1::t_b34082b790c3bf 268-269
+packages/tui/src/runtime-tui.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 9
+  s_58249cd92a0ae1::t_79d606b9682f65 10-15,148-151
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_e1716322ca8fbf 7,22,34-37,108-109,230
+  s_58249cd92a0ae1::t_c82bc896bb6993 90,110-135,227
+  s_58249cd92a0ae1::t_6f865e3992ca50 228-229,231,234,247-248,257,265-276,284,305
+packages/core/src/context-manager.ts
+  s_58249cd92a0ae1::t_cb9e015abebc8c 10,22,114
+  s_58249cd92a0ae1::t_b8d2c16f5db923 115-120
+packages/core/src/request-executor.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 12,81-82,84-87,111,129-130,148
+  s_58249cd92a0ae1::t_c9e3edd7afebda 5-10,35-36,42-53,102-106,118-121,135-138,140-144,149-156,162-167
+  s_58249cd92a0ae1::t_e1716322ca8fbf 1-4,11,13-34,37-41,54-80,83,88-101,107-110,112-117,122-128,131-134,139,145-147,157-161,168-174
+  s_58249cd92a0ae1::t_caf87900631b0f 175-179
+.vibecoding/2026-10-08/e04-s001-failure-recovery/failures.md
+  s_58249cd92a0ae1::t_c4ebe99eedc655 4-6
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_e1716322ca8fbf 5,102
+  s_58249cd92a0ae1::t_c0ae7dadc92c8a 103-105
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_cb9e015abebc8c 20-21,25,63,85,107-108,125
+  s_58249cd92a0ae1::t_c82bc896bb6993 49-53
+  s_58249cd92a0ae1::t_c4ebe99eedc655 19,86-91,115,120
+packages/core/src/__tests__/compact-loop.test.ts
+  s_58249cd92a0ae1::t_2f67f1ceceb5c0 10,45-49,93-95,98-99,257-263
+  s_58249cd92a0ae1::t_3a1af019541ec4 264-267,458-465
+packages/core/src/__tests__/failure-recovery.test.ts
+  s_58249cd92a0ae1::t_c9e3edd7afebda 1-196
+  s_58249cd92a0ae1::t_45d97d5d84dbc1 197-369
+packages/tui/src/run-options.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 1-27
+packages/core/src/run-budget.ts
+  s_58249cd92a0ae1::t_e1716322ca8fbf 1-115
+  s_58249cd92a0ae1::t_7ed7b335621928 116-121
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_cb9e015abebc8c 4,76-77,91,148,150-157
+  s_58249cd92a0ae1::t_45c90b0be87e90 158-164
+packages/core/src/runtime.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 55-57
+  s_58249cd92a0ae1::t_e1716322ca8fbf 8-23,39-42,50-54,58-59,67
+  s_58249cd92a0ae1::t_e4d25c8f544ee1 60-66,98-101
+packages/core/src/context-budget.ts
+  s_58249cd92a0ae1::t_cb9e015abebc8c 3,150-151,158,160-167
+  s_58249cd92a0ae1::t_1f6e32efbe0b88 168-174
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 5,23-24,100-103,198,215-218,355
+packages/core/src/llm/anthropic.ts
+  s_58249cd92a0ae1::t_e1716322ca8fbf 19-20
+  s_58249cd92a0ae1::t_da7ad3530a33a9 5,8-10,13,21,25
+packages/core/src/__tests__/helpers/message-stream.ts
+  s_58249cd92a0ae1::t_eb80f6746d218d 1-23
+packages/tui/src/runtime-state.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 1,69-83
+  s_58249cd92a0ae1::t_c9659ca08e95dc 84-88,127-129
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_cb9e015abebc8c 69-71
+  s_58249cd92a0ae1::t_c82bc896bb6993 72
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 55-59,164,476-478,560
+  s_58249cd92a0ae1::t_2f67f1ceceb5c0 3,54
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_c4ebe99eedc655 166-172,194,570
+  s_58249cd92a0ae1::t_c82bc896bb6993 19-20,41-42,72
+  s_58249cd92a0ae1::t_b09f0c60c730d5 571-573
+researches/failure-recovery/gemini-cli.md
+  s_58249cd92a0ae1::t_c4ebe99eedc655 1-15
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_c82bc896bb6993 21,53-54,285-286,433-447
+  s_58249cd92a0ae1::t_c9e3edd7afebda 13
+  s_58249cd92a0ae1::t_cb9e015abebc8c 17,30-31,91-92,119,121-122,220,224,253,278-279,288,449,481
+  s_58249cd92a0ae1::t_eb80f6746d218d 222-223,225-232,245-246,314,316-318,329,338-339,348,357,373-375,391-392,399,401,411-432,448,450-452
+  s_58249cd92a0ae1::t_fca5c4491cd0e5 287,289,291,308,453-455,480,484
+researches/failure-recovery/README.md
+  s_58249cd92a0ae1::t_c4ebe99eedc655 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c882c6aeec7415b05622c8202ac7b72f09f067c6",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
