@@ -1,0 +1,43 @@
+e2e/src/helpers/session-test-setup.ts
+  s_58249cd92a0ae1::t_b6beac509fcf72 9
+e2e/src/result-references-live.test.ts
+  s_58249cd92a0ae1::t_68d3884a320d80 1-106
+e2e/src/result-references.test.ts
+  s_58249cd92a0ae1::t_9d53e343470319 1-210
+packages/core/src/__tests__/result-store.test.ts
+  s_3f9fbf53483416::t_f68d52480dd897 13,286-363
+packages/core/src/loop.ts
+  s_3f9fbf53483416::t_1dbc044e6368d7 133,169,291,299-314
+researches/result-references/acceptance/core-initial.txt
+  s_58249cd92a0ae1::t_49c3a2e8d009e0 1-316
+researches/result-references/acceptance/focused-tests.txt
+  s_58249cd92a0ae1::t_e57b75ef04c2ed 1-10
+researches/result-references/acceptance/live-test.txt
+  s_58249cd92a0ae1::t_6ec8f412602555 1-9
+researches/result-references/acceptance/restart-tests.txt
+  s_58249cd92a0ae1::t_1d687280a76816 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9db688e4d7f48bb574c5bfe02a2755b8306c2a4b",
+  "prompts": {},
+  "sessions": {
+    "s_3f9fbf53483416": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a129b5-5bff-7fd0-ad51-e9cab5878822",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
