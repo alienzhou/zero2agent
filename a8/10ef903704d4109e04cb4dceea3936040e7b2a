@@ -1,0 +1,35 @@
+researches/summary-quality/evaluation/fixtures.mjs
+  s_58249cd92a0ae1::t_445b55f51fd8f6 1-52
+  s_58249cd92a0ae1::t_ad2a9a7fad208e 53-228
+researches/summary-quality/evaluation/run.mjs
+  s_58249cd92a0ae1::t_f477a0910da62e 1-124
+  s_58249cd92a0ae1::t_f0210ebd2229c8 125-263
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_5af52f6d86e676 1-7
+specs/E04-reliability-and-context/S003-summary-quality/details/00-overview.md
+  s_58249cd92a0ae1::t_d25bef95a30c91 1-7
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_f7029940aa9c5d 1-17
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_ef8f7c0c9e8a49 1-13
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_dfed1aa2dafed8 1-11
+specs/E04-reliability-and-context/S003-summary-quality/details/04-backlog.md
+  s_58249cd92a0ae1::t_e88ca4315f3a60 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a810ef903704d4109e04cb4dceea3936040e7b2a",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
