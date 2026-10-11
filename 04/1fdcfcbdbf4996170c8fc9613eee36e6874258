@@ -1,0 +1,57 @@
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_cad518d5a3453f::t_197b624986f23d 111-118,131-132,134,145
+.authoring/site/chapters/epic04-story003/content-plan.md
+  s_58249cd92a0ae1::t_4ffd6e94ea6543 41-42
+.authoring/site/chapters/epic04-story003/review.md
+  s_cad518d5a3453f::t_542a41712ebd9e 50-51
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_35a94c2b8d3bf7 27-29,35-36
+.authoring/site/chapters/epic04-story003/verification/checks-source-key-audit.json
+  s_58249cd92a0ae1::t_9a4f7ade4e26c1 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_d3d4a06839e749 2,106,108
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_f23cfee29d6dba 102-103
+packages/core/src/__tests__/artifact-completion.test.ts
+  s_58249cd92a0ae1::t_af8f08190edec4 239-303
+researches/summary-quality/contract-demo.mjs
+  s_58249cd92a0ae1::t_e821d0f45ae58b 1-50
+researches/summary-quality/evaluation/analyze-contract-pair.mjs
+  s_58249cd92a0ae1::t_767046d8a10d24 1-72
+researches/summary-quality/evaluation/contract-pair-v1/scorer.test.mjs
+  s_58249cd92a0ae1::t_2c293896cc78cf 1-33
+site/chapters/epic04-story003/15-task.html
+  s_58249cd92a0ae1::t_7252a7665f0c21 1
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_f5ee5cb0ac807b 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_b70135e03fc060 9,145,148-151,181,186-188
+site/course.json
+  s_58249cd92a0ae1::t_150403e8d8a4b9 6650-6666,6733,6736-6738,6740-6743,6746
+specs/E04-reliability-and-context/S003-summary-quality/follow-along.md
+  s_58249cd92a0ae1::t_f35962cb80e1a1 83-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "041fdcfcbdbf4996170c8fc9613eee36e6874258",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_cad518d5a3453f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12bb6-22d4-72a1-b938-8224f50a31dd",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
