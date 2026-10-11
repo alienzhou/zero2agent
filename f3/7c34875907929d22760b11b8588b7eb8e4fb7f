@@ -1,0 +1,63 @@
+packages/core/src/__tests__/context-manager.test.ts
+  s_58249cd92a0ae1::t_ca9711ebfec1ec 3-6,251-253,266-269,294,296-298,312-324
+packages/core/src/__tests__/permissions.test.ts
+  s_58249cd92a0ae1::t_bc87fd8537a1e4 244,263-267
+packages/core/src/__tests__/result-store.test.ts
+  s_58249cd92a0ae1::t_48e932ece5b9f0 1-285
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_bafe36e644af3e 275-276,333-334
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_86c9233dfbbee1 1,26,45,50
+packages/core/src/context-manager.ts
+  s_58249cd92a0ae1::t_cf83ae19f97ff6 3-5,21-23,75,95,385-404,406-413
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_1a63c8655339f4 24,79-86
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_0b831d169e7208 1-3,42-48,168-182,184,188-194,198-203,212,227,256-269,318,346,424-426,436,466-467,486
+packages/core/src/result-store.ts
+  s_58249cd92a0ae1::t_0787e1e8ea116e 1-479
+packages/core/src/session-snapshot.ts
+  s_58249cd92a0ae1::t_af088a7d14f9c7 1,6,102
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_8431a77e8f7b35 1,18-27,76-80,86,96
+packages/core/src/tools/__tests__/terminal-acceptance.test.ts
+  s_58249cd92a0ae1::t_2aff3c6b088d9f 69-70
+packages/core/src/tools/__tests__/terminal-interactive.test.ts
+  s_58249cd92a0ae1::t_f2fdbc84e02bc9 53-54
+packages/core/src/tools/__tests__/terminal-p0-evidence.test.ts
+  s_58249cd92a0ae1::t_43c0ca4ffafdd3 57
+packages/core/src/tools/index.ts
+  s_58249cd92a0ae1::t_63e65ef83bf67b 3,27,42
+packages/core/src/tools/read-tool-result.ts
+  s_58249cd92a0ae1::t_f40d13c34d07bb 1-39
+packages/core/src/tools/terminal.ts
+  s_58249cd92a0ae1::t_0dbb3f8379ddcf 108-119,142-148,154,177,179-186,189,207-208,210-213,215,261-262,266-276,491-492,502-505,514-516,527,561,600,685-694,711-725
+packages/core/src/tools/types.ts
+  s_58249cd92a0ae1::t_95c5c6aa571e4d 1,21-22,35-36
+packages/tui/src/cli.ts
+  s_3f9fbf53483416::t_ed3886c4581e60 367
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f37c34875907929d22760b11b8588b7eb8e4fb7f",
+  "prompts": {},
+  "sessions": {
+    "s_3f9fbf53483416": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a129b5-5bff-7fd0-ad51-e9cab5878822",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
