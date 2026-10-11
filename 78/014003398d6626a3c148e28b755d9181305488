@@ -1,0 +1,27 @@
+researches/summary-quality/evaluation/extractive-handoff.mjs
+  s_58249cd92a0ae1::t_ca63ff5f66b68a 1-49
+researches/summary-quality/evaluation/extractive-handoff.test.mjs
+  s_58249cd92a0ae1::t_ca63ff5f66b68a 1-60
+researches/summary-quality/evaluation/extractive-probe.mjs
+  s_58249cd92a0ae1::t_62d7db3c8c83ab 1-117
+researches/summary-quality/evaluation/extractive-protocol.md
+  s_58249cd92a0ae1::t_62d7db3c8c83ab 1-16
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_e48b7e1b99d46b 48-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78014003398d6626a3c148e28b755d9181305488",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
