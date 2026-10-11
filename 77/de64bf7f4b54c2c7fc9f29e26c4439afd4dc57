@@ -1,0 +1,45 @@
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_5f9e3094b00536 131-137
+.authoring/site/chapters/epic04-story003/content-plan.md
+  s_58249cd92a0ae1::t_5c495f48d877f5 43-44
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_23932a766ec258 52-53
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_f2c70e94a3792b 30
+.authoring/site/chapters/epic04-story003/verification/checks-contract-api.json
+  s_58249cd92a0ae1::t_2e652b66349bc0 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_e212a95993163e 2,106,108
+researches/summary-quality/evaluation/contract-pair-v2/baseline/README.md
+  s_58249cd92a0ae1::t_fe6befa2fd3968 1-16
+researches/summary-quality/evaluation/contract-pair-v2/baseline/manifest.json
+  s_58249cd92a0ae1::t_4ea26aae2e4e2d 1-444
+researches/summary-quality/evaluation/contract-pair-v2/baseline/paired-analysis.json
+  s_58249cd92a0ae1::t_a1458135d06ce6 1-6484
+researches/summary-quality/evaluation/contract-pair-v2/baseline/runtime-hashes.json
+  s_58249cd92a0ae1::t_607ab31edf4fcb 1-86
+researches/summary-quality/evaluation/contract-pair-v2/baseline/verification.json
+  s_58249cd92a0ae1::t_b2431c89cdfc3b 1-513
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_4535644c38c7ac 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_89cb572fde7d4e 181,184-185,187-188
+site/course.json
+  s_58249cd92a0ae1::t_7c025ae6ca683d 6733-6749
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "77de64bf7f4b54c2c7fc9f29e26c4439afd4dc57",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
