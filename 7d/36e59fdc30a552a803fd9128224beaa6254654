@@ -1,0 +1,45 @@
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_faf16e2df99930 15-16
+packages/core/src/context-manager.ts
+  s_58249cd92a0ae1::t_faf16e2df99930 60-72,165-175,178-187,190,193,195
+  s_58249cd92a0ae1::t_0f89a62fc1bd11 315-316,419-420
+packages/core/src/tools/read-history.ts
+  s_58249cd92a0ae1::t_faf16e2df99930 10
+packages/core/src/history-evidence.ts
+  s_58249cd92a0ae1::t_faf16e2df99930 285,316-320
+packages/core/src/__tests__/history-evidence.test.ts
+  s_58249cd92a0ae1::t_e7129dc88ae491 30-58,65,78
+  s_58249cd92a0ae1::t_3cd3e057128900 59-64,77,79-81
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_408579a42184a2 25
+e2e/src/compact-contract.test.ts
+  s_58249cd92a0ae1::t_d8b38eab02b49d 169-173,241-246,283-286
+e2e/src/human-terminal-session-e2e.test.ts
+  s_58249cd92a0ae1::t_33e53aa3cf44b8 239-241
+packages/core/src/__tests__/context-manager.test.ts
+  s_58249cd92a0ae1::t_06f737f503878d 13-16,99-100,122,365-367
+packages/core/src/__tests__/session-snapshot.test.ts
+  s_58249cd92a0ae1::t_5b6cf0ef19c4c6 23-27
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_a095947a37f697 95-99,113-117
+researches/summary-quality/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_769f4fd698252a 20-26
+researches/summary-quality/evaluation/comparison.md
+  s_58249cd92a0ae1::t_6dd7c81df3d3da 18,41,65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d36e59fdc30a552a803fd9128224beaa6254654",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
