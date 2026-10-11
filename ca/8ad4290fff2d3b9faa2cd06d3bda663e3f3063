@@ -1,0 +1,153 @@
+.authoring/site/chapters/epic04-story002/author.cjs
+  s_3f9fbf53483416::t_a50981cf33119d 1-151
+.authoring/site/chapters/epic04-story002/content-plan.md
+  s_58249cd92a0ae1::t_0848a7c94f0871 1-26
+.authoring/site/chapters/epic04-story002/review.md
+  s_58249cd92a0ae1::t_4f97f0b82ee8bc 1-11
+.authoring/site/chapters/epic04-story002/sources.md
+  s_58249cd92a0ae1::t_3dfc1a879b8711 1-17
+.authoring/site/chapters/epic04-story002/verification/initial-issues.json
+  s_58249cd92a0ae1::t_58e42de4f55d21 1
+.authoring/site/course.json
+  s_3f9fbf53483416::t_c3b2b0972cf78c 134-140
+.discuss/2026-10-08/e04-course-plan/outline.md
+  s_58249cd92a0ae1::t_d97e888649a799 3,67-69
+.env.example
+  s_58249cd92a0ae1::t_f494933042af99 36-38
+.vibecoding/2026-10-11/e04-s002-result-references/completion-audit.md
+  s_58249cd92a0ae1::t_25c2486c04f41d 1-17
+.vibecoding/2026-10-11/e04-s002-result-references/dialogue.md
+  s_58249cd92a0ae1::t_69c2a9385acaa3 1-10
+.vibecoding/2026-10-11/e04-s002-result-references/learnings.md
+  s_58249cd92a0ae1::t_7875b3c101e18c 1-8
+CHANGELOG.md
+  s_58249cd92a0ae1::t_2a79b2e856e05a 50-61,70
+README.md
+  s_58249cd92a0ae1::t_5ab047068b97a8 115,118-119,166,184-185
+docs/architecture.md
+  s_3f9fbf53483416::t_94f73b66a344c7 35-36,78,174-177
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_3df18d83b68960 21,34
+packages/core/README.md
+  s_58249cd92a0ae1::t_385155128a94d7 71-76
+packages/core/src/__tests__/result-store.test.ts
+  s_58249cd92a0ae1::t_53867753c4ec01 414-422
+packages/core/src/prompt/system.ts
+  s_58249cd92a0ae1::t_5be5c1e879fc91 47-48
+packages/core/src/tools/terminal.ts
+  s_58249cd92a0ae1::t_6941e1fbc01862 688-691
+researches/result-references/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_d7b3ad2b89b13a 1-11
+researches/result-references/acceptance/final/build.txt
+  s_58249cd92a0ae1::t_5738933bb8b5da 1-13
+researches/result-references/acceptance/final/course-check.txt
+  s_58249cd92a0ae1::t_1ef0e1072225f8 1
+researches/result-references/acceptance/final/format.txt
+  s_58249cd92a0ae1::t_06e69865eddd63 1-2
+researches/result-references/acceptance/final/full-tests.txt
+  s_58249cd92a0ae1::t_981e98bff9b071 1-27
+researches/result-references/acceptance/final/lint.txt
+  s_58249cd92a0ae1::t_d20eac2ec4dac1 1-59
+researches/result-references/acceptance/final/live-test.txt
+  s_58249cd92a0ae1::t_6b78a12588bb6c 1-9
+researches/result-references/acceptance/final/prompt-tests.txt
+  s_58249cd92a0ae1::t_9c811a34592476 1-10
+researches/result-references/acceptance/final/restart-tests.txt
+  s_58249cd92a0ae1::t_2624219a30d213 1-9
+researches/result-references/acceptance/final/result-unit-tests.txt
+  s_58249cd92a0ae1::t_a9bb7cb1823e94 1-10
+researches/result-references/acceptance/final/site-build.txt
+  s_58249cd92a0ae1::t_2a7c3b5df4968c 1-13
+researches/result-references/acceptance/final/site-check.txt
+  s_58249cd92a0ae1::t_73d66118fd54f0 1-5
+researches/result-references/acceptance/final/source-hashes.json
+  s_58249cd92a0ae1::t_a03e6c272884b1 1-33
+retros/E04-S002-result-references.md
+  s_58249cd92a0ae1::t_f44b9a63083aef 1-15
+retros/README.md
+  s_58249cd92a0ae1::t_0a27bce4fd1822 67-68
+scripts/e04-s002-course-check.mjs
+  s_58249cd92a0ae1::t_773a2ad30a9665 1-79
+site/chapters/epic04-story002/01-cover.html
+  s_3f9fbf53483416::t_20794a2907550a 1
+site/chapters/epic04-story002/02-needle.html
+  s_3f9fbf53483416::t_2ab0755b1d37c8 1
+site/chapters/epic04-story002/03-reuse.html
+  s_3f9fbf53483416::t_c70a71e7265dfb 1
+site/chapters/epic04-story002/04-receipt.html
+  s_3f9fbf53483416::t_55414c1f2e0fda 1
+site/chapters/epic04-story002/05-flow.html
+  s_3f9fbf53483416::t_f07454e21b2d56 1
+site/chapters/epic04-story002/06-sizes.html
+  s_3f9fbf53483416::t_00fe722000e7fb 1
+site/chapters/epic04-story002/07-utf8.html
+  s_3f9fbf53483416::t_b16345c3f51f0d 1
+site/chapters/epic04-story002/08-tail.html
+  s_3f9fbf53483416::t_c03da94b65713a 1
+site/chapters/epic04-story002/09-long-line.html
+  s_3f9fbf53483416::t_21a2c8c3dbd9be 1
+site/chapters/epic04-story002/10-permission.html
+  s_3f9fbf53483416::t_ff300bdbca5935 1
+site/chapters/epic04-story002/11-dedup.html
+  s_3f9fbf53483416::t_f1efbb1a21acb9 1
+site/chapters/epic04-story002/12-lifecycle.html
+  s_3f9fbf53483416::t_917cd1f03a6c97 1
+site/chapters/epic04-story002/13-restart.html
+  s_3f9fbf53483416::t_b48ee2f2d95af6 1
+site/chapters/epic04-story002/14-failure.html
+  s_3f9fbf53483416::t_924fa59267071d 1
+site/chapters/epic04-story002/15-terminal.html
+  s_3f9fbf53483416::t_6d49c7cfb7bf18 1
+site/chapters/epic04-story002/16-capacity.html
+  s_3f9fbf53483416::t_4871a04589d924 1
+site/chapters/epic04-story002/17-evidence.html
+  s_3f9fbf53483416::t_d572d14e1d5499 1
+site/chapters/epic04-story002/18-practice.html
+  s_3f9fbf53483416::t_7c006c2d4d3e4a 1
+site/chapters/epic04-story002/course.css
+  s_3f9fbf53483416::t_bd61aec319a42b 1-22
+site/chapters/epic04-story002/pages.json
+  s_3f9fbf53483416::t_0ad44fc0ad1ba7 1-182
+site/course.json
+  s_3f9fbf53483416::t_1b7f073dca9392 5850-6297,6300
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_708902efa4c3f2 9-10
+specs/E04-reliability-and-context/S001-failure-recovery/README.md
+  s_58249cd92a0ae1::t_997ae284ac9754 78
+specs/E04-reliability-and-context/S002-result-references/README.md
+  s_58249cd92a0ae1::t_d90a24116423b8 5,7,9,11-20,22,24-89
+specs/E04-reliability-and-context/S002-result-references/details/00-overview.md
+  s_58249cd92a0ae1::t_0f5594d153a2c3 5
+specs/E04-reliability-and-context/S002-result-references/details/01-technical-design.md
+  s_3f9fbf53483416::t_a8e9b8f115028d 15
+specs/E04-reliability-and-context/S002-result-references/details/02-task-list.md
+  s_58249cd92a0ae1::t_53be802d5b2dda 7-13
+specs/E04-reliability-and-context/S002-result-references/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_71ea4d1f8a42b9 1,3,5-53
+specs/E04-reliability-and-context/S002-result-references/follow-along.md
+  s_58249cd92a0ae1::t_770f377a246ddd 1-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ca8ad4290fff2d3b9faa2cd06d3bda663e3f3063",
+  "prompts": {},
+  "sessions": {
+    "s_3f9fbf53483416": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a129b5-5bff-7fd0-ad51-e9cab5878822",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
