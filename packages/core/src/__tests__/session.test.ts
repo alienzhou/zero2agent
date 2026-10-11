@@ -272,6 +272,8 @@ describe('in-memory sessions', () => {
     expect(execute).toHaveBeenCalledWith(
       { message: 'value' },
       {
+        results: expect.anything(),
+        resultSource: expect.objectContaining({ toolCallId: expect.any(String) }),
         cwd: '/tmp/session-project',
         signal: expect.any(AbortSignal),
         onResultMetadata: expect.any(Function),
@@ -328,6 +330,8 @@ describe('in-memory sessions', () => {
     cwd.mockReturnValue('/tmp/project-b')
     await agent.run('inspect')
     expect(execute).toHaveBeenCalledWith(expect.anything(), {
+      results: expect.anything(),
+      resultSource: expect.objectContaining({ toolCallId: expect.any(String) }),
       cwd: '/tmp/project-a',
       signal: expect.any(AbortSignal),
       onResultMetadata: expect.any(Function),

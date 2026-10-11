@@ -1,5 +1,6 @@
 export type { Tool, ToolContext, ToolExecutionMetadata } from './types.js'
 export { toAnthropicTool } from './types.js'
+export { readToolResultTool } from './read-tool-result.js'
 export { readFileTool } from './read-file.js'
 export { listDirectoryTool } from './list-directory.js'
 export { grepSearchTool } from './grep-search.js'
@@ -23,6 +24,7 @@ export type {
   TerminalInterruptController,
 } from './terminal-runtime.js'
 
+import { readToolResultTool } from './read-tool-result.js'
 import { readFileTool } from './read-file.js'
 import { listDirectoryTool } from './list-directory.js'
 import { grepSearchTool } from './grep-search.js'
@@ -37,6 +39,7 @@ import type { Tool } from './types.js'
  * 所有可用工具的列表
  */
 export const allTools: Tool[] = [
+  readToolResultTool,
   readFileTool,
   listDirectoryTool,
   grepSearchTool,

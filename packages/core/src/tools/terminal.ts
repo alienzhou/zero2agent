@@ -105,6 +105,18 @@ export function sanitizeCommandInOutput(output: string, userCommand: string): st
 // ── OutputSink 状态机 ───────────────────────────────
 
 export class OutputSink {
+  storageError?: string
+  private closed = false
+  private closePromise?: Promise<void>
+
+  constructor(
+    private options: {
+      path?: string
+      maxBytes?: number
+      pause?: () => void
+      resume?: () => void
+    } = {}
+  ) {}
   private bufs: Buffer[] = []
   private memoryBytes = 0
   lineCount = 0
@@ -127,14 +139,19 @@ export class OutputSink {
   private openLogFile(): void {
     if (this.writeStream) return
     const hex = crypto.randomBytes(4).toString('hex')
-    this.logPath = path.join(os.tmpdir(), `zero2agent-${hex}.log`)
-    this.writeStream = fs.createWriteStream(this.logPath)
+    this.logPath = this.options.path ?? path.join(os.tmpdir(), `zero2agent-${hex}.log`)
+    this.writeStream = fs.createWriteStream(this.logPath, { flags: 'wx', mode: 0o600 })
+    this.writeStream.on('error', () => {
+      this.storageError = 'RESULT_STORAGE_FAILED: terminal output could not be saved completely'
+      this.options.resume?.()
+    })
+    this.writeStream.on('drain', () => this.options.resume?.())
   }
 
   private flushBuffersToDisk(): void {
     if (!this.writeStream) return
     for (const buf of this.bufs) {
-      this.writeStream.write(buf)
+      if (!this.writeStream.write(buf)) this.options.pause?.()
     }
   }
 
@@ -157,10 +174,19 @@ export class OutputSink {
   }
 
   append(chunk: Buffer): void {
+    if (this.closed) return
     this.countChunk(chunk)
+    if (this.totalBytes > (this.options.maxBytes ?? Number.MAX_SAFE_INTEGER)) {
+      this.storageError =
+        'RESULT_CAPACITY: terminal output exceeded the storage limit; output is incomplete'
+      this.spilled = true
+      this.bufs = []
+      this.memoryBytes = 0
+    }
+    if (this.storageError) return
 
     if (this.writeStream) {
-      this.writeStream.write(chunk)
+      if (!this.writeStream.write(chunk)) this.options.pause?.()
     }
 
     if (this.spilled) return
@@ -178,12 +204,15 @@ export class OutputSink {
   }
 
   async closeStream(): Promise<void> {
-    if (!this.writeStream || this.writeStream.writableEnded) return
+    if (this.closePromise) return this.closePromise
+    this.closed = true
     const stream = this.writeStream
-    await new Promise<void>((resolve, reject) => {
-      stream.end(() => resolve())
-      stream.on('error', reject)
+    if (!stream || stream.destroyed) return
+    this.closePromise = new Promise<void>(resolve => {
+      stream.once('close', resolve)
+      stream.end()
     })
+    return this.closePromise
   }
 
   formatSize(): string {
@@ -229,11 +258,22 @@ export async function runCommand(
   userCommand: string,
   cwd: string,
   turnSignal?: AbortSignal,
-  onResultMetadata?: (metadata: ToolExecutionMetadata) => void
+  onResultMetadata?: (metadata: ToolExecutionMetadata) => void,
+  outputOptions?: { path: string; maxBytes: number }
 ): Promise<RunResult> {
   turnSignal?.throwIfAborted()
   const wrapped = wrapCommand(userCommand)
-  const sink = new OutputSink()
+  const sink = new OutputSink({
+    ...outputOptions,
+    pause: () => {
+      child.stdout?.pause()
+      child.stderr?.pause()
+    },
+    resume: () => {
+      child.stdout?.resume()
+      child.stderr?.resume()
+    },
+  })
   const startAt = Date.now()
   const runtime = getTerminalRuntimeHooks()
 
@@ -448,7 +488,8 @@ function formatUntrustedBody(body: string, nonce: string): string {
 export function formatReceipt(
   result: RunResult,
   envFailureNotice: boolean,
-  completionNotices: string[]
+  completionNotices: string[],
+  resultReference?: string
 ): string {
   const parts: string[] = []
   const { sink, outcome, wallTimeMs } = result
@@ -456,6 +497,10 @@ export function formatReceipt(
 
   if (envFailureNotice) {
     parts.push('Note: could not load your shell profile; PATH may be incomplete.')
+  }
+
+  if (sink.storageError) {
+    return `Error: ${sink.storageError}. Command status: ${outcome}; exit code: ${result.exitCode ?? 'unknown'}. Side effects were not rolled back; do not re-run automatically.`
   }
 
   if (outcome === 'skipped') {
@@ -466,7 +511,9 @@ export function formatReceipt(
     if (sink.logPath) {
       parts.push(`Saved to: ${sink.logPath}`)
       parts.push('')
-      parts.push('Use read_file or grep_search on that path; it may still be being written.')
+      parts.push(
+        'Unsealed output: still being written; no immutable result reference exists yet. Use read_file or grep_search on that path with current file permission.'
+      )
       parts.push(`To check whether it is still alive, run: kill -0 ${result.pid}`)
     }
     appendNotices(parts, completionNotices)
@@ -477,7 +524,7 @@ export function formatReceipt(
     parts.push(`Status: cancelled by user (after ${Math.round(wallTimeMs / 1000)}s)`)
     if (sink.spilled && sink.logPath) {
       parts.push(`Output before cancellation: ${sink.formatSize()}`)
-      parts.push(`Saved to: ${sink.logPath}`)
+      parts.push(resultReference ?? `Saved to: ${sink.logPath}`)
     } else {
       parts.push('Output before cancellation:')
       const body = sanitizeCommandInOutput(sink.getBodyText(), result.command).trimEnd()
@@ -511,7 +558,7 @@ export function formatReceipt(
 
   if (sink.spilled) {
     parts.push(`Total: ${sink.formatSize()}`)
-    if (sink.logPath) parts.push(`Saved to: ${sink.logPath}`)
+    if (sink.logPath) parts.push(resultReference ?? `Saved to: ${sink.logPath}`)
   } else {
     const body = sanitizeCommandInOutput(sink.getBodyText(), result.command).trimEnd()
     parts.push('Output:')
@@ -550,7 +597,7 @@ export const terminalTool: Tool = {
     'Interactive mode is not for unattended execution; the human supplies input, and interactive content is not recorded or sent to the model. ' +
     'Never put credentials in command. Do not automatically retry a declined interactive request. ' +
     'Use workdir instead of cd — each call is a new process and cd does not persist. ' +
-    'Very large output (>800 lines / 20KB) is saved to /tmp and omitted from the receipt; use read_file or grep_search to read the saved file.',
+    'Very large output (>800 lines / 20KB) is saved once and omitted from the receipt. Read a sealed result with read_tool_result using its reference and byte ranges. Background output is unsealed and still growing; raw-path reads require file permission.',
   input_schema: {
     type: 'object',
     properties: {
@@ -635,7 +682,16 @@ export const terminalTool: Tool = {
 
     let result: RunResult
     try {
-      result = await runCommand(command, workdirResult.path, ctx.signal, ctx.onResultMetadata)
+      const outputOptions = ctx.results
+        ? { path: await ctx.results.spoolPath(), maxBytes: ctx.results.maxResultBytes }
+        : undefined
+      result = await runCommand(
+        command,
+        workdirResult.path,
+        ctx.signal,
+        ctx.onResultMetadata,
+        outputOptions
+      )
     } catch (err) {
       const msg = (err as Error).message
       if (msg.includes('ENOENT')) {
@@ -652,6 +708,20 @@ export const terminalTool: Tool = {
         signal: result.signal,
       })
     )
-    return formatReceipt(result, envFailureNotice, completionNotices)
+    let reference: string | undefined
+    if (ctx.results && ctx.resultSource && result.sink.logPath && result.outcome !== 'skipped') {
+      try {
+        if (result.sink.spilled && !result.sink.storageError) {
+          reference = ctx.results.receipt(
+            await ctx.results.seal(result.sink.logPath, ctx.resultSource)
+          )
+        } else {
+          await fs.promises.rm(result.sink.logPath, { force: true })
+        }
+      } catch (error) {
+        result.sink.storageError = `Result sealing failed after command settled: ${(error as Error).message}`
+      }
+    }
+    return formatReceipt(result, envFailureNotice, completionNotices, reference)
   },
 }

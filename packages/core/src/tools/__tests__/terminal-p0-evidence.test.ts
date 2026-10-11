@@ -54,7 +54,7 @@ describe('P0 证据：terminalTool.description 契约', () => {
     expect(d).toMatch(/cd does not persist/i)
     expect(d).toMatch(/800 lines/i)
     expect(d).toMatch(/20KB/i)
-    expect(d).toMatch(/read_file|grep_search/)
+    expect(d).toMatch(/read_tool_result/)
   })
 })
 

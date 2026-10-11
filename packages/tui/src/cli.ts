@@ -364,6 +364,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    results: { directory: process.env.ZERO2AGENT_RESULT_DIR },
     limits,
     fileMutations: noCheckpoints ? undefined : checkpoints.capture,
     diagnostics: journal ? event => journal.diagnostic(event) : undefined,

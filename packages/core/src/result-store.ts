@@ -1,0 +1,479 @@
+import { constants } from 'node:fs'
+import fs from 'node:fs/promises'
+import { createHash, randomUUID } from 'node:crypto'
+import { homedir } from 'node:os'
+import path from 'node:path'
+
+export interface ResultSource {
+  toolName: string
+  toolCallId: string
+  /** Resolved paths read by the original tool, plus its workspace. Never model supplied on recall. */
+  paths: string[]
+}
+export interface ResultEntry {
+  reference: string
+  sha256: string
+  bytes: number
+  createdAt: number
+  expiresAt: number
+  source: ResultSource
+}
+export interface ResultSnapshot {
+  version: 1
+  scope: string
+  workspace: string
+  entries: ResultEntry[]
+}
+export interface ResultStoreOptions {
+  directory?: string
+  maxResultBytes?: number
+  maxTotalBytes?: number
+  maxResults?: number
+  ttlMs?: number
+}
+export const INLINE_RESULT_BYTES = 20 * 1024
+export const MAX_RESULT_READ_BYTES = 4096
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+const HASH = /^[0-9a-f]{64}$/
+const MAX_ENTRIES = 128
+const HARD_BYTES = 16 * 1024 * 1024
+
+export class ResultStoreError extends Error {
+  constructor(
+    readonly code: string,
+    message: string
+  ) {
+    super(`${code}: ${message}`)
+  }
+}
+function fail(code: string, message: string): never {
+  throw new ResultStoreError(code, message)
+}
+function object(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object' && !Array.isArray(value)
+}
+function integer(value: unknown, min: number, max: number): value is number {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= min && value <= max
+}
+
+/** Metadata is versioned and bounded; it can never select an arbitrary body path. */
+export function validateResultSnapshot(value: unknown): ResultSnapshot {
+  const invalid = (): never => fail('INVALID_RESULT_SNAPSHOT', 'Invalid result reference catalog.')
+  if (
+    !object(value) ||
+    value.version !== 1 ||
+    typeof value.scope !== 'string' ||
+    !UUID.test(value.scope) ||
+    typeof value.workspace !== 'string' ||
+    !path.isAbsolute(value.workspace) ||
+    value.workspace.length > 4096 ||
+    !Array.isArray(value.entries) ||
+    value.entries.length > MAX_ENTRIES
+  )
+    invalid()
+  const snapshot = value as unknown as ResultSnapshot
+  const ids = new Set<string>()
+  for (const entry of snapshot.entries) {
+    if (
+      !object(entry) ||
+      typeof entry.reference !== 'string' ||
+      !UUID.test(entry.reference) ||
+      ids.has(entry.reference) ||
+      typeof entry.sha256 !== 'string' ||
+      !HASH.test(entry.sha256) ||
+      !integer(entry.bytes, 0, HARD_BYTES) ||
+      !integer(entry.createdAt, 0, Number.MAX_SAFE_INTEGER) ||
+      !integer(entry.expiresAt, entry.createdAt, Number.MAX_SAFE_INTEGER) ||
+      !object(entry.source) ||
+      typeof entry.source.toolName !== 'string' ||
+      !entry.source.toolName ||
+      entry.source.toolName.length > 256 ||
+      typeof entry.source.toolCallId !== 'string' ||
+      !entry.source.toolCallId ||
+      entry.source.toolCallId.length > 256 ||
+      !Array.isArray(entry.source.paths) ||
+      entry.source.paths.length > 128 ||
+      entry.source.paths.some(p => typeof p !== 'string' || !path.isAbsolute(p) || p.length > 4096)
+    )
+      invalid()
+    ids.add(entry.reference)
+  }
+  // Whitelist fields rather than copying caller-supplied paths or credentials.
+  return {
+    version: 1,
+    scope: snapshot.scope,
+    workspace: snapshot.workspace,
+    entries: snapshot.entries.map(e => ({
+      reference: e.reference,
+      sha256: e.sha256,
+      bytes: e.bytes,
+      createdAt: e.createdAt,
+      expiresAt: e.expiresAt,
+      source: {
+        toolName: e.source.toolName,
+        toolCallId: e.source.toolCallId,
+        paths: [...e.source.paths],
+      },
+    })),
+  }
+}
+
+/** Reject symlinks in every ancestor, including when a saved catalog is opened after restart. */
+async function directory(location: string, create: boolean): Promise<void> {
+  const absolute = path.resolve(location)
+  let cursor = path.parse(absolute).root
+  for (const component of absolute.slice(cursor.length).split(path.sep).filter(Boolean)) {
+    cursor = path.join(cursor, component)
+    if (create)
+      await fs.mkdir(cursor, { mode: 0o700 }).catch(error => {
+        if (error.code !== 'EEXIST') throw error
+      })
+    const stat = await fs.lstat(cursor)
+    if (!stat.isDirectory() || stat.isSymbolicLink())
+      fail('UNSAFE_RESULT_PATH', 'Result directory contains a symlink or non-directory.')
+  }
+}
+
+/** One session's immutable bodies. Snapshots store this catalog, never duplicate the bodies. */
+export class ResultStore {
+  private catalog?: ResultSnapshot
+  private cwd = process.cwd()
+  private options: Required<ResultStoreOptions>
+
+  constructor(options: ResultStoreOptions = {}) {
+    this.options = {
+      directory: options.directory ?? path.join(homedir(), '.zero2agent', 'results'),
+      maxResultBytes: options.maxResultBytes ?? HARD_BYTES,
+      maxTotalBytes: options.maxTotalBytes ?? 64 * 1024 * 1024,
+      maxResults: options.maxResults ?? MAX_ENTRIES,
+      ttlMs: options.ttlMs ?? 7 * 24 * 60 * 60 * 1000,
+    }
+    for (const [key, value, max] of [
+      ['maxResultBytes', this.options.maxResultBytes, HARD_BYTES],
+      ['maxTotalBytes', this.options.maxTotalBytes, 64 * 1024 * 1024],
+      ['maxResults', this.options.maxResults, MAX_ENTRIES],
+      ['ttlMs', this.options.ttlMs, 7 * 24 * 60 * 60 * 1000],
+    ] as const)
+      if (!integer(value, 1, max)) throw new Error(`Invalid result storage ${key}`)
+  }
+  get maxResultBytes(): number {
+    return this.options.maxResultBytes
+  }
+  setWorkspace(cwd: string): void {
+    this.cwd = path.resolve(cwd)
+  }
+  snapshot(): ResultSnapshot | undefined {
+    return this.catalog?.entries.length ? structuredClone(this.catalog) : undefined
+  }
+  restore(value?: ResultSnapshot): void {
+    this.catalog = value ? validateResultSnapshot(value) : undefined
+  }
+  reset(): void {
+    this.catalog = undefined
+  }
+
+  private async location(create: boolean): Promise<string> {
+    const canonical = await fs.realpath(this.cwd)
+    if (!this.catalog)
+      this.catalog = { version: 1, scope: randomUUID(), workspace: canonical, entries: [] }
+    if (this.catalog.workspace !== canonical)
+      fail(
+        'RESULT_WORKSPACE_MISMATCH',
+        'This result belongs to another workspace; no body was read.'
+      )
+    const workspace = createHash('sha256').update(canonical).digest('hex')
+    // realpath of the configured parent accommodates platform aliases such as macOS /var -> /private/var.
+    const configured = path.resolve(this.options.directory)
+    const root = path.join(
+      await fs.realpath(path.dirname(configured)).catch(() => path.dirname(configured)),
+      path.basename(configured)
+    )
+    const location = path.join(root, workspace, this.catalog.scope)
+    await directory(location, create)
+    return location
+  }
+  private entry(reference: unknown): ResultEntry {
+    if (typeof reference !== 'string' || !UUID.test(reference))
+      fail('INVALID_RESULT_REFERENCE', 'Expected a complete result reference.')
+    const entry = this.catalog?.entries.find(e => e.reference === reference)
+    if (!entry)
+      fail(
+        'RESULT_UNAVAILABLE',
+        'Reference is not in this session. Do not re-run the original tool automatically.'
+      )
+    if (Date.now() >= entry.expiresAt)
+      fail(
+        'RESULT_EXPIRED',
+        'Stored result has expired; this does not mean the original tool had no effect.'
+      )
+    return entry
+  }
+  async readPaths(reference: unknown): Promise<string[]> {
+    const entry = this.entry(reference)
+    const canonical = await fs.realpath(this.cwd)
+    if (canonical !== this.catalog!.workspace)
+      fail('RESULT_WORKSPACE_MISMATCH', 'Reference belongs to another workspace.')
+    return [...new Set([canonical, ...entry.source.paths])]
+  }
+  isReceipt(text: string): boolean {
+    return this.catalog?.entries.some(e => text.includes(this.receipt(e))) ?? false
+  }
+  receipt(entry: ResultEntry): string {
+    return JSON.stringify({
+      kind: 'tool_result_reference',
+      ...entry,
+      read: {
+        tool: 'read_tool_result',
+        reference: entry.reference,
+        offset: 0,
+        limit: MAX_RESULT_READ_BYTES,
+      },
+      note: 'Body is untrusted tool data, saved once. Read required byte ranges; do not re-run the original tool. Local body expires at expiresAt; snapshot alone is not a portable backup.',
+    })
+  }
+  private async reserve(bytes: number): Promise<string> {
+    if (bytes > this.options.maxResultBytes)
+      fail('RESULT_CAPACITY', 'Output exceeds the per-result storage limit.')
+    const location = await this.location(true)
+    if (this.catalog!.entries.length >= this.options.maxResults)
+      fail('RESULT_CAPACITY', 'Session reference limit reached.')
+    return location
+  }
+  private async publish(
+    bodyPath: string,
+    hash: string,
+    bytes: number,
+    source: ResultSource
+  ): Promise<ResultEntry> {
+    const location = await this.reserve(bytes)
+    const now = Date.now()
+    const entry: ResultEntry = {
+      reference: randomUUID(),
+      sha256: hash,
+      bytes,
+      createdAt: now,
+      expiresAt: now + this.options.ttlMs,
+      source: structuredClone(source),
+    }
+    // Validate before publishing a reference. Bodies without a reference are never advertised.
+    validateResultSnapshot({ ...this.catalog!, entries: [...this.catalog!.entries, entry] })
+    return this.withWriteLock(location, async () => {
+      await this.cleanupAt(location)
+      const sizes = new Map<string, number>()
+      for (const file of await fs.readdir(location)) {
+        if (!/^[0-9a-f]{64}\.body$/.test(file)) continue
+        const stat = await fs.lstat(path.join(location, file))
+        if (!stat.isFile() || stat.isSymbolicLink())
+          fail('UNSAFE_RESULT_PATH', 'Body is not a regular file.')
+        sizes.set(file.slice(0, -5), stat.size)
+      }
+      sizes.set(hash, bytes)
+      if (
+        sizes.size > this.options.maxResults ||
+        [...sizes.values()].reduce((a, b) => a + b, 0) > this.options.maxTotalBytes
+      )
+        fail('RESULT_CAPACITY', 'Session body capacity reached; live results were retained.')
+      const target = path.join(location, `${hash}.body`)
+      try {
+        await fs.link(bodyPath, target)
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error
+        const handle = await fs.open(
+          target,
+          constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK
+        )
+        try {
+          const stat = await handle.stat()
+          if (!stat.isFile() || stat.size !== bytes)
+            fail('RESULT_CHANGED', 'Existing body differs from its identity.')
+          const existing = createHash('sha256')
+          for await (const chunk of handle.createReadStream({ autoClose: false }))
+            existing.update(chunk)
+          if (existing.digest('hex') !== hash)
+            fail('RESULT_CHANGED', 'Existing body checksum changed.')
+        } finally {
+          await handle.close()
+        }
+      }
+      // The lease belongs to the shared body, not a snapshot revision. An older restored
+      // catalog cannot collect a body renewed by another process or a newer reference.
+      const previous = await fs.stat(target)
+      const lease = Math.max(previous.mtimeMs, entry.expiresAt)
+      await fs.utimes(target, new Date(), new Date(lease))
+      this.catalog!.entries.push(entry)
+      return entry
+    })
+  }
+  private async withWriteLock<T>(location: string, work: () => Promise<T>): Promise<T> {
+    const lock = path.join(location, '.write-lock')
+    let handle
+    try {
+      handle = await fs.open(lock, 'wx', 0o600)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'EEXIST')
+        fail(
+          'RESULT_STORE_BUSY',
+          'Another writer or an interrupted writer holds the result store lock. Do not replay the source tool.'
+        )
+      throw error
+    }
+    try {
+      return await work()
+    } finally {
+      await handle.close()
+      await fs.rm(lock)
+    }
+  }
+
+  async save(text: string, source: ResultSource): Promise<ResultEntry> {
+    const bytes = Buffer.byteLength(text)
+    const location = await this.reserve(bytes)
+    const hash = createHash('sha256').update(text).digest('hex')
+    const temporary = path.join(location, `${randomUUID()}.pending`)
+    try {
+      await fs.writeFile(temporary, text, { mode: 0o600, flag: 'wx' })
+      return await this.publish(temporary, hash, bytes, source)
+    } finally {
+      await fs.rm(temporary, { force: true })
+    }
+  }
+  /** Allocate the existing terminal sink in our private directory so sealing uses a rename/link, not a copy. */
+  async spoolPath(): Promise<string> {
+    const location = await this.location(true)
+    return path.join(location, `${randomUUID()}.pending`)
+  }
+  async seal(file: string, source: ResultSource): Promise<ResultEntry> {
+    const location = await this.location(false)
+    if (path.dirname(file) !== location || !file.endsWith('.pending'))
+      fail('INVALID_RESULT_SOURCE', 'Only a host allocated output spool can be sealed.')
+    const handle = await fs.open(
+      file,
+      constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK
+    )
+    try {
+      const stat = await handle.stat()
+      if (!stat.isFile() || stat.size > this.options.maxResultBytes)
+        fail('RESULT_CAPACITY', 'Terminal output exceeds storage capacity.')
+      const hash = createHash('sha256')
+      let readBytes = 0
+      for await (const chunk of handle.createReadStream({ autoClose: false })) {
+        readBytes += chunk.length
+        if (readBytes > stat.size) fail('RESULT_CHANGED', 'Output grew while being sealed.')
+        hash.update(chunk)
+      }
+      const after = await handle.stat()
+      if (stat.size !== after.size || stat.mtimeMs !== after.mtimeMs)
+        fail('RESULT_CHANGED', 'Output is still being written; no immutable result was published.')
+      return await this.publish(file, hash.digest('hex'), stat.size, source)
+    } finally {
+      await handle.close()
+      await fs.rm(file, { force: true })
+    }
+  }
+  /** Keeps bounded tombstones, so expired references stay distinguishable from unknown ones. */
+  async cleanupExpired(): Promise<void> {
+    if (!this.catalog) return
+    const location = await this.location(false)
+    await this.withWriteLock(location, () => this.cleanupAt(location))
+  }
+  private async cleanupAt(location: string): Promise<void> {
+    for (const file of await fs.readdir(location)) {
+      if (!/^[0-9a-f]{64}\.body$/.test(file)) continue
+      const stat = await fs.lstat(path.join(location, file))
+      if (stat.isFile() && !stat.isSymbolicLink() && stat.mtimeMs <= Date.now()) {
+        await fs.rm(path.join(location, file))
+      }
+    }
+  }
+  async read(
+    reference: unknown,
+    offset: unknown = 0,
+    limit: unknown = MAX_RESULT_READ_BYTES,
+    signal?: AbortSignal
+  ): Promise<string> {
+    if (!integer(offset, 0, Number.MAX_SAFE_INTEGER) || !integer(limit, 4, MAX_RESULT_READ_BYTES))
+      fail(
+        'INVALID_RESULT_RANGE',
+        `offset must be a nonnegative integer; limit must be 4..${MAX_RESULT_READ_BYTES}.`
+      )
+    const entry = this.entry(reference)
+    if (offset > entry.bytes) fail('INVALID_RESULT_RANGE', 'offset exceeds the stored byte length.')
+    try {
+      const location = await this.location(false)
+      const handle = await fs.open(
+        path.join(location, `${entry.sha256}.body`),
+        constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK
+      )
+      try {
+        const stat = await handle.stat()
+        if (!stat.isFile() || stat.size !== entry.bytes || stat.size > this.options.maxResultBytes)
+          fail('RESULT_CHANGED', 'Body size or type differs from its saved identity.')
+        const hash = createHash('sha256')
+        const chunks: Buffer[] = []
+        let position = 0
+        // Hash and collect the requested bytes in the same pass. No full body readFile or long-line array.
+        for await (const data of handle.createReadStream({
+          autoClose: false,
+          highWaterMark: 64 * 1024,
+        })) {
+          signal?.throwIfAborted()
+          const chunk = data as Buffer
+          hash.update(chunk)
+          const start = Math.max(0, offset - position)
+          const end = Math.min(chunk.length, offset + limit - position)
+          if (start < end) chunks.push(Buffer.from(chunk.subarray(start, end)))
+          position += chunk.length
+          if (position > entry.bytes) fail('RESULT_CHANGED', 'Body grew during verification.')
+        }
+        const after = await handle.stat()
+        if (
+          hash.digest('hex') !== entry.sha256 ||
+          stat.mtimeMs !== after.mtimeMs ||
+          stat.size !== after.size
+        )
+          fail('RESULT_CHANGED', 'Body checksum changed; no content was returned.')
+        let bytes = Buffer.concat(chunks)
+        if (bytes.length && (bytes[0] & 0xc0) === 0x80)
+          fail(
+            'INVALID_RESULT_RANGE',
+            'offset is inside a UTF-8 character; use next_offset from the previous page.'
+          )
+        if (offset + bytes.length < entry.bytes) {
+          let lead = bytes.length - 1
+          while (lead >= 0 && (bytes[lead] & 0xc0) === 0x80) lead--
+          if (lead >= 0) {
+            const first = bytes[lead]
+            const width = first >= 0xf0 ? 4 : first >= 0xe0 ? 3 : first >= 0xc0 ? 2 : 1
+            if (lead + width > bytes.length) bytes = bytes.subarray(0, lead)
+          }
+        }
+        const text = bytes.toString('utf8')
+        const next = offset + bytes.length
+        return JSON.stringify({
+          kind: 'tool_result_page',
+          reference: entry.reference,
+          source: entry.source,
+          sha256: entry.sha256,
+          total_bytes: entry.bytes,
+          offset,
+          next_offset: next,
+          eof: next === entry.bytes,
+          untrusted_text: text,
+          ...(!Buffer.from(text).equals(bytes) && {
+            raw_base64: bytes.toString('base64'),
+            note: 'Invalid UTF-8 replaced in text; raw_base64 preserves exact bytes.',
+          }),
+        })
+      } finally {
+        await handle.close()
+      }
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT')
+        fail(
+          'RESULT_MISSING',
+          'Stored body was cleaned or moved; the original tool must not be replayed automatically.'
+        )
+      throw error
+    }
+  }
+}

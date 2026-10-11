@@ -1,3 +1,6 @@
+import { INLINE_RESULT_BYTES, type ResultSource, type ResultStoreOptions } from './result-store.js'
+import { resolvePhysicalPath } from './tools/path-guard.js'
+import { readToolResultTool } from './tools/read-tool-result.js'
 import type { FileMutationHandler } from './file-mutations.js'
 /**
  * ReACT 循环实现
@@ -35,6 +38,13 @@ import {
   type PermissionOptions,
   type PermissionDecision,
 } from './permissions.js'
+
+function resultAwareTools(tools: Tool[] = allTools): Tool[] {
+  const existing = tools.find(tool => tool.name === readToolResultTool.name)
+  if (existing && existing !== readToolResultTool)
+    throw new Error('read_tool_result is a reserved host tool')
+  return existing ? tools : [...tools, readToolResultTool]
+}
 
 function describeToolError(error: unknown): string {
   try {
@@ -155,15 +165,42 @@ export async function executeToolCalls(
               notifyObserver(() => ctx.onResultMetadata?.(structuredClone(metadata)))
             }
           : undefined
+      const resultSource: ResultSource = {
+        toolName: tool.name,
+        toolCallId: block.id,
+        paths: [
+          ctx.cwd,
+          ...(tool.permission?.effect === 'read'
+            ? (tool.permission.paths ?? []).flatMap(key => {
+                const value = input[key] ?? '.'
+                return (Array.isArray(value) ? value : [value])
+                  .filter((p): p is string => typeof p === 'string')
+                  .map(p => resolvePhysicalPath(p, ctx.cwd))
+              })
+            : []),
+        ].map(p => resolvePhysicalPath(p)),
+      }
       const callCtx: ToolContext = Object.freeze({
+        resultSource,
         ...ctx,
         ...(metadataObserver && { onResultMetadata: metadataObserver }),
       })
-      const initial = permissions.evaluate(tool, input, callCtx)
+      const permissionInput = tool.readPaths
+        ? { ...input, __result_paths: await tool.readPaths(input, callCtx) }
+        : input
+      const permissionTool = tool.readPaths
+        ? { ...tool, permission: { effect: 'read' as const, paths: ['__result_paths'] } }
+        : tool
+      const initial = permissions.evaluate(permissionTool, permissionInput, callCtx)
       diagnostics?.permission('initial', block.id, block.name, initial.action)
       if (initial.action === 'ask') state('approval', { reason: initial.reason })
       assertNotCancelled(ctx.signal)
-      const decision = await permissions.authorize(block.id, tool, input, callCtx)
+      const decision = await permissions.authorize(
+        block.id,
+        permissionTool,
+        permissionInput,
+        callCtx
+      )
       diagnostics?.permission('resolved', block.id, block.name, decision.action)
       notifyObserver(() => events?.onPermission?.(block.id, { ...decision }))
       assertNotCancelled(ctx.signal)
@@ -172,7 +209,7 @@ export async function executeToolCalls(
         throw new Error(`Permission denied: ${decision.reason}`)
       }
       // Awaiting the host can change the filesystem. Check hard boundaries again.
-      const boundary = permissions.checkWorkspace(tool, input, callCtx)
+      const boundary = permissions.checkWorkspace(permissionTool, permissionInput, callCtx)
       if (boundary?.action === 'deny') {
         diagnostics?.permission('boundary', block.id, block.name, 'deny')
         denied = true
@@ -187,7 +224,7 @@ export async function executeToolCalls(
         assertNotCancelled(ctx.signal)
         return tool.execute(input, callCtx)
       }
-      const output =
+      let output =
         fileMutations && tool.checkpointPaths
           ? await fileMutations(
               {
@@ -216,7 +253,20 @@ export async function executeToolCalls(
         /^(?:Note: could not load your shell profile; PATH may be incomplete\.\n)?Status: (?:human-controlled )?cancelled(?: by user|\n|$)/.test(
           output
         )
-      const failed = output.startsWith('Error:') || cancelled || nativeFailed
+      let failed = output.startsWith('Error:') || cancelled || nativeFailed
+      if (
+        ctx.results &&
+        tool !== readToolResultTool &&
+        Buffer.byteLength(output) > INLINE_RESULT_BYTES
+      ) {
+        try {
+          output = ctx.results.receipt(await ctx.results.save(output, resultSource))
+        } catch (error) {
+          // The tool already settled. Preserve that fact and never suggest replaying side effects.
+          output = `Error: Tool execution settled (original result ${failed ? 'failed' : 'completed'}), but output storage failed: ${describeToolError(error)}. Do not re-run the tool automatically.`
+          failed = true
+        }
+      }
       state(cancelled ? 'cancelled' : nativeDenied ? 'denied' : failed ? 'error' : 'completed', {
         output,
         durationMs,
@@ -265,6 +315,7 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  results?: ResultStoreOptions
   limits?: RunLimits
   fileMutations?: FileMutationHandler
   diagnostics?: DiagnosticObserver
@@ -292,7 +343,7 @@ export interface RunLoopOptions {
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
   const budget = new RunBudget(options.limits, options.signal)
   options = { ...options, signal: budget.signal }
-  const session = options.session ?? new Session()
+  const session = options.session ?? new Session(options.results)
   const diagnostics = new DiagnosticEmitter(options.diagnostics, options.diagnosticContext)
   const emitter = new RuntimeEmitter(diagnostics.operationId, event => {
     diagnostics.runtime(event)
@@ -370,6 +421,9 @@ export function createCompactionRuntime(
   const model = getModelName(options.config ?? {})
   const budget = session.getContextBudget(model, options.context)
   return {
+    results: session.getResultStore(options.cwd ?? process.cwd()),
+    tools: resultAwareTools(options.tools),
+    cwd: options.cwd ?? process.cwd(),
     client,
     budget,
     diagnostics,
@@ -379,7 +433,7 @@ export function createCompactionRuntime(
         model,
         max_tokens: budget.outputTokens,
         messages,
-        tools: (options.tools ?? allTools).map(toAnthropicTool),
+        tools: resultAwareTools(options.tools).map(toAnthropicTool),
         ...(options.systemPrompt && { system: options.systemPrompt }),
       }),
     summarize: createContextSummarizer(client, model, budget, diagnostics, executor),
@@ -409,7 +463,8 @@ async function runTurnLoop(
   budget: RunBudget,
   executor: RequestExecutor
 ): Promise<string> {
-  const { tools = allTools, events, cwd } = options
+  const { events, cwd } = options
+  const tools = resultAwareTools(options.tools)
   const session = options.session!
   const runtime = createCompactionRuntime(
     {
@@ -428,6 +483,7 @@ async function runTurnLoop(
   )
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const ctx: ToolContext = {
+    results: session.getResultStore(cwd ?? process.cwd()),
     cwd: cwd ?? process.cwd(),
     ...(options.signal && { signal: options.signal }),
   }

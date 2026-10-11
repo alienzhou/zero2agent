@@ -1,7 +1,9 @@
+import { validateResultSnapshot, type ResultSnapshot } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
 
 /** Durable data only. Pending jobs, budgets and temporary pruning artifacts are rebuilt. */
 export interface SessionSnapshot {
+  results?: ResultSnapshot
   messages: Anthropic.MessageParam[]
   context: { through: number; summary: string }
 }
@@ -97,6 +99,7 @@ export function validateSessionSnapshot(value: unknown): SessionSnapshot {
   }
   if (pending.size) fail()
   return structuredClone({
+    ...(value.results === undefined ? {} : { results: validateResultSnapshot(value.results) }),
     messages: value.messages,
     context: { through, summary },
   }) as SessionSnapshot
