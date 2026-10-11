@@ -55,7 +55,7 @@ git checkout main
 
 真实 CLI 新进程恢复、权限拒绝与删除正文验证原工具不重放；真实模型从约 300 KB 合成日志中回读未知随机证据。18 页课程用日志案例、字节尺、回执拆解和预测实验讲解，正文与模型发送视图区分清楚。
 
-状态：实现、课程和验收可审阅，尚未合入 main、未部署网站；固定版本为 `E04-S002-result-references`，以实际远端 Tag 为准。
+状态：实现、课程和验收已完成，通过 [PR #24](https://github.com/alienzhou/zero2agent/pull/24) 交付；课程网站尚未部署。固定版本 `E04-S002-result-references` 指向 `eced181`，后续交付状态文档修订不移动该 Tag。
 
 ---
 
