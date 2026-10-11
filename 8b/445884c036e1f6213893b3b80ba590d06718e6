@@ -1,0 +1,80 @@
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_967f9206d6e0a7 17-20
+packages/core/src/context-manager.ts
+  s_58249cd92a0ae1::t_0034be7ed814a3 3
+  s_58249cd92a0ae1::t_9c205c2fa2cb3e 46,49,71,80
+  s_58249cd92a0ae1::t_1075f255906772 81-84,92,100,143-150,278-281,305-307,336-344,370,391,423
+packages/core/src/tools/__tests__/terminal-acceptance.test.ts
+  s_58249cd92a0ae1::t_5af44af65b51e0 69-70
+packages/core/src/history-evidence.ts
+  s_58249cd92a0ae1::t_5af44af65b51e0 10,12-16,58-72,110,129,152-156,198,204-205,208-210,226-227
+  s_58249cd92a0ae1::t_396e6c8c848585 1-9,11,17-57,73-109,111-128,130-151,157-197,199-203,206-207,211-225,228-231
+  s_58249cd92a0ae1::t_2e0d9b3a53c349 232-319
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_967f9206d6e0a7 25
+packages/core/src/prompt/system.ts
+  s_58249cd92a0ae1::t_5af44af65b51e0 48
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_2bcef518c9078b 1-28
+packages/core/src/tools/types.ts
+  s_58249cd92a0ae1::t_967f9206d6e0a7 2,22-23
+packages/core/src/__tests__/history-evidence.test.ts
+  s_58249cd92a0ae1::t_a3037ef2d672bb 7,110-112,140,144-186
+  s_58249cd92a0ae1::t_92095977c4adf7 1-6,8-109,113-139,141-143,187-212
+  s_58249cd92a0ae1::t_188d8ab34cad17 213-315
+researches/summary-quality/evaluation/analyze.mjs
+  s_58249cd92a0ae1::t_021d4f20f97a73 1-109
+packages/core/src/tools/index.ts
+  s_58249cd92a0ae1::t_967f9206d6e0a7 4,29,45
+packages/core/src/tools/__tests__/terminal-interactive.test.ts
+  s_58249cd92a0ae1::t_5af44af65b51e0 54
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_967f9206d6e0a7 7,20-30,91,100,111
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_41f0afac8ebdd6 4,45-51,200-203,512-514,518,523,595,610
+  s_58249cd92a0ae1::t_5af44af65b51e0 5,515-517
+packages/core/src/tools/read-history.ts
+  s_58249cd92a0ae1::t_5af44af65b51e0 9
+  s_58249cd92a0ae1::t_396e6c8c848585 1-8,10-21
+  s_58249cd92a0ae1::t_d249fa9fbf7b6c 22-32
+packages/core/src/session-snapshot.ts
+  s_58249cd92a0ae1::t_967f9206d6e0a7 3,8,10,33-34,105-108
+  s_58249cd92a0ae1::t_d0c96c172c65ab 109-112,115
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_2bcef518c9078b 7-12
+researches/summary-quality/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_2bcef518c9078b 1-9
+researches/summary-quality/evaluation/scorer.test.mjs
+  s_58249cd92a0ae1::t_021d4f20f97a73 1-27
+e2e/src/history-references.test.ts
+  s_58249cd92a0ae1::t_2bde206197f312 22-23,30-32,37-53,61-67,76,86-92,101-103,107,125-127,133-148,150-163
+  s_58249cd92a0ae1::t_4363091210ce41 1-21,24-29,33-36,54-60,68-75,77-85,93-100,104-106,108-124,128-132,149,164-170
+packages/core/src/__tests__/compact-loop.test.ts
+  s_58249cd92a0ae1::t_39840b719803a7 76,234,346
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_c582c5f56cbc04 275-276,335-336
+researches/summary-quality/evaluation/baseline-v1/manifest.json
+  s_58249cd92a0ae1::t_f1fd111388860e 1-365
+researches/summary-quality/evaluation/baseline-v2/manifest.json
+  s_58249cd92a0ae1::t_6d5dcd0cc0eaf0 1-365
+researches/summary-quality/evaluation/baseline-v3/analysis.json
+  s_58249cd92a0ae1::t_dbc3690ac05ec7 1-5852
+researches/summary-quality/evaluation/baseline-v3/manifest.json
+  s_58249cd92a0ae1::t_9899a34ede3abb 1-367
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8b445884c036e1f6213893b3b80ba590d06718e6",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
