@@ -1,0 +1,31 @@
+researches/summary-quality/evaluation/candidate-v6/analysis.json
+  s_58249cd92a0ae1::t_ceb5bc71ca20a7 1-5975
+researches/summary-quality/evaluation/candidate-v6/initial-request-reconstruction.json
+  s_58249cd92a0ae1::t_c649306376a058 1-61
+researches/summary-quality/evaluation/candidate-v6/manifest.json
+  s_58249cd92a0ae1::t_655b7f8f7bff33 1-367
+researches/summary-quality/evaluation/candidate-v6/runtime-hashes.json
+  s_58249cd92a0ae1::t_9c90dec8f7d1a7 1-90
+researches/summary-quality/evaluation/candidate-v6/verification.json
+  s_58249cd92a0ae1::t_a52bf1ae9aeab6 1-11
+researches/summary-quality/evaluation/comparison-provenance.json
+  s_58249cd92a0ae1::t_17c1c726173ed8 8-9
+researches/summary-quality/evaluation/comparison.md
+  s_58249cd92a0ae1::t_aa65f36511802b 1,3,9-14,18,24-30,38,48,127-146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "314907b744e0983763488f2a8d3ec39acf35913c",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
