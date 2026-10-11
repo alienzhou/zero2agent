@@ -1,0 +1,31 @@
+researches/summary-quality/evaluation/contract-field-meaning-design.md
+  s_58249cd92a0ae1::t_66eb0bca03c864 18-19
+researches/summary-quality/evaluation/contract-pair-v2/contracts.json
+  s_58249cd92a0ae1::t_8fb212cd40cdfd 149-150,305-306,443-444,501-502
+researches/summary-quality/evaluation/contract-pair-v2/descriptions.json
+  s_58249cd92a0ae1::t_217fd4809ee31a 6-7,10-17
+researches/summary-quality/evaluation/contract-pair-v2/inputs.json
+  s_58249cd92a0ae1::t_3b075345eb1a32 162-163,230,328-329,384,476-477,510,539-540,589
+researches/summary-quality/evaluation/contract-pair-v2/inputs.test.mjs
+  s_58249cd92a0ae1::t_17693b00179ae2 8,22
+researches/summary-quality/evaluation/contract-pair-v2/protocol.md
+  s_58249cd92a0ae1::t_f90edc5b0bb0f0 7
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_6de551ef90e77d 137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d1963b62ec6c77b516f9c4e4581fd2f1cec6e358",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
