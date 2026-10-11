@@ -1,0 +1,42 @@
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_5f09053d5f8e11 44,46-47,333
+docs/architecture.md
+  s_58249cd92a0ae1::t_511071c7f7cce7 158-159
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_511071c7f7cce7 60-63
+packages/core/src/__tests__/diagnostics.test.ts
+  s_58249cd92a0ae1::t_2da0313ebb78be 37-40,42,112-131,133-144,223-225,257,286-291
+  s_58249cd92a0ae1::t_1908acfeff64c3 41,53,132
+e2e/src/run-log.test.ts
+  s_58249cd92a0ae1::t_2da0313ebb78be 6,26-38,48-54,65-67,80,88
+  s_58249cd92a0ae1::t_be84f5dc71526c 39-47,55-64
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_5f09053d5f8e11 46,586-587
+docs/getting-started.md
+  s_58249cd92a0ae1::t_511071c7f7cce7 138-139
+e2e/src/runtime-logging.test.ts
+  s_58249cd92a0ae1::t_92a5f065f35350 76-84,94-96,100
+  s_58249cd92a0ae1::t_2aabfce16688d8 97-99,101-102,130-131
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_55cc5ba3e852e2 64-69
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_2569f7e47d559a 44-45
+researches/summary-quality/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_fd505914cd0109 54-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bef6e96bb29be15090386172b05606a7da8dbeec",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
