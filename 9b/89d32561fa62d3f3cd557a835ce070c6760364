@@ -1,0 +1,27 @@
+researches/summary-quality/evaluation/completion-contract-proposal.md
+  s_58249cd92a0ae1::t_57eaba02325526 1-56
+researches/summary-quality/evaluation/artifact-contract.mjs
+  s_58249cd92a0ae1::t_ece1082931abfc 1-58
+researches/summary-quality/evaluation/artifact-contract-probe.mjs
+  s_58249cd92a0ae1::t_ece1082931abfc 1-71
+researches/summary-quality/evaluation/artifact-contract.test.mjs
+  s_58249cd92a0ae1::t_ece1082931abfc 1-45
+researches/summary-quality/evaluation/artifact-contract-probe.json
+  s_58249cd92a0ae1::t_a3c0840e9f2664 1-1331
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9b89d32561fa62d3f3cd557a835ce070c6760364",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
