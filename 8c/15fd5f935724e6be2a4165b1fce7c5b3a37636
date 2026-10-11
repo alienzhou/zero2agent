@@ -1,0 +1,57 @@
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_95927aacd0306f 24
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_95927aacd0306f 132,134
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_95927aacd0306f 15-16
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_95927aacd0306f 10-11
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_55490b7b12f75f 40-43
+.authoring/site/chapters/epic04-story003/verification/checks-candidate-v8-complete.json
+  s_58249cd92a0ae1::t_3414b9cbaac443 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_2233a1656fab05 2,106,108
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_9399a21e72d6bd 70-71
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_a48ff4bc96ce26 46-47
+CHANGELOG.md
+  s_58249cd92a0ae1::t_739c8d263779e6 54,58-59
+researches/summary-quality/acceptance/model-identity-local-links.json
+  s_58249cd92a0ae1::t_71a1e9af863040 1-6
+researches/summary-quality/acceptance/model-identity-source-hashes.json
+  s_58249cd92a0ae1::t_691e2394406383 1-86
+researches/summary-quality/acceptance/model-identity-verification.json
+  s_58249cd92a0ae1::t_0284f461016462 1-56
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_30ee9b0c1c93ca 46-47
+retros/E04-S003-summary-quality.md
+  s_58249cd92a0ae1::t_5a7bf13c1ded21 62-67
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_0b690489e27021 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_18cc3bf0a30ba4 182-183
+site/course.json
+  s_58249cd92a0ae1::t_47b2cfc92acac1 6748,6751
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_fca2c3919dafee 61-66
+specs/E04-reliability-and-context/S003-summary-quality/follow-along.md
+  s_58249cd92a0ae1::t_226f446c704c24 70-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c15fd5f935724e6be2a4165b1fce7c5b3a37636",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
