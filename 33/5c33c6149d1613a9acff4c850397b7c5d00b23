@@ -1,0 +1,51 @@
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_44b3926a5d72bc 20-22
+e2e/src/run-log.test.ts
+  s_58249cd92a0ae1::t_5b4d962c060722 54-74
+packages/core/src/__tests__/context-summary.test.ts
+  s_58249cd92a0ae1::t_797e20799e8f0b 137,149,152-239,312-317
+packages/core/src/__tests__/diagnostics.test.ts
+  s_58249cd92a0ae1::t_dbaa7a9c3cfaab 86-105
+packages/core/src/__tests__/history-evidence.test.ts
+  s_58249cd92a0ae1::t_ce47d4dae66035 302,307-309,333
+packages/core/src/__tests__/result-store.test.ts
+  s_58249cd92a0ae1::t_e6cd230a902a5d 79-92
+packages/core/src/context-budget.ts
+  s_58249cd92a0ae1::t_9c33cd20bd0a05 26-38,40-41,44
+packages/core/src/context-manager.ts
+  s_58249cd92a0ae1::t_57cd20e7a29945 7-12,22,60,354-356,365-368,390-395,416-422
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_83d332dd855a01 56-57,68-70,106-108,117-119,195,197-210
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_768f6dc9b3bf2b 4-8,58,251,257
+packages/core/src/result-store.ts
+  s_58249cd92a0ae1::t_95f753886b86ae 525-529
+packages/core/src/tools/read-tool-result.ts
+  s_58249cd92a0ae1::t_bd52e523971314 13
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_5acf9da69de9bb 53
+researches/summary-quality/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_621915dd099f5d 15-19
+researches/summary-quality/evaluation/comparison.md
+  s_58249cd92a0ae1::t_4256944d05ca46 67-72
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_596105d357942c 71-80
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_a87809a7621087 33-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "335c33c6149d1613a9acff4c850397b7c5d00b23",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
