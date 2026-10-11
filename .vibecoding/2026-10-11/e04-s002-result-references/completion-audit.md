@@ -12,6 +12,8 @@
 | 工程门禁 | Story 验收页及 acceptance/final 原始输出、源码哈希 |
 | 课程 | 18 份 HTML、pages.json、author.cjs、内容计划、来源及逐页/双端检查 |
 | 文档闭环 | 固定五篇 details、跟练、复盘、讨论/协作记录、首页/课表/前后课导航 |
-| Tag / PR | 待发布后在此登记远端状态 |
+| Tag / PR | [PR #24](https://github.com/alienzhou/zero2agent/pull/24)，分支 `codex/e04-s002-result-references`；[E04-S002-result-references](https://github.com/alienzhou/zero2agent/tree/E04-S002-result-references) 标记包含本审计的最终交付提交 |
+
+2026-10-11 交付核对：最终 24 份 TypeScript 源码哈希与验收记录一致；默认全仓 643 项通过，真实模型专项 1 项通过。PR 创建时为 OPEN / MERGEABLE，GitHub 未返回 CI 检查项，本地验收与远端 CI 分开记录。交付时另以远端分支、Tag 和 PR head 的提交一致性核对发布结果。
 
 原主工作区中的用户修改保持原样。创建 PR 表示交付人工审阅，不等同已经人工批准、合并或部署；这些状态分别报告。
