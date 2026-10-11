@@ -1,0 +1,10 @@
+◇ injected env (0) from ../../.env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+
+
+ Test Files  4 passed (4)
+      Tests  120 passed (120)
+   Start at  16:00:10
+   Duration  866ms (transform 475ms, setup 0ms, import 798ms, tests 1.14s, environment 0ms)
+

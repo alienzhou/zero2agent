@@ -1,0 +1,316 @@
+
+> @zero2agent/core@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+> vitest run
+
+◇ injected env (0) from ../../.env.local // tip: ⌘ override existing { override: true }
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+
+ ❯ src/__tests__/session.test.ts (34 tests | 2 failed) 193ms
+     × reset removes history but retains tool configuration and cwd 6ms
+     × pins default cwd when the Agent is constructed 4ms
+ ❯ src/__tests__/permissions.test.ts (54 tests | 2 failed) 229ms
+     × observer failures and input mutation cannot change approved arguments 5ms
+     × pins call IDs, tool names and the entire batch before an asynchronous host reply 2ms
+ ❯ src/tools/__tests__/terminal-interactive.test.ts (19 tests | 1 failed) 35ms
+     × keeps eight tools and exposes the host environment helper 10ms
+ ❯ src/tools/__tests__/terminal-acceptance.test.ts (26 tests | 2 failed) 12341ms
+     × [P0] allTools 注册 terminal（共 8 个） 6ms
+     × [P0] 跳过回执含 pid / kill-0 引导（formatReceipt） 3ms
+
+> @zero2agent/tui@0.0.0 build /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/tui
+> tsc
+
+ ❯ src/tools/__tests__/terminal-p0-evidence.test.ts (20 tests | 1 failed) 37480ms
+     × [P0] description 写明非交互、workdir、超长落盘回读 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/permissions.test.ts > single approval lifecycle > observer failures and input mutation cannot change approved arguments
+AssertionError: expected "vi.fn()" to be called with arguments: [ { nested: { x: 'original' } }, …(1) ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -4,7 +4,14 @@
+        "x": "original",
+      },
+    },
+    {
+      "cwd": "/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core",
++     "resultSource": {
++       "paths": [
++         "/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core",
++       ],
++       "toolCallId": "a",
++       "toolName": "custom",
++     },
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/__tests__/permissions.test.ts:244:23
+    242|       p
+    243|     )
+    244|     expect(t.execute).toHaveBeenCalledWith(input, ctx)
+       |                       ^
+    245|     expect(results.map(r => r.tool_use_id)).toEqual(['a', 'b'])
+    246|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  src/__tests__/permissions.test.ts > single approval lifecycle > pins call IDs, tool names and the entire batch before an asynchronous host reply
+AssertionError: expected 2nd "vi.fn()" call to have been called with [ { message: 'second' }, …(1) ]
+
+- Expected
++ Received
+
+@@ -2,7 +2,14 @@
+    {
+      "message": "second",
+    },
+    {
+      "cwd": "/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core",
++     "resultSource": {
++       "paths": [
++         "/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core",
++       ],
++       "toolCallId": "second",
++       "toolName": "custom",
++     },
+    },
+  ]
+
+ ❯ src/__tests__/permissions.test.ts:263:23
+    261|     const results = await executeToolCalls(content, [t], ctx, undefine…
+    262|     expect(results.map(result => result.tool_use_id)).toEqual(['origin…
+    263|     expect(t.execute).toHaveBeenNthCalledWith(2, { message: 'second' }…
+       |                       ^
+    264|   })
+    265|   it('returned Error receipts are error tool results', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  src/__tests__/session.test.ts > in-memory sessions > reset removes history but retains tool configuration and cwd
+AssertionError: expected "vi.fn()" to be called with arguments: [ { message: 'value' }, { …(3) } ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -2,9 +2,40 @@
+    {
+      "message": "value",
+    },
+    {
+      "cwd": "/tmp/session-project",
+-     "onResultMetadata": Any<Function>,
+-     "signal": Any<AbortSignal>,
++     "onResultMetadata": [Function anonymous],
++     "resultSource": {
++       "paths": [
++         "/tmp/session-project",
++       ],
++       "toolCallId": "call-1",
++       "toolName": "echo",
++     },
++     "results": ResultStore {
++       "catalog": undefined,
++       "cwd": "/tmp/session-project",
++       "options": {
++         "directory": "/Users/zhouhongxuan/.zero2agent/results",
++         "maxResultBytes": 16777216,
++         "maxResults": 128,
++         "maxTotalBytes": 67108864,
++         "ttlMs": 604800000,
++       },
++     },
++     "signal": AbortSignal {
++       Symbol(kEvents): Map {},
++       Symbol(events.maxEventTargetListeners): 0,
++       Symbol(events.maxEventTargetListenersWarned): false,
++       Symbol(kHandlers): Map {},
++       Symbol(kAborted): false,
++       Symbol(kReason): undefined,
++       Symbol(kComposite): true,
++       Symbol(kSourceSignals): Set {
++         SafeWeakRef {},
++         SafeWeakRef {},
++       },
++       Symbol(kDependantSignals): Set {},
++     },
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/__tests__/session.test.ts:272:21
+    270|     await agent.run('new')
+    271|     expect(requests[1]).toEqual([{ role: 'user', content: 'new' }])
+    272|     expect(execute).toHaveBeenCalledWith(
+       |                     ^
+    273|       { message: 'value' },
+    274|       {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/__tests__/session.test.ts > in-memory sessions > pins default cwd when the Agent is constructed
+AssertionError: expected "vi.fn()" to be called with arguments: [ Anything, …(1) ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   Anything,
++   {
++     "message": "value",
++   },
+    {
+      "cwd": "/tmp/project-a",
+-     "onResultMetadata": Any<Function>,
+-     "signal": Any<AbortSignal>,
++     "onResultMetadata": [Function anonymous],
++     "resultSource": {
++       "paths": [
++         "/tmp/project-a",
++       ],
++       "toolCallId": "call-1",
++       "toolName": "echo",
++     },
++     "results": ResultStore {
++       "catalog": undefined,
++       "cwd": "/tmp/project-a",
++       "options": {
++         "directory": "/Users/zhouhongxuan/.zero2agent/results",
++         "maxResultBytes": 16777216,
++         "maxResults": 128,
++         "maxTotalBytes": 67108864,
++         "ttlMs": 604800000,
++       },
++     },
++     "signal": AbortSignal {
++       Symbol(kEvents): Map {},
++       Symbol(events.maxEventTargetListeners): 0,
++       Symbol(events.maxEventTargetListenersWarned): false,
++       Symbol(kHandlers): Map {},
++       Symbol(kAborted): false,
++       Symbol(kReason): undefined,
++       Symbol(kComposite): true,
++       Symbol(kSourceSignals): Set {
++         SafeWeakRef {},
++         SafeWeakRef {},
++       },
++       Symbol(kDependantSignals): Set {},
++     },
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/__tests__/session.test.ts:330:21
+    328|     cwd.mockReturnValue('/tmp/project-b')
+    329|     await agent.run('inspect')
+    330|     expect(execute).toHaveBeenCalledWith(expect.anything(), {
+       |                     ^
+    331|       cwd: '/tmp/project-a',
+    332|       signal: expect.any(AbortSignal),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/tools/__tests__/terminal-acceptance.test.ts > E02-S003 验收：基础功能 [checklist §功能] > [P0] allTools 注册 terminal（共 8 个）
+AssertionError: expected [ …(9) ] to have a length of 8 but got 9
+
+- Expected
++ Received
+
+- 8
++ 9
+
+ ❯ src/tools/__tests__/terminal-acceptance.test.ts:70:22
+     68|
+     69|   it('[P0] allTools 注册 terminal（共 8 个）', () => {
+     70|     expect(allTools).toHaveLength(8)
+       |                      ^
+     71|     expect(allTools.map(t => t.name)).toContain('terminal')
+     72|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  src/tools/__tests__/terminal-acceptance.test.ts > E02-S003 验收：跳过回执形状 [checklist §议题③] > [P0] 跳过回执含 pid / kill-0 引导（formatReceipt）
+AssertionError: expected 'Status: skipped by user — still runni…' to contain 'read_file or grep_search'
+
+- Expected
++ Received
+
+- read_file or grep_search
++ Status: skipped by user — still running in background (pid 12345)
++ Elapsed: 12 seconds (when skipped)
++ Output so far: 0 lines / 0 KB (still growing)
++ Saved to: /tmp/zero2agent-deadbeef.log
++
++ Unsealed output: still being written; no immutable result reference exists yet. Reading the path requires current file permission.
++ To check whether it is still alive, run: kill -0 12345
+
+ ❯ src/tools/__tests__/terminal-acceptance.test.ts:269:21
+    267|     expect(receipt).toContain('pid 12345')
+    268|     expect(receipt).toContain('kill -0 12345')
+    269|     expect(receipt).toContain('read_file or grep_search')
+       |                     ^
+    270|     expect(receipt).not.toMatch(/^Exit code:/m)
+    271|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  src/tools/__tests__/terminal-interactive.test.ts > human-controlled terminal > keeps eight tools and exposes the host environment helper
+AssertionError: expected [ …(9) ] to have a length of 8 but got 9
+
+- Expected
++ Received
+
+- 8
++ 9
+
+ ❯ src/tools/__tests__/terminal-interactive.test.ts:54:22
+     52| describe('human-controlled terminal', () => {
+     53|   it('keeps eight tools and exposes the host environment helper', () =…
+     54|     expect(allTools).toHaveLength(8)
+       |                      ^
+     55|     expect(allTools.filter(tool => tool.name === 'terminal')).toEqual(…
+     56|     expect(getBaseShellEnv).toBeTypeOf('function')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  src/tools/__tests__/terminal-p0-evidence.test.ts > P0 证据：terminalTool.description 契约 > [P0] description 写明非交互、workdir、超长落盘回读
+AssertionError: expected 'Execute a shell command via bash -c i…' to match /read_file|grep_search/
+
+- Expected:
+/read_file|grep_search/
+
++ Received:
+"Execute a shell command via bash -c in the workspace. stdout and stderr are merged. Returns exit code and output wrapped in an untrusted isolation tag. Non-zero exit codes are normal output, not tool errors. By default this is non-interactive: commands needing tty or user input will fail; use flags like -y or --no-input. Set interactive=true for human takeover, requiring an actual CLI TTY and user confirmation. Interactive mode is not for unattended execution; the human supplies input, and interactive content is not recorded or sent to the model. Never put credentials in command. Do not automatically retry a declined interactive request. Use workdir instead of cd — each call is a new process and cd does not persist. Very large output (>800 lines / 20KB) is saved once and omitted from the receipt. Read a sealed result with read_tool_result using its reference and byte ranges. Background output is unsealed and still growing; raw-path reads require file permission."
+
+ ❯ src/tools/__tests__/terminal-p0-evidence.test.ts:57:15
+     55|     expect(d).toMatch(/800 lines/i)
+     56|     expect(d).toMatch(/20KB/i)
+     57|     expect(d).toMatch(/read_file|grep_search/)
+       |               ^
+     58|   })
+     59| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  5 failed | 28 passed (33)
+      Tests  8 failed | 449 passed (457)
+   Start at  15:57:55
+   Duration  45.10s (transform 1.74s, setup 0ms, import 3.79s, tests 104.15s, environment 2ms)
+
+/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @zero2agent/core@0.0.0 test: `vitest run`
+Exit status 1

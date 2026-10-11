@@ -10,6 +10,7 @@ import { terminalTool, OutputSink } from '../tools/terminal.js'
 import { PermissionController } from '../permissions.js'
 import { RunBudget } from '../run-budget.js'
 import { Session } from '../session.js'
+import { readFileTool } from '../tools/read-file.js'
 import type { Tool } from '../tools/types.js'
 
 const directories: string[] = []
@@ -281,5 +282,83 @@ describe('bounded result bodies', () => {
     await expect(store.read(entry.reference)).rejects.toThrow('RESULT_UNAVAILABLE')
     session.restore(snapshot)
     expect(JSON.parse(await store.read(entry.reference)).untrusted_text).toBe('saved evidence')
+  })
+  it('rechecks current approval for a canonical outside source after its workspace symlink is removed', async () => {
+    const { store, dir } = await fixture()
+    const outside = await fs.realpath(await fs.mkdtemp(path.join(tmpdir(), 'z2a-outside-')))
+    directories.push(outside)
+    const file = path.join(outside, 'source')
+    await fs.writeFile(file, 's'.repeat(24000))
+    await fs.symlink(file, path.join(dir, 'alias'))
+    let approvals = 0
+    const approve = new PermissionController({
+      requestApproval: async r => {
+        approvals++
+        return { requestId: r.id, decision: 'allow' }
+      },
+    })
+    const [result] = await executeToolCalls(
+      [call('read_file', { path: 'alias' })],
+      [readFileTool],
+      { cwd: dir, results: store },
+      undefined,
+      approve
+    )
+    const { reference } = JSON.parse(String(result.content))
+    await fs.unlink(path.join(dir, 'alias'))
+    const [denied] = await executeToolCalls(
+      [call('read_tool_result', { reference })],
+      [readToolResultTool],
+      { cwd: dir, results: store },
+      undefined,
+      new PermissionController({ mode: 'read-only' })
+    )
+    expect(denied.is_error).toBe(true)
+    expect(denied.content).toContain('Read-only')
+    const [read] = await executeToolCalls(
+      [call('read_tool_result', { reference })],
+      [readToolResultTool],
+      { cwd: dir, results: store },
+      undefined,
+      approve
+    )
+    expect(read.is_error).toBeUndefined()
+    expect(approvals).toBe(2)
+  })
+  it('an older catalog cannot collect a body renewed by another restored owner', async () => {
+    const { store, source, root, dir } = await fixture()
+    const first = await store.save('shared evidence', source)
+    const old = store.snapshot()!
+    old.entries[0].expiresAt = old.entries[0].createdAt
+    const older = new ResultStore({ directory: root })
+    older.setWorkspace(dir)
+    older.restore(old)
+    await store.save('shared evidence', { ...source, toolCallId: 'two' })
+    await older.cleanupExpired()
+    expect(JSON.parse(await store.read(first.reference)).untrusted_text).toBe('shared evidence')
+  })
+  it('bounds thrown tool errors while preserving the failed result and refuses reads after cancellation', async () => {
+    const { store, dir } = await fixture()
+    const probe: Tool = {
+      name: 'probe',
+      permission: { effect: 'read' },
+      description: '',
+      input_schema: { type: 'object', properties: {} },
+      execute: async () => {
+        throw new Error('failure'.repeat(5000))
+      },
+    }
+    const [result] = await executeToolCalls([call('probe', {})], [probe], {
+      cwd: dir,
+      results: store,
+    })
+    expect(result.is_error).toBe(true)
+    const receipt = JSON.parse(String(result.content))
+    expect(receipt.kind).toBe('tool_result_reference')
+    const controller = new AbortController()
+    controller.abort(new Error('cancelled before page'))
+    await expect(store.read(receipt.reference, 0, 4096, controller.signal)).rejects.toThrow(
+      'cancelled before page'
+    )
   })
 })

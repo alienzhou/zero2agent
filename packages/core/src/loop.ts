@@ -130,6 +130,7 @@ export async function executeToolCalls(
     let nativeFailed = false
     let nativeDenied = false
     let metadataSettled = false
+    let resultSource: ResultSource | undefined
     try {
       budget?.consumeTool(block.name, block.input)
       consumed = true
@@ -165,7 +166,7 @@ export async function executeToolCalls(
               notifyObserver(() => ctx.onResultMetadata?.(structuredClone(metadata)))
             }
           : undefined
-      const resultSource: ResultSource = {
+      resultSource = {
         toolName: tool.name,
         toolCallId: block.id,
         paths: [
@@ -287,7 +288,7 @@ export async function executeToolCalls(
       const limited =
         error instanceof RunBudgetError || ctx.signal?.reason instanceof RunBudgetError
       const cancelled = !limited && (ctx.signal?.aborted || error instanceof TurnCancelledError)
-      const errorMessage =
+      let errorMessage =
         limited && start === undefined
           ? `Error: Run stopped before this tool started; it was not executed (${(ctx.signal?.reason as RunBudgetError | undefined)?.limitReason ?? (error as RunBudgetError).limitReason}).`
           : cancelled
@@ -295,6 +296,22 @@ export async function executeToolCalls(
               ? 'Error: Turn cancelled before this tool started; it was not executed.'
               : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
             : `Error: ${describeToolError(error)}`
+      if (ctx.results && Buffer.byteLength(errorMessage) > INLINE_RESULT_BYTES) {
+        try {
+          errorMessage = ctx.results.receipt(
+            await ctx.results.save(
+              errorMessage,
+              resultSource ?? {
+                toolName: block.name,
+                toolCallId: block.id,
+                paths: [ctx.cwd],
+              }
+            )
+          )
+        } catch (storageError) {
+          errorMessage = `Error: Tool failed; its full error could not be stored: ${describeToolError(storageError)}. Any side effects were not rolled back; do not re-run automatically.`
+        }
+      }
       state(cancelled ? 'cancelled' : denied ? 'denied' : 'error', {
         output: errorMessage,
         reason: errorMessage,
