@@ -1,0 +1,21 @@
+.vibecoding/2026-10-11/e04-s002-result-references/completion-audit.md
+  s_58249cd92a0ae1::t_77635028ca0653 15-17
+specs/E04-reliability-and-context/S002-result-references/details/02-task-list.md
+  s_58249cd92a0ae1::t_77635028ca0653 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eced1818b970a36a477e73b723441869f14de547",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
