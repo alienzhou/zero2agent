@@ -16,10 +16,13 @@ import { resolve } from 'node:path'
 import { PermissionController, type PermissionOptions } from './permissions.js'
 import { Session } from './session.js'
 import type Anthropic from '@anthropic-ai/sdk'
-import { TurnCancelledError } from './runtime.js'
+import { TurnCancelledError, RunBudgetError } from './runtime.js'
+import { RunBudget, validateRunLimits, type RunLimits } from './run-budget.js'
+import { RequestExecutor } from './request-executor.js'
 import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  limits?: RunLimits
   fileMutations?: FileMutationHandler
   diagnostics?: DiagnosticObserver
   config?: LLMConfig
@@ -43,7 +46,11 @@ export class Agent {
 
   constructor(options: AgentOptions = {}) {
     this.permissions = new PermissionController(options.permissions)
-    this.options = { ...options, cwd: resolve(options.cwd ?? process.cwd()) }
+    this.options = {
+      ...options,
+      limits: validateRunLimits(options.limits),
+      cwd: resolve(options.cwd ?? process.cwd()),
+    }
   }
 
   /**
@@ -53,6 +60,7 @@ export class Agent {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
+        limits: this.options.limits,
         signal: controller.signal,
         fileMutations: this.options.fileMutations,
         diagnostics: this.options.diagnostics,
@@ -74,6 +82,13 @@ export class Agent {
   async compact(diagnosticContext?: DiagnosticContext): Promise<boolean> {
     const controller = this.beginOperation()
     const diagnostics = new DiagnosticEmitter(this.options.diagnostics, diagnosticContext)
+    const budget = new RunBudget(this.options.limits, controller.signal)
+    const executor = new RequestExecutor(
+      budget,
+      diagnostics,
+      undefined,
+      this.options.events?.onRequestNotice
+    )
     diagnostics.start('compact')
     try {
       const result = await this.session.compact(() =>
@@ -89,22 +104,25 @@ export class Agent {
             },
           },
           this.session,
-          diagnostics
+          diagnostics,
+          executor
         )
       )
       if (controller.signal.aborted) throw new TurnCancelledError()
       diagnostics.end('completed', 'compact')
       return result
-    } catch (error) {
+    } catch (caught) {
+      const error = budget.signal.reason instanceof RunBudgetError ? budget.signal.reason : caught
       diagnostics.end(
         controller.signal.aborted ? 'cancelled' : 'error',
         'compact',
         error,
-        controller.signal
+        budget.signal
       )
       if (controller.signal.aborted) throw new TurnCancelledError()
       throw error
     } finally {
+      budget.close()
       this.active = undefined
     }
   }

@@ -1,4 +1,4 @@
-import type { CompactionEvent, RuntimeEvent } from '@zero2agent/core'
+import type { CompactionEvent, RuntimeEvent, RequestNotice } from '@zero2agent/core'
 
 export const MAX_ENTRIES = 100
 export const MAX_ENTRY_TEXT = 12_000
@@ -7,7 +7,8 @@ const TRUNCATED = '\n[显示历史已截短；完整会话由 Agent 保存]'
 
 export type ToolState = Extract<RuntimeEvent, { type: 'tool-state' }>
 export type TimelineEntry =
-  | { kind: 'user' | 'text' | 'notice'; text: string }
+  | { kind: 'user' | 'notice'; text: string }
+  | { kind: 'text'; text: string; requestId?: string }
   | { kind: 'tool'; call: ToolState }
 export interface RuntimeState {
   turnId?: string
@@ -66,6 +67,31 @@ export function compactionLabel(event: CompactionEvent): string {
   }[event.phase]
 }
 
+export function requestNoticeLabel(event: RequestNotice): string {
+  if (event.type === 'request-abandoned')
+    return '未完成草稿已结束，未写入正式会话；后续尝试将重新生成。'
+  const purpose = { model: '模型', summary: '摘要', count: '计数' }[event.purpose]
+  return `${purpose}请求失败 (${event.errorKind})，${event.delayMs}ms 后进行第 ${event.attempt} 次尝试；Ctrl-C 可取消等待。`
+}
+
+export function applyRequestNotice(state: RuntimeState, event: RequestNotice): RuntimeState {
+  const entries = state.entries.map(
+    (entry): TimelineEntry =>
+      event.type === 'request-abandoned' &&
+      event.purpose === 'model' &&
+      event.discardedChars > 0 &&
+      entry.kind === 'text' &&
+      entry.requestId === event.requestId
+        ? {
+            kind: 'notice',
+            // Each fragment is already bounded; keep its draft label outside that truncation.
+            text: `[未完成草稿 · 未写入会话]\n${entry.text}`,
+          }
+        : entry
+  )
+  return appendEntry({ ...state, entries }, { kind: 'notice', text: requestNoticeLabel(event) })
+}
+
 /** The renderer is a projection; stale turns and replayed events cannot overwrite new state. */
 export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): RuntimeState {
   if (event.type === 'turn-start') {
@@ -93,17 +119,21 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       break
     case 'text-delta': {
       const last = state.entries.at(-1)
-      if (last?.kind === 'text')
+      if (last?.kind === 'text' && last.requestId === event.requestId)
         state.entries[state.entries.length - 1] = {
-          kind: 'text',
+          ...last,
           text: bounded(last.text.replace(TRUNCATED + '\n', '') + event.text),
         }
-      else state.entries.push({ kind: 'text', text: bounded(event.text) })
+      else
+        state.entries.push({ kind: 'text', text: bounded(event.text), requestId: event.requestId })
       break
     }
     case 'notice':
       state.entries.push({ kind: 'notice', text: bounded(event.text) })
       break
+    case 'request-retry':
+    case 'request-abandoned':
+      return applyRequestNotice(state, event)
     case 'tool-state': {
       const index = state.entries.findIndex(
         entry =>

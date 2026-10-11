@@ -1,0 +1,48 @@
+
+> zero2agent@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e04-s001
+> pnpm -r test
+
+Scope: 5 of 6 workspace projects
+packages/cdp-debug test$ vitest run
+packages/cdp-debug test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s001/packages/cdp-debug
+packages/cdp-debug test:  Test Files  1 passed (1)
+packages/cdp-debug test:       Tests  1 passed (1)
+packages/cdp-debug test:    Start at  12:53:18
+packages/cdp-debug test:    Duration  105ms (transform 17ms, setup 0ms, import 30ms, tests 5ms, environment 0ms)
+packages/cdp-debug test: Done
+packages/core test$ vitest run
+packages/core test: ◇ injected env (0) from ../../.env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+packages/core test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s001/packages/core
+packages/core test:  Test Files  32 passed (32)
+packages/core test:       Tests  442 passed (442)
+packages/core test:    Start at  12:53:19
+packages/core test:    Duration  44.46s (transform 1.23s, setup 0ms, import 2.28s, tests 99.34s, environment 2ms)
+packages/core test: Done
+e2e test$ vitest run
+e2e test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s001/e2e
+e2e test:  ❯ src/multi-turn-contract.test.ts (6 tests | 1 failed) 727ms
+e2e test:      × carries tool history, handles /new locally, and does not undo files 159ms
+e2e test: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+e2e test:  FAIL  src/multi-turn-contract.test.ts > CLI multi-turn contract (local SSE, no live model) > carries tool history, handles /new locally, and does not undo files
+e2e test: AssertionError: expected '日志记录不可用；任务继续，使用 /log 查看状态。\n' to be '' // Object.is equality
+e2e test: - Expected
+e2e test: + Received
+e2e test: + 日志记录不可用；任务继续，使用 /log 查看状态。
+e2e test: +
+e2e test:  ❯ src/multi-turn-contract.test.ts:254:27
+e2e test:     252|     expect(result.stdout).toContain('已开始新对话')
+e2e test:     253|     expect(result.file).toBe('persisted tool effect')
+e2e test:     254|     expect(result.stderr).toBe('')
+e2e test:        |                           ^
+e2e test:     255|   })
+e2e test:     256|
+e2e test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+e2e test:  Test Files  1 failed | 15 passed | 13 skipped (29)
+e2e test:       Tests  1 failed | 172 passed | 56 skipped (229)
+e2e test:    Start at  12:54:03
+e2e test:    Duration  77.41s (transform 303ms, setup 0ms, import 1.16s, tests 74.35s, environment 1ms)
+e2e test: Failed
+/Users/zhouhongxuan/program/works/zero2agent-e04-s001/e2e:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @zero2agent/e2e@0.0.0 test: `vitest run`
+Exit status 1
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,0 +1,30 @@
+● zero2agent · 查看运行日志
+会话: 500480bc · 已保存 r4 · 日志 5e296b81 · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /
+7f1be0 · attempt=1 · model · claude-sonnet-4-20250514
+#22 phase/requesting · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b
+8-e06f64ce57f5
+#23 phase/streaming · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b8
+-e06f64ce57f5
+#24 request/error · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b8-e
+06f64ce57f5 · req=ac4d67ac-958d-4acd-8c1f-297bf72a0d8c · logical=e347287f-fd5e-4624-8e2b-2a6603
+7f1be0 · attempt=1 · model · 3ms · error=network
+#25 request/retry · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b8-e
+06f64ce57f5 · req=ac4d67ac-958d-4acd-8c1f-297bf72a0d8c · logical=e347287f-fd5e-4624-8e2b-2a6603
+7f1be0 · attempt=1 · wait=1ms · model · error=network
+#26 request/start · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b8-e
+06f64ce57f5 · req=301faaaa-d26e-40c4-ba36-e51743b02d45 · logical=e347287f-fd5e-4624-8e2b-2a6603
+7f1be0 · attempt=2 · model · claude-sonnet-4-20250514
+#27 phase/requesting · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b
+8-e06f64ce57f5
+#28 phase/streaming · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84b8
+-e06f64ce57f5
+#29 request/completed · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-84
+b8-e06f64ce57f5 · req=301faaaa-d26e-40c4-ba36-e51743b02d45 · logical=e347287f-fd5e-4624-8e2b-2a
+66037f1be0 · attempt=2 · model · 2ms · in=10 · out=10
+#30 operation/completed · op=564f898a-bdde-4420-b28f-f848753d5ffd · session=500480bc-2de4-49a2-
+84b8-e06f64ce57f5 · 6ms
+#31 host/save-start · session=500480bc-2de4-49a2-84b8-e06f64ce57f5 · r3
+#32 host/save-completed · session=500480bc-2de4-49a2-84b8-e06f64ce57f5 · r4
+行 44–68 / 68 · 只读快照
+↑↓ / PgUp PgDn / Home End 翻阅
+Esc / Ctrl-C 返回日志列表 · 草稿保留

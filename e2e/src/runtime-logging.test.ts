@@ -188,7 +188,7 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
     const native = report.records.find(r => r.kind === 'tool' && r.event === 'metadata')!
     expect(native).toMatchObject({ terminalOutcome: 'completed', exitCode: 7, toolCallId: 'cmd' })
     expect(native.requestId).toBe(
-      report.records.find(r => r.kind === 'tool' && r.event === 'completed')?.requestId
+      report.records.find(r => r.kind === 'tool' && r.event === 'error')?.requestId
     )
     expect(JSON.stringify(report)).not.toContain('private-command-output')
   })

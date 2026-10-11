@@ -18,6 +18,12 @@
       "number": 3,
       "title": "从循环到产品",
       "description": "接上多轮对话、上下文压缩、执行权限与可操作的 TUI。"
+    },
+    {
+      "id": "epic04",
+      "number": 4,
+      "title": "失败后继续，长任务保持可靠",
+      "description": "用失败恢复、运行预算与上下文工程处理更长的任务。"
     }
   ],
   "chapters": [
@@ -118,6 +124,13 @@
       "title": "文件 Checkpoint 与回退",
       "description": "用内容分块、压缩去重和有界存储保护文件修改，预览冲突后回退，并正确处理未结算状态。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E03-S006-file-checkpoints-18p/specs/E03-product-foundations/S006-file-checkpoints"
+    },
+    {
+      "id": "epic04-story001",
+      "epic": "epic04",
+      "title": "失败恢复与运行预算",
+      "description": "有限重试模型请求，让工具修正重新授权，并按运行预算停止；保留已完成效果与实际证据。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S001-failure-recovery/specs/E04-reliability-and-context/S001-failure-recovery"
     }
   ]
 }

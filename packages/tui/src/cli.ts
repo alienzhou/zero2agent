@@ -2,7 +2,7 @@
 /**
  * zero2agent CLI 入口
  */
-import { Agent, buildSystemPrompt, terminalTool } from '@zero2agent/core'
+import { Agent, buildSystemPrompt, terminalTool, validateRunLimits } from '@zero2agent/core'
 import type { LoopEventHandlers } from '@zero2agent/core'
 import * as readline from 'node:readline'
 import path from 'node:path'
@@ -20,6 +20,8 @@ import {
   formatCheckpointUsage,
 } from './checkpoint-view.js'
 import { safeText } from './display-text.js'
+import { RUN_LIMIT_FLAGS, limitValue, runLimitsFromEnv } from './run-options.js'
+import { requestNoticeLabel } from './runtime-state.js'
 
 // ── 环境变量 ───────────────────────────────────────
 
@@ -89,12 +91,27 @@ function formatToolInput(input: Record<string, unknown>): string {
 
 let activeJournal: RunJournal | undefined
 let hasStreamedText = false
+const toolFailures = new Map<string, boolean>()
 
 function resetStreamState() {
   hasStreamedText = false
+  toolFailures.clear()
 }
 
 const events: LoopEventHandlers = {
+  onEvent: event => {
+    if (event.type === 'request-retry' || event.type === 'request-abandoned')
+      events.onRequestNotice?.(event)
+    if (
+      event.type === 'tool-state' &&
+      ['completed', 'error', 'cancelled', 'denied'].includes(event.status)
+    )
+      toolFailures.set(event.toolName, event.status !== 'completed')
+  },
+  onRequestNotice: notice => {
+    process.stdout.write(`\n${DIM}${requestNoticeLabel(notice)}${RESET}\n`)
+    hasStreamedText = false
+  },
   onText: text => {
     if (!hasStreamedText) {
       process.stdout.write('\n')
@@ -112,7 +129,8 @@ const events: LoopEventHandlers = {
   },
   onToolEnd: (name, output, durationMs) => {
     const summary = summarizeToolOutput(name, output)
-    process.stdout.write(`${DIM}  ${GREEN}✓${RESET}${DIM} ${summary} (${durationMs}ms)${RESET}\n`)
+    const status = toolFailures.get(name) ? `${RED}✗` : `${GREEN}✓`
+    process.stdout.write(`${DIM}  ${status}${RESET}${DIM} ${summary} (${durationMs}ms)${RESET}\n`)
   },
   onToolError: (_name, error) => {
     process.stdout.write(`${DIM}  ${RED}✗${RESET}${DIM} ${error}${RESET}\n`)
@@ -189,6 +207,7 @@ async function main() {
   loadLocalEnv()
 
   const args = process.argv.slice(2)
+  let limits = runLimitsFromEnv()
   let noCheckpoints = process.env.ZERO2AGENT_NO_CHECKPOINTS === '1'
   let checkpointAction: 'list' | 'diff' | 'undo' | 'recover' | 'stats' | 'prune' | undefined
   let checkpointId: string | undefined
@@ -205,7 +224,10 @@ async function main() {
   while (args[0]?.startsWith('--')) {
     const flag = args.shift()
     if (flag === '--') break
-    if (flag === '--no-checkpoints') noCheckpoints = true
+    if (flag && Object.hasOwn(RUN_LIMIT_FLAGS, flag)) {
+      const key = RUN_LIMIT_FLAGS[flag as keyof typeof RUN_LIMIT_FLAGS]
+      limits = validateRunLimits({ ...limits, [key]: limitValue(flag, args.shift()) })
+    } else if (flag === '--no-checkpoints') noCheckpoints = true
     else if (flag === '--confirm') {
       confirmCheckpoint = args.shift()
       if (!confirmCheckpoint || !/^[0-9a-f]{64}$/.test(confirmCheckpoint))
@@ -291,9 +313,9 @@ async function main() {
     return
   }
   const logs = await LogStore.open(process.cwd(), {
-    onFailure: () => {
+    onFailure: failure => {
       if (tui) tui.logFailure()
-      else console.error('日志记录不可用；任务继续，使用 /log 查看状态。')
+      else console.error(`日志记录不可用 (${failure})；任务继续，使用 /log 查看状态。`)
     },
   })
   if ((listLogs && readLog) || (logOperation && !readLog))
@@ -342,6 +364,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    limits,
     fileMutations: noCheckpoints ? undefined : checkpoints.capture,
     diagnostics: journal ? event => journal.diagnostic(event) : undefined,
     permissions: permissionOptionsFromEnv(

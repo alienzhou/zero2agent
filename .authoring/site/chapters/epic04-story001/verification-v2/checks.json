@@ -1,0 +1,205 @@
+{
+  "chapter": "epic04-story001",
+  "pageLimit": 18,
+  "includesCover": true,
+  "browser": "154.0.8037.98",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "sha256": "c33d7855bdddebfff7b756d32e2c6e9621eec0d4318d3717333322b75fa440e1",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "02-written-before-failure.html",
+      "sha256": "bd772f334d756927e0018909d84fae070b66c49912472a64d1c195d61ee8595f",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "03-three-failures.html",
+      "sha256": "8cf8a4bf25699faa9600976819ad5e6769b8fc40d0579f318296948a2448d3e7",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "04-error-matrix.html",
+      "sha256": "07eb9f21d3a2a5a9ceff947d774ed0412d684a98eece13ef2d5c22fca1bb4842",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "05-one-retry-owner.html",
+      "sha256": "81772390529c9cdd9d9ae60644c9b031b1d052f0d4d1f0cb583e7a129c7d7e1a",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": [
+        [
+          "SDK × 3",
+          "9"
+        ],
+        [
+          "9",
+          "次"
+        ]
+      ]
+    },
+    {
+      "file": "06-attempt-identity.html",
+      "sha256": "c95425cf816035566b7b155e3307518093c5c04c49f62b0c5fcfc47cd4b0f449",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "07-backoff.html",
+      "sha256": "554960d1e9f4aba6dab694a01ab5d6f3e5107d3ffa92e4fe26199a8ef6be2ecc",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "08-timeouts.html",
+      "sha256": "e57cf18fdb0f14d26ea0fea8538490e7af1446c642fd2476e671f5871a932d1a",
+      "overflow": [],
+      "svgTextOverflow": [
+        {
+          "text": "Turn · 默认 10 分钟"
+        }
+      ],
+      "textOverlaps": []
+    },
+    {
+      "file": "09-cancel-wait.html",
+      "sha256": "987f9c95b21fde3f004e75325f8cabaef67064171dd335922c845561f5ee120d",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "10-stream-end.html",
+      "sha256": "a1e04f40cbef62401ebd67d892359a8b7d33e5ea826e924a02c00e6391941eb6",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "11-tool-correction.html",
+      "sha256": "da4a695beee339dcd7c7be214d7f1804d3cf2b2e8644c403b1892a5199042584",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "12-approval.html",
+      "sha256": "a4134b185321b40c2327b5ed8ee86e5e30ba64925083455a0f71d4fdfa8906cb",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "13-budgets.html",
+      "sha256": "6a7768f96a6b8c28a7959c66baebac4873ac6bdb9632e7370d952e73d46b428d",
+      "overflow": [],
+      "svgTextOverflow": [
+        {
+          "text": "20"
+        },
+        {
+          "text": "100"
+        }
+      ],
+      "textOverlaps": [
+        [
+          "20",
+          "推理迭代"
+        ],
+        [
+          "100",
+          "实际请求"
+        ],
+        [
+          "64",
+          "工具调用"
+        ]
+      ]
+    },
+    {
+      "file": "14-batch-pairing.html",
+      "sha256": "63ff725bbd01499e8fda24298195e4ab59f88cb258f2b90d95bbd815ecd00512",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "15-native-outcomes.html",
+      "sha256": "3b19033e6eedcd0bc01fd4d0a7bb1eba689452cb3179dc70c708a6869d95a72e",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "16-settlement.html",
+      "sha256": "c7560a4788be5402a3be8675df437fca53a7af6aa249a797f02d39b301a5a68d",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "17-configuration.html",
+      "sha256": "d6c2f3d10fec5b6611e449e60696c9d16c6cf97b6170b8fb68ed7a126a284d8f",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    },
+    {
+      "file": "18-practice.html",
+      "sha256": "0243479f08d24a464b79f3212b0e7a577f1c5e974e6c0d40d7b8bca7d7b7da53",
+      "overflow": [],
+      "svgTextOverflow": [],
+      "textOverlaps": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "sections": 18,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "sections": 18,
+      "overflow": false,
+      "textOpen": true,
+      "zoomOpen": true,
+      "zoomClosed": true,
+      "targetReachable": true,
+      "errors": []
+    }
+  ],
+  "failures": [
+    "05-one-retry-owner.html",
+    "08-timeouts.html",
+    "13-budgets.html"
+  ],
+  "sources": {
+    "author.cjs": "cabe2ac675f6dc8ee65de5c327cb54733471139e53a6bc8f0b2146bcd0d22d14",
+    "course.css": "526030a7e95c24e898f547e81166314d0f09e933e99181e45bfaee744da61c4e"
+  },
+  "passed": false
+}

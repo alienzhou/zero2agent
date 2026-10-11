@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto'
 import { ContextBudget, ContextBudgetError, type ContextRequest } from './context-budget.js'
 import type { ContextSummarizer } from './context-summary.js'
 import type { SessionSnapshot } from './session-snapshot.js'
+import type { RequestExecutor } from './request-executor.js'
 
 type Message = Anthropic.MessageParam
 
@@ -18,6 +19,7 @@ export interface CompactionEvent {
 }
 
 export interface CompactionRuntime {
+  executor?: RequestExecutor
   diagnostics?: DiagnosticEmitter
   budget: ContextBudget
   client: Anthropic
@@ -109,7 +111,13 @@ export class ContextManager {
         signal.addEventListener('abort', abort, { once: true })
       })
       return await Promise.race([
-        runtime.budget.count(request, runtime.client, signal, runtime.diagnostics),
+        runtime.budget.count(
+          request,
+          runtime.client,
+          signal,
+          runtime.diagnostics,
+          runtime.executor
+        ),
         cancelled,
       ])
     } finally {

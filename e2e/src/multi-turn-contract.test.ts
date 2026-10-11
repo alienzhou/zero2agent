@@ -207,7 +207,7 @@ describe('CLI multi-turn contract (local SSE, no live model)', () => {
         })
         event('error', {
           type: 'error',
-          error: { type: 'api_error', message: 'partial-contract-failure' },
+          error: { type: 'invalid_request_error', message: 'partial-contract-failure' },
         })
         res.end()
       } else sendReply(res, [{ type: 'text', text: 'recovered after SSE error' }])
