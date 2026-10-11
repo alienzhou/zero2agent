@@ -1,0 +1,35 @@
+specs/E04-reliability-and-context/S002-result-references/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 53
+README.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 115,166,185
+CHANGELOG.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 58
+.discuss/2026-10-08/e04-course-plan/outline.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 3
+.vibecoding/2026-10-11/e04-s002-result-references/prompt.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 6-7
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 21,32
+.vibecoding/2026-10-11/e04-s002-result-references/completion-audit.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 15,19-21
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 10
+.vibecoding/2026-10-11/e04-s002-result-references/dialogue.md
+  s_58249cd92a0ae1::t_c807eed05d5ad2 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "49e44ac6caf64202d40682ff91401af3ca423f4c",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
