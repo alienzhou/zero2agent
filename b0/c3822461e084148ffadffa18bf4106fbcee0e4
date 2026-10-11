@@ -1,0 +1,87 @@
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_5e80d56b26f255 43,83,120-124,134,145
+.authoring/site/chapters/epic04-story003/content-plan.md
+  s_58249cd92a0ae1::t_380051b8f9812a 26
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_7ccb05e0504ee7 3,10-11
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_49d5bc730c8710 17
+.authoring/site/chapters/epic04-story003/verification/checks-candidate-v1.json
+  s_58249cd92a0ae1::t_309d8aed91d0ca 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_239eae4207a9e6 2,106,108
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_7c436932eafc28 146-147
+.discuss/2026-10-11/e04-s003-summary-quality/outline.md
+  s_58249cd92a0ae1::t_dad21a8a50e29f 3,94
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_efa356c91a6c3f 1-13
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_b7a1ebf4ba82eb 9-17
+.vibecoding/2026-10-11/e04-s003-summary-quality/learnings.md
+  s_58249cd92a0ae1::t_cfa037058d4161 1-10
+CHANGELOG.md
+  s_58249cd92a0ae1::t_13912460e0a596 50-59
+README.en.md
+  s_58249cd92a0ae1::t_9d95811bbfc7c3 110-111,160,175-180
+README.md
+  s_58249cd92a0ae1::t_36df31c00ee35e 115,166,186
+docs/architecture.md
+  s_58249cd92a0ae1::t_60e19caa25447a 33,36,38,180-185
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_2efac5d0dcd5be 21,32
+packages/core/README.md
+  s_58249cd92a0ae1::t_6581d6ff9d3ec6 7,38,42,77-82
+researches/summary-quality/acceptance/candidate-v2-source-hashes.json
+  s_58249cd92a0ae1::t_02e16cea51f74f 1-41
+researches/summary-quality/acceptance/local-links.json
+  s_58249cd92a0ae1::t_3202082f938fc9 1-6
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_7367a1c791475e 7-8
+researches/summary-quality/evaluation/comparison.md
+  s_58249cd92a0ae1::t_949247ea2dfe04 5-6
+retros/E04-S003-summary-quality.md
+  s_58249cd92a0ae1::t_1077ffd4627316 1-27
+retros/README.md
+  s_58249cd92a0ae1::t_2504aba4a9fcbe 27
+site/chapters/epic04-story003/04-views.html
+  s_58249cd92a0ae1::t_df5bdbde29620c 1
+site/chapters/epic04-story003/10-large-result.html
+  s_58249cd92a0ae1::t_6df0430a9dd90c 1
+site/chapters/epic04-story003/16-comparison.html
+  s_58249cd92a0ae1::t_36fce0b4f28920 1
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_d937465ee45e4b 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_3e106b34b82724 9,152,155-156
+site/course.json
+  s_58249cd92a0ae1::t_24f4aef37e180c 6304,6306,6397,6541,6678,6681-6687,6689,6692,6695-6701,6746
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_4f1047f5d8fd5f 10-11
+specs/E04-reliability-and-context/S002-result-references/README.md
+  s_58249cd92a0ae1::t_f00f54bdc64c6b 89
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_032edbfc986fd3 7,38,69,78
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_7ce79ad469c5f0 60
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_dc1b5504a82342 6,8-16,18
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_a3938ae957034a 3,7,9-14,16,18,20-24,26,28,30,32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b0c3822461e084148ffadffa18bf4106fbcee0e4",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
