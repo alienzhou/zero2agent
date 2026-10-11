@@ -1,0 +1,53 @@
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_49fdfda3d67c10 3,12-15
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_49fdfda3d67c10 14-21
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_5a883e2fedf521 83,98,134,145
+.authoring/site/chapters/epic04-story003/content-plan.md
+  s_58249cd92a0ae1::t_e8c5d5d64f21d3 27-28
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_3e4ab0837cbd44 19-20
+.authoring/site/chapters/epic04-story003/verification/checks-candidate-v2.json
+  s_58249cd92a0ae1::t_6291e5528a5342 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_720153a85ede6c 2,106,108
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_a234ef89c2f198 11,15
+CHANGELOG.md
+  s_58249cd92a0ae1::t_3cb08b5db478cf 56
+README.en.md
+  s_58249cd92a0ae1::t_45cde673c60bb6 160
+README.md
+  s_58249cd92a0ae1::t_076d037d5fb0c5 166
+packages/core/README.md
+  s_58249cd92a0ae1::t_552d1fa29ee99d 83-84
+researches/summary-quality/acceptance/candidate-v3-source-hashes.json
+  s_58249cd92a0ae1::t_b9fad8e386a8fb 1-48
+site/chapters/epic04-story003/10-large-result.html
+  s_58249cd92a0ae1::t_839c687c87952d 1
+site/chapters/epic04-story003/12-recursive.html
+  s_58249cd92a0ae1::t_09ef1adaa7df28 1
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_2b4c208ec1fbe3 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_da10a0fe4a262c 9
+site/course.json
+  s_58249cd92a0ae1::t_3dc1a2d375d3ef 6541,6587,6746
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ea25812bf5c602a10f9a337f38c97988466022b8",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
