@@ -1,0 +1,77 @@
+packages/core/README.md
+  s_58249cd92a0ae1::t_558433b912b887 90-92
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_558433b912b887 28-31
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_122a1f9aa4d76c 43,54,83,120-124,134,145
+.authoring/site/chapters/epic04-story003/content-plan.md
+  s_58249cd92a0ae1::t_21988c93ddca96 35-36
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_20cfe27aff57d0 21,24
+.authoring/site/chapters/epic04-story003/verification/checks-candidate-v6.json
+  s_58249cd92a0ae1::t_79dd7b7dc67b02 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_6780f2398ce9bf 2,106,108
+.discuss/2026-10-11/e04-s003-summary-quality/outline.md
+  s_58249cd92a0ae1::t_7bbe4fe51bd430 3
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_8a1c53d81b2f41 44-51
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_a4812ab6c44b27 11-15
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_ddb4613c6a8754 35-37
+CHANGELOG.md
+  s_58249cd92a0ae1::t_9b7dab6181f0f1 56
+README.en.md
+  s_58249cd92a0ae1::t_6f193fdeb93555 160
+README.md
+  s_58249cd92a0ae1::t_a021301eb82aa0 166
+docs/architecture.md
+  s_58249cd92a0ae1::t_629a2745ff5b45 185
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_724c90f2eb320c 21
+researches/summary-quality/acceptance/candidate-v7-source-hashes.json
+  s_58249cd92a0ae1::t_dfaff102379263 1-50
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_adc38435931c64 28
+retros/E04-S003-summary-quality.md
+  s_58249cd92a0ae1::t_0de521d8fb4f50 44-49
+site/chapters/epic04-story003/04-views.html
+  s_58249cd92a0ae1::t_51d7e1b21361ea 1
+site/chapters/epic04-story003/06-states.html
+  s_58249cd92a0ae1::t_d84ada2bb0a833 1
+site/chapters/epic04-story003/10-large-result.html
+  s_58249cd92a0ae1::t_8ddf8bdd4950f4 1
+site/chapters/epic04-story003/16-comparison.html
+  s_58249cd92a0ae1::t_5392923ba25eb0 1
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_d9d5ee032c25e1 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_7f10a72e93887b 9,152,159-160,179
+site/course.json
+  s_58249cd92a0ae1::t_e777d336bbda37 6397,6452,6541,6678,6681,6684,6687,6691,6695,6699,6703-6706,6751
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_ad695c9718ffb8 11
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_62c340f64fc0ec 7,69
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_ab4436559b4290 19
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_ddbc24e4c6da2a 9,11-13,16,46-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "40041fe4a2636bc0a80f30da8db68dc4c43cdcad",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
