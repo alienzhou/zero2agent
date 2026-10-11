@@ -1,0 +1,48 @@
+{
+  "capturedAt": "2026-10-11T07:10:54.505Z",
+  "implementationCommit": "a494fb46e01e4962e9f832d2a863029f8ae5d9ed",
+  "reviewedBase": "b3e0dc872a5626d6054ebbcf645f14e8d41bdaff",
+  "scope": "Two P2 fixes: mark all abandoned attempt fragments and preserve budget reasons before session history is saved. Earlier course/live-service evidence remains attached to its original source version.",
+  "runtime": {
+    "node": "v22.15.1",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "sourceHashes": {
+    "packages/core/src/runtime.ts": "c9387d8af080bba914acf61d1dd4b5aef48a2c0ad29d1702380e959d90b94abc",
+    "packages/core/src/loop.ts": "4e99f9b00ddffc85faa6e4e9ebb5dab304a8633ca45e581830a06672bd21cf87",
+    "packages/tui/src/runtime-state.ts": "8cc0dbd9e1119c330db9f99c37d63c530659dd5af33ef919e28c9e1ec4c5bb48",
+    "packages/core/src/__tests__/failure-recovery.test.ts": "c2ee5b1a1dbe80cccf585d75e7ecbb8a44195b7bb586556cc1824b388237d44b",
+    "e2e/src/recovery-projection.test.ts": "965c995cc2f9efa4a401835b6e49f747893efccf9888e37ed6033154f98a8979",
+    "e2e/src/runtime-tui-state.test.ts": "340a3425484973d1075aac23ac27d837fb380019b37b4151798bed16588285f8"
+  },
+  "validation": {
+    "build": "passed",
+    "e2eTypes": "passed",
+    "changedTypeScriptFormat": "passed",
+    "lint": {
+      "errors": 0,
+      "existingWarnings": 44
+    },
+    "targeted": {
+      "core": 94,
+      "e2e": 42
+    },
+    "defaultSuite": {
+      "core": 447,
+      "e2e": 176,
+      "cdp": 1,
+      "passed": 624,
+      "skippedLive": 57
+    }
+  },
+  "defaultTestOutput": {
+    "path": "researches/failure-recovery/acceptance/review-fixes-tests-2026-10-11.txt",
+    "sha256": "461de37049b8a6548f9f4e49f20780c8b871d8bfec267fc8ad95387e9b66a1e4"
+  },
+  "fixedCourseTag": {
+    "name": "E04-S001-failure-recovery",
+    "commit": "21e946dae8208e5391edc14ff3321ae26e2fd114",
+    "moved": false
+  }
+}

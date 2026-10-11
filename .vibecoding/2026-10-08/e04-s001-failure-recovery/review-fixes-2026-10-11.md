@@ -29,4 +29,6 @@ Received: { kind: 'text', text: 'DRAFT ONE' }
 
 修复后专项：Core 94 项通过；投影、CLI 故障和实际 TUI/PTY 42 项通过。`pnpm build`、E2E `tsc --noEmit` 通过；lint 0 错误、44 项既有警告。最初在根目录执行 tsc 时找不到该命令，改为 E2E 包内执行后通过，没有修改类型检查配置。
 
-默认全仓回归及远端更新结果将在完成后补记。本轮只处理这两条 P2；先前偶发日志不可用的根因仍未确认。固定课程 Tag 保留原版本，后续代码修复以 PR 分支为准。
+修复提交为 `a494fb46e01e4962e9f832d2a863029f8ae5d9ed`。默认 `pnpm test` 全仓 624 项通过（Core 447、E2E 176、CDP 1），57 项真实服务测试离线跳过；[完整输出](../../../researches/failure-recovery/acceptance/review-fixes-tests-2026-10-11.txt)与[本轮源码哈希](../../../researches/failure-recovery/acceptance/review-fixes-source-hashes-2026-10-11.json)另存，不覆盖早先验收证据。主工作区两份未提交文件的 SHA-256 与开始时一致。
+
+本轮只处理这两条 P2；先前偶发日志不可用的根因仍未确认。固定课程 Tag 保留原版本，后续代码修复以 PR 分支为准。交付继续更新同一 PR #23 的分支及说明，不合并 main、不部署站点。
