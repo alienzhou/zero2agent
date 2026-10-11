@@ -1,0 +1,29 @@
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_4071eeda893388 38
+researches/summary-quality/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_a8c57e887d52c1 48-53
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_4071eeda893388 98-99
+packages/core/src/result-store.ts
+  s_58249cd92a0ae1::t_22b126bc24b71f 535-539
+specs/E04-reliability-and-context/S003-summary-quality/follow-along.md
+  s_58249cd92a0ae1::t_9ea14bb77aaa7e 45-46
+packages/core/src/__tests__/result-store.test.ts
+  s_58249cd92a0ae1::t_f7e38ce8bc753d 127-163
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1ca7898998caf1f01adf1979c1921b070ede267b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
