@@ -1,0 +1,41 @@
+researches/summary-quality/acceptance/failure-notes.md
+  s_58249cd92a0ae1::t_58c0577f34a0d2 27-33
+packages/core/src/tools/read-tool-result.ts
+  s_58249cd92a0ae1::t_0af567c8c3ec19 26-27,41-42,44
+  s_58249cd92a0ae1::t_143827c1466fdc 13,19,24,28,34,43,45-52
+  s_58249cd92a0ae1::t_546f68cbe4dc29 25
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_143827c1466fdc 20-25,30,96,103,105,154,156,162,183-184
+  s_58249cd92a0ae1::t_f2b6418697cede 185-189,198
+packages/core/src/result-store.ts
+  s_58249cd92a0ae1::t_0af567c8c3ec19 444-447,450,453-456,470,480,494,513-516,524-525,532,535-538
+  s_58249cd92a0ae1::t_41d853d308c4e2 539-540
+packages/core/src/__tests__/context-summary.test.ts
+  s_58249cd92a0ae1::t_0b6231efb31b2b 5-6,257-300
+  s_58249cd92a0ae1::t_bab3801303f15d 301-315,348
+packages/core/README.md
+  s_58249cd92a0ae1::t_e21e58279fb35b 74,87-88
+packages/core/src/__tests__/result-store.test.ts
+  s_58249cd92a0ae1::t_36de9f0744ab19 93-134,140,144
+  s_58249cd92a0ae1::t_766f84cdd52e8a 135-139,141-143,145-147
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_e21e58279fb35b 9,91-100
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_e21e58279fb35b 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cf63c124fd85ccd89eb248f65280faf85d8d9029",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
