@@ -7,7 +7,8 @@ const TRUNCATED = '\n[显示历史已截短；完整会话由 Agent 保存]'
 
 export type ToolState = Extract<RuntimeEvent, { type: 'tool-state' }>
 export type TimelineEntry =
-  | { kind: 'user' | 'text' | 'notice'; text: string }
+  | { kind: 'user' | 'notice'; text: string }
+  | { kind: 'text'; text: string; requestId?: string }
   | { kind: 'tool'; call: ToolState }
 export interface RuntimeState {
   turnId?: string
@@ -74,15 +75,20 @@ export function requestNoticeLabel(event: RequestNotice): string {
 }
 
 export function applyRequestNotice(state: RuntimeState, event: RequestNotice): RuntimeState {
-  const entries = [...state.entries]
-  if (event.type === 'request-abandoned' && event.discardedChars > 0) {
-    const last = entries.at(-1)
-    if (last?.kind === 'text')
-      entries[entries.length - 1] = {
-        kind: 'notice',
-        text: bounded(`[未完成草稿 · 未写入会话]\n${last.text}`),
-      }
-  }
+  const entries = state.entries.map(
+    (entry): TimelineEntry =>
+      event.type === 'request-abandoned' &&
+      event.purpose === 'model' &&
+      event.discardedChars > 0 &&
+      entry.kind === 'text' &&
+      entry.requestId === event.requestId
+        ? {
+            kind: 'notice',
+            // Each fragment is already bounded; keep its draft label outside that truncation.
+            text: `[未完成草稿 · 未写入会话]\n${entry.text}`,
+          }
+        : entry
+  )
   return appendEntry({ ...state, entries }, { kind: 'notice', text: requestNoticeLabel(event) })
 }
 
@@ -113,12 +119,13 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
       break
     case 'text-delta': {
       const last = state.entries.at(-1)
-      if (last?.kind === 'text')
+      if (last?.kind === 'text' && last.requestId === event.requestId)
         state.entries[state.entries.length - 1] = {
-          kind: 'text',
+          ...last,
           text: bounded(last.text.replace(TRUNCATED + '\n', '') + event.text),
         }
-      else state.entries.push({ kind: 'text', text: bounded(event.text) })
+      else
+        state.entries.push({ kind: 'text', text: bounded(event.text), requestId: event.requestId })
       break
     }
     case 'notice':

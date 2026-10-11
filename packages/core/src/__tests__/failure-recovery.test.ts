@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import Anthropic from '@anthropic-ai/sdk'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Agent } from '../agent.js'
-import { RunBudgetError, TurnCancelledError, type RuntimeEvent } from '../runtime.js'
+import { TurnCancelledError, type RuntimeEvent } from '../runtime.js'
 import { retryAfterMs, RequestTimeoutError } from '../request-executor.js'
 import type { DiagnosticEvent } from '../diagnostics.js'
 import type { Tool } from '../tools/types.js'
@@ -475,21 +475,35 @@ describe('failure recovery through real HTTP and SDK', () => {
       true
     )
   })
-  it('counts provider token requests against the operation quota', async () => {
-    const p = await provider((_body, res) => {
-      res.writeHead(200, { 'content-type': 'application/json' })
-      res.end('{"input_tokens":10}')
-    })
-    const agent = new Agent({
-      config: p.config,
-      tools: [],
-      context: { counting: 'provider' },
-      limits: { ...limits, maxRequests: 2 },
-    })
-    await expect(agent.run('inspect')).rejects.toBeInstanceOf(RunBudgetError)
-    expect(p.urls).toHaveLength(2)
-    expect(p.urls.every(url => url.includes('count_tokens'))).toBe(true)
-  })
+  it.each([1, 2])(
+    'retains the request-budget reason when the quota of %i stops preparation or sending',
+    async maxRequests => {
+      const p = await provider((_body, res, _index, url) => {
+        if (url.includes('count_tokens'))
+          res.writeHead(200, { 'content-type': 'application/json' }).end('{"input_tokens":10}')
+        else answer(res)
+      })
+      const agent = new Agent({
+        config: p.config,
+        tools: [],
+        context: { counting: 'provider' },
+        limits: { ...limits, maxRequests },
+      })
+      await expect(agent.run('inspect')).rejects.toMatchObject({
+        name: 'RunBudgetError',
+        limitReason: 'requests',
+      })
+      expect(p.urls).toHaveLength(maxRequests)
+      expect(p.urls.every(url => url.includes('count_tokens'))).toBe(true)
+      const stopped = agent.getHistory().at(-1)!
+      expect(stopped.content).toContain('Run budget stopped: requests.')
+
+      const resumed = new Agent({ config: p.config, tools: [], limits })
+      resumed.restore(JSON.parse(JSON.stringify(agent.snapshot())))
+      expect(await resumed.run('continue')).toBe('completed')
+      expect(p.requests.at(-1)!.messages).toContainEqual(stopped)
+    }
+  )
   it('waits for a signal-ignoring tool to settle after a duration limit', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'zero2agent-late-write-'))
     cleanup.push(() => rm(cwd, { recursive: true, force: true }))

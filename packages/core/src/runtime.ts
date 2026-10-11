@@ -4,7 +4,7 @@ import type { CompactionEvent } from './context-manager.js'
 export type RuntimeEvent = { turnId: string; seq: number } & (
   | { type: 'turn-start' }
   | { type: 'phase'; phase: 'preparing' | 'requesting' | 'streaming' | 'tools' | 'cancelling' }
-  | { type: 'text-delta'; text: string }
+  | { type: 'text-delta'; text: string; requestId?: string }
   | {
       type: 'request-abandoned'
       purpose: 'model' | 'summary' | 'count'

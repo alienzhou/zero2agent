@@ -320,7 +320,20 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       emitter.emit({ type: 'turn-start' })
       if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
-      return runTurnLoop(messages, { ...options, session }, emitter, diagnostics, budget, executor)
+      try {
+        return await runTurnLoop(
+          messages,
+          { ...options, session },
+          emitter,
+          diagnostics,
+          budget,
+          executor
+        )
+      } catch (error) {
+        // Context preparation can wrap a budget stop. Restore it before Session saves history.
+        if (budget.signal.reason instanceof RunBudgetError) throw budget.signal.reason
+        throw error
+      }
     })
     emitter.emit({ type: 'turn-end', status: 'completed' })
     diagnostics.end('completed', 'turn')
@@ -452,7 +465,7 @@ async function runTurnLoop(
                 streaming = true
                 emitter.emit({ type: 'phase', phase: 'streaming' })
               }
-              emitter.emit({ type: 'text-delta', text })
+              emitter.emit({ type: 'text-delta', text, requestId: attempt.span?.requestId })
               notifyObserver(() => events?.onText?.(text))
             })
             try {

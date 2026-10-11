@@ -89,6 +89,42 @@ describe('E03-S003: terminal projection and safe text cells', () => {
     expect(error?.kind === 'tool' && error.call.reason!.length).toBeLessThan(MAX_ENTRY_TEXT + 100)
   })
 
+  it.each([20, MAX_ENTRY_TEXT * 2])(
+    'separates request identities and keeps the abandonment label for %i draft characters',
+    length => {
+      let state = reduceRuntime(initialState(), { type: 'turn-start', turnId: 'a', seq: 1 })
+      state = reduceRuntime(state, {
+        type: 'text-delta',
+        turnId: 'a',
+        seq: 2,
+        requestId: 'complete',
+        text: 'Completed answer',
+      })
+      state = reduceRuntime(state, {
+        type: 'text-delta',
+        turnId: 'a',
+        seq: 3,
+        requestId: 'draft',
+        text: 'x'.repeat(length),
+      })
+      state = reduceRuntime(state, {
+        type: 'request-abandoned',
+        turnId: 'a',
+        seq: 4,
+        purpose: 'model',
+        requestId: 'draft',
+        discardedChars: length,
+      })
+      expect(state.entries[0]).toMatchObject({ kind: 'text', text: 'Completed answer' })
+      expect(state.entries[1]).toMatchObject({
+        kind: 'notice',
+        text: expect.stringContaining('[未完成草稿 · 未写入会话]'),
+      })
+      const draft = state.entries[1]
+      expect(draft.kind !== 'tool' && draft.text.length).toBeLessThan(MAX_ENTRY_TEXT + 100)
+    }
+  )
+
   it('renders escape, OSC, C1 and bidi controls as visible inert text', () => {
     const dirty = '\x1b[2J\x1b]52;c;secrets\x07\u009b31m\u202e.exe\r\b'
     const clean = safeText(dirty)
