@@ -1,0 +1,35 @@
+researches/summary-quality/evaluation/completion-contract-proposal.md
+  s_58249cd92a0ae1::t_6278d30dc7a9f4 24,42
+researches/summary-quality/evaluation/contract-pair-v1/baseline/README.md
+  s_58249cd92a0ae1::t_c7af4e86abb1a9 1-16
+researches/summary-quality/evaluation/contract-pair-v1/baseline/manifest.json
+  s_58249cd92a0ae1::t_31c8da0b87d826 1-443
+researches/summary-quality/evaluation/contract-pair-v1/baseline/paired-analysis.json
+  s_58249cd92a0ae1::t_ad6d178591ada5 1-6486
+researches/summary-quality/evaluation/contract-pair-v1/baseline/runtime-hashes.json
+  s_58249cd92a0ae1::t_a07848f217b95b 1-86
+researches/summary-quality/evaluation/contract-pair-v1/baseline/verification.json
+  s_58249cd92a0ae1::t_b89062e80f76de 1-511
+researches/summary-quality/evaluation/verify-contract-pair.mjs
+  s_58249cd92a0ae1::t_888d83a7713916 1-57
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_405b45c3191d03 81-86
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_4566024d2f6bb0 14-16,28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "baa12b0a45b743b2232dc78ab451d3a2642a8be0",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
