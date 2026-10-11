@@ -1,0 +1,39 @@
+retros/E04-S003-summary-quality.md
+  s_58249cd92a0ae1::t_751ffb44a3757c 68-73
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_751ffb44a3757c 17
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_a792c0954071b1 72-79
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_f0e54b491686d1 50-52
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_b2e949f8ff67e8 48-53
+researches/summary-quality/evaluation/extractive-pilot-v1/verification.json
+  s_58249cd92a0ae1::t_4626c68b556a04 1-91
+researches/summary-quality/evaluation/extractive-pilot-v2/README.md
+  s_58249cd92a0ae1::t_881cb0c515c45a 1-20
+researches/summary-quality/evaluation/extractive-pilot-v2/manifest.json
+  s_58249cd92a0ae1::t_ea3d6e5261d7fe 1-93
+researches/summary-quality/evaluation/extractive-pilot-v2/results.json
+  s_58249cd92a0ae1::t_e4f4bdb5d27ed6 1-262
+researches/summary-quality/evaluation/extractive-pilot-v2/verification.json
+  s_58249cd92a0ae1::t_fb3a3895335103 1-91
+specs/E04-reliability-and-context/S003-summary-quality/details/04-backlog.md
+  s_58249cd92a0ae1::t_c564baa42691f5 17-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b6a8b9190ee1cefadb18e2f27c98311208d05791",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
