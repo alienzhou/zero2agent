@@ -1,0 +1,22 @@
+researches/summary-quality/evaluation/contract-pair-v2/failure-analysis.md
+  s_58249cd92a0ae1::t_426c3c8a250cb5 1-25
+researches/summary-quality/evaluation/contract-pair-v2/failure-regression.test.mjs
+  s_58249cd92a0ae1::t_fb714d3be31312 1-50,53-56
+  s_58249cd92a0ae1::t_653bb5567c1e77 51-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "762e5358e738c9ae50b682575dfd1b9120f28883",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
