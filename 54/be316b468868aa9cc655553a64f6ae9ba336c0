@@ -1,0 +1,33 @@
+researches/summary-quality/offline-demo.mjs
+  s_58249cd92a0ae1::t_b90b426927af4d 1-58
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_a92cd0d99b059a 5,7-80
+specs/E04-reliability-and-context/S003-summary-quality/details/00-overview.md
+  s_58249cd92a0ae1::t_8e43c66f2e32f6 1,5,7-15
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_9727b432402de7 3,5,7,9,11,13,15,17-60
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_9cb1ef312bf790 5-7,14-15
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_33e114f5472958 12-22
+specs/E04-reliability-and-context/S003-summary-quality/details/04-backlog.md
+  s_58249cd92a0ae1::t_23547ad027c8ca 6-16
+specs/E04-reliability-and-context/S003-summary-quality/follow-along.md
+  s_58249cd92a0ae1::t_44f400eb4b4c87 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "54be316b468868aa9cc655553a64f6ae9ba336c0",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
