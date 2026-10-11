@@ -1,0 +1,46 @@
+.vibecoding/2026-10-11/e04-s003-summary-audit/dialogue.md
+  s_58249cd92a0ae1::t_b471ead2d5db09 1-10
+.discuss/2026-10-08/e04-course-plan/outline.md
+  s_58249cd92a0ae1::t_b471ead2d5db09 70-71
+.vibecoding/2026-10-11/e04-s003-summary-audit/learnings.md
+  s_58249cd92a0ae1::t_b471ead2d5db09 1-7
+researches/summary-quality/README.md
+  s_58249cd92a0ae1::t_b471ead2d5db09 1-79
+researches/summary-quality/current-capability-probe.mjs
+  s_58249cd92a0ae1::t_9c45f6d2602bfe 1-103
+  s_58249cd92a0ae1::t_962e62b4b13a63 104-140
+.vibecoding/2026-10-11/e04-s003-summary-audit/prompt.md
+  s_58249cd92a0ae1::t_b471ead2d5db09 1-3
+.discuss/2026-10-11/e04-s003-summary-quality/outline.md
+  s_58249cd92a0ae1::t_b471ead2d5db09 1-94
+researches/summary-quality/audit-2026-10-11/build.txt
+  s_58249cd92a0ae1::t_0863a196c64a83 1-13
+researches/summary-quality/audit-2026-10-11/cli-recheck.txt
+  s_58249cd92a0ae1::t_a17e6495994d3c 1-9
+researches/summary-quality/audit-2026-10-11/cli-tests.txt
+  s_58249cd92a0ae1::t_1a9593b49b7b70 1-36
+researches/summary-quality/audit-2026-10-11/core-tests.txt
+  s_58249cd92a0ae1::t_d41892413496fe 1-10
+researches/summary-quality/audit-2026-10-11/live-observation.json
+  s_58249cd92a0ae1::t_887ef8a9625ae0 1-13
+researches/summary-quality/audit-2026-10-11/live-test.txt
+  s_58249cd92a0ae1::t_13c9828595da69 1-9
+researches/summary-quality/audit-2026-10-11/probe.json
+  s_58249cd92a0ae1::t_cd8b85cae35b15 1-93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e0fbac3794511c0080dd48589bbbc020353019c4",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
