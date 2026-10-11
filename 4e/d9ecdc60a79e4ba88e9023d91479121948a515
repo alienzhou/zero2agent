@@ -1,0 +1,56 @@
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_646f6cf592eed7 18
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_646f6cf592eed7 109,120,122,124
+  s_58249cd92a0ae1::t_5240be0a1799d0 118,145
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_41839fb07a1fd0 44-49
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_646f6cf592eed7 28,54-59
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_646f6cf592eed7 44
+  s_58249cd92a0ae1::t_e0ba0ffc2770b3 50,67-72
+researches/summary-quality/evaluation/comparison.md
+  s_58249cd92a0ae1::t_2d5a99aa223666 11,14,16,20-21,28,113,115,125,135,153,155,166
+  s_58249cd92a0ae1::t_c95c5f7b586685 192-197
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_632b9787a399e1 25-26,29-31
+.authoring/site/chapters/epic04-story003/verification/checks-model-identity.json
+  s_58249cd92a0ae1::t_8fb560ffaa3e52 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_979c2e5b5eaae1 2,106,108
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_57c9238cba3120 80-87
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_dc477a78a6feb3 55-57
+CHANGELOG.md
+  s_58249cd92a0ae1::t_7c33ab6d31c546 56
+retros/E04-S003-summary-quality.md
+  s_58249cd92a0ae1::t_b6cd4e3b8cf422 74-81
+site/chapters/epic04-story003/14-score.html
+  s_58249cd92a0ae1::t_3e3b8f7895dbdb 1
+site/chapters/epic04-story003/15-task.html
+  s_58249cd92a0ae1::t_63612d1ed041f6 1
+site/chapters/epic04-story003/16-comparison.html
+  s_58249cd92a0ae1::t_5ef8f1646133a3 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_5064842cd69322 3,139-140,149-150,165-166
+site/course.json
+  s_58249cd92a0ae1::t_1af12cdf93eaf3 6643,6671,6684,6690,6702,6706
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4ed9ecdc60a79e4ba88e9023d91479121948a515",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
