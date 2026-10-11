@@ -1,0 +1,71 @@
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_8db7b5a7be0db3 83,120-124,134,145
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_c731a37659467f 11-15
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_8db7b5a7be0db3 22,25
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_c731a37659467f 32-35
+.authoring/site/chapters/epic04-story003/content-plan.md
+  s_58249cd92a0ae1::t_7e9a3273e2f748 37-38
+.authoring/site/chapters/epic04-story003/verification/checks-candidate-v7.json
+  s_58249cd92a0ae1::t_1820bf1d837ffa 1-110
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_a2ae43a77c2800 2,106,108
+.discuss/2026-10-11/e04-s003-summary-quality/outline.md
+  s_58249cd92a0ae1::t_2d35809737075d 3
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_2e7e6cba05e6e9 52-57
+CHANGELOG.md
+  s_58249cd92a0ae1::t_f53733a8f33a5f 56
+README.en.md
+  s_58249cd92a0ae1::t_957c33e5b3775c 160
+README.md
+  s_58249cd92a0ae1::t_063619bdbff281 166
+docs/architecture.md
+  s_58249cd92a0ae1::t_16c8cbf44031e9 185
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_d6fbaa36d13cce 21
+packages/core/README.md
+  s_58249cd92a0ae1::t_05d3656450d33e 92-94
+researches/summary-quality/acceptance/candidate-v8-source-hashes.json
+  s_58249cd92a0ae1::t_d53b1cb15925e2 1-50
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_02aae9eeb9ca67 28
+retros/E04-S003-summary-quality.md
+  s_58249cd92a0ae1::t_82910e8c661274 50-55
+site/chapters/epic04-story003/10-large-result.html
+  s_58249cd92a0ae1::t_e0240800162a42 1
+site/chapters/epic04-story003/16-comparison.html
+  s_58249cd92a0ae1::t_7a82b31362ad2d 1
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_8a4741184930c1 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_7ea2893be575dd 9,100-101,153,161-162,181
+site/course.json
+  s_58249cd92a0ae1::t_00b349fac613e2 6541,6678,6681,6684,6687,6690,6695,6699,6703-6706,6751
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_492227b9883789 11
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_05c42c7f0a7641 7,69
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_c3c3a7e8da7eae 19
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_357ff4170d97d3 9,11-13,16,46,50-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1d62cfe817b77b07c24776647f7d10ea0f428178",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
