@@ -1,0 +1,45 @@
+packages/core/src/__tests__/artifact-completion.test.ts
+  s_58249cd92a0ae1::t_bea9b71957b65f 239-253
+packages/core/src/artifact-contract.ts
+  s_58249cd92a0ae1::t_411609e72e847e 3,6-9,93-97,100,110-111
+researches/summary-quality/evaluation/analyze-contract-pair-v2.mjs
+  s_58249cd92a0ae1::t_34fc0cf3ce72d8 1-72
+researches/summary-quality/evaluation/artifact-contract-described.mjs
+  s_58249cd92a0ae1::t_8784200114e94b 1-14
+researches/summary-quality/evaluation/contract-field-meaning-design.md
+  s_58249cd92a0ae1::t_b8269ff0b0d52d 1-17
+researches/summary-quality/evaluation/contract-pair-v2/contracts.json
+  s_58249cd92a0ae1::t_142e08519e0365 1-547
+researches/summary-quality/evaluation/contract-pair-v2/descriptions.json
+  s_58249cd92a0ae1::t_143700e7cd4fed 1-11
+researches/summary-quality/evaluation/contract-pair-v2/inputs.json
+  s_58249cd92a0ae1::t_e8e1b5a6c5dc25 1-587
+researches/summary-quality/evaluation/contract-pair-v2/inputs.test.mjs
+  s_58249cd92a0ae1::t_fea1c0e76bf76e 1-29
+researches/summary-quality/evaluation/contract-pair-v2/protocol.md
+  s_58249cd92a0ae1::t_68b76fa9f8c4e4 1-31
+researches/summary-quality/evaluation/run-contract-pair-v2.mjs
+  s_58249cd92a0ae1::t_bee8d6efe073ee 1-307
+researches/summary-quality/evaluation/verify-contract-pair-v2.mjs
+  s_58249cd92a0ae1::t_72600617a7b486 1-57
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_6f5b3110da6a80 136-137
+specs/E04-reliability-and-context/S003-summary-quality/details/04-backlog.md
+  s_58249cd92a0ae1::t_e28e74ebcce6cf 24,28,32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b8a3377072db021b3704a355407471518b2855c7",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
