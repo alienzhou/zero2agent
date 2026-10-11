@@ -1,0 +1,27 @@
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_ebb19a4f863793 238-246
+e2e/src/run-log.test.ts
+  s_58249cd92a0ae1::t_ebb19a4f863793 26-53
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_a7c5bb4c053775 1-6
+.vibecoding/2026-10-11/e04-s003-summary-quality/prompt.md
+  s_58249cd92a0ae1::t_4e0eaa66c6f66b 1-3
+researches/summary-quality/evaluation/log-failure-repro.json
+  s_58249cd92a0ae1::t_cd00568d52fd6e 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c391781c415614fbb41a9f191568f0c3464af089",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
