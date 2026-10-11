@@ -361,4 +361,54 @@ describe('bounded result bodies', () => {
       'cancelled before page'
     )
   })
+  it('accepts a configured parent alias even when its private children do not exist yet', async () => {
+    const { dir } = await fixture()
+    const alias = path.join(dir, 'parent-alias')
+    await fs.symlink(dir, alias)
+    const store = new ResultStore({ directory: path.join(alias, 'new', 'nested', 'results') })
+    store.setWorkspace(dir)
+    const entry = await store.save('nested-root', {
+      toolName: 'probe',
+      toolCallId: 'one',
+      paths: [dir],
+    })
+    expect(JSON.parse(await store.read(entry.reference)).untrusted_text).toBe('nested-root')
+  })
+  it('preserves malformed UTF-8 bytes without confusing them with valid character boundaries', async () => {
+    const { store, source } = await fixture()
+    const bytes = Buffer.from([0x80, 0xff, 0xc0, 0x81, 0x41, 0xf0, 0xa0, 0xae, 0xb7, 0x42])
+    const spool = await store.spoolPath()
+    await fs.writeFile(spool, bytes, { mode: 0o600 })
+    const entry = await store.seal(spool, source)
+    const first = JSON.parse(await store.read(entry.reference, 0, 7))
+    expect(Buffer.from(first.raw_base64, 'base64')).toEqual(bytes.subarray(0, 5))
+    expect(first.next_offset).toBe(5)
+    const second = JSON.parse(await store.read(entry.reference, first.next_offset, 4))
+    expect(second.untrusted_text).toBe('𠮷')
+    expect(second.next_offset).toBe(9)
+  })
+  it('counts active spools and closed background files against capacity, and releases small-command reservations', async () => {
+    const { store, source } = await fixture({ maxResultBytes: 16, maxTotalBytes: 20 })
+    const active = await store.spoolPath()
+    await expect(store.spoolPath()).rejects.toThrow('RESULT_CAPACITY')
+    await fs.writeFile(active, 'background')
+    await store.releaseSpool(active, true)
+    await expect(store.spoolPath()).rejects.toThrow('RESULT_CAPACITY')
+    await fs.rm(active)
+    const entry = await store.save('a'.repeat(16), source)
+    // A duplicate reference needs no second body or capacity reservation.
+    await store.save('a'.repeat(16), source)
+    expect(JSON.parse(await store.read(entry.reference)).untrusted_text).toBe('a'.repeat(16))
+    const fresh = await fixture({ maxResultBytes: 25000, maxTotalBytes: 25000 })
+    const [short] = await executeToolCalls(
+      [call('terminal', { command: 'printf short' })],
+      [terminalTool],
+      { cwd: fresh.dir, results: fresh.store },
+      undefined,
+      new PermissionController({ mode: 'bypass' })
+    )
+    expect(short.content).toContain('short')
+    const pending = await fresh.store.spoolPath()
+    await fresh.store.releaseSpool(pending)
+  })
 })

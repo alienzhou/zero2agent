@@ -19,7 +19,8 @@ describe('E02-S003 terminal 契约：工具链集成', () => {
   it('[P0] 构建产物 allTools 含 terminal', () => {
     const names = allTools.map(t => t.name)
     expect(names).toContain('terminal')
-    expect(names).toHaveLength(8)
+    expect(names).toHaveLength(9)
+    expect(names).toContain('read_tool_result')
   })
 
   it('[P0] terminal 创建文件 + read_file 回读', async () => {

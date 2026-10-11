@@ -1,0 +1,185 @@
+
+> zero2agent@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e04-s002
+> pnpm -r test
+
+Scope: 5 of 6 workspace projects
+packages/cdp-debug test$ vitest run
+packages/cdp-debug test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/cdp-debug
+packages/cdp-debug test:  Test Files  1 passed (1)
+packages/cdp-debug test:       Tests  1 passed (1)
+packages/cdp-debug test:    Start at  16:05:04
+packages/cdp-debug test:    Duration  118ms (transform 16ms, setup 0ms, import 30ms, tests 7ms, environment 0ms)
+packages/cdp-debug test: Done
+packages/core test$ vitest run
+packages/core test: ◇ injected env (2) from ../../.env.local // tip: ⌘ enable debugging { debug: true }
+packages/core test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+packages/core test:  Test Files  33 passed (33)
+packages/core test:       Tests  460 passed (460)
+packages/core test:    Start at  16:05:05
+packages/core test:    Duration  45.15s (transform 1.12s, setup 0ms, import 2.42s, tests 103.48s, environment 2ms)
+packages/core test: Done
+e2e test$ vitest run
+e2e test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/e2e
+e2e test:  ❯ src/runtime-logging.test.ts (9 tests | 1 failed) 23622ms
+e2e test:      × keeps a background completion attached to its original request after later turns 20084ms
+e2e test:  ❯ src/terminal-contract.test.ts (7 tests | 1 failed) 465ms
+e2e test:      × [P0] 构建产物 allTools 含 terminal 4ms
+e2e test: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+e2e test:  FAIL  src/runtime-logging.test.ts > E03-S005 logs over production CLI, SDK and real PTY > keeps a background completion attached to its original request after later turns
+e2e test: Error: Timed out waiting for /运行中 10s/
+e2e test: [?1049h[?2004h[?25l[?25l[H[2K[1;36m● zero2agent · 等待输入[0m
+e2e test: [2K[2m会话: 0e67b1ba · 新会话 · 日志 6a6a9cff · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /private/var/folde[0m
+e2e test: [2K[2m· 仅保护 write_file / replace_in_file / delete；shell、人工终端与外部服务不自动回退。[0m
+e2e test: [2K[2m· 输入你的问题。/new 新建对话 · /sessions 会话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退[0m
+e2e test: [2K出[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K─ 输入 ──────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+e2e test: [2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+e2e test: [2K你: [0m[J[32;5H[?25h[?25l[H[2K[1;36m◐ zero2agent · 等待模型 · 0.0s[0m
+e2e test: [2K[2m会话: 0e67b1ba · 本轮未结算 r1 · 日志 6a6a9cff · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /private/va[0m
+e2e test: [2K[2m· 仅保护 write_file / replace_in_file / delete；shell、人工终端与外部服务不自动回退。[0m
+e2e test: [2K[2m· 输入你的问题。/new 新建对话 · /sessions 会话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退[0m
+e2e test: [2K出[0m
+e2e test: [2K[32m你 › background test[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K─ 运行中 · 可编辑草稿 ───────────────────────────────────────────────────────────────────────────────────────[0m
+e2e test: [2KCtrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键[0m
+e2e test: [2K草稿: [0m[J[32;7H[?25h[?25l[H[2K[1;36m◐ zero2agent · 正在保存会话 · 0.0s[0m
+e2e test: [2K[2m会话: 0e67b1ba · 已保存 r2 · 日志 6a6a9cff · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /private/var/fo[0m
+e2e test: [2K[2m· 仅保护 write_file / replace_in_file / delete；shell、人工终端与外部服务不自动回退。[0m
+e2e test: [2K[2m· 输入你的问题。/new 新建对话 · /sessions 会话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退[0m
+e2e test: [2K出[0m
+e2e test: [2K[32m你 › background test[0m
+e2e test: [2K[1;31m┌ ◆ terminal · 失败 · background-command · 13ms[0m
+e2e test: [2K[2m│ {"command":"sleep 12; printf done > background-marker.txt","interactive":false}[0m
+e2e test: [2K[2m│ Error: Failed to execute command: UNSAFE_RESULT_PATH: Result directory contains a symlink or non-directory.[0m
+e2e test: [2K└[0m
+e2e test: [2K[36mAgent › private-model-answer[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K─ 运行中 · 可编辑草稿 ───────────────────────────────────────────────────────────────────────────────────────[0m
+e2e test: [2KCtrl-C 取消本轮 · Ctrl-O 工具详情 · /help 快捷键[0m
+e2e test: [2K草稿: [0m[J[32;7H[?25h[?25l[H[2K[1;36m● zero2agent · 已完成[0m
+e2e test: [2K[2m会话: 0e67b1ba · 已保存 r2 · 日志 6a6a9cff · 记录中 · 文件保护开启 · /checkpoints · 工作目录: /private/var/fo[0m
+e2e test: [2K[2m· 仅保护 write_file / replace_in_file / delete；shell、人工终端与外部服务不自动回退。[0m
+e2e test: [2K[2m· 输入你的问题。/new 新建对话 · /sessions 会话 · /compact 压缩 · /terminal 人工终端 · /help 快捷键 · exit 退[0m
+e2e test: [2K出[0m
+e2e test: [2K[32m你 › background test[0m
+e2e test: [2K[1;31m┌ ◆ terminal · 失败 · background-command · 13ms[0m
+e2e test: [2K[2m│ {"command":"sleep 12; printf done > background-marker.txt","interactive":false}[0m
+e2e test: [2K[2m│ Error: Failed to execute command: UNSAFE_RESULT_PATH: Result directory contains a symlink or non-directory.[0m
+e2e test: [2K└[0m
+e2e test: [2K[36mAgent › private-model-answer[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K[0m
+e2e test: [2K─ 输入 ──────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+e2e test: [2KEnter 发送 · Ctrl-O 工具详情 · PgUp/PgDn 查看 · /help[0m
+e2e test: [2K你: [0m[J[32;5H[?25h
+e2e test:  ❯ Timeout.<anonymous> src/helpers/human-terminal.ts:91:22
+e2e test:      89|     return new Promise((resolve, reject) => {
+e2e test:      90|       const timeout = setTimeout(
+e2e test:      91|         () => finish(new Error(`Timed out waiting for ${marker}\n${out…
+e2e test:        |                      ^
+e2e test:      92|         options.timeoutMs ?? 12_000
+e2e test:      93|       )
+e2e test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+e2e test:  FAIL  src/terminal-contract.test.ts > E02-S003 terminal 契约：工具链集成 > [P0] 构建产物 allTools 含 terminal
+e2e test: AssertionError: expected [ 'read_tool_result', …(8) ] to have a length of 8 but got 9
+e2e test: - Expected
+e2e test: + Received
+e2e test: - 8
+e2e test: + 9
+e2e test:  ❯ src/terminal-contract.test.ts:22:19
+e2e test:      20|     const names = allTools.map(t => t.name)
+e2e test:      21|     expect(names).toContain('terminal')
+e2e test:      22|     expect(names).toHaveLength(8)
+e2e test:        |                   ^
+e2e test:      23|   })
+e2e test:      24|
+e2e test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+e2e test:  Test Files  2 failed | 16 passed | 15 skipped (33)
+e2e test:       Tests  2 failed | 176 passed | 58 skipped (236)
+e2e test:    Start at  16:05:50
+e2e test:    Duration  89.81s (transform 373ms, setup 0ms, import 1.62s, tests 85.89s, environment 1ms)
+e2e test: Failed
+/Users/zhouhongxuan/program/works/zero2agent-e04-s002/e2e:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @zero2agent/e2e@0.0.0 test: `vitest run`
+Exit status 1
+ ELIFECYCLE  Test failed. See above for more details.

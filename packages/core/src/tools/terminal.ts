@@ -259,7 +259,7 @@ export async function runCommand(
   cwd: string,
   turnSignal?: AbortSignal,
   onResultMetadata?: (metadata: ToolExecutionMetadata) => void,
-  outputOptions?: { path: string; maxBytes: number }
+  outputOptions?: { path: string; maxBytes: number; onBackgroundClosed?: () => Promise<void> }
 ): Promise<RunResult> {
   turnSignal?.throwIfAborted()
   const wrapped = wrapCommand(userCommand)
@@ -426,7 +426,16 @@ export async function runCommand(
       )
       unregisterBackgroundProcess(pid)
       queueCompletionNotice(userCommand, pid)
-      void sink.closeStream()
+      void sink
+        .closeStream()
+        .then(() => outputOptions?.onBackgroundClosed?.())
+        .catch(() => {
+          // A retained reservation is conservative: later writes report capacity/busy instead of hiding lost output.
+          queueCompletionNotice(
+            'Output reservation cleanup failed; inspect the result directory before starting more output.',
+            pid
+          )
+        })
     })
     registerBackgroundProcess({
       pid,
@@ -597,6 +606,7 @@ export const terminalTool: Tool = {
     'Interactive mode is not for unattended execution; the human supplies input, and interactive content is not recorded or sent to the model. ' +
     'Never put credentials in command. Do not automatically retry a declined interactive request. ' +
     'Use workdir instead of cd — each call is a new process and cd does not persist. ' +
+    'Hosts without result storage return a raw file path; use read_file or grep_search with current permission. ' +
     'Very large output (>800 lines / 20KB) is saved once and omitted from the receipt. Read a sealed result with read_tool_result using its reference and byte ranges. Background output is unsealed and still growing; raw-path reads require file permission.',
   input_schema: {
     type: 'object',
@@ -681,9 +691,15 @@ export const terminalTool: Tool = {
     const envFailureNotice = consumeShellEnvFailureNotice()
 
     let result: RunResult
+    let outputPath: string | undefined
     try {
+      outputPath = await ctx.results?.spoolPath()
       const outputOptions = ctx.results
-        ? { path: await ctx.results.spoolPath(), maxBytes: ctx.results.maxResultBytes }
+        ? {
+            path: outputPath!,
+            maxBytes: ctx.results.maxResultBytes,
+            onBackgroundClosed: () => ctx.results!.releaseSpool(outputPath!, true),
+          }
         : undefined
       result = await runCommand(
         command,
@@ -693,6 +709,7 @@ export const terminalTool: Tool = {
         outputOptions
       )
     } catch (err) {
+      if (outputPath) await ctx.results?.releaseSpool(outputPath)
       const msg = (err as Error).message
       if (msg.includes('ENOENT')) {
         return 'Error: bash not found; S003 assumes POSIX + bash'
@@ -720,6 +737,13 @@ export const terminalTool: Tool = {
         }
       } catch (error) {
         result.sink.storageError = `Result sealing failed after command settled: ${(error as Error).message}`
+      }
+    }
+    if (outputPath && result.outcome !== 'skipped') {
+      try {
+        await ctx.results?.releaseSpool(outputPath)
+      } catch (error) {
+        result.sink.storageError = `Result cleanup failed after command settled: ${(error as Error).message}`
       }
     }
     return formatReceipt(result, envFailureNotice, completionNotices, reference)

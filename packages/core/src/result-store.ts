@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import { createHash, randomUUID } from 'node:crypto'
 import { homedir } from 'node:os'
 import path from 'node:path'
+import { resolvePhysicalPath } from './tools/path-guard.js'
 
 export interface ResultSource {
   toolName: string
@@ -138,6 +139,7 @@ async function directory(location: string, create: boolean): Promise<void> {
 export class ResultStore {
   private catalog?: ResultSnapshot
   private cwd = process.cwd()
+  private allocatedSpools = new Set<string>()
   private options: Required<ResultStoreOptions>
 
   constructor(options: ResultStoreOptions = {}) {
@@ -184,10 +186,7 @@ export class ResultStore {
     const workspace = createHash('sha256').update(canonical).digest('hex')
     // realpath of the configured parent accommodates platform aliases such as macOS /var -> /private/var.
     const configured = path.resolve(this.options.directory)
-    const root = path.join(
-      await fs.realpath(path.dirname(configured)).catch(() => path.dirname(configured)),
-      path.basename(configured)
-    )
+    const root = path.join(resolvePhysicalPath(path.dirname(configured)), path.basename(configured))
     const location = path.join(root, workspace, this.catalog.scope)
     await directory(location, create)
     return location
@@ -259,20 +258,9 @@ export class ResultStore {
     validateResultSnapshot({ ...this.catalog!, entries: [...this.catalog!.entries, entry] })
     return this.withWriteLock(location, async () => {
       await this.cleanupAt(location)
-      const sizes = new Map<string, number>()
-      for (const file of await fs.readdir(location)) {
-        if (!/^[0-9a-f]{64}\.body$/.test(file)) continue
-        const stat = await fs.lstat(path.join(location, file))
-        if (!stat.isFile() || stat.isSymbolicLink())
-          fail('UNSAFE_RESULT_PATH', 'Body is not a regular file.')
-        sizes.set(file.slice(0, -5), stat.size)
-      }
-      sizes.set(hash, bytes)
-      if (
-        sizes.size > this.options.maxResults ||
-        [...sizes.values()].reduce((a, b) => a + b, 0) > this.options.maxTotalBytes
-      )
-        fail('RESULT_CAPACITY', 'Session body capacity reached; live results were retained.')
+      const sizes = await this.usage(location, bodyPath)
+      sizes.set(`${hash}.body`, bytes)
+      this.checkCapacity(sizes)
       const target = path.join(location, `${hash}.body`)
       try {
         await fs.link(bodyPath, target)
@@ -287,8 +275,12 @@ export class ResultStore {
           if (!stat.isFile() || stat.size !== bytes)
             fail('RESULT_CHANGED', 'Existing body differs from its identity.')
           const existing = createHash('sha256')
-          for await (const chunk of handle.createReadStream({ autoClose: false }))
+          let verified = 0
+          for await (const chunk of handle.createReadStream({ autoClose: false })) {
+            verified += chunk.length
+            if (verified > bytes) fail('RESULT_CHANGED', 'Existing body grew during verification.')
             existing.update(chunk)
+          }
           if (existing.digest('hex') !== hash)
             fail('RESULT_CHANGED', 'Existing body checksum changed.')
         } finally {
@@ -325,22 +317,80 @@ export class ResultStore {
     }
   }
 
+  private checkCapacity(sizes: Map<string, number>): void {
+    if (
+      sizes.size > this.options.maxResults ||
+      [...sizes.values()].reduce((a, b) => a + b, 0) > this.options.maxTotalBytes
+    )
+      fail(
+        'RESULT_CAPACITY',
+        'Session capacity includes live bodies and pending output reservations; no live evidence was evicted.'
+      )
+  }
+  private async usage(location: string, exclude?: string): Promise<Map<string, number>> {
+    const files = new Set(await fs.readdir(location))
+    const sizes = new Map<string, number>()
+    for (const file of files) {
+      if (!/^(?:[0-9a-f]{64}\.body|[0-9a-f-]{36}\.pending(?:\.reserve)?)$/.test(file)) continue
+      const full = path.join(location, file)
+      if (full === exclude || full === `${exclude}.reserve`) continue
+      if (file.endsWith('.pending') && files.has(`${file}.reserve`)) continue
+      const stat = await fs.lstat(full)
+      if (!stat.isFile() || stat.isSymbolicLink())
+        fail('UNSAFE_RESULT_PATH', 'Stored output is not a regular file.')
+      if (file.endsWith('.reserve')) {
+        if (stat.size > 32) fail('RESULT_CHANGED', 'Invalid output reservation.')
+        const reserved = Number(await fs.readFile(full, 'utf8'))
+        if (!integer(reserved, 0, HARD_BYTES)) fail('RESULT_CHANGED', 'Invalid output reservation.')
+        sizes.set(file, reserved)
+      } else sizes.set(file, stat.size)
+    }
+    return sizes
+  }
   async save(text: string, source: ResultSource): Promise<ResultEntry> {
     const bytes = Buffer.byteLength(text)
     const location = await this.reserve(bytes)
     const hash = createHash('sha256').update(text).digest('hex')
-    const temporary = path.join(location, `${randomUUID()}.pending`)
+    const existing = path.join(location, `${hash}.body`)
+    try {
+      await fs.lstat(existing)
+      return await this.publish(existing, hash, bytes, source)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+    }
+    const temporary = await this.allocateSpool(bytes)
     try {
       await fs.writeFile(temporary, text, { mode: 0o600, flag: 'wx' })
       return await this.publish(temporary, hash, bytes, source)
     } finally {
-      await fs.rm(temporary, { force: true })
+      await this.releaseSpool(temporary)
     }
   }
-  /** Allocate the existing terminal sink in our private directory so sealing uses a rename/link, not a copy. */
+  /** Reserve worst-case output before starting a process; background spools retain that reservation until closed. */
   async spoolPath(): Promise<string> {
-    const location = await this.location(true)
-    return path.join(location, `${randomUUID()}.pending`)
+    return this.allocateSpool(this.options.maxResultBytes)
+  }
+  private async allocateSpool(bytes: number): Promise<string> {
+    const location = await this.reserve(bytes)
+    return this.withWriteLock(location, async () => {
+      await this.cleanupAt(location)
+      const file = path.join(location, `${randomUUID()}.pending`)
+      const sizes = await this.usage(location)
+      sizes.set(path.basename(file), bytes)
+      this.checkCapacity(sizes)
+      await fs.writeFile(`${file}.reserve`, String(bytes), { mode: 0o600, flag: 'wx' })
+      this.allocatedSpools.add(file)
+      return file
+    })
+  }
+  /** keep=true leaves a closed background log counted by its actual size, with its original path readable. */
+  async releaseSpool(file: string, keep = false): Promise<void> {
+    if (!this.allocatedSpools.has(file)) return
+    await this.withWriteLock(path.dirname(file), async () => {
+      if (!keep) await fs.rm(file, { force: true })
+      await fs.rm(`${file}.reserve`, { force: true })
+      this.allocatedSpools.delete(file)
+    })
   }
   async seal(file: string, source: ResultSource): Promise<ResultEntry> {
     const location = await this.location(false)
@@ -367,7 +417,7 @@ export class ResultStore {
       return await this.publish(file, hash.digest('hex'), stat.size, source)
     } finally {
       await handle.close()
-      await fs.rm(file, { force: true })
+      await this.releaseSpool(file)
     }
   }
   /** Keeps bounded tombstones, so expired references stay distinguishable from unknown ones. */
@@ -411,6 +461,7 @@ export class ResultStore {
         const hash = createHash('sha256')
         const chunks: Buffer[] = []
         let position = 0
+        const captureStart = Math.max(0, offset - 3)
         // Hash and collect the requested bytes in the same pass. No full body readFile or long-line array.
         for await (const data of handle.createReadStream({
           autoClose: false,
@@ -419,8 +470,8 @@ export class ResultStore {
           signal?.throwIfAborted()
           const chunk = data as Buffer
           hash.update(chunk)
-          const start = Math.max(0, offset - position)
-          const end = Math.min(chunk.length, offset + limit - position)
+          const start = Math.max(0, captureStart - position)
+          const end = Math.min(chunk.length, offset + limit + 3 - position)
           if (start < end) chunks.push(Buffer.from(chunk.subarray(start, end)))
           position += chunk.length
           if (position > entry.bytes) fail('RESULT_CHANGED', 'Body grew during verification.')
@@ -432,21 +483,34 @@ export class ResultStore {
           stat.size !== after.size
         )
           fail('RESULT_CHANGED', 'Body checksum changed; no content was returned.')
-        let bytes = Buffer.concat(chunks)
-        if (bytes.length && (bytes[0] & 0xc0) === 0x80)
+        signal?.throwIfAborted()
+        const captured = Buffer.concat(chunks)
+        const begin = offset - captureStart
+        let end = Math.min(begin + limit, captured.length)
+        const crossing = (boundary: number): number | undefined => {
+          for (let lead = Math.max(0, boundary - 3); lead < boundary; lead++) {
+            const byte = captured[lead]
+            const width =
+              byte >= 0xc2 && byte <= 0xdf
+                ? 2
+                : byte >= 0xe0 && byte <= 0xef
+                  ? 3
+                  : byte >= 0xf0 && byte <= 0xf4
+                    ? 4
+                    : 1
+            if (lead + width <= boundary || lead + width > captured.length) continue
+            const value = captured.subarray(lead, lead + width)
+            if (Buffer.from(value.toString('utf8')).equals(value)) return lead
+          }
+          return undefined
+        }
+        if (crossing(begin) !== undefined)
           fail(
             'INVALID_RESULT_RANGE',
             'offset is inside a UTF-8 character; use next_offset from the previous page.'
           )
-        if (offset + bytes.length < entry.bytes) {
-          let lead = bytes.length - 1
-          while (lead >= 0 && (bytes[lead] & 0xc0) === 0x80) lead--
-          if (lead >= 0) {
-            const first = bytes[lead]
-            const width = first >= 0xf0 ? 4 : first >= 0xe0 ? 3 : first >= 0xc0 ? 2 : 1
-            if (lead + width > bytes.length) bytes = bytes.subarray(0, lead)
-          }
-        }
+        end = crossing(end) ?? end
+        const bytes = captured.subarray(begin, end)
         const text = bytes.toString('utf8')
         const next = offset + bytes.length
         return JSON.stringify({
