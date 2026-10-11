@@ -1,0 +1,10 @@
+◇ injected env (2) from ../../.env.local // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  16:21:59
+   Duration  110ms (transform 19ms, setup 0ms, import 33ms, tests 2ms, environment 0ms)
+

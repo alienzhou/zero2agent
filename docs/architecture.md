@@ -32,7 +32,8 @@ packages/core/src/
 ├── loop.ts                   # ReAct 循环
 ├── prompt/                   # 系统指令与任务上下文
 ├── tools/
-│   ├── index.ts              # 八个工具的注册表
+│   ├── index.ts              # 九个工具的注册表
+│   ├── read-tool-result.ts   # 存储结果的有界回读
 │   ├── types.ts              # Tool / ToolContext
 │   ├── read-file.ts          # 读取文件
 │   ├── grep-search.ts        # 搜索内容
@@ -74,7 +75,7 @@ packages/tui/src/
 
 ### @zero2agent/shared
 
-当前只有 `src/index.ts` 的 `VERSION` 占位导出，尚未实现通用 logger/config 模块。另有独立的 `cdp-debug` 调试包和 `e2e` 验收工作区，不属于八个 Agent 工具。
+当前只有 `src/index.ts` 的 `VERSION` 占位导出，尚未实现通用 logger/config 模块。另有独立的 `cdp-debug` 调试包和 `e2e` 验收工作区，不属于九个 Agent 工具。
 
 ---
 
@@ -170,3 +171,7 @@ TUI 宿主的 `CheckpointStore` 只读取声明目标，内容定义分块后按
 
 - 📖 [快速上手](./getting-started.md) - 先把项目跑起来
 - 🗓️ [迭代日志](../CHANGELOG.md) - 查看各迭代学习要点
+
+## 大工具结果
+
+Session 持有 ResultStore。新工具结果在进入历史前转换为引用；ContextManager 为旧历史复用同一存储，只改变发送视图。正文按 SHA-256 保存，快照只保存版本化来源和目录身份。read_tool_result 按当前权限和预算读取有限字节，并流式验证正文；终端复用现有文件封存，后台输出保持未封存状态。容量包含活跃输出预留，详情见 [E04-S002](../specs/E04-reliability-and-context/S002-result-references/README.md)。

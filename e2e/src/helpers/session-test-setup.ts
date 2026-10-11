@@ -6,6 +6,7 @@ import path from 'node:path'
 export default async function setup() {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'z2a-test-sessions-'))
   process.env.ZERO2AGENT_SESSION_DIR = root
+  process.env.ZERO2AGENT_RESULT_DIR = path.join(root, 'results')
   process.env.ZERO2AGENT_LOG_DIR = path.join(root, 'logs')
   process.env.ZERO2AGENT_CHECKPOINT_DIR = path.join(root, 'checkpoints')
   return async () => {

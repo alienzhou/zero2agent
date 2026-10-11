@@ -64,3 +64,5 @@ Brief description of the iteration.
 - Common errors and fixes
 - ...
 ```
+
+- [E04-S002：已有落盘，还缺少可读取的契约](./E04-S002-result-references.md)

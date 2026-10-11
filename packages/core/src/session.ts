@@ -1,3 +1,4 @@
+import { ResultStore, type ResultStoreOptions } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ContextManager, type CompactionRuntime } from './context-manager.js'
 import { ContextBudget, type ContextOptions, type ContextRequest } from './context-budget.js'
@@ -14,6 +15,16 @@ export class Session {
   private context = new ContextManager()
   private budget?: ContextBudget
   private budgetKey = ''
+  private results: ResultStore
+
+  constructor(resultOptions?: ResultStoreOptions) {
+    this.results = new ResultStore(resultOptions)
+  }
+
+  getResultStore(cwd?: string): ResultStore {
+    if (cwd) this.results.setWorkspace(cwd)
+    return this.results
+  }
 
   getContextBudget(model: string, options: ContextOptions = {}): ContextBudget {
     const key = JSON.stringify([model, options])
@@ -62,12 +73,17 @@ export class Session {
 
   snapshot(): SessionSnapshot {
     this.assertIdle()
-    return { messages: this.getHistory(), context: this.context.snapshot() }
+    return {
+      messages: this.getHistory(),
+      context: this.context.snapshot(),
+      ...(this.results.snapshot() && { results: this.results.snapshot() }),
+    }
   }
 
   restore(value: unknown): void {
     this.assertIdle()
     const snapshot = validateSessionSnapshot(value)
+    this.results.restore(snapshot.results)
     this.context.restore(snapshot.context)
     this.messages = snapshot.messages
     this.budget = undefined
@@ -77,6 +93,7 @@ export class Session {
   /** Reject while running: reset is neither cancellation nor rollback. */
   reset(): void {
     this.assertIdle()
+    this.results.reset()
     this.context.reset()
     this.budget = undefined
     this.messages = []

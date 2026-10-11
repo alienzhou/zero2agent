@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi, type Mock } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
-import { readFile, rm } from 'node:fs/promises'
-import { dirname } from 'node:path'
+import { rm, mkdtemp } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { ResultStore } from '../result-store.js'
+import { join } from 'node:path'
 import { ContextBudget } from '../context-budget.js'
 import { ContextManager, type CompactionRuntime, type CompactionEvent } from '../context-manager.js'
 
@@ -246,6 +248,9 @@ describe('tiered context management', () => {
 
   it('shortens large tool bodies without splitting pairs or losing the original result', async () => {
     const { manager, runtime, summarize, events } = fixture()
+    const root = await mkdtemp(join(tmpdir(), 'context-results-'))
+    artifacts.push(root)
+    runtime.results = new ResultStore({ directory: root })
     const output = 'evidence\n'.repeat(3000)
     const messages: Message[] = [
       user('inspect'),
@@ -258,9 +263,10 @@ describe('tiered context management', () => {
     const request = await manager.prepare(messages, runtime)
     const blocks = request.messages[2].content as Anthropic.ToolResultBlockParam[]
     const result = String(blocks[0].content)
-    const path = result.match(/saved to (.+?)\. Read it/)![1]
-    artifacts.push(dirname(path))
-    expect(await readFile(path, 'utf8')).toBe(output)
+    const receipt = JSON.parse(result)
+    const page = JSON.parse(await runtime.results.read(receipt.reference))
+    expect(page.untrusted_text).toBe(output.slice(0, 4096))
+    expect(receipt.bytes).toBe(Buffer.byteLength(output))
     expect((messages[2].content as Anthropic.ToolResultBlockParam[])[0].content).toBe(output)
     expect(blocks[0].tool_use_id).toBe('read-1')
     expect(summarize).not.toHaveBeenCalled()
@@ -285,8 +291,11 @@ describe('tiered context management', () => {
     expect(request.messages).toEqual(messages)
   })
 
-  it('makes a long single-line result readable in bounded character slices', async () => {
+  it('makes a long single-line result readable in bounded byte pages without chunk copies', async () => {
     const { manager, runtime } = fixture()
+    const root = await mkdtemp(join(tmpdir(), 'context-results-'))
+    artifacts.push(root)
+    runtime.results = new ResultStore({ directory: root })
     const output = '𠮷single-line'.repeat(3000) + 'END-EVIDENCE'
     const messages: Message[] = [
       user('inspect'),
@@ -300,19 +309,19 @@ describe('tiered context management', () => {
     const receipt = String(
       (request.messages[2].content as Anthropic.ToolResultBlockParam[])[0].content
     )
-    const path = receipt.match(/Long lines: read (.+?\.chunks\.jsonl)/)![1]
-    artifacts.push(dirname(path))
-    const rows = (await readFile(path, 'utf8')).trim().split('\n')
-    const chunks = rows.map(row => JSON.parse(row) as { start_character: number; text: string })
-    expect(chunks.map(row => row.text).join('')).toBe(output)
-    expect(chunks.at(-1)?.text).toContain('END-EVIDENCE')
-    expect(rows.every(row => Buffer.byteLength(row) < 1024)).toBe(true)
-    const readback = await import('../tools/read-file.js')
-    const last = await readback.readFileTool.execute(
-      { path, start_line: rows.length, end_line: rows.length },
-      { cwd: dirname(path) }
-    )
-    expect(last).toContain('END-EVIDENCE')
+    const { reference } = JSON.parse(receipt)
+    let text = '',
+      offset = 0
+    for (;;) {
+      const page = JSON.parse(await runtime.results.read(reference, offset, 512))
+      text += page.untrusted_text
+      expect(Buffer.byteLength(page.untrusted_text)).toBeLessThanOrEqual(512)
+      if (page.eof) break
+      offset = page.next_offset
+    }
+    expect(text).toBe(output)
+    expect(text).toContain('END-EVIDENCE')
+    expect(runtime.results.snapshot()!.entries).toHaveLength(1)
   })
 
   it('cancels promptly while provider token counting is pending', async () => {

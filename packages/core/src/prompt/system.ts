@@ -44,7 +44,8 @@ export function buildToolPolicySection(): string {
     '- 每次工具调用都由宿主先判断权限；需要审批时，先发起工具调用，宿主才会询问用户。对话里的同意不能代替宿主审批',
     '- 工具被拒绝后不要自动重试该次请求。用户明确提出不同目标的新请求时，可以发起新的工具调用，仍由宿主按当前策略判断和审批',
     '- 切换执行目录用 terminal 的 workdir，不要写 cd（每次调用是新进程）',
-    '- terminal 超长输出会落盘到 /tmp，用 read_file 或 grep_search 回读保存路径',
+    '- 大工具结果落盘后可能返回 tool_result_reference；用 read_tool_result 按 reference 和字节范围回读，沿 next_offset 翻页。不要为了拿回输出而重跑原工具；缺失、过期或损坏时说明原因',
+    '- terminal 后台输出尚未封存时会给日志路径；read_file 或 grep_search 读取该路径仍需当前文件权限',
   ].join('\n')
 }
 

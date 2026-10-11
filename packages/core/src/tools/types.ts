@@ -1,3 +1,4 @@
+import type { ResultStore, ResultSource } from '../result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
 
 /**
@@ -17,6 +18,8 @@ export interface ToolExecutionMetadata {
   signal?: string | number
 }
 export interface ToolContext {
+  results?: ResultStore
+  resultSource?: ResultSource
   /** Native result metadata only; no command or terminal bytes. Notification, never control. */
   onResultMetadata?: (metadata: ToolExecutionMetadata) => void
   /** Cooperatively stop active work when the host cancels the turn. */
@@ -29,6 +32,8 @@ export interface ToolContext {
  * 工具接口定义
  */
 export interface Tool {
+  /** Host-owned paths for stored-result reads; resolved before permission evaluation. */
+  readPaths?: (input: Record<string, unknown>, ctx: ToolContext) => Promise<string[]>
   /** Explicit host contract: these inputs identify every file this tool can mutate. */
   checkpointPaths?: string[]
   /** Trusted host metadata; omitted tools require approval by default. */

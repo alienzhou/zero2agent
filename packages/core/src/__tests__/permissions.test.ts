@@ -241,7 +241,7 @@ describe('single approval lifecycle', () => {
       },
       p
     )
-    expect(t.execute).toHaveBeenCalledWith(input, ctx)
+    expect(t.execute).toHaveBeenCalledWith(input, expect.objectContaining(ctx))
     expect(results.map(r => r.tool_use_id)).toEqual(['a', 'b'])
   })
   it('pins call IDs, tool names and the entire batch before an asynchronous host reply', async () => {
@@ -260,7 +260,11 @@ describe('single approval lifecycle', () => {
     })
     const results = await executeToolCalls(content, [t], ctx, undefined, p)
     expect(results.map(result => result.tool_use_id)).toEqual(['original', 'second'])
-    expect(t.execute).toHaveBeenNthCalledWith(2, { message: 'second' }, ctx)
+    expect(t.execute).toHaveBeenNthCalledWith(
+      2,
+      { message: 'second' },
+      expect.objectContaining(ctx)
+    )
   })
   it('returned Error receipts are error tool results', async () => {
     const t = { ...tool('read'), execute: async () => 'Error: no file' }

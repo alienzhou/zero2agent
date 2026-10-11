@@ -1,0 +1,13 @@
+
+> zero2agent@0.0.0 site:build /Users/zhouhongxuan/program/works/zero2agent-e04-s002
+> node scripts/build-site.mjs
+
+Authored epic03-story002
+Authored epic03-story003
+Authored epic03-story004
+Authored epic03-story005
+Authored epic03-story006
+Authored epic04-story001
+Authored epic04-story002
+Course catalog: 16 chapters, 247 diagrams.
+Site check passed: 16 chapters, 247 diagrams; local dependencies complete.

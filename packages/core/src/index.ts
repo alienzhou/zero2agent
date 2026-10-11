@@ -21,6 +21,7 @@ export type { LLMConfig } from './llm/index.js'
 export {
   allTools,
   readFileTool,
+  readToolResultTool,
   listDirectoryTool,
   terminalTool,
   toAnthropicTool,
@@ -75,3 +76,11 @@ export { DiagnosticEmitter, diagnosticLabel, diagnosticNumber } from './diagnost
 export type { DiagnosticEvent, DiagnosticObserver, DiagnosticContext } from './diagnostics.js'
 
 export type { FileMutation, FileMutationHandler } from './file-mutations.js'
+
+export { ResultStore, ResultStoreError } from './result-store.js'
+export type {
+  ResultStoreOptions,
+  ResultSnapshot,
+  ResultEntry,
+  ResultSource,
+} from './result-store.js'

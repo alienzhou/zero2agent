@@ -1,0 +1,59 @@
+
+> zero2agent@0.0.0 lint /Users/zhouhongxuan/program/works/zero2agent-e04-s002
+> eslint packages e2e --ext .ts,.tsx
+
+
+/Users/zhouhongxuan/program/works/zero2agent-e04-s002/e2e/src/helpers/terminal-live.ts
+  36:29  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+
+/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core/src/tools/terminal.ts
+  235:54  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+  343:23  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+
+/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/tui/src/cli.ts
+   32:1   warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+   96:1   warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  153:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  157:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  164:1   warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  287:12  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  293:38  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  295:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  297:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  306:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  309:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  310:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  328:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  338:12  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  408:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  420:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  421:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  422:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  423:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  424:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  425:16  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  426:3   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  457:21  warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  471:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  484:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  486:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  488:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  493:22  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  496:13  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  497:13  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  505:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  506:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  509:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  511:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  514:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  517:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  526:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  539:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+/Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/tui/src/setup-terminal-runtime.ts
+  48:62  warning  Missing return type on function                                                    @typescript-eslint/explicit-function-return-type
+  70:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  73:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+✖ 44 problems (0 errors, 44 warnings)
+

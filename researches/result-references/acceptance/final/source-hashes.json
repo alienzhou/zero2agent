@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-10-11T08:27:16.761140+00:00",
+  "implementationBase": "c2f8f5d",
+  "note": "Final source includes the subsequent prompt update and direct-tool source-identity guard. Full suite and targeted evidence record their actual runs.",
+  "node": "v22.15.1",
+  "platform": "darwin",
+  "files": {
+    "e2e/src/helpers/session-test-setup.ts": "9a1ef18b584dd9df2cf15c76cc853af6ac07f313bcbe7de7caa34d817c49c1d4",
+    "e2e/src/result-references-live.test.ts": "2612bd61ba9a05beaadcce414354c579e1ea8a9baa71b20a19a5b0bb7991592e",
+    "e2e/src/result-references.test.ts": "9a5992b3c428878bd975bf2c81f465e3f3812c045353fd11add185080b040fe3",
+    "e2e/src/terminal-contract.test.ts": "f22ba525cf0825791333ae1657e4326c6e6258ad1ecd00c995075bb9937156fd",
+    "packages/core/src/__tests__/context-manager.test.ts": "828e267ac298a629a3bf446d169c7c4cc2987a9cab25da5f45222c4dfc57b17b",
+    "packages/core/src/__tests__/permissions.test.ts": "66d78443859803f41c72746892f1546ee9f496adb2b1669b25c5c5deec59a8b3",
+    "packages/core/src/__tests__/result-store.test.ts": "38ce2c50571a11e539b5d68b2007f7d89789ac84839f9d2dda0154f03ce9651b",
+    "packages/core/src/__tests__/session.test.ts": "a64c440591120a1c188723ad1c90978675bd50cf2dd5bc9b3287479885dd3127",
+    "packages/core/src/agent.ts": "dc48dc7cef1f70a36a1bffb16882b2959c626eb8fee2cc2a68fe0f051702505f",
+    "packages/core/src/context-manager.ts": "6e1acf85c13a3e6c20a5a5b8ea86dd2ebc432385af5623972fe15eaf0aad2526",
+    "packages/core/src/index.ts": "cb11a984f4430da6edd39ac907c0ee24da59dd3af968f85ad90cdee9c0e8c903",
+    "packages/core/src/loop.ts": "70349ddfffb1361eeb29a656656c1cf8f6445aa78dea2029d5dd895e3c02db7a",
+    "packages/core/src/prompt/system.ts": "f1cc6845839b7a0aaa2ee1dfb902bc28dba18be3ed4ed8b7be989d8a1ffb3463",
+    "packages/core/src/result-store.ts": "a674ce80a5159cb35ef1e3839236eb35b23e0edafe53799f74b18cff8316c655",
+    "packages/core/src/session-snapshot.ts": "63b9a245d8e32ce9d35d3b90101457424cac670f01e1434a38b0467d893091fd",
+    "packages/core/src/session.ts": "5e20cc2804ce334dadfb21098e3bc3f75588f24e375f7da22398b0cab12c563a",
+    "packages/core/src/tools/__tests__/terminal-acceptance.test.ts": "3b9b3fd42ca01456771b3b004798c5f694544c273715a938f966404c32ab5d8c",
+    "packages/core/src/tools/__tests__/terminal-interactive.test.ts": "6e9d2a824a2eaa7be4518095bf7f4d5b92583a324ff7e5bb72b9f0d5a370b32c",
+    "packages/core/src/tools/__tests__/terminal-p0-evidence.test.ts": "711e30ebaac3d8f02b486e87b65d45fabc7a9ab68a23a2754defcee80393ebd0",
+    "packages/core/src/tools/index.ts": "25fac60dc2bbe7eb163a1bdc8a126d21aadcfdbfde2c756df7e192725cb9d8fb",
+    "packages/core/src/tools/read-tool-result.ts": "49e8c6e2c5e84d8d8eec4b7d90bbf81bfedc128c6b2c1bb4c14e5d39c753cce7",
+    "packages/core/src/tools/terminal.ts": "03a6e2035a569821becaff6d60e71ab930b4fd672fa8a7440cb6b5dba15f5814",
+    "packages/core/src/tools/types.ts": "758e9f73d1e26b9d15efd2d711ad4557ac54081f57eecc260904adc867fcf2fd",
+    "packages/tui/src/cli.ts": "d032cf008c16d4d9f7b34f453bf5ef959f2f69a0555b50656b01ef9743cc6eef"
+  }
+}

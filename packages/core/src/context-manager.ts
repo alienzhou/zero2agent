@@ -1,9 +1,8 @@
 import type { DiagnosticEmitter } from './diagnostics.js'
 import type Anthropic from '@anthropic-ai/sdk'
-import { mkdtemp, writeFile } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { randomUUID } from 'node:crypto'
+import { resolvePhysicalPath } from './tools/path-guard.js'
+import { ResultStore } from './result-store.js'
+import type { Tool } from './tools/types.js'
 import { ContextBudget, ContextBudgetError, type ContextRequest } from './context-budget.js'
 import type { ContextSummarizer } from './context-summary.js'
 import type { SessionSnapshot } from './session-snapshot.js'
@@ -19,6 +18,9 @@ export interface CompactionEvent {
 }
 
 export interface CompactionRuntime {
+  results?: ResultStore
+  tools?: Tool[]
+  cwd?: string
   executor?: RequestExecutor
   diagnostics?: DiagnosticEmitter
   budget: ContextBudget
@@ -70,7 +72,7 @@ export class ContextManager {
   private job?: CompactionJob
   private failedThrough = -1
   private replacements = new Map<number, Message>()
-  private artifactDirectory?: string
+  private fallbackResults = new ResultStore()
 
   snapshot(): SessionSnapshot['context'] {
     return { through: this.through, summary: this.summary }
@@ -90,7 +92,7 @@ export class ContextManager {
     this.summary = ''
     this.failedThrough = -1
     this.replacements.clear()
-    this.artifactDirectory = undefined
+    this.fallbackResults.reset()
   }
 
   cancel(): void {
@@ -380,32 +382,35 @@ export class ContextManager {
           Buffer.byteLength(block.content) <= limit
         )
           continue
-        const directory =
-          this.artifactDirectory ?? (await mkdtemp(join(tmpdir(), 'zero2agent-context-')))
-        this.assertCurrent(epoch)
-        this.artifactDirectory = directory
-        const path = join(directory, `${randomUUID()}.txt`)
-        await writeFile(path, block.content, { flag: 'wx', mode: 0o600 })
-        this.assertCurrent(epoch)
-        let readHint = 'Read it in line ranges'
-        if (block.content.split('\n').some(line => Buffer.byteLength(line) > limit / 2)) {
-          const points = Array.from(block.content)
-          const chunks: string[] = []
-          for (let offset = 0; offset < points.length; offset += 128) {
-            chunks.push(
-              JSON.stringify({
-                start_character: offset,
-                text: points.slice(offset, offset + 128).join(''),
+        const store = runtime.results ?? this.fallbackResults
+        if (store.isReceipt(block.content)) continue
+        const calls = messages
+          .slice(0, i)
+          .flatMap(m =>
+            Array.isArray(m.content) ? m.content.filter(b => b.type === 'tool_use') : []
+          )
+        const call = calls.reverse().find(c => c.id === block.tool_use_id)
+        if (call?.name === 'read_tool_result') continue
+        const tool = runtime.tools?.find(t => t.name === call?.name)
+        const cwd = runtime.cwd ?? process.cwd()
+        store.setWorkspace(cwd)
+        const input = (call?.input ?? {}) as Record<string, unknown>
+        const paths =
+          tool?.permission?.effect === 'read'
+            ? (tool.permission.paths ?? []).flatMap(key => {
+                const value = input[key] ?? '.'
+                return (Array.isArray(value) ? value : [value])
+                  .filter((p): p is string => typeof p === 'string')
+                  .map(p => resolvePhysicalPath(p, cwd))
               })
-            )
-          }
-          const chunkPath = `${path}.chunks.jsonl`
-          await writeFile(chunkPath, chunks.join('\n') + '\n', { flag: 'wx', mode: 0o600 })
-          this.assertCurrent(epoch)
-          readHint = `Long lines: read ${chunkPath} one line at a time; each line contains a JSON-escaped character slice`
-        }
-        const preview = [...block.content].slice(0, 120).join('')
-        block.content = `[Harness: tool output shortened; full output saved to ${path}. ${readHint}; do not re-run the tool.]\n${preview}`
+            : []
+        const entry = await store.save(block.content, {
+          toolName: call?.name ?? 'historical_tool',
+          toolCallId: block.tool_use_id,
+          paths: [resolvePhysicalPath(cwd), ...paths],
+        })
+        this.assertCurrent(epoch)
+        block.content = store.receipt(entry)
         replaced = true
       }
       if (replaced) {

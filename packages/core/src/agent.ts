@@ -1,3 +1,4 @@
+import type { ResultStoreOptions } from './result-store.js'
 import type { FileMutationHandler } from './file-mutations.js'
 /**
  * Agent 类 - 封装 ReACT 循环的简化入口
@@ -22,6 +23,7 @@ import { RequestExecutor } from './request-executor.js'
 import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  results?: ResultStoreOptions
   limits?: RunLimits
   fileMutations?: FileMutationHandler
   diagnostics?: DiagnosticObserver
@@ -40,11 +42,12 @@ export interface AgentOptions {
  */
 export class Agent {
   private options: AgentOptions
-  private session = new Session()
+  private session: Session
   private permissions: PermissionController
   private active?: AbortController
 
   constructor(options: AgentOptions = {}) {
+    this.session = new Session(options.results)
     this.permissions = new PermissionController(options.permissions)
     this.options = {
       ...options,

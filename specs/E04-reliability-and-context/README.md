@@ -6,8 +6,8 @@
 
 | Story | 主题 | 状态 |
 | --- | --- | --- |
-| [E04-S001](./S001-failure-recovery/README.md) | 失败恢复与运行预算 | 实现、课程与验收可审阅；未合入 main |
-| E04-S002 | 大工具结果按需读取 | Planned |
+| [E04-S001](./S001-failure-recovery/README.md) | 失败恢复与运行预算 | 已通过 PR #23 合入 main |
+| [E04-S002](./S002-result-references/README.md) | 大工具结果按需读取 | 实现、跟练、18 页课程与验收已完成；[PR #24](https://github.com/alienzhou/zero2agent/pull/24) |
 | E04-S003 | 摘要质量与事实保留 | Planned |
 | E04-S004 | 中断后的安全续跑 | Planned |
 

@@ -1,0 +1,27 @@
+
+> zero2agent@0.0.0 test /Users/zhouhongxuan/program/works/zero2agent-e04-s002
+> pnpm -r test
+
+Scope: 5 of 6 workspace projects
+packages/cdp-debug test$ vitest run
+packages/cdp-debug test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/cdp-debug
+packages/cdp-debug test:  Test Files  1 passed (1)
+packages/cdp-debug test:       Tests  1 passed (1)
+packages/cdp-debug test:    Start at  16:23:43
+packages/cdp-debug test:    Duration  98ms (transform 13ms, setup 0ms, import 23ms, tests 6ms, environment 0ms)
+packages/cdp-debug test: Done
+packages/core test$ vitest run
+packages/core test: ◇ injected env (2) from ../../.env.local // tip: ⌘ override existing { override: true }
+packages/core test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+packages/core test:  Test Files  33 passed (33)
+packages/core test:       Tests  464 passed (464)
+packages/core test:    Start at  16:23:43
+packages/core test:    Duration  44.71s (transform 1.17s, setup 0ms, import 2.58s, tests 102.31s, environment 2ms)
+packages/core test: Done
+e2e test$ vitest run
+e2e test:  RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/e2e
+e2e test:  Test Files  18 passed | 15 skipped (33)
+e2e test:       Tests  178 passed | 58 skipped (236)
+e2e test:    Start at  16:24:28
+e2e test:    Duration  82.76s (transform 368ms, setup 0ms, import 1.61s, tests 78.94s, environment 1ms)
+e2e test: Done

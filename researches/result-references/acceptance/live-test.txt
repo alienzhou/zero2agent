@@ -1,0 +1,9 @@
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/e2e
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:03:06
+   Duration  6.47s (transform 136ms, setup 0ms, import 247ms, tests 6.13s, environment 0ms)
+
