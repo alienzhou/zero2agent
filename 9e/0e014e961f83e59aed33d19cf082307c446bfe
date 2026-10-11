@@ -1,0 +1,29 @@
+researches/summary-quality/evaluation/completion-review-plan.test.mjs
+  s_58249cd92a0ae1::t_dc333a465fc2f6 1-32,34-57,59-74,87
+  s_58249cd92a0ae1::t_c9e7752df472a6 33,58,75-86
+researches/summary-quality/evaluation/completion-review-plan.mjs
+  s_58249cd92a0ae1::t_c9e7752df472a6 25,47-49,53,57-62,68-72,82
+  s_58249cd92a0ae1::t_dc333a465fc2f6 1-24,26-46,50-52,54-56,63-67,73-81,83
+researches/summary-quality/evaluation/completion-review-probe.mjs
+  s_58249cd92a0ae1::t_fa9b05f9bcc065 1-127
+researches/summary-quality/evaluation/completion-review-protocol.md
+  s_58249cd92a0ae1::t_fa9b05f9bcc065 1-25
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_d32cd071313204 53-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e0e014e961f83e59aed33d19cf082307c446bfe",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
