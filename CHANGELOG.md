@@ -47,6 +47,18 @@ git checkout main
 
 ---
 
+## E04-S002：大工具结果按需读取（2026-10-11）
+
+[课程](./specs/E04-reliability-and-context/S002-result-references/README.md) · [跟练](./specs/E04-reliability-and-context/S002-result-references/follow-along.md) · [复盘](./retros/E04-S002-result-references.md) · [验收](./specs/E04-reliability-and-context/S002-result-references/details/03-verification-checklist.md)
+
+超过 20 KiB 的新工具结果保存为带来源、SHA-256 和失效时间的引用；read_tool_result 每页最多读取 4096 字节。旧历史压缩复用同一结果存储，终端已结算输出复用流式文件封存。当前权限重新检查，单份/会话容量包括未封存输出预留；缺失、改变、过期和存储失败明确报告。
+
+真实 CLI 新进程恢复、权限拒绝与删除正文验证原工具不重放；真实模型从约 300 KB 合成日志中回读未知随机证据。18 页课程用日志案例、字节尺、回执拆解和预测实验讲解，正文与模型发送视图区分清楚。
+
+状态：实现、课程和验收可审阅，尚未合入 main、未部署网站；固定版本为 `E04-S002-result-references`，以实际远端 Tag 为准。
+
+---
+
 ## E04-S001：失败恢复与运行预算（2026-10-08）
 
 [课程](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) · [跟练](./specs/E04-reliability-and-context/S001-failure-recovery/follow-along.md) · [复盘](./retros/E04-S001-failure-recovery.md) · [验收](./specs/E04-reliability-and-context/S001-failure-recovery/details/03-verification-checklist.md)
@@ -55,7 +67,7 @@ git checkout main
 
 单次、管道、plain和TUI提供统一配置、草稿与重试显示，诊断记录关联逻辑请求和每次attempt。18页课程以故障时间线、日志拆解、回执单和预测实验讲解。真实服务故障注入、生产CLI/PTY、文件效果及原有日志/回退回归分别取证，范围见验收页。
 
-状态：可审阅分支，未合入main、未部署网站。课程固定版本为 `E04-S001-failure-recovery`，以实际远端Tag为准；人工审查与合并是后续发布步骤。
+状态：2026-10-11 已由 PR #23 合入 main（772ab67），网站未部署。`E04-S001-failure-recovery` 是初次课程固定版本；后续两项 P2 修复和回归已包含在 main，原 Tag 未移动。
 
 ---
 

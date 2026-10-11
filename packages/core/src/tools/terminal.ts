@@ -685,6 +685,10 @@ export const terminalTool: Tool = {
       }
     }
 
+    if (ctx.results && !ctx.resultSource) {
+      return 'Error: terminal result storage requires host-provided source identity; command was not executed.'
+    }
+
     // 先触发 env 采集，再消费失败提示（P1：首次回执即告知）
     buildSpawnEnv()
     const completionNotices = drainCompletionNotices()

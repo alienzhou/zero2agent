@@ -75,4 +75,4 @@ CLI 参数覆盖环境变量。Core 的 AgentOptions.limits 使用同一校验�
 1. [重试一次请求，不等于业务只发生一次](./deep-dive/01-retry-and-effects.md)：从缺失回复推导恢复范围，区别请求身份、幂等性和用量证据。
 2. [时间预算到了，为什么还要等工具结束](./deep-dive/02-deadline-and-settlement.md)：解释取消契约、晚到写入与输入所有权，以及硬隔离还需要的协议。
 
-上一篇：[E03-S006 文件 Checkpoint](../../E03-product-foundations/S006-file-checkpoints/README.md) | 下一篇：E04-S002 大工具结果按需读取（规划）
+上一篇：[E03-S006 文件 Checkpoint](../../E03-product-foundations/S006-file-checkpoints/README.md) | 下一篇：[E04-S002 大工具结果按需读取](../S002-result-references/README.md)

@@ -112,8 +112,10 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
-| [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001 可审阅，后续三课规划中 |
+| [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001 已合入；[S002 实现与课程可审阅](./specs/E04-reliability-and-context/S002-result-references/README.md) |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
+
+最新课程：[E04-S002：大工具结果按需读取](./specs/E04-reliability-and-context/S002-result-references/README.md)，从[重启回读实验](./specs/E04-reliability-and-context/S002-result-references/follow-along.md)开始。
 
 ### 你可以这样进入
 
@@ -161,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E03-S006：文件 Checkpoint 与回退](./specs/E03-product-foundations/S006-file-checkpoints/README.md)为受控文件工具增加分块去重、压缩、差异预览、冲突检查与可恢复回退，不创建额外 Git 仓库。提供 [18 页图解课程（含封面）](./docs/site.md)、[离线跟练](./specs/E03-product-foundations/S006-file-checkpoints/follow-along.md)和[空间实验](./researches/file-checkpoints/README.md)。本课已通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入 main（`8a0d0e8`），课程网站尚未部署；分层结果与审阅范围见[验收清单](./specs/E03-product-foundations/S006-file-checkpoints/details/03-verification-checklist.md)。S005 已通过 [PR #21](https://github.com/alienzhou/zero2agent/pull/21) 合入 main。
+**最新更新**：[E04-S002：大工具结果按需读取](./specs/E04-reliability-and-context/S002-result-references/README.md)已完成引用存储、有限回读、权限与本机恢复验收，提供含封面的 18 页图解和[跟练](./specs/E04-reliability-and-context/S002-result-references/follow-along.md)。当前分支可审阅，尚未合入 main、未部署网站；S001 已由 PR #23 合入。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -179,6 +181,8 @@ zero2agent/
 | [E03-S004](./specs/E03-product-foundations/S004-session-persistence/README.md) | 自动保存、会话浏览与恢复 | Done，已合入 main |
 | [E03-S005](./specs/E03-product-foundations/S005-runtime-logging/README.md) | 关联运行日志、只读追查与诊断边界 | Done，已合入 main |
 | [E03-S006](./specs/E03-product-foundations/S006-file-checkpoints/README.md) | 受控文件分块去重、差异与可恢复回退 | Done，已合入 main |
+| [E04-S001](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) | 失败恢复与运行预算 | 已合入 main |
+| [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | 大工具结果按需读取 | 实现、课程与验收可审阅 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

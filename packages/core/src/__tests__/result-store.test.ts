@@ -411,4 +411,13 @@ describe('bounded result bodies', () => {
     const pending = await fresh.store.spoolPath()
     await fresh.store.releaseSpool(pending)
   })
+  it('refuses direct terminal storage without source identity before running the command', async () => {
+    const { store, dir } = await fixture()
+    const result = await terminalTool.execute(
+      { command: 'touch should-not-exist' },
+      { cwd: dir, results: store }
+    )
+    expect(result).toContain('source identity; command was not executed')
+    await expect(fs.stat(path.join(dir, 'should-not-exist'))).rejects.toThrow()
+  })
 })

@@ -1,0 +1,182 @@
+{
+  "title": "Zero2Agent · E04-S002 大工具结果按需读取",
+  "date": "2026-10-11",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "v1-result-reference",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "保存大结果，按需取证",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S02",
+        "T02"
+      ]
+    },
+    {
+      "file": "02-needle.html",
+      "title": "输出很长，问题却很具体",
+      "number": 2,
+      "sources": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "03-reuse.html",
+      "title": "已有落盘，这一课补读取契约",
+      "number": 3,
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "file": "04-receipt.html",
+      "title": "拿到一个引用，究竟知道了什么？",
+      "number": 4,
+      "sources": [
+        "S01"
+      ]
+    },
+    {
+      "file": "05-flow.html",
+      "title": "保存成功之后，才把引用交给模型",
+      "number": 5,
+      "sources": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "06-sizes.html",
+      "title": "300 KB 的输出，不用每轮都重新发送",
+      "number": 6,
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "file": "07-utf8.html",
+      "title": "一个“𠮷”字，占用四个 UTF-8 字节",
+      "number": 7,
+      "sources": [
+        "S01",
+        "T03"
+      ]
+    },
+    {
+      "file": "08-tail.html",
+      "title": "已知证据在末尾，直接算最后一页",
+      "number": 8,
+      "sources": [
+        "S01",
+        "S04"
+      ]
+    },
+    {
+      "file": "09-long-line.html",
+      "title": "一整行再长，也只保留一页在内存里",
+      "number": 9,
+      "sources": [
+        "S01",
+        "S03",
+        "T03"
+      ]
+    },
+    {
+      "file": "10-permission.html",
+      "title": "过去读到过，不代表现在永远能读",
+      "number": 10,
+      "sources": [
+        "S02",
+        "S04",
+        "T03"
+      ]
+    },
+    {
+      "file": "11-dedup.html",
+      "title": "同样的字节，不必保存两份",
+      "number": 11,
+      "sources": [
+        "S01",
+        "S02",
+        "T03"
+      ]
+    },
+    {
+      "file": "12-lifecycle.html",
+      "title": "过期、丢失、改变，是三个不同的事实",
+      "number": 12,
+      "sources": [
+        "S01"
+      ]
+    },
+    {
+      "file": "13-restart.html",
+      "title": "恢复会话，需要两部分数据",
+      "number": 13,
+      "sources": [
+        "S01",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "14-failure.html",
+      "title": "工具执行成功了，磁盘却存不下输出",
+      "number": 14,
+      "sources": [
+        "S01",
+        "S02",
+        "T03"
+      ]
+    },
+    {
+      "file": "15-terminal.html",
+      "title": "文件还在增长，不能说它已经完整封存",
+      "number": 15,
+      "sources": [
+        "S02",
+        "S05"
+      ]
+    },
+    {
+      "file": "16-capacity.html",
+      "title": "保存大结果，也要有容量上限",
+      "number": 16,
+      "sources": [
+        "S01",
+        "S02",
+        "T03"
+      ]
+    },
+    {
+      "file": "17-evidence.html",
+      "title": "正文真的省下了，证据也真的读到了",
+      "number": 17,
+      "sources": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "18-practice.html",
+      "title": "先预测，再运行这三个实验",
+      "number": 18,
+      "sources": [
+        "T01",
+        "T02",
+        "D01"
+      ]
+    }
+  ]
+}

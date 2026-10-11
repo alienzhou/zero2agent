@@ -1,0 +1,10 @@
+◇ injected env (2) from ../../.env.local // tip: ⌘ override existing { override: true }
+
+ RUN  v4.1.0 /Users/zhouhongxuan/program/works/zero2agent-e04-s002/packages/core
+
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  16:23:39
+   Duration  1.02s (transform 124ms, setup 0ms, import 289ms, tests 659ms, environment 0ms)
+

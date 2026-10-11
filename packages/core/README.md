@@ -68,3 +68,9 @@ pnpm test:e2e:live
 ```
 
 配置方式见 [`e2e/README.md`](../../e2e/README.md)。
+
+## 大结果引用
+
+默认工具新增 `read_tool_result`。Agent/Session 为大于 20 KiB 的工具结果提供本机有界存储与版本化引用；终端在 800 行或 20 KiB 后复用原流式输出封存。回读按 UTF-8 字节范围分页，最多 4096 字节，重新检查来源权限与 SHA-256，消耗当前工具预算。
+
+可通过 `AgentOptions.results` 设置私有 `directory`，或降低 `maxResultBytes`（默认 16 MiB）、`maxTotalBytes`（64 MiB）、`maxResults`（128）、`ttlMs`（7 天）。快照不含正文；新进程需要原工作区和结果目录。`RESULT_MISSING`、`RESULT_EXPIRED`、`RESULT_CHANGED` 都不授权重跑源工具。生命周期和后台未封存范围见 [S002 课程](../../specs/E04-reliability-and-context/S002-result-references/README.md)。
