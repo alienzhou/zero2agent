@@ -1,0 +1,38 @@
+packages/tui/src/runtime-state.ts
+  s_58249cd92a0ae1::t_ee031bf1abd0aa 10-11,78-87,122
+  s_58249cd92a0ae1::t_3ed7b2072e0d8f 88-91,124,127-128
+e2e/src/recovery-projection.test.ts
+  s_58249cd92a0ae1::t_3da88562049b79 1-95
+  s_58249cd92a0ae1::t_17353d72cccaec 96-114
+.vibecoding/2026-10-08/e04-s001-failure-recovery/review-fixes-2026-10-11.md
+  s_58249cd92a0ae1::t_fa95692f97e3ff 1-32
+.vibecoding/2026-10-08/e04-s001-failure-recovery/dialogue.md
+  s_58249cd92a0ae1::t_fa95692f97e3ff 16-17
+packages/core/src/__tests__/failure-recovery.test.ts
+  s_58249cd92a0ae1::t_ee031bf1abd0aa 8
+  s_58249cd92a0ae1::t_3da88562049b79 478-506
+e2e/src/runtime-tui-state.test.ts
+  s_58249cd92a0ae1::t_ee031bf1abd0aa 92-114
+  s_58249cd92a0ae1::t_1c37e53e0ae2f7 115-127
+packages/core/src/runtime.ts
+  s_58249cd92a0ae1::t_ee031bf1abd0aa 7
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_ee031bf1abd0aa 323-331
+  s_58249cd92a0ae1::t_bef5ab0ff4696c 332-336,468
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a494fb46e01e4962e9f832d2a863029f8ae5d9ed",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
