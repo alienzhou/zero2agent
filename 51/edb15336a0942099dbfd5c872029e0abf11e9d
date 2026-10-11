@@ -1,0 +1,23 @@
+.vibecoding/2026-10-11/e04-s003-summary-quality/author-review.md
+  s_58249cd92a0ae1::t_9dfa9b7de9cb85 104-107
+packages/core/src/__tests__/artifact-completion.test.ts
+  s_58249cd92a0ae1::t_1c47d920bf70d1 8,413-420,436-439,445-449
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_0e920f14990fc4 144,160-162,305-308,313-320
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "51edb15336a0942099dbfd5c872029e0abf11e9d",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
