@@ -1,0 +1,27 @@
+specs/E04-reliability-and-context/S001-failure-recovery/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_2735e431e55050 47-52
+.vibecoding/2026-10-08/e04-s001-failure-recovery/completion-audit.md
+  s_58249cd92a0ae1::t_2735e431e55050 34-35
+.vibecoding/2026-10-08/e04-s001-failure-recovery/review-fixes-2026-10-11.md
+  s_58249cd92a0ae1::t_2735e431e55050 32-34
+researches/failure-recovery/acceptance/review-fixes-source-hashes-2026-10-11.json
+  s_58249cd92a0ae1::t_993f8d6f7dd454 1-48
+researches/failure-recovery/acceptance/review-fixes-tests-2026-10-11.txt
+  s_58249cd92a0ae1::t_dd12cb08cd1b54 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fa1e5c98a23d221b15861db81c5f02d7bf838e49",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
