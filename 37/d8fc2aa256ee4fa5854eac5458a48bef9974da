@@ -1,0 +1,23 @@
+.discuss/2026-10-11/e04-s003-summary-quality/outline.md
+  s_58249cd92a0ae1::t_7e24c6c0338ed3 3
+.vibecoding/2026-10-11/e04-s003-summary-quality/completion-audit.md
+  s_58249cd92a0ae1::t_b5ac8cb4bfb82c 13-14,21
+.vibecoding/2026-10-11/e04-s003-summary-quality/dialogue.md
+  s_58249cd92a0ae1::t_b1d666fed59f9c 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "37d8fc2aa256ee4fa5854eac5458a48bef9974da",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
