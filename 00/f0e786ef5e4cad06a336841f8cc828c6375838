@@ -1,0 +1,48 @@
+packages/core/src/runtime.ts
+  s_58249cd92a0ae1::t_6be7a3b8d743ff 26
+e2e/src/run-log.test.ts
+  s_58249cd92a0ae1::t_32db56a000c4a0 26-49
+packages/core/src/result-read-recovery.ts
+  s_58249cd92a0ae1::t_43e982a1a91ffa 1-56
+  s_58249cd92a0ae1::t_8dfe1e88a8b33d 57-58
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_43e982a1a91ffa 9-10,115-116,322,556,561-562,569,571,673-674,734,748-749
+  s_58249cd92a0ae1::t_6be7a3b8d743ff 280-285,321,323-324,735-747
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_43e982a1a91ffa 82
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_6be7a3b8d743ff 84
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_6be7a3b8d743ff 43,268-269
+researches/summary-quality/evaluation/read-recovery-v1/protocol.md
+  s_58249cd92a0ae1::t_a977bd427133b7 1-13
+packages/core/src/tools/read-tool-result.ts
+  s_58249cd92a0ae1::t_43e982a1a91ffa 2-12,23,34-35,39-40,58-67,70
+  s_58249cd92a0ae1::t_15621094b48399 68-69
+.vibecoding/2026-10-13/e04-s003-read-recovery/dialogue.md
+  s_58249cd92a0ae1::t_2ebaa04122134c 1-11
+packages/core/src/__tests__/artifact-completion.test.ts
+  s_58249cd92a0ae1::t_9458b5c3c02409 2-11,17-18,555-803
+researches/summary-quality/evaluation/analyze-read-recovery.mjs
+  s_58249cd92a0ae1::t_64269ae3f55a6e 1-72
+researches/summary-quality/evaluation/run-read-recovery.mjs
+  s_58249cd92a0ae1::t_10d12eca153f57 1-307
+researches/summary-quality/evaluation/verify-read-recovery.mjs
+  s_58249cd92a0ae1::t_14d8af63a34d49 1-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "00f0e786ef5e4cad06a336841f8cc828c6375838",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
