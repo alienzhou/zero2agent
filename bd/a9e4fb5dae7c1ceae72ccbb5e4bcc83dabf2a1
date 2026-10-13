@@ -1,0 +1,25 @@
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_b86f69f4f0efd9 32
+.vibecoding/2026-10-13/e04-s003-read-recovery/dialogue.md
+  s_58249cd92a0ae1::t_e8e1691ab1bb6b 14-15
+researches/summary-quality/read-recovery-demo.mjs
+  s_58249cd92a0ae1::t_173607a49c6a58 1-47
+specs/E04-reliability-and-context/S003-summary-quality/follow-along.md
+  s_58249cd92a0ae1::t_8444929fc390b2 135-144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bda9e4fb5dae7c1ceae72ccbb5e4bcc83dabf2a1",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
