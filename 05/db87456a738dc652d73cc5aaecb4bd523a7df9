@@ -1,0 +1,45 @@
+.authoring/site/chapters/epic04-story003/author.cjs
+  s_58249cd92a0ae1::t_62fa97097fd7dc 131-136
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_67f2da7996d6f1 56-57
+.authoring/site/chapters/epic04-story003/sources.md
+  s_58249cd92a0ae1::t_b0665d66abfcbb 31-33
+.authoring/site/chapters/epic04-story003/verification/checks-before-read-recovery.json
+  s_58249cd92a0ae1::t_6681d8146d35db 1-110
+.authoring/site/chapters/epic04-story003/verification/checks-read-recovery-preview-unavailable.json
+  s_58249cd92a0ae1::t_0cdb1f4f2be4c9 1-7
+.authoring/site/chapters/epic04-story003/verification/checks.json
+  s_58249cd92a0ae1::t_98151c24c62797 2-3,106,108
+.vibecoding/2026-10-13/e04-s003-read-recovery/dialogue.md
+  s_58249cd92a0ae1::t_296abcae02613a 12-13
+researches/summary-quality/evaluation/analyze-read-recovery.mjs
+  s_58249cd92a0ae1::t_94887b62356340 51,55
+researches/summary-quality/evaluation/verify-read-recovery.mjs
+  s_58249cd92a0ae1::t_1b54280cbef2ed 56
+site/chapters/epic04-story003/18-next.html
+  s_58249cd92a0ae1::t_c62548a564fa4e 1
+site/chapters/epic04-story003/pages.json
+  s_58249cd92a0ae1::t_ad58abb8d5917a 181,184-187
+site/course.json
+  s_58249cd92a0ae1::t_2d8d08e9bb867e 6733-6749
+specs/E04-reliability-and-context/S003-summary-quality/details/01-technical-design.md
+  s_58249cd92a0ae1::t_0c9f6bbdf0bbad 138-148
+specs/E04-reliability-and-context/S003-summary-quality/follow-along.md
+  s_58249cd92a0ae1::t_122147d4aee63b 124-134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "05db87456a738dc652d73cc5aaecb4bd523a7df9",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
