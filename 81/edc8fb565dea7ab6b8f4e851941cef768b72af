@@ -1,0 +1,167 @@
+packages/core/src/tools/read-tool-result.ts
+  s_58249cd92a0ae1::t_43e982a1a91ffa 37
+  s_58249cd92a0ae1::t_436d5fa0a8b56a 2-12,23,29,35-36,44,51-68
+  s_58249cd92a0ae1::t_cfd1d0eeaef938 34,38
+e2e/src/compact-contract.test.ts
+  s_58249cd92a0ae1::t_890cbe53fa8705 169-173,241-246,262,283-286,317
+e2e/src/history-references.test.ts
+  s_58249cd92a0ae1::t_9674e6ed272308 1-170
+e2e/src/human-terminal-session-e2e.test.ts
+  s_58249cd92a0ae1::t_f4cf538c785d36 239-241,384
+e2e/src/run-log.test.ts
+  s_58249cd92a0ae1::t_2a1e37780620df 6,26-176
+e2e/src/runtime-logging.test.ts
+  s_58249cd92a0ae1::t_11c514e79b5251 76-84,94-102,130-131
+e2e/src/terminal-contract.test.ts
+  s_58249cd92a0ae1::t_9fc8130e9448f2 22,24
+packages/core/README.md
+  s_58249cd92a0ae1::t_ee1c21b38e5903 7,38,42,74,77-94
+packages/core/src/__tests__/artifact-completion.test.ts
+  s_58249cd92a0ae1::t_1322f9a39f226d 1-803
+packages/core/src/__tests__/compact-loop.test.ts
+  s_58249cd92a0ae1::t_e0b240e86bf56d 76,234,346
+packages/core/src/__tests__/context-manager.test.ts
+  s_58249cd92a0ae1::t_54ca6ba4d1fa08 13-16,99-100,122,365-367
+packages/core/src/__tests__/context-summary.test.ts
+  s_58249cd92a0ae1::t_29d4c572d908a5 5-6,139,151,154-241,257-315,348,373-378
+packages/core/src/__tests__/diagnostics.test.ts
+  s_58249cd92a0ae1::t_ebd31e57f086cc 37-42,53,91-110,112-144,223-225,257,286-291
+packages/core/src/__tests__/history-evidence.test.ts
+  s_58249cd92a0ae1::t_5272dbba5d6a55 1-490
+packages/core/src/__tests__/result-store.test.ts
+  s_58249cd92a0ae1::t_122352e0da5744 79-184
+packages/core/src/__tests__/session-snapshot.test.ts
+  s_58249cd92a0ae1::t_5d458bab45affe 23-27
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_226f36b1385614 95-99,113-117,283-284,343-344
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_6889d77028506e 1,64-80,84
+packages/core/src/artifact-completion.ts
+  s_58249cd92a0ae1::t_32dec8b0ad76b3 1-184
+packages/core/src/artifact-contract.ts
+  s_58249cd92a0ae1::t_0125c47df7ea90 1-196
+packages/core/src/context-budget.ts
+  s_58249cd92a0ae1::t_b7621160de5735 26-38,40-41,44
+packages/core/src/context-manager.ts
+  s_58249cd92a0ae1::t_4bc19b459c0c33 3,7-12,22,52,55,59-117,136,145-149,157,165,208-219,221-236,238-239,359-361,363-366,390-392,419-433,455-460,464-465,477-483,488,520
+packages/core/src/context-summary.ts
+  s_58249cd92a0ae1::t_cf8e78c60a209c 11-18,20-25,30,61-62,73-75,96,103,105,112-114,123-125,154,156,162,183-189,198,209,211-224
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_0609733b82f70c 4-8,34-43,53,55-56,70,90-92,260-269,276,282,355
+packages/core/src/history-evidence.ts
+  s_58249cd92a0ae1::t_f4fb8f95eccf75 1-328
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_c955a3369cce46 25,82,89-97
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_738b5cc6670e30 1-6,9-12,52-58,114-116,146,149,162-164,213-216,280-285,313-317,321-333,381,408-412,553-574,577-583,588,660,672-674,677,734-801
+packages/core/src/prompt/system.ts
+  s_58249cd92a0ae1::t_e068c8879b1b05 48
+packages/core/src/result-read-recovery.ts
+  s_58249cd92a0ae1::t_7e80e75207cbbf 1-58
+packages/core/src/result-store.ts
+  s_58249cd92a0ae1::t_2be06b4897d2ed 444-447,450,453-456,470,480,494,513-516,524-525,532,535-550
+packages/core/src/runtime.ts
+  s_58249cd92a0ae1::t_3bb13bd8b35c81 1,26,37-44
+packages/core/src/session-snapshot.ts
+  s_58249cd92a0ae1::t_1c8a9cd23880bc 3,8,10,33-34,105-112,115
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_d66673f2ddd567 7,20-30,91,100,111
+packages/core/src/tools/__tests__/terminal-acceptance.test.ts
+  s_58249cd92a0ae1::t_adeacb608fe019 69-70
+packages/core/src/tools/__tests__/terminal-interactive.test.ts
+  s_58249cd92a0ae1::t_ff42d0b9159b2e 54
+packages/core/src/tools/index.ts
+  s_58249cd92a0ae1::t_4f8fdeb1ca476c 4,29,45
+packages/core/src/tools/read-history.ts
+  s_58249cd92a0ae1::t_45b42c76b62ee1 1-32
+packages/core/src/tools/types.ts
+  s_58249cd92a0ae1::t_12a52f2ad728c6 2,22-23
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_e3d74968940b92 20-21,48,56-57,83-84,245-253,591-592
+.gitignore
+  s_58249cd92a0ae1::t_353077623ce4f4 49-60
+researches/summary-quality/README.md
+  s_58249cd92a0ae1::t_e10af83371e467 1-9
+researches/summary-quality/contract-demo.mjs
+  s_58249cd92a0ae1::t_dde4e84f63c119 1-50
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_db8814aaf67195 1-34
+researches/summary-quality/evaluation/analyze-contract-pair-v2.mjs
+  s_58249cd92a0ae1::t_5c0c1ad053a34c 1-72
+researches/summary-quality/evaluation/analyze-read-recovery.mjs
+  s_58249cd92a0ae1::t_ded30a61e99c25 1-72
+researches/summary-quality/evaluation/analyze.mjs
+  s_58249cd92a0ae1::t_782979c4d04d20 1-118
+researches/summary-quality/evaluation/artifact-contract-described.mjs
+  s_58249cd92a0ae1::t_85e265547ebb36 1-14
+researches/summary-quality/evaluation/artifact-contract.mjs
+  s_58249cd92a0ae1::t_c83ee32218f6a4 1-58
+researches/summary-quality/evaluation/artifact-contract.test.mjs
+  s_58249cd92a0ae1::t_714929504aff93 1-45
+researches/summary-quality/evaluation/contract-pair-v1/README.md
+  s_58249cd92a0ae1::t_099ee58b5d2b96 1-3
+researches/summary-quality/evaluation/contract-pair-v1/contracts.json
+  s_58249cd92a0ae1::t_8f6c0c03d5523a 1-544
+researches/summary-quality/evaluation/contract-pair-v1/inputs.json
+  s_58249cd92a0ae1::t_6490813d9c464f 1-584
+researches/summary-quality/evaluation/contract-pair-v1/inputs.test.mjs
+  s_58249cd92a0ae1::t_14c25becd80d8a 1-20
+researches/summary-quality/evaluation/contract-pair-v1/protocol.md
+  s_58249cd92a0ae1::t_17665fca80407a 1-29
+researches/summary-quality/evaluation/contract-pair-v2/README.md
+  s_58249cd92a0ae1::t_cb47ab3992b68b 1-5
+researches/summary-quality/evaluation/contract-pair-v2/contracts.json
+  s_58249cd92a0ae1::t_2d18f4f74eb98f 1-551
+researches/summary-quality/evaluation/contract-pair-v2/descriptions.json
+  s_58249cd92a0ae1::t_9811737a1f9509 1-19
+researches/summary-quality/evaluation/contract-pair-v2/failure-regression.test.mjs
+  s_58249cd92a0ae1::t_ca92d0f376e75a 1-56
+researches/summary-quality/evaluation/contract-pair-v2/inputs.json
+  s_58249cd92a0ae1::t_0241fd452817c8 1-591
+researches/summary-quality/evaluation/contract-pair-v2/inputs.test.mjs
+  s_58249cd92a0ae1::t_fe07394f45c24c 1-29
+researches/summary-quality/evaluation/contract-pair-v2/protocol.md
+  s_58249cd92a0ae1::t_5a2c755a158c2a 1-31
+researches/summary-quality/evaluation/fixtures.mjs
+  s_58249cd92a0ae1::t_af31be3c8d4ff2 1-230
+researches/summary-quality/evaluation/read-recovery-v1/README.md
+  s_58249cd92a0ae1::t_6c26dd843f8266 1-11
+researches/summary-quality/evaluation/read-recovery-v1/protocol.md
+  s_58249cd92a0ae1::t_1d4cb81693198e 1-13
+researches/summary-quality/evaluation/results.json
+  s_58249cd92a0ae1::t_5f847c8b7873f9 1-464
+researches/summary-quality/evaluation/run-read-recovery.mjs
+  s_58249cd92a0ae1::t_80c7b8ad6b95d4 1-307
+researches/summary-quality/evaluation/run.mjs
+  s_58249cd92a0ae1::t_50c075bd3c671a 1-266
+researches/summary-quality/evaluation/scorer.test.mjs
+  s_58249cd92a0ae1::t_36bd3935da3425 1-34
+researches/summary-quality/evaluation/source-map-audit.mjs
+  s_58249cd92a0ae1::t_977208674333ee 1-59
+researches/summary-quality/evaluation/source-map-audit.test.mjs
+  s_58249cd92a0ae1::t_a93fedf2b16089 1-25
+researches/summary-quality/evidence-archive.json
+  s_58249cd92a0ae1::t_670f0ef37e7dd1 1-17
+researches/summary-quality/offline-demo.mjs
+  s_58249cd92a0ae1::t_746d2794c9c7c2 1-58
+researches/summary-quality/read-recovery-demo.mjs
+  s_58249cd92a0ae1::t_3071e82f68165b 1-47
+researches/summary-quality/verify-archive.mjs
+  s_58249cd92a0ae1::t_70ed0cce635c11 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "81edc8fb565dea7ab6b8f4e851941cef768b72af",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
