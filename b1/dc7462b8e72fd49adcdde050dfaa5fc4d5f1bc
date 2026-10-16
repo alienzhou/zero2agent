@@ -1,0 +1,21 @@
+researches/safe-resume/README.md
+  s_58249cd92a0ae1::t_b7a9c6fe26775b 11
+researches/safe-resume/evidence-archive.json
+  s_58249cd92a0ae1::t_c7a3095ac05c20 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b1dc7462b8e72fd49adcdde050dfaa5fc4d5f1bc",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
