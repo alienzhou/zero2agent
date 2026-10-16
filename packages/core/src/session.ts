@@ -1,3 +1,4 @@
+import type { ExecutionRecovery } from './execution-recovery.js'
 import { ResultStore, type ResultStoreOptions } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ContextManager, type CompactionRuntime } from './context-manager.js'
@@ -11,6 +12,7 @@ const INTERRUPTED =
 
 /** One in-memory conversation. Resetting history never undoes tool side effects. */
 export class Session {
+  recovery?: ExecutionRecovery
   private messages: Anthropic.MessageParam[] = []
   private running = false
   private context = new ContextManager()
@@ -85,8 +87,14 @@ export class Session {
 
   snapshot(): SessionSnapshot {
     this.assertIdle()
+    return this.executionSnapshot(this.getHistory())
+  }
+
+  /** Internal execution boundary: caller supplies paired history, never an in-flight SDK object. */
+  executionSnapshot(messages: Anthropic.MessageParam[]): SessionSnapshot {
     return {
-      messages: this.getHistory(),
+      ...(this.recovery && { recovery: structuredClone(this.recovery) }),
+      messages: structuredClone(messages),
       context: this.context.snapshot(),
       ...(this.evidence.snapshot() && { history: this.evidence.snapshot() }),
       ...(this.results.snapshot() && { results: this.results.snapshot() }),
@@ -99,6 +107,7 @@ export class Session {
     this.results.restore(snapshot.results)
     this.evidence.restore(snapshot.history)
     this.context.restore(snapshot.context)
+    this.recovery = snapshot.recovery
     this.messages = snapshot.messages
     this.budget = undefined
     this.budgetKey = ''
@@ -111,6 +120,7 @@ export class Session {
     this.evidence.restore()
     this.context.reset()
     this.budget = undefined
+    this.recovery = undefined
     this.messages = []
   }
 

@@ -46,16 +46,25 @@ async function directory(location: string, create: boolean): Promise<void> {
 export class SessionStore {
   private constructor(
     readonly cwd: string,
-    readonly directory: string
+    readonly directory: string,
+    private limits = { bytes: 512 * 1024 * 1024, revisions: 2048 }
   ) {}
 
   static async open(
     cwd: string,
-    root = process.env.ZERO2AGENT_SESSION_DIR ?? path.join(homedir(), '.zero2agent', 'sessions')
+    root = process.env.ZERO2AGENT_SESSION_DIR ?? path.join(homedir(), '.zero2agent', 'sessions'),
+    limits = { bytes: 512 * 1024 * 1024, revisions: 2048 }
   ): Promise<SessionStore> {
+    if (
+      !Number.isSafeInteger(limits.bytes) ||
+      limits.bytes < 1 ||
+      !Number.isSafeInteger(limits.revisions) ||
+      limits.revisions < 1
+    )
+      throw new Error('Invalid session storage limits.')
     const canonical = await fs.realpath(cwd)
     const workspace = createHash('sha256').update(canonical).digest('hex')
-    return new SessionStore(canonical, path.join(path.resolve(root), workspace))
+    return new SessionStore(canonical, path.join(path.resolve(root), workspace), limits)
   }
 
   fresh(): StoredSession {
@@ -208,6 +217,21 @@ export class SessionStore {
     if ((await this.latest(location)) !== current.revision)
       throw new Error(
         'Session revision conflict: another process saved this conversation. Memory is retained.'
+      )
+    const generations = (await fs.readdir(location)).filter(name => REVISION.test(name))
+    let storedBytes = 0
+    for (const name of generations) {
+      const stat = await fs.lstat(path.join(location, name))
+      if (!stat.isFile() || stat.isSymbolicLink())
+        throw new Error('Session generation must be a regular file.')
+      storedBytes += stat.size
+    }
+    if (
+      generations.length >= this.limits.revisions ||
+      storedBytes + Buffer.byteLength(bytes) > this.limits.bytes
+    )
+      throw new Error(
+        'Session storage capacity reached; recovery evidence is retained. Archive this session before starting new work.'
       )
     const temp = path.join(location, `.pending-${randomUUID()}`)
     const target = path.join(location, `${next.revision}.json`)

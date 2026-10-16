@@ -1,6 +1,6 @@
 import { CheckpointStore, type RestorePlan, type Checkpoint } from './checkpoint-store.js'
 import { formatCheckpointDiff, formatCheckpointUsage } from './checkpoint-view.js'
-import { listBackgroundProcesses } from '@zero2agent/core'
+import { RecoveryRequiredError, listBackgroundProcesses } from '@zero2agent/core'
 import { hostname } from 'node:os'
 import { terminalTool, TurnCancelledError, type Agent } from '@zero2agent/core'
 import { LogStore, RunJournal, formatLog, type LogItem } from './run-log.js'
@@ -26,11 +26,17 @@ export class Conversations {
     private captureEnabled = true
   ) {
     this.current = store?.fresh()
+    if (store)
+      agent.setExecutionPersistence(async snapshot => {
+        if (!this.current?.pending || this.current.pending.kind !== 'turn')
+          throw new Error('Execution persistence requires a reserved session turn.')
+        this.current = await store.save(this.current, snapshot, this.current.pending)
+      })
     this.journal?.host('session-new', { sessionId: this.id })
   }
   get status(): string {
     return this.current
-      ? `${this.current.id} · ${this.writing ? '正在保存' : this.dirty ? '尚未保存 /save 重试' : this.current.pending ? `本轮未结算 r${this.current.revision}` : this.current.revision ? `已保存 r${this.current.revision}` : '新会话'}`
+      ? `${this.current.id} · ${this.writing ? '正在保存' : this.dirty ? '尚未保存 /save 重试' : this.agent.needsRecovery ? `待恢复 /recovery · r${this.current.revision}` : this.current.pending ? `本轮未结算 r${this.current.revision}` : this.current.revision ? `已保存 r${this.current.revision}` : '新会话'}`
       : '临时会话（未启用保存）'
   }
   get id(): string | undefined {
@@ -217,12 +223,15 @@ export class Conversations {
         if ((error as NodeJS.ErrnoException).code !== 'ESRCH')
           throw new Error('无法确认旧进程已退出，暂不恢复。')
         // Dead process: restore only the settled snapshot, never its pending execution.
-        candidate.state.messages.push({ role: 'assistant', content: RECOVERY_NOTICE })
+        if (!candidate.state.recovery)
+          candidate.state.messages.push({ role: 'assistant', content: RECOVERY_NOTICE })
         this.agent.restore(candidate.state)
         this.current = candidate
         this.journal?.host('session-resume', { sessionId: this.id, revision: candidate.revision })
         this.dirty = true
-        return '已恢复上次结算的历史。上次运行中断，工具可能已修改文件；继续前请检查工作区。'
+        return candidate.state.recovery
+          ? await this.recoveryReport()
+          : '已恢复上次结算的历史。上次运行中断，工具可能已修改文件；继续前请检查工作区。'
       }
       throw new Error('该会话的旧进程仍在运行，暂不恢复；先结束原运行。')
     }
@@ -230,7 +239,9 @@ export class Conversations {
     this.current = candidate
     this.journal?.host('session-resume', { sessionId: this.id, revision: candidate.revision })
     this.dirty = false
-    return '已恢复会话。历史工具只供查看；新操作使用当前权限与模型配置。'
+    return candidate.state.recovery
+      ? await this.recoveryReport()
+      : '已恢复会话。历史工具只供查看；新操作使用当前权限与模型配置。'
   }
   async resumeLatest(): Promise<string> {
     const latest = (await this.list())[0]
@@ -241,7 +252,42 @@ export class Conversations {
     if (this.busy) this.cancelled = true
     this.agent.cancelTurn()
   }
+  async recoveryReport(): Promise<string> {
+    const recovery = this.agent.snapshot().recovery
+    if (!recovery) return '当前没有待恢复的任务。'
+    const names = { settled: '已结算', 'not-started': '未执行', unknown: '效果未知，先核对' }
+    const records = this.checkpoints ? await this.checkpoints.list() : []
+    return [
+      '中断任务待恢复：已恢复逐工具执行记录；加载不会重放工具。',
+      `原运行 ${recovery.operationId} · ${recovery.reason}`,
+      `上次记录预算：请求 ${recovery.budget.requests} / 工具 ${recovery.budget.tools} / 迭代 ${recovery.budget.iterations}；停止原因 ${recovery.budget.stopReason ?? '未记录，计数仅到最近保存边界'}`,
+      ...recovery.tools.map(t => {
+        const matches = records.filter(
+          r =>
+            r.sessionId === this.id &&
+            r.operationId === recovery.operationId &&
+            r.toolCallId === t.toolCallId
+        )
+        return `${JSON.stringify(t.toolName)} ${JSON.stringify(t.toolCallId)}: ${names[t.state]}${matches.map(r => `；Checkpoint ${r.id} (${r.state})，/diff ${r.id}`).join('')}`
+      }),
+      `未解决读取 ${recovery.read.pending.length}${recovery.read.overflow ? '（已超限）' : ''}；产物契约 ${recovery.artifactContract ? '保留' : '无'}`,
+      '先核对文件和外部效果。/recovery continue <指令> 明确开始新一轮预算，沿用未完成检查；旧工具不重放。',
+      '保留中断状态可直接退出；/new 可开始另一条独立会话。文件回退沿用 /recover UUID 或 /undo UUID。',
+    ].join('\n')
+  }
+  continueInterrupted(message: string): Promise<string> {
+    if (!message.trim())
+      return Promise.reject(new Error('Continue requires an explicit instruction.'))
+    if (!this.agent.needsRecovery)
+      return Promise.reject(new Error('No interrupted task is awaiting recovery.'))
+    const work = this.perform('turn', () =>
+      this.agent.continueInterrupted(message, { sessionId: this.id })
+    )
+    this.operation = work
+    return work
+  }
   run(message: string): Promise<string> {
+    if (this.agent.needsRecovery) return Promise.reject(new RecoveryRequiredError())
     const work = this.perform('turn', () => this.agent.run(message, { sessionId: this.id }))
     this.operation = work
     return work

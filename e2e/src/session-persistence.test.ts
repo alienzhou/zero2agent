@@ -62,7 +62,7 @@ describe('E03-S004: production CLI session persistence', () => {
       (await runCli({ cwd: p.cwd, env: p.env, args: ['remember 中文 and file evidence'] })).code
     ).toBe(0)
     const [item] = await p.store.list()
-    expect(item.revision).toBe(2)
+    expect(item.revision).toBe(3)
     const second = await runCli({ cwd: p.cwd, env: p.env, args: ['--resume', item.id, 'continue'] })
     expect(second.code, second.output).toBe(0)
     expect(p.requests).toHaveLength(2)
@@ -70,7 +70,7 @@ describe('E03-S004: production CLI session persistence', () => {
     expect(JSON.stringify(p.requests[1].messages)).toContain('actual saved answer')
     expect(p.requests[1].messages.at(-1)?.content).toBe('continue')
     expect(await p.store.list()).toHaveLength(1)
-    expect((await p.store.load(item.id)).revision).toBe(4)
+    expect((await p.store.load(item.id)).revision).toBe(6)
   })
   it('lists without credentials, safely displays controls, and keeps --no-save entirely in memory', async () => {
     const p = await fixture()
@@ -198,7 +198,7 @@ describe.skipIf(process.platform === 'win32')(
       from = session.output.length
       session.write('continue\r')
       await session.waitFor('actual saved answer', from)
-      await session.waitFor('已保存 r3', from)
+      await session.waitFor('已保存 r4', from)
       expect(JSON.stringify(p.requests[0])).toContain('old write result')
       expect(JSON.stringify(p.requests[0])).not.toContain('private-modal-input')
       expect(JSON.stringify(p.requests[0])).not.toContain('not-a-chat')
@@ -234,7 +234,7 @@ describe.skipIf(process.platform === 'win32')(
       cleanups.push(() => session.close())
       await session.waitFor('你: ')
       session.write('first task\r')
-      await session.waitFor('已保存 r2')
+      await session.waitFor('已保存 r3')
       const [item] = await p.store.list()
       const from = session.output.length
       session.write('make effect then wait\r')
@@ -257,15 +257,15 @@ describe.skipIf(process.platform === 'win32')(
       const resumed = await runCli({
         cwd: p.cwd,
         env: p.env,
-        args: ['--resume', item.id, 'inspect after crash'],
+        args: ['--resume', item.id, '--resume-task', 'inspect after crash'],
       })
       expect(resumed.code, resumed.output).toBe(0)
       expect(p.requests).toHaveLength(4)
       const restored = JSON.stringify(p.requests[3].messages)
       expect(restored).toContain('settled first answer')
-      expect(restored).toContain('previous process stopped')
-      expect(restored).not.toContain('crash-write')
-      expect(restored).not.toContain('make effect then wait')
+      expect(restored).toContain('crash-write')
+      expect(restored).toContain('make effect then wait')
+      expect(restored).toContain('Created effect.txt')
       expect(await fs.readFile(path.join(p.cwd, 'effect.txt'), 'utf8')).toBe('already happened')
     })
   }

@@ -1,3 +1,8 @@
+import {
+  RecoveryRequiredError,
+  type ExecutionPersistence,
+  type ExecutionRecovery,
+} from './execution-recovery.js'
 import type { ArtifactContract } from './artifact-contract.js'
 import type { ResultStoreOptions } from './result-store.js'
 import type { FileMutationHandler } from './file-mutations.js'
@@ -24,6 +29,7 @@ import { RequestExecutor } from './request-executor.js'
 import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  executionPersistence?: ExecutionPersistence
   results?: ResultStoreOptions
   limits?: RunLimits
   fileMutations?: FileMutationHandler
@@ -61,6 +67,7 @@ export class Agent {
    * 运行 Agent 处理用户消息
    */
   async run(message: string, diagnosticContext?: DiagnosticContext): Promise<string> {
+    if (this.session.recovery) throw new RecoveryRequiredError()
     return this.runInternal(message, undefined, diagnosticContext)
   }
 
@@ -70,18 +77,37 @@ export class Agent {
     contract: ArtifactContract,
     diagnosticContext?: DiagnosticContext
   ): Promise<string> {
+    if (this.session.recovery) throw new RecoveryRequiredError()
     return this.runInternal(message, contract, diagnosticContext)
+  }
+
+  /** Explicit user continuation starts a new turn/budget, while retaining unfinished checks. */
+  async continueInterrupted(
+    message: string,
+    diagnosticContext?: DiagnosticContext
+  ): Promise<string> {
+    const recovery = this.session.recovery
+    if (!recovery) throw new Error('No interrupted task is awaiting recovery.')
+    return this.runInternal(message, recovery.artifactContract, diagnosticContext, recovery)
+  }
+
+  setExecutionPersistence(persist?: ExecutionPersistence): void {
+    if (this.active) throw new Error('Cannot change persistence while running.')
+    this.options.executionPersistence = persist
   }
 
   private async runInternal(
     message: string,
     artifactContract: ArtifactContract | undefined,
-    diagnosticContext?: DiagnosticContext
+    diagnosticContext?: DiagnosticContext,
+    recovery?: ExecutionRecovery
   ): Promise<string> {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
         artifactContract,
+        recovery,
+        executionPersistence: this.options.executionPersistence,
         limits: this.options.limits,
         signal: controller.signal,
         fileMutations: this.options.fileMutations,
@@ -102,6 +128,7 @@ export class Agent {
   }
 
   async compact(diagnosticContext?: DiagnosticContext): Promise<boolean> {
+    if (this.session.recovery) throw new RecoveryRequiredError()
     const controller = this.beginOperation()
     const diagnostics = new DiagnosticEmitter(this.options.diagnostics, diagnosticContext)
     const budget = new RunBudget(this.options.limits, controller.signal)
@@ -164,6 +191,10 @@ export class Agent {
     const controller = new AbortController()
     this.active = controller
     return controller
+  }
+
+  get needsRecovery(): boolean {
+    return !this.active && !!this.session.recovery
   }
 
   getContext(): Anthropic.MessageParam[] {

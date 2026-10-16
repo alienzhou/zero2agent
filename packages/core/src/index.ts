@@ -95,3 +95,14 @@ export {
 export type { ArtifactContract, ArtifactRule, ArtifactValue } from './artifact-contract.js'
 export { ArtifactCompletionError } from './artifact-completion.js'
 export type { ArtifactFailure } from './artifact-completion.js'
+
+export {
+  ExecutionPersistenceError,
+  RecoveryRequiredError,
+  validateExecutionRecovery,
+} from './execution-recovery.js'
+export type {
+  ExecutionPersistence,
+  ExecutionBoundary,
+  ExecutionRecovery,
+} from './execution-recovery.js'

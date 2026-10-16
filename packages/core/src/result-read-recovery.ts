@@ -1,3 +1,23 @@
+export interface ReadRecoveryState {
+  pending: string[]
+  requested: boolean
+  overflow: boolean
+}
+export function validateReadRecovery(value: unknown): ReadRecoveryState {
+  const s = value as ReadRecoveryState | undefined
+  if (
+    !s ||
+    !Array.isArray(s.pending) ||
+    s.pending.length > 32 ||
+    s.pending.some(x => typeof x !== 'string' || !/^[0-9a-f-]{36}$/.test(x)) ||
+    new Set(s.pending).size !== s.pending.length ||
+    typeof s.requested !== 'boolean' ||
+    typeof s.overflow !== 'boolean'
+  )
+    throw new Error('Invalid saved read recovery state.')
+  return { pending: [...s.pending], requested: s.requested, overflow: s.overflow }
+}
+
 /** Per-turn control state derived only from the built-in read tool, never model prose. */
 export class EvidenceReadIncompleteError extends Error {
   constructor() {
@@ -12,6 +32,18 @@ export class ResultReadRecovery {
   private pending = new Set<string>()
   private requested = false
   private overflow = false
+
+  constructor(state?: ReadRecoveryState) {
+    if (state) {
+      const validated = validateReadRecovery(state)
+      this.pending = new Set(validated.pending)
+      this.requested = validated.requested
+      this.overflow = validated.overflow
+    }
+  }
+  snapshot(): ReadRecoveryState {
+    return { pending: [...this.pending], requested: this.requested, overflow: this.overflow }
+  }
 
   failed(input: unknown): void {
     const reference = (input as { reference?: unknown } | undefined)?.reference
