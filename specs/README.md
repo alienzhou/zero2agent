@@ -83,6 +83,12 @@ specs/
 
 ---
 
+## Epic 4：健壮性与上下文管理
+
+[四课入口](./E04-reliability-and-context/README.md)：失败恢复与预算 → 大结果按需读取 → 摘要质量与事实保留 → 中断后的安全续跑。S001–S003 已合入；[S004](./E04-reliability-and-context/S004-safe-resume/README.md)实现、测试、文档与课程完成，待 PR 审阅。
+
+---
+
 ## 历史迭代
 
 | 迭代 | 名称 | 状态 | 说明 |

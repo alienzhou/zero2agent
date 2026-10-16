@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "releaseTag": "E04-S004-safe-resume-review",
+  "status": "draft-review-evidence",
+  "releaseURL": "https://github.com/alienzhou/zero2agent/releases/tag/E04-S004-safe-resume-review",
+  "file": "e04-s004-evidence-20261016.tar.gz",
+  "sha256": "6079baddaec9d8827ee4d36e25244b18c9364f401aba92410d9f57b814acb156",
+  "bytes": 4045691,
+  "payloadFiles": 237,
+  "implementationCommit": "ae6f6facb7ca042f9b133881c40b8886dd6b4606",
+  "access": "Draft release; repository reviewer access required. Not a public course release."
+}

@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E04-S003：摘要质量与事实保留](./specs/E04-reliability-and-context/S003-summary-quality/README.md)已完成实现、严格验收和 18 页课程。修复读取参数错误后仍可提前完成的问题：当前回合保留未解决读取，在原预算内至多纠错一次。完整真实评测任务及关键项 56/56，普通事实 63/63；723 项工程测试通过，58 live 默认跳过。原 728 份及新增 56 份保存在带 SHA-256 的 Release 归档。固定课程版本 `E04-S003-summary-quality`；[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 最终复核通过，按用户授权交付；网站尚未部署。
+**最新更新**：[E04-S004：中断后的安全续跑](./specs/E04-reliability-and-context/S004-safe-resume/README.md)已完成实现、故障回归、离线跟练及 18 页课程，进入 PR 审阅。逐工具保存执行记录；核对未知效果后明确开启新一轮，保留 S003 完成检查。S003 已通过 PR #25 合入 main；S004 尚未合并，网站未部署。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -184,6 +184,7 @@ zero2agent/
 | [E04-S001](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) | 失败恢复与运行预算 | 已合入 main |
 | [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | 大工具结果按需读取 | Done，[PR #24](https://github.com/alienzhou/zero2agent/pull/24)，已打 Tag |
 | [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | 摘要质量与事实保留 | 实现、课程、严格验收及最终复核完成；交付见 PR #25 |
+| [E04-S004](./specs/E04-reliability-and-context/S004-safe-resume/README.md) | 中断后的安全续跑 | 实现、测试、文档与课程完成，待 PR 审阅 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

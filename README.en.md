@@ -178,6 +178,7 @@ zero2agent/
 | [E04-S001](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) | Failure recovery and run budgets | Done; merged into main |
 | [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | On-demand reads of large tool results | Done; merged into main |
 | [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | Summary quality and fact retention | Implementation, lesson, strict acceptance and final review complete; delivery in PR #25 |
+| [E04-S004](./specs/E04-reliability-and-context/S004-safe-resume/README.md) | Safe continuation after process interruption | Implementation, tests, documentation and 18-page lesson complete; pending PR review |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 
