@@ -112,7 +112,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
-| [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S002 已合入；[S003 已完成，待合入](./specs/E04-reliability-and-context/S003-summary-quality/README.md) |
+| [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S003 已完成；[S003 交付](./specs/E04-reliability-and-context/S003-summary-quality/README.md) |
 | Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
 
 最新课程：[E04-S002：大工具结果按需读取](./specs/E04-reliability-and-context/S002-result-references/README.md)，从[重启回读实验](./specs/E04-reliability-and-context/S002-result-references/follow-along.md)开始。
@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E04-S003：摘要质量与事实保留](./specs/E04-reliability-and-context/S003-summary-quality/README.md)已完成实现、严格验收和 18 页课程。修复读取参数错误后仍可提前完成的问题：当前回合保留未解决读取，在原预算内至多纠错一次。完整真实评测任务及关键项 56/56，普通事实 63/63；723 项工程测试通过，58 live 默认跳过。原 728 份及新增 56 份保存在带 SHA-256 的 Release 归档。固定课程版本 `E04-S003-summary-quality`；[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 待人工审阅与合入，网站尚未部署。
+**最新更新**：[E04-S003：摘要质量与事实保留](./specs/E04-reliability-and-context/S003-summary-quality/README.md)已完成实现、严格验收和 18 页课程。修复读取参数错误后仍可提前完成的问题：当前回合保留未解决读取，在原预算内至多纠错一次。完整真实评测任务及关键项 56/56，普通事实 63/63；723 项工程测试通过，58 live 默认跳过。原 728 份及新增 56 份保存在带 SHA-256 的 Release 归档。固定课程版本 `E04-S003-summary-quality`；[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 最终复核通过，按用户授权交付；网站尚未部署。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -183,7 +183,7 @@ zero2agent/
 | [E03-S006](./specs/E03-product-foundations/S006-file-checkpoints/README.md) | 受控文件分块去重、差异与可恢复回退 | Done，已合入 main |
 | [E04-S001](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) | 失败恢复与运行预算 | 已合入 main |
 | [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | 大工具结果按需读取 | Done，[PR #24](https://github.com/alienzhou/zero2agent/pull/24)，已打 Tag |
-| [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | 摘要质量与事实保留 | 实现、课程与严格验收完成；待人工审阅、合入 |
+| [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | 摘要质量与事实保留 | 实现、课程、严格验收及最终复核完成；交付见 PR #25 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

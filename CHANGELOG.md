@@ -57,7 +57,7 @@ git checkout main
 
 完整真实评测任务与关键项 56/56、普通事实 63/63，通过严格门槛。0/1/3 次组分别 8/8、24/24、24/24。沿用 v2 相同调用方输入，与历史基线 54/56、前候选 55/56 比较；并非新的同期成对实验，不把全部差异归因于机制。原协议 504 份、两组成对共 224 份不改，新 56 份及成本独立保存。模型配置、硬预算和验收线均未降低。
 
-工程全仓 723 项通过（Core 538 / E2E 184 / CDP 1），58 live 默认跳过；构建、类型和格式通过，lint 0 错误、44 条既有警告。18 页图解、跟练、设计和复盘已完成，PC/H5 导航、文字与放大检查通过。固定版本 `E04-S003-summary-quality`；[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 待人工审阅与合入，网站未部署。历次失败和修正过程见[历史比较（归档）](https://github.com/alienzhou/zero2agent/releases/tag/E04-S003-summary-quality)。
+工程全仓 723 项通过（Core 538 / E2E 184 / CDP 1），58 live 默认跳过；构建、类型和格式通过，lint 0 错误、44 条既有警告。18 页图解、跟练、设计和复盘已完成，PC/H5 导航、文字与放大检查通过。固定版本 `E04-S003-summary-quality`；[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 最终复核通过，按用户授权交付；网站未部署。历次失败和修正过程见[历史比较（归档）](https://github.com/alienzhou/zero2agent/releases/tag/E04-S003-summary-quality)。
 
 ---
 

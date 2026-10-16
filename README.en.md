@@ -108,7 +108,7 @@ The course content is organized into four layers:
 | [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
 | Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
 | Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S001–S006 merged into main |
-| [Epic 4: Robustness and Context Management](./specs/E04-reliability-and-context/README.md) | Handle failures, long context, and complex runtime situations | S001–S002 merged; S003 complete, awaiting merge |
+| [Epic 4: Robustness and Context Management](./specs/E04-reliability-and-context/README.md) | Handle failures, long context, and complex runtime situations | S001–S003 complete; S003 delivery tracked in PR #25 |
 | Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
 
 ### How to Enter
@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: [E04-S003: Summary quality and fact retention](./specs/E04-reliability-and-context/S003-summary-quality/README.md) now includes bounded correction of unresolved saved-evidence reads, preventing premature completion after invalid read arguments. The complete real-service run passed 56/56 tasks and critical cases, with 63/63 ordinary facts; 723 engineering tests passed and 58 live tests were skipped by default. All 784 records are preserved in a separately downloadable, checksummed Release archive. The 18-page lesson is complete at `E04-S003-summary-quality`. [PR #25](https://github.com/alienzhou/zero2agent/pull/25) awaits human review and merge; the site has not been deployed.
+**Latest update**: [E04-S003: Summary quality and fact retention](./specs/E04-reliability-and-context/S003-summary-quality/README.md) now includes bounded correction of unresolved saved-evidence reads, preventing premature completion after invalid read arguments. The complete real-service run passed 56/56 tasks and critical cases, with 63/63 ordinary facts; 723 engineering tests passed and 58 live tests were skipped by default. All 784 records are preserved in a separately downloadable, checksummed Release archive. The 18-page lesson is complete at `E04-S003-summary-quality`. [PR #25](https://github.com/alienzhou/zero2agent/pull/25) passed final review and is authorized for delivery; the site has not been deployed.
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -177,7 +177,7 @@ zero2agent/
 | [E03-S006](./specs/E03-product-foundations/S006-file-checkpoints/README.md) | File checkpoints and recovery | Done; merged into main |
 | [E04-S001](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) | Failure recovery and run budgets | Done; merged into main |
 | [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | On-demand reads of large tool results | Done; merged into main |
-| [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | Summary quality and fact retention | Implementation, lesson and strict acceptance complete; human review and merge pending |
+| [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | Summary quality and fact retention | Implementation, lesson, strict acceptance and final review complete; delivery in PR #25 |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

@@ -22,4 +22,4 @@
 
 18 页含封面，生成源、pages.json 与实际 HTML 同提交保存。site:build/site:check、PC 1440×1000 / H5 390×844 导航、正文展开、图解放大及逐页边界/重叠检查通过。仓库只保留最新 checks.json，截图和历次检查在归档。
 
-固定课程版本 `E04-S003-summary-quality`，同一 [PR #25](https://github.com/alienzhou/zero2agent/pull/25) 更新为精简历史；Tag 跟随本次精简版本，原 Tag 的 8f94840 内容由归档保存。人工审阅、合入与部署仍单独记录；GitHub 暂无 CI 检查项，本地验证和 AI 作者复核不冒充人工签署。
+固定课程版本 `E04-S003-summary-quality`，同一 [PR #25](https://github.com/alienzhou/zero2agent/pull/25) 更新为精简历史；Tag 跟随本次精简版本，原 Tag 的 8f94840 内容由归档保存。2026-10-16 最终复核未发现阻塞项，当前源码补验 Core 131 / E2E 14 全部通过；用户明确授权无阻塞后合入，实际合入状态以 PR 链接为准。GitHub 暂无 CI 检查项，本地验证和 AI 作者复核不冒充人工签署，网站仍未部署。
