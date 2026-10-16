@@ -1,0 +1,29 @@
+researches/safe-resume/demo.mjs
+  s_58249cd92a0ae1::t_423bfd20874ff7 1-116
+e2e/src/safe-resume.test.ts
+  s_58249cd92a0ae1::t_6d233eadbb8c8b 90,107,338-341,350-378
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_1d22bf49ba4757 21,594-595,660,683
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_4359e9f8e8b637 528,530
+packages/tui/src/conversations.ts
+  s_58249cd92a0ae1::t_06a317ed0c790b 262
+packages/tui/src/session-store.ts
+  s_58249cd92a0ae1::t_6324079330491c 13,109-112,132,200
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae6f6facb7ca042f9b133881c40b8886dd6b4606",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
