@@ -1,0 +1,121 @@
+specs/E04-reliability-and-context/S004-safe-resume/details/02-task-list.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-14
+specs/E04-reliability-and-context/S004-safe-resume/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-19
+specs/E04-reliability-and-context/S004-safe-resume/follow-along.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-41
+.authoring/site/chapters/epic04-story004/sources.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-14
+specs/E04-reliability-and-context/S004-safe-resume/details/00-overview.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-10
+.vibecoding/2026-10-16/e04-s004-delivery/prompt.md
+  s_58249cd92a0ae1::t_b33217dec32c74 1-5
+specs/E04-reliability-and-context/S004-safe-resume/details/04-backlog.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-11
+.authoring/site/chapters/epic04-story004/review.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-7
+retros/E04-S004-safe-resume.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-11
+researches/safe-resume/verify-evidence.mjs
+  s_58249cd92a0ae1::t_1df1bec3108751 1-18
+.vibecoding/2026-10-16/e04-s004-delivery/dialogue.md
+  s_58249cd92a0ae1::t_b33217dec32c74 1-15
+specs/E04-reliability-and-context/S004-safe-resume/README.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-76
+.vibecoding/2026-10-16/e04-s004-delivery/learnings.md
+  s_58249cd92a0ae1::t_b33217dec32c74 1-7
+.authoring/site/chapters/epic04-story004/content-plan.md
+  s_58249cd92a0ae1::t_6c376d14d30ff7 1-5
+researches/safe-resume/README.md
+  s_58249cd92a0ae1::t_1df1bec3108751 1-24
+.authoring/site/chapters/epic04-story004/author.cjs
+  s_58249cd92a0ae1::t_d189ef30f700c8 1-99
+.authoring/site/chapters/epic04-story004/verification/checks.json
+  s_58249cd92a0ae1::t_19b7b0e51e85fe 1-110
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_477ffa5e1e2648 148-154
+.gitignore
+  s_58249cd92a0ae1::t_57c2a5f22e29be 61-64
+CHANGELOG.md
+  s_58249cd92a0ae1::t_27659cc6e77bf5 9-16
+README.en.md
+  s_58249cd92a0ae1::t_1e6dac9026f5a3 181
+README.md
+  s_58249cd92a0ae1::t_f57a801c8e39d1 166,187
+docs/architecture.md
+  s_58249cd92a0ae1::t_f7e57ddb58221c 192-199
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_52eec9b90c9987 21,32
+researches/safe-resume/evidence-archive.json
+  s_58249cd92a0ae1::t_7a019a01cece1e 1-12
+researches/safe-resume/verification.json
+  s_58249cd92a0ae1::t_87ee24f353babb 1-159
+retros/README.md
+  s_58249cd92a0ae1::t_01b4426270d118 69-70
+scripts/e04-s004-course-check.mjs
+  s_58249cd92a0ae1::t_21c90a02f29e8a 1-79
+site/chapters/epic04-story004/01-cover.html
+  s_58249cd92a0ae1::t_4ce2a9a25b811b 1
+site/chapters/epic04-story004/02-incident.html
+  s_58249cd92a0ae1::t_848312a256705b 1
+site/chapters/epic04-story004/03-boundaries.html
+  s_58249cd92a0ae1::t_8a2e9d8d717395 1
+site/chapters/epic04-story004/04-timeline.html
+  s_58249cd92a0ae1::t_3889ef6cd67eed 1
+site/chapters/epic04-story004/05-states.html
+  s_58249cd92a0ae1::t_1811e9af26f940 1
+site/chapters/epic04-story004/06-before.html
+  s_58249cd92a0ae1::t_24c20a8f2016f4 1
+site/chapters/epic04-story004/07-receipt.html
+  s_58249cd92a0ae1::t_5e25b21436cabd 1
+site/chapters/epic04-story004/08-generation.html
+  s_58249cd92a0ae1::t_416e7f5df332c3 1
+site/chapters/epic04-story004/09-batch.html
+  s_58249cd92a0ae1::t_00d398df8715f8 1
+site/chapters/epic04-story004/10-files.html
+  s_58249cd92a0ae1::t_600c64482f4b88 1
+site/chapters/epic04-story004/11-shell.html
+  s_58249cd92a0ae1::t_b832ea116eebea 1
+site/chapters/epic04-story004/12-permissions.html
+  s_58249cd92a0ae1::t_b84f66e52d8270 1
+site/chapters/epic04-story004/13-guards.html
+  s_58249cd92a0ae1::t_63db49412873be 1
+site/chapters/epic04-story004/14-interface.html
+  s_58249cd92a0ae1::t_08c2606b83cf00 1
+site/chapters/epic04-story004/15-experiment.html
+  s_58249cd92a0ae1::t_795c0593976ddc 1
+site/chapters/epic04-story004/16-storage.html
+  s_58249cd92a0ae1::t_47fbee85dcc29c 1
+site/chapters/epic04-story004/17-practice.html
+  s_58249cd92a0ae1::t_9970c746b23508 1
+site/chapters/epic04-story004/18-finish.html
+  s_58249cd92a0ae1::t_ff74155a9f5cb5 1
+site/chapters/epic04-story004/course.css
+  s_58249cd92a0ae1::t_b4996d102689b4 1-22
+site/chapters/epic04-story004/pages.json
+  s_58249cd92a0ae1::t_56abfdd045d2d9 1-180
+site/course.json
+  s_58249cd92a0ae1::t_de1262d1a55439 6753-7169,7172
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_d847d5f78e4d5b 12,14
+specs/E04-reliability-and-context/S004-safe-resume/details/01-technical-design.md
+  s_58249cd92a0ae1::t_bc1856d48221ed 7,21,27
+specs/README.md
+  s_58249cd92a0ae1::t_c8b2c0b8b90092 86-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a8aaa1ca15163cf21f89646d10cd7f8edf3af960",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
