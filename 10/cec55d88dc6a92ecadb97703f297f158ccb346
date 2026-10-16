@@ -1,0 +1,19 @@
+specs/E04-reliability-and-context/S004-safe-resume/details/01-technical-design.md
+  s_58249cd92a0ae1::t_1e8d1a4e82a369 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "10cec55d88dc6a92ecadb97703f297f158ccb346",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
