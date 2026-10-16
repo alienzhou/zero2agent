@@ -1,0 +1,50 @@
+packages/core/src/execution-recovery.ts
+  s_58249cd92a0ae1::t_d3ebc8179b11bb 1-89
+  s_58249cd92a0ae1::t_0171aa68290c44 90-163
+e2e/src/safe-resume.test.ts
+  s_58249cd92a0ae1::t_77719bfef316c7 1-148,155-156
+  s_58249cd92a0ae1::t_7e54703607df44 149-154,157-360
+e2e/src/fixtures/safe-resume-child.mjs
+  s_58249cd92a0ae1::t_77719bfef316c7 1-47
+  s_58249cd92a0ae1::t_97c6fddb0bd3e3 48-51
+e2e/src/session-persistence.test.ts
+  s_58249cd92a0ae1::t_36d640d4113a82 65,73,201,237,260,266-268
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_efe2f09fe60ec2 1-5,32,70,80,84-98,102-103,109-110,131,196-199
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_095c2d50a2e342 98-108
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_4ad0ead18c8e27 1-8,124-129,143-151,266-267,344,401-407,413-414,442,498-499,590-594,627-704,706-709,711-751,753-786,788-816,818,821-824,827-835,837-838,840-860,862-882,884-885,887-895,898-913,918-939,942-943,945-957
+packages/core/src/result-read-recovery.ts
+  s_58249cd92a0ae1::t_95492d02ed1304 1-20,36-47
+packages/core/src/run-budget.ts
+  s_58249cd92a0ae1::t_6662915418dc49 76-85
+packages/core/src/session-snapshot.ts
+  s_58249cd92a0ae1::t_2923a1036b6c64 1,8,107-114
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_07d949f0ec21ef 1,15,90-94,96-97,110,123
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_a9128230b1e2d1 224,275-279,286-292,353,419-422,442,527-531
+packages/tui/src/conversations.ts
+  s_58249cd92a0ae1::t_381a2cd58f5abc 3,29-34,39,226-227,232-234,242-244,255-288,290
+packages/tui/src/runtime-tui.ts
+  s_58249cd92a0ae1::t_15e430c9c964a8 56,69,668-673
+packages/tui/src/session-store.ts
+  s_58249cd92a0ae1::t_c172955cbf24be 49-50,55-56,58-64,67,221-235
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dea466202e755a2f199ca8cca26f86947747b9a3",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
