@@ -1,0 +1,25 @@
+.vibecoding/2026-10-16/e04-s004-course-plan/prompt.md
+  s_58249cd92a0ae1::t_bde35b751198db 1-5
+.discuss/2026-10-16/e04-s004-safe-resume/outline.md
+  s_58249cd92a0ae1::t_bde35b751198db 1-83
+.vibecoding/2026-10-16/e04-s004-course-plan/dialogue.md
+  s_58249cd92a0ae1::t_bde35b751198db 1-9
+.vibecoding/2026-10-16/e04-s004-course-plan/learnings.md
+  s_58249cd92a0ae1::t_bde35b751198db 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "03baa01a4b4492f5b842d922ab80e24a20ed7f3b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
