@@ -76,6 +76,112 @@ describe('bounded result bodies', () => {
       await expect(store.read(entry.reference, start, size)).rejects.toThrow('INVALID_RESULT_RANGE')
     }
   })
+  it('marks a partial trailing identifier and lets the caller recover its remaining bytes', async () => {
+    const { store, source } = await fixture()
+    const body = 'diagnostic=FAULT_z91f\n'
+    const entry = await store.save(body, source)
+    const first = JSON.parse(await store.read(entry.reference, 0, 18))
+    expect(first.untrusted_text).toBe('diagnostic=FAULT_z')
+    expect(first.eof).toBe(false)
+    expect(first.continuation_hint).toMatch(/incomplete/)
+    const last = JSON.parse(await store.read(entry.reference, first.next_offset, 4096))
+    expect(first.untrusted_text + last.untrusted_text).toBe(body)
+    expect(last.eof).toBe(true)
+    expect(last.continuation_hint).toBeUndefined()
+    expect(last.next_offset).toBe(entry.bytes)
+  })
+  it('reads only the final bounded page without splitting its initial UTF-8 character', async () => {
+    const { store, source, dir } = await fixture()
+    const body = 'irrelevant line\n'.repeat(900) + '甲😀end\n'
+    const entry = await store.save(body, source)
+    const results = await executeToolCalls(
+      [call('read_tool_result', { reference: entry.reference, tail: true, limit: 7 })],
+      [readToolResultTool],
+      { cwd: dir, results: store },
+      undefined,
+      new PermissionController({ mode: 'read-only' })
+    )
+    expect(results[0].is_error).not.toBe(true)
+    const page = JSON.parse(String(results[0].content))
+    expect(page.untrusted_text).toBe('end\n')
+    expect(page.offset).toBe(entry.bytes - 4)
+    expect(page.next_offset).toBe(entry.bytes)
+    expect(page.eof).toBe(true)
+    expect(page.leading_fragment_hint).toContain('incomplete')
+    expect(page.source).toEqual(source)
+    expect(page.sha256).toBe(entry.sha256)
+    expect(store.snapshot()!.entries).toHaveLength(1)
+    for (const input of [
+      { tail: true, offset: 0 },
+      { tail: 'true' },
+      { tail: true, limit: 4097 },
+    ]) {
+      await expect(
+        readToolResultTool.execute(
+          { reference: entry.reference, ...input },
+          { cwd: dir, results: store }
+        )
+      ).rejects.toThrow('INVALID_RESULT_RANGE')
+    }
+  })
+  it('distinguishes an empty page at the end of a nonempty result from an empty body', async () => {
+    const { store, source, dir, bodyPath } = await fixture()
+    const body = 'observed diagnostic: FAULT_z91f\n'
+    const entry = await store.save(body, source)
+    const results = await executeToolCalls(
+      [call('read_tool_result', { reference: entry.reference, offset: entry.bytes })],
+      [readToolResultTool],
+      { cwd: dir, results: store },
+      undefined,
+      new PermissionController({ mode: 'read-only' })
+    )
+    expect(results[0].is_error).not.toBe(true)
+    const page = JSON.parse(String(results[0].content))
+    expect(page).toMatchObject({
+      total_bytes: Buffer.byteLength(body),
+      offset: entry.bytes,
+      next_offset: entry.bytes,
+      eof: true,
+      untrusted_text: '',
+      sha256: entry.sha256,
+    })
+    expect(page.empty_page_hint).toContain('body is not empty')
+    expect(page.empty_page_hint).toContain('tail:true without offset')
+    expect(page.continuation_hint).toBeUndefined()
+    const tail = JSON.parse(await store.read(entry.reference, 'tail'))
+    expect(tail.untrusted_text).toBe(body)
+    expect(tail.empty_page_hint).toBeUndefined()
+
+    const empty = await store.save('', { ...source, toolCallId: 'empty' })
+    const emptyPage = JSON.parse(await store.read(empty.reference))
+    expect(emptyPage).toMatchObject({ total_bytes: 0, offset: 0, eof: true, untrusted_text: '' })
+    expect(emptyPage.empty_page_hint).toBeUndefined()
+
+    // EOF still verifies the saved bytes; it must not become an unchecked metadata path.
+    await fs.writeFile(bodyPath(entry.sha256), body.replace('FAULT', 'FORGE'))
+    await expect(store.read(entry.reference, entry.bytes)).rejects.toThrow('RESULT_CHANGED')
+  })
+  it('keeps tail reads subject to original permissions and immutable body checks', async () => {
+    const { store, source, dir, bodyPath } = await fixture()
+    const entry = await store.save('secret tail\n', { ...source, paths: [path.dirname(dir)] })
+    const denied = await executeToolCalls(
+      [call('read_tool_result', { reference: entry.reference, tail: true })],
+      [readToolResultTool],
+      { cwd: dir, results: store },
+      undefined,
+      new PermissionController({ mode: 'read-only' })
+    )
+    expect(denied[0].is_error).toBe(true)
+    expect(String(denied[0].content)).not.toContain('secret tail')
+    const complete = JSON.parse(await store.read(entry.reference, 'tail'))
+    expect(complete.offset).toBe(0)
+    expect(complete.leading_fragment_hint).toBeUndefined()
+    expect(complete.untrusted_text).toBe('secret tail\n')
+    await fs.writeFile(bodyPath(entry.sha256), 'forged tail\n')
+    await expect(store.read(entry.reference, 'tail')).rejects.toThrow('RESULT_CHANGED')
+    await fs.rm(bodyPath(entry.sha256))
+    await expect(store.read(entry.reference, 'tail')).rejects.toThrow('RESULT_MISSING')
+  })
   it('distinguishes missing, tampered, unknown, and expired bodies without returning content', async () => {
     const { store, source, bodyPath } = await fixture()
     const entry = await store.save('private evidence', source)

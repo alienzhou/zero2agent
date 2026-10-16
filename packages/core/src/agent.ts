@@ -1,3 +1,4 @@
+import type { ArtifactContract } from './artifact-contract.js'
 import type { ResultStoreOptions } from './result-store.js'
 import type { FileMutationHandler } from './file-mutations.js'
 /**
@@ -60,9 +61,27 @@ export class Agent {
    * 运行 Agent 处理用户消息
    */
   async run(message: string, diagnosticContext?: DiagnosticContext): Promise<string> {
+    return this.runInternal(message, undefined, diagnosticContext)
+  }
+
+  /** Explicit caller contract for this turn; not inherited by later turns or snapshots. */
+  async runWithContract(
+    message: string,
+    contract: ArtifactContract,
+    diagnosticContext?: DiagnosticContext
+  ): Promise<string> {
+    return this.runInternal(message, contract, diagnosticContext)
+  }
+
+  private async runInternal(
+    message: string,
+    artifactContract: ArtifactContract | undefined,
+    diagnosticContext?: DiagnosticContext
+  ): Promise<string> {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
+        artifactContract,
         limits: this.options.limits,
         signal: controller.signal,
         fileMutations: this.options.fileMutations,

@@ -166,7 +166,11 @@ describe('CLI compaction contract (local HTTP provider, no credentials)', () => 
     ).toBe(false)
     expect(JSON.stringify(mains[2].messages)).toContain(SUMMARY)
     expect(JSON.stringify(mains[2].messages)).not.toContain(mainText)
-    expect(mains[2].messages.at(-1)).toEqual({ role: 'user', content: 'continue from here' })
+    expect(mains[2].messages.at(-1)).toEqual({
+      role: 'user',
+      content:
+        '[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\ncontinue from here',
+    })
     expect(result.stdout).toContain('正在压缩上下文')
     expect(result.stdout).toContain('完整会话记录保留')
     expect(result.stderr).toBe('')
@@ -234,7 +238,12 @@ describe('CLI compaction contract (local HTTP provider, no credentials)', () => 
     expect(summaries.length).toBeGreaterThan(2)
     expect(summaries.length).toBeLessThanOrEqual(inputs.length * 3)
     for (const [index, request] of mains.entries()) {
-      expect(request.messages.at(-1)).toEqual({ role: 'user', content: inputs[index] })
+      expect(request.messages.at(-1)).toEqual({
+        role: 'user',
+        content: JSON.stringify(request.messages).includes(SUMMARY)
+          ? `[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\n${inputs[index]}`
+          : inputs[index],
+      })
     }
     expect(JSON.stringify(mains.at(-1)?.messages)).toContain(SUMMARY)
     expect(result.stdout).toContain('上下文压缩完成')
@@ -250,7 +259,7 @@ describe('CLI compaction contract (local HTTP provider, no credentials)', () => 
     const result = await exercise(
       [...rounds, 'exit'],
       (res, request) => {
-        if (request.stream) reply(res, request, 'old observation; '.repeat(280))
+        if (request.stream) reply(res, request, 'old observation; '.repeat(250))
         else if (mainsAtRelease === undefined) pending = { res, request }
         else reply(res, request, SUMMARY)
       },
@@ -271,7 +280,10 @@ describe('CLI compaction contract (local HTTP provider, no credentials)', () => 
     const mains = mainRequests(result.requests)
     expect(mains).toHaveLength(4)
     expect(JSON.stringify(mains[3].messages)).toContain(SUMMARY)
-    expect(mains[3].messages.at(-1)).toEqual({ role: 'user', content: rounds[3] })
+    expect(mains[3].messages.at(-1)).toEqual({
+      role: 'user',
+      content: `[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\n${rounds[3]}`,
+    })
     expect(result.stdout).toContain('正在后台压缩历史')
     expect(result.stdout).toContain('上下文压缩完成')
     expect(result.stderr).toBe('')
@@ -302,7 +314,7 @@ describe('CLI compaction contract (local HTTP provider, no credentials)', () => 
         'exit',
       ],
       (res, request) => {
-        if (request.stream) reply(res, request, 'old observation; '.repeat(280))
+        if (request.stream) reply(res, request, 'old observation; '.repeat(250))
         else {
           pending = res
           res.once('close', () => {

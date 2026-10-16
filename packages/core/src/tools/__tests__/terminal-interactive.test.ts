@@ -51,7 +51,7 @@ const execute = (extra: Record<string, unknown> = {}) =>
 
 describe('human-controlled terminal', () => {
   it('keeps existing tools and adds bounded result reading and exposes the host environment helper', () => {
-    expect(allTools).toHaveLength(9)
+    expect(allTools).toHaveLength(10)
     expect(allTools.filter(tool => tool.name === 'terminal')).toEqual([terminalTool])
     expect(getBaseShellEnv).toBeTypeOf('function')
     expect(terminalTool.input_schema.properties).toHaveProperty('interactive.type', 'boolean')

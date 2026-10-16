@@ -66,8 +66,8 @@ describe('E02-S003 验收：基础功能 [checklist §功能]', () => {
     expect(body).toContain('err')
   })
 
-  it('[P0] allTools 注册 terminal（共 9 个）', () => {
-    expect(allTools).toHaveLength(9)
+  it('[P0] allTools 注册 terminal（共 10 个）', () => {
+    expect(allTools).toHaveLength(10)
     expect(allTools.map(t => t.name)).toContain('terminal')
   })
 

@@ -1,3 +1,4 @@
+import type { ArtifactFailure } from './artifact-completion.js'
 import type { CompactionEvent } from './context-manager.js'
 
 /** Every event belongs to one turn; seq strictly increases within that turn. */
@@ -22,6 +23,7 @@ export type RuntimeEvent = { turnId: string; seq: number } & (
       errorKind: string
     }
   | { type: 'notice'; text: string }
+  | { type: 'evidence-read'; status: 'invalid-input' | 'correcting' | 'resolved' | 'blocked' }
   | {
       type: 'tool-state'
       toolCallId: string
@@ -31,6 +33,14 @@ export type RuntimeEvent = { turnId: string; seq: number } & (
       output?: string
       durationMs?: number
       reason?: string
+    }
+  | {
+      type: 'artifact-check'
+      status: 'started' | 'passed' | 'failed' | 'repair' | 'blocked'
+      attempt: number
+      fileCount: number
+      issueCount?: number
+      artifactFailure?: ArtifactFailure
     }
   | { type: 'compaction'; event: CompactionEvent }
   | { type: 'turn-end'; status: 'completed' | 'cancelled' | 'error'; error?: string }

@@ -22,6 +22,7 @@ export {
   allTools,
   readFileTool,
   readToolResultTool,
+  readHistoryTool,
   listDirectoryTool,
   terminalTool,
   toAnthropicTool,
@@ -78,9 +79,19 @@ export type { DiagnosticEvent, DiagnosticObserver, DiagnosticContext } from './d
 export type { FileMutation, FileMutationHandler } from './file-mutations.js'
 
 export { ResultStore, ResultStoreError } from './result-store.js'
+export { EvidenceReadIncompleteError } from './result-read-recovery.js'
 export type {
   ResultStoreOptions,
   ResultSnapshot,
   ResultEntry,
   ResultSource,
 } from './result-store.js'
+
+export {
+  formatArtifactTask,
+  validateArtifactContract,
+  ARTIFACT_LIMITS,
+} from './artifact-contract.js'
+export type { ArtifactContract, ArtifactRule, ArtifactValue } from './artifact-contract.js'
+export { ArtifactCompletionError } from './artifact-completion.js'
+export type { ArtifactFailure } from './artifact-completion.js'

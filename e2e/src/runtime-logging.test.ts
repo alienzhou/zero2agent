@@ -73,7 +73,15 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
         count === 1 ? 'tool_use' : 'end_turn'
       )
     )
-    expect((await runCli({ cwd: p.cwd, env: p.env, args: ['private-user-body'] })).code).toBe(0)
+    expect(
+      (
+        await runCli({
+          cwd: p.cwd,
+          env: { ...p.env, MODEL_NAME: 'requested-fixture' },
+          args: ['private-user-body'],
+        })
+      ).code
+    ).toBe(0)
     expect(await fs.readFile(path.join(p.cwd, 'private-name.txt'), 'utf8')).toBe(
       'private-file-body'
     )
@@ -83,6 +91,15 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
     expect(
       report.records.filter(r => r.kind === 'request' && r.event === 'completed')
     ).toHaveLength(2)
+    expect(
+      report.records
+        .filter(r => r.kind === 'request' && r.event === 'completed')
+        .map(r => r.responseModel)
+    ).toEqual(['contract-model', 'contract-model'])
+    expect((p.requests as Array<{ model: string }>).map(r => r.model)).toEqual([
+      'requested-fixture',
+      'requested-fixture',
+    ])
     const tool = report.records.find(r => r.kind === 'tool' && r.event === 'completed')!
     expect(tool).toMatchObject({ toolCallId: 'write-once', toolName: 'write_file' })
     expect(
@@ -110,6 +127,8 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
     })
     expect(inspected.code).toBe(0)
     expect(inspected.output).toContain('call=write-once')
+    expect(inspected.output).toContain('requested-model=requested-fixture')
+    expect(inspected.output).toContain('reported-model=contract-model')
     expect(p.requests).toHaveLength(2)
     expect(await fs.readFile(path.join(p.logs.directory, item.id + '.jsonl'), 'utf8')).toBe(bytes)
     expect(await fs.readFile(path.join(p.cwd, 'private-name.txt'))).toEqual(snapshot)

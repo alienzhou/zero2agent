@@ -1,11 +1,13 @@
 import { validateResultSnapshot, type ResultSnapshot } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
+import { validateHistorySnapshot, type HistorySnapshot } from './history-evidence.js'
 
 /** Durable data only. Pending jobs, budgets and temporary pruning artifacts are rebuilt. */
 export interface SessionSnapshot {
   results?: ResultSnapshot
+  history?: HistorySnapshot
   messages: Anthropic.MessageParam[]
-  context: { through: number; summary: string }
+  context: { through: number; summary: string; format?: 'evidence-v1' }
 }
 
 function object(value: unknown): value is Record<string, unknown> {
@@ -28,7 +30,8 @@ export function validateSessionSnapshot(value: unknown): SessionSnapshot {
     through < 0 ||
     through > value.messages.length ||
     typeof summary !== 'string' ||
-    (through === 0 ? summary !== '' : !summary.trim())
+    (through === 0 ? summary !== '' : !summary.trim()) ||
+    (value.context.format !== undefined && value.context.format !== 'evidence-v1')
   )
     fail()
   const pending = new Set<string>()
@@ -99,8 +102,16 @@ export function validateSessionSnapshot(value: unknown): SessionSnapshot {
   }
   if (pending.size) fail()
   return structuredClone({
+    ...(value.history === undefined
+      ? {}
+      : {
+          history: validateHistorySnapshot(
+            value.history,
+            value.messages as Anthropic.MessageParam[]
+          ),
+        }),
     ...(value.results === undefined ? {} : { results: validateResultSnapshot(value.results) }),
     messages: value.messages,
-    context: { through, summary },
+    context: { through, summary, ...(value.context.format && { format: value.context.format }) },
   }) as SessionSnapshot
 }

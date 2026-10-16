@@ -10,6 +10,10 @@ import { ContextManager, type CompactionRuntime, type CompactionEvent } from '..
 type Message = Anthropic.MessageParam
 const user = (content: string): Message => ({ role: 'user', content })
 const assistant = (content: string): Message => ({ role: 'assistant', content })
+const active = (content: string): Message =>
+  user(
+    `[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\n${content}`
+  )
 const longHistory = (): Message[] => [
   user('original requirement ' + 'u'.repeat(1200)),
   assistant('a'.repeat(6000)),
@@ -92,7 +96,8 @@ describe('tiered context management', () => {
     await Promise.resolve()
     const request = await manager.prepare(messages, runtime)
     expect(JSON.stringify(request.messages)).toContain('Old work summarized.')
-    expect(request.messages.slice(-3)).toEqual(messages.slice(-3))
+    expect(request.messages.slice(-3, -1)).toEqual(messages.slice(-3, -1))
+    expect(request.messages.at(-1)).toEqual(active(String(messages.at(-1)!.content)))
     expect(messages).toEqual(originals)
     expect(events.some(e => e.phase === 'completed')).toBe(true)
   })
@@ -114,7 +119,7 @@ describe('tiered context management', () => {
     pending.resolve('Old completed work summarized.')
     const request = await preparing
     expect(runtime.budget.estimate(request)).toBeLessThanOrEqual(runtime.budget.inputLimit)
-    expect(request.messages.at(-1)).toEqual(user('new question'))
+    expect(request.messages.at(-1)).toEqual(active('new question'))
   })
 
   it('blocks in foreground immediately after a large single-turn growth', async () => {
@@ -357,7 +362,9 @@ describe('tiered context management', () => {
       messages.push(user(`turn-${turn}: ` + 'u'.repeat(180)))
       const request = await manager.prepare(messages, runtime)
       expect(runtime.budget.estimate(request)).toBeLessThanOrEqual(runtime.budget.inputLimit)
-      expect(request.messages.at(-1)).toEqual(messages.at(-1))
+      expect(request.messages.at(-1)).toEqual(
+        manager.snapshot().summary ? active(String(messages.at(-1)!.content)) : messages.at(-1)
+      )
       messages.push(assistant('a'.repeat(900)))
     }
     expect(messages).toHaveLength(240)

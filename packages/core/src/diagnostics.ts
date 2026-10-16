@@ -1,7 +1,11 @@
 import { randomUUID } from 'node:crypto'
 import { performance } from 'node:perf_hooks'
 import Anthropic from '@anthropic-ai/sdk'
-import type { ContextRequest } from './context-budget.js'
+import {
+  contextFailureReason,
+  type ContextFailureReason,
+  type ContextRequest,
+} from './context-budget.js'
 import type { RuntimeEvent } from './runtime.js'
 import { notifyObserver } from './runtime.js'
 import { RunBudgetError } from './runtime.js'
@@ -27,7 +31,16 @@ export interface DiagnosticEvent {
   operationId: string
   seq: number
   at: string
-  kind: 'operation' | 'request' | 'tool' | 'permission' | 'phase' | 'compaction' | 'notice'
+  kind:
+    | 'operation'
+    | 'request'
+    | 'tool'
+    | 'permission'
+    | 'phase'
+    | 'compaction'
+    | 'notice'
+    | 'artifact-check'
+    | 'evidence-read'
   event: string
   sessionId?: string
   operation?: 'turn' | 'compact'
@@ -37,7 +50,10 @@ export interface DiagnosticEvent {
   delayMs?: number
   limitReason?: string
   purpose?: RequestPurpose
+  /** Requested model name, recorded at request start. */
   model?: string
+  /** Service-reported identity from a complete Message; not verified model provenance. */
+  responseModel?: string
   messageCount?: number
   toolCount?: number
   maxOutputTokens?: number
@@ -51,6 +67,7 @@ export interface DiagnosticEvent {
   stopReason?: string
   providerRequestId?: string
   errorKind?: DiagnosticError
+  compactionFailure?: ContextFailureReason
   httpStatus?: number
   toolCallId?: string
   toolName?: string
@@ -70,6 +87,9 @@ export interface DiagnosticEvent {
   trigger?: 'auto' | 'manual' | 'overflow'
   before?: number
   after?: number
+  fileCount?: number
+  issueCount?: number
+  artifactFailure?: string
 }
 export type DiagnosticObserver = (event: DiagnosticEvent) => void
 type Details = Omit<
@@ -237,17 +257,29 @@ export class DiagnosticEmitter {
         outputChars: event.output?.length,
         durationMs: diagnosticNumber(event.durationMs),
       })
+    else if (event.type === 'artifact-check')
+      this.emit('artifact-check', event.status, {
+        requestId: this.modelRequestId,
+        attempt: diagnosticNumber(event.attempt),
+        fileCount: diagnosticNumber(event.fileCount),
+        issueCount: diagnosticNumber(event.issueCount),
+        artifactFailure: diagnosticLabel(event.artifactFailure),
+      })
+    else if (event.type === 'evidence-read')
+      this.emit('evidence-read', event.status, { requestId: this.modelRequestId })
     else if (event.type === 'compaction') this.compaction(event.event)
     else if (event.type === 'notice') this.emit('notice', 'shown')
   }
   compaction(event: {
     phase: string
     trigger: DiagnosticEvent['trigger']
+    failureReason?: unknown
     before?: number
     after?: number
   }): void {
     this.emit('compaction', event.phase, {
       trigger: event.trigger,
+      compactionFailure: contextFailureReason(event.failureReason),
       before: diagnosticNumber(event.before),
       after: diagnosticNumber(event.after),
     })
@@ -320,6 +352,7 @@ export class RequestSpan {
       cacheReadTokens: diagnosticNumber(message.usage?.cache_read_input_tokens),
       cacheWriteTokens: diagnosticNumber(message.usage?.cache_creation_input_tokens),
       stopReason: diagnosticLabel(message.stop_reason),
+      responseModel: this.purpose === 'count' ? undefined : diagnosticLabel(message.model),
       providerRequestId: diagnosticLabel(message._request_id),
     })
   }

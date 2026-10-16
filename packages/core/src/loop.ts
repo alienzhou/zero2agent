@@ -1,6 +1,15 @@
+import {
+  formatArtifactTask,
+  validateArtifactContract,
+  type ArtifactContract,
+} from './artifact-contract.js'
+import { checkArtifacts, ArtifactCompletionError } from './artifact-completion.js'
 import { INLINE_RESULT_BYTES, type ResultSource, type ResultStoreOptions } from './result-store.js'
 import { resolvePhysicalPath } from './tools/path-guard.js'
-import { readToolResultTool } from './tools/read-tool-result.js'
+import { readToolResultTool, ResultReadInputError } from './tools/read-tool-result.js'
+import { ResultReadRecovery, EvidenceReadIncompleteError } from './result-read-recovery.js'
+import { readHistoryTool } from './tools/read-history.js'
+import { validateHistoryPaths } from './history-evidence.js'
 import type { FileMutationHandler } from './file-mutations.js'
 /**
  * ReACT 循环实现
@@ -40,10 +49,13 @@ import {
 } from './permissions.js'
 
 function resultAwareTools(tools: Tool[] = allTools): Tool[] {
-  const existing = tools.find(tool => tool.name === readToolResultTool.name)
-  if (existing && existing !== readToolResultTool)
-    throw new Error('read_tool_result is a reserved host tool')
-  return existing ? tools : [...tools, readToolResultTool]
+  const result = [...tools]
+  for (const builtin of [readToolResultTool, readHistoryTool]) {
+    const existing = result.find(tool => tool.name === builtin.name)
+    if (existing && existing !== builtin) throw new Error(`${builtin.name} is a reserved host tool`)
+    if (!existing) result.push(builtin)
+  }
+  return result
 }
 
 function describeToolError(error: unknown): string {
@@ -99,7 +111,9 @@ export async function executeToolCalls(
   diagnostics?: DiagnosticEmitter,
   fileMutations?: FileMutationHandler,
   sessionId?: string,
-  budget?: RunBudget
+  budget?: RunBudget,
+  completionSafety?: { safe: boolean },
+  readRecovery?: ResultReadRecovery
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -129,13 +143,14 @@ export async function executeToolCalls(
     let consumed = false
     let nativeFailed = false
     let nativeDenied = false
+    let nativeStopped = false
     let metadataSettled = false
     let resultSource: ResultSource | undefined
+    const tool = tools.find(t => t.name === block.name)
     try {
       budget?.consumeTool(block.name, block.input)
       consumed = true
       assertNotCancelled(ctx.signal)
-      const tool = tools.find(t => t.name === block.name)
       if (!tool) throw new Error(`Unknown tool: ${block.name}`)
       const input = structuredClone(block.input) as Record<string, unknown>
       const originatingRequestId = diagnostics?.latestModelRequestId
@@ -144,6 +159,9 @@ export async function executeToolCalls(
           ? (metadata: ToolExecutionMetadata) => {
               if (!metadataSettled) {
                 nativeDenied ||= metadata.terminalOutcome === 'declined'
+                nativeStopped ||= ['cancelled', 'skipped', 'drain-timeout'].includes(
+                  metadata.terminalOutcome
+                )
                 nativeFailed ||=
                   (metadata.exitCode !== undefined && metadata.exitCode !== 0) ||
                   metadata.signal !== undefined ||
@@ -192,6 +210,10 @@ export async function executeToolCalls(
       const permissionTool = tool.readPaths
         ? { ...tool, permission: { effect: 'read' as const, paths: ['__result_paths'] } }
         : tool
+      ctx.recordHistoryPaths?.([
+        ...resultSource.paths,
+        ...(tool.readPaths ? (permissionInput.__result_paths as string[]) : []),
+      ])
       const initial = permissions.evaluate(permissionTool, permissionInput, callCtx)
       diagnostics?.permission('initial', block.id, block.name, initial.action)
       if (initial.action === 'ask') state('approval', { reason: initial.reason })
@@ -255,6 +277,12 @@ export async function executeToolCalls(
           output
         )
       let failed = output.startsWith('Error:') || cancelled || nativeFailed
+      if (!failed && tool === readToolResultTool) {
+        const pending = readRecovery?.unresolved
+        readRecovery?.succeeded(input, output)
+        if (pending && !readRecovery?.unresolved)
+          emitter?.emit({ type: 'evidence-read', status: 'resolved' })
+      }
       if (
         ctx.results &&
         tool !== readToolResultTool &&
@@ -282,9 +310,27 @@ export async function executeToolCalls(
         content: output,
         ...(failed && { is_error: true }),
       })
+      if (
+        completionSafety &&
+        (nativeDenied || nativeStopped || (failed && tool.permission?.effect !== 'read'))
+      )
+        completionSafety.safe = false
       budget?.settleTool(block.name, block.input, failed, nativeDenied)
     } catch (error) {
       metadataSettled = true
+      if (tool === readToolResultTool && error instanceof ResultReadInputError) {
+        readRecovery?.failed(block.input)
+        emitter?.emit({ type: 'evidence-read', status: 'invalid-input' })
+      }
+      if (
+        completionSafety &&
+        (denied ||
+          nativeDenied ||
+          nativeStopped ||
+          error instanceof TurnCancelledError ||
+          tool?.permission?.effect !== 'read')
+      )
+        completionSafety.safe = false
       const limited =
         error instanceof RunBudgetError || ctx.signal?.reason instanceof RunBudgetError
       const cancelled = !limited && (ctx.signal?.aborted || error instanceof TurnCancelledError)
@@ -332,6 +378,7 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  artifactContract?: ArtifactContract
   results?: ResultStoreOptions
   limits?: RunLimits
   fileMutations?: FileMutationHandler
@@ -358,6 +405,11 @@ export interface RunLoopOptions {
  * @returns 最终的文本响应
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
+  if (options.artifactContract !== undefined) {
+    const artifactContract = validateArtifactContract(options.artifactContract)
+    options = { ...options, artifactContract }
+    userMessage = formatArtifactTask(userMessage, artifactContract)
+  }
   const budget = new RunBudget(options.limits, options.signal)
   options = { ...options, signal: budget.signal }
   const session = options.session ?? new Session(options.results)
@@ -498,12 +550,42 @@ async function runTurnLoop(
     diagnostics,
     executor
   )
+  let completionFeedback: string | undefined
+  let completionAttempt = 0
+  const completionSafety = { safe: true }
+  const readRecovery = new ResultReadRecovery()
+  const originalRequest = runtime.request
+  // Feedback is an ephemeral request overlay, included in context accounting but not user history.
+  runtime.request = view => {
+    const request = originalRequest(view)
+    const feedback = [completionFeedback, readRecovery.feedback].filter(Boolean).join('\n')
+    if (feedback) {
+      const last = request.messages.at(-1)
+      if (last?.role === 'user') {
+        last.content = [
+          ...(typeof last.content === 'string'
+            ? [{ type: 'text' as const, text: last.content }]
+            : last.content),
+          { type: 'text', text: feedback },
+        ]
+      } else request.messages.push({ role: 'user', content: feedback })
+    }
+    return request
+  }
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const ctx: ToolContext = {
+    history: session.historyReader(() => messages, cwd ?? process.cwd()),
+    recordHistoryPaths: paths => {
+      session.assertHistoryCapacity()
+      const combined = [...new Set([...batchHistoryPaths, ...paths])]
+      validateHistoryPaths(combined)
+      for (const p of combined) batchHistoryPaths.add(p)
+    },
     results: session.getResultStore(cwd ?? process.cwd()),
     cwd: cwd ?? process.cwd(),
     ...(options.signal && { signal: options.signal }),
   }
+  const batchHistoryPaths = new Set<string>()
   while (true) {
     assertNotCancelled(options.signal)
     budget.consumeIteration()
@@ -575,6 +657,7 @@ async function runTurnLoop(
         throw new Error('Model stopped for tool_use without any tool calls.')
       }
       messages.push({ role: 'assistant', content: structuredClone(response.content) })
+      batchHistoryPaths.clear()
       emitter.emit({ type: 'phase', phase: 'tools' })
       const toolResults = await executeToolCalls(
         response.content,
@@ -586,9 +669,12 @@ async function runTurnLoop(
         diagnostics,
         options.fileMutations,
         options.diagnosticContext?.sessionId,
-        budget
+        budget,
+        completionSafety,
+        readRecovery
       )
       messages.push({ role: 'user', content: toolResults })
+      session.recordHistorySource(messages, messages.length - 1, [...batchHistoryPaths])
       budget.check()
       assertNotCancelled(options.signal)
       continue
@@ -645,6 +731,74 @@ async function runTurnLoop(
       notifyObserver(() => events?.onText?.(`\n${emptyNotice}\n`))
     }
     assertNotCancelled(options.signal)
+    if (readRecovery.unresolved) {
+      try {
+        if (response.stop_reason !== 'end_turn' || calls.length || !completionSafety.safe)
+          throw new EvidenceReadIncompleteError()
+        readRecovery.requestCorrection()
+      } catch (error) {
+        emitter.emit({ type: 'evidence-read', status: 'blocked' })
+        throw error
+      }
+      emitter.emit({ type: 'evidence-read', status: 'correcting' })
+      emitter.emit({
+        type: 'notice',
+        text: '[Harness] Correcting an unresolved saved-evidence read within the current budget.',
+      })
+      continue
+    }
+    if (options.artifactContract) {
+      const contract = options.artifactContract
+      const attempt = ++completionAttempt
+      try {
+        if (response.stop_reason !== 'end_turn' || calls.length)
+          throw new ArtifactCompletionError('incomplete-response')
+        if (!completionSafety.safe) throw new ArtifactCompletionError('unsafe-effects')
+        emitter.emit({
+          type: 'artifact-check',
+          status: 'started',
+          attempt,
+          fileCount: contract.artifacts.length,
+        })
+        const issues = await checkArtifacts(
+          contract,
+          ctx,
+          permissions,
+          budget,
+          diagnostics,
+          attempt
+        )
+        budget.check()
+        emitter.emit({
+          type: 'artifact-check',
+          status: issues.count ? 'failed' : 'passed',
+          attempt,
+          fileCount: contract.artifacts.length,
+          issueCount: issues.count,
+        })
+        if (issues.count) {
+          if (attempt >= 2) throw new ArtifactCompletionError('invalid-artifact')
+          completionFeedback = issues.feedback()
+          emitter.emit({
+            type: 'artifact-check',
+            status: 'repair',
+            attempt,
+            fileCount: contract.artifacts.length,
+            issueCount: issues.count,
+          })
+          continue
+        }
+      } catch (error) {
+        emitter.emit({
+          type: 'artifact-check',
+          status: 'blocked',
+          attempt,
+          fileCount: contract.artifacts.length,
+          ...(error instanceof ArtifactCompletionError ? { artifactFailure: error.reason } : {}),
+        })
+        throw error
+      }
+    }
     return text || notice || emptyNotice
   }
 }

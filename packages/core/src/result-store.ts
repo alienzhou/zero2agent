@@ -441,13 +441,19 @@ export class ResultStore {
     limit: unknown = MAX_RESULT_READ_BYTES,
     signal?: AbortSignal
   ): Promise<string> {
-    if (!integer(offset, 0, Number.MAX_SAFE_INTEGER) || !integer(limit, 4, MAX_RESULT_READ_BYTES))
+    if (
+      (offset !== 'tail' && !integer(offset, 0, Number.MAX_SAFE_INTEGER)) ||
+      !integer(limit, 4, MAX_RESULT_READ_BYTES)
+    )
       fail(
         'INVALID_RESULT_RANGE',
-        `offset must be a nonnegative integer; limit must be 4..${MAX_RESULT_READ_BYTES}.`
+        `offset must be a nonnegative integer or tail; limit must be 4..${MAX_RESULT_READ_BYTES}.`
       )
     const entry = this.entry(reference)
-    if (offset > entry.bytes) fail('INVALID_RESULT_RANGE', 'offset exceeds the stored byte length.')
+    const tail = offset === 'tail'
+    const requestedOffset = offset === 'tail' ? Math.max(0, entry.bytes - limit) : offset
+    if (requestedOffset > entry.bytes)
+      fail('INVALID_RESULT_RANGE', 'offset exceeds the stored byte length.')
     try {
       const location = await this.location(false)
       const handle = await fs.open(
@@ -461,7 +467,7 @@ export class ResultStore {
         const hash = createHash('sha256')
         const chunks: Buffer[] = []
         let position = 0
-        const captureStart = Math.max(0, offset - 3)
+        const captureStart = Math.max(0, requestedOffset - 3)
         // Hash and collect the requested bytes in the same pass. No full body readFile or long-line array.
         for await (const data of handle.createReadStream({
           autoClose: false,
@@ -471,7 +477,7 @@ export class ResultStore {
           const chunk = data as Buffer
           hash.update(chunk)
           const start = Math.max(0, captureStart - position)
-          const end = Math.min(chunk.length, offset + limit + 3 - position)
+          const end = Math.min(chunk.length, requestedOffset + limit + 3 - position)
           if (start < end) chunks.push(Buffer.from(chunk.subarray(start, end)))
           position += chunk.length
           if (position > entry.bytes) fail('RESULT_CHANGED', 'Body grew during verification.')
@@ -485,7 +491,7 @@ export class ResultStore {
           fail('RESULT_CHANGED', 'Body checksum changed; no content was returned.')
         signal?.throwIfAborted()
         const captured = Buffer.concat(chunks)
-        const begin = offset - captureStart
+        let begin = requestedOffset - captureStart
         let end = Math.min(begin + limit, captured.length)
         const crossing = (boundary: number): number | undefined => {
           for (let lead = Math.max(0, boundary - 3); lead < boundary; lead++) {
@@ -504,7 +510,10 @@ export class ResultStore {
           }
           return undefined
         }
-        if (crossing(begin) !== undefined)
+        // Tail pages move their start forward at most three bytes, never exceed
+        // the requested range or return a partial leading UTF-8 character.
+        if (tail) while (crossing(begin) !== undefined) begin++
+        else if (crossing(begin) !== undefined)
           fail(
             'INVALID_RESULT_RANGE',
             'offset is inside a UTF-8 character; use next_offset from the previous page.'
@@ -512,16 +521,33 @@ export class ResultStore {
         end = crossing(end) ?? end
         const bytes = captured.subarray(begin, end)
         const text = bytes.toString('utf8')
-        const next = offset + bytes.length
+        const actualOffset = captureStart + begin
+        const next = actualOffset + bytes.length
         return JSON.stringify({
           kind: 'tool_result_page',
           reference: entry.reference,
           source: entry.source,
           sha256: entry.sha256,
           total_bytes: entry.bytes,
-          offset,
+          offset: actualOffset,
           next_offset: next,
           eof: next === entry.bytes,
+          ...(entry.bytes > 0 &&
+            actualOffset === entry.bytes && {
+              empty_page_hint:
+                'This page starts at the end; the stored body is not empty. To read its final bytes, use tail:true without offset, or request an earlier byte range.',
+            }),
+          ...(tail &&
+            actualOffset > 0 &&
+            captured[begin - 1] !== 10 && {
+              leading_fragment_hint:
+                'Earlier bytes are omitted; the first line or identifier may be incomplete. Read a preceding byte range before quoting it.',
+            }),
+          ...(next < entry.bytes &&
+            !text.endsWith('\n') && {
+              continuation_hint:
+                'More bytes remain. The trailing line or identifier may be incomplete; use next_offset before quoting a partial value.',
+            }),
           untrusted_text: text,
           ...(!Buffer.from(text).equals(bytes) && {
             raw_base64: bytes.toString('base64'),
