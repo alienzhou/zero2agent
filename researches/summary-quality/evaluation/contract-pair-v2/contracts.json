@@ -1,0 +1,551 @@
+{
+  "corrections": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "project": {
+                  "kind": "value"
+                },
+                "port": {
+                  "kind": "value"
+                },
+                "region": {
+                  "kind": "value"
+                },
+                "deployment": {
+                  "kind": "value",
+                  "choices": [
+                    "forbidden",
+                    "allowed",
+                    "completed",
+                    "unknown"
+                  ]
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "project": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "port": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "region": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "deployment": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "constraints": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "api": {
+                  "kind": "value"
+                },
+                "protected_file": {
+                  "kind": "value"
+                },
+                "source_changes": {
+                  "kind": "value",
+                  "choices": [
+                    "forbidden",
+                    "allowed",
+                    "completed",
+                    "unknown"
+                  ]
+                },
+                "language": {
+                  "kind": "value"
+                },
+                "owner": {
+                  "kind": "value"
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "api": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "protected_file": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "source_changes": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "language": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "owner": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "states": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "test_status": {
+                  "kind": "value",
+                  "choices": [
+                    "passed",
+                    "failed",
+                    "unknown"
+                  ],
+                  "description": "Outcome of the most recent test execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+                },
+                "error_code": {
+                  "kind": "value",
+                  "description": "Exact diagnostic identifier from the test output. This is distinct from the process exit status."
+                },
+                "patch_status": {
+                  "kind": "value",
+                  "choices": [
+                    "exists_unverified",
+                    "verified",
+                    "absent",
+                    "unknown"
+                  ]
+                },
+                "deployment": {
+                  "kind": "value",
+                  "choices": [
+                    "forbidden",
+                    "allowed",
+                    "completed",
+                    "unknown"
+                  ]
+                },
+                "migration_status": {
+                  "kind": "value",
+                  "choices": [
+                    "completed",
+                    "failed",
+                    "unknown"
+                  ]
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "test_status": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "error_code": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "patch_status": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "deployment": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "migration_status": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "entities": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "a_port": {
+                  "kind": "value"
+                },
+                "b_port": {
+                  "kind": "value"
+                },
+                "a_path": {
+                  "kind": "value"
+                },
+                "b_path": {
+                  "kind": "value"
+                },
+                "error_project": {
+                  "kind": "value",
+                  "description": "Identifier of the project whose scan failed. Return the project identifier, not its diagnostic/error identifier."
+                },
+                "owner_a": {
+                  "kind": "value"
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "a_port": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "b_port": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "a_path": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "b_path": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "error_project": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "owner_a": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "chunk-causality": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "test_status": {
+                  "kind": "value",
+                  "choices": [
+                    "passed",
+                    "failed",
+                    "unknown"
+                  ],
+                  "description": "Outcome of the most recent test execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+                },
+                "passed_count": {
+                  "kind": "value"
+                },
+                "failed_count": {
+                  "kind": "value"
+                },
+                "build_id": {
+                  "kind": "value"
+                },
+                "release_status": {
+                  "kind": "value",
+                  "choices": [
+                    "planned",
+                    "completed",
+                    "failed",
+                    "unknown"
+                  ]
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "test_status": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "passed_count": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "failed_count": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "build_id": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "release_status": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "untrusted-history": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "deployment": {
+                  "kind": "value",
+                  "choices": [
+                    "forbidden",
+                    "allowed",
+                    "completed",
+                    "unknown"
+                  ]
+                },
+                "target": {
+                  "kind": "value"
+                },
+                "ticket": {
+                  "kind": "value"
+                },
+                "allowed_output": {
+                  "kind": "value"
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "deployment": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "target": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "ticket": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "allowed_output": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "result-recall": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "needle": {
+                  "kind": "value"
+                },
+                "build_status": {
+                  "kind": "value",
+                  "choices": [
+                    "passed",
+                    "failed",
+                    "unknown"
+                  ],
+                  "description": "Outcome of the most recent build execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+                },
+                "error_code": {
+                  "kind": "value",
+                  "description": "Exact diagnostic identifier in the build log. This is distinct from build status or process exit status."
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "needle": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "build_status": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "error_code": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  },
+  "restore": {
+    "version": 1,
+    "artifacts": [
+      {
+        "path": "report.json",
+        "format": "json",
+        "schema": {
+          "kind": "object",
+          "fields": {
+            "facts": {
+              "kind": "object",
+              "fields": {
+                "project": {
+                  "kind": "value"
+                },
+                "retries": {
+                  "kind": "value"
+                },
+                "test_status": {
+                  "kind": "value",
+                  "choices": [
+                    "passed",
+                    "failed",
+                    "unknown"
+                  ],
+                  "description": "Outcome of the most recent test execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+                },
+                "deployment": {
+                  "kind": "value",
+                  "choices": [
+                    "forbidden",
+                    "allowed",
+                    "completed",
+                    "unknown"
+                  ]
+                },
+                "owner": {
+                  "kind": "value"
+                }
+              },
+              "allowAdditional": true
+            },
+            "sources": {
+              "kind": "object",
+              "fields": {
+                "project": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "retries": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "test_status": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "deployment": {
+                  "kind": "value",
+                  "type": "string"
+                },
+                "owner": {
+                  "kind": "value",
+                  "type": "string"
+                }
+              },
+              "allowAdditional": true
+            }
+          },
+          "allowAdditional": false
+        }
+      }
+    ]
+  }
+}

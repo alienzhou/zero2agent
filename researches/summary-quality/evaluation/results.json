@@ -1,0 +1,464 @@
+{
+  "scope": "Fixed synthetic tasks. Historical rounds are retained independently; descriptions/contracts changed only under approved paired protocols. No rerun or score replacement during repository cleanup.",
+  "rounds": [
+    {
+      "round": "baseline-v3",
+      "tasks": 41,
+      "critical": 42,
+      "total": 56,
+      "sourceCommit": "e01bd85ca731622aadfbfb0c821b5b01b00472f3",
+      "archivedDirectory": "researches/summary-quality/evaluation/baseline-v3"
+    },
+    {
+      "round": "candidate-v1",
+      "tasks": 40,
+      "critical": 41,
+      "total": 56,
+      "sourceCommit": "e01bd85ca731622aadfbfb0c821b5b01b00472f3",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v1"
+    },
+    {
+      "round": "candidate-v2",
+      "tasks": 49,
+      "critical": 50,
+      "total": 56,
+      "sourceCommit": "54be316b468868aa9cc655553a64f6ae9ba336c0",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v2"
+    },
+    {
+      "round": "candidate-v3",
+      "tasks": 47,
+      "critical": 48,
+      "total": 56,
+      "sourceCommit": "335c33c6149d1613a9acff4c850397b7c5d00b23",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v3"
+    },
+    {
+      "round": "candidate-v4",
+      "tasks": 52,
+      "critical": 52,
+      "total": 56,
+      "sourceCommit": "7d36e59fdc30a552a803fd9128224beaa6254654",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v4"
+    },
+    {
+      "round": "candidate-v5",
+      "tasks": 49,
+      "critical": 49,
+      "total": 56,
+      "sourceCommit": "cf63c124fd85ccd89eb248f65280faf85d8d9029",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v5"
+    },
+    {
+      "round": "candidate-v6",
+      "tasks": 49,
+      "critical": 52,
+      "total": 56,
+      "sourceCommit": "cfee4b7276d781115be0c8ccd55b573491fdc897",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v6"
+    },
+    {
+      "round": "candidate-v7",
+      "tasks": 48,
+      "critical": 50,
+      "total": 56,
+      "sourceCommit": "d3be703a8479f05c7905d142967379a9c27d154a",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v7"
+    },
+    {
+      "round": "candidate-v8",
+      "tasks": 52,
+      "critical": 53,
+      "total": 56,
+      "sourceCommit": "1ca7898998caf1f01adf1979c1921b070ede267b",
+      "archivedDirectory": "researches/summary-quality/evaluation/candidate-v8"
+    },
+    {
+      "round": "contract-pair-v1/baseline",
+      "total": 56,
+      "tasks": 53,
+      "critical": 53,
+      "ordinaryCorrect": 61,
+      "ordinaryTotal": 63,
+      "contractValid": 53,
+      "repairs": 0,
+      "completionChecks": 0,
+      "sourceCommit": "bef6e96bb29be15090386172b05606a7da8dbeec",
+      "requestTotals": {
+        "model": {
+          "attempts": 143,
+          "inputTokensKnown": 257447,
+          "outputTokensKnown": 20593,
+          "cacheReadTokensKnown": 222972,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 325971
+        },
+        "summary": {
+          "attempts": 105,
+          "inputTokensKnown": 541144,
+          "outputTokensKnown": 21659,
+          "cacheReadTokensKnown": 227273,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 324780
+        },
+        "count": {
+          "attempts": 0,
+          "inputTokensKnown": 0,
+          "outputTokensKnown": 0,
+          "cacheReadTokensKnown": 0,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 0
+        }
+      },
+      "responseModels": [
+        "MiniMax-M3"
+      ],
+      "archivedDirectory": "researches/summary-quality/evaluation/contract-pair-v1/baseline"
+    },
+    {
+      "round": "contract-pair-v1/candidate",
+      "total": 56,
+      "tasks": 54,
+      "critical": 54,
+      "ordinaryCorrect": 63,
+      "ordinaryTotal": 63,
+      "contractValid": 56,
+      "repairs": 1,
+      "completionChecks": 57,
+      "sourceCommit": "f5887c20d49266b2edf970b772397f92abfffbcb",
+      "requestTotals": {
+        "model": {
+          "attempts": 143,
+          "inputTokensKnown": 214829,
+          "outputTokensKnown": 17829,
+          "cacheReadTokensKnown": 253232,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 296062
+        },
+        "summary": {
+          "attempts": 104,
+          "inputTokensKnown": 496142,
+          "outputTokensKnown": 21599,
+          "cacheReadTokensKnown": 264929,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 302414
+        },
+        "count": {
+          "attempts": 0,
+          "inputTokensKnown": 0,
+          "outputTokensKnown": 0,
+          "cacheReadTokensKnown": 0,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 0
+        }
+      },
+      "responseModels": [
+        "MiniMax-M3"
+      ],
+      "archivedDirectory": "researches/summary-quality/evaluation/contract-pair-v1/candidate"
+    },
+    {
+      "round": "contract-pair-v2/baseline",
+      "total": 56,
+      "tasks": 54,
+      "critical": 55,
+      "ordinaryCorrect": 61,
+      "ordinaryTotal": 63,
+      "contractValid": 55,
+      "repairs": 0,
+      "completionChecks": 0,
+      "sourceCommit": "bef6e96bb29be15090386172b05606a7da8dbeec",
+      "requestTotals": {
+        "model": {
+          "attempts": 146,
+          "inputTokensKnown": 190168,
+          "outputTokensKnown": 18564,
+          "cacheReadTokensKnown": 281137,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 269954
+        },
+        "summary": {
+          "attempts": 103,
+          "inputTokensKnown": 497883,
+          "outputTokensKnown": 20502,
+          "cacheReadTokensKnown": 248450,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 295016
+        },
+        "count": {
+          "attempts": 0,
+          "inputTokensKnown": 0,
+          "outputTokensKnown": 0,
+          "cacheReadTokensKnown": 0,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 0
+        }
+      },
+      "responseModels": [
+        "MiniMax-M3"
+      ],
+      "archivedDirectory": "researches/summary-quality/evaluation/contract-pair-v2/baseline"
+    },
+    {
+      "round": "contract-pair-v2/candidate",
+      "total": 56,
+      "tasks": 55,
+      "critical": 55,
+      "ordinaryCorrect": 62,
+      "ordinaryTotal": 63,
+      "contractValid": 56,
+      "repairs": 1,
+      "completionChecks": 57,
+      "sourceCommit": "51edb15336a0942099dbfd5c872029e0abf11e9d",
+      "requestTotals": {
+        "model": {
+          "attempts": 147,
+          "inputTokensKnown": 235327,
+          "outputTokensKnown": 19040,
+          "cacheReadTokensKnown": 268019,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 301019
+        },
+        "summary": {
+          "attempts": 102,
+          "inputTokensKnown": 493545,
+          "outputTokensKnown": 22018,
+          "cacheReadTokensKnown": 252843,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 316189
+        },
+        "count": {
+          "attempts": 0,
+          "inputTokensKnown": 0,
+          "outputTokensKnown": 0,
+          "cacheReadTokensKnown": 0,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 0
+        }
+      },
+      "responseModels": [
+        "MiniMax-M3"
+      ],
+      "archivedDirectory": "researches/summary-quality/evaluation/contract-pair-v2/candidate"
+    },
+    {
+      "round": "read-recovery-v1/candidate",
+      "total": 56,
+      "tasks": 56,
+      "critical": 56,
+      "ordinaryCorrect": 63,
+      "ordinaryTotal": 63,
+      "contractValid": 56,
+      "repairs": 0,
+      "completionChecks": 56,
+      "readCorrections": 0,
+      "sourceCommit": "00f0e786ef5e4cad06a336841f8cc828c6375838",
+      "requestTotals": {
+        "model": {
+          "attempts": 138,
+          "inputTokensKnown": 166746,
+          "outputTokensKnown": 17839,
+          "cacheReadTokensKnown": 276913,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 347474
+        },
+        "summary": {
+          "attempts": 102,
+          "inputTokensKnown": 609565,
+          "outputTokensKnown": 20372,
+          "cacheReadTokensKnown": 136019,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 755802
+        },
+        "count": {
+          "attempts": 0,
+          "inputTokensKnown": 0,
+          "outputTokensKnown": 0,
+          "cacheReadTokensKnown": 0,
+          "cacheWriteTokensKnown": 0,
+          "missingInputUsage": 0,
+          "missingOutputUsage": 0,
+          "durationMsKnown": 0
+        }
+      },
+      "responseModels": [
+        "MiniMax-M3"
+      ],
+      "archivedDirectory": "researches/summary-quality/evaluation/read-recovery-v1/candidate"
+    }
+  ],
+  "formalRecords": 784,
+  "final": {
+    "acceptance": {
+      "criticalAll": true,
+      "ordinaryAtLeast95": true,
+      "noTaskRegression": true,
+      "baselineTasks": 54,
+      "previousCandidateTasks": 55,
+      "passed": true
+    },
+    "groups": [
+      {
+        "depth": 0,
+        "total": 8,
+        "tasks": 8,
+        "critical": 8,
+        "ordinaryCorrect": 9,
+        "ordinaryTotal": 9,
+        "contractValid": 8,
+        "repairs": 0,
+        "completionChecks": 8,
+        "readCorrections": 0
+      },
+      {
+        "depth": 1,
+        "total": 24,
+        "tasks": 24,
+        "critical": 24,
+        "ordinaryCorrect": 27,
+        "ordinaryTotal": 27,
+        "contractValid": 24,
+        "repairs": 0,
+        "completionChecks": 24,
+        "readCorrections": 0
+      },
+      {
+        "depth": 3,
+        "total": 24,
+        "tasks": 24,
+        "critical": 24,
+        "ordinaryCorrect": 27,
+        "ordinaryTotal": 27,
+        "contractValid": 24,
+        "repairs": 0,
+        "completionChecks": 24,
+        "readCorrections": 0
+      }
+    ],
+    "sourceCommit": "00f0e786ef5e4cad06a336841f8cc828c6375838",
+    "sourceHashes": {
+      "agent": "03316fc2a392d9fcde91aa78ea8e3e6b2cf305c94f8de22c2c71f0125b1e8724",
+      "artifact-completion": "6af5b071cdf5f52ade8fb7e033e3235aab4ebfcb019a7c7928f7befd530131e3",
+      "artifact-contract": "6fea38c29185ca4c4d63e0f30701e696644c562c84daa4923c1fd5b7d2117779",
+      "context-budget": "14d1e7f1f3402e049dce61fe371eed03f8cf4d0d4fc09a736c088cd912fc61c2",
+      "context-manager": "2d569f46917065e682d40dc73f41109eb5a0446536ee601e6f2b8fe9ce5fd93b",
+      "context-summary": "527cb7f75ab7d829799f69d09975dbe6109e03be432fde25ebb56198b8dfccab",
+      "diagnostics": "4213abc058d1e5be85eeba7dd231691686954a88070ed878c701acc51142d490",
+      "file-mutations": "9674c671b6f328e4a0eacf7dee40c7a8f1605c63bbf97063b5574d91dc6e2746",
+      "history-evidence": "bd69814b91474afbda6faf34e02d8f9887f0c9d42d7ed3be3b5411ed45fbf068",
+      "index": "70c82d23c371f64f23fd6df69b19698475ee850a8ced61236d28ce3416c9b7d1",
+      "llm/anthropic": "64db58f2cd950925e6caec81787b924200f095cf4452b8f0ba190962ae850f1b",
+      "llm/index": "02a28058903e59ccf36e4097c33c7415772c78551697034441f333732c90ae99",
+      "loop": "002f10a547a5c439d4ef639f4359b14f81c87d3ca0d688675e844313fbeaaba2",
+      "permissions": "f33c0354056d498d1dbce8abfb3572a4c612813d65c024ef941619c734a646dd",
+      "prompt/index": "8d163e3a463bd6c1c9a9bb010677ebf4572f495b9ba1c0c2b63965205af6cc58",
+      "prompt/system": "9c2f7d47d71103f77145b2ec5613c37e0ca307f0a09fc1ff363bfde405f2468a",
+      "prompt/types": "c79894624321332aabd71de78ff7bd6b43d23074f2b1db901696742d540c3fa4",
+      "prompt/user-task": "a6d7a3417e7028a65889eb55aaca2e68ae1a57206fb12016c9e0c694785856d1",
+      "request-executor": "a0beae4e2046119eaf17b10daf973b775e68aa15e7ac07c4dbebbf94ead0aa02",
+      "result-read-recovery": "e07648d75aaa679b5c7e96531fd6185fe4328bdc3aa6bfb8ae60fa1379e8f17b",
+      "result-store": "db9473ae443bbee4ab617537fb2f89d3504bad8d1c70c4d58da82af0b7e47532",
+      "run-budget": "b9eb1a251efaf35258b2cb55cb0048c0971921145eb2dc2b419da1acea7d6b0f",
+      "runtime": "00e5d1bab47669186e85c0f35a889b8b0dabc0cb9731aa8523ea517443f41575",
+      "session-snapshot": "8cd252024b3ce2dcca132b1fba0900e0e96807d1aa32cdebbe3e2557d69d2f71",
+      "session": "5cf5b42fd2773584b5c62fd104ce03d1e348b63da1f0ae70ca4cb2328350f799",
+      "tools/delete": "1459418fcd51cdb409dbe8211d6c9a780c779e7b8929af1d5c8a22208eb83b38",
+      "tools/find-files": "2c5c47516f2de88ef5cfde64ef4f7aa1a4dd7ed28b23a102a88134e6bd985de2",
+      "tools/grep-search": "10a2237214f748e72e815694830cd263a24d86c29f7ea90d9599feb04cafda03",
+      "tools/index": "7c2bf65aef0947715564575ec3287bdd9bf13b7e9656349e5a3388aa50cf4425",
+      "tools/list-directory": "910f303bee9a9ee29c9f9aac954eec2a014558fbbd7e8e5285857cf1cf82c25c",
+      "tools/path-guard": "9fe686030b475c65114f0097db8851bb80c3f4694d9c6c0297d2bed21cd8d5ee",
+      "tools/process-registry": "0ffa138f3ef34ac4d778ae5811e7f63c2044822ca4d7e7dbb798de3d9213685e",
+      "tools/read-file": "1f796599283b0e70b2ae80acf83aaf0bf3df6f5c9e7a1d52ea7e5716d2663a89",
+      "tools/read-history": "af3af60be96ba0b27e82625a504b8abd888887186fbcb07612412f67bf3b965f",
+      "tools/read-tool-result": "d11a36e7e821277ab32676aa6ae78e97540f2b80efc93d2652ea3103d1ab83d1",
+      "tools/replace-in-file": "d77762a0c818b97c55c27b5b3d8b5c3ab7a488c39dfd4be17d2520a82bb16410",
+      "tools/shell-env": "e93a37b7ebee1b5854cd0ebddc7b8ed2dba70fda8e9c89b1215fe94cbebd14be",
+      "tools/terminal-runtime": "cdfe972609099f3b1d9c8110d5b592bad6e370ad92b5059b03ac63280a0cceb9",
+      "tools/terminal": "03a6e2035a569821becaff6d60e71ab930b4fd672fa8a7440cb6b5dba15f5814",
+      "tools/types": "48b319614bb95fc10337e1019901c1f3872584fb4c73295e1d8d89c43c755844",
+      "tools/write-file": "83ea351baf189f358a2ab580994c671feb87e9db279f897c31b086a999b8ee2a"
+    },
+    "runtimeHashes": {
+      "agent": "d389a9db8fbc1f211a368c75c759ae79fdcc9329beb1f3a31babba832864f943",
+      "artifact-completion": "9e15f0a874a4bb1da33b4ea05f3e2161e95dc1eb8e7d121d1705770a0d37fa2d",
+      "artifact-contract": "ae008c9422cb2bb094c04a077bfb59822e638965bfbdc87341b22bf9a57f7bbb",
+      "context-budget": "7c109631c9696116d601313a301019a0e4030e2ad63751d516965201dd168220",
+      "context-manager": "3fd465709ad363df0acee566d2063298de38a8da9b5a25922ad5689d731e9a8e",
+      "context-summary": "fdce4826b85b1cf5ff19632c8f15bcac88883c9afde3097024cdbf16f70e8b6a",
+      "diagnostics": "0339e35fd7d3bce2107ac0db7cfb13d0ae51a8c8083afa65c3b52b63ccba2c1c",
+      "file-mutations": "c5a9101c9ba2d2864e7d2e4b27a099410ce1b1bcaef8f4ed90fa01f60dc25068",
+      "history-evidence": "53a7a65aa097c3f3b7a8abae1cc3b275e6166b98d817546ab983a376df6ed0e8",
+      "index": "670ce84437581bf7b82fdba69bd9c5a32548d493e6258a45fae37b8c820b0ebe",
+      "llm/anthropic": "620fcb56ff0a6b102a94bc7db210c20fa06187d565c00a0f9c980bc1d7dd1d70",
+      "llm/index": "c07f982c6348436157ad70d6a31ed5ec51162f7ad9be437ba071c366b698cd49",
+      "loop": "519b31e3e4cdccf3ae0a7fec99827278c1d1819ca0e86d14912ee6e654dfdf71",
+      "permissions": "85442b78d15ccc7c84e6cf3b027c986494211e5ef250870b6ff3faff02e9701d",
+      "prompt/index": "9c5cacef831a64e9d1451504b20e4aeb0595751ee999200c8af49fb45d7d2a37",
+      "prompt/system": "615130d0b104aa8e3770ceaf07737b2a0ea967c77d1c79d1f3140d1934ef48fd",
+      "prompt/types": "cfe271bdc094c05279ca6dbe4241667668f6786b34bb4e31b1ce07ba2d7dd050",
+      "prompt/user-task": "cac21408732e16071372aa7eca7db94e1a1ebabe4f0009bd1a01771dddcb50b2",
+      "request-executor": "ae5ad80acb3d9274c67f45ca1785d87a2ffaa300db061ac67769868a70668203",
+      "result-read-recovery": "0c55519cbbbf5a4a6d356881502d30926a90fdb9d0e601f93d7e5e204b16c834",
+      "result-store": "09f8b384cf3c2b01facadd5f73fd0f8a250bb7b8ab9826aa285f25ce689c1165",
+      "run-budget": "c69af333e0f06c48cbf510e18999275156f9a026569be1e71cf6fc551f6678aa",
+      "runtime": "77e4a66f70dc41a8ea0819af955f986427fc36acc83429c81891812ed200e6fc",
+      "session-snapshot": "6a4da56e3d2e18eaf4aff5de98b437d6688e308a2d45033ff76ae3e5b5e4adae",
+      "session": "f44d18b9ac1e0c476199ba887701534b7bba6bb7ec9d0a6212d381d9fda0022e",
+      "tools/delete": "c3f86e4813cfd390ea2fd6d5c01e3dfb4ce1fbce3852b262eef6c91f07d277c0",
+      "tools/find-files": "82bf851ae7fdb34a9e2c7dfc2f6e2fc5432abc7a712fac945b876d1a7c10fdb5",
+      "tools/grep-search": "b0a6430663dbf381716f5f2a5512f017a1747f675ac27c3edfc315ddb2b0b5b8",
+      "tools/index": "73843b328f6c66fed8dc251fe7067767216b5fe29844f2029fc77371ecfe8a1a",
+      "tools/list-directory": "fddd7aa46239ef26965f3f212857538018cd11a088048815f0056f0e556b360f",
+      "tools/path-guard": "f3c15a11ad22c7f7d16040fc7d0ae29025173e5012936a2a70fc360238da7f58",
+      "tools/process-registry": "513d340fafc29500d4132aca91d2093f68e54ddfe15cc4710d6619b7c006ff12",
+      "tools/read-file": "773e29d9ef042754792f51892acf36bb9873f7c9d19358acaaf113e808d32d0b",
+      "tools/read-history": "e0deb2c993399ff6dc3ee2a25e8b61e9d6ffb17d6fc9beb324e335afce561645",
+      "tools/read-tool-result": "8853f602f3bc0fdc6861212983889bfc118763760c469b13954a2d47e0b8e851",
+      "tools/replace-in-file": "3d007a2e284ba015d727fb9bd991c860c679fb3d21016aff7997ec14a5c6f849",
+      "tools/shell-env": "dcfe439be8bf61d1f35314af6c7aecba073bc5c4903a308ac35b87443204a125",
+      "tools/terminal-runtime": "903bafa2354378037eb070f7dbe80777936c11666e2fa92a519daccb9052fd61",
+      "tools/terminal": "8f08b09ec322b01374c96ee9d9225c667e82bbc8fd97eb438133f1966857fcba",
+      "tools/types": "2b72b04155d979d2d09b0f36f9c304612505e554dc7aae8622c4b35d8aa4cf0a",
+      "tools/write-file": "96f92ed5cba6f0916c03f478c619c93d9093c4c518d81f306eca699907843539"
+    },
+    "evaluationHashes": {
+      "fixtures.mjs": "8e832dabed3f8443d90cd1070ffde61b4c68eac6e4b9a6dedfbd81944e6106e8",
+      "run-read-recovery.mjs": "acb4ef18ce1eeb593440c8a57848830030848eb50560b0b26d579a2664294e6d",
+      "read-recovery-v1/protocol.md": "2af89c93a4f3eb7d82ddd4f5ab0e4823a7d275b5b7971b25a3dc9ececd8b887a",
+      "contract-pair-v2/protocol.md": "962242f1a89ef7e374b509d4d592e6ef222225483aa3f73c93da9e0e06c9d94b",
+      "contract-pair-v2/inputs.json": "74f3dc833b7379389d1b79c2d7e137603ab1f9c9ae76882793fdae4ab6fa62bd",
+      "contract-pair-v2/contracts.json": "37c391a9dcb76384f90909ee2058e8966dc26179ad618d020520e32873399662",
+      "contract-pair-v2/descriptions.json": "7c111c5b110bc996cad5b5e3ecd6f9ceba6e5f094ff60940c15bdbfbf8791e60"
+    }
+  },
+  "archive": "../evidence-archive.json"
+}

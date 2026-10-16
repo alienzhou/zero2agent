@@ -46,3 +46,15 @@ benchmarks/results/
 benchmarks/node_modules/
 .myflicker
 .codeflicker/
+
+# E04-S003 runtime evidence is distributed as a checksummed Release archive.
+/researches/summary-quality/acceptance/
+/researches/summary-quality/audit-*/
+/researches/summary-quality/evaluation/baseline-*/
+/researches/summary-quality/evaluation/candidate-*/
+/researches/summary-quality/evaluation/contract-pair-v*/baseline/
+/researches/summary-quality/evaluation/contract-pair-v*/candidate/*
+!/researches/summary-quality/evaluation/contract-pair-v2/candidate/result-recall-0-0.json.gz
+/researches/summary-quality/evaluation/read-recovery-v*/candidate/
+/.authoring/site/chapters/epic04-story003/verification/*.png
+/.authoring/site/chapters/epic04-story003/verification/checks-*.json
