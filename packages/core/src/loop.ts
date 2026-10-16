@@ -18,6 +18,7 @@ import { readToolResultTool, ResultReadInputError } from './tools/read-tool-resu
 import { ResultReadRecovery, EvidenceReadIncompleteError } from './result-read-recovery.js'
 import { readHistoryTool } from './tools/read-history.js'
 import { validateHistoryPaths } from './history-evidence.js'
+import type { SessionSnapshot } from './session-snapshot.js'
 import type { FileMutationHandler } from './file-mutations.js'
 /**
  * ReACT 循环实现
@@ -590,7 +591,8 @@ async function runTurnLoop(
   let completionFeedback: string | undefined = options.recovery?.artifactFeedback
   // Rechecking is read-only; a consumed repair opportunity is never replenished.
   let completionAttempt = Math.min(options.recovery?.artifactAttempts ?? 0, 1)
-  const completionSafety = { safe: options.recovery?.safe ?? true }
+  // Explicit continuation is a new turn: past effects remain evidence, new calls are reauthorized.
+  const completionSafety = { safe: true }
   const readRecovery = new ResultReadRecovery(options.recovery?.read)
   const originalRequest = runtime.request
   // Feedback is an ephemeral request overlay, included in context accounting but not user history.
@@ -655,7 +657,7 @@ async function runTurnLoop(
     }
     return copy
   }
-  const capture = (reason: ExecutionRecovery['reason'] = 'interrupted') => {
+  const capture = (reason: ExecutionRecovery['reason'] = 'interrupted'): SessionSnapshot => {
     const copy = paired()
     if (batchIndex >= 0 && copy[batchIndex + 1])
       session.recordHistorySource(copy, batchIndex + 1, [...batchHistoryPaths])
@@ -677,8 +679,8 @@ async function runTurnLoop(
   }
   const persist = async (boundary: ExecutionBoundary): Promise<void> => {
     if (!enabled) return
-    const snapshot = capture()
     try {
+      const snapshot = capture()
       await options.executionPersistence?.(snapshot, boundary)
     } catch {
       persistenceBroken = true

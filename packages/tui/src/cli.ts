@@ -525,9 +525,9 @@ async function main() {
         } else if (trimmed === '/session') {
           console.log(safeText(conversations.status))
         } else if (trimmed === '/recovery') {
-          console.log(safeText(await conversations.recoveryReport()))
+          process.stdout.write(safeText(await conversations.recoveryReport()) + '\n')
         } else if (trimmed.startsWith('/recovery continue ')) {
-          console.log('明确续跑：使用当前权限和新一轮预算；保留未完成检查。')
+          process.stdout.write('明确续跑：使用当前权限和新一轮预算；保留未完成检查。\n')
           await conversations.continueInterrupted(trimmed.slice('/recovery continue '.length))
         } else if (trimmed === '/save') {
           await conversations.save()

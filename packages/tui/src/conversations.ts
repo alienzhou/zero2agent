@@ -259,7 +259,7 @@ export class Conversations {
     const records = this.checkpoints ? await this.checkpoints.list() : []
     return [
       '中断任务待恢复：已恢复逐工具执行记录；加载不会重放工具。',
-      `原运行 ${recovery.operationId} · ${recovery.reason}`,
+      `原运行 ${recovery.operationId} · ${recovery.reason}${recovery.safe ? '' : ' · 上一轮有拒绝、取消或不安全效果，需核对'}`,
       `上次记录预算：请求 ${recovery.budget.requests} / 工具 ${recovery.budget.tools} / 迭代 ${recovery.budget.iterations}；停止原因 ${recovery.budget.stopReason ?? '未记录，计数仅到最近保存边界'}`,
       ...recovery.tools.map(t => {
         const matches = records.filter(

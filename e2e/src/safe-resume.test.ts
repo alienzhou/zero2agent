@@ -87,6 +87,7 @@ describe.skipIf(process.platform === 'win32')('E04-S004 real process interruptio
     expect(crashed.signal, crashed.output).toBe('SIGKILL')
     const [item] = await p.store.list()
     const before = await p.store.load(item.id)
+    expect(before.version).toBe(2) // Older version-1 readers must fail closed.
     expect(before.state.recovery?.tools.map(t => t.state)).toEqual(states)
     expect(before.state.messages[0].content).toContain('Create first.txt')
     validateSessionSnapshot(before.state)
@@ -103,6 +104,7 @@ describe.skipIf(process.platform === 'win32')('E04-S004 real process interruptio
     if (effects) expect(await fs.readFile(path.join(p.dir, 'first.txt'), 'utf8')).toBe('first')
     await expect(fs.stat(path.join(p.dir, 'second.txt'))).rejects.toThrow()
     const saved = await p.store.load(item.id)
+    expect(saved.version).toBe(2) // The session never downgrades after settlement.
     expect(saved.state.recovery).toBeUndefined()
     expect(saved.pending).toBeUndefined()
     expect(JSON.stringify(p.requests[1].messages)).toContain('Create first.txt')
@@ -333,12 +335,45 @@ describe('execution persistence failures', () => {
     await p.store.save(saved, saved.state)
     await expect(p.store.save(saved, saved.state)).rejects.toThrow('conflict')
     expect((await p.store.load(item.id)).state.recovery).toEqual(saved.state.recovery)
+    const latestPath = path.join(p.store.directory, item.id, `${saved.revision + 1}.json`)
+    const latest = await p.store.load(item.id)
+    await fs.writeFile(latestPath, JSON.stringify({ ...latest, version: 1 }))
+    await expect(p.store.load(item.id)).rejects.toThrow('requires session format version 2')
     await fs.writeFile(
       path.join(p.store.directory, item.id, `${saved.revision + 1}.json`),
       '{broken'
     )
     await expect(p.store.load(item.id)).rejects.toThrow()
     expect(p.requests).toHaveLength(1)
+  })
+
+  it('allows an explicitly inspected new turn after old unsafe effects without inheriting approvals', async () => {
+    const p = await fixture()
+    expect((await p.launch('tool-settled')).signal).toBe('SIGKILL')
+    const [item] = await p.store.list()
+    const saved = await p.store.load(item.id)
+    saved.state.recovery!.safe = false
+    saved.state.recovery!.artifactContract = {
+      version: 1,
+      artifacts: [
+        { path: 'report.json', format: 'json', schema: { kind: 'value', type: 'number' } },
+      ],
+    }
+    await fs.writeFile(path.join(p.dir, 'report.json'), '42')
+    await p.store.save(saved, saved.state)
+    const agent = new Agent({
+      cwd: p.dir,
+      config: { apiKey: 'fixture', baseURL: p.baseURL },
+      permissions: { mode: 'accept-edits' },
+    })
+    const c = new Conversations(agent, p.store)
+    await c.resume(item.id)
+    await expect(c.run('implicit bypass')).rejects.toThrow('requires review')
+    await expect(
+      c.continueInterrupted('I inspected and accepted previous effects; validate the artifact.')
+    ).resolves.toContain('finished')
+    expect(p.requests).toHaveLength(2)
+    expect(await fs.readFile(path.join(p.dir, 'effects.txt'), 'utf8')).toBe('first.txt\n')
   })
 
   it('bounds storage without deleting the pending evidence', async () => {
