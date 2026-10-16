@@ -107,8 +107,8 @@ The course content is organized into four layers:
 | ---- | ---- | ---- |
 | [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
 | Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
-| Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S003 merged; S004 session persistence |
-| Epic 4: Robustness and Context Management | Handle failures, long context, and complex runtime situations | Planned |
+| Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S001–S006 merged into main |
+| [Epic 4: Robustness and Context Management](./specs/E04-reliability-and-context/README.md) | Handle failures, long context, and complex runtime situations | S001–S002 merged; S003 complete, awaiting merge |
 | Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
 
 ### How to Enter
@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: [E03-S004: Session persistence and resume](./specs/E03-product-foundations/S004-session-persistence/README.md) adds automatic saving, a session picker, cross-process resume, and explicit failure/conflict handling while preserving existing interactions. Includes 20 illustrated pages and an [offline walkthrough](./specs/E03-product-foundations/S004-session-persistence/follow-along.md). See the [verification checklist](./specs/E03-product-foundations/S004-session-persistence/details/03-verification-checklist.md) for evidence and human review status. S003 was merged through [PR #19](https://github.com/alienzhou/zero2agent/pull/19).
+**Latest update**: [E04-S003: Summary quality and fact retention](./specs/E04-reliability-and-context/S003-summary-quality/README.md) now includes bounded correction of unresolved saved-evidence reads, preventing premature completion after invalid read arguments. The complete real-service run passed 56/56 tasks and critical cases, with 63/63 ordinary facts; 723 engineering tests passed and 58 live tests were skipped by default. All 784 records are preserved in a separately downloadable, checksummed Release archive. The 18-page lesson is complete at `E04-S003-summary-quality`. [PR #25](https://github.com/alienzhou/zero2agent/pull/25) awaits human review and merge; the site has not been deployed.
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -172,7 +172,12 @@ zero2agent/
 | [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | Multi-turn sessions and context compaction | Done; merged and tagged |
 | [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | Permissions and single-call Approval | Done; merged and tagged |
 | [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | Runtime events, turn cancellation and interactive TUI | Done; merged into main |
-| [E03-S004](./specs/E03-product-foundations/S004-session-persistence/README.md) | Automatic saving, session browser and resume | Implemented; verification and review tracked in the lesson |
+| [E03-S004](./specs/E03-product-foundations/S004-session-persistence/README.md) | Automatic saving, session browser and resume | Done; merged into main |
+| [E03-S005](./specs/E03-product-foundations/S005-runtime-logging/README.md) | Runtime logs and diagnosis | Done; merged into main |
+| [E03-S006](./specs/E03-product-foundations/S006-file-checkpoints/README.md) | File checkpoints and recovery | Done; merged into main |
+| [E04-S001](./specs/E04-reliability-and-context/S001-failure-recovery/README.md) | Failure recovery and run budgets | Done; merged into main |
+| [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | On-demand reads of large tool results | Done; merged into main |
+| [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | Summary quality and fact retention | Implementation, lesson and strict acceptance complete; human review and merge pending |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

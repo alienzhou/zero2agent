@@ -86,4 +86,4 @@ Ctrl-S 转后台的文件仍在增长，回执标记 `unsealed`，沿用原日�
 
 [设计总览](details/00-overview.md) | [技术设计](details/01-technical-design.md) | [任务](details/02-task-list.md) | [验收证据](details/03-verification-checklist.md) | [Backlog](details/04-backlog.md)
 
-上一篇：[失败恢复与运行预算](../S001-failure-recovery/README.md) · 下一课计划：E04-S003 摘要质量与事实保留
+上一篇：[失败恢复与运行预算](../S001-failure-recovery/README.md) · 下一课：[摘要质量与事实保留（开发稿）](../S003-summary-quality/README.md)

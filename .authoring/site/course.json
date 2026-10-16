@@ -138,6 +138,13 @@
       "title": "大工具结果按需读取",
       "description": "复用已有落盘，用受控引用和有限字节读取取回证据；检查来源权限、校验、容量与重启后的生命周期。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S002-result-references/specs/E04-reliability-and-context/S002-result-references"
+    },
+    {
+      "id": "epic04-story003",
+      "epic": "epic04",
+      "title": "摘要质量与事实保留",
+      "description": "原史来源、按需回查、显式产物校验与有界读取纠错。固定集任务和关键项 56/56，18 页图解与可运行跟练，保留全部失败和成本。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S003-summary-quality/specs/E04-reliability-and-context/S003-summary-quality"
     }
   ]
 }

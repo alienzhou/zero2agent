@@ -30,10 +30,12 @@ packages/core/src/
 ├── index.ts                  # 公共 API
 ├── agent.ts                  # Agent 入口与会话
 ├── loop.ts                   # ReAct 循环
+├── history-evidence.ts       # 原史索引、引用、来源权限目录
 ├── prompt/                   # 系统指令与任务上下文
 ├── tools/
-│   ├── index.ts              # 九个工具的注册表
+│   ├── index.ts              # 十个工具的注册表
 │   ├── read-tool-result.ts   # 存储结果的有界回读
+│   ├── read-history.ts       # 当前会话的原始来源回查
 │   ├── types.ts              # Tool / ToolContext
 │   ├── read-file.ts          # 读取文件
 │   ├── grep-search.ts        # 搜索内容
@@ -153,6 +155,8 @@ packages/tui/src/
 
 Core 的 `DiagnosticEmitter` 创建操作和请求身份，在实际 SDK 调用、权限与工具边界报告白名单元信息。宿主 `RunJournal` 负责工作区隔离、独占 JSONL、有界串行写入、flush 与可见降级；读取器只读验证版本和完整行，再交给 TUI 或 CLI 展示。
 
+请求开始的 `model` 与完整响应的可选 `responseModel` 分别记录发送名称和服务自报名称，按 requestId 关联。名称经过有界白名单校验及落盘凭据过滤；失败、取消、计数和缺字段不猜测返回名称。服务自报不等于身份验证，也不回填旧记录。
+
 诊断通知与控制接口分开；观察者错误不能改变模型历史或工具结果。后台摘要和命令使用启动时的父身份。运行日志独立于会话快照，不能用于恢复进程、重放工具或判断缺失终态等于没有副作用。详见 [S005 技术设计](../specs/E03-product-foundations/S005-runtime-logging/details/01-technical-design.md)。
 
 ---
@@ -175,3 +179,13 @@ TUI 宿主的 `CheckpointStore` 只读取声明目标，内容定义分块后按
 ## 大工具结果
 
 Session 持有 ResultStore。新工具结果在进入历史前转换为引用；ContextManager 为旧历史复用同一存储，只改变发送视图。正文按 SHA-256 保存，快照只保存版本化来源和目录身份。read_tool_result 按当前权限和预算读取有限字节，并流式验证正文；终端复用现有文件封存，后台输出保持未封存状态。容量包含活跃输出预留，详情见 [E04-S002](../specs/E04-reliability-and-context/S002-result-references/README.md)。
+
+## 摘要与原史来源（S003）
+
+ContextManager 将自由文本交接与宿主从原史计算的有界索引放入发送视图，多次压缩时重新引入原始节选。read_history 按字面检索用户原话或列举来源身份，按带哈希引用读取有限字节。工具来源路径在执行前绑定、结果结算后关联到原消息；恢复先校验整个目录，新读取再经过当前权限。摘要或引用不提供新的授权，原有历史也不会因当前权限收紧而被删除。
+
+Core 另提供按回合显式 runWithContract：调用方声明 JSON 结构与可选字段含义，正常完成时在当前权限和原预算内读取实际文件，最多一个修复阶段。反馈只存在于发送视图，旧契约不随恢复自动启用；拒绝、取消及失败/未知效果阻止自动修复。结构检查不认证语义。
+
+内置 read_tool_result 的参数错误会在本回合登记未解决引用；只有同引用的有效正文页或真实空正文才能清除。正常结束前至多进入一次读取纠错阶段，仍未解决则返回 EvidenceReadIncompleteError；当前权限、取消和原预算继续生效，旧命令不重放。状态与反馈不作为控制指令持久化。
+
+固定集完整真实验证为任务及关键项 56/56、普通事实 63/63；原 728 份失败与成绩保留。此前基线/候选 54/55 是历史同输入对照，不能将差异全部归因于纠错。确定性 HTTP/SDK 前后对照另证实提前完成被阻止，见 [S003 验收与限制](../specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md)。

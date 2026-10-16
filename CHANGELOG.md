@@ -47,6 +47,20 @@ git checkout main
 
 ---
 
+## E04-S003：摘要质量与事实保留（2026-10-13）
+
+[课程](./specs/E04-reliability-and-context/S003-summary-quality/README.md) · [跟练](./specs/E04-reliability-and-context/S003-summary-quality/follow-along.md) · [复盘](./retros/E04-S003-summary-quality.md) · [严格验收](./researches/summary-quality/evaluation/read-recovery-v1/README.md)
+
+增加宿主原史索引、原角色回查、来源权限目录和恢复校验，多次压缩重新引入原始节选。按回合显式 runWithContract 校验真实 JSON 文件，允许一次原预算内的结构修复；结构合法不认证事实。请求模型名与服务回执名分别记录，诊断不保存正文或凭据。
+
+最后的缺口发生在零压缩任务：结果读取参数无效后，模型仍可写 unknown 并结束。新增按回合未解决读取状态，当前权限与原预算内至多一次纠错；同引用读取成功才清除，仍失败明确返回未完成，不重放旧工具。确定性同响应前后对照证明旧版本提前结束、新版本会纠错并写入实际产物。
+
+完整真实评测任务与关键项 56/56、普通事实 63/63，通过严格门槛。0/1/3 次组分别 8/8、24/24、24/24。沿用 v2 相同调用方输入，与历史基线 54/56、前候选 55/56 比较；并非新的同期成对实验，不把全部差异归因于机制。原协议 504 份、两组成对共 224 份不改，新 56 份及成本独立保存。模型配置、硬预算和验收线均未降低。
+
+工程全仓 723 项通过（Core 538 / E2E 184 / CDP 1），58 live 默认跳过；构建、类型和格式通过，lint 0 错误、44 条既有警告。18 页图解、跟练、设计和复盘已完成，PC/H5 导航、文字与放大检查通过。固定版本 `E04-S003-summary-quality`；[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 待人工审阅与合入，网站未部署。历次失败和修正过程见[历史比较（归档）](https://github.com/alienzhou/zero2agent/releases/tag/E04-S003-summary-quality)。
+
+---
+
 ## E04-S002：大工具结果按需读取（2026-10-11）
 
 [课程](./specs/E04-reliability-and-context/S002-result-references/README.md) · [跟练](./specs/E04-reliability-and-context/S002-result-references/follow-along.md) · [复盘](./retros/E04-S002-result-references.md) · [验收](./specs/E04-reliability-and-context/S002-result-references/details/03-verification-checklist.md)
