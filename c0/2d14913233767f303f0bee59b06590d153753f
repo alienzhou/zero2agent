@@ -1,0 +1,87 @@
+.gitignore
+  s_58249cd92a0ae1::t_353077623ce4f4 49-60
+researches/summary-quality/README.md
+  s_58249cd92a0ae1::t_e10af83371e467 1-9
+researches/summary-quality/contract-demo.mjs
+  s_58249cd92a0ae1::t_dde4e84f63c119 1-50
+researches/summary-quality/evaluation/README.md
+  s_58249cd92a0ae1::t_db8814aaf67195 1-34
+researches/summary-quality/evaluation/analyze-contract-pair-v2.mjs
+  s_58249cd92a0ae1::t_5c0c1ad053a34c 1-72
+researches/summary-quality/evaluation/analyze-read-recovery.mjs
+  s_58249cd92a0ae1::t_ded30a61e99c25 1-72
+researches/summary-quality/evaluation/analyze.mjs
+  s_58249cd92a0ae1::t_782979c4d04d20 1-118
+researches/summary-quality/evaluation/artifact-contract-described.mjs
+  s_58249cd92a0ae1::t_85e265547ebb36 1-14
+researches/summary-quality/evaluation/artifact-contract.mjs
+  s_58249cd92a0ae1::t_c83ee32218f6a4 1-58
+researches/summary-quality/evaluation/artifact-contract.test.mjs
+  s_58249cd92a0ae1::t_714929504aff93 1-45
+researches/summary-quality/evaluation/contract-pair-v1/README.md
+  s_58249cd92a0ae1::t_099ee58b5d2b96 1-3
+researches/summary-quality/evaluation/contract-pair-v1/contracts.json
+  s_58249cd92a0ae1::t_8f6c0c03d5523a 1-544
+researches/summary-quality/evaluation/contract-pair-v1/inputs.json
+  s_58249cd92a0ae1::t_6490813d9c464f 1-584
+researches/summary-quality/evaluation/contract-pair-v1/inputs.test.mjs
+  s_58249cd92a0ae1::t_14c25becd80d8a 1-20
+researches/summary-quality/evaluation/contract-pair-v1/protocol.md
+  s_58249cd92a0ae1::t_17665fca80407a 1-29
+researches/summary-quality/evaluation/contract-pair-v2/README.md
+  s_58249cd92a0ae1::t_cb47ab3992b68b 1-5
+researches/summary-quality/evaluation/contract-pair-v2/contracts.json
+  s_58249cd92a0ae1::t_2d18f4f74eb98f 1-551
+researches/summary-quality/evaluation/contract-pair-v2/descriptions.json
+  s_58249cd92a0ae1::t_9811737a1f9509 1-19
+researches/summary-quality/evaluation/contract-pair-v2/failure-regression.test.mjs
+  s_58249cd92a0ae1::t_ca92d0f376e75a 1-56
+researches/summary-quality/evaluation/contract-pair-v2/inputs.json
+  s_58249cd92a0ae1::t_0241fd452817c8 1-591
+researches/summary-quality/evaluation/contract-pair-v2/inputs.test.mjs
+  s_58249cd92a0ae1::t_fe07394f45c24c 1-29
+researches/summary-quality/evaluation/contract-pair-v2/protocol.md
+  s_58249cd92a0ae1::t_5a2c755a158c2a 1-31
+researches/summary-quality/evaluation/fixtures.mjs
+  s_58249cd92a0ae1::t_af31be3c8d4ff2 1-230
+researches/summary-quality/evaluation/read-recovery-v1/README.md
+  s_58249cd92a0ae1::t_6c26dd843f8266 1-11
+researches/summary-quality/evaluation/read-recovery-v1/protocol.md
+  s_58249cd92a0ae1::t_1d4cb81693198e 1-13
+researches/summary-quality/evaluation/results.json
+  s_58249cd92a0ae1::t_5f847c8b7873f9 1-464
+researches/summary-quality/evaluation/run-read-recovery.mjs
+  s_58249cd92a0ae1::t_80c7b8ad6b95d4 1-307
+researches/summary-quality/evaluation/run.mjs
+  s_58249cd92a0ae1::t_50c075bd3c671a 1-266
+researches/summary-quality/evaluation/scorer.test.mjs
+  s_58249cd92a0ae1::t_36bd3935da3425 1-34
+researches/summary-quality/evaluation/source-map-audit.mjs
+  s_58249cd92a0ae1::t_977208674333ee 1-59
+researches/summary-quality/evaluation/source-map-audit.test.mjs
+  s_58249cd92a0ae1::t_a93fedf2b16089 1-25
+researches/summary-quality/evidence-archive.json
+  s_58249cd92a0ae1::t_670f0ef37e7dd1 1-17
+researches/summary-quality/offline-demo.mjs
+  s_58249cd92a0ae1::t_746d2794c9c7c2 1-58
+researches/summary-quality/read-recovery-demo.mjs
+  s_58249cd92a0ae1::t_3071e82f68165b 1-47
+researches/summary-quality/verify-archive.mjs
+  s_58249cd92a0ae1::t_70ed0cce635c11 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c02d14913233767f303f0bee59b06590d153753f",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
