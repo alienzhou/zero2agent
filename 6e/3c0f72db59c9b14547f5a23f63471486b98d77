@@ -1,0 +1,39 @@
+.authoring/site/chapters/epic04-story003/review.md
+  s_58249cd92a0ae1::t_964547fadf4858 5
+.vibecoding/2026-10-16/e04-s003-delivery/dialogue.md
+  s_58249cd92a0ae1::t_f9e3740a04341f 10-11
+CHANGELOG.md
+  s_58249cd92a0ae1::t_b3c9e015959573 60
+README.en.md
+  s_58249cd92a0ae1::t_6f769ef7d86e75 111,160,180
+README.md
+  s_58249cd92a0ae1::t_a1c962636bb836 115,166,186
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_6eea624af8c5da 21,32
+researches/summary-quality/delivery-verification.json
+  s_58249cd92a0ae1::t_22adcb3abb409d 65-80
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_845936d2cd1621 11
+specs/E04-reliability-and-context/S003-summary-quality/README.md
+  s_58249cd92a0ae1::t_6cfd104d4e9b73 7
+specs/E04-reliability-and-context/S003-summary-quality/details/02-task-list.md
+  s_58249cd92a0ae1::t_da83ee8c911fec 16-18
+specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_19146444281164 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e3c0f72db59c9b14547f5a23f63471486b98d77",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
