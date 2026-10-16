@@ -1,0 +1,19 @@
+{
+  "entities": {
+    "error_project": "Identifier of the project whose scan failed. Return the project identifier, not its diagnostic/error identifier."
+  },
+  "states": {
+    "error_code": "Exact diagnostic identifier from the test output. This is distinct from the process exit status.",
+    "test_status": "Outcome of the most recent test execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+  },
+  "result-recall": {
+    "error_code": "Exact diagnostic identifier in the build log. This is distinct from build status or process exit status.",
+    "build_status": "Outcome of the most recent build execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+  },
+  "chunk-causality": {
+    "test_status": "Outcome of the most recent test execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+  },
+  "restore": {
+    "test_status": "Outcome of the most recent test execution recorded in the provided history. Lack of permission or evidence for a new run does not erase the recorded outcome."
+  }
+}

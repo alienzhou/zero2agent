@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { DiagnosticEmitter } from '@zero2agent/core'
-import { LogStore, LOG_LIMITS } from '../../packages/tui/dist/run-log.js'
+import { LogStore, LOG_LIMITS, formatLog } from '../../packages/tui/dist/run-log.js'
 import { makeTempWorkspace } from './helpers/cli.js'
 
 const cleanups: Array<() => Promise<void>> = []
@@ -23,6 +23,157 @@ async function setup(options: { queueBytes?: number; fileBytes?: number } = {}) 
   return { ...workspace, store, journal, diagnostics }
 }
 describe('versioned local run logs', () => {
+  it('records evidence-read stages without reference IDs or evidence bytes', async () => {
+    const { store, journal, diagnostics } = await setup()
+    diagnostics.start('turn')
+    for (const [index, status] of ['invalid-input', 'correcting', 'resolved', 'blocked'].entries())
+      diagnostics.runtime({
+        type: 'evidence-read',
+        turnId: diagnostics.operationId,
+        seq: index + 1,
+        status,
+        reference: 'private-reference',
+        body: 'private-evidence',
+      } as never)
+    await journal.flush()
+    const report = await store.read(journal.id)
+    expect(report.records.filter(r => r.kind === 'evidence-read').map(r => r.event)).toEqual([
+      'invalid-input',
+      'correcting',
+      'resolved',
+      'blocked',
+    ])
+    expect(JSON.stringify(report)).not.toContain('private-reference')
+    expect(JSON.stringify(report)).not.toContain('private-evidence')
+  })
+
+  it('round-trips artifact-check metadata without capturing contract or file bodies', async () => {
+    const { store, journal, diagnostics } = await setup()
+    diagnostics.start('turn')
+    diagnostics.runtime({
+      type: 'artifact-check',
+      turnId: diagnostics.operationId,
+      seq: 1,
+      status: 'failed',
+      attempt: 1,
+      fileCount: 2,
+      issueCount: 4,
+    })
+    diagnostics.runtime({
+      type: 'artifact-check',
+      turnId: diagnostics.operationId,
+      seq: 2,
+      status: 'blocked',
+      attempt: 2,
+      fileCount: 2,
+      artifactFailure: 'permission',
+      ...({ contract: 'private-contract', body: 'private-file' } as object),
+    })
+    diagnostics.end('error', 'turn')
+    await journal.close()
+    expect(journal.failure).toBeUndefined()
+    const report = await store.read(journal.id)
+    expect(report.warnings).toEqual([])
+    expect(report.records.filter(r => r.kind === 'artifact-check')).toMatchObject([
+      { event: 'failed', attempt: 1, fileCount: 2, issueCount: 4 },
+      { event: 'blocked', attempt: 2, fileCount: 2, artifactFailure: 'permission' },
+    ])
+    expect(await fs.readFile(journal.file, 'utf8')).not.toMatch(/private-contract|private-file/)
+  })
+
+  it('persists distinct model identities and keeps older records without a response model readable', async () => {
+    const { store, journal, diagnostics } = await setup()
+    diagnostics.start('turn')
+    const request = { model: 'requested-alias', max_tokens: 10, messages: [] }
+    const first = diagnostics.request('model', request)
+    first.complete({
+      id: 'response',
+      type: 'message',
+      role: 'assistant',
+      model: 'served-model',
+      content: [],
+      stop_reason: 'end_turn',
+      stop_sequence: null,
+      usage: {
+        input_tokens: 1,
+        output_tokens: 0,
+        cache_creation_input_tokens: null,
+        cache_read_input_tokens: null,
+        server_tool_use: null,
+        service_tier: null,
+      },
+    })
+    const older = diagnostics.request('count', request)
+    older.complete({ input_tokens: 1 })
+    diagnostics.end('completed', 'turn')
+    await journal.close()
+    expect(journal.failure).toBeUndefined()
+    const report = await store.read(journal.id)
+    expect(report.warnings).toEqual([])
+    expect(
+      report.records.find(r => r.requestId === first.requestId && r.event === 'start')
+    ).toMatchObject({ model: 'requested-alias' })
+    expect(
+      report.records.find(r => r.requestId === first.requestId && r.event === 'completed')
+    ).toMatchObject({ responseModel: 'served-model' })
+    expect(
+      report.records.find(r => r.requestId === older.requestId && r.event === 'completed')
+        ?.responseModel
+    ).toBeUndefined()
+    expect(formatLog(report)).toContain('requested-model=requested-alias')
+    expect(formatLog(report)).toContain('reported-model=served-model')
+  })
+  it('keeps UUIDs containing numeric token budgets while still redacting credentials', async () => {
+    const previousBudget = process.env.MAX_OUTPUT_TOKENS
+    const previousSecret = process.env.Z2A_AUDIT_SECRET
+    process.env.MAX_OUTPUT_TOKENS = '4096'
+    process.env.Z2A_AUDIT_SECRET = 'fixture-sensitive-value'
+    try {
+      const { store, journal, diagnostics } = await setup()
+      diagnostics.start('turn')
+      diagnostics.emit('request', 'start', {
+        purpose: 'summary',
+        requestId: '00004096-0000-4000-8000-000000000001',
+        model: 'fixture-sensitive-value',
+        responseModel: 'fixture-sensitive-value',
+      })
+      await journal.close()
+      expect(journal.failure).toBeUndefined()
+      const report = await store.read(journal.id)
+      expect(report.records.find(r => r.kind === 'request')).toMatchObject({
+        requestId: '00004096-0000-4000-8000-000000000001',
+        model: 'redacted',
+        responseModel: 'redacted',
+      })
+      expect(await fs.readFile(journal.file, 'utf8')).not.toContain('fixture-sensitive-value')
+    } finally {
+      if (previousBudget === undefined) delete process.env.MAX_OUTPUT_TOKENS
+      else process.env.MAX_OUTPUT_TOKENS = previousBudget
+      if (previousSecret === undefined) delete process.env.Z2A_AUDIT_SECRET
+      else process.env.Z2A_AUDIT_SECRET = previousSecret
+    }
+  })
+  it('persists an allowlisted compaction failure without the provider failure text', async () => {
+    const { store, journal, diagnostics } = await setup()
+    diagnostics.start('compact')
+    diagnostics.compaction({
+      phase: 'failed',
+      trigger: 'manual',
+      failureReason: 'summary-byte-limit',
+    })
+    diagnostics.compaction({
+      phase: 'failed',
+      trigger: 'manual',
+      failureReason: 'private failure body',
+    })
+    await journal.close()
+    expect(journal.failure).toBeUndefined()
+    const report = await store.read(journal.id)
+    const failures = report.records.filter(record => record.kind === 'compaction')
+    expect(failures[0].compactionFailure).toBe('summary-byte-limit')
+    expect(failures[1].compactionFailure).toBeUndefined()
+    expect(await fs.readFile(journal.file, 'utf8')).not.toContain('private failure body')
+  })
   it('publishes private ordered metadata and verifies a settled operation', async () => {
     const { store, journal, diagnostics } = await setup()
     diagnostics.start('turn')

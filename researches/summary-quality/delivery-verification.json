@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-16",
+  "scope": "Repository history cleanup; no new real-service requests. Prior 56/56 remains archived and independently re-scored.",
+  "baseCommit": "1731015e8464bf5753b651e02c2df5ce725ff2a3",
+  "archivedHead": "8f948408a644e0491ef524c65d9f778d6db29d09",
+  "originalEvidence": "evidence-archive.json",
+  "sourceEquivalence": {
+    "totalFunctionalFiles": 39,
+    "identicalBytes": 38,
+    "syntaxEquivalentTypeScript": 38,
+    "formatOnlyWithinChangedFiles": [
+      "packages/core/src/tools/read-tool-result.ts"
+    ]
+  },
+  "formatOnlyFilesRestoredToMain": 13,
+  "engineering": {
+    "build": "passed",
+    "coreTests": 538,
+    "e2eTests": 184,
+    "cdpTests": 1,
+    "liveSkipped": 58,
+    "e2eTypecheck": "passed",
+    "lintErrors": 0,
+    "existingLintWarnings": 44,
+    "formatChangedTypeScript": 38,
+    "researchTests": 23,
+    "offlineDemos": 3,
+    "finalTargetedTests": 64
+  },
+  "course": {
+    "pages": 18,
+    "pc": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "navigation": "passed",
+    "textExpansion": "passed",
+    "zoom": "passed",
+    "boundaryAndOverlapIssues": 0,
+    "scriptErrors": 0
+  },
+  "reScoredArchivedRun": {
+    "tasks": 56,
+    "critical": 56,
+    "ordinaryCorrect": 63,
+    "ordinaryTotal": 63,
+    "readCorrections": 0
+  },
+  "cleanupEvidence": {
+    "url": "https://github.com/alienzhou/zero2agent/releases/download/E04-S003-summary-quality/e04-s003-cleanup-checks-20261016.tar.gz",
+    "sha256": "9d423a030a48a07fa346ea2c5726a4d298b466086a72bd15fc25bbe6810b2c39",
+    "bytes": 4259421
+  },
+  "retainedInitialFailures": [
+    "Full tests started before golden input files were copied: 537/538 core passed, missing inputs.json. Restored required files; full 723 passed.",
+    "Root pnpm exec tsc unavailable: used declared E2E workspace TypeScript, which passed.",
+    "One modified read-tool-result.ts formatting issue: corrected only that changed file; 38 changed TypeScript checks and AST equivalence passed."
+  ],
+  "humanReview": "pending",
+  "merge": "pending",
+  "deployment": "not performed",
+  "finalReview": {
+    "date": "2026-10-16",
+    "reviewedImplementationHead": "44faf2413cf429356d056205c6a831508a0acc8e",
+    "blockingFindings": 0,
+    "coreTargetedPassed": 131,
+    "e2eTargetedPassed": 14,
+    "sourceChanges": "Delivery-status prose and review metadata only after this review; implementation unchanged.",
+    "userAuthorization": "Explicitly requested final review and merge of PR #25 if no blocking problems.",
+    "mergeStatusSource": "https://github.com/alienzhou/zero2agent/pull/25",
+    "scope": "Earlier pending fields record the cleanup checkpoint. AI review is not recorded as a human GitHub approval.",
+    "evidence": {
+      "url": "https://github.com/alienzhou/zero2agent/releases/download/E04-S003-summary-quality/e04-s003-final-review-20261016.tar.gz",
+      "sha256": "335b3013f9406bb29cdb5a0b50504d578cb00191546c8f0dce745cc00dcad75a"
+    }
+  }
+}

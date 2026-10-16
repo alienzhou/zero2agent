@@ -34,7 +34,12 @@ async function provider(
     model: 'claude-sonnet-4-20250514',
   }
 }
-function sse(res: ServerResponse, tool = false, finish = true) {
+function sse(
+  res: ServerResponse,
+  tool = false,
+  finish = true,
+  model: unknown = 'claude-sonnet-4-20250514'
+) {
   res.writeHead(200, { 'content-type': 'text/event-stream' })
   const event = (type: string, data: unknown) =>
     res.write(`event: ${type}\ndata: ${JSON.stringify(data)}\n\n`)
@@ -45,7 +50,7 @@ function sse(res: ServerResponse, tool = false, finish = true) {
       type: 'message',
       role: 'assistant',
       content: [],
-      model: 'claude-sonnet-4-20250514',
+      ...(model === null ? {} : { model }),
       stop_reason: null,
       stop_sequence: null,
       usage: { input_tokens: 19, output_tokens: 0 },
@@ -83,7 +88,60 @@ const probe = {
   permission: { effect: 'read' as const },
 }
 
+it('emits only allowlisted compaction causes, never raw failure text', () => {
+  const records: DiagnosticEvent[] = []
+  const diagnostics = new DiagnosticEmitter(event => records.push(event))
+  diagnostics.start('compact')
+  diagnostics.compaction({
+    phase: 'failed',
+    trigger: 'manual',
+    failureReason: 'summary-byte-limit',
+  })
+  diagnostics.compaction({
+    phase: 'failed',
+    trigger: 'manual',
+    failureReason: 'private provider response',
+  })
+  const failed = records.filter(e => e.kind === 'compaction')
+  expect(failed[0].compactionFailure).toBe('summary-byte-limit')
+  expect(failed[1].compactionFailure).toBeUndefined()
+  expect(JSON.stringify(records)).not.toContain('private provider response')
+})
+
 describe('runtime diagnostics through the actual SDK', () => {
+  it('keeps requested and service-reported model identities separate across turns', async () => {
+    const requested: unknown[] = []
+    const config = await provider((body, response) => {
+      requested.push(body.model)
+      sse(response, false, true, `served-model-${requested.length}`)
+    })
+    const records: DiagnosticEvent[] = []
+    const agent = new Agent({ config, tools: [], diagnostics: event => records.push(event) })
+    expect(await agent.run('first request')).toBe('private-model-body')
+    expect(await agent.run('second request')).toBe('private-model-body')
+    expect(requested).toEqual([config.model, config.model])
+    const starts = records.filter(e => e.kind === 'request' && e.event === 'start')
+    const ends = records.filter(e => e.kind === 'request' && e.event === 'completed')
+    expect(starts.map(e => e.model)).toEqual(requested)
+    expect(ends.map(e => e.responseModel)).toEqual(['served-model-1', 'served-model-2'])
+    expect(starts.every(e => e.responseModel === undefined)).toBe(true)
+    expect(ends.map(e => e.requestId)).toEqual(starts.map(e => e.requestId))
+    expect(JSON.stringify(agent.snapshot())).not.toContain('served-model-')
+  })
+  it('omits missing or malformed service model labels instead of guessing from the request', async () => {
+    for (const returned of [null, '', 'private response body\nnext line', 'x'.repeat(129)]) {
+      const config = await provider((_body, response) => {
+        sse(response, false, true, returned)
+      })
+      const records: DiagnosticEvent[] = []
+      const agent = new Agent({ config, tools: [], diagnostics: e => records.push(e) })
+      expect(await agent.run('private-user-body')).toBe('private-model-body')
+      const completed = records.find(e => e.kind === 'request' && e.event === 'completed')!
+      expect(completed.responseModel).toBeUndefined()
+      expect(JSON.stringify(records)).not.toContain('private response body')
+      expect(JSON.stringify(records)).not.toContain('x'.repeat(129))
+    }
+  })
   it('correlates repeated tool IDs to requests without recording any bodies', async () => {
     let count = 0
     const config = await provider((_body, response) => sse(response, count++ < 2))
@@ -162,6 +220,9 @@ describe('runtime diagnostics through the actual SDK', () => {
       textChars: 18,
       errorKind: 'cancelled',
     })
+    expect(
+      records.find(e => e.kind === 'request' && e.event === 'cancelled')?.responseModel
+    ).toBeUndefined()
     expect(await agent.run('continue')).toBe('private-model-body')
     expect(new Set(records.map(e => e.operationId)).size).toBe(2)
   })
@@ -193,7 +254,7 @@ describe('runtime diagnostics through the actual SDK', () => {
                 id: 'summary',
                 type: 'message',
                 role: 'assistant',
-                model: 'claude-sonnet-4-20250514',
+                model: 'served-summary-model',
                 stop_reason: 'end_turn',
                 content: [{ type: 'text', text: 'short handoff' }],
                 usage: { input_tokens: 30, output_tokens: 4 },
@@ -222,6 +283,12 @@ describe('runtime diagnostics through the actual SDK', () => {
     ).toBe('short handoff')
     expect(records.some(e => e.purpose === 'count' && e.event === 'completed')).toBe(true)
     expect(records.some(e => e.purpose === 'summary' && e.event === 'completed')).toBe(true)
+    expect(
+      records.find(e => e.purpose === 'summary' && e.event === 'completed')?.responseModel
+    ).toBe('served-summary-model')
+    expect(
+      records.find(e => e.purpose === 'count' && e.event === 'completed')?.responseModel
+    ).toBeUndefined()
     expect(JSON.stringify(records)).not.toContain('private-history')
     diagnostics.end('completed', 'compact')
     diagnostics.emit('compaction', 'completed', { trigger: 'auto' })

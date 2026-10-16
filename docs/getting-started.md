@@ -135,6 +135,8 @@ node packages/tui/dist/cli.js --no-save --no-log
 
 列表和查看不需要 API key，不执行旧工具。`--no-save` 与 `--no-log` 分别关闭新快照和新日志；日志根目录可用 `ZERO2AGENT_LOG_DIR` 设置。运行记录不包含问题、回复、文件或工具正文及人工终端字节；缺少结束记录时，先检查实际效果再继续。
 
+请求开始的 `requested-model` 是实际发送的配置名称，完整响应的 `reported-model` 是服务自报名称，两者可能不同。后者缺失时表示没有可记录的回执，不推断与请求名相同；它也不能证明实际模型身份。旧日志没有该字段时仍可查看。
+
 完整体验与固定版本获取见 [S005 跟练](../specs/E03-product-foundations/S005-runtime-logging/follow-along.md)。
 
 ---

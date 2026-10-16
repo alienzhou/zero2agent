@@ -73,7 +73,7 @@ describe('compaction across the real loop and session', () => {
     'cancels orphaned background work after a %s one-shot run',
     async entry => {
       const reply = toolReply()
-      reply.content.unshift({ type: 'text', text: 'analysis '.repeat(1200), citations: null })
+      reply.content.unshift({ type: 'text', text: 'analysis '.repeat(1000), citations: null })
       const tool: Tool = {
         permission: { effect: 'read' },
         name: 'write',
@@ -231,7 +231,7 @@ describe('compaction across the real loop and session', () => {
     const batch = toolReply()
     batch.content.unshift({
       type: 'text',
-      text: 'historical analysis ' + 'a'.repeat(9500),
+      text: 'historical analysis ' + 'a'.repeat(8500),
       citations: null,
     })
     batch.content.push({ type: 'tool_use', id: 'failed-write', name: 'fail', input: {} })
@@ -343,7 +343,7 @@ describe('compaction across the real loop and session', () => {
       expect(events.map(event => event.phase)).toEqual(['background', 'waiting', 'completed'])
       expect(agent.getHistory()).toEqual(history)
       expect(agent.getContext().slice(-3)).toEqual(history.slice(-3))
-      expect(JSON.stringify(agent.getContext())).not.toContain('a'.repeat(9500))
+      expect(JSON.stringify(agent.getContext())).not.toContain('a'.repeat(8500))
       expect(await agent.run('Continue from the inspection; do not repeat writes.')).toBe(
         'resumed without repeating tools'
       )

@@ -92,7 +92,11 @@ describe('in-memory sessions', () => {
     const history = agent.getHistory()
     expect(await agent.compact()).toBe(true)
     expect(agent.getHistory()).toEqual(history)
-    expect(agent.getContext()).toContainEqual({ role: 'user', content: 'original task' })
+    expect(agent.getContext()).toContainEqual({
+      role: 'user',
+      content:
+        '[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\noriginal task',
+    })
     expect(JSON.stringify(agent.getContext())).toContain(
       'Summary: verified historical evidence retained.'
     )
@@ -106,7 +110,11 @@ describe('in-memory sessions', () => {
     expect(summaryRequest[0]).not.toHaveProperty('stream')
     await agent.run('latest user intent')
     expect(JSON.stringify(requests[1])).toContain('Summary: verified historical evidence retained.')
-    expect(requests[1].at(-1)).toEqual({ role: 'user', content: 'latest user intent' })
+    expect(requests[1].at(-1)).toEqual({
+      role: 'user',
+      content:
+        '[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\nlatest user intent',
+    })
     expect(agent.getHistory()).toHaveLength(4)
     agent.reset()
     expect(agent.getContext()).toEqual([])
@@ -272,6 +280,8 @@ describe('in-memory sessions', () => {
     expect(execute).toHaveBeenCalledWith(
       { message: 'value' },
       {
+        history: expect.anything(),
+        recordHistoryPaths: expect.any(Function),
         results: expect.anything(),
         resultSource: expect.objectContaining({ toolCallId: expect.any(String) }),
         cwd: '/tmp/session-project',
@@ -330,6 +340,8 @@ describe('in-memory sessions', () => {
     cwd.mockReturnValue('/tmp/project-b')
     await agent.run('inspect')
     expect(execute).toHaveBeenCalledWith(expect.anything(), {
+      history: expect.anything(),
+      recordHistoryPaths: expect.any(Function),
       results: expect.anything(),
       resultSource: expect.objectContaining({ toolCallId: expect.any(String) }),
       cwd: '/tmp/project-a',

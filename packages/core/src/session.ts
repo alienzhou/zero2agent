@@ -4,6 +4,7 @@ import { ContextManager, type CompactionRuntime } from './context-manager.js'
 import { ContextBudget, type ContextOptions, type ContextRequest } from './context-budget.js'
 import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
 import { RunBudgetError } from './runtime.js'
+import { HistoryEvidence, type HistoryReader } from './history-evidence.js'
 
 const INTERRUPTED =
   '[Harness] This turn was interrupted. Completed tool results are retained; no file changes were rolled back. Re-check the workspace before continuing.'
@@ -16,6 +17,17 @@ export class Session {
   private budget?: ContextBudget
   private budgetKey = ''
   private results: ResultStore
+  private evidence = new HistoryEvidence()
+
+  historyReader(messages: () => Anthropic.MessageParam[], cwd: string): HistoryReader {
+    return this.evidence.access(messages, cwd)
+  }
+  assertHistoryCapacity(): void {
+    this.evidence.assertCapacity()
+  }
+  recordHistorySource(messages: Anthropic.MessageParam[], index: number, paths: string[]): void {
+    this.evidence.record(messages, index, paths)
+  }
 
   constructor(resultOptions?: ResultStoreOptions) {
     this.results = new ResultStore(resultOptions)
@@ -76,6 +88,7 @@ export class Session {
     return {
       messages: this.getHistory(),
       context: this.context.snapshot(),
+      ...(this.evidence.snapshot() && { history: this.evidence.snapshot() }),
       ...(this.results.snapshot() && { results: this.results.snapshot() }),
     }
   }
@@ -84,6 +97,7 @@ export class Session {
     this.assertIdle()
     const snapshot = validateSessionSnapshot(value)
     this.results.restore(snapshot.results)
+    this.evidence.restore(snapshot.history)
     this.context.restore(snapshot.context)
     this.messages = snapshot.messages
     this.budget = undefined
@@ -94,6 +108,7 @@ export class Session {
   reset(): void {
     this.assertIdle()
     this.results.reset()
+    this.evidence.restore()
     this.context.reset()
     this.budget = undefined
     this.messages = []

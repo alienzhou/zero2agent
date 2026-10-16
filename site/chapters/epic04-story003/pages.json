@@ -1,0 +1,186 @@
+{
+  "title": "Zero2Agent · E04-S003 摘要质量与事实保留",
+  "date": "2026-10-13",
+  "draft": false,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "read-recovery-v1-accepted",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "压缩后，仍按最新事实继续",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S02",
+        "E01"
+      ]
+    },
+    {
+      "file": "02-wrong.html",
+      "title": "一句旧值，会改变后续操作",
+      "number": 2,
+      "sources": [
+        "D01",
+        "E01"
+      ]
+    },
+    {
+      "file": "03-layers.html",
+      "title": "已经能压缩，现在要验证压缩质量",
+      "number": 3,
+      "sources": [
+        "S01",
+        "D01"
+      ]
+    },
+    {
+      "file": "04-views.html",
+      "title": "原史、交接、工作上下文如何连接",
+      "number": 4,
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "file": "05-constraints.html",
+      "title": "后来的一条纠正，通常只替换一部分要求",
+      "number": 5,
+      "sources": [
+        "E01",
+        "S02"
+      ]
+    },
+    {
+      "file": "06-states.html",
+      "title": "计划、观察、未知，不要在摘要里混成一种状态",
+      "number": 6,
+      "sources": [
+        "S02",
+        "E01"
+      ]
+    },
+    {
+      "file": "07-references.html",
+      "title": "一个引用，究竟能证明什么？",
+      "number": 7,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "08-timeline.html",
+      "title": "别让被替换的旧值，在第三次摘要里复活",
+      "number": 8,
+      "sources": [
+        "E01"
+      ]
+    },
+    {
+      "file": "09-capacity.html",
+      "title": "索引有上限，遗漏必须可见",
+      "number": 9,
+      "sources": [
+        "S01",
+        "S03"
+      ]
+    },
+    {
+      "file": "10-large-result.html",
+      "title": "只看到结果引用时，沿用上一课的回读工具",
+      "number": 10,
+      "sources": [
+        "S04",
+        "E01",
+        "E09"
+      ]
+    },
+    {
+      "file": "11-history.html",
+      "title": "先定位，再读原文，原角色一起返回",
+      "number": 11,
+      "sources": [
+        "S03",
+        "T02"
+      ]
+    },
+    {
+      "file": "12-recursive.html",
+      "title": "让原始纠正，再次进入下一轮交接",
+      "number": 12,
+      "sources": [
+        "S01",
+        "T02"
+      ]
+    },
+    {
+      "file": "13-restore.html",
+      "title": "恢复的是事实和来源，不是过去的审批",
+      "number": 13,
+      "sources": [
+        "S01",
+        "S03",
+        "T01",
+        "T03"
+      ]
+    },
+    {
+      "file": "14-score.html",
+      "title": "评分器要能抓住错误，再拿它比较两个版本",
+      "number": 14,
+      "sources": [
+        "E01",
+        "E02",
+        "E12"
+      ]
+    },
+    {
+      "file": "15-task.html",
+      "title": "口头说完成之后，再检查实际文件",
+      "number": 15,
+      "sources": [
+        "S05",
+        "T04",
+        "E13",
+        "E14"
+      ]
+    },
+    {
+      "file": "16-comparison.html",
+      "title": "固定集全部通过，仍保留每轮失败",
+      "number": 16,
+      "sources": [
+        "E15",
+        "E16",
+        "T05"
+      ]
+    },
+    {
+      "file": "17-practice.html",
+      "title": "故意留下一个坏摘要，看原始纠正还能否找回",
+      "number": 17,
+      "sources": [
+        "T02",
+        "T03"
+      ]
+    },
+    {
+      "file": "18-next.html",
+      "title": "读取出错后，任务还没有完成",
+      "number": 18,
+      "sources": [
+        "S04",
+        "S06",
+        "T05",
+        "E16",
+        "D01"
+      ]
+    }
+  ]
+}

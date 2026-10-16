@@ -1,4 +1,5 @@
 import type { ResultStore, ResultSource } from '../result-store.js'
+import type { HistoryReader } from '../history-evidence.js'
 import type Anthropic from '@anthropic-ai/sdk'
 
 /**
@@ -18,6 +19,8 @@ export interface ToolExecutionMetadata {
   signal?: string | number
 }
 export interface ToolContext {
+  history?: HistoryReader
+  recordHistoryPaths?: (paths: string[]) => void
   results?: ResultStore
   resultSource?: ResultSource
   /** Native result metadata only; no command or terminal bytes. Notification, never control. */

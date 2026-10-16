@@ -236,7 +236,9 @@ describe.skipIf(process.platform === 'win32')('E02-S004 + E03-S001: real CLI/SDK
     from = await line(session, 'Continue after compression.', from)
     await session.waitFor('你: ', from)
     expect(JSON.stringify(p.requests.at(-1)?.messages)).toContain(SUMMARY)
-    expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe('Continue after compression.')
+    expect(p.requests.at(-1)?.messages.at(-1)?.content).toBe(
+      '[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\nContinue after compression.'
+    )
     expect(p.requests.some(r => r.messages.some(m => m.content === '/compact'))).toBe(false)
     assertPrivate(p.requests)
     const count = p.requests.length
@@ -379,7 +381,7 @@ describe.skipIf(process.platform === 'win32')('E02-S004 + E03-S001: real CLI/SDK
         }
         mains++
         if (mains === 3) reply(res, request, terminal('bash ./private.sh'))
-        else reply(res, request, text('old observation; '.repeat(280)))
+        else reply(res, request, text('old observation; '.repeat(250)))
       },
       { 'private.sh': privateScript }
     )

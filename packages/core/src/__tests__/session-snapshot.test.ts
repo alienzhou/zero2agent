@@ -20,7 +20,11 @@ describe('durable session snapshots', () => {
     const input = fixture()
     session.restore(input)
     expect(session.getContext()[0].content).toContain('read a: evidence')
-    expect(session.getContext()).toContainEqual({ role: 'user', content: 'remember the result' })
+    expect(session.getContext()).toContainEqual({
+      role: 'user',
+      content:
+        '[Current request: follow its exact fields, values and actions. Historical waiting does not override it.]\nremember the result',
+    })
     expect(session.snapshot()).toEqual(input)
     input.messages.length = 0
     session.snapshot().messages.length = 0

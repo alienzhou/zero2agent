@@ -17,6 +17,8 @@ export const LOG_LIMITS = {
 }
 const NUMBERS = [
   'attempt',
+  'fileCount',
+  'issueCount',
   'delayMs',
   'messageCount',
   'toolCount',
@@ -43,6 +45,7 @@ const LABELS = [
   'sessionId',
   'requestId',
   'model',
+  'responseModel',
   'stopReason',
   'providerRequestId',
   'toolCallId',
@@ -50,6 +53,8 @@ const LABELS = [
   'action',
   'trigger',
   'errorKind',
+  'compactionFailure',
+  'artifactFailure',
   'operation',
   'terminalOutcome',
   'signal',
@@ -75,6 +80,8 @@ const EVENTS: Record<string, string[]> = {
   phase: ['preparing', 'requesting', 'streaming', 'tools', 'cancelling'],
   compaction: ['pruned', 'background', 'waiting', 'foreground', 'completed', 'failed'],
   notice: ['shown'],
+  'artifact-check': ['started', 'passed', 'failed', 'repair', 'blocked'],
+  'evidence-read': ['invalid-input', 'correcting', 'resolved', 'blocked'],
 }
 export interface LogRecord extends Omit<Partial<DiagnosticEvent>, 'seq' | 'kind'> {
   version: 1
@@ -235,7 +242,15 @@ export class RunJournal {
         : LOG_LIMITS.file
     // Defense in depth for provider/model/tool IDs. Bodies are excluded before this step.
     this.secrets = Object.entries(process.env)
-      .filter(([k, v]) => /(?:KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL)/i.test(k) && v && v.length >= 4)
+      .filter(
+        ([k, v]) =>
+          /(?:KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL)/i.test(k) &&
+          v &&
+          v.length >= 4 &&
+          // These are validated numeric CLI budgets, not credentials. Treating 4096 as
+          // a secret randomly redacts UUIDs containing those digits and invalidates logs.
+          !(/^(?:MAX_INPUT_TOKENS|MAX_OUTPUT_TOKENS)$/.test(k) && /^\d+$/.test(v))
+      )
       .map(([, v]) => v!)
   }
   static async create(directory: string, options: LogOptions = {}): Promise<RunJournal> {
@@ -573,7 +588,8 @@ export function formatLog(report: LogReport): string {
         r.delayMs !== undefined && `wait=${r.delayMs}ms`,
         r.limitReason && `limit=${r.limitReason}`,
         r.purpose,
-        r.model,
+        r.model && `requested-model=${r.model}`,
+        r.responseModel && `reported-model=${r.responseModel}`,
         r.toolName && `tool=${r.toolName}`,
         r.toolCallId && `call=${r.toolCallId}`,
         r.action,

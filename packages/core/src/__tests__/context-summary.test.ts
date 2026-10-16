@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
 import { ContextBudget, type ContextRequest } from '../context-budget.js'
 import { createContextSummarizer } from '../context-summary.js'
+import { RunBudget } from '../run-budget.js'
+import { RequestExecutor } from '../request-executor.js'
 
 const model = 'custom'
 const history = (text: string): Anthropic.MessageParam[] => [{ role: 'user', content: text }]
@@ -134,7 +136,7 @@ describe('summary requests', () => {
     const client = { messages: { create } } as unknown as Anthropic
     const messages = history('甲😀乙\\\"\n'.repeat(2500))
     const budget = makeBudget()
-    await createContextSummarizer(client, model, budget)(messages, signal())
+    const summary = await createContextSummarizer(client, model, budget)(messages, signal())
     let reconstructed = ''
     for (const request of requests) {
       expect(budget.estimate(request)).toBeLessThanOrEqual(budget.inputLimit)
@@ -146,8 +148,96 @@ describe('summary requests', () => {
     expect(reconstructed).toBe(JSON.stringify(messages))
     expect(requests.length).toBeGreaterThan(2)
     expect(requests.length).toBeLessThanOrEqual(128)
-    expect(sourceOf(requests.at(-1)!)).toContain('Kept intent')
+    expect(summary).toContain('Kept intent')
   })
+
+  it('keeps ordered completed fragments that already fit without a lossy extra rewrite', async () => {
+    const messages = history('original chronological data '.repeat(180))
+    const fragments = [
+      'D1: port 7011; deployment forbidden.',
+      'D2: port 7089 replaces 7011. Tests failed.',
+    ]
+    const seen: string[] = []
+    const create = vi.fn(async (request: ContextRequest) => {
+      seen.push(sourceOf(request))
+      return response(fragments[seen.length - 1] ?? 'Port 7011; tests passed.')
+    })
+    const countTokens = vi.fn(async (request: ContextRequest) => ({
+      input_tokens: request.system && sourceOf(request).length > 3000 ? 6000 : 1000,
+    }))
+    const client = { messages: { create, countTokens } } as unknown as Anthropic
+    const budget = new ContextBudget(model, {
+      contextWindow: 8192,
+      maxInputTokens: 5000,
+      summaryTokens: 256,
+      counting: 'provider',
+    })
+    const text = await createContextSummarizer(client, model, budget)(messages, signal())
+    expect(text).toContain(fragments[0])
+    expect(text).toContain(fragments[1])
+    expect(text.indexOf(fragments[0])).toBeLessThan(text.indexOf(fragments[1]))
+    expect(seen.join('')).toBe(JSON.stringify(messages))
+    expect(create).toHaveBeenCalledTimes(2)
+    expect(Buffer.byteLength(text)).toBeLessThanOrEqual(budget.summaryTokens * 4)
+  })
+
+  it('still reduces fragment handoffs when their combined bytes exceed the final ceiling', async () => {
+    const messages = history('original chronological data '.repeat(180))
+    const create = vi.fn(async () =>
+      response(create.mock.calls.length <= 2 ? 'fact '.repeat(130) : 'Latest correction retained.')
+    )
+    const countTokens = vi.fn(async (request: ContextRequest) => ({
+      input_tokens: request.system && sourceOf(request).length > 3000 ? 6000 : 1000,
+    }))
+    const client = { messages: { create, countTokens } } as unknown as Anthropic
+    const budget = new ContextBudget(model, {
+      contextWindow: 8192,
+      maxInputTokens: 5000,
+      summaryTokens: 256,
+      counting: 'provider',
+    })
+    expect(await createContextSummarizer(client, model, budget)(messages, signal())).toBe(
+      'Latest correction retained.'
+    )
+    expect(create).toHaveBeenCalledTimes(3)
+  })
+
+  it.each(['tightened-budget', 'cancelled'] as const)(
+    'does not adopt joined fragments after %s during their final count',
+    async failure => {
+      const controller = new AbortController()
+      const create = vi.fn(async () =>
+        response(create.mock.calls.length <= 2 ? 'Completed fragment facts.' : 'Combined handoff.')
+      )
+      const countTokens = vi.fn(async (request: ContextRequest) => {
+        if (!request.system && (request.messages[0].content as string).startsWith('[Fragment 1]')) {
+          if (failure === 'cancelled') controller.abort(new Error('cancelled during joined count'))
+          if (failure === 'tightened-budget') budget.tighten()
+          return { input_tokens: 2000 }
+        }
+        return { input_tokens: request.system && sourceOf(request).length > 3000 ? 6000 : 1000 }
+      })
+      const client = { messages: { create, countTokens } } as unknown as Anthropic
+      const budget = new ContextBudget(model, {
+        contextWindow: 8192,
+        maxInputTokens: 5000,
+        summaryTokens: 256,
+        counting: 'provider',
+      })
+      const result = createContextSummarizer(
+        client,
+        model,
+        budget
+      )(history('original chronological data '.repeat(180)), controller.signal)
+      if (failure === 'cancelled') {
+        await expect(result).rejects.toThrow('cancelled during joined count')
+        expect(create).toHaveBeenCalledTimes(2)
+      } else {
+        await expect(result).resolves.toBe('Combined handoff.')
+        expect(create).toHaveBeenCalledTimes(3)
+      }
+    }
+  )
 
   it('counts each actual request through provider counting when configured', async () => {
     const create = vi.fn().mockResolvedValue(response())
@@ -164,6 +254,65 @@ describe('summary requests', () => {
 })
 
 describe('summary failures remain failures', () => {
+  it('discards a truncated handoff and makes at most one tighter request from the original source', async () => {
+    const create = vi
+      .fn()
+      .mockResolvedValueOnce(response('fabricated discarded prefix', 'max_tokens'))
+      .mockResolvedValueOnce(response('Corrected port 9381; deployment forbidden.'))
+    const client = { messages: { create } } as unknown as Anthropic
+    const input = history('source correction and observations '.repeat(50))
+    expect(await createContextSummarizer(client, model, makeBudget())(input, signal())).toBe(
+      'Corrected port 9381; deployment forbidden.'
+    )
+    expect(create).toHaveBeenCalledTimes(2)
+    for (const [request] of create.mock.calls) {
+      expect(sourceOf(request)).toBe(JSON.stringify(input))
+      expect(request.max_tokens).toBe(256)
+      expect(JSON.stringify(request)).not.toContain('fabricated discarded prefix')
+    }
+    expect(create.mock.calls[1][0].system).toContain('at most 256 UTF-8 bytes')
+  })
+  it('does not repeat output recovery for another fragment in the same compaction', async () => {
+    const create = vi
+      .fn()
+      .mockResolvedValueOnce(response('partial', 'max_tokens'))
+      .mockResolvedValueOnce(response('Completed fragment.'))
+      .mockResolvedValue(response('partial again', 'max_tokens'))
+    const client = { messages: { create } } as unknown as Anthropic
+    await expect(
+      createContextSummarizer(
+        client,
+        model,
+        makeBudget()
+      )(history('long source '.repeat(1000)), signal())
+    ).rejects.toMatchObject({ reason: 'incomplete-summary' })
+    expect(create).toHaveBeenCalledTimes(3)
+  })
+  it('does not regenerate past cancellation or the shared request budget', async () => {
+    for (const cancelled of [false, true]) {
+      const controller = new AbortController()
+      const run = new RunBudget({ maxRequests: 1 })
+      const create = vi.fn(async () => {
+        if (cancelled) controller.abort(new Error('cancelled'))
+        return response('discarded', 'max_tokens')
+      })
+      const client = { messages: { create } } as unknown as Anthropic
+      try {
+        await expect(
+          createContextSummarizer(
+            client,
+            model,
+            makeBudget(),
+            undefined,
+            new RequestExecutor(run)
+          )(history('original '.repeat(100)), controller.signal)
+        ).rejects.toThrow(cancelled ? 'cancelled' : /requests/)
+        expect(create).toHaveBeenCalledTimes(1)
+      } finally {
+        run.close()
+      }
+    }
+  })
   it.each([
     response('', 'end_turn'),
     response('partial', 'max_tokens'),
@@ -196,7 +345,7 @@ describe('summary failures remain failures', () => {
         makeBudget()
       )(history('history '.repeat(100)), signal())
     ).rejects.toThrow(/Summary/)
-    expect(create).toHaveBeenCalledTimes(1)
+    expect(create).toHaveBeenCalledTimes(reply.stop_reason === 'max_tokens' ? 2 : 1)
   })
 
   it('rejects nonreducing text rather than returning a truncated success', async () => {
@@ -221,7 +370,12 @@ describe('summary failures remain failures', () => {
     const client = { messages: { create } } as unknown as Anthropic
     const messages = history('abcdef '.repeat(1000))
     await createContextSummarizer(client, model, makeBudget())(messages, signal())
-    expect(pieces.slice(0, -1).join('')).toBe(JSON.stringify(messages))
+    let original = ''
+    for (const piece of pieces) {
+      if (original.length >= JSON.stringify(messages).length) break
+      original += piece
+    }
+    expect(original).toBe(JSON.stringify(messages))
   })
 
   it('bounds overflow retries and never retries unrelated API errors', async () => {

@@ -23,10 +23,25 @@ export type ContextRequest = {
   system?: string
 }
 
+const CONTEXT_FAILURE_REASONS = [
+  'incomplete-summary',
+  'nonreducing-summary',
+  'summary-byte-limit',
+  'summary-input-limit',
+  'invalid-history-reference',
+  'nonreducing-context',
+] as const
+export type ContextFailureReason = (typeof CONTEXT_FAILURE_REASONS)[number]
+export function contextFailureReason(value: unknown): ContextFailureReason | undefined {
+  return CONTEXT_FAILURE_REASONS.find(reason => reason === value)
+}
+
 export class ContextBudgetError extends Error {
-  constructor(message: string, options?: ErrorOptions) {
+  readonly reason?: ContextFailureReason
+  constructor(message: string, options?: ErrorOptions & { reason?: ContextFailureReason }) {
     super(message, options)
     this.name = 'ContextBudgetError'
+    this.reason = contextFailureReason(options?.reason)
   }
 }
 

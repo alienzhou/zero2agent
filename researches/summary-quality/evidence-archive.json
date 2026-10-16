@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "release": "https://github.com/alienzhou/zero2agent/releases/tag/E04-S003-summary-quality",
+  "url": "https://github.com/alienzhou/zero2agent/releases/download/E04-S003-summary-quality/e04-s003-evidence-20261016.tar.gz",
+  "sha256": "c686b4f1c7907428b675bc4720d991fcee9917f78bd38a93f46f4083ede93f8e",
+  "bytes": 87901559,
+  "originalHead": "8f948408a644e0491ef524c65d9f778d6db29d09",
+  "baseCommit": "1731015e8464bf5753b651e02c2df5ce725ff2a3",
+  "snapshotFiles": 3068,
+  "formalRecords": 784,
+  "contents": [
+    "snapshot/ (complete original tracked tree)",
+    "manifest.json (per-file SHA-256)",
+    "original-history.bundle (original S003 commits)",
+    "README.md (recovery instructions)"
+  ]
+}
