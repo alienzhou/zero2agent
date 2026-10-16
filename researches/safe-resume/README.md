@@ -8,7 +8,7 @@
 - [故障矩阵](../../e2e/src/safe-resume.test.ts)：17 项定向测试，包括真实子进程和 PTY。
 - [课程检查](../../scripts/e04-s004-course-check.mjs)：所有截图写入 tmp，不写入 Git。
 
-审阅阶段的证据包放在 GitHub 草稿 Release `E04-S004-safe-resume-review`，供有仓库权限的 reviewer 下载；不会把草稿说成已公开发布的课程版本。下载后先核对归档 SHA-256，再解压校验：
+审阅阶段的证据包放在 [GitHub 草稿 Release E04-S004-safe-resume-review](https://github.com/alienzhou/zero2agent/releases/tag/untagged-770faef92672460c60f5)，供有仓库权限的 reviewer 下载；不会把草稿说成已公开发布的课程版本。下载后先核对归档 SHA-256，再解压校验：
 
 ```sh
 shasum -a 256 e04-s004-evidence-20261016.tar.gz
