@@ -60,9 +60,7 @@
       "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
       "fixtureVersion": 2,
       "mode": "real-service",
-      "initialScopes": [
-        "packages/api"
-      ],
+      "initialScopes": ["packages/api"],
       "passed": true,
       "hashesStillCurrent": true,
       "cases": [
@@ -71,9 +69,7 @@
           "passed": true,
           "requests": 7,
           "tools": 10,
-          "reportedModels": [
-            "MiniMax-M3"
-          ],
+          "reportedModels": ["MiniMax-M3"],
           "checks": {
             "paired": true,
             "noRecordEffects": true,
@@ -98,9 +94,7 @@
           "passed": true,
           "requests": 1,
           "tools": 1,
-          "reportedModels": [
-            "MiniMax-M3"
-          ],
+          "reportedModels": ["MiniMax-M3"],
           "checks": {
             "paired": true,
             "noRecordEffects": true,
@@ -120,9 +114,7 @@
       "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
       "fixtureVersion": 2,
       "mode": "deterministic-http",
-      "initialScopes": [
-        "packages/api"
-      ],
+      "initialScopes": ["packages/api"],
       "passed": true,
       "hashesStillCurrent": true,
       "cases": [
@@ -188,9 +180,7 @@
             "passed": false,
             "requests": 8,
             "tools": 9,
-            "reportedModels": [
-              "MiniMax-M3"
-            ],
+            "reportedModels": ["MiniMax-M3"],
             "checks": {},
             "error": "Run budget stopped: tools. Completed results are retained; effects were not rolled back.",
             "durationMs": 19599
@@ -200,9 +190,7 @@
             "passed": true,
             "requests": 1,
             "tools": 1,
-            "reportedModels": [
-              "MiniMax-M3"
-            ],
+            "reportedModels": ["MiniMax-M3"],
             "checks": {
               "paired": true,
               "noRecordEffects": true,
@@ -242,14 +230,8 @@
   },
   "course": {
     "pages": 12,
-    "pc": [
-      1440,
-      1000
-    ],
-    "h5": [
-      390,
-      844
-    ],
+    "pc": [1440, 1000],
+    "h5": [390, 844],
     "pageGeometry": "passed",
     "navigation": "passed",
     "zoom": "passed",
