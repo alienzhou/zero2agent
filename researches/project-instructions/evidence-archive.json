@@ -16,5 +16,19 @@
     "Evidence is outside Git history; obtain the draft asset with repository access.",
     "Failed runs are retained alongside passing runs; see verification.json.",
     "Manifest includes the production/test/course sources used for review and historical live run sources."
-  ]
+  ],
+  "courseRevision": {
+    "asset": "e05-s001-course-concise-evidence.tar.gz",
+    "bytes": 5294054,
+    "sha256": "c308a85f81fc445fa07c6ef1750cf9ceab42fbe912a2623293e298017de8bfbd",
+    "manifestSha256": "2366a3eae1c57be85a65462b137ed59d1637a309ca4b3f0cc101db0b9deeb252",
+    "fileCount": 78,
+    "source": "221f07d656dfd055e59180b4313552619f8a5da4",
+    "pages": 10,
+    "rawEvidence": "tmp/e05-s001/course-JggNEW",
+    "downloadVerified": true,
+    "releaseTag": "E05-S001-project-instructions-evidence",
+    "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-7886d81721647cf26090",
+    "note": "Current 10-page course, independently verified; original 18-page evidence remains unchanged."
+  }
 }

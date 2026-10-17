@@ -35,6 +35,8 @@ tar -xzf e05-s001-project-instructions-evidence.tar.gz
 node researches/project-instructions/verify-evidence.mjs e05-s001-evidence
 ```
 
+当前 **10 页课程**另有 `e05-s001-course-concise-evidence.tar.gz`，含 78 个截图、源码和检查文件；已下载回验整体与 manifest 哈希。使用相同 release 的 `gh release download --pattern e05-s001-course-concise-evidence.tar.gz` 下载，解压后运行 `node researches/project-instructions/verify-evidence.mjs e05-s001-course-concise`。整体 SHA-256 见索引 `courseRevision.sha256`。当前浏览器证据为 `course-JggNEW`，中间修订 `course-lkvlFm` 同时保留。
+
 归档含 `tmp/e05-s001/`（固定案例、终端、PC/H5 图）、`tmp/e05-s001*.log`（包括初始失败）和 `source/<commit>/`。早期未提交的 demo 原型没有保留完整源字节，只保留其失败与记录哈希；三个 live 版本都有对应已提交源码。最终 demo 新增源码/运行时复制，仅影响证据采集，生产实现与固定任务哈希没有变化。
 
 这份证据不代替人工 review，也不表示课程已经发布。应用层权限和路径检查不等于 OS 沙箱。
