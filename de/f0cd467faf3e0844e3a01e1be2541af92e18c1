@@ -1,0 +1,25 @@
+.discuss/2026-10-17/e05-s001-project-instructions/outline.md
+  s_58249cd92a0ae1::t_d3fd1c4c04685f 14-17
+packages/core/src/tools/__tests__/find-files.test.ts
+  s_58249cd92a0ae1::t_89924ca4ae7526 42-56,76-93
+packages/core/src/tools/find-files.ts
+  s_58249cd92a0ae1::t_b8c817ced1d243 36-39,41,48,140-142,153,188
+researches/project-instructions/demo.mjs
+  s_58249cd92a0ae1::t_f456ff2d42b052 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "def0cd467faf3e0844e3a01e1be2541af92e18c1",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
