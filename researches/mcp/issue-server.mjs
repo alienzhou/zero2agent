@@ -28,6 +28,7 @@ input.on('line', line => {
     let tools = message.params?.cursor ? definitions.slice(1) : definitions.slice(0,1)
     let nextCursor = message.params?.cursor ? undefined : 'page-2'
     if (mode === 'cycle') nextCursor = 'page-2'
+    if (mode === 'pages-at-limit' || mode === 'pages-below-limit') { tools=[]; const n=Number(message.params?.cursor??0); nextCursor=n < (mode==='pages-at-limit'?7:6)?String(n+1):undefined }
     if (mode === 'too-many-pages') { tools=[]; nextCursor=String(Number(message.params?.cursor??0)+1) }
     if (mode === 'bad-schema') tools=[{...definitions[0],inputSchema:{...schema,unrecognizedKeyword:true}}]
     if (mode === 'bad-name') tools=[{...definitions[0],name:'bad name'}]
@@ -35,6 +36,7 @@ input.on('line', line => {
     if (mode === 'too-many-tools') tools=Array.from({length:33},(_,i)=>({...definitions[0],name:'t'+i}))
     if (mode === 'tools-at-limit') {tools=Array.from({length:32},(_,i)=>({...definitions[0],name:'t'+i}));nextCursor=undefined}
     if (mode === 'oversize-frame') {process.stdout.write('x'.repeat(1024*1024+1)); return}
+    if (mode.startsWith('frame-')) { const size=1024*1024+(mode==='frame-above'?1:mode==='frame-below'?-1:0); const frame={jsonrpc:'2.0',id:message.id,result:{tools:[],pad:''}}; frame.result.pad='x'.repeat(size-Buffer.byteLength(JSON.stringify(frame))); process.stdout.write(JSON.stringify(frame)+'\n'); return }
     if (mode === 'invalid-frame') {process.stdout.write('not-json\n'); return}
     reply(message.id,{tools,...(nextCursor !== undefined && {nextCursor})})
   } else if (message.method === 'tools/call') {

@@ -122,6 +122,24 @@ describe('MCP native stdio, discovery and current permissions', () => {
     const pid = (await audit())[0].pid
     expect(() => process.kill(pid, 0)).toThrow()
   })
+  it.each(['pages-below-limit', 'pages-at-limit', 'frame-below', 'frame-at'])(
+    'accepts exact capacity %s',
+    async mode => {
+      const c = client(mode, { startupTimeoutMs: 1500 })
+      await c.open()
+      expect(c.view()[0].state).toBe('ready')
+    }
+  )
+  it('rejects the message byte above its bound before JSON parsing', async () => {
+    const c = client('frame-above')
+    await c.open()
+    expect(c.view()[0].state).toBe('failed')
+  })
+  it('does not send a forbidden initialize cancellation notification', async () => {
+    const c = client('hang-init', { startupTimeoutMs: 100 })
+    await c.open()
+    expect((await audit()).some(e => e.method === 'notifications/cancelled')).toBe(false)
+  })
   it('accepts the tool count at the bound', async () => {
     const c = client('tools-at-limit')
     await c.open()
@@ -256,6 +274,20 @@ describe('MCP configuration, schema and names are bounded', () => {
     ])
       expect(() => validateMcpOptions(options as never)).toThrow()
     expect(validateMcpOptions({ servers: [] })).toEqual({ servers: [] })
+    for (const count of [3, 4])
+      expect(
+        validateMcpOptions({
+          servers: Array.from({ length: count }, (_, i) => ({
+            id: 's' + i,
+            command: process.execPath,
+          })),
+        }).servers
+      ).toHaveLength(count)
+    for (const ms of [29999, 30000])
+      expect(validateMcpOptions({ servers: [], callTimeoutMs: ms }).callTimeoutMs).toBe(ms)
+    expect(() =>
+      validateMcpOptions({ servers: [{ id: 7, command: process.execPath }] } as never)
+    ).toThrow()
   })
   it('keeps name length under model bounds and distinguishes raw names', () => {
     expect(mcpToolName('x'.repeat(32), 'a'.repeat(128)).length).toBeLessThanOrEqual(64)

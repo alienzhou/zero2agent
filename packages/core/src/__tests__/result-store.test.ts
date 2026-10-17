@@ -207,7 +207,7 @@ describe('bounded result bodies', () => {
     await expect(store.read(entry.reference)).rejects.toThrow()
     const snapshot = store.snapshot()!
     expect(() => validateResultSnapshot({ ...snapshot, scope: '../escape' })).toThrow()
-    expect(() => validateResultSnapshot({ ...snapshot, version: 2 })).toThrow()
+    expect(() => validateResultSnapshot({ ...snapshot, version: 99 })).toThrow()
     snapshot.entries[0].sha256 = '../secret'
     expect(() => store.restore(snapshot)).toThrow()
     expect(store.snapshot()!.entries[0].sha256).toBe(entry.sha256)
@@ -381,7 +381,7 @@ describe('bounded result bodies', () => {
     })
     const snapshot = session.snapshot()
     expect(() =>
-      session.restore({ ...snapshot, results: { ...snapshot.results, version: 2 } })
+      session.restore({ ...snapshot, results: { ...snapshot.results, version: 99 } })
     ).toThrow()
     expect(session.snapshot()).toEqual(snapshot)
     session.reset()

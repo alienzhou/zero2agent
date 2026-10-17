@@ -55,6 +55,7 @@ export function validateMcpOptions(options: McpOptions): McpOptions {
   for (const s of options.servers) {
     if (
       !s ||
+      typeof s.id !== 'string' ||
       !/^[a-zA-Z0-9_-]{1,32}$/.test(s.id) ||
       ids.has(s.id) ||
       typeof s.command !== 'string' ||
