@@ -35,6 +35,8 @@ export interface ToolContext {
  * 工具接口定义
  */
 export interface Tool {
+  /** Trusted directory inputs for AGENTS.md discovery; does not describe arbitrary shell effects. */
+  instructionDirectories?: string[]
   /** Host-owned paths for stored-result reads; resolved before permission evaluation. */
   readPaths?: (input: Record<string, unknown>, ctx: ToolContext) => Promise<string[]>
   /** Explicit host contract: these inputs identify every file this tool can mutate. */

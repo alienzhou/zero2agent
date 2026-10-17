@@ -47,6 +47,10 @@ const STATUS: Record<string, string> = {
 const COMMANDS = [
   '/new',
   '/compact',
+  '/instructions',
+  '/instructions refresh',
+  '/instructions off',
+  '/instructions on',
   '/terminal',
   '/help',
   '/sessions',
@@ -66,7 +70,7 @@ const COMMANDS = [
 const MAX_DRAFT_LENGTH = 16_384
 const DRAFT_LIMIT_NOTICE = '输入上限 16,384 个 UTF-16 单元；本次输入或整段粘贴未加入，原草稿保留。'
 const HELP =
-  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/recovery 查看中断进度，/recovery continue 指令 开始新预算并保留未完成检查。\n/logs 运行日志列表，/log [UUID] [operationId] 查看日志；Esc 返回，↑↓ / PgUp/PgDn 翻阅。\n/checkpoints 文件列表，/diff UUID 差异，/undo [UUID] 回退预览，/recover UUID 检查中断写入。\n/checkpoint-stats 占用，/checkpoint-prune 清理过期记录。仅受控文件工具自动捕获，shell 和人工终端不捕获。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
+  '输入编辑：← → / Ctrl-B/F 移动，Home End / Ctrl-A/E 行首尾；↑ ↓ 在多行中移动或查看历史。\n剪切：Ctrl-U 剪切前文，Ctrl-K 剪切到行尾，Ctrl-W 剪切前词，Ctrl-Y 恢复；Ctrl-D 删除后一字。\nCtrl-J 换行；粘贴支持多行，粘贴结束后 Enter 发送；运行中可编辑草稿，完成后 Enter 发送。\n输入上限 16,384 个 UTF-16 单元；超限会提示并保留原草稿，整段粘贴不会被截断提交。\n查看：PgUp/PgDn 滚动，Ctrl-End 回到底部；Ctrl-O 展开工具，Alt-↑/↓ 选择工具。\n审批：↑↓ / PgUp/PgDn / Home End 查看全部参数，y 允许本次，n / Enter / Esc 拒绝。\n运行：Ctrl-C 取消本轮（不回滚文件），Ctrl-X 停止前台命令，Ctrl-S 转后台。\n空闲：Ctrl-C 先清草稿，空草稿时退出；Ctrl-D 空草稿时退出。\n命令：/new 新对话，/sessions 会话列表，/resume UUID 恢复，/session 当前会话，/save 重试保存。\n/recovery 查看中断进度，/recovery continue 指令 开始新预算并保留未完成检查。\n/logs 运行日志列表，/log [UUID] [operationId] 查看日志；Esc 返回，↑↓ / PgUp/PgDn 翻阅。\n/checkpoints 文件列表，/diff UUID 差异，/undo [UUID] 回退预览，/recover UUID 检查中断写入。\n/checkpoint-stats 占用，/checkpoint-prune 清理过期记录。仅受控文件工具自动捕获，shell 和人工终端不捕获。\n/instructions 查看最近加载的规则，/instructions refresh 重读，off 关闭，on 开启。\n/compact 压缩，/terminal 人工终端，/help 帮助，exit 退出。'
 const toolKey = (call: { turnId: string; toolCallId: string }): string =>
   `${call.turnId}:${call.toolCallId}`
 
@@ -745,6 +749,13 @@ export class RuntimeTui {
           back: this.logBack,
         }
         this.logBack = undefined
+        this.state.phase = 'idle'
+      } else if (input === '/instructions' || input.startsWith('/instructions ')) {
+        this.notice(
+          await this.conversations!.instructions(
+            input.slice('/instructions'.length).trim() || 'show'
+          )
+        )
         this.state.phase = 'idle'
       } else if (input === '/compact') {
         this.compacting = true

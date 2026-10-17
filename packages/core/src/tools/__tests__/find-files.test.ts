@@ -39,9 +39,21 @@ beforeAll(async () => {
   const now = Date.now()
   await fs.utimes(path.join(tmpDir, 'src', 'index.ts'), now / 1000, now / 1000)
   await fs.utimes(path.join(tmpDir, 'src', 'app.tsx'), (now - 1000) / 1000, (now - 1000) / 1000)
-  await fs.utimes(path.join(tmpDir, 'src', 'utils', 'helper.ts'), (now - 2000) / 1000, (now - 2000) / 1000)
-  await fs.utimes(path.join(tmpDir, 'src', 'utils', 'format.ts'), (now - 3000) / 1000, (now - 3000) / 1000)
-  await fs.utimes(path.join(tmpDir, 'tests', 'app.test.ts'), (now - 4000) / 1000, (now - 4000) / 1000)
+  await fs.utimes(
+    path.join(tmpDir, 'src', 'utils', 'helper.ts'),
+    (now - 2000) / 1000,
+    (now - 2000) / 1000
+  )
+  await fs.utimes(
+    path.join(tmpDir, 'src', 'utils', 'format.ts'),
+    (now - 3000) / 1000,
+    (now - 3000) / 1000
+  )
+  await fs.utimes(
+    path.join(tmpDir, 'tests', 'app.test.ts'),
+    (now - 4000) / 1000,
+    (now - 4000) / 1000
+  )
 })
 
 afterAll(async () => {
@@ -59,6 +71,24 @@ describe('find_files', () => {
     expect(result).toContain('helper.ts')
     expect(result).toContain('format.ts')
     expect(result).toContain('app.test.ts')
+  })
+
+  it('resolves workspace-relative glob prefixes from ctx.cwd, not the host process directory', async () => {
+    expect(process.cwd()).not.toBe(ctx.cwd)
+    const result = await findFilesTool.execute({ pattern: 'src/**/*.ts' }, ctx)
+    expect(result).toContain('src/index.ts')
+    expect(result).toContain('src/utils/helper.ts')
+    expect(result).not.toContain('tests/app.test.ts')
+    const direct = await findFilesTool.execute({ pattern: 'tests/*.test.ts' }, ctx)
+    expect(direct).toContain('tests/app.test.ts')
+  })
+
+  it('reports an invalid child-process cwd instead of an unhandled spawn error', async () => {
+    const result = await findFilesTool.execute(
+      { pattern: '*.ts', path: tmpDir },
+      { cwd: path.join(tmpDir, 'missing-cwd') }
+    )
+    expect(result).toContain('Error: Search failed:')
   })
 
   it('结果按修改时间降序排列', async () => {

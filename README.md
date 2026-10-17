@@ -113,7 +113,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
 | [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S004 已完成；[S004 交付](./specs/E04-reliability-and-context/S004-safe-resume/README.md) |
-| Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
+| [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001 已实现、待 PR 人工 review；其余三课已规划 |
 
 最新课程：[E04-S002：大工具结果按需读取](./specs/E04-reliability-and-context/S002-result-references/README.md)，从[重启回读实验](./specs/E04-reliability-and-context/S002-result-references/follow-along.md)开始。
 
@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E04-S004：中断后的安全续跑](./specs/E04-reliability-and-context/S004-safe-resume/README.md)已完成实现、故障回归、离线跟练及 18 页课程。逐工具保存执行记录；核对未知效果后明确开启新一轮，保留 S003 完成检查。最终复核后按用户授权通过 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付；固定跟练版本 `E04-S004-safe-resume`，网站未部署。
+**最新更新**：[E05-S001：项目指令与 AGENTS.md](./specs/E05-extensibility/S001-project-instructions/README.md)已接通目录规则、执行前预检、有限重规划及 CLI/TUI 查看控制。10 页课程和固定离线/真实服务案例已验证，工程验收与最终自查完成，等待 PR 人工 review；人工 review 和站点发布待进行。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -185,6 +185,7 @@ zero2agent/
 | [E04-S002](./specs/E04-reliability-and-context/S002-result-references/README.md) | 大工具结果按需读取 | Done，[PR #24](https://github.com/alienzhou/zero2agent/pull/24)，已打 Tag |
 | [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | 摘要质量与事实保留 | 实现、课程、严格验收及最终复核完成；交付见 PR #25 |
 | [E04-S004](./specs/E04-reliability-and-context/S004-safe-resume/README.md) | 中断后的安全续跑 | 已完成；[PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付 |
+| [E05-S001](./specs/E05-extensibility/S001-project-instructions/README.md) | 项目指令、目录作用域与执行前检查 | 待人工 review |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

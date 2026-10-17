@@ -106,3 +106,14 @@ export type {
   ExecutionBoundary,
   ExecutionRecovery,
 } from './execution-recovery.js'
+
+export {
+  ProjectInstructions,
+  ProjectInstructionError,
+  PROJECT_INSTRUCTION_LIMITS,
+} from './project-instructions.js'
+export type {
+  ProjectInstructionOptions,
+  ProjectInstructionView,
+  ProjectInstructionEntry,
+} from './project-instructions.js'

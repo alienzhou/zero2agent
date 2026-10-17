@@ -24,6 +24,12 @@
       "number": 4,
       "title": "失败后继续，长任务保持可靠",
       "description": "用失败恢复、运行预算与上下文工程处理更长的任务。"
+    },
+    {
+      "id": "epic05",
+      "number": 5,
+      "title": "让 Agent 理解项目并接入扩展",
+      "description": "项目指令、Skills、MCP 与 Hooks 复用现有的权限、预算和恢复机制。"
     }
   ],
   "chapters": [
@@ -152,6 +158,13 @@
       "title": "中断后的安全续跑",
       "description": "逐工具保存执行进度，核对未知效果，在当前权限下明确继续。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S004-safe-resume/specs/E04-reliability-and-context/S004-safe-resume"
+    },
+    {
+      "id": "epic05-story001",
+      "epic": "epic05",
+      "title": "项目指令与 AGENTS.md",
+      "description": "沿目录加载开放格式的项目约定，在副作用前补齐规则，核对来源、版本与当前权限。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E05-S001-project-instructions-concise-review/specs/E05-extensibility/S001-project-instructions"
     }
   ]
 }
