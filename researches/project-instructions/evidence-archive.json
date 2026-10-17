@@ -2,7 +2,7 @@
   "version": 1,
   "story": "E05-S001",
   "releaseTag": "E05-S001-project-instructions-evidence",
-  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-7886d81721647cf26090",
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-3ddce92dfe6f1b48304d",
   "releaseStatus": "draft-review-evidence",
   "asset": "e05-s001-project-instructions-evidence.tar.gz",
   "bytes": 8456107,
@@ -28,7 +28,7 @@
     "rawEvidence": "tmp/e05-s001/course-JggNEW",
     "downloadVerified": true,
     "releaseTag": "E05-S001-project-instructions-evidence",
-    "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-7886d81721647cf26090",
+    "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-3ddce92dfe6f1b48304d",
     "note": "Current 10-page course, independently verified; original 18-page evidence remains unchanged."
   }
 }
