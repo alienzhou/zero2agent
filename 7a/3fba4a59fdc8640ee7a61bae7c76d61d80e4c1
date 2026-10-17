@@ -1,0 +1,69 @@
+packages/core/package.json
+  s_58249cd92a0ae1::t_a6d66a088d5b2a 22,25
+packages/core/src/__tests__/mcp-integration.test.ts
+  s_58249cd92a0ae1::t_484533cb35f6e8 1-274
+packages/core/src/__tests__/mcp.test.ts
+  s_58249cd92a0ae1::t_c8b7a4e939dce9 1-284
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_cb9d0850906e48 1,39,67,70,127,330-350,360
+packages/core/src/external-source.ts
+  s_58249cd92a0ae1::t_657fe2e9864d8d 1-23
+packages/core/src/history-evidence.ts
+  s_58249cd92a0ae1::t_eb372ce6bcec6b 1,25,28,153,176-182,184,192-195,205-210,220,256-260
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_d6b3736f933896 123-131
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_5e78652dad1e45 1-2,93-96,160,162-163,177,247,286-296,415-417,437-445,489-490,538-539,580,601-605,621,654-660,741-743,754,760-761,792-797,826,835-840,926,972,1038-1039,1052-1058
+packages/core/src/mcp/client.ts
+  s_58249cd92a0ae1::t_53603e9ea7f86e 1-335
+packages/core/src/mcp/schema.ts
+  s_58249cd92a0ae1::t_46517741799e44 1-58
+packages/core/src/mcp/stdio.ts
+  s_5c33d26abfbb40::t_09fd8e4e4af22d 1-151
+packages/core/src/prompt/system.ts
+  s_58249cd92a0ae1::t_4cabfcdf36cfdf 25
+packages/core/src/result-store.ts
+  s_58249cd92a0ae1::t_f210b4df239e7e 1,14,25,67,102-105,110,123,217-219,267
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_16bd5695e43c2f 1,33-39
+packages/core/src/tools/read-history.ts
+  s_58249cd92a0ae1::t_fc44d029b1dd28 4
+packages/core/src/tools/read-tool-result.ts
+  s_58249cd92a0ae1::t_942b5b1aa0d4e8 16
+packages/core/src/tools/types.ts
+  s_58249cd92a0ae1::t_a2ad5ff1f710d6 1,24,40-41
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_db38c553982d95 3,226-228,277-284,329-360,511,545,565
+packages/tui/src/mcp-config.ts
+  s_58249cd92a0ae1::t_611e430906015d 1-43
+packages/tui/src/session-store.ts
+  s_58249cd92a0ae1::t_b327d18854aab6 13,109,113-117,208-214
+pnpm-lock.yaml
+  s_58249cd92a0ae1::t_4fbdc117d574ff 72-74,81-83,2567-3022,5676-6024
+researches/mcp/issue-server.mjs
+  s_58249cd92a0ae1::t_07c8c344179736 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7a3fba4a59fdc8640ee7a61bae7c76d61d80e4c1",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_5c33d26abfbb40": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a14968-a2b0-7953-b5bf-1704721bea78",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
