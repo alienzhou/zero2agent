@@ -1,0 +1,25 @@
+packages/core/src/__tests__/mcp-integration.test.ts
+  s_58249cd92a0ae1::t_8b7a40b4ec2b4d 261-284
+packages/core/src/__tests__/mcp.test.ts
+  s_58249cd92a0ae1::t_1564ed20208645 156-167,349-400
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_30e9ed87b09f07 2,742-746
+researches/mcp/issue-server.mjs
+  s_58249cd92a0ae1::t_8d8c471476b857 104-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fdaddc9a46f70b395b56bc19bec0570e8fd96fd3",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
