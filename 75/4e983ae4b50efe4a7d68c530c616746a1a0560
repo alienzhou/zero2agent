@@ -1,0 +1,22 @@
+researches/skills/README.md
+  s_58249cd92a0ae1::t_a5d686f812ac04 33,39
+  s_58249cd92a0ae1::t_d02f255d5739de 40
+researches/skills/verification-v1.json
+  s_58249cd92a0ae1::t_8c0823ed1ad4d8 1-121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "754e983ae4b50efe4a7d68c530c616746a1a0560",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
