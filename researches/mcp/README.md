@@ -29,4 +29,8 @@ node researches/mcp/demo.mjs --live
 
 运行会建立新的 `tmp/e05-s003/{offline,live}-*`。源与运行产物副本、原始请求/响应、协议事件、快照、效果与测试记录都在该忽略目录。成功/失败均保留，脚本不会自动重跑。每例最多 8 请求、12 工具、120 秒；请求配置名与服务报告名分别记录。
 
+可运行 `node researches/mcp/probe-stdio.mjs`，通过透明本地 shim 保存双向原始协议字节、实际 SDK 工具表并核对服务后代 PID 退出；不发模型请求，也不调用 record_action。
+
 跟练与独立校验见 [Story 跟练](../../specs/E05-extensibility/S003-mcp/follow-along.md)，结论与原始归档索引见 `verification.json` 和 `evidence-archive.json`。
+
+下载独立证据附件后按 `evidence-archive.json` 的 SHA-256 校验并解压，在仓库运行 `node researches/mcp/verify-evidence.mjs /path/to/extracted`。脚本只读 manifest、源码副本与结果，不执行归档里的代码。

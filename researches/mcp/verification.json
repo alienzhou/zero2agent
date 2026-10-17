@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "productionSource": "78d0ce0601bc211c363079239f77113e2f273a5b",
+  "platform": {
+    "os": "macOS 14.7.8 (23H730)",
+    "system": "darwin",
+    "architecture": "arm64",
+    "node": "v22.15.1"
+  },
+  "protocol": "2025-11-25",
+  "sdkVersion": "1.26.0",
+  "engineering": {
+    "build": "passed",
+    "core": 803,
+    "e2e": 246,
+    "cdp": 1,
+    "total": 1050,
+    "liveSkipped": 58,
+    "focusedCoreMcp": 70,
+    "focusedHost": 15,
+    "lint": {
+      "errors": 0,
+      "warnings": 49
+    },
+    "format": {
+      "changed": "passed",
+      "wholeRepository": "11 pre-existing files fail current Prettier; source bytes unchanged from base",
+      "preExistingFiles": [
+        "packages/cdp-debug/src/cli/index.ts",
+        "packages/cdp-debug/src/server/cdp-client.ts",
+        "packages/cdp-debug/src/server/index.ts",
+        "packages/cdp-debug/src/server/routes.ts",
+        "packages/core/src/llm/index.ts",
+        "packages/core/src/prompt/index.ts",
+        "packages/core/src/tools/__tests__/grep-search.test.ts",
+        "packages/core/src/tools/__tests__/read-file.test.ts",
+        "packages/core/src/tools/__tests__/write-file.test.ts",
+        "packages/core/vitest.config.ts",
+        "packages/shared/src/index.ts"
+      ]
+    }
+  },
+  "acceptance": {
+    "frozenInputsSha256": "f8c6a4b2bf03cdf3c39e3c25e2670376ab1afcde7f1e9635bbf38c1f07395859",
+    "limits": {
+      "maxRequests": 8,
+      "maxToolCalls": 12,
+      "maxDurationMs": 120000,
+      "maxRetries": 0,
+      "requestTimeoutMs": 120000
+    },
+    "requestedModel": "claude-sonnet-4-20250514",
+    "live": {
+      "path": "current/live-j69LQq",
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "requests": 6,
+          "tools": 9,
+          "reportedModels": [
+            "MiniMax-M3"
+          ],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "externalReads": true,
+            "tailRecall": true,
+            "actualTests": true,
+            "independentAmounts": true,
+            "jsonReport": true,
+            "webUnchanged": true
+          },
+          "durationMs": 9428
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 2,
+          "tools": 1,
+          "reportedModels": [
+            "MiniMax-M3"
+          ],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "refused": true,
+            "unchanged": true,
+            "invoked": true
+          },
+          "durationMs": 4110
+        }
+      ]
+    },
+    "offline": {
+      "path": "current/offline-DvERky",
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "requests": 7,
+          "tools": 9,
+          "reportedModels": [],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "externalReads": true,
+            "tailRecall": true,
+            "actualTests": true,
+            "independentAmounts": true,
+            "jsonReport": true,
+            "webUnchanged": true
+          },
+          "durationMs": 844
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 2,
+          "tools": 1,
+          "reportedModels": [],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "refused": true,
+            "unchanged": true,
+            "invoked": true
+          },
+          "durationMs": 85
+        }
+      ]
+    }
+  },
+  "course": {
+    "pages": 11,
+    "pc": [
+      1440,
+      1000
+    ],
+    "h5": [
+      390,
+      844
+    ],
+    "pageGeometry": "passed",
+    "navigation": "passed",
+    "zoom": "passed",
+    "text": "passed",
+    "humanReview": "pending",
+    "deployed": false
+  },
+  "historicalObservations": {
+    "preserved": true,
+    "initialModelRun": "Behaviour passed but capture overlapped build; one runtime hash differed, excluded from current evidence",
+    "retests": "Same frozen case values/model/budgets; later runs certify subsequent implementation fixes. Earlier logs retained.",
+    "initialEngineeringFailures": "5 outdated schema-version/context assertions, then corrected; first host failure was a table-driven test argument shape, not a product pass"
+  },
+  "evidence": "evidence-archive.json",
+  "status": "Ready for PR review; no merge or deployment"
+}
