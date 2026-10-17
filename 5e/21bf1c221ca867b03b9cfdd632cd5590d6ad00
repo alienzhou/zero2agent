@@ -1,0 +1,23 @@
+packages/core/src/__tests__/project-instructions.test.ts
+  s_58249cd92a0ae1::t_c0fd528bb4fc1a 29,240-281
+packages/core/src/prompt/types.ts
+  s_58249cd92a0ae1::t_d751e0db6c009e 16-18,20,27,39,44,49,55,61
+researches/project-instructions/demo.mjs
+  s_58249cd92a0ae1::t_cb9e4854a6ee3c 63,67-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5e21bf1c221ca867b03b9cfdd632cd5590d6ad00",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
