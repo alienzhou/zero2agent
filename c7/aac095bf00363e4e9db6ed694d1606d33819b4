@@ -1,0 +1,22 @@
+e2e/src/skills.test.ts
+  s_58249cd92a0ae1::t_2cfd3127f58c8c 169-175
+researches/skills/demo.mjs
+  s_58249cd92a0ae1::t_840ce50ff2d4d6 493
+  s_58249cd92a0ae1::t_f35d3a716d3ee7 494-495
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c7aac095bf00363e4e9db6ed694d1606d33819b4",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
