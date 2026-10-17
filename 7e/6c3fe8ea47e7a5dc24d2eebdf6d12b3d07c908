@@ -1,0 +1,23 @@
+packages/core/src/skills.ts
+  s_58249cd92a0ae1::t_70038dd22c5cb4 6,187-200,287,294,301,318,321-322,324,587-589
+  s_58249cd92a0ae1::t_4679a273bcef08 591-592,596-599,715-719
+packages/core/src/__tests__/skills.test.ts
+  s_58249cd92a0ae1::t_0034aed0d6cbdd 6-12,318-339,358-431,434,436,459
+  s_58249cd92a0ae1::t_119c518c56d4ea 432-433,435,437-458,460
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7e6c3fe8ea47e7a5dc24d2eebdf6d12b3d07c908",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
