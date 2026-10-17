@@ -1,0 +1,127 @@
+{
+  "title": "Zero2Agent · E05-S003 MCP 工具接入",
+  "date": "2026-10-17",
+  "draft": true,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "mcp-stdio-tools",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "接入外部工具，仍由宿主控制执行",
+      "number": 1,
+      "sources": [
+        "O01",
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "02-roles.html",
+      "title": "MCP 提供工具，工作方法仍来自前两课",
+      "number": 2,
+      "sources": [
+        "D01",
+        "S01"
+      ]
+    },
+    {
+      "file": "03-stdio.html",
+      "title": "先握手、再发现，工具调用结束后关闭",
+      "number": 3,
+      "sources": [
+        "O01",
+        "O02",
+        "S02"
+      ]
+    },
+    {
+      "file": "04-trust.html",
+      "title": "允许启动服务，不等于批准它的工具",
+      "number": 4,
+      "sources": [
+        "O03",
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-catalogue.html",
+      "title": "同名工具可以共存，旧调用不能换个服务执行",
+      "number": 5,
+      "sources": [
+        "O03",
+        "O04",
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "06-results.html",
+      "title": "参数不合法就不发送，返回内容也不能随意丢弃",
+      "number": 6,
+      "sources": [
+        "O03",
+        "S01",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "07-recall.html",
+      "title": "保存下来的正文，仍然属于原外部来源",
+      "number": 7,
+      "sources": [
+        "S01",
+        "S05",
+        "T02"
+      ]
+    },
+    {
+      "file": "08-unknown.html",
+      "title": "没有收到结果，不能推断操作没发生",
+      "number": 8,
+      "sources": [
+        "O05",
+        "S02",
+        "S06",
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "09-bounds.html",
+      "title": "每一轮有边界，结束时等待真正清理",
+      "number": 9,
+      "sources": [
+        "S02",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "10-controls.html",
+      "title": "先查看工具表，再带上明确授权做任务",
+      "number": 10,
+      "sources": [
+        "S03",
+        "D02",
+        "T03"
+      ]
+    },
+    {
+      "file": "11-practice.html",
+      "title": "工单读得到，拒绝和未知效果也管得住",
+      "number": 11,
+      "sources": [
+        "T01",
+        "T02",
+        "T03",
+        "D02"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "productionSource": "39f485d5a73e056f680be0f8f97881f65e37e0c8",
+  "platform": {
+    "os": "macOS 14.7.8 (23H730)",
+    "system": "darwin",
+    "architecture": "arm64",
+    "node": "v22.15.1"
+  },
+  "protocol": "2025-11-25",
+  "sdkVersion": "1.26.0",
+  "engineering": {
+    "build": "passed",
+    "core": 806,
+    "e2e": 246,
+    "cdp": 1,
+    "total": 1053,
+    "liveSkipped": 58,
+    "focusedCoreMcp": 73,
+    "focusedHost": 15,
+    "lint": {
+      "errors": 0,
+      "warnings": 49
+    },
+    "format": {
+      "changed": "passed",
+      "wholeRepository": "11 pre-existing files fail current Prettier; source bytes unchanged from base",
+      "preExistingFiles": [
+        "packages/cdp-debug/src/cli/index.ts",
+        "packages/cdp-debug/src/server/cdp-client.ts",
+        "packages/cdp-debug/src/server/index.ts",
+        "packages/cdp-debug/src/server/routes.ts",
+        "packages/core/src/llm/index.ts",
+        "packages/core/src/prompt/index.ts",
+        "packages/core/src/tools/__tests__/grep-search.test.ts",
+        "packages/core/src/tools/__tests__/read-file.test.ts",
+        "packages/core/src/tools/__tests__/write-file.test.ts",
+        "packages/core/vitest.config.ts",
+        "packages/shared/src/index.ts"
+      ]
+    }
+  },
+  "acceptance": {
+    "frozenInputsSha256": "f8c6a4b2bf03cdf3c39e3c25e2670376ab1afcde7f1e9635bbf38c1f07395859",
+    "limits": {
+      "maxRequests": 8,
+      "maxToolCalls": 12,
+      "maxDurationMs": 120000,
+      "maxRetries": 0,
+      "requestTimeoutMs": 120000
+    },
+    "requestedModel": "claude-sonnet-4-20250514",
+    "live": {
+      "path": "current/live-K0hzWB",
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "requests": 6,
+          "tools": 9,
+          "reportedModels": [
+            "MiniMax-M3"
+          ],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "externalReads": true,
+            "tailRecall": true,
+            "actualTests": true,
+            "independentAmounts": true,
+            "jsonReport": true,
+            "webUnchanged": true
+          },
+          "durationMs": 10379
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 2,
+          "tools": 1,
+          "reportedModels": [
+            "MiniMax-M3"
+          ],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "refused": true,
+            "unchanged": true,
+            "invoked": true
+          },
+          "durationMs": 3589
+        }
+      ]
+    },
+    "offline": {
+      "path": "current/offline-ZFP713",
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "requests": 7,
+          "tools": 9,
+          "reportedModels": [],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "externalReads": true,
+            "tailRecall": true,
+            "actualTests": true,
+            "independentAmounts": true,
+            "jsonReport": true,
+            "webUnchanged": true
+          },
+          "durationMs": 975
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 2,
+          "tools": 1,
+          "reportedModels": [],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "refused": true,
+            "unchanged": true,
+            "invoked": true
+          },
+          "durationMs": 77
+        }
+      ]
+    }
+  },
+  "course": {
+    "pages": 11,
+    "pc": [
+      1440,
+      1000
+    ],
+    "h5": [
+      390,
+      844
+    ],
+    "pageGeometry": "passed",
+    "navigation": "passed",
+    "zoom": "passed",
+    "text": "passed",
+    "humanReview": "pending",
+    "deployed": false
+  },
+  "historicalObservations": {
+    "preserved": true,
+    "initialModelRun": "Behaviour passed but capture overlapped build; one runtime hash differed, excluded from current evidence",
+    "retests": "Same frozen case values/model/budgets; later runs certify subsequent implementation fixes. Earlier logs retained.",
+    "initialEngineeringFailures": "5 outdated schema-version/context assertions, then corrected; first host failure was a table-driven test argument shape, not a product pass",
+    "priorAcceptedSource": "78d0ce0: 1050 default tests passed; retained in original immutable archive, superseded by final review fixes.",
+    "finalReview": "3 regressions failed on original implementation, then passed after preserving unknown through storage/cleanup failures. Initial fix had 2 no-unsafe-finally lint errors; promise error mapping corrected. All raw records retained in supplement; frozen model cases unchanged."
+  },
+  "evidence": "evidence-archive.json",
+  "status": "Final AI review and fixes passed; delivered through PR #30 under user merge authorization. Site not deployed.",
+  "finalReview": {
+    "userAuthorization": "review 完合并",
+    "reviewer": "AI; no claim of independent human review",
+    "fixedFindings": 2,
+    "addedRegressions": 3,
+    "focusedMcp": 73,
+    "focusedHost": 15,
+    "fullDefaultTests": 1053,
+    "e2eTypes": "passed",
+    "sourceRuntimeHashesMatch": true,
+    "completionTag": "E05-S003-mcp-tools",
+    "evidence": "evidence-archive.json supplements"
+  }
+}

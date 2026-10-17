@@ -1,3 +1,4 @@
+import { validateExternalSources, type ExternalSource } from './external-source.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
@@ -21,9 +22,10 @@ export interface HistorySource {
   message: number
   hash: string
   paths: string[]
+  external?: ExternalSource[]
 }
 export interface HistorySnapshot {
-  version: 1
+  version: 1 | 2
   sources: HistorySource[]
 }
 
@@ -148,7 +150,7 @@ export function validateHistorySnapshot(
   if (!value || typeof value !== 'object') fail('invalid source catalog')
   const candidate = value as HistorySnapshot
   if (
-    candidate.version !== 1 ||
+    ![1, 2].includes(candidate.version) ||
     !Array.isArray(candidate.sources) ||
     candidate.sources.length > MAX_SOURCES
   )
@@ -171,9 +173,15 @@ export function validateHistorySnapshot(
     )
       fail('source catalog does not match raw history')
     seen.add(s.message)
-    return { message: s.message, hash: s.hash, paths: [...s.paths] }
+    if (s.external && candidate.version !== 2) fail('external sources require version 2')
+    return {
+      message: s.message,
+      hash: s.hash,
+      paths: [...s.paths],
+      ...(s.external && { external: validateExternalSources(s.external) }),
+    }
   })
-  return { version: 1, sources }
+  return { version: candidate.version, sources }
 }
 
 /** Only the owning Session supplies history and original canonical tool-source paths. */
@@ -181,7 +189,10 @@ export class HistoryEvidence {
   private sources = new Map<number, HistorySource>()
   snapshot(): HistorySnapshot | undefined {
     return this.sources.size
-      ? { version: 1, sources: structuredClone([...this.sources.values()]) }
+      ? {
+          version: [...this.sources.values()].some(s => s.external?.length) ? 2 : 1,
+          sources: structuredClone([...this.sources.values()]),
+        }
       : undefined
   }
   restore(snapshot?: HistorySnapshot): void {
@@ -191,7 +202,12 @@ export class HistoryEvidence {
     if (this.sources.size >= MAX_SOURCES)
       fail('source catalog capacity reached; start a new session')
   }
-  record(messages: Message[], index: number, paths: string[]): void {
+  record(
+    messages: Message[],
+    index: number,
+    paths: string[],
+    external: ExternalSource[] = []
+  ): void {
     if (!paths.length) return
     const unique = [...new Set(paths)]
     validateHistoryPaths(unique)
@@ -201,6 +217,7 @@ export class HistoryEvidence {
       message: index,
       hash: digest(historyText(messages[index])),
       paths: unique,
+      ...(external.length && { external: validateExternalSources(external) }),
     })
   }
   access(messages: () => Message[], cwd: string): HistoryReader {
@@ -236,6 +253,11 @@ export class HistoryReader {
     return { message, index, text: historyText(message) }
   }
 
+  external(input: Record<string, unknown>): ExternalSource[] {
+    if (input.reference === undefined) return []
+    const { message, index } = this.selected(input)
+    return toolResult(message) ? structuredClone(this.sources.get(index)?.external ?? []) : []
+  }
   paths(input: Record<string, unknown>): string[] {
     if (input.reference === undefined) return [this.cwd]
     const { message, index, text } = this.selected(input)

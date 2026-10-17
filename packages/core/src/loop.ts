@@ -1,3 +1,5 @@
+import { McpController, McpUnknownOutcomeError, type McpOptions } from './mcp/client.js'
+import { validateExternalSources, type ExternalSource } from './external-source.js'
 import {
   ProjectInstructions,
   ProjectInstructionError,
@@ -88,6 +90,10 @@ function contextTools(options: RunLoopOptions): Tool[] {
       tools.push(tool)
     }
   }
+  for (const tool of options.mcpController?.tools() ?? []) {
+    if (tools.some(t => t.name === tool.name)) throw new Error('MCP tool name collision')
+    tools.push(tool)
+  }
   return tools
 }
 
@@ -151,8 +157,10 @@ export async function executeToolCalls(
     start(id: string): Promise<void>
     settled(result: Anthropic.ToolResultBlockParam): Promise<void>
     failure?: ExecutionPersistenceError
+    unknown?: McpUnknownOutcomeError
   },
-  instructionGuard?: { check(): Promise<void>; failure?: Error }
+  instructionGuard?: { check(): Promise<void>; failure?: Error },
+  mcp?: McpController
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -166,7 +174,7 @@ export async function executeToolCalls(
     })
   }
   for (const block of calls) {
-    if (execution?.failure) {
+    if (execution?.failure || execution?.unknown) {
       results.push({
         type: 'tool_result',
         tool_use_id: block.id,
@@ -236,6 +244,7 @@ export async function executeToolCalls(
       resultSource = {
         toolName: tool.name,
         toolCallId: block.id,
+        ...(tool.externalSource && { external: [tool.externalSource] }),
         paths: [
           ctx.cwd,
           ...(tool.permission?.effect === 'read'
@@ -274,6 +283,17 @@ export async function executeToolCalls(
         ...resultSource.paths,
         ...(tool.readPaths ? (permissionInput.__result_paths as string[]) : []),
       ])
+      const external = [
+        ...(resultSource.external ?? []),
+        ...((await tool.readSources?.(input, callCtx)) ?? []),
+      ]
+      if (external.length) {
+        if (!mcp) throw new Error('External source authorization unavailable')
+        // Original calls use their real arguments at the ordinary gate below. Recall uses a separate current source gate.
+        if (tool.readSources) await mcp.authorizeSources(external, permissions, callCtx)
+        resultSource.external = external
+        ctx.recordHistoryExternal?.(external)
+      }
       const initial = permissions.evaluate(permissionTool, permissionInput, callCtx)
       diagnostics?.permission('initial', block.id, block.name, initial.action)
       if (initial.action === 'ask') state('approval', { reason: initial.reason })
@@ -392,6 +412,9 @@ export async function executeToolCalls(
         completionSafety.safe = false
       budget?.settleTool(block.name, block.input, failed, nativeDenied)
     } catch (error) {
+      if (error instanceof McpUnknownOutcomeError && execution) {
+        execution.unknown = error
+      }
       if (error instanceof ExecutionPersistenceError && execution) execution.failure = error
       metadataSettled = true
       if (tool === readToolResultTool && error instanceof ResultReadInputError) {
@@ -411,13 +434,15 @@ export async function executeToolCalls(
         error instanceof RunBudgetError || ctx.signal?.reason instanceof RunBudgetError
       const cancelled = !limited && (ctx.signal?.aborted || error instanceof TurnCancelledError)
       let errorMessage =
-        limited && start === undefined
-          ? `Error: Run stopped before this tool started; it was not executed (${(ctx.signal?.reason as RunBudgetError | undefined)?.limitReason ?? (error as RunBudgetError).limitReason}).`
-          : cancelled
-            ? start === undefined
-              ? 'Error: Turn cancelled before this tool started; it was not executed.'
-              : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
-            : `Error: ${describeToolError(error)}`
+        error instanceof McpUnknownOutcomeError
+          ? interruptedResult('unknown')
+          : limited && start === undefined
+            ? `Error: Run stopped before this tool started; it was not executed (${(ctx.signal?.reason as RunBudgetError | undefined)?.limitReason ?? (error as RunBudgetError).limitReason}).`
+            : cancelled
+              ? start === undefined
+                ? 'Error: Turn cancelled before this tool started; it was not executed.'
+                : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
+              : `Error: ${describeToolError(error)}`
       if (ctx.results && Buffer.byteLength(errorMessage) > INLINE_RESULT_BYTES) {
         try {
           errorMessage = ctx.results.receipt(
@@ -461,6 +486,8 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  mcp?: McpOptions | false
+  mcpController?: McpController
   skills?: SkillsOptions | false
   /** @internal Volatile catalogue/activation state owned by Agent. */
   skillController?: Skills
@@ -508,6 +535,8 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   options = {
     ...options,
     signal: budget.signal,
+    mcpController:
+      options.mcpController ?? new McpController(options.cwd ?? process.cwd(), options.mcp),
     permissionController:
       options.permissionController ?? new PermissionController(options.permissions),
     skillController:
@@ -548,6 +577,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       emitter.emit({ type: 'turn-start' })
       if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
+      await options.mcpController!.open(options.signal)
       try {
         return await runTurnLoop(
           messages,
@@ -568,7 +598,11 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     return result
   } catch (caught) {
     const error = options.signal?.reason instanceof RunBudgetError ? options.signal.reason : caught
-    if (!options.recovery && !(error instanceof ExecutionPersistenceError))
+    if (
+      !options.recovery &&
+      !options.mcpController?.hasUnknownOutcome &&
+      !(error instanceof ExecutionPersistenceError)
+    )
       session.recovery = undefined
     if (started) {
       const cancelled =
@@ -584,10 +618,17 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     }
     throw error
   } finally {
-    session.skills = options.skillController!.snapshotSelection()
-    budget.close()
-    options.signal?.removeEventListener('abort', cancel)
-    if (!options.session) session.cancelCompaction()
+    try {
+      await options.mcpController?.close().catch(error => {
+        if (options.mcpController?.hasUnknownOutcome) throw new McpUnknownOutcomeError(true)
+        throw error
+      })
+    } finally {
+      session.skills = options.skillController!.snapshotSelection()
+      budget.close()
+      options.signal?.removeEventListener('abort', cancel)
+      if (!options.session) session.cancelCompaction()
+    }
   }
 }
 
@@ -616,6 +657,13 @@ export function createCompactionRuntime(
         tools: contextTools(options).map(toAnthropicTool),
         ...(options.systemPrompt && { system: options.systemPrompt }),
       })
+      const failedMcp = options.mcpController?.view().filter(s => s.state === 'failed') ?? []
+      if (failedMcp.length)
+        request.system =
+          (request.system ?? '') +
+          '\nMCP unavailable: ' +
+          JSON.stringify(failedMcp) +
+          '. Built-in tools remain available.'
       const projectRequest = options.instructionController?.overlay(request) ?? request
       return options.skillController?.overlay(projectRequest) ?? projectRequest
     },
@@ -696,6 +744,13 @@ async function runTurnLoop(
   let sentSkills = skills.fingerprint
   const ctx: ToolContext = {
     history: session.historyReader(() => messages, cwd ?? process.cwd()),
+    recordHistoryExternal: sources => {
+      const next = new Map(batchExternal)
+      for (const source of sources) next.set(JSON.stringify(source), source)
+      // Fail before a call, never while publishing its already-completed effects.
+      validateExternalSources([...next.values()])
+      for (const [key, source] of next) batchExternal.set(key, source)
+    },
     recordHistoryPaths: paths => {
       session.assertHistoryCapacity()
       const combined = [...new Set([...batchHistoryPaths, ...paths])]
@@ -706,12 +761,14 @@ async function runTurnLoop(
     cwd: cwd ?? process.cwd(),
     ...(options.signal && { signal: options.signal }),
   }
+  const batchExternal = new Map<string, ExternalSource>()
   const batchHistoryPaths = new Set<string>()
   const tracked: ExecutionRecovery['tools'] = []
   const settled = new Map<string, Anthropic.ToolResultBlockParam>()
   let batchIndex = -1
   let persistenceBroken = false
-  const enabled = !!options.executionPersistence || !!options.recovery
+  const enabled =
+    !!options.executionPersistence || !!options.recovery || !!options.mcpController?.tools().length
   const paired = (): Anthropic.MessageParam[] => {
     const copy = structuredClone(messages)
     const last = copy.at(-1)
@@ -742,7 +799,12 @@ async function runTurnLoop(
     session.skills = skills.snapshotSelection()
     const copy = paired()
     if (batchIndex >= 0 && copy[batchIndex + 1])
-      session.recordHistorySource(copy, batchIndex + 1, [...batchHistoryPaths])
+      session.recordHistorySource(
+        copy,
+        batchIndex + 1,
+        [...batchHistoryPaths],
+        [...batchExternal.values()]
+      )
     const recovery: ExecutionRecovery = {
       version: 1,
       operationId: diagnostics.operationId,
@@ -771,6 +833,7 @@ async function runTurnLoop(
   }
   const execution = {
     failure: undefined as ExecutionPersistenceError | undefined,
+    unknown: undefined as McpUnknownOutcomeError | undefined,
     start: async (id: string): Promise<void> => {
       tracked.find(t => t.messageIndex === batchIndex && t.toolCallId === id)!.state = 'unknown'
       await persist('tool-start')
@@ -779,7 +842,12 @@ async function runTurnLoop(
       settled.set(result.tool_use_id, structuredClone(result))
       tracked.find(
         t => t.messageIndex === batchIndex && t.toolCallId === result.tool_use_id
-      )!.state = 'settled'
+      )!.state =
+        result.content === interruptedResult('unknown')
+          ? 'unknown'
+          : result.content === interruptedResult('not-started')
+            ? 'not-started'
+            : 'settled'
       await persist('tool-settled')
     },
   }
@@ -865,6 +933,7 @@ async function runTurnLoop(
         }
         messages.push({ role: 'assistant', content: structuredClone(response.content) })
         batchIndex = messages.length - 1
+        batchExternal.clear()
         batchHistoryPaths.clear()
         settled.clear()
         tracked.push(
@@ -910,6 +979,7 @@ async function runTurnLoop(
         const guard = {
           failure: undefined as Error | undefined,
           check: async (): Promise<void> => {
+            options.mcpController?.assertCurrent()
             await instructions.prepareBatch(response.content, tools, permissions, options.signal)
             await skills.refresh(permissions, options.signal)
             if (!loadOnly && checkedSkills !== skills.fingerprint)
@@ -975,7 +1045,8 @@ async function runTurnLoop(
             completionSafety,
             readRecovery,
             enabled ? execution : undefined,
-            guard
+            guard,
+            options.mcpController
           )
           instructionFailure = guard.failure
         }
@@ -984,11 +1055,18 @@ async function runTurnLoop(
             const item = tracked.find(
               t => t.messageIndex === batchIndex && t.toolCallId === result.tool_use_id
             )!
-            if (result.content !== interruptedResult('not-started')) item.state = 'settled'
+            if (result.content !== interruptedResult('not-started'))
+              item.state = result.content === interruptedResult('unknown') ? 'unknown' : 'settled'
           }
         }
         messages.push({ role: 'user', content: toolResults })
-        session.recordHistorySource(messages, messages.length - 1, [...batchHistoryPaths])
+        session.recordHistorySource(
+          messages,
+          messages.length - 1,
+          [...batchHistoryPaths],
+          [...batchExternal.values()]
+        )
+        if (execution.unknown) throw execution.unknown
         if (execution.failure) throw execution.failure
         if (instructionFailure) throw instructionFailure
         budget.check()

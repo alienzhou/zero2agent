@@ -1,0 +1,67 @@
+{
+  "capturedAt": "2026-10-17T14:05:55.868Z",
+  "browser": "155.0.8059.82",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "issues": []
+    },
+    {
+      "file": "02-roles.html",
+      "issues": []
+    },
+    {
+      "file": "03-stdio.html",
+      "issues": []
+    },
+    {
+      "file": "04-trust.html",
+      "issues": []
+    },
+    {
+      "file": "05-catalogue.html",
+      "issues": []
+    },
+    {
+      "file": "06-results.html",
+      "issues": []
+    },
+    {
+      "file": "07-recall.html",
+      "issues": []
+    },
+    {
+      "file": "08-unknown.html",
+      "issues": []
+    },
+    {
+      "file": "09-bounds.html",
+      "issues": []
+    },
+    {
+      "file": "10-controls.html",
+      "issues": []
+    },
+    {
+      "file": "11-practice.html",
+      "issues": []
+    }
+  ],
+  "surfaces": [
+    {
+      "mode": "pc",
+      "width": 1440,
+      "height": 1000,
+      "sections": 11,
+      "errors": []
+    },
+    {
+      "mode": "h5",
+      "width": 390,
+      "height": 844,
+      "sections": 11,
+      "errors": []
+    }
+  ],
+  "manifestPages": 11
+}

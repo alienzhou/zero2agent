@@ -1,6 +1,7 @@
 import type { Tool } from './types.js'
 export const readHistoryTool: Tool = {
   name: 'read_history',
+  readSources: async (input, ctx) => ctx.history?.external(input) ?? [],
   permission: { effect: 'read' },
   readPaths: async (input, ctx) => {
     if (!ctx.history) throw new Error('History is unavailable in this host')

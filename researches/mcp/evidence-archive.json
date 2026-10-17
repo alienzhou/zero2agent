@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "tag": "E05-S003-mcp-review",
+  "source": "78d0ce0601bc211c363079239f77113e2f273a5b",
+  "asset": "e05-s003-mcp-evidence.tar.gz",
+  "sha256": "9bec2de6b1adcf4f077bf81d21bdd59eb6ae49683f2c423ed370280b08a7f2e8",
+  "bytes": 6766431,
+  "manifestSha256": "f67337535f5e468a73aa6834749025088bc1438982f1545ecb39342d121df2e2",
+  "files": 1898,
+  "credentialScan": {
+    "passed": true,
+    "files": 1899
+  },
+  "delivery": "Independent draft GitHub Release; raw records are excluded from Git",
+  "downloadCommand": "gh release download E05-S003-mcp-review --repo alienzhou/zero2agent --pattern e05-s003-mcp-evidence.tar.gz",
+  "verifyCommand": "node researches/mcp/verify-evidence.mjs /path/to/extracted",
+  "extractedArchiveVerified": true,
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-52293f885ddc3ed56757",
+  "assetUrl": "https://github.com/alienzhou/zero2agent/releases/download/untagged-52293f885ddc3ed56757/e05-s003-mcp-evidence.tar.gz",
+  "draft": true,
+  "remoteDownloadVerified": true,
+  "supplements": [
+    {
+      "source": "39f485d5a73e056f680be0f8f97881f65e37e0c8",
+      "asset": "e05-s003-final-review-evidence.tar.gz",
+      "bytes": 4056329,
+      "sha256": "0bb360a9453eb60b8b4e359f1d1a1b4e36dee45d953959ad76ed8f0ee97e0f0a",
+      "manifestSha256": "c1f90e166e396cad5433252fd053123cd29e2c86b28d67c6202619f941e00479",
+      "files": 786,
+      "credentialScan": {
+        "passed": true,
+        "files": 786
+      },
+      "scope": "Final PR review and regression fixes; original evidence archive remains unchanged.",
+      "remoteDownloadVerified": true,
+      "extractedArchiveVerified": true,
+      "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-52293f885ddc3ed56757",
+      "downloadCommand": "gh release download E05-S003-mcp-review --repo alienzhou/zero2agent --pattern e05-s003-final-review-evidence.tar.gz",
+      "verifyCommand": "node researches/mcp/verify-evidence.mjs /path/to/extracted",
+      "assetUrl": "https://github.com/alienzhou/zero2agent/releases/download/untagged-52293f885ddc3ed56757/e05-s003-final-review-evidence.tar.gz"
+    }
+  ]
+}

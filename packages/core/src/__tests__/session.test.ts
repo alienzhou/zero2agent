@@ -281,6 +281,7 @@ describe('in-memory sessions', () => {
       { message: 'value' },
       {
         history: expect.anything(),
+        recordHistoryExternal: expect.any(Function),
         recordHistoryPaths: expect.any(Function),
         results: expect.anything(),
         resultSource: expect.objectContaining({ toolCallId: expect.any(String) }),
@@ -341,6 +342,7 @@ describe('in-memory sessions', () => {
     await agent.run('inspect')
     expect(execute).toHaveBeenCalledWith(expect.anything(), {
       history: expect.anything(),
+      recordHistoryExternal: expect.any(Function),
       recordHistoryPaths: expect.any(Function),
       results: expect.anything(),
       resultSource: expect.objectContaining({ toolCallId: expect.any(String) }),

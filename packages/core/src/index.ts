@@ -120,3 +120,12 @@ export type {
 export { Skills, SkillError, SKILL_LIMITS } from './skills.js'
 export type { SkillsOptions, SkillView, SkillEntry, SkillSelectionSnapshot } from './skills.js'
 export { SkillFormatError, parseSkillFile, parseSkillHeader } from './skill-format.js'
+
+export {
+  McpController,
+  McpUnknownOutcomeError,
+  mcpToolName,
+  validateMcpOptions,
+} from './mcp/client.js'
+export type { McpOptions, McpServerConfig, McpServerView } from './mcp/client.js'
+export type { ExternalSource } from './external-source.js'

@@ -367,7 +367,7 @@ describe('source-backed history evidence', () => {
     expect(() => reader.read({ cursor: -1 })).toThrow(/cursor/)
     expect(() => reader.read({ cursor: 2 })).toThrow(/cursor/)
     expect(() => reader.read({}, AbortSignal.abort(new Error('cancelled')))).toThrow('cancelled')
-    expect(() => validateHistorySnapshot({ version: 2, sources: [] }, [])).toThrow(/version/)
+    expect(() => validateHistorySnapshot({ version: 99, sources: [] }, [])).toThrow(/version/)
     expect(() =>
       validateHistorySnapshot({ version: 1, sources: Array(2049).fill({}) }, [])
     ).toThrow(/size/)
