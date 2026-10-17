@@ -1,0 +1,73 @@
+.authoring/site/chapters/epic05-story001/author.cjs
+  s_58249cd92a0ae1::t_57bcc212dd5c00 1-113
+.authoring/site/chapters/epic05-story001/content-plan.md
+  s_58249cd92a0ae1::t_a14e17fb3125c3 1-5
+.authoring/site/chapters/epic05-story001/review.md
+  s_58249cd92a0ae1::t_49fa063752ce5d 1-7
+.authoring/site/chapters/epic05-story001/sources.md
+  s_58249cd92a0ae1::t_c30461683b1dd6 1-14
+.authoring/site/chapters/epic05-story001/verification/checks.json
+  s_58249cd92a0ae1::t_355228288b3cec 1-111
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_87f80f8f9c4349 27-32,161-167
+scripts/e05-s001-course-check.mjs
+  s_58249cd92a0ae1::t_6a78335505e8bb 1-79
+site/chapters/epic05-story001/01-cover.html
+  s_58249cd92a0ae1::t_c3a326cc2ca940 1
+site/chapters/epic05-story001/02-problem.html
+  s_58249cd92a0ae1::t_5f1f9fa66ab066 1
+site/chapters/epic05-story001/03-standard.html
+  s_58249cd92a0ae1::t_ca83ece04a5484 1
+site/chapters/epic05-story001/04-scope.html
+  s_58249cd92a0ae1::t_243a76ea04dfdf 1
+site/chapters/epic05-story001/05-discovery.html
+  s_58249cd92a0ae1::t_0387c3c26c5e5d 1
+site/chapters/epic05-story001/06-priority.html
+  s_58249cd92a0ae1::t_096b32320459ae 1
+site/chapters/epic05-story001/07-request.html
+  s_58249cd92a0ae1::t_a43df89952f078 1
+site/chapters/epic05-story001/08-replan.html
+  s_58249cd92a0ae1::t_03e8b3c63b8c3b 1
+site/chapters/epic05-story001/09-batch.html
+  s_58249cd92a0ae1::t_8447a8225b9eaa 1
+site/chapters/epic05-story001/10-reading.html
+  s_58249cd92a0ae1::t_ab8fcd6d041d9e 1
+site/chapters/epic05-story001/11-versions.html
+  s_58249cd92a0ae1::t_95802238f75338 1
+site/chapters/epic05-story001/12-limits.html
+  s_58249cd92a0ae1::t_3f1ea37cc1fcd3 1
+site/chapters/epic05-story001/13-changed.html
+  s_58249cd92a0ae1::t_0d6b97ae935256 1
+site/chapters/epic05-story001/14-restore.html
+  s_58249cd92a0ae1::t_8d828cd96a714a 1
+site/chapters/epic05-story001/15-controls.html
+  s_58249cd92a0ae1::t_138aaaa0443199 1
+site/chapters/epic05-story001/16-practice.html
+  s_58249cd92a0ae1::t_89e45f86c646db 1
+site/chapters/epic05-story001/17-verify.html
+  s_58249cd92a0ae1::t_26b12741957b90 1
+site/chapters/epic05-story001/18-finish.html
+  s_58249cd92a0ae1::t_8aa6c79444e7c3 1
+site/chapters/epic05-story001/course.css
+  s_58249cd92a0ae1::t_75b33ccdd19dc8 1-22
+site/chapters/epic05-story001/pages.json
+  s_58249cd92a0ae1::t_42c2db9549e202 1-182
+site/course.json
+  s_58249cd92a0ae1::t_2b8f64a6226e32 27-32,7176-7578,7581
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f6c5a91908dec77f2c1c488de2fea03e055e92a8",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
