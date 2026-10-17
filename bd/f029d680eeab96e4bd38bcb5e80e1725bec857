@@ -1,0 +1,23 @@
+.authoring/site/reviews/pr27-pr28-final-review.json
+  s_58249cd92a0ae1::t_5431347c9a0644 52-64
+.vibecoding/2026-10-17/pr27-pr28-final-review/dialogue.md
+  s_58249cd92a0ae1::t_f715051c9793db 10-11
+docs/pr27-pr28-final-review.md
+  s_58249cd92a0ae1::t_eda7940f0b55f7 21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bdf029d680eeab96e4bd38bcb5e80e1725bec857",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
