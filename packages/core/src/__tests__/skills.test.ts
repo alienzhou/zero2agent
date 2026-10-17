@@ -489,11 +489,16 @@ describe('frozen capacity and pagination boundaries', () => {
       ).toBe(LIMITS.totalActiveBytes + delta)
     }
   })
-  it('limits active guide count separately from bytes', async () => {
+  it.each([-1, 0, 1])('limits active guide count at threshold %+d', async delta => {
     for (let n = 0; n <= LIMITS.active; n++) await skill(`s-${n}`, '')
     const loader = new Skills(root)
-    for (let n = 0; n < LIMITS.active; n++) await loader.activate(`s-${n}`, permissions)
-    await expect(loader.activate(`s-${LIMITS.active}`, permissions)).rejects.toThrow('4 skills')
+    for (let n = 0; n < Math.min(LIMITS.active, LIMITS.active + delta); n++)
+      await loader.activate(`s-${n}`, permissions)
+    if (delta > 0)
+      await expect(loader.activate(`s-${LIMITS.active}`, permissions)).rejects.toThrow('4 skills')
+    expect(loader.view().entries.filter(entry => entry.status === 'loaded')).toHaveLength(
+      Math.min(LIMITS.active, LIMITS.active + delta)
+    )
   })
   it.each([-1, 0, 1])('limits resource file bytes at threshold %+d', async delta => {
     await skill('guide')
@@ -514,6 +519,7 @@ describe('frozen capacity and pagination boundaries', () => {
     await skill('guide')
     await file('.agents/skills/guide/ref.md', 'a😀中文tail')
     await file('.agents/skills/guide/control.md', '\u0001'.repeat(LIMITS.pageBytes))
+    await file('.agents/skills/guide/bom.md', '\uFEFFliteral')
     const loader = new Skills(root)
     await loader.activate('guide', permissions)
     const first = JSON.parse(await loader.readResource('guide', 'ref.md', 0, 4, permissions))
@@ -540,6 +546,66 @@ describe('frozen capacity and pagination boundaries', () => {
     expect(
       Buffer.byteLength(await loader.readResource('guide', 'control.md', 0, 1024, permissions))
     ).toBeLessThanOrEqual(16 * 1024)
+    const bom = JSON.parse(await loader.readResource('guide', 'bom.md', 0, 4096, permissions))
+    expect(bom.text).toBe('\uFEFFliteral')
+    expect(Buffer.byteLength(bom.text)).toBe(bom.bytes)
+  })
+  it.each([-1, 0, 1])('limits page payload bytes at threshold %+d', async delta => {
+    await skill('guide')
+    await file('.agents/skills/guide/ref.md', 'x'.repeat(LIMITS.pageBytes + 10))
+    const loader = new Skills(root)
+    await loader.activate('guide', permissions)
+    const work = loader.readResource('guide', 'ref.md', 0, LIMITS.pageBytes + delta, permissions)
+    if (delta > 0) await expect(work).rejects.toThrow('4..4096')
+    else {
+      const page = JSON.parse(await work)
+      expect(page.bytes).toBe(LIMITS.pageBytes + delta)
+      expect(Buffer.byteLength(page.text)).toBe(page.bytes)
+      expect(page.next_offset).toBe(page.bytes)
+    }
+  })
+  it.each([-1, 0, 1])('expires pending reads at operation deadline %+d', async delta => {
+    await skill('guide')
+    vi.useFakeTimers()
+    vi.spyOn(AbortSignal, 'timeout').mockImplementation(ms => {
+      const deadline = new AbortController()
+      setTimeout(() => deadline.abort(new DOMException('Timed out', 'TimeoutError')), ms)
+      return deadline.signal
+    })
+    let reached: () => void = () => {}
+    const atApproval = new Promise<void>(resolve => {
+      reached = resolve
+    })
+    let release: () => void = () => {}
+    const waiting = new Promise<void>(resolve => {
+      release = resolve
+    })
+    let first = true
+    const approvals = new PermissionController({
+      rules: [{ tool: 'read_file', action: 'ask' }],
+      requestApproval: async request => {
+        if (first) {
+          first = false
+          reached()
+          await waiting
+        }
+        return { requestId: request.id, decision: 'allow' }
+      },
+    })
+    const loader = new Skills(root)
+    const outcome = loader.activate('guide', approvals).then(
+      value => ({ value, error: undefined }),
+      error => ({ value: undefined, error })
+    )
+    await atApproval
+    await vi.advanceTimersByTimeAsync(LIMITS.operationMs + delta)
+    release()
+    const settled = await outcome
+    if (delta < 0) expect(settled.value?.status).toBe('loaded')
+    else {
+      expect(settled.error.message).toContain('5000 ms')
+      expect(loader.view().entries.every(entry => entry.status !== 'loaded')).toBe(true)
+    }
   })
   it('bounds pending approval and responds to cancellation without activating a body', async () => {
     await skill('guide')

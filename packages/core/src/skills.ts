@@ -434,7 +434,7 @@ export class Skills {
   }
   private text(bytes: Buffer): string {
     try {
-      return new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+      return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes)
     } catch {
       return fail('SKILL_INVALID_UTF8', 'Skill source or resource is not valid UTF-8.')
     }
