@@ -1,0 +1,29 @@
+.discuss/2026-10-17/e05-s001-project-instructions/outline.md
+  s_58249cd92a0ae1::t_289a2715ac6b02 8-13
+packages/core/src/__tests__/project-instructions.test.ts
+  s_58249cd92a0ae1::t_c675927e67951b 299-360
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_de354aac28f4e5 6,653,753,837,846,850-851
+packages/core/src/project-instructions.ts
+  s_58249cd92a0ae1::t_44ce312179f341 104-117
+researches/project-instructions/demo.mjs
+  s_58249cd92a0ae1::t_07414a9d516961 305-306
+specs/E05-extensibility/S001-project-instructions/details/01-technical-design.md
+  s_58249cd92a0ae1::t_e8cba98729c5da 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8ae1e934d61c0fef26dcf6c87f658014835af333",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
