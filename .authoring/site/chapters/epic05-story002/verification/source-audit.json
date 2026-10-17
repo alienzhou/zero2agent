@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-17T09:51:41.946Z",
+  "reviewedAt": "2026-10-17T09:59:00.846Z",
   "kind": "AI source-to-course review; not runtime acceptance or independent human sign-off",
   "standardCommit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
   "claims": [
@@ -8,13 +8,15 @@
     "current read/execute permissions and inert script loading",
     "source/version refresh, selection-only restore and inactive historical copies",
     "CLI and slash command spelling; inspection/refresh make no model request",
-    "offline fixture commands, real file/test effects and separate refusal evidence"
+    "offline fixture commands, real file/test effects and separate refusal evidence",
+    "historical read_history/read_tool_result retain their own permission rules; read_file restrictions do not erase already visible history",
+    "offline report assertions require native terminal completion metadata with exitCode 0 before the report write"
   ],
   "sourceHashes": {
-    "packages/core/src/skills.ts": "7ed6e91ad2f0c771606b841ef1ba9a27b8f7640de24078d938a6f8603b81bafd",
+    "packages/core/src/skills.ts": "e37ab27b722f403d03078011e71294f89a9e44d0dfce46244694b175a17eee4a",
     "packages/core/src/skill-format.ts": "2126838fff37795d1f9cc4a88d977aa53530339a6af56b38e7dbf507d574c623",
-    "packages/core/src/agent.ts": "affb4a2b6742135a1c0cac75b6bbedee79993c69a1e7152cd749405a183cd9e5",
-    "packages/core/src/loop.ts": "ba10a06ed795fdf384a26290778e3d7683d9966f5eec6e44d4b2e215b8090603",
+    "packages/core/src/agent.ts": "e28581861fa10c046c0c1e2db6f7e0fa015af297667978640ee53cd9f28299a0",
+    "packages/core/src/loop.ts": "9b8a077b6619e24b8b220a9bbd3e229d706d24d8f2a8e2d5baa054955fe41916",
     "packages/core/src/tools/skill-tools.ts": "b46cb13dc814da94a4d796f8f469b2a7a7ed6c7ed0a399a04aa503a7479d9a4f",
     "packages/core/src/permissions.ts": "f33c0354056d498d1dbce8abfb3572a4c612813d65c024ef941619c734a646dd",
     "packages/core/src/tools/path-guard.ts": "9fe686030b475c65114f0097db8851bb80c3f4694d9c6c0297d2bed21cd8d5ee",
@@ -25,6 +27,13 @@
     "packages/tui/src/skill-view.ts": "a10294206ab25ad27ddaf2593b658af0a9146717587f6bcc8abf7dc4648a1cd8",
     "packages/tui/src/session-store.ts": "ea174913935f6ee173ee759bb2f5065ee635dad6d89271943656b27e18fa3558",
     "researches/skills/cases.mjs": "9a913b28fa93dd9e3fe30a029579829654f6a0d0974ac199fdf56b90809b871b",
-    "researches/skills/demo.mjs": "676f4016ee81a9516940dcdc09a1c3d80abb8e882927498ce31f952b6a88a55d"
-  }
+    "researches/skills/demo.mjs": "ea67b69eb55c6d188c9a25beea6c9cbaa93c4318f93a5a56312c3ef14c3670ac",
+    "packages/core/src/history-evidence.ts": "bd69814b91474afbda6faf34e02d8f9887f0c9d42d7ed3be3b5411ed45fbf068",
+    "packages/core/src/tools/read-history.ts": "af3af60be96ba0b27e82625a504b8abd888887186fbcb07612412f67bf3b965f",
+    "packages/core/src/tools/read-tool-result.ts": "e761fa709211e4d10cd408f54a4d74d2c09699b30004afb16dd4bde885d79c75",
+    "packages/core/src/result-store.ts": "db9473ae443bbee4ab617537fb2f89d3504bad8d1c70c4d58da82af0b7e47532"
+  },
+  "productionCheckpoint": "33fd4caf0b3a1fc33c1523f2432c584f7426c49c",
+  "loaderCheckpoint": "7e6c3fe8ea47e7a5dc24d2eebdf6d12b3d07c908",
+  "acceptanceCheckpoint": "398a795630c7509e21cc7504786f8751298784e4"
 }
