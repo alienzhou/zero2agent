@@ -21,6 +21,8 @@
 
 当前源码、平台、默认/专项测试、两例离线与两例真实服务的逐项结论见 [紧凑验收索引](../../../../researches/mcp/verification.json)，原始记录及校验说明见 [归档索引](../../../../researches/mcp/evidence-archive.json)。输入、模型与门槛未降低；早期失败与被后续代码替代的观察保留并注明原因。
 
-PC 1440×1000 与 H5 390×844 均逐页检查导航、放大和文字展开；课程源、目录与实际 HTML 为 11 页。[阅读检查](../../../../.authoring/site/chapters/epic05-story003/verification/checks.json)是 AI 检查，人工 review 待用户完成。
+PC 1440×1000 与 H5 390×844 均逐页检查导航、放大和文字展开；课程源、目录与实际 HTML 为 11 页。[阅读检查](../../../../.authoring/site/chapters/epic05-story003/verification/checks.json)是 AI 检查。最终按用户「review 完合并」的授权执行 AI 复核与合并，不据此声称人工审阅通过。
+
+最终审查增加 3 个组合故障回归，先复现再修复：unknown 回执保存失败后仍为 unknown，最外层清理失败仍保留未知语义并释放预算，检查入口在清理报错后释放运行所有权。真实服务效果均为一次，后续调用未开始；见 [最终审查](../../../../.vibecoding/2026-10-17/e05-s003-mcp/review.md)。
 
 工程格式本次变更通过；全库命令仍报告 11 个既有文件不符合当前 Prettier，文件未在本节修改，明确单列，不写成全库格式通过。lint 无 error，warning 数量见索引。所有业务关键情境逐项通过；站点未部署。

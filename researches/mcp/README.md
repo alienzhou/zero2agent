@@ -34,3 +34,5 @@ node researches/mcp/demo.mjs --live
 跟练与独立校验见 [Story 跟练](../../specs/E05-extensibility/S003-mcp/follow-along.md)，结论与原始归档索引见 `verification.json` 和 `evidence-archive.json`。
 
 下载独立证据附件后按 `evidence-archive.json` 的 SHA-256 校验并解压，在仓库运行 `node researches/mcp/verify-evidence.mjs /path/to/extracted`。脚本只读 manifest、源码副本与结果，不执行归档里的代码。
+
+最终 PR 审查的修复与重验另存为索引的 `supplements` 附件，使用同一命令校验；首版附件及失败记录不替换。当前源码对应的结论见 `verification.json`，不能把修复前的通过记录当作最终版本成绩。

@@ -9,7 +9,10 @@ const index = JSON.parse(
   await fs.readFile(new URL('./evidence-archive.json', import.meta.url), 'utf8')
 )
 const manifestBytes = await fs.readFile(path.join(root, 'manifest.json'))
-assert.equal(sha(manifestBytes), index.manifestSha256, 'Manifest digest mismatch')
+assert(
+  [index, ...(index.supplements ?? [])].some(item => item.manifestSha256 === sha(manifestBytes)),
+  'Manifest digest mismatch'
+)
 const manifest = JSON.parse(manifestBytes)
 async function files(dir, prefix = '') {
   const all = []
