@@ -33,15 +33,19 @@ function buildRgArgs(input: FindFilesInput, searchPath: string): string[] {
   return args
 }
 
-function runRipgrep(args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+function runRipgrep(
+  args: string[],
+  cwd: string
+): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   return new Promise(resolve => {
-    const proc = spawn(rgPath, args, { stdio: ['ignore', 'pipe', 'pipe'] })
+    const proc = spawn(rgPath, args, { cwd, stdio: ['ignore', 'pipe', 'pipe'] })
     const stdoutChunks: Buffer[] = []
     const stderrChunks: Buffer[] = []
 
     proc.stdout.on('data', (chunk: Buffer) => stdoutChunks.push(chunk))
     proc.stderr.on('data', (chunk: Buffer) => stderrChunks.push(chunk))
 
+    proc.on('error', error => resolve({ stdout: '', stderr: error.message, exitCode: 2 }))
     proc.on('close', code => {
       resolve({
         stdout: Buffer.concat(stdoutChunks).toString('utf-8'),
@@ -133,7 +137,9 @@ export const findFilesTool: Tool = {
 
   execute: async (input: Record<string, unknown>, ctx: ToolContext): Promise<string> => {
     const params = input as unknown as FindFilesInput
-    const searchPath = path.resolve(ctx.cwd, params.path || '.')
+    // Canonicalize cwd too: macOS /var aliases must not break rooted glob prefixes.
+    const workspace = await fs.realpath(ctx.cwd).catch(() => ctx.cwd)
+    const searchPath = path.resolve(workspace, params.path || '.')
 
     // 验证搜索路径是否存在
     try {
@@ -144,7 +150,7 @@ export const findFilesTool: Tool = {
 
     // 构造参数并调用 ripgrep
     const args = buildRgArgs(params, searchPath)
-    const { stdout, stderr, exitCode } = await runRipgrep(args)
+    const { stdout, stderr, exitCode } = await runRipgrep(args, workspace)
 
     // exitCode 1 = 无匹配，exitCode 2 = 错误
     if (exitCode === 2) {
@@ -179,6 +185,6 @@ export const findFilesTool: Tool = {
     const truncatedEntries = sortedEntries.slice(0, MAX_FILES)
 
     // 基于 ctx.cwd 计算相对路径
-    return formatOutput(truncatedEntries, totalCount, params.pattern, truncated, ctx.cwd)
+    return formatOutput(truncatedEntries, totalCount, params.pattern, truncated, workspace)
   },
 }

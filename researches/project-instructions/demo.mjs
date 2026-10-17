@@ -45,6 +45,7 @@ const sourceFiles = [
   'packages/core/src/project-instructions.ts',
   'packages/core/src/loop.ts',
   'packages/core/src/agent.ts',
+  'packages/core/src/tools/find-files.ts',
   'researches/project-instructions/cases.mjs',
   'researches/project-instructions/demo.mjs',
 ]
