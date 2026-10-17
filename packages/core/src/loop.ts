@@ -619,10 +619,10 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     throw error
   } finally {
     try {
-      await options.mcpController?.close()
-    } catch (error) {
-      if (options.mcpController?.hasUnknownOutcome) throw new McpUnknownOutcomeError(true)
-      throw error
+      await options.mcpController?.close().catch(error => {
+        if (options.mcpController?.hasUnknownOutcome) throw new McpUnknownOutcomeError(true)
+        throw error
+      })
     } finally {
       session.skills = options.skillController!.snapshotSelection()
       budget.close()
