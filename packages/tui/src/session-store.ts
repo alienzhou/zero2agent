@@ -10,7 +10,7 @@ const REVISION = /^([1-9][0-9]{0,8})\.json$/
 const MAX_BYTES = 32 * 1024 * 1024
 
 export interface StoredSession {
-  version: 1
+  version: 1 | 2
   id: string
   cwd: string
   title: string
@@ -46,16 +46,25 @@ async function directory(location: string, create: boolean): Promise<void> {
 export class SessionStore {
   private constructor(
     readonly cwd: string,
-    readonly directory: string
+    readonly directory: string,
+    private limits = { bytes: 512 * 1024 * 1024, revisions: 2048 }
   ) {}
 
   static async open(
     cwd: string,
-    root = process.env.ZERO2AGENT_SESSION_DIR ?? path.join(homedir(), '.zero2agent', 'sessions')
+    root = process.env.ZERO2AGENT_SESSION_DIR ?? path.join(homedir(), '.zero2agent', 'sessions'),
+    limits = { bytes: 512 * 1024 * 1024, revisions: 2048 }
   ): Promise<SessionStore> {
+    if (
+      !Number.isSafeInteger(limits.bytes) ||
+      limits.bytes < 1 ||
+      !Number.isSafeInteger(limits.revisions) ||
+      limits.revisions < 1
+    )
+      throw new Error('Invalid session storage limits.')
     const canonical = await fs.realpath(cwd)
     const workspace = createHash('sha256').update(canonical).digest('hex')
-    return new SessionStore(canonical, path.join(path.resolve(root), workspace))
+    return new SessionStore(canonical, path.join(path.resolve(root), workspace), limits)
   }
 
   fresh(): StoredSession {
@@ -97,7 +106,10 @@ export class SessionStore {
       if (!stat.isFile() || stat.size > MAX_BYTES)
         throw new Error('Session snapshot is not a regular file or exceeds 32 MiB.')
       const data = JSON.parse(await handle.readFile('utf8')) as StoredSession
-      if (!data || data.version !== 1) throw new Error('Unsupported session format version.')
+      if (!data || ![1, 2].includes(data.version))
+        throw new Error('Unsupported session format version.')
+      if (data.version === 1 && data.state?.recovery !== undefined)
+        throw new Error('Execution recovery requires session format version 2.')
       if (data.id !== id || data.cwd !== this.cwd || data.revision !== revision)
         throw new Error('Session identity, workspace or revision does not match.')
       if (
@@ -117,7 +129,7 @@ export class SessionStore {
       )
         throw new Error('Invalid pending operation.')
       return {
-        version: 1,
+        version: data.version,
         id,
         cwd: this.cwd,
         title: data.title,
@@ -151,7 +163,7 @@ export class SessionStore {
           title: item.title,
           updatedAt: item.updatedAt,
           revision: item.revision,
-          pending: !!item.pending,
+          pending: !!item.pending || !!item.state.recovery,
         })
       } catch (error) {
         result.push({
@@ -185,7 +197,7 @@ export class SessionStore {
       message => message.role === 'user' && typeof message.content === 'string'
     )
     const next: StoredSession = {
-      version: 1,
+      version: current.version === 2 || snapshot.recovery ? 2 : 1,
       id: current.id,
       cwd: this.cwd,
       createdAt: current.createdAt,
@@ -208,6 +220,21 @@ export class SessionStore {
     if ((await this.latest(location)) !== current.revision)
       throw new Error(
         'Session revision conflict: another process saved this conversation. Memory is retained.'
+      )
+    const generations = (await fs.readdir(location)).filter(name => REVISION.test(name))
+    let storedBytes = 0
+    for (const name of generations) {
+      const stat = await fs.lstat(path.join(location, name))
+      if (!stat.isFile() || stat.isSymbolicLink())
+        throw new Error('Session generation must be a regular file.')
+      storedBytes += stat.size
+    }
+    if (
+      generations.length >= this.limits.revisions ||
+      storedBytes + Buffer.byteLength(bytes) > this.limits.bytes
+    )
+      throw new Error(
+        'Session storage capacity reached; recovery evidence is retained. Archive this session before starting new work.'
       )
     const temp = path.join(location, `.pending-${randomUUID()}`)
     const target = path.join(location, `${next.revision}.json`)

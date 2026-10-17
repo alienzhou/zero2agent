@@ -1,0 +1,180 @@
+{
+  "title": "Zero2Agent · E04-S004 中断后的安全续跑",
+  "date": "2026-10-16",
+  "draft": true,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "safe-resume-review",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "程序中断后，安全接着做",
+      "number": 1,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "02-incident.html",
+      "title": "文件已经改了，对话却停在上一轮",
+      "number": 2,
+      "sources": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "03-boundaries.html",
+      "title": "续聊、重试、回退，分别解决了哪一部分",
+      "number": 3,
+      "sources": [
+        "S02",
+        "D01"
+      ]
+    },
+    {
+      "file": "04-timeline.html",
+      "title": "崩溃发生在哪一步，决定我们能说什么",
+      "number": 4,
+      "sources": [
+        "S01",
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-states.html",
+      "title": "未执行、已结算、未知，不要混成一个“失败”",
+      "number": 5,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "06-before.html",
+      "title": "保存失败时，新的副作用必须停下来",
+      "number": 6,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "07-receipt.html",
+      "title": "工具执行一次，回执随后进入恢复快照",
+      "number": 7,
+      "sources": [
+        "S01",
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "08-generation.html",
+      "title": "同一份版本，一起保存事实与控制状态",
+      "number": 8,
+      "sources": [
+        "S02",
+        "D01"
+      ]
+    },
+    {
+      "file": "09-batch.html",
+      "title": "第一项完成，不代表整批都可以重放",
+      "number": 9,
+      "sources": [
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "10-files.html",
+      "title": "看到文件存在，仍要判断它是谁改的",
+      "number": 10,
+      "sources": [
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "11-shell.html",
+      "title": "未知命令的效果，需要人在现场核对",
+      "number": 11,
+      "sources": [
+        "D01",
+        "S03"
+      ]
+    },
+    {
+      "file": "12-permissions.html",
+      "title": "昨天同意的写入，今天仍按当前策略判断",
+      "number": 12,
+      "sources": [
+        "S01",
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "13-guards.html",
+      "title": "一次重启，不能把“未完成”变成完成",
+      "number": 13,
+      "sources": [
+        "S01",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "14-interface.html",
+      "title": "先看清楚，再明确开始下一轮",
+      "number": 14,
+      "sources": [
+        "S05",
+        "T01"
+      ]
+    },
+    {
+      "file": "15-experiment.html",
+      "title": "让进程真的退出，再让新进程读磁盘",
+      "number": 15,
+      "sources": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "16-storage.html",
+      "title": "容量满或数据损坏，必须明确停下来",
+      "number": 16,
+      "sources": [
+        "S02",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "17-practice.html",
+      "title": "一次命令，看见中断前后的两个进程",
+      "number": 17,
+      "sources": [
+        "T02"
+      ]
+    },
+    {
+      "file": "18-finish.html",
+      "title": "能解释停在哪里，才能安全地继续",
+      "number": 18,
+      "sources": [
+        "D01",
+        "T01",
+        "T02"
+      ]
+    }
+  ]
+}

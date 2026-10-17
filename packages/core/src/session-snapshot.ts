@@ -1,9 +1,11 @@
+import { validateExecutionRecovery, type ExecutionRecovery } from './execution-recovery.js'
 import { validateResultSnapshot, type ResultSnapshot } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { validateHistorySnapshot, type HistorySnapshot } from './history-evidence.js'
 
 /** Durable data only. Pending jobs, budgets and temporary pruning artifacts are rebuilt. */
 export interface SessionSnapshot {
+  recovery?: ExecutionRecovery
   results?: ResultSnapshot
   history?: HistorySnapshot
   messages: Anthropic.MessageParam[]
@@ -102,6 +104,14 @@ export function validateSessionSnapshot(value: unknown): SessionSnapshot {
   }
   if (pending.size) fail()
   return structuredClone({
+    ...(value.recovery === undefined
+      ? {}
+      : {
+          recovery: validateExecutionRecovery(
+            value.recovery,
+            value.messages as Anthropic.MessageParam[]
+          ),
+        }),
     ...(value.history === undefined
       ? {}
       : {

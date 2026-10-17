@@ -221,6 +221,7 @@ async function main() {
   let list = false
   let resume: string | undefined
   let latest = false
+  let resumeTask: string | undefined
   while (args[0]?.startsWith('--')) {
     const flag = args.shift()
     if (flag === '--') break
@@ -271,13 +272,24 @@ async function main() {
     } else if (flag === '--no-save') noSave = true
     else if (flag === '--list-sessions') list = true
     else if (flag === '--continue') latest = true
-    else if (flag === '--resume') {
+    else if (flag === '--resume-task') {
+      resumeTask = args.shift()
+      if (!resumeTask?.trim() || resumeTask.startsWith('--'))
+        throw new Error('--resume-task requires an instruction.')
+    } else if (flag === '--resume') {
       resume = args.shift()
       if (!resume || resume.startsWith('--')) throw new Error('--resume requires a session UUID.')
     } else throw new Error(`Unknown option: ${flag}`)
   }
   if ((noSave && (list || resume || latest)) || (resume && latest))
     throw new Error('--no-save cannot restore/list sessions; use either --resume or --continue.')
+  if (
+    resumeTask &&
+    (!(resume || latest) || args.length || list || listLogs || readLog || checkpointAction)
+  )
+    throw new Error(
+      '--resume-task requires --resume or --continue and cannot combine with other tasks/actions.'
+    )
   if (confirmCheckpoint && !['undo', 'recover'].includes(checkpointAction ?? ''))
     throw new Error('--confirm requires --undo or --recover')
   const checkpoints = await CheckpointStore.open(process.cwd(), {
@@ -338,7 +350,7 @@ async function main() {
     } else console.log(safeText(formatLog(await logs.read(readLog!, logOperation))))
     return
   }
-  const messageArg = args[0]
+  const messageArg = resumeTask ?? args[0]
   const store = noSave ? undefined : await SessionStore.open(process.cwd())
   if (list) {
     printSessions(await store!.list())
@@ -404,7 +416,10 @@ async function main() {
     if (resumed) console.error(resumed)
     try {
       resetStreamState()
-      await conversations.run(messageArg)
+      if (resumeTask) {
+        console.error('明确续跑：使用当前权限和新一轮预算；保留未完成检查。')
+        await conversations.continueInterrupted(messageArg)
+      } else await conversations.run(messageArg)
       console.log()
     } catch (error) {
       console.error('\n执行出错:', (error as Error).message)
@@ -424,7 +439,7 @@ async function main() {
   console.log(CHECKPOINT_SCOPE)
   if (resumed) console.log(resumed)
   console.log(
-    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
+    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/recovery 中断任务；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
   )
 
   const rl = readline.createInterface({
@@ -509,6 +524,11 @@ async function main() {
           console.log('使用 /resume UUID 恢复所选会话。')
         } else if (trimmed === '/session') {
           console.log(safeText(conversations.status))
+        } else if (trimmed === '/recovery') {
+          process.stdout.write(safeText(await conversations.recoveryReport()) + '\n')
+        } else if (trimmed.startsWith('/recovery continue ')) {
+          process.stdout.write('明确续跑：使用当前权限和新一轮预算；保留未完成检查。\n')
+          await conversations.continueInterrupted(trimmed.slice('/recovery continue '.length))
         } else if (trimmed === '/save') {
           await conversations.save()
           console.log(safeText(conversations.status))

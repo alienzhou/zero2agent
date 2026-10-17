@@ -58,3 +58,7 @@ benchmarks/node_modules/
 /researches/summary-quality/evaluation/read-recovery-v*/candidate/
 /.authoring/site/chapters/epic04-story003/verification/*.png
 /.authoring/site/chapters/epic04-story003/verification/checks-*.json
+
+# E04-S004 raw acceptance evidence is archived outside Git.
+/researches/safe-resume/acceptance/
+/.authoring/site/chapters/epic04-story004/verification/*.png

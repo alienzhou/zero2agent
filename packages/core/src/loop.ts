@@ -1,4 +1,12 @@
 import {
+  ExecutionPersistenceError,
+  RecoveryRequiredError,
+  interruptedResult,
+  type ExecutionPersistence,
+  type ExecutionRecovery,
+  type ExecutionBoundary,
+} from './execution-recovery.js'
+import {
   formatArtifactTask,
   validateArtifactContract,
   type ArtifactContract,
@@ -10,6 +18,7 @@ import { readToolResultTool, ResultReadInputError } from './tools/read-tool-resu
 import { ResultReadRecovery, EvidenceReadIncompleteError } from './result-read-recovery.js'
 import { readHistoryTool } from './tools/read-history.js'
 import { validateHistoryPaths } from './history-evidence.js'
+import type { SessionSnapshot } from './session-snapshot.js'
 import type { FileMutationHandler } from './file-mutations.js'
 /**
  * ReACT 循环实现
@@ -113,7 +122,12 @@ export async function executeToolCalls(
   sessionId?: string,
   budget?: RunBudget,
   completionSafety?: { safe: boolean },
-  readRecovery?: ResultReadRecovery
+  readRecovery?: ResultReadRecovery,
+  execution?: {
+    start(id: string): Promise<void>
+    settled(result: Anthropic.ToolResultBlockParam): Promise<void>
+    failure?: ExecutionPersistenceError
+  }
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -127,6 +141,15 @@ export async function executeToolCalls(
     })
   }
   for (const block of calls) {
+    if (execution?.failure) {
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        is_error: true,
+        content: interruptedResult('not-started'),
+      })
+      continue
+    }
     const state = (
       status: Extract<RuntimeEvent, { type: 'tool-state' }>['status'],
       detail: { output?: string; reason?: string; durationMs?: number } = {}
@@ -241,6 +264,8 @@ export async function executeToolCalls(
       state('running')
       notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
       assertNotCancelled(ctx.signal)
+      await execution?.start(block.id)
+      assertNotCancelled(ctx.signal)
       start = Date.now()
       // Never race a tool against cancellation: it may finish a write despite ignoring signal.
       const execute = (): Promise<string> => {
@@ -317,6 +342,7 @@ export async function executeToolCalls(
         completionSafety.safe = false
       budget?.settleTool(block.name, block.input, failed, nativeDenied)
     } catch (error) {
+      if (error instanceof ExecutionPersistenceError && execution) execution.failure = error
       metadataSettled = true
       if (tool === readToolResultTool && error instanceof ResultReadInputError) {
         readRecovery?.failed(block.input)
@@ -373,11 +399,20 @@ export async function executeToolCalls(
       if (consumed && !limited && !cancelled)
         budget?.settleTool(block.name, block.input, true, denied)
     }
+    if (execution && !execution.failure) {
+      try {
+        await execution.settled(results[results.length - 1])
+      } catch {
+        execution.failure = new ExecutionPersistenceError()
+      }
+    }
   }
   return results
 }
 
 export interface RunLoopOptions {
+  executionPersistence?: ExecutionPersistence
+  recovery?: ExecutionRecovery
   artifactContract?: ArtifactContract
   results?: ResultStoreOptions
   limits?: RunLimits
@@ -405,6 +440,7 @@ export interface RunLoopOptions {
  * @returns 最终的文本响应
  */
 export async function runLoop(userMessage: string, options: RunLoopOptions = {}): Promise<string> {
+  if (options.session?.recovery && !options.recovery) throw new RecoveryRequiredError()
   if (options.artifactContract !== undefined) {
     const artifactContract = validateArtifactContract(options.artifactContract)
     options = { ...options, artifactContract }
@@ -460,6 +496,8 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     return result
   } catch (caught) {
     const error = options.signal?.reason instanceof RunBudgetError ? options.signal.reason : caught
+    if (!options.recovery && !(error instanceof ExecutionPersistenceError))
+      session.recovery = undefined
     if (started) {
       const cancelled =
         !(error instanceof RunBudgetError) &&
@@ -550,10 +588,12 @@ async function runTurnLoop(
     diagnostics,
     executor
   )
-  let completionFeedback: string | undefined
-  let completionAttempt = 0
+  let completionFeedback: string | undefined = options.recovery?.artifactFeedback
+  // Rechecking is read-only; a consumed repair opportunity is never replenished.
+  let completionAttempt = Math.min(options.recovery?.artifactAttempts ?? 0, 1)
+  // Explicit continuation is a new turn: past effects remain evidence, new calls are reauthorized.
   const completionSafety = { safe: true }
-  const readRecovery = new ResultReadRecovery()
+  const readRecovery = new ResultReadRecovery(options.recovery?.read)
   const originalRequest = runtime.request
   // Feedback is an ephemeral request overlay, included in context accounting but not user history.
   runtime.request = view => {
@@ -586,219 +626,336 @@ async function runTurnLoop(
     ...(options.signal && { signal: options.signal }),
   }
   const batchHistoryPaths = new Set<string>()
-  while (true) {
-    assertNotCancelled(options.signal)
-    budget.consumeIteration()
-    let response: Anthropic.Message
-    for (let recovery = 0; ; recovery++) {
-      emitter.emit({ type: 'phase', phase: 'preparing' })
-      assertNotCancelled(options.signal)
-      const request = await session.prepareRequest(messages, runtime)
-      assertNotCancelled(options.signal)
-      try {
-        emitter.emit({ type: 'phase', phase: 'requesting' })
-        assertNotCancelled(options.signal)
-        response = await executor.run(
-          'model',
-          request,
-          async attempt => {
-            let acceptingText = true
-            let stopped = false
-            let streaming = false
-            const stream = runtime.client.messages.stream(request, {
-              signal: attempt.signal,
-              timeout: attempt.timeoutMs,
-              maxRetries: 0,
-            })
-            stream.on('streamEvent', event => {
-              if (event.type === 'message_stop') stopped = true
-            })
-            stream.on('text', text => {
-              if (!acceptingText || attempt.signal.aborted) return
-              attempt.span?.text(text)
-              if (!streaming) {
-                streaming = true
-                emitter.emit({ type: 'phase', phase: 'streaming' })
+  const tracked: ExecutionRecovery['tools'] = []
+  const settled = new Map<string, Anthropic.ToolResultBlockParam>()
+  let batchIndex = -1
+  let persistenceBroken = false
+  const enabled = !!options.executionPersistence || !!options.recovery
+  const paired = (): Anthropic.MessageParam[] => {
+    const copy = structuredClone(messages)
+    const last = copy.at(-1)
+    if (last?.role === 'assistant' && Array.isArray(last.content)) {
+      const calls = last.content.filter(b => b.type === 'tool_use')
+      if (calls.length)
+        copy.push({
+          role: 'user',
+          content: calls.map(
+            call =>
+              settled.get(call.id) ?? {
+                type: 'tool_result',
+                tool_use_id: call.id,
+                is_error: true,
+                content: interruptedResult(
+                  tracked.find(t => t.messageIndex === batchIndex && t.toolCallId === call.id)
+                    ?.state === 'unknown'
+                    ? 'unknown'
+                    : 'not-started'
+                ),
               }
-              emitter.emit({ type: 'text-delta', text, requestId: attempt.span?.requestId })
-              notifyObserver(() => events?.onText?.(text))
-            })
-            try {
-              const complete = await stream.finalMessage()
-              if (!stopped) throw new IncompleteStreamError()
-              return complete
-            } catch (error) {
-              if (
-                !stopped &&
-                error instanceof Anthropic.AnthropicError &&
-                /^(?:stream ended without producing a Message with role=assistant|request ended without sending any chunks)$/.test(
-                  error.message
-                )
-              )
-                throw new IncompleteStreamError()
-              throw error
-            } finally {
-              acceptingText = false
-            }
-          },
-          options.signal
-        )
-        assertNotCancelled(options.signal)
-        break
-      } catch (error) {
-        assertNotCancelled(options.signal)
-        if (!isContextOverflow(error) || recovery >= 2) throw error
-        if (!(await session.recoverContext(messages, runtime))) throw error
-      }
+          ),
+        })
     }
-
-    if (response.stop_reason === 'tool_use') {
-      if (!response.content.some(block => block.type === 'tool_use')) {
-        throw new Error('Model stopped for tool_use without any tool calls.')
-      }
-      messages.push({ role: 'assistant', content: structuredClone(response.content) })
-      batchHistoryPaths.clear()
-      emitter.emit({ type: 'phase', phase: 'tools' })
-      const toolResults = await executeToolCalls(
-        response.content,
-        tools,
-        ctx,
-        events,
-        permissions,
-        emitter,
-        diagnostics,
-        options.fileMutations,
-        options.diagnosticContext?.sessionId,
-        budget,
-        completionSafety,
-        readRecovery
-      )
-      messages.push({ role: 'user', content: toolResults })
-      session.recordHistorySource(messages, messages.length - 1, [...batchHistoryPaths])
-      budget.check()
+    return copy
+  }
+  const capture = (reason: ExecutionRecovery['reason'] = 'interrupted'): SessionSnapshot => {
+    const copy = paired()
+    if (batchIndex >= 0 && copy[batchIndex + 1])
+      session.recordHistorySource(copy, batchIndex + 1, [...batchHistoryPaths])
+    const recovery: ExecutionRecovery = {
+      version: 1,
+      operationId: diagnostics.operationId,
+      reason,
+      tools: structuredClone(tracked),
+      read: readRecovery.snapshot(),
+      artifactAttempts: completionAttempt,
+      ...(options.artifactContract && { artifactContract: options.artifactContract }),
+      ...(completionFeedback && { artifactFeedback: completionFeedback }),
+      safe: completionSafety.safe,
+      budget: budget.evidence(),
+      limits: budget.limits,
+    }
+    session.recovery = recovery
+    return session.executionSnapshot(copy)
+  }
+  const persist = async (boundary: ExecutionBoundary): Promise<void> => {
+    if (!enabled) return
+    try {
+      const snapshot = capture()
+      await options.executionPersistence?.(snapshot, boundary)
+    } catch {
+      persistenceBroken = true
+      throw new ExecutionPersistenceError()
+    }
+  }
+  const execution = {
+    failure: undefined as ExecutionPersistenceError | undefined,
+    start: async (id: string): Promise<void> => {
+      tracked.find(t => t.messageIndex === batchIndex && t.toolCallId === id)!.state = 'unknown'
+      await persist('tool-start')
+    },
+    settled: async (result: Anthropic.ToolResultBlockParam): Promise<void> => {
+      settled.set(result.tool_use_id, structuredClone(result))
+      tracked.find(
+        t => t.messageIndex === batchIndex && t.toolCallId === result.tool_use_id
+      )!.state = 'settled'
+      await persist('tool-settled')
+    },
+  }
+  try {
+    await persist('turn-start')
+    while (true) {
       assertNotCancelled(options.signal)
-      continue
-    }
-
-    if (
-      !['end_turn', 'max_tokens', 'stop_sequence', 'refusal'].includes(response.stop_reason ?? '')
-    ) {
-      throw new Error(`Unsupported model stop reason: ${response.stop_reason}`)
-    }
-
-    const text = extractTextContent(response.content)
-    const emptyNotice = response.content.length ? '' : '[Harness] Model returned no content.'
-    const calls = response.content.filter(block => block.type === 'tool_use')
-    const notice =
-      response.stop_reason === 'max_tokens'
-        ? '[Harness] Model output was truncated by max_tokens. Any tool calls in this response were not executed.'
-        : calls.length > 0
-          ? '[Harness] Tool calls were not executed because the response did not stop for tool_use.'
-          : ''
-    messages.push({
-      role: 'assistant',
-      content: response.content.length ? structuredClone(response.content) : emptyNotice,
-    })
-    if (calls.length) {
-      for (const call of calls) {
-        emitter.emit({
-          type: 'tool-state',
-          toolCallId: call.id,
-          toolName: call.name,
-          status: 'error',
-          input: call.input as Record<string, unknown>,
-          output: notice,
-          reason: notice,
-        })
+      budget.consumeIteration()
+      let response: Anthropic.Message
+      for (let recovery = 0; ; recovery++) {
+        emitter.emit({ type: 'phase', phase: 'preparing' })
+        assertNotCancelled(options.signal)
+        const request = await session.prepareRequest(messages, runtime)
+        assertNotCancelled(options.signal)
+        try {
+          emitter.emit({ type: 'phase', phase: 'requesting' })
+          assertNotCancelled(options.signal)
+          response = await executor.run(
+            'model',
+            request,
+            async attempt => {
+              let acceptingText = true
+              let stopped = false
+              let streaming = false
+              const stream = runtime.client.messages.stream(request, {
+                signal: attempt.signal,
+                timeout: attempt.timeoutMs,
+                maxRetries: 0,
+              })
+              stream.on('streamEvent', event => {
+                if (event.type === 'message_stop') stopped = true
+              })
+              stream.on('text', text => {
+                if (!acceptingText || attempt.signal.aborted) return
+                attempt.span?.text(text)
+                if (!streaming) {
+                  streaming = true
+                  emitter.emit({ type: 'phase', phase: 'streaming' })
+                }
+                emitter.emit({ type: 'text-delta', text, requestId: attempt.span?.requestId })
+                notifyObserver(() => events?.onText?.(text))
+              })
+              try {
+                const complete = await stream.finalMessage()
+                if (!stopped) throw new IncompleteStreamError()
+                return complete
+              } catch (error) {
+                if (
+                  !stopped &&
+                  error instanceof Anthropic.AnthropicError &&
+                  /^(?:stream ended without producing a Message with role=assistant|request ended without sending any chunks)$/.test(
+                    error.message
+                  )
+                )
+                  throw new IncompleteStreamError()
+                throw error
+              } finally {
+                acceptingText = false
+              }
+            },
+            options.signal
+          )
+          assertNotCancelled(options.signal)
+          break
+        } catch (error) {
+          assertNotCancelled(options.signal)
+          if (!isContextOverflow(error) || recovery >= 2) throw error
+          if (!(await session.recoverContext(messages, runtime))) throw error
+        }
       }
-      // Even skipped calls need a matching result before a later user turn can be sent.
-      messages.push({
-        role: 'user',
-        content: calls.map(call => ({
-          type: 'tool_result' as const,
-          tool_use_id: call.id,
-          is_error: true,
-          content: notice,
-        })),
-      })
-    }
-    if (notice) {
-      messages.push({ role: 'assistant', content: notice })
-      emitter.emit({ type: 'notice', text: notice })
-      notifyObserver(() => events?.onText?.(`\n${notice}\n`))
-    } else if (emptyNotice) {
-      emitter.emit({ type: 'notice', text: emptyNotice })
-      notifyObserver(() => events?.onText?.(`\n${emptyNotice}\n`))
-    }
-    assertNotCancelled(options.signal)
-    if (readRecovery.unresolved) {
-      try {
-        if (response.stop_reason !== 'end_turn' || calls.length || !completionSafety.safe)
-          throw new EvidenceReadIncompleteError()
-        readRecovery.requestCorrection()
-      } catch (error) {
-        emitter.emit({ type: 'evidence-read', status: 'blocked' })
-        throw error
-      }
-      emitter.emit({ type: 'evidence-read', status: 'correcting' })
-      emitter.emit({
-        type: 'notice',
-        text: '[Harness] Correcting an unresolved saved-evidence read within the current budget.',
-      })
-      continue
-    }
-    if (options.artifactContract) {
-      const contract = options.artifactContract
-      const attempt = ++completionAttempt
-      try {
-        if (response.stop_reason !== 'end_turn' || calls.length)
-          throw new ArtifactCompletionError('incomplete-response')
-        if (!completionSafety.safe) throw new ArtifactCompletionError('unsafe-effects')
-        emitter.emit({
-          type: 'artifact-check',
-          status: 'started',
-          attempt,
-          fileCount: contract.artifacts.length,
-        })
-        const issues = await checkArtifacts(
-          contract,
-          ctx,
-          permissions,
-          budget,
-          diagnostics,
-          attempt
+
+      if (response.stop_reason === 'tool_use') {
+        if (!response.content.some(block => block.type === 'tool_use')) {
+          throw new Error('Model stopped for tool_use without any tool calls.')
+        }
+        messages.push({ role: 'assistant', content: structuredClone(response.content) })
+        batchIndex = messages.length - 1
+        batchHistoryPaths.clear()
+        settled.clear()
+        tracked.push(
+          ...response.content
+            .filter(b => b.type === 'tool_use')
+            .map(b => ({
+              messageIndex: batchIndex,
+              toolCallId: b.id,
+              toolName: b.name,
+              state: 'not-started' as const,
+            }))
         )
+        await persist('response')
+        emitter.emit({ type: 'phase', phase: 'tools' })
+        const toolResults = await executeToolCalls(
+          response.content,
+          tools,
+          ctx,
+          events,
+          permissions,
+          emitter,
+          diagnostics,
+          options.fileMutations,
+          options.diagnosticContext?.sessionId,
+          budget,
+          completionSafety,
+          readRecovery,
+          enabled ? execution : undefined
+        )
+        if (execution.failure) {
+          for (const result of toolResults) {
+            const item = tracked.find(
+              t => t.messageIndex === batchIndex && t.toolCallId === result.tool_use_id
+            )!
+            if (result.content !== interruptedResult('not-started')) item.state = 'settled'
+          }
+        }
+        messages.push({ role: 'user', content: toolResults })
+        session.recordHistorySource(messages, messages.length - 1, [...batchHistoryPaths])
+        if (execution.failure) throw execution.failure
         budget.check()
-        emitter.emit({
-          type: 'artifact-check',
-          status: issues.count ? 'failed' : 'passed',
-          attempt,
-          fileCount: contract.artifacts.length,
-          issueCount: issues.count,
+        assertNotCancelled(options.signal)
+        continue
+      }
+
+      if (
+        !['end_turn', 'max_tokens', 'stop_sequence', 'refusal'].includes(response.stop_reason ?? '')
+      ) {
+        throw new Error(`Unsupported model stop reason: ${response.stop_reason}`)
+      }
+
+      const text = extractTextContent(response.content)
+      const emptyNotice = response.content.length ? '' : '[Harness] Model returned no content.'
+      const calls = response.content.filter(block => block.type === 'tool_use')
+      const notice =
+        response.stop_reason === 'max_tokens'
+          ? '[Harness] Model output was truncated by max_tokens. Any tool calls in this response were not executed.'
+          : calls.length > 0
+            ? '[Harness] Tool calls were not executed because the response did not stop for tool_use.'
+            : ''
+      messages.push({
+        role: 'assistant',
+        content: response.content.length ? structuredClone(response.content) : emptyNotice,
+      })
+      if (calls.length) {
+        for (const call of calls) {
+          emitter.emit({
+            type: 'tool-state',
+            toolCallId: call.id,
+            toolName: call.name,
+            status: 'error',
+            input: call.input as Record<string, unknown>,
+            output: notice,
+            reason: notice,
+          })
+        }
+        // Even skipped calls need a matching result before a later user turn can be sent.
+        messages.push({
+          role: 'user',
+          content: calls.map(call => ({
+            type: 'tool_result' as const,
+            tool_use_id: call.id,
+            is_error: true,
+            content: notice,
+          })),
         })
-        if (issues.count) {
-          if (attempt >= 2) throw new ArtifactCompletionError('invalid-artifact')
-          completionFeedback = issues.feedback()
+      }
+      if (notice) {
+        messages.push({ role: 'assistant', content: notice })
+        emitter.emit({ type: 'notice', text: notice })
+        notifyObserver(() => events?.onText?.(`\n${notice}\n`))
+      } else if (emptyNotice) {
+        emitter.emit({ type: 'notice', text: emptyNotice })
+        notifyObserver(() => events?.onText?.(`\n${emptyNotice}\n`))
+      }
+      assertNotCancelled(options.signal)
+      if (readRecovery.unresolved) {
+        try {
+          if (response.stop_reason !== 'end_turn' || calls.length || !completionSafety.safe)
+            throw new EvidenceReadIncompleteError()
+          readRecovery.requestCorrection()
+        } catch (error) {
+          emitter.emit({ type: 'evidence-read', status: 'blocked' })
+          throw error
+        }
+        await persist('response')
+        emitter.emit({ type: 'evidence-read', status: 'correcting' })
+        emitter.emit({
+          type: 'notice',
+          text: '[Harness] Correcting an unresolved saved-evidence read within the current budget.',
+        })
+        continue
+      }
+      if (options.artifactContract) {
+        const contract = options.artifactContract
+        const attempt = ++completionAttempt
+        try {
+          if (response.stop_reason !== 'end_turn' || calls.length)
+            throw new ArtifactCompletionError('incomplete-response')
+          if (!completionSafety.safe) throw new ArtifactCompletionError('unsafe-effects')
           emitter.emit({
             type: 'artifact-check',
-            status: 'repair',
+            status: 'started',
+            attempt,
+            fileCount: contract.artifacts.length,
+          })
+          const issues = await checkArtifacts(
+            contract,
+            ctx,
+            permissions,
+            budget,
+            diagnostics,
+            attempt
+          )
+          budget.check()
+          emitter.emit({
+            type: 'artifact-check',
+            status: issues.count ? 'failed' : 'passed',
             attempt,
             fileCount: contract.artifacts.length,
             issueCount: issues.count,
           })
-          continue
+          if (issues.count) {
+            if (attempt >= 2) throw new ArtifactCompletionError('invalid-artifact')
+            completionFeedback = issues.feedback()
+            await persist('response')
+            emitter.emit({
+              type: 'artifact-check',
+              status: 'repair',
+              attempt,
+              fileCount: contract.artifacts.length,
+              issueCount: issues.count,
+            })
+            continue
+          }
+        } catch (error) {
+          emitter.emit({
+            type: 'artifact-check',
+            status: 'blocked',
+            attempt,
+            fileCount: contract.artifacts.length,
+            ...(error instanceof ArtifactCompletionError ? { artifactFailure: error.reason } : {}),
+          })
+          throw error
         }
-      } catch (error) {
-        emitter.emit({
-          type: 'artifact-check',
-          status: 'blocked',
-          attempt,
-          fileCount: contract.artifacts.length,
-          ...(error instanceof ArtifactCompletionError ? { artifactFailure: error.reason } : {}),
-        })
-        throw error
+      }
+      session.recovery = undefined
+      return text || notice || emptyNotice
+    }
+  } catch (error) {
+    if (enabled) {
+      const snapshot = capture(persistenceBroken ? 'storage-error' : 'stopped')
+      messages.splice(0, messages.length, ...snapshot.messages)
+      if (!persistenceBroken) {
+        try {
+          await options.executionPersistence?.(snapshot, 'turn-stopped')
+        } catch {
+          throw new ExecutionPersistenceError()
+        }
       }
     }
-    return text || notice || emptyNotice
+    throw error
   }
 }

@@ -73,6 +73,16 @@ export class RunBudget {
     this.timer.unref()
   }
 
+  evidence(): { iterations: number; requests: number; tools: number; stopReason?: RunLimitReason } {
+    return {
+      iterations: this.iterations,
+      requests: this.requests,
+      tools: this.tools,
+      ...(this.signal.reason instanceof RunBudgetError
+        ? { stopReason: this.signal.reason.limitReason }
+        : {}),
+    }
+  }
   stop(reason: RunLimitReason): RunBudgetError {
     if (!this.controller.signal.aborted) this.controller.abort(new RunBudgetError(reason))
     return this.controller.signal.reason as RunBudgetError

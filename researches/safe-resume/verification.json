@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "implementationCommit": "ae6f6facb7ca042f9b133881c40b8886dd6b4606",
+  "baseCommit": "88ab5c47b38d0b8693dfaa3e1a2f189f6077986c",
+  "platform": "macOS local filesystem",
+  "tests": {
+    "core": 538,
+    "e2e": 201,
+    "cdp": 1,
+    "totalPassed": 740,
+    "liveDefaultSkipped": 58,
+    "safeResumeCases": 17
+  },
+  "commands": {
+    "pnpm build": "passed",
+    "pnpm test": "740 passed; 58 live skipped",
+    "pnpm --filter @zero2agent/e2e exec tsc --noEmit": "passed",
+    "pnpm lint": "0 errors; 44 existing warnings",
+    "prettier changed TypeScript": "passed",
+    "pnpm site:build / site:check": "18 chapters; 283 diagrams",
+    "node scripts/e04-s004-course-check.mjs": "18 pages, PC/H5; no overlap/overflow/script errors"
+  },
+  "live": {
+    "mode": "real-service",
+    "startedAt": "2026-10-16T15:30:12.924Z",
+    "source": "ae6f6facb7ca042f9b133881c40b8886dd6b4606",
+    "requestedModel": "claude-sonnet-4-20250514",
+    "passed": true,
+    "sourceHashes": {
+      "packages/core/src/loop.ts": "fa62d3bc4dcc1945bbba7314e2bed9adc212dd5cdac5a959ef44d805d50433fb",
+      "packages/core/src/execution-recovery.ts": "441f6e838747b43689f76f870a4034a0b429a3e6af0e6762ae02f83d3b8f9f5e",
+      "packages/core/src/agent.ts": "cf03b1ea98e2f76e476ea4623773e6e1e6eeb4271ef10c4c1873c401e275e020",
+      "packages/core/src/session.ts": "b7b9f8991d9532afb565977a958d77a52c2f0d6953c1708383c44a3be83aa5c0",
+      "packages/tui/src/session-store.ts": "b2c899889e93c31ae5d536f70cd4766fdbb37d420873ad756a55a32fef26a004",
+      "packages/tui/src/conversations.ts": "069f6e85db0849079e39c3771d3b05ab7a1a29e665f9aa81a4aa6740d9703659"
+    },
+    "runtimeHashes": {
+      "packages/core/dist/loop.js": "699f5bbacfab784a40aad370e907c0acde66d51c23059aa6d1320f5417e20480",
+      "packages/core/dist/execution-recovery.js": "bb90268bcce9bfc49a3042deaa2a8641150456e556d7e086c4f8d6d62c38c88b",
+      "packages/core/dist/agent.js": "14661b5d2b3916874e6adfe3ce27f30236e87a579d10b834eb95ebdb3ad29f93",
+      "packages/core/dist/session.js": "47832f27d42399d21e1b2ee088232eee5dbcb2cc310d9cbbd5d44e78699a5c63",
+      "packages/tui/dist/session-store.js": "87e7a593302d234f16f6e93f59438684925510f430e44a14ffcc6155c8a581c5",
+      "packages/tui/dist/conversations.js": "b5a318cb36136ba3909057964d093b882ca165da0781a623cbc7444f55df8340"
+    },
+    "firstExit": {
+      "code": null,
+      "signal": "SIGKILL"
+    },
+    "crashStates": [
+      {
+        "tool": "write_file",
+        "state": "settled"
+      },
+      {
+        "tool": "write_file",
+        "state": "not-started"
+      }
+    ],
+    "continueExit": {
+      "code": 0,
+      "signal": null
+    },
+    "reportedModels": [
+      "MiniMax-M3"
+    ],
+    "modelRequests": 3,
+    "effects": [
+      {
+        "path": "first.json"
+      },
+      {
+        "path": "second.json"
+      }
+    ],
+    "finishedAt": "2026-10-16T15:30:19.860Z",
+    "evidenceDirectory": "live-4eCOMk"
+  },
+  "offline": {
+    "mode": "deterministic-http",
+    "startedAt": "2026-10-16T15:30:12.452Z",
+    "source": "ae6f6facb7ca042f9b133881c40b8886dd6b4606",
+    "requestedModel": "fixture",
+    "passed": true,
+    "sourceHashes": {
+      "packages/core/src/loop.ts": "fa62d3bc4dcc1945bbba7314e2bed9adc212dd5cdac5a959ef44d805d50433fb",
+      "packages/core/src/execution-recovery.ts": "441f6e838747b43689f76f870a4034a0b429a3e6af0e6762ae02f83d3b8f9f5e",
+      "packages/core/src/agent.ts": "cf03b1ea98e2f76e476ea4623773e6e1e6eeb4271ef10c4c1873c401e275e020",
+      "packages/core/src/session.ts": "b7b9f8991d9532afb565977a958d77a52c2f0d6953c1708383c44a3be83aa5c0",
+      "packages/tui/src/session-store.ts": "b2c899889e93c31ae5d536f70cd4766fdbb37d420873ad756a55a32fef26a004",
+      "packages/tui/src/conversations.ts": "069f6e85db0849079e39c3771d3b05ab7a1a29e665f9aa81a4aa6740d9703659"
+    },
+    "runtimeHashes": {
+      "packages/core/dist/loop.js": "699f5bbacfab784a40aad370e907c0acde66d51c23059aa6d1320f5417e20480",
+      "packages/core/dist/execution-recovery.js": "bb90268bcce9bfc49a3042deaa2a8641150456e556d7e086c4f8d6d62c38c88b",
+      "packages/core/dist/agent.js": "14661b5d2b3916874e6adfe3ce27f30236e87a579d10b834eb95ebdb3ad29f93",
+      "packages/core/dist/session.js": "47832f27d42399d21e1b2ee088232eee5dbcb2cc310d9cbbd5d44e78699a5c63",
+      "packages/tui/dist/session-store.js": "87e7a593302d234f16f6e93f59438684925510f430e44a14ffcc6155c8a581c5",
+      "packages/tui/dist/conversations.js": "b5a318cb36136ba3909057964d093b882ca165da0781a623cbc7444f55df8340"
+    },
+    "firstExit": {
+      "code": null,
+      "signal": "SIGKILL"
+    },
+    "crashStates": [
+      {
+        "tool": "write_file",
+        "state": "settled"
+      },
+      {
+        "tool": "write_file",
+        "state": "not-started"
+      }
+    ],
+    "continueExit": {
+      "code": 0,
+      "signal": null
+    },
+    "reportedModels": [
+      "deterministic-fixture"
+    ],
+    "modelRequests": 3,
+    "effects": [
+      {
+        "path": "first.json"
+      },
+      {
+        "path": "second.json"
+      }
+    ],
+    "finishedAt": "2026-10-16T15:30:12.857Z",
+    "evidenceDirectory": "offline-OMmqi0"
+  },
+  "sourceHashes": {
+    "e2e/src/fixtures/safe-resume-child.mjs": "a2e29c9ece39368e852f4764b21f78d7ad1689e249ac52a6827e6444020bf29d",
+    "e2e/src/safe-resume.test.ts": "bf5686999d58f504038cd6f69e163e2ed2eb06fa786ccbb169f31a9fcd269ef2",
+    "e2e/src/session-persistence.test.ts": "96d120316683c3b0f5ec40259098bfe687e44d371e07fe807f0f8aa85b47a2f1",
+    "packages/core/src/agent.ts": "cf03b1ea98e2f76e476ea4623773e6e1e6eeb4271ef10c4c1873c401e275e020",
+    "packages/core/src/execution-recovery.ts": "441f6e838747b43689f76f870a4034a0b429a3e6af0e6762ae02f83d3b8f9f5e",
+    "packages/core/src/index.ts": "6df4191f0cb680bb5e7e2c66e6588a58379cf3a813fd8d2275be2de3d4e98930",
+    "packages/core/src/loop.ts": "fa62d3bc4dcc1945bbba7314e2bed9adc212dd5cdac5a959ef44d805d50433fb",
+    "packages/core/src/result-read-recovery.ts": "0e87441bbf6ec2600d675f7fff74a809ecaf2180d6bdd8e4b327cbf07131a348",
+    "packages/core/src/run-budget.ts": "e084760a49e7867bb26d278606ce5c21f2432c4ee5921e82519cf34de6c2d119",
+    "packages/core/src/session-snapshot.ts": "54356524f0d36b2e31d705ee32c3a3574135ff3251cf92d84b22df45e7722256",
+    "packages/core/src/session.ts": "b7b9f8991d9532afb565977a958d77a52c2f0d6953c1708383c44a3be83aa5c0",
+    "packages/tui/src/cli.ts": "7d84ecd6c648911263e8fde87c9ee39bb76fe215e8178e749f3321039e30d662",
+    "packages/tui/src/conversations.ts": "069f6e85db0849079e39c3771d3b05ab7a1a29e665f9aa81a4aa6740d9703659",
+    "packages/tui/src/runtime-tui.ts": "11e82f9cc8afaf783d825ce74ef677a7efc85c499194fb78468a24621da5aa67",
+    "packages/tui/src/session-store.ts": "b2c899889e93c31ae5d536f70cd4766fdbb37d420873ad756a55a32fef26a004",
+    "scripts/e04-s004-course-check.mjs": "8e4e5566c697f2a7bd6479071df36c5f023b9fd6781b4e950914a9c5d3a303e1"
+  },
+  "review": {
+    "kind": "AI final review",
+    "blockingFindings": [],
+    "humanReview": "Not claimed; user explicitly authorized final AI review and merge on 2026-10-17.",
+    "merge": "Authorized after final review; actual status: https://github.com/alienzhou/zero2agent/pull/26",
+    "siteDeployment": "not performed"
+  },
+  "evidenceIndex": "evidence-archive.json",
+  "finalReview": {
+    "date": "2026-10-17",
+    "originalHead": "b1dc7462b8e72fd49adcdde050dfaa5fc4d5f1bc",
+    "codeCommit": "238834422afb3835249cf90d3678abc233916168",
+    "fixedFinding": "Session list lost the unresolved badge after inspection/save cleared pending. Include recovery in the badge condition; all four real crash boundaries now assert persistence until successful continuation.",
+    "tests": {
+      "core": 538,
+      "e2e": 201,
+      "cdp": 1,
+      "totalPassed": 740,
+      "liveDefaultSkipped": 58,
+      "safeResumeCases": 17
+    },
+    "commands": {
+      "pnpm build": "passed",
+      "pnpm test": "740 passed; 58 live skipped",
+      "pnpm lint": "0 errors; 44 existing warnings",
+      "e2e tsc --noEmit": "passed",
+      "prettier changed TypeScript": "passed",
+      "pnpm site:build / site:check": "18 chapters; 283 diagrams",
+      "course browser checks": "18 pages, PC/H5 navigation/text/zoom; no boundary/overlap/overflow/script errors",
+      "Markdown local links": "no missing targets"
+    },
+    "sourceHashes": {
+      "e2e/src/fixtures/safe-resume-child.mjs": "a2e29c9ece39368e852f4764b21f78d7ad1689e249ac52a6827e6444020bf29d",
+      "e2e/src/safe-resume.test.ts": "22f017697afd8171338888b4bb08cfa6eb5da5c10f29e27d98ab8e76469ff009",
+      "e2e/src/session-persistence.test.ts": "96d120316683c3b0f5ec40259098bfe687e44d371e07fe807f0f8aa85b47a2f1",
+      "packages/core/src/agent.ts": "cf03b1ea98e2f76e476ea4623773e6e1e6eeb4271ef10c4c1873c401e275e020",
+      "packages/core/src/execution-recovery.ts": "441f6e838747b43689f76f870a4034a0b429a3e6af0e6762ae02f83d3b8f9f5e",
+      "packages/core/src/index.ts": "6df4191f0cb680bb5e7e2c66e6588a58379cf3a813fd8d2275be2de3d4e98930",
+      "packages/core/src/loop.ts": "fa62d3bc4dcc1945bbba7314e2bed9adc212dd5cdac5a959ef44d805d50433fb",
+      "packages/core/src/result-read-recovery.ts": "0e87441bbf6ec2600d675f7fff74a809ecaf2180d6bdd8e4b327cbf07131a348",
+      "packages/core/src/run-budget.ts": "e084760a49e7867bb26d278606ce5c21f2432c4ee5921e82519cf34de6c2d119",
+      "packages/core/src/session-snapshot.ts": "54356524f0d36b2e31d705ee32c3a3574135ff3251cf92d84b22df45e7722256",
+      "packages/core/src/session.ts": "b7b9f8991d9532afb565977a958d77a52c2f0d6953c1708383c44a3be83aa5c0",
+      "packages/tui/src/cli.ts": "7d84ecd6c648911263e8fde87c9ee39bb76fe215e8178e749f3321039e30d662",
+      "packages/tui/src/conversations.ts": "069f6e85db0849079e39c3771d3b05ab7a1a29e665f9aa81a4aa6740d9703659",
+      "packages/tui/src/runtime-tui.ts": "11e82f9cc8afaf783d825ce74ef677a7efc85c499194fb78468a24621da5aa67",
+      "packages/tui/src/session-store.ts": "bd7501546dc3e05c4b2bb842673b1fffaf1901a65ced8571052dd4416de81ddf",
+      "scripts/e04-s004-course-check.mjs": "8e4e5566c697f2a7bd6479071df36c5f023b9fd6781b4e950914a9c5d3a303e1",
+      ".authoring/site/chapters/epic04-story004/author.cjs": "8a037fa366e072079cee080f23f7102d95798e6857281da590543c8abdf67da2",
+      "site/chapters/epic04-story004/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
+      "site/chapters/epic04-story004/pages.json": "6908ed033b195ca3cd75143380f0c7aed3f5512d9a28d8e0f44f91e110a69a07",
+      "site/chapters/epic04-story004/18-finish.html": "93c23111bef5bd56b10c31291f4e67684eca076a2a3f2a340bad88b571c15992",
+      ".authoring/site/course.json": "86b86fee11f8c03b9ad1023d4504281e24e41f64541392a3d57388447e0b743a",
+      "site/course.json": "380696f12c4c8c5adc5897a1ed4a239d1275987972dd9315bfad482103b01f8b",
+      "packages/core/dist/loop.js": "699f5bbacfab784a40aad370e907c0acde66d51c23059aa6d1320f5417e20480",
+      "packages/core/dist/execution-recovery.js": "bb90268bcce9bfc49a3042deaa2a8641150456e556d7e086c4f8d6d62c38c88b",
+      "packages/core/dist/agent.js": "14661b5d2b3916874e6adfe3ce27f30236e87a579d10b834eb95ebdb3ad29f93",
+      "packages/core/dist/session.js": "47832f27d42399d21e1b2ee088232eee5dbcb2cc310d9cbbd5d44e78699a5c63",
+      "packages/tui/dist/session-store.js": "48596b89693176aabbdd62408cbff33f69d3e6fb5e2ce92d88e39aa014b7c616",
+      "packages/tui/dist/conversations.js": "b5a318cb36136ba3909057964d093b882ca165da0781a623cbc7444f55df8340"
+    },
+    "offline": {
+      "mode": "deterministic-http",
+      "startedAt": "2026-10-17T01:13:15.396Z",
+      "source": "238834422afb3835249cf90d3678abc233916168",
+      "requestedModel": "fixture",
+      "passed": true,
+      "sourceHashes": {
+        "packages/core/src/loop.ts": "fa62d3bc4dcc1945bbba7314e2bed9adc212dd5cdac5a959ef44d805d50433fb",
+        "packages/core/src/execution-recovery.ts": "441f6e838747b43689f76f870a4034a0b429a3e6af0e6762ae02f83d3b8f9f5e",
+        "packages/core/src/agent.ts": "cf03b1ea98e2f76e476ea4623773e6e1e6eeb4271ef10c4c1873c401e275e020",
+        "packages/core/src/session.ts": "b7b9f8991d9532afb565977a958d77a52c2f0d6953c1708383c44a3be83aa5c0",
+        "packages/tui/src/session-store.ts": "bd7501546dc3e05c4b2bb842673b1fffaf1901a65ced8571052dd4416de81ddf",
+        "packages/tui/src/conversations.ts": "069f6e85db0849079e39c3771d3b05ab7a1a29e665f9aa81a4aa6740d9703659"
+      },
+      "runtimeHashes": {
+        "packages/core/dist/loop.js": "699f5bbacfab784a40aad370e907c0acde66d51c23059aa6d1320f5417e20480",
+        "packages/core/dist/execution-recovery.js": "bb90268bcce9bfc49a3042deaa2a8641150456e556d7e086c4f8d6d62c38c88b",
+        "packages/core/dist/agent.js": "14661b5d2b3916874e6adfe3ce27f30236e87a579d10b834eb95ebdb3ad29f93",
+        "packages/core/dist/session.js": "47832f27d42399d21e1b2ee088232eee5dbcb2cc310d9cbbd5d44e78699a5c63",
+        "packages/tui/dist/session-store.js": "48596b89693176aabbdd62408cbff33f69d3e6fb5e2ce92d88e39aa014b7c616",
+        "packages/tui/dist/conversations.js": "b5a318cb36136ba3909057964d093b882ca165da0781a623cbc7444f55df8340"
+      },
+      "firstExit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "crashStates": [
+        {
+          "tool": "write_file",
+          "state": "settled"
+        },
+        {
+          "tool": "write_file",
+          "state": "not-started"
+        }
+      ],
+      "continueExit": {
+        "code": 0,
+        "signal": null
+      },
+      "reportedModels": [
+        "deterministic-fixture"
+      ],
+      "modelRequests": 3,
+      "effects": [
+        {
+          "path": "first.json"
+        },
+        {
+          "path": "second.json"
+        }
+      ],
+      "finishedAt": "2026-10-17T01:13:15.801Z",
+      "evidenceDirectory": "/Users/zhouhongxuan/program/works/zero2agent-e04-s002/tmp/e04-s004/offline-lqwO01"
+    },
+    "live": "No new live requests; previous live result retained at ae6f6fa. Final code diff only affects session-list presentation.",
+    "evidence": {
+      "file": "e04-s004-final-review-20261017.tar.gz",
+      "sha256": "77d108a3e44cb582d178c9b81932d3eba11c12a435bc74b21e1f96a81fcb3126",
+      "bytes": 4129767,
+      "payloadFiles": 125,
+      "codeCommit": "238834422afb3835249cf90d3678abc233916168",
+      "releaseTag": "E04-S004-safe-resume-review"
+    },
+    "result": "No unresolved blocking findings; user-authorized merge through PR #26."
+  }
+}

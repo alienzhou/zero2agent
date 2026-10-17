@@ -18,7 +18,7 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新课程：[E04-S003：摘要质量与事实保留](../../specs/E04-reliability-and-context/S003-summary-quality/README.md)。原史来源、按需回查、显式产物契约和有界读取纠错已经实现；完整固定集任务与关键项 56/56、普通事实 63/63，18 页课程与跟练完成。[PR #25](https://github.com/alienzhou/zero2agent/pull/25) 最终复核通过，按用户授权交付，网站未部署。S001/S002 已由 PR #23/#24 合入 main。Epic 4 保持四课，下一课为 S004 断点续跑与副作用安全恢复。
+最新课程：[E04-S004：中断后的安全续跑](../../specs/E04-reliability-and-context/S004-safe-resume/README.md)。逐工具保存执行事实，核对未知效果后明确开启新一轮，保留 S003 的完成检查。实现、测试、文档、跟练及 18 页课程完成最终复核，按用户授权通过 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付；固定版本 `E04-S004-safe-resume`，网站未部署。S001–S003 已分别由 PR #23/#24/#25 合入 main，Epic 4 的四课实现链条完整。
 
 ---
 
@@ -29,7 +29,7 @@
 | Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | ✅ Done | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S006 已合入 main | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
-| Epic 4：健壮性与上下文管理 | 处理失败恢复与上下文质量 | 理解有限恢复、按需读取、事实保留与安全续跑 | S001–S003 已完成；S003 交付见 PR #25；S004 规划中 | [进入 Epic 4](../../specs/E04-reliability-and-context/README.md) |
+| Epic 4：健壮性与上下文管理 | 处理失败恢复与上下文质量 | 理解有限恢复、按需读取、事实保留与安全续跑 | S001–S004 已完成；S004 由 PR #26 交付 | [进入 Epic 4](../../specs/E04-reliability-and-context/README.md) |
 | Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解 AGENTS、Skills、MCP、Hooks 等扩展能力 | 📝 Planned | Coming soon |
 
 ---

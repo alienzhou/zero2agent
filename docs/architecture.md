@@ -189,3 +189,11 @@ Core 另提供按回合显式 runWithContract：调用方声明 JSON 结构与�
 内置 read_tool_result 的参数错误会在本回合登记未解决引用；只有同引用的有效正文页或真实空正文才能清除。正常结束前至多进入一次读取纠错阶段，仍未解决则返回 EvidenceReadIncompleteError；当前权限、取消和原预算继续生效，旧命令不重放。状态与反馈不作为控制指令持久化。
 
 固定集完整真实验证为任务及关键项 56/56、普通事实 63/63；原 728 份失败与成绩保留。此前基线/候选 54/55 是历史同输入对照，不能将差异全部归因于纠错。确定性 HTTP/SDK 前后对照另证实提前完成被阻止，见 [S003 验收与限制](../specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md)。
+
+## 逐工具执行恢复（E04-S004）
+
+Core 的 ExecutionPersistence 是等待完成的控制接口。在本轮输入、完整模型响应、当前工具执行标记和真实回执处，宿主把原史、摘要、来源目录、结果引用与恢复控制一起发布为完整 generation。执行标记写入后却缺少回执的调用归为未知，恢复时只装载数据；配对占位明确标为宿主中断记录。
+
+Conversations 复用 SessionStore 并升级含恢复状态的会话格式为 version=2，旧读取器拒绝读取，新读取器继续支持旧 version=1。保存冲突、损坏或容量超限阻止新工作，最高版本不会自动回退。单份 32 MiB、单会话 512 MiB/2048 份；结果正文仍有独立生命周期。
+
+`/recovery` 查看进度，`/recovery continue 指令` 或 `--resume-task` 明确开启新预算；原契约、未解决读取及已用修复机会继续保留。旧工具不重放，新调用使用当前权限。文件核对与回退仍由 CheckpointStore 负责。详见 [S004 协议](../specs/E04-reliability-and-context/S004-safe-resume/details/01-technical-design.md)。
