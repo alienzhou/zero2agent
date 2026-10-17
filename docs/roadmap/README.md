@@ -22,7 +22,7 @@ E04 收束课：[E04-S004：中断后的安全续跑](../../specs/E04-reliabilit
 
 ---
 
-下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入并配套 10 页课程；[S002](../../specs/E05-extensibility/S002-skills/README.md)已完成按需加载与 11 页课程，由 PR #29 交付；[S003](../../specs/E05-extensibility/S003-mcp/README.md)由 PR #30 合入；[S004](../../specs/E05-extensibility/S004-hooks/README.md)实现、12 页课程与组合验收完成，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付。
+[E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入并配套 10 页课程；[S002](../../specs/E05-extensibility/S002-skills/README.md)已完成按需加载与 11 页课程，由 PR #29 交付；[S003](../../specs/E05-extensibility/S003-mcp/README.md)由 PR #30 合入；[S004](../../specs/E05-extensibility/S004-hooks/README.md)实现、12 页课程与组合验收完成，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付。
 
 ## 学习地图
 
