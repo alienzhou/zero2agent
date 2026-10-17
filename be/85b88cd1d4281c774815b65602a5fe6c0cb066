@@ -1,0 +1,35 @@
+packages/core/src/__tests__/project-instructions.test.ts
+  s_58249cd92a0ae1::t_77fe073e928fd1 414-421
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_fde4338d969961 231,247
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_e04b8e8924e974 474,482
+packages/core/src/project-instructions.ts
+  s_58249cd92a0ae1::t_bc885b0199780b 63,77-79,233,300-312
+researches/project-instructions/README.md
+  s_58249cd92a0ae1::t_92ff68058bb093 1-9
+researches/project-instructions/cases.mjs
+  s_58249cd92a0ae1::t_4444f510b9d04d 1-49
+researches/project-instructions/demo.mjs
+  s_58249cd92a0ae1::t_ea17ad933f7f59 1-379
+specs/E05-extensibility/S001-project-instructions/details/01-technical-design.md
+  s_58249cd92a0ae1::t_1b230cbfdf1696 33-36
+specs/E05-extensibility/S001-project-instructions/follow-along.md
+  s_58249cd92a0ae1::t_f07ddd4ec2e3c3 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "be85b88cd1d4281c774815b65602a5fe6c0cb066",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
