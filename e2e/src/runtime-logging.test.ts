@@ -217,6 +217,13 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
       const p = await fixture(),
         tty = startHumanTerminal(CLI_ENTRY, [], p.cwd, true, { env: p.env })
       cleanups.push(() => tty.close())
+      if (process.env.E2E_EVIDENCE_DIR) {
+        const directory = process.env.E2E_EVIDENCE_DIR
+        cleanups.push(async () => {
+          await fs.mkdir(directory, { recursive: true })
+          await fs.writeFile(path.join(directory, 'runtime-logging-help.ansi'), tty.output)
+        })
+      }
       tty.resize(96, 30)
       await tty.waitFor('等待输入')
       const start = tty.output.length
@@ -245,7 +252,16 @@ describe('E03-S005 logs over production CLI, SDK and real PTY', () => {
       await tty.waitFor('等待输入', conversation)
       const help = tty.output.length
       tty.write('/help\r')
-      await tty.waitFor('/logs', help)
+      await tty.waitFor('exit 退出。', help)
+      // At 42×18 the complete help occupies several pages. Locate the log
+      // instructions through the documented scroll control, not a fixed final page.
+      let helpPage = ''
+      for (let page = 0; page < 8 && !helpPage.includes('/logs 运行日志列表'); page++) {
+        const pageFrom = tty.output.length
+        tty.write('\x1b[5~')
+        helpPage = await tty.waitFor('向上', pageFrom)
+      }
+      expect(helpPage).toContain('/logs 运行日志列表')
       tty.write('second\r')
       await until(async () => p.requests.length === 2)
       expect(JSON.stringify(p.requests[1])).not.toContain('/log')
