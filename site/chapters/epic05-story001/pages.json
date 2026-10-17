@@ -1,0 +1,105 @@
+{
+  "title": "Zero2Agent · E05-S001 项目指令与 AGENTS.md",
+  "date": "2026-10-17",
+  "draft": true,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "project-instructions-concise-review",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "先读项目约定，再修改目标文件",
+      "number": 1,
+      "sources": [
+        "O01",
+        "S01"
+      ]
+    },
+    {
+      "file": "02-standard.html",
+      "title": "稳定约定写进文件，本次任务留在对话里",
+      "number": 2,
+      "sources": [
+        "O01",
+        "D01"
+      ]
+    },
+    {
+      "file": "03-scope.html",
+      "title": "api 的规则，不能用到旁边的 web",
+      "number": 3,
+      "sources": [
+        "O01",
+        "S01"
+      ]
+    },
+    {
+      "file": "04-priority.html",
+      "title": "用户明确要求优先，项目文本不能授予权限",
+      "number": 4,
+      "sources": [
+        "O01",
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-request.html",
+      "title": "规则进入当前请求，不反复追加进对话历史",
+      "number": 5,
+      "sources": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "file": "06-replan.html",
+      "title": "模型第一次写 api，可能还没见过 api 的约定",
+      "number": 6,
+      "sources": [
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "07-changed.html",
+      "title": "批准以后，还要再确认规则版本",
+      "number": 7,
+      "sources": [
+        "S02",
+        "T01",
+        "D01"
+      ]
+    },
+    {
+      "file": "08-controls.html",
+      "title": "看规则、刷新、关闭，都不需要问模型",
+      "number": 8,
+      "sources": [
+        "S03",
+        "T02"
+      ]
+    },
+    {
+      "file": "09-practice.html",
+      "title": "金额函数、回归测试，再加一份可校验报告",
+      "number": 9,
+      "sources": [
+        "T03",
+        "D01"
+      ]
+    },
+    {
+      "file": "10-verify.html",
+      "title": "检查真实请求和文件，确认规则先于修改",
+      "number": 10,
+      "sources": [
+        "T01",
+        "T02",
+        "T03"
+      ]
+    }
+  ]
+}

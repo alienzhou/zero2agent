@@ -1,4 +1,9 @@
 import {
+  ProjectInstructions,
+  type ProjectInstructionOptions,
+  type ProjectInstructionView,
+} from './project-instructions.js'
+import {
   RecoveryRequiredError,
   type ExecutionPersistence,
   type ExecutionRecovery,
@@ -29,6 +34,7 @@ import { RequestExecutor } from './request-executor.js'
 import type { SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  projectInstructions?: ProjectInstructionOptions | false
   executionPersistence?: ExecutionPersistence
   results?: ResultStoreOptions
   limits?: RunLimits
@@ -52,10 +58,15 @@ export class Agent {
   private session: Session
   private permissions: PermissionController
   private active?: AbortController
+  private instructions: ProjectInstructions
 
   constructor(options: AgentOptions = {}) {
     this.session = new Session(options.results)
     this.permissions = new PermissionController(options.permissions)
+    this.instructions = new ProjectInstructions(
+      options.cwd ?? process.cwd(),
+      options.projectInstructions
+    )
     this.options = {
       ...options,
       limits: validateRunLimits(options.limits),
@@ -105,6 +116,7 @@ export class Agent {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
+        instructionController: this.instructions,
         artifactContract,
         recovery,
         executionPersistence: this.options.executionPersistence,
@@ -140,10 +152,12 @@ export class Agent {
     )
     diagnostics.start('compact')
     try {
+      await this.instructions.refresh(this.permissions, budget.signal)
       const result = await this.session.compact(() =>
         createCompactionRuntime(
           {
             ...this.options,
+            instructionController: this.instructions,
             events: {
               ...this.options.events,
               onCompaction: event => {
@@ -214,6 +228,7 @@ export class Agent {
     if (this.active)
       throw new Error('Session is already running. Wait before running or resetting.')
     this.session.reset()
+    this.instructions.reset('empty')
   }
 
   /** Inspect a detached snapshot, never the writable session history. */
@@ -229,9 +244,30 @@ export class Agent {
   restore(snapshot: unknown): void {
     if (this.active) throw new Error('Wait for the running operation before restoring.')
     this.session.restore(snapshot)
+    this.instructions.reset('restored')
     // Approval state is process-local and never inherited from a saved conversation.
     this.permissions.cancelPending()
     this.permissions = new PermissionController(this.options.permissions)
+  }
+
+  /** Metadata/body view of the most recent load; no I/O, model calls or approvals. */
+  getProjectInstructions(): ProjectInstructionView {
+    return this.instructions.view()
+  }
+
+  async refreshProjectInstructions(): Promise<ProjectInstructionView> {
+    const controller = this.beginOperation()
+    try {
+      await this.instructions.refresh(this.permissions, controller.signal)
+      return this.instructions.view()
+    } finally {
+      this.active = undefined
+    }
+  }
+
+  setProjectInstructionsEnabled(enabled: boolean): void {
+    if (this.active) throw new Error('Cannot change project instructions while running.')
+    this.instructions.setEnabled(enabled)
   }
 
   /**

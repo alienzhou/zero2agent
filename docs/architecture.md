@@ -197,3 +197,11 @@ Core 的 ExecutionPersistence 是等待完成的控制接口。在本轮输入�
 Conversations 复用 SessionStore 并升级含恢复状态的会话格式为 version=2，旧读取器拒绝读取，新读取器继续支持旧 version=1。保存冲突、损坏或容量超限阻止新工作，最高版本不会自动回退。单份 32 MiB、单会话 512 MiB/2048 份；结果正文仍有独立生命周期。
 
 `/recovery` 查看进度，`/recovery continue 指令` 或 `--resume-task` 明确开启新预算；原契约、未解决读取及已用修复机会继续保留。旧工具不重放，新调用使用当前权限。文件核对与回退仍由 CheckpointStore 负责。详见 [S004 协议](../specs/E04-reliability-and-context/S004-safe-resume/details/01-technical-design.md)。
+
+## 项目指令覆盖层（E05-S001）
+
+Agent 持有易失的 ProjectInstructions。沿显式根、cwd 和可信工具目标的祖先链读取 AGENTS.md，PermissionController 在正文读取前授权。overlay 把带来源、目录和哈希的 Markdown 加入用户级请求；固定优先说明进入 system，整个请求仍由 ContextBudget 计量。
+
+runTurnLoop 对模型整批调用先 prepareBatch。若发现尚未见过或已经变更的适用规则，批次全部配对为未执行，并有限重规划。卸载不相关目录不额外重规划。每个 execute 前再次解析目标路径，规则在审批或批中发生变化则停止剩余调用，保留已完成效果。
+
+规则正文和读取批准不进入会话快照；恢复/压缩使用当前文件与当前权限。Conversations 向 CLI/plain/TUI 提供统一的查看、刷新、开关，元信息明确区分已读取与已发送。协议和容量见 [S001 技术设计](../specs/E05-extensibility/S001-project-instructions/details/01-technical-design.md)。

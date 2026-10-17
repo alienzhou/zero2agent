@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "story": "E05-S001",
+  "releaseTag": "E05-S001-project-instructions-evidence",
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-3ddce92dfe6f1b48304d",
+  "releaseStatus": "draft-review-evidence",
+  "asset": "e05-s001-project-instructions-evidence.tar.gz",
+  "bytes": 8456107,
+  "sha256": "940edd40a430107681881f6b8efab3f96c7d3820802638277e79f0d8ded966b3",
+  "manifestSha256": "a64f9a515d8a6c56e309822c08fd37d4484449503ae0c9d0486bd7e352a5510d",
+  "fileCount": 434,
+  "source": "d2d1b99bfc6d6701c09f6581e809ccedf4d4d6f0",
+  "downloadVerified": true,
+  "privateDataCheck": "Known local credential values absent; evidence proxy records bodies only, never authentication headers. Fixtures contain synthetic project files.",
+  "notes": [
+    "Evidence is outside Git history; obtain the draft asset with repository access.",
+    "Failed runs are retained alongside passing runs; see verification.json.",
+    "Manifest includes the production/test/course sources used for review and historical live run sources."
+  ],
+  "courseRevision": {
+    "asset": "e05-s001-course-concise-evidence.tar.gz",
+    "bytes": 5294054,
+    "sha256": "c308a85f81fc445fa07c6ef1750cf9ceab42fbe912a2623293e298017de8bfbd",
+    "manifestSha256": "2366a3eae1c57be85a65462b137ed59d1637a309ca4b3f0cc101db0b9deeb252",
+    "fileCount": 78,
+    "source": "221f07d656dfd055e59180b4313552619f8a5da4",
+    "pages": 10,
+    "rawEvidence": "tmp/e05-s001/course-JggNEW",
+    "downloadVerified": true,
+    "releaseTag": "E05-S001-project-instructions-evidence",
+    "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-3ddce92dfe6f1b48304d",
+    "note": "Current 10-page course, independently verified; original 18-page evidence remains unchanged."
+  }
+}

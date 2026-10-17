@@ -595,6 +595,7 @@ function appendNotices(parts: string[], notices: string[]): void {
 // ── 工具定义 ─────────────────────────────────────────
 
 export const terminalTool: Tool = {
+  instructionDirectories: ['workdir'],
   permission: { effect: 'execute', paths: [] },
   name: 'terminal',
   description:

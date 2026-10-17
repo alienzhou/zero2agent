@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "story": "E05-S001",
+  "date": "2026-10-17",
+  "status": "engineering-passed-human-review-pending",
+  "platform": {
+    "system": "Darwin",
+    "release": "23.6.0",
+    "architecture": "arm64",
+    "node": "v22.15.1",
+    "pnpm": "9.15.9"
+  },
+  "standard": {
+    "url": "https://agents.md/",
+    "source": "https://github.com/agentsmd/agents.md/tree/d001185d792eb6402a58e4cbef1c228b309ec25d",
+    "checkedAt": "2026-10-17"
+  },
+  "engineering": {
+    "source": "5e21bf1",
+    "productionSource": "def0cd467faf3e0844e3a01e1be2541af92e18c1",
+    "build": "passed",
+    "e2eTypes": "passed",
+    "changedTypescriptPrettier": "passed",
+    "lint": {
+      "errors": 0,
+      "warnings": 46,
+      "baselineWarnings": 44
+    },
+    "tests": {
+      "corePassed": 577,
+      "e2ePassed": 211,
+      "cdpPassed": 1,
+      "totalPassed": 789,
+      "liveSkipped": 58
+    },
+    "focused": {
+      "coreProjectInstructions": 37,
+      "cliAndPty": 10
+    },
+    "logs": [
+      "tmp/e05-s001-final-build.log",
+      "tmp/e05-s001-final-regression.log",
+      "tmp/e05-s001-final-types.log",
+      "tmp/e05-s001-final-format.log",
+      "tmp/e05-s001-final-lint.log"
+    ],
+    "hostEvidence": {
+      "command": "E05_INSTRUCTION_EVIDENCE_DIR=\"$PWD/tmp/e05-s001/host-final\" pnpm --filter @zero2agent/e2e exec vitest run src/project-instructions.test.ts",
+      "passed": 10,
+      "directory": "tmp/e05-s001/host-final",
+      "log": "tmp/e05-s001-host-evidence.log",
+      "note": "Opt-in evidence capture added after the full suite; focused tests and E2E types rerun. Production code unchanged."
+    }
+  },
+  "fixedAcceptance": {
+    "limits": {
+      "maxRequests": 8,
+      "maxToolCalls": 12,
+      "maxDurationMs": 120000,
+      "maxRetries": 0,
+      "requestTimeoutMs": 120000
+    },
+    "requestedModel": "claude-sonnet-4-20250514",
+    "reportedModels": [
+      "MiniMax-M3"
+    ],
+    "live": {
+      "path": "tmp/e05-s001/live-Lv1vUL",
+      "source": "def0cd467faf3e0844e3a01e1be2541af92e18c1",
+      "startedAt": "2026-10-17T02:36:47.067Z",
+      "finishedAt": "2026-10-17T02:37:04.000Z",
+      "passed": true,
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "artifact": {
+            "package": "api",
+            "testsPassed": true,
+            "summary": "Fixed totalCents in packages/api/amount.ts to return integer cents (Math.round(price * 100) * quantity) instead of currency units. Added regression tests for decimal price times integer quantity (1.99*3=597, 0.1*7=70, 2.5*4=1000) and zero quantity. All 3 tests pass via node --experimental-strip-types --test."
+          },
+          "requests": 7,
+          "effects": [
+            {
+              "tool": "replace_in_file",
+              "path": "packages/api/amount.ts"
+            },
+            {
+              "tool": "replace_in_file",
+              "path": "packages/api/amount.test.ts"
+            },
+            {
+              "tool": "write_file",
+              "path": "artifacts/change-report.json"
+            }
+          ],
+          "deniedCalls": 0,
+          "reportedModels": [
+            "MiniMax-M3"
+          ]
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 2,
+          "effects": [],
+          "deniedCalls": 1,
+          "reportedModels": [
+            "MiniMax-M3"
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "packages/core/src/project-instructions.ts": "b7f5953ac8d3c1a7c658e5d9ba64c5c13ed5f1ce1112d770c32f562bffd16423",
+        "packages/core/src/loop.ts": "0a62e2f925b6654993d4abc513ccc1a0ba0cccae94fbbf20c3038c91e5fb7066",
+        "packages/core/src/agent.ts": "9db78dea70c6a28f27981e50c74d07ccc77c4e5e48b8db6665ad8184b9f8d64d",
+        "packages/core/src/tools/find-files.ts": "5db20749f3b569dc53bb6aa1a91eb4d62b074c7d3cffcc44b651840f448ef9a4",
+        "researches/project-instructions/cases.mjs": "8502847c6df3d3bb38005acd0e032be3e52cbcbb294f8c0211d483f69bd19d9f",
+        "researches/project-instructions/demo.mjs": "ab98bd7ae2aeeab9e4815935c7cd8cc25baa05764afee072cc1d72fcd4d5d1e0"
+      },
+      "runtimeHashes": {
+        "packages/core/dist/project-instructions.js": "cc8518a18ddf12150c238f412fc8a7899875ec04543155155ba012f4cfbdb443",
+        "packages/core/dist/loop.js": "a92a969cd5085b4d8b574318de3b752ff746abd02316b6a5751f645791ae593b",
+        "packages/core/dist/agent.js": "e8e9c191648b2da93f108c54c8cfa34ecf833b13a74c18599564424135d05347"
+      }
+    },
+    "offline": {
+      "path": "tmp/e05-s001/offline-zR7BiE",
+      "passed": true,
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "artifact": {
+            "package": "api",
+            "testsPassed": true,
+            "summary": "Converted prices to cents and added decimal/zero regressions."
+          },
+          "requests": 6,
+          "effects": [
+            {
+              "tool": "write_file",
+              "path": "packages/api/amount.ts"
+            },
+            {
+              "tool": "write_file",
+              "path": "packages/api/amount.test.ts"
+            },
+            {
+              "tool": "write_file",
+              "path": "artifacts/change-report.json"
+            }
+          ],
+          "deniedCalls": 0,
+          "reportedModels": [
+            "deterministic-fixture"
+          ]
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 2,
+          "effects": [],
+          "deniedCalls": 1,
+          "reportedModels": [
+            "deterministic-fixture"
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "packages/core/src/project-instructions.ts": "b7f5953ac8d3c1a7c658e5d9ba64c5c13ed5f1ce1112d770c32f562bffd16423",
+        "packages/core/src/loop.ts": "0a62e2f925b6654993d4abc513ccc1a0ba0cccae94fbbf20c3038c91e5fb7066",
+        "packages/core/src/agent.ts": "9db78dea70c6a28f27981e50c74d07ccc77c4e5e48b8db6665ad8184b9f8d64d",
+        "packages/core/src/tools/find-files.ts": "5db20749f3b569dc53bb6aa1a91eb4d62b074c7d3cffcc44b651840f448ef9a4",
+        "researches/project-instructions/cases.mjs": "8502847c6df3d3bb38005acd0e032be3e52cbcbb294f8c0211d483f69bd19d9f",
+        "researches/project-instructions/demo.mjs": "8925c9883a521b4497c82f4a6a751978f858af990d8177079641a2b3b6c52fc7"
+      },
+      "runtimeHashes": {
+        "packages/core/dist/project-instructions.js": "cc8518a18ddf12150c238f412fc8a7899875ec04543155155ba012f4cfbdb443",
+        "packages/core/dist/loop.js": "a92a969cd5085b4d8b574318de3b752ff746abd02316b6a5751f645791ae593b",
+        "packages/core/dist/agent.js": "e8e9c191648b2da93f108c54c8cfa34ecf833b13a74c18599564424135d05347",
+        "packages/core/dist/tools/find-files.js": "eba0c0a1b5c98b566c3ce85b341a350ed5060097e03d1ac662a1b7fd35a7bc21"
+      }
+    },
+    "preservedFailures": [
+      {
+        "path": "tmp/e05-s001/live-VAXKr4",
+        "cause": "Unrelated scope removal incorrectly consumed replan budget",
+        "fix": "8ae1e934d61c0fef26dcf6c87f658014835af333"
+      },
+      {
+        "path": "tmp/e05-s001/live-zz5I7N",
+        "cause": "Prefixed find_files glob inherited host cwd instead of Agent cwd",
+        "fix": "def0cd467faf3e0844e3a01e1be2541af92e18c1"
+      }
+    ]
+  },
+  "course": {
+    "pages": 10,
+    "source": "E05-S001-project-instructions-concise-review",
+    "siteChapters": 19,
+    "siteDiagrams": 293,
+    "browserReport": ".authoring/site/chapters/epic05-story001/verification/checks.json",
+    "rawEvidence": "tmp/e05-s001/course-JggNEW",
+    "passed": true,
+    "humanReview": "pending",
+    "published": false,
+    "notes": "Reader requested less repetition. Runtime unchanged; site build/check and browser interaction rerun. Prior 18-page evidence preserved separately."
+  },
+  "evidenceArchive": "evidence-archive.json",
+  "limitations": [
+    "Two fixed live cases do not establish a general success rate.",
+    "Default 58 live tests were skipped; only the two recorded fixed cases ran against the service.",
+    "Configured model alias and service-reported model are recorded separately.",
+    "This is application-level authorization, not an OS shell sandbox.",
+    "An already blocked kernel filesystem call cannot be forcibly interrupted by the refresh deadline.",
+    "Initial uncommitted demo prototype source was not retained verbatim; its failure/hash remains. Later live revisions have committed source copies."
+  ],
+  "previousCourse": {
+    "pages": 18,
+    "source": "f6c5a91",
+    "siteChapters": 19,
+    "siteDiagrams": 301,
+    "browserReport": "source/d2d1b99bfc6d6701c09f6581e809ccedf4d4d6f0/.authoring/site/chapters/epic05-story001/verification/checks.json",
+    "rawEvidence": "tmp/e05-s001/course-Ex89tI",
+    "passed": true,
+    "humanReview": "pending",
+    "published": false
+  }
+}

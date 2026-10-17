@@ -122,6 +122,14 @@ node packages/tui/dist/cli.js
 
 ---
 
+## 项目规则与 AGENTS.md
+
+构建后可在当前目录执行 `node <仓库路径>/packages/tui/dist/cli.js --instructions` 查看规则，无需模型密钥。默认只在启动 cwd 以内发现；从子目录启动时可通过 `--instructions-root <项目根>` 明确读取上层规则。它不改变文件工具的写入边界。
+
+plain/TUI 的 `/instructions` 查看最近读取版本与上次模型请求实际使用的版本；`/instructions refresh` 重读，`/instructions off` 关闭，`/instructions on` 开启。单次关闭用 `--no-instructions` 或 `ZERO2AGENT_NO_INSTRUCTIONS=1`。自动读取仍服从 read_file 当前权限；规则缺失和读取被拒绝会分别显示。
+
+遵循普通 Markdown 的 [AGENTS.md 开放格式](https://agents.md/)，无必填字段。嵌套约定仅作用于相应目录，明确用户要求优先；项目文件无法批准工具。完整容量、恢复语义及无需密钥的双包跟练见 [E05-S001](../specs/E05-extensibility/S001-project-instructions/README.md)。
+
 ## 运行日志与故障追查
 
 S005 默认把请求、工具、权限与保存元信息写入本地日志。构建后用 `/logs` 选择运行，Enter 进入独立查看器，方向键、Page、Home/End 滚动，Esc 返回并保留草稿。

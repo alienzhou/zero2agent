@@ -1,0 +1,79 @@
+{
+  "capturedAt": "2026-10-17T03:24:52.694Z",
+  "browser": "155.0.8059.82",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "issues": []
+    },
+    {
+      "file": "02-standard.html",
+      "issues": []
+    },
+    {
+      "file": "03-scope.html",
+      "issues": []
+    },
+    {
+      "file": "04-priority.html",
+      "issues": []
+    },
+    {
+      "file": "05-request.html",
+      "issues": []
+    },
+    {
+      "file": "06-replan.html",
+      "issues": []
+    },
+    {
+      "file": "07-changed.html",
+      "issues": []
+    },
+    {
+      "file": "08-controls.html",
+      "issues": []
+    },
+    {
+      "file": "09-practice.html",
+      "issues": []
+    },
+    {
+      "file": "10-verify.html",
+      "issues": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "count": 10,
+      "textExpanded": true,
+      "zoom": true,
+      "navigation": true,
+      "selected": "07-changed",
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "count": 10,
+      "textExpanded": true,
+      "zoom": true,
+      "navigation": true,
+      "selected": "07-changed",
+      "horizontalOverflow": false
+    }
+  ],
+  "errors": [],
+  "sourceHashes": {
+    ".authoring/site/chapters/epic05-story001/author.cjs": "94ffa61a0bbc4584b8323df2dc03cb03afd6d7d62adfb7906f81fb334fd67617",
+    "site/chapters/epic05-story001/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
+    "site/chapters/epic05-story001/pages.json": "511954968dd2be623f009a878921023b85a9b97229015850c774cf557a06f4f0"
+  },
+  "evidenceDirectory": "tmp/e05-s001/course-JggNEW"
+}
