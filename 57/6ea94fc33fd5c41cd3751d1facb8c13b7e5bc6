@@ -1,0 +1,25 @@
+specs/README.md
+  s_58249cd92a0ae1::t_af644ba2accc08 92-97
+README.md
+  s_58249cd92a0ae1::t_af644ba2accc08 116
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_af644ba2accc08 25-26,35
+README.en.md
+  s_58249cd92a0ae1::t_af644ba2accc08 112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "576ea94fc33fd5c41cd3751d1facb8c13b7e5bc6",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
