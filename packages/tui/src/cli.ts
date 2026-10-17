@@ -103,6 +103,8 @@ function resetStreamState() {
 
 const events: LoopEventHandlers = {
   onEvent: event => {
+    if (event.type === 'hook-check')
+      process.stdout.write(`\nHook ${event.stage}/${event.hookId}: ${event.status}\n`)
     if (event.type === 'request-retry' || event.type === 'request-abandoned')
       events.onRequestNotice?.(event)
     if (
@@ -225,6 +227,10 @@ async function main() {
   let noSkills = process.env.ZERO2AGENT_NO_SKILLS === '1'
   let mcpConfigFile: string | undefined
   let inspectMcp = false
+  let inspectHooks = false
+  let hookConfigFile: string | undefined
+  const hookTrust: string[] = []
+  let recheckHooks: string | undefined
   const enabledMcpServers: string[] = []
   const skillRoots: string[] = []
   const selectedSkills: string[] = []
@@ -274,6 +280,15 @@ async function main() {
         if (!checkpointId || checkpointId.startsWith('--'))
           throw new Error(`${flag} requires a UUID`)
       }
+    } else if (flag === '--hooks') inspectHooks = true
+    else if (flag === '--hooks-config' || flag === '--hook-trust' || flag === '--recheck-hooks') {
+      const value = args.shift()
+      if (!value || value.startsWith('--')) throw new Error(`${flag} requires a value`)
+      if (flag === '--hooks-config') {
+        if (hookConfigFile) throw new Error('Use one --hooks-config')
+        hookConfigFile = value
+      } else if (flag === '--hook-trust') hookTrust.push(value)
+      else recheckHooks = value
     } else if (flag === '--mcp') inspectMcp = true
     else if (flag === '--mcp-config' || flag === '--mcp-enable') {
       const value = args.shift()
@@ -326,6 +341,48 @@ async function main() {
     )
   if (confirmCheckpoint && !['undo', 'recover'].includes(checkpointAction ?? ''))
     throw new Error('--confirm requires --undo or --recover')
+  if (hookTrust.length && !hookConfigFile) throw new Error('--hook-trust requires --hooks-config')
+  if (
+    recheckHooks &&
+    (!(resume || latest) ||
+      args.length ||
+      resumeTask ||
+      inspectHooks ||
+      inspectMcp ||
+      inspectSkills ||
+      inspectInstructions ||
+      list ||
+      listLogs ||
+      readLog ||
+      checkpointAction)
+  )
+    throw new Error('--recheck-hooks requires --resume or --continue and no other action')
+  const hooks = hookConfigFile ? { file: hookConfigFile, trust: hookTrust } : false
+  if (inspectHooks) {
+    if (
+      args.length ||
+      resume ||
+      latest ||
+      resumeTask ||
+      inspectMcp ||
+      inspectSkills ||
+      inspectInstructions ||
+      list ||
+      listLogs ||
+      readLog ||
+      checkpointAction
+    )
+      throw new Error('--hooks cannot combine with another action')
+    const inspector = new Agent({
+      cwd: process.cwd(),
+      hooks: hooks || { file: '.zero2agent/hooks.json' },
+      skills: false,
+      projectInstructions: false,
+    })
+    process.stdout.write(safeText(JSON.stringify(await inspector.inspectHooks(), null, 2)) + '\n')
+    await inspector.close()
+    return
+  }
   const mcp = await readMcpConfig(mcpConfigFile, enabledMcpServers)
   if (inspectMcp) {
     if (
@@ -490,6 +547,7 @@ async function main() {
   }
   const tui =
     !messageArg &&
+    !recheckHooks &&
     !plain &&
     process.stdin.isTTY &&
     process.stdout.isTTY &&
@@ -497,7 +555,7 @@ async function main() {
       ? new RuntimeTui()
       : undefined
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.ANTHROPIC_API_KEY && !recheckHooks) {
     console.error('错误: 请设置 ANTHROPIC_API_KEY 环境变量')
     process.exit(1)
   }
@@ -508,6 +566,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    hooks,
     mcp,
     skills,
     projectInstructions,
@@ -538,6 +597,16 @@ async function main() {
   if (resume) resumed = await conversations.resume(resume)
   else if (latest) resumed = await conversations.resumeLatest()
 
+  if (recheckHooks) {
+    try {
+      await conversations.recheckHooks(recheckHooks)
+      process.stdout.write(safeText(await conversations.recoveryReport()) + '\n')
+    } finally {
+      await agent.close()
+      await conversations.closeLogs(Number(process.exitCode ?? 0))
+    }
+    return
+  }
   if (tui) {
     try {
       await tui.run(agent, conversations, resumed)
@@ -661,6 +730,9 @@ async function main() {
           console.log('使用 /resume UUID 恢复所选会话。')
         } else if (trimmed === '/session') {
           console.log(safeText(conversations.status))
+        } else if (trimmed.startsWith('/recovery check ')) {
+          await conversations.recheckHooks(trimmed.slice('/recovery check '.length))
+          process.stdout.write(safeText(await conversations.recoveryReport()) + '\n')
         } else if (trimmed === '/recovery') {
           process.stdout.write(safeText(await conversations.recoveryReport()) + '\n')
         } else if (trimmed.startsWith('/recovery continue ')) {

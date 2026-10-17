@@ -128,6 +128,12 @@ export function reduceRuntime(previous: RuntimeState, event: RuntimeEvent): Runt
         state.entries.push({ kind: 'text', text: bounded(event.text), requestId: event.requestId })
       break
     }
+    case 'hook-check':
+      state.entries.push({
+        kind: 'notice',
+        text: `Hook ${event.stage}/${event.hookId}: ${event.status}`,
+      })
+      break
     case 'notice':
       state.entries.push({ kind: 'notice', text: bounded(event.text) })
       break

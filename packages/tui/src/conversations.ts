@@ -273,9 +273,27 @@ export class Conversations {
         return `${JSON.stringify(t.toolName)} ${JSON.stringify(t.toolCallId)}: ${names[t.state]}${matches.map(r => `；Checkpoint ${r.id} (${r.state})，/diff ${r.id}`).join('')}`
       }),
       `未解决读取 ${recovery.read.pending.length}${recovery.read.overflow ? '（已超限）' : ''}；产物契约 ${recovery.artifactContract ? '保留' : '无'}`,
+      ...(recovery.hooks?.checks.map(
+        c =>
+          `Hook ${c.stage}/${c.hookId} ${c.checkId}: ${c.state}${c.cause ? ` (${c.cause})` : ''}${c.resolves ? `；新检查关联 ${c.resolves}` : ''}`
+      ) ?? []),
+      ...(recovery.hooks
+        ? [
+            '先核对 Hook 的未知效果；/recovery check <核对说明> 明确授权新检查，旧检查不会自动重放。',
+          ]
+        : []),
       '先核对文件和外部效果。/recovery continue <指令> 明确开始新一轮预算，沿用未完成检查；旧工具不重放。',
       '保留中断状态可直接退出；/new 可开始另一条独立会话。文件回退沿用 /recover UUID 或 /undo UUID。',
     ].join('\n')
+  }
+  async recheckHooks(note: string): Promise<void> {
+    this.assertIdle()
+    const work = this.perform('turn', async () => {
+      await this.agent.recheckHooks(note)
+      return 'Hook checks reviewed.'
+    })
+    this.operation = work
+    await work
   }
   continueInterrupted(message: string): Promise<string> {
     if (!message.trim())

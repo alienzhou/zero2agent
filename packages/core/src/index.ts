@@ -129,3 +129,14 @@ export {
 } from './mcp/client.js'
 export type { McpOptions, McpServerConfig, McpServerView } from './mcp/client.js'
 export type { ExternalSource } from './external-source.js'
+
+export { Hooks, HookError, validateHookConfig, validateHookSnapshot } from './hooks.js'
+export type {
+  HookOptions,
+  HookConfig,
+  HookDefinition,
+  HookView,
+  HookSnapshot,
+  HookCheck,
+  HookStage,
+} from './hooks.js'

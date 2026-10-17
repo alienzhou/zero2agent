@@ -1,3 +1,4 @@
+import { Hooks, type HookOptions, type HookView } from './hooks.js'
 import { McpController, type McpOptions, type McpServerView } from './mcp/client.js'
 import {
   ProjectInstructions,
@@ -36,6 +37,7 @@ import { RequestExecutor } from './request-executor.js'
 import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  hooks?: HookOptions | false
   mcp?: McpOptions | false
   skills?: SkillsOptions | false
   projectInstructions?: ProjectInstructionOptions | false
@@ -65,8 +67,10 @@ export class Agent {
   private instructions: ProjectInstructions
   private skills: Skills
   private mcp: McpController
+  private hooks: Hooks
 
   constructor(options: AgentOptions = {}) {
+    this.hooks = new Hooks(resolve(options.cwd ?? process.cwd()), options.hooks)
     this.mcp = new McpController(options.cwd ?? process.cwd(), options.mcp)
     this.session = new Session(options.results)
     this.permissions = new PermissionController(options.permissions)
@@ -124,6 +128,7 @@ export class Agent {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
+        hookController: this.hooks,
         mcpController: this.mcp,
         skillController: this.skills,
         instructionController: this.instructions,
@@ -325,6 +330,42 @@ export class Agent {
     if (this.active) throw new Error('Cannot change skills while running.')
     this.skills.setEnabled(enabled)
     this.session.skills = this.skills.snapshotSelection()
+  }
+
+  async inspectHooks(): Promise<HookView[]> {
+    const controller = this.beginOperation()
+    try {
+      controller.signal.throwIfAborted()
+      return await this.hooks.inspect()
+    } finally {
+      this.active = undefined
+    }
+  }
+  /** Explicit user review authorizes new checks; restoration/continuation never replays them. */
+  async recheckHooks(note: string): Promise<void> {
+    if (!note.trim() || note.length > 4096)
+      throw new Error('Recheck requires an explicit review note of 1..4096 characters')
+    const recovery = this.session.recovery
+    if (!recovery?.hooks) throw new Error('No Hook recovery is pending')
+    const controller = this.beginOperation()
+    const budget = new RunBudget(this.options.limits, controller.signal)
+    try {
+      await this.hooks.begin(recovery.hooks)
+      const persist = async (
+        boundary: import('./execution-recovery.js').ExecutionBoundary
+      ): Promise<void> => {
+        recovery.hooks = this.hooks.snapshot()!
+        await this.options.executionPersistence?.(this.session.snapshot(), boundary)
+      }
+      this.session.recordControlNote(
+        `User explicitly reviewed Hook effects and requested new checks: ${note}`
+      )
+      await this.hooks.recheck(persist, note, budget.signal)
+    } finally {
+      recovery.hooks = this.hooks.snapshot() ?? recovery.hooks
+      budget.close()
+      this.active = undefined
+    }
   }
 
   async inspectMcp(): Promise<McpServerView[]> {

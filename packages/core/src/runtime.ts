@@ -22,6 +22,13 @@ export type RuntimeEvent = { turnId: string; seq: number } & (
       discardedChars: number
       errorKind: string
     }
+  | {
+      type: 'hook-check'
+      hookId: string
+      stage: import('./hooks.js').HookStage
+      checkId: string
+      status: 'started' | 'passed' | 'blocked' | 'unknown'
+    }
   | { type: 'notice'; text: string }
   | { type: 'evidence-read'; status: 'invalid-input' | 'correcting' | 'resolved' | 'blocked' }
   | {

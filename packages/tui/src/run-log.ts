@@ -58,6 +58,9 @@ const LABELS = [
   'operation',
   'terminalOutcome',
   'signal',
+  'hookId',
+  'hookStage',
+  'checkId',
 ] as const
 const EVENTS: Record<string, string[]> = {
   host: [
@@ -81,6 +84,7 @@ const EVENTS: Record<string, string[]> = {
   compaction: ['pruned', 'background', 'waiting', 'foreground', 'completed', 'failed'],
   notice: ['shown'],
   'artifact-check': ['started', 'passed', 'failed', 'repair', 'blocked'],
+  'hook-check': ['started', 'passed', 'blocked', 'unknown'],
   'evidence-read': ['invalid-input', 'correcting', 'resolved', 'blocked'],
 }
 export interface LogRecord extends Omit<Partial<DiagnosticEvent>, 'seq' | 'kind'> {

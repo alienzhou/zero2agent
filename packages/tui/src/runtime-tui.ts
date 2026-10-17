@@ -675,6 +675,9 @@ export class RuntimeTui {
         this.notice(message)
       } else if (input === '/session') {
         this.notice(this.conversations!.status)
+      } else if (input.startsWith('/recovery check ')) {
+        await this.conversations!.recheckHooks(input.slice('/recovery check '.length))
+        this.notice(await this.conversations!.recoveryReport())
       } else if (input === '/recovery') {
         this.notice(await this.conversations!.recoveryReport())
         this.state.phase = 'idle'

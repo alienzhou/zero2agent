@@ -39,6 +39,7 @@ export interface DiagnosticEvent {
     | 'phase'
     | 'compaction'
     | 'notice'
+    | 'hook-check'
     | 'artifact-check'
     | 'evidence-read'
   event: string
@@ -89,6 +90,9 @@ export interface DiagnosticEvent {
   after?: number
   fileCount?: number
   issueCount?: number
+  hookId?: string
+  hookStage?: string
+  checkId?: string
   artifactFailure?: string
 }
 export type DiagnosticObserver = (event: DiagnosticEvent) => void
@@ -256,6 +260,13 @@ export class DiagnosticEmitter {
         inputFields: event.input ? Object.keys(event.input).length : undefined,
         outputChars: event.output?.length,
         durationMs: diagnosticNumber(event.durationMs),
+      })
+    else if (event.type === 'hook-check')
+      this.emit('hook-check', event.status, {
+        hookId: diagnosticLabel(event.hookId),
+        hookStage: diagnosticLabel(event.stage),
+        checkId: diagnosticLabel(event.checkId),
+        requestId: this.modelRequestId,
       })
     else if (event.type === 'artifact-check')
       this.emit('artifact-check', event.status, {
