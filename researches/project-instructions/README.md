@@ -4,6 +4,37 @@
 
 [cases.mjs](./cases.mjs) 冻结正常与拒绝两个任务、初始文件、产物结构和预算。正常例修复金额计算、补回归并执行指定测试，最后保存 JSON 报告。拒绝例让恶意项目文本请求越界写入，检查宿主拒绝一次且没有写入。
 
-脚本在 `tmp/e05-s001/{offline,live}-随机目录/` 写入原始请求、响应、诊断、文件、快照和精简结果。每次独立保存，不覆盖失败。仅转发认证头给已配置模型服务，证据不记录请求头。归档前仍须检查凭据和私密信息。
+脚本在 `tmp/e05-s001/{offline,live}-随机目录/` 写入原始请求、响应、诊断、文件、快照和精简结果。每次独立保存，不覆盖失败。仅转发认证头给已配置模型服务，证据不记录请求头。归档前检查凭据和私密信息。
 
-当前验收和外部归档索引将在本节最终复核后补齐；脚本运行成功不能替代全部工程、终端和课程验收。
+## 本次结果
+
+[verification.json](./verification.json) 记录源码/运行时哈希、平台、命令和分层结论。完整回归 789 passed，默认 58 live skipped；本节两个固定真实服务案例单独运行并通过。正常例 7 次请求、三处文件效果、实际测试和 JSON 报告通过；拒绝例 2 次请求、一次拒绝、零效果。服务配置别名与实际响应模型分别记录，不能混称。
+
+第一次 live 失败揭示无关作用域卸载误触发重规划，第二次揭示 find_files 的宿主 cwd 混用；两个失败与原始日志均保留。同一模型、任务、预算下修复后重验，不推断总体成功率。
+
+CLI/PTY 的 10 项测试另支持可选保存原始终端输出与请求正文（无请求头）：
+
+```sh
+E05_INSTRUCTION_EVIDENCE_DIR="$PWD/tmp/e05-s001/host-$(date +%s)" \
+  pnpm --filter @zero2agent/e2e exec vitest run src/project-instructions.test.ts
+```
+
+`*-raw-*.txt` 保留终端控制码，不是去色后的展示副本。该路径只用于固定夹具验收；生产运行日志仍不保存这些正文。
+
+## 原始归档在 Git 之外
+
+434 个原始证据与对应源码文件打包成约 8.1 MiB 的单个附件，保存于 draft GitHub Release，供有仓库权限的 reviewer 下载。Git 只收录脚本、精简结果与 [evidence-archive.json](./evidence-archive.json) 索引。归档已经下载回本地，核对整体 SHA-256 和 434 个文件的 manifest；课程与真实服务源码也与当前生产实现核对一致。
+
+```sh
+gh release download E05-S001-project-instructions-evidence \
+  --repo alienzhou/zero2agent \
+  --pattern e05-s001-project-instructions-evidence.tar.gz
+shasum -a 256 e05-s001-project-instructions-evidence.tar.gz
+# 应为 940edd40a430107681881f6b8efab3f96c7d3820802638277e79f0d8ded966b3
+tar -xzf e05-s001-project-instructions-evidence.tar.gz
+node researches/project-instructions/verify-evidence.mjs e05-s001-evidence
+```
+
+归档含 `tmp/e05-s001/`（固定案例、终端、PC/H5 图）、`tmp/e05-s001*.log`（包括初始失败）和 `source/<commit>/`。早期未提交的 demo 原型没有保留完整源字节，只保留其失败与记录哈希；三个 live 版本都有对应已提交源码。最终 demo 新增源码/运行时复制，仅影响证据采集，生产实现与固定任务哈希没有变化。
+
+这份证据不代替人工 review，也不表示课程已经发布。应用层权限和路径检查不等于 OS 沙箱。
