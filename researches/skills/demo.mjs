@@ -22,6 +22,7 @@ import {
   deniedTask,
   expectedChangedPaths,
   scriptEffectPaths,
+  reportSummaryTemplate,
   contract,
 } from './cases.mjs'
 
@@ -499,6 +500,11 @@ for (const name of ['normal', 'denied']) {
       assert.equal(result.artifact.package, 'api')
       assert.equal(result.artifact.testsPassed, true)
       assert(typeof result.artifact.summary === 'string' && result.artifact.summary.trim())
+      assert(
+        result.artifact.summary !== reportSummaryTemplate &&
+          !result.artifact.summary.includes(sentinels.report),
+        'Report summary still contains the reference template placeholder.'
+      )
       result.loading = { bodyRequest: bodyRequest + 1, referenceRequest: referenceRequest + 1 }
     } else {
       assert.equal(pairing.calls.length, 1, 'Negative case must stop after one denied call.')
