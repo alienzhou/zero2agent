@@ -1,0 +1,39 @@
+.discuss/2026-10-17/e05-s003-mcp/decisions/D01-boundaries.md
+  s_58249cd92a0ae1::t_a1de714ff065d2 1-3
+.discuss/2026-10-17/e05-s003-mcp/outline.md
+  s_58249cd92a0ae1::t_0ecce0fbed7f02 1-3
+.vibecoding/2026-10-17/e05-s003-mcp/dialogue.md
+  s_58249cd92a0ae1::t_099e13de23db00 1-3
+.vibecoding/2026-10-17/e05-s003-mcp/learnings.md
+  s_58249cd92a0ae1::t_f5159f803ebc12 1-3
+.vibecoding/2026-10-17/e05-s003-mcp/prompt.md
+  s_58249cd92a0ae1::t_2edaee2a951b8e 1
+specs/E05-extensibility/S003-mcp/README.md
+  s_58249cd92a0ae1::t_fe71f2a9d5a8e2 1-10
+specs/E05-extensibility/S003-mcp/details/00-overview.md
+  s_58249cd92a0ae1::t_4a07453238a6ad 1-5
+specs/E05-extensibility/S003-mcp/details/01-technical-design.md
+  s_58249cd92a0ae1::t_4dc2f41a36bf94 1-15
+specs/E05-extensibility/S003-mcp/details/02-task-list.md
+  s_58249cd92a0ae1::t_3149ece3d08859 1-9
+specs/E05-extensibility/S003-mcp/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_61330bde68381e 1-18
+specs/E05-extensibility/S003-mcp/details/04-backlog.md
+  s_58249cd92a0ae1::t_cb305c673845e4 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "acd3c3bda69ecb45a1c59a529c82e0f67f48d1d0",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
