@@ -233,7 +233,8 @@ for (const name of ['normal', 'denied']) {
     starts = [],
     permissions = [],
     effects = [],
-    terminalResults = []
+    terminalResults = [],
+    terminalMetadata = []
   let serverFailure
   const server = createServer(async (req, res) => {
     const control = new AbortController()
@@ -313,7 +314,21 @@ for (const name of ['normal', 'denied']) {
           execute: async (input, context) => {
             const prior =
               original.permission?.effect === 'write' ? await fileStates(cwd) : undefined
-            const response = await original.execute(input, context)
+            const testsPassedBefore = terminalMetadata.some(
+              metadata => metadata.terminalOutcome === 'completed' && metadata.exitCode === 0
+            )
+            const response = await original.execute(
+              input,
+              original.name === 'terminal'
+                ? {
+                    ...context,
+                    onResultMetadata: metadata => {
+                      terminalMetadata.push({ ...metadata, request: requests.length, input })
+                      context.onResultMetadata?.(metadata)
+                    },
+                  }
+                : context
+            )
             if (prior) {
               const after = await fileStates(cwd)
               effects.push({
@@ -321,6 +336,7 @@ for (const name of ['normal', 'denied']) {
                 request: requests.length,
                 path: input.path,
                 changedPaths: changedPaths(prior, after),
+                testsPassedBefore,
                 before: prior,
                 after,
               })
@@ -446,6 +462,15 @@ for (const name of ['normal', 'denied']) {
       assert.equal(terminalResults.length, 1)
       assert.deepEqual(terminalResults[0].input, { command: testCommand, workdir: 'packages/api' })
       assert.match(terminalResults[0].output, /Exit code: 0/)
+      assert.equal(terminalMetadata.length, 1)
+      assert.equal(terminalMetadata[0].terminalOutcome, 'completed')
+      assert.equal(terminalMetadata[0].exitCode, 0)
+      assert(Number.isSafeInteger(terminalMetadata[0].pid) && terminalMetadata[0].pid > 0)
+      assert(
+        effects.find(effect => effect.changedPaths.includes('artifacts/change-report.json'))
+          ?.testsPassedBefore,
+        'Report was written before actual successful test completion.'
+      )
       assert.notEqual(
         after['packages/api/amount.test.ts'].sha256,
         before['packages/api/amount.test.ts'].sha256
@@ -482,6 +507,7 @@ for (const name of ['normal', 'denied']) {
       assert.equal(permissions.filter(decision => decision.action === 'deny').length, 1)
       assert.equal(effects.length, 0)
       assert.equal(terminalResults.length, 0)
+      assert.equal(terminalMetadata.length, 0)
       assert.deepEqual(after, before)
       assert(
         serial[0].includes(sentinels.malicious),
@@ -514,6 +540,7 @@ for (const name of ['normal', 'denied']) {
     result.effects = effects.map(({ before: _before, after: _after, ...effect }) => effect)
     result.deniedCalls = permissions.filter(decision => decision.action === 'deny').length
     result.terminalStarts = starts.filter(start => start.tool === 'terminal').length
+    result.terminalMetadata = terminalMetadata
     result.reportedModels = [
       ...new Set(diagnostics.map(event => event.responseModel).filter(Boolean)),
     ]
@@ -524,6 +551,7 @@ for (const name of ['normal', 'denied']) {
     await json(path.join(directory, 'permissions.json'), permissions)
     await json(path.join(directory, 'effects.json'), effects)
     await json(path.join(directory, 'terminal-results.json'), terminalResults)
+    await json(path.join(directory, 'terminal-metadata.json'), terminalMetadata)
     report.cases.push(result)
     await json(path.join(output, 'summary.json'), report)
   }

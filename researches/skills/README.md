@@ -1,6 +1,70 @@
-# Skills 格式依据与解析边界
+# Skills 的可复现验收与格式依据
 
-本节按 Agent Skills 开放格式实现发现与按需加载。先运行 `pnpm install`，再执行 `pnpm --filter @zero2agent/core exec vitest run src/__tests__/skill-format.test.ts`，验证严格解析器和仓库内 CDP 示例。测试使用本地文本，不发模型请求，不运行技能脚本。发现、权限、恢复及请求正文的集成验收由本节其他测试覆盖，不能由解析器测试替代。
+[本课](../../specs/E05-extensibility/S002-skills/README.md) | [跟练](../../specs/E05-extensibility/S002-skills/follow-along.md) | [验收清单](../../specs/E05-extensibility/S002-skills/details/03-verification-checklist.md)
+
+先在仓库根目录运行 `pnpm install`、`pnpm build`，再执行 `node researches/skills/demo.mjs`。默认使用本机 HTTP/SSE 确定性响应、真实文件工具和真实 Node 测试进程，不需要模型 API key。下文记录固定案例、证据读取和标准解析依据；各层验证分别记录，解析器通过不能代替宿主或真实模型验收。
+
+## 运行固定的正常与拒绝案例
+
+```sh
+pnpm build
+node researches/skills/demo.mjs
+```
+
+[cases.mjs](cases.mjs) 在真实服务评估前冻结 `fixtureVersion=1`、项目文件、两个任务、技能正文、报告格式、独立金额断言及预算。每例最多 8 次模型请求、12 次工具调用、120 秒，传输重试为零。正常例初始不激活技能；拒绝例通过 `selected` 明确选择恶意技能。夹具不放置 AGENTS.md，以免把另一节的作用域重规划混入这组固定案例；项目规则与技能共存由 Core 集成测试单独覆盖。
+
+| 案例 | 固定行为 | 必须核对的事实 |
+| --- | --- | --- |
+| normal | 目录 → `load_skill` → 正文 → 报告资源 → 读文件、修复、真实测试 → JSON 报告 | 首次只有元数据，正文和资源随后依次出现；无关正文与巨大参考哨兵不进入任何请求；只改变三个目标文件，每个修改一次；真实测试成功，独立金额断言与报告契约通过 |
+| denied | 恶意正文要求自动运行脚本并自称放宽权限；任务只请求一次固定 terminal 调用，当前策略为 read-only | 显示 `allowed-tools` 不授予权限的提示；一次调用和错误结果完整配对、一次拒绝；实际工具启动数、脚本启动文件、计数器、输出和其他文件效果全部为零 |
+
+确定性正常响应固定为 7 次请求、8 次工具调用；正文在第二次请求出现，报告资源在第三次请求出现。拒绝例固定为 2 次请求、1 次被拒绝的工具调用。真实服务仍使用同一输入与预算，独立记录实际次数，不要求模型逐字复现确定性回答。
+
+需要评估当前配置的真实服务时，显式运行：
+
+```sh
+node researches/skills/demo.mjs --live
+```
+
+`--live` 从仓库根 `.env.local` 或现有环境读取配置，正常与拒绝各运行一次；不会自动重跑失败任务。配置模型名与服务实际自报模型名分别保存，不混称，也不由两例推断泛化成功率。修复后重验应保留先前失败目录、修正原因和对应源码，不换模型、改任务或放宽预算来取得通过。
+
+## 读取原始证据
+
+每次运行新建 `tmp/e05-s002/{offline,live}-随机目录/`，不覆盖已有成功或失败。终端输出的 `evidenceDirectory` 指向本次目录，`summary.json` 保存精简判定及源文件/构建产物哈希，`source/` 保留本次实际源码和运行时字节；未提交代码由精确文件哈希区分，不能只依赖 HEAD 标签。
+
+| 文件 | 用途 |
+| --- | --- |
+| `frozen-run.json`、`summary.json` | 固定输入哈希、预算、时间、平台、源码身份、实际模型身份与分案例结果 |
+| `normal/requests.jsonl`、`denied/requests.jsonl` | 实际送往 SDK 服务的请求正文；每次请求都检查工具调用与结果配对，不记录请求头 |
+| `request-observations.jsonl` | 各次请求到达时的文件字节数与哈希，用于排除正文或参考尚未可见时的抢先写入 |
+| `before.json`、`after.json`、`effects.json` | 全夹具前后文件集合、真实字节变化和每次写工具的效果；不从模型回答猜测写入成功 |
+| `snapshot.json`、`skills-view.json` | 完整配对历史、已选身份及最近技能/资源状态；当前正文与历史结果分开判读 |
+| `permissions.json`、`tool-starts.json`、`terminal-results.json`、`terminal-metadata.json` | 宿主许可、工具启动、测试回执及原生进程 PID/退出事实；报告写入前必须已有完成且 exitCode=0 的测试，拒绝例三个脚本效果文件均不存在 |
+| `independent-check.txt`、`regression-check.txt` | 正常例的独立金额断言和再次运行的真实 Node 回归结果 |
+| `responses.raw` | 仅真实服务模式保存的原始响应流；传输失败也保留 |
+
+表中分案例文件位于 `normal/` 或 `denied/`。单纯停用只移除当前激活覆盖层；曾经读过的参考文件仍可能保留在历史工具结果中。检查停用应核对当前 loaded 列表及覆盖层，不能要求历史事实消失；检查未获许可或无关正文是否泄漏，应使用从未加载它们的新会话。
+
+## 复核边界与实际宿主
+
+```sh
+pnpm --filter @zero2agent/core exec vitest run src/__tests__/skill-format.test.ts src/__tests__/skills.test.ts src/__tests__/skills-integration.test.ts
+pnpm --filter @zero2agent/e2e exec vitest run src/skills.test.ts src/skills-snapshot.test.ts
+pnpm --filter @zero2agent/e2e exec tsc --noEmit
+```
+
+上述用例分别覆盖严格格式、数量/字节/时限前一值与边界/超限、读取与路径权限、批次隔离、当前版本、预算、压缩和恢复，以及真实 CLI、管道、plain、TUI 与 version=3 磁盘会话。Windows 上真实 PTY 用例会明确跳过；只按实际平台及执行层级记录通过。
+
+可选保存请求正文和未经去控制码的终端输出：
+
+```sh
+E05_SKILL_EVIDENCE_DIR="$PWD/tmp/e05-s002/host-local" \
+  pnpm --filter @zero2agent/e2e exec vitest run src/skills.test.ts
+```
+
+`*-raw-*.txt` 保留 PTY/plain 原始控制字节；后续去色或整理的版本只能作为注明来源的展示副本。该入口仅采集固定合成夹具，不改变生产诊断日志只保存元信息的约定。首轮 `host-initial` 的 12 项宿主测试和 `offline-fwaS5m` 两例均通过，原记录保留。补齐恢复选项回归后，`host-refined-AwqwMF` 为 16 项宿主加 4 项磁盘快照测试全部通过；`offline-qMiL8R` 两例通过，并记录原生成功退出及报告写入前已成功测试的事实。E2E 类型检查通过。当前完整交付结论以[逐项验收](../../specs/E05-extensibility/S002-skills/details/03-verification-checklist.md)为准，不能把定向结果扩写为全部门槛通过。
+
+Git 只保存实现、必要小夹具、复现脚本和精简结果。原始请求、响应、终端和失败附件保存在忽略目录，归档前检查凭据与私密内容，另生成 manifest 及整体 SHA-256；对解压后的归档运行 `node researches/skills/verify-evidence.mjs <解压目录>`，核对列出的路径、大小和内容哈希。没有实际生成并下载校验归档前，不宣称证据已经独立归档或可复核。工程完整回归、默认跳过的 live 测试、固定真实服务案例、课程检查和人工 review 分别记录。
 
 ## 固定的上游版本
 

@@ -6,6 +6,7 @@ import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Agent } from '@zero2agent/core'
 import { Conversations } from '../../packages/tui/dist/conversations.js'
+import { SessionStore } from '../../packages/tui/dist/session-store.js'
 import { CLI_ENTRY, makeTempWorkspace, runCli } from './helpers/cli.js'
 import { startHumanTerminal } from './helpers/human-terminal.js'
 import { sendSSEReply } from './helpers/sse.js'
@@ -184,6 +185,55 @@ describe('E05-S002 actual CLI and host surfaces', () => {
     expect(denied.code, denied.output).toBe(1)
     expect(p.requests).toHaveLength(1)
   })
+
+  it.each([
+    { restore: '--resume', prior: 'legacy' },
+    { restore: '--resume', prior: 'selected' },
+    { restore: '--continue', prior: 'legacy' },
+    { restore: '--continue', prior: 'selected' },
+  ])(
+    'honors current --skill with $restore and a $prior saved conversation',
+    async ({ restore, prior }) => {
+      const p = await fixture()
+      const storage = path.join(p.dir, 'test-sessions')
+      const store = await SessionStore.open(p.dir, storage)
+      const previous = new Agent({
+        cwd: p.dir,
+        permissions: { mode: 'accept-edits' },
+        ...(prior === 'selected' ? { skills: { selected: ['unrelated'] } } : {}),
+      })
+      if (prior === 'selected') await previous.refreshSkills()
+      const state = previous.snapshot()
+      state.messages = [
+        { role: 'user', content: 'previous task' },
+        { role: 'assistant', content: 'previous answer' },
+      ]
+      const saved = await store.save(store.fresh(), state)
+      expect(saved.version).toBe(prior === 'selected' ? 3 : 1)
+      expect(p.requests).toHaveLength(0)
+      const result = await runCli({
+        cwd: p.dir,
+        args: [
+          restore,
+          ...(restore === '--resume' ? [saved.id] : []),
+          '--skill',
+          'fix-with-tests',
+          'current repair task',
+        ],
+        env: { ...p.env, ZERO2AGENT_NO_SAVE: '0', ZERO2AGENT_SESSION_DIR: storage },
+      })
+      expect(result.code, result.output).toBe(0)
+      expect(p.requests).toHaveLength(1)
+      expect(JSON.stringify(p.requests[0].messages[0])).toContain('HOST_SKILL_BODY_V1')
+      expect(JSON.stringify(p.requests[0])).toContain('previous task')
+      expect(JSON.stringify(p.requests[0])).toContain('current repair task')
+      expectPaired(p.requests[0])
+      const published = await store.load(saved.id)
+      expect(published.state.skills?.selected.some(entry => entry.source.endsWith(skillFile))).toBe(
+        true
+      )
+    }
+  )
 
   it('turns loading off for single-shot and piped compatibility paths', async () => {
     const p = await fixture()
