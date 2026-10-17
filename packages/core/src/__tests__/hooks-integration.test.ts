@@ -411,3 +411,82 @@ it('rejects an oversized planned after-check before the declared tool effect', a
   expect(p.requests).toHaveLength(1)
   expect(validateSessionSnapshot(a.snapshot())).toBeTruthy()
 })
+
+it.each(['mutation', 'denied-read'] as const)(
+  'preserves contract-only audit paths during explicit completion recheck: %s',
+  async mode => {
+    const script = path.join(root, 'completion-check.mjs')
+    const report = path.join(root, 'report.json')
+    await fs.writeFile(report, '{"ok":true}')
+    await fs.writeFile(
+      script,
+      `import fs from 'node:fs';
+const input = JSON.parse(fs.readFileSync(0, 'utf8'));
+fs.appendFileSync('starts', '1');
+const pass = fs.existsSync('allow-check');
+if (pass) fs.writeFileSync('report.json', '{"ok":false}');
+process.stdout.write(JSON.stringify({version:1, decision:pass?'pass':'block'}));`
+    )
+    const config: HookConfig = {
+      version: 1,
+      hooks: [
+        {
+          id: 'gate',
+          stage: 'beforeComplete',
+          command: process.execPath,
+          args: [script],
+          sources: [script],
+        },
+      ],
+    }
+    const views = await new Hooks(root, { config }).inspect()
+    const o = {
+      cwd: root,
+      skills: false as const,
+      projectInstructions: false as const,
+      hooks: { config, trust: views.map(v => `${v.id}:${v.identity}`) },
+    }
+    const p = provider(answer())
+    const a = new Agent(o)
+    await expect(
+      a.runWithContract('verify existing report', {
+        version: 1,
+        artifacts: [
+          {
+            path: 'report.json',
+            format: 'json',
+            schema: {
+              kind: 'object',
+              fields: { ok: { kind: 'value', type: 'boolean' } },
+              allowAdditional: false,
+            },
+          },
+        ],
+      })
+    ).rejects.toThrow('blocked')
+    const saved = a.snapshot()
+    expect(saved.recovery!.hooks!.writes).toEqual([])
+    await fs.writeFile(path.join(root, 'allow-check'), 'user reviewed existing effects')
+    const b = new Agent({
+      ...o,
+      permissions: {
+        mode: 'accept-edits',
+        ...(mode === 'denied-read' && { rules: [{ tool: 'read_file', action: 'deny' } as const] }),
+      },
+    })
+    b.restore(saved)
+    await expect(
+      b.recheckHooks('Run an independent new check of the existing report')
+    ).rejects.toThrow(mode === 'mutation' ? 'files-changed' : 'unverifiable')
+    expect(p.requests).toHaveLength(1)
+    expect(b.snapshot().recovery?.hooks?.checks[0].state).toBe('blocked')
+    if (mode === 'mutation') {
+      expect(await fs.readFile(report, 'utf8')).toBe('{"ok":false}')
+      expect(b.snapshot().recovery?.hooks?.checks.at(-1)?.state).toBe('blocked')
+      expect(await fs.readFile(path.join(root, 'starts'), 'utf8')).toBe('11')
+    } else {
+      expect(await fs.readFile(report, 'utf8')).toBe('{"ok":true}')
+      expect(await fs.readFile(path.join(root, 'starts'), 'utf8')).toBe('1')
+    }
+  }
+)

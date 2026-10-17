@@ -112,6 +112,7 @@ export function validateHookConfig(value: unknown): HookConfig {
       !pathList(h.sources, 8) ||
       !h.sources.length ||
       (h.args !== undefined && !pathList(h.args, 64)) ||
+      (h.stage === 'beforeComplete' && h.tool !== undefined) ||
       (h.tool !== undefined && (typeof h.tool !== 'string' || !/^[\w.-]{1,128}$/.test(h.tool))) ||
       (h.timeoutMs !== undefined &&
         (!Number.isSafeInteger(h.timeoutMs) || h.timeoutMs < 1 || h.timeoutMs > 10000)) ||
@@ -579,7 +580,8 @@ export class Hooks {
     persist: (b: ExecutionBoundary) => Promise<void>,
     note: string,
     signal?: AbortSignal,
-    notify?: (check: HookCheck, status: 'started' | 'passed' | 'blocked' | 'unknown') => void
+    notify?: (check: HookCheck, status: 'started' | 'passed' | 'blocked' | 'unknown') => void,
+    extra: string[] = []
   ): Promise<void> {
     if (!note.trim() || note.length > 4096)
       throw new Error('Recheck requires an explicit review note of 1..4096 characters')
@@ -596,7 +598,8 @@ export class Hooks {
         persist,
         signal,
         notify,
-        old.checkId
+        old.checkId,
+        extra
       )
     }
   }

@@ -374,14 +374,19 @@ export class Agent {
       this.session.recordControlNote(
         `User explicitly reviewed Hook effects and requested new checks: ${note}`
       )
-      await this.hooks.recheck(persist, note, budget.signal, (check, status) =>
-        emitter.emit({
-          type: 'hook-check',
-          hookId: check.hookId,
-          checkId: check.checkId,
-          stage: check.stage,
-          status,
-        })
+      await this.hooks.recheck(
+        persist,
+        note,
+        budget.signal,
+        (check, status) =>
+          emitter.emit({
+            type: 'hook-check',
+            hookId: check.hookId,
+            checkId: check.checkId,
+            stage: check.stage,
+            status,
+          }),
+        recovery.artifactContract?.artifacts.map(a => a.path) ?? []
       )
       emitter.emit({ type: 'turn-end', status: 'completed' })
       diagnostics.end('completed', 'turn')

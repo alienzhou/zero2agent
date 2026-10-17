@@ -60,6 +60,12 @@ async function audit() {
     .map(l => JSON.parse(l))
 }
 describe('native command Hooks and version trust', () => {
+  it('rejects a tool selector on a completion Hook instead of silently skipping its check', async () => {
+    const { config } = await setup('pass', 'beforeComplete')
+    config.hooks[0].tool = 'write_file'
+    expect(() => validateHookConfig(config)).toThrow('Invalid')
+  })
+
   it('redacts malformed config snippets including env credentials from discovery and guards', async () => {
     const { config } = await setup()
     const file = path.join(root, 'hooks.json')

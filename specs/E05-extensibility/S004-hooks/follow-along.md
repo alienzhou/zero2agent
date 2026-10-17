@@ -59,7 +59,7 @@ node packages/tui/dist/cli.js --hooks-config /absolute/hooks.json --hook-trust g
 
 已知任务目录时可添加 `--instructions-scope packages/api`（可重复，最多 8 个目录），SDK 对应 `projectInstructions: {scopes: ['packages/api']}`。这只提前加载指定目录的当前 AGENTS.md；规则仍带作用域、受读取权限与 root 物理边界约束，不扫描兄弟目录、不授予写入权限。未声明时沿用按工具目标补载的行为；恢复时必须由当前宿主重新提供目录选择，旧快照不恢复它。
 
-普通任务需要当前模型配置；同样参数支持单次任务、管道、plain 与 TUI。只提供配置不等于信任，未信任项不执行。配置不接受 enabled、shell、自动批准或参数改写字段；没有隐式仓库脚本执行。
+普通任务需要当前模型配置；同样参数支持单次任务、管道、plain 与 TUI。只提供配置不等于信任，未信任项不执行。配置不接受 enabled、shell、自动批准或参数改写字段；没有隐式仓库脚本执行。可选 tool 仅筛选 beforeTool/afterTool 的精确工具名，beforeComplete 不接受该字段。
 
 ## 三个检查点的顺序
 
@@ -92,7 +92,7 @@ stdout 必须是 `{ "version":1, "decision":"pass" }` 或 block，可带最多 5
 node packages/tui/dist/cli.js --resume <session-uuid> --hooks-config /absolute/hooks.json --hook-trust gate:<identity> --recheck-hooks '已核对效果，运行新检查'
 ```
 
-这条命令不发模型请求，不要求 API key；仍使用当前目录与脚本信任，保留旧检查记录，新检查关联旧 ID。之后用 `--resume-task` 或交互 continue 明确开始新轮次。配置/脚本改动后，先重新 inspect 并审阅、信任新版本；仅显式 recheck 可采用同 ID/阶段的受信任替代版本，普通继续不会自动迁移，删除必要 Hook 也不能解除旧门槛。
+这条命令不发模型请求，不要求 API key；仍使用当前目录与脚本信任，保留旧检查记录，新检查关联旧 ID；完成前重查仍审计保存的产物契约路径，不能绕过当前读权限或接受检查程序对这些文件的改动。之后用 `--resume-task` 或交互 continue 明确开始新轮次。配置/脚本改动后，先重新 inspect 并审阅、信任新版本；仅显式 recheck 可采用同 ID/阶段的受信任替代版本，普通继续不会自动迁移，删除必要 Hook 也不能解除旧门槛。
 
 恢复控制为 v2、磁盘会话为 v5；普通旧会话 1–4 继续支持。快照不存脚本、命令、环境、批准和进程对象，恢复不复活旧进程。
 
