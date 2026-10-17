@@ -214,3 +214,11 @@ Skills 控制器将发现摘要、激活正文和资源页分开。扫描默认�
 加载与业务调用混批时整批未执行并重新规划。模型响应期间当前技能版本改变时，也在副作用前重新规划；审批或批中变化停止剩余调用，保留已发生效果。工具配对、原工具/请求预算和有限重规划继续生效；技能声明不能改变 PermissionController。
 
 SessionSnapshot.skills 字段只存来源身份、路径与旧内容版本；原消息与资源结果仍按历史保存。磁盘格式含技能选择时升为 version=3；普通历史仍兼容原格式。恢复使用当前根、读取权限与文件版本，不恢复正文缓存、授权或进程。无技能的普通会话保持原请求；停用保留历史事实，当前覆盖层不再激活该技能。历史 read_history/read_tool_result 仍使用各自原有的权限语义，收紧 read_file 不会删除历史文本。边界和失败行为见 [S002 设计](../specs/E05-extensibility/S002-skills/details/01-technical-design.md)。
+
+## MCP 外部工具
+
+E05-S003 的 `mcp/client.ts` 将显式启用的本地 stdio 服务映射到 Tool；`mcp/stdio.ts` 限制帧、累计字节并等待子进程组关闭，`mcp/schema.ts` 严格校验有界 Schema 子集。Agent 每轮固定工具表，原权限控制器和预算处理所有实际调用，服务 annotations 不授予本地权限。
+
+结果与历史来源目录携带不含配置凭据的 ExternalSource，正文回读检查当前服务身份与原工具权限。发出调用后的断线/取消/超时或无法解释的结果停止本轮，沿用配对的 unknown/not-started 恢复记录，必须显式核对后继续；业务调用不会自动重试。磁盘会话 v4 保存外部来源，兼容普通 v1/v2/v3。
+
+配置和限制、SDK/CLI 入口见 [MCP 跟练](../specs/E05-extensibility/S003-mcp/follow-along.md)。

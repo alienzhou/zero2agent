@@ -173,6 +173,14 @@
       "title": "Skills 的发现与按需加载",
       "description": "先看技能摘要，选中后读步骤，需要时再取参考文件。沿用当前权限，观察目录、正文、资源的分层加载与真实文件效果。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E05-S002-skills-loading/specs/E05-extensibility/S002-skills"
+    },
+    {
+      "id": "epic05-story003",
+      "epic": "epic05",
+      "code": "E05-S003",
+      "title": "MCP 工具接入",
+      "description": "显式启用本地 stdio 服务，校验并授权外部工具，保留长结果来源，在未知效果后停止并核对。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e05-s003-mcp/specs/E05-extensibility/S003-mcp"
     }
   ]
 }

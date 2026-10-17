@@ -203,6 +203,59 @@ describe('E05-S003 native CLI/PTY/session integration', () => {
     await terminal.waitExit()
     await saveEvidence(`pty-${stop}.raw`, terminal.output)
   })
+  it('owns MCP approval input in a real PTY and refuses without an effect', async () => {
+    const p = await setup('normal', (res, index) =>
+      sendSSEReply(
+        res,
+        index === 1
+          ? [action('approval', 'record_action')]
+          : [{ type: 'text', text: 'MCP_APPROVAL_REFUSED' }],
+        index === 1 ? 'tool_use' : 'end_turn'
+      )
+    )
+    const terminal = startHumanTerminal(CLI_ENTRY, p.args, p.dir, true, {
+      env: { ...p.env, PERMISSION_MODE: 'default' },
+    })
+    cleanup.push(() => terminal.close())
+    await terminal.waitFor('对话')
+    terminal.write('record action\r')
+    await terminal.waitFor('允许这次操作')
+    terminal.write('n')
+    await terminal.waitFor('MCP_APPROVAL_REFUSED')
+    expect((await p.events()).filter(e => e.event === 'effect')).toHaveLength(0)
+    terminal.write('exit\r')
+    await terminal.waitExit()
+    await saveEvidence('pty-approval.raw', terminal.output)
+  })
+  it('cleans the effect-hang MCP process after an active TUI SIGTERM', async () => {
+    const p = await setup('effect-hang', res =>
+      sendSSEReply(
+        res,
+        [action('effect', 'record_action'), action('never', 'record_action')],
+        'tool_use'
+      )
+    )
+    await fs.writeFile(p.file, JSON.stringify({ ...p.config, callTimeoutMs: 2000 }))
+    const terminal = startHumanTerminal(CLI_ENTRY, p.args, p.dir, true, { env: p.env })
+    cleanup.push(() => terminal.close())
+    await terminal.waitFor('对话')
+    terminal.write('record once\r')
+    let events: Array<{ event: string; pid: number }> = []
+    for (let i = 0; i < 200; i++) {
+      try {
+        events = await p.events()
+        if (events.some(e => e.event === 'effect')) break
+      } catch {}
+      await new Promise(r => setTimeout(r, 5))
+    }
+    expect(events.filter(e => e.event === 'effect')).toHaveLength(1)
+    terminal.signal('SIGTERM')
+    expect(await terminal.waitExit()).toBe(143)
+    expect(() => process.kill(events[0].pid, 0)).toThrow()
+    expect((await p.events()).filter(e => e.event === 'effect')).toHaveLength(1)
+    expect(p.requests).toHaveLength(1)
+    await saveEvidence('pty-active-SIGTERM.raw', terminal.output)
+  })
   it('publishes v4 source provenance and rejects down-version files; v1 legacy remains v1', async () => {
     const p = await setup('normal', (res, index) =>
       sendSSEReply(

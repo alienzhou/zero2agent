@@ -115,7 +115,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S004 已完成；[S004 交付](./specs/E04-reliability-and-context/S004-safe-resume/README.md) |
 | [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001 已合入；[S002 实现与课程](./specs/E05-extensibility/S002-skills/README.md)由 PR #29 交付，S003/S004 已规划 |
 
-最新课程：[E05-S002：Skills 的发现与按需加载](./specs/E05-extensibility/S002-skills/README.md)，从[离线跟练](./specs/E05-extensibility/S002-skills/follow-along.md)开始。
+最新课程：[E05-S003：MCP 工具接入](./specs/E05-extensibility/S003-mcp/README.md)，从[离线跟练](./specs/E05-extensibility/S003-mcp/follow-along.md)开始。
 
 ### 你可以这样进入
 
@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E05-S002：Skills 的发现与按需加载](./specs/E05-extensibility/S002-skills/README.md)接通摘要目录、正文选择、资源分页与 CLI/TUI 控制，沿用当前读取权限和运行预算。课程按实际主线安排 11 页；实现、分层验收和阅读体验见 Story；最终复核后按用户授权由 [PR #29](https://github.com/alienzhou/zero2agent/pull/29) 交付，站点未部署。
+**最新更新**：[E05-S003：MCP 工具接入](./specs/E05-extensibility/S003-mcp/README.md)接通显式启用的本地 stdio 服务，校验并授权工具，保留长结果外部来源，在未知效果后停止并核对。11 页课程与实现、测试、跟练一起交付，待 PR review；站点未部署。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -186,7 +186,8 @@ zero2agent/
 | [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | 摘要质量与事实保留 | 实现、课程、严格验收及最终复核完成；交付见 PR #25 |
 | [E04-S004](./specs/E04-reliability-and-context/S004-safe-resume/README.md) | 中断后的安全续跑 | 已完成；[PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付 |
 | [E05-S001](./specs/E05-extensibility/S001-project-instructions/README.md) | 项目指令、目录作用域与执行前检查 | 已合入 PR #27 |
-| [E05-S002](./specs/E05-extensibility/S002-skills/README.md) | Skills 发现、按需加载与资源边界 | PR #29 交付 |
+| [E05-S002](./specs/E05-extensibility/S002-skills/README.md) | Skills 发现、按需加载与资源边界 | 已合入 PR #29 |
+| [E05-S003](./specs/E05-extensibility/S003-mcp/README.md) | MCP 工具接入、当前权限与未知效果恢复 | 待 PR review |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 
