@@ -1,0 +1,91 @@
+.authoring/site/README.md
+  s_58249cd92a0ae1::t_4687112f016360 42
+.authoring/site/chapters/epic05-story001/author.cjs
+  s_58249cd92a0ae1::t_eeb6575acd8d1c 24-25,27-29,35-36,39-40,44-45,47-48,53,57-58,62-74,83
+.authoring/site/chapters/epic05-story001/content-plan.md
+  s_58249cd92a0ae1::t_4f384a61160fcf 1,3,5-20
+.authoring/site/chapters/epic05-story001/review.md
+  s_58249cd92a0ae1::t_0e3a8b83418671 3,5,7
+.authoring/site/chapters/epic05-story001/verification/checks.json
+  s_58249cd92a0ae1::t_0681a1173a57ff 2,10,14,18,22,26,30,34,38,42,52,56,64,68,74,76,78
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_07040d29f3bea5 167
+.discuss/2026-10-17/e05-course-reading-cost/outline.md
+  s_58249cd92a0ae1::t_4ecb1202f17e1a 1-7
+.vibecoding/2026-10-17/e05-course-reading-cost/dialogue.md
+  s_58249cd92a0ae1::t_f60c769711b73f 1-7
+.vibecoding/2026-10-17/e05-course-reading-cost/learnings.md
+  s_58249cd92a0ae1::t_b4aa0462f569ca 1-6
+.vibecoding/2026-10-17/e05-course-reading-cost/prompt.md
+  s_58249cd92a0ae1::t_ab1b7c833a7bef 1-5
+AGENTS.md
+  s_58249cd92a0ae1::t_72334b891f1ed4 156
+CHANGELOG.md
+  s_c8e0304c6af01c::t_9035c92fcbf1b2 15
+README.en.md
+  s_c8e0304c6af01c::t_160b7658624c65 160
+README.md
+  s_c8e0304c6af01c::t_89762143e68ddf 166
+docs/roadmap/README.md
+  s_c8e0304c6af01c::t_b3a556e10f489a 25
+researches/project-instructions/README.md
+  s_c8e0304c6af01c::t_a6d98263e9323b 26
+researches/project-instructions/verification.json
+  s_58249cd92a0ae1::t_020630421970be 199-200,202,204,207-208,218-229
+retros/E05-S001-project-instructions.md
+  s_c8e0304c6af01c::t_db0a31dfd16565 13
+scripts/e05-s001-course-check.mjs
+  s_58249cd92a0ae1::t_262ec632fa7c6a 40,52
+site/chapters/epic05-story001/02-standard.html
+  s_58249cd92a0ae1::t_a9c6ff5ee41c04 1
+site/chapters/epic05-story001/03-scope.html
+  s_58249cd92a0ae1::t_fb10a403bf9686 1
+site/chapters/epic05-story001/04-priority.html
+  s_58249cd92a0ae1::t_b6f7819adf3b4c 1
+site/chapters/epic05-story001/05-request.html
+  s_58249cd92a0ae1::t_7909b7185b3f68 1
+site/chapters/epic05-story001/06-replan.html
+  s_58249cd92a0ae1::t_d7b464a17910bd 1
+site/chapters/epic05-story001/07-changed.html
+  s_58249cd92a0ae1::t_82c3d74e648766 1
+site/chapters/epic05-story001/08-controls.html
+  s_58249cd92a0ae1::t_6676363fd7e16d 1
+site/chapters/epic05-story001/09-practice.html
+  s_58249cd92a0ae1::t_ac2632e7ab6861 1
+site/chapters/epic05-story001/10-verify.html
+  s_58249cd92a0ae1::t_9cb8d4b39bf51a 1
+site/chapters/epic05-story001/pages.json
+  s_58249cd92a0ae1::t_d9cda839a3b8c6 9,21-22,30,32,39,41,49,51,58,60,67,69,77,79,86,88,95-97
+site/course.json
+  s_58249cd92a0ae1::t_1599d8b2512d26 7184,7210-7211,7213,7215-7218,7220-7222,7226,7230-7232,7235,7238-7239,7246,7250-7252,7255,7266,7270-7272,7275,7287,7291-7293,7296,7310,7314-7316,7319,7336-7338,7341,7354,7358-7360,7363,7380-7397,7403
+specs/E05-extensibility/S001-project-instructions/README.md
+  s_c8e0304c6af01c::t_1645846a7713bd 5
+specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_9ad5c1aa28d864 19
+specs/E05-extensibility/course-plan.md
+  s_58249cd92a0ae1::t_baed9635f35ec9 159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "221f07d656dfd055e59180b4313552619f8a5da4",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    },
+    "s_c8e0304c6af01c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a14536-bbb7-7b61-a5da-667bbc55dc14",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
