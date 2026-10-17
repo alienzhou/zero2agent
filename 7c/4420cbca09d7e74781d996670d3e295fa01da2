@@ -1,0 +1,19 @@
+.authoring/site/chapters/epic05-story002/verification/source-audit.json
+  s_58249cd92a0ae1::t_4bae34657abd17 2,13-14,30-31,39-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7c4420cbca09d7e74781d996670d3e295fa01da2",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
