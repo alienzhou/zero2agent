@@ -1,0 +1,65 @@
+scripts/e05-s002-course-check.mjs
+  s_58249cd92a0ae1::t_a199c9cc18f024 44-51
+  s_58249cd92a0ae1::t_e7c371eadf8e84 1-18,21-43,52-86,88-116
+  s_58249cd92a0ae1::t_f8641abeb82193 19-20,87
+.authoring/site/chapters/epic05-story002/review.md
+  s_58249cd92a0ae1::t_c04aa076c4ba27 5,7-11
+  s_58249cd92a0ae1::t_19722ca7315d17 1-4,6,12-13
+.authoring/site/chapters/epic05-story002/author.cjs
+  s_58249cd92a0ae1::t_a72c8eea7bc421 1-12,17-64,67-97,99-126
+  s_58249cd92a0ae1::t_a199c9cc18f024 13-16,65-66
+  s_58249cd92a0ae1::t_b697aad10b9afe 98
+.authoring/site/chapters/epic05-story002/sources.md
+  s_58249cd92a0ae1::t_19722ca7315d17 1-19
+  s_58249cd92a0ae1::t_6161fa86c388d4 20
+.authoring/site/chapters/epic05-story002/content-plan.md
+  s_58249cd92a0ae1::t_19722ca7315d17 1-21
+.authoring/site/chapters/epic05-story002/style.css
+  s_58249cd92a0ae1::t_8796f936513e5f 1-22
+.authoring/site/chapters/epic05-story002/verification/checks.json
+  s_58249cd92a0ae1::t_f0ccace58a42ef 1-154
+.authoring/site/chapters/epic05-story002/verification/source-audit.json
+  s_58249cd92a0ae1::t_c593866c214fd8 1-30
+site/chapters/epic05-story002/01-cover.html
+  s_58249cd92a0ae1::t_2dc702c3b26a62 1
+site/chapters/epic05-story002/02-layers.html
+  s_58249cd92a0ae1::t_c1808906884fe4 1
+site/chapters/epic05-story002/03-package.html
+  s_58249cd92a0ae1::t_501e5c2a484eee 1
+site/chapters/epic05-story002/04-selection.html
+  s_58249cd92a0ae1::t_db350d045cc387 1
+site/chapters/epic05-story002/05-before-work.html
+  s_58249cd92a0ae1::t_28674c660c5d85 1
+site/chapters/epic05-story002/06-resources.html
+  s_58249cd92a0ae1::t_3ad26908880d9a 1
+site/chapters/epic05-story002/07-scripts.html
+  s_58249cd92a0ae1::t_c4a8db47a6de1b 1
+site/chapters/epic05-story002/08-current.html
+  s_58249cd92a0ae1::t_9dbb97b6dd343a 1
+site/chapters/epic05-story002/09-controls.html
+  s_58249cd92a0ae1::t_01a2d5f2e34688 1
+site/chapters/epic05-story002/10-practice.html
+  s_58249cd92a0ae1::t_15b4f7fe3224c1 1
+site/chapters/epic05-story002/11-verify.html
+  s_58249cd92a0ae1::t_f974196c7bba11 1
+site/chapters/epic05-story002/course.css
+  s_58249cd92a0ae1::t_0e477012a6c08a 1-22
+site/chapters/epic05-story002/pages.json
+  s_58249cd92a0ae1::t_99f5f56830eccb 1-123
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70a362c696cc64d226bc09a39178b0da9a9c1c50",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
