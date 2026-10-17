@@ -6758,7 +6758,7 @@
       "title": "中断后的安全续跑",
       "description": "逐工具保存执行进度，核对未知效果，在当前权限下明确继续。",
       "code": "E04-S004",
-      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e04-s004-safe-resume/specs/E04-reliability-and-context/S004-safe-resume",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S004-safe-resume/specs/E04-reliability-and-context/S004-safe-resume",
       "pages": [
         {
           "id": "01-cover",
@@ -7163,7 +7163,7 @@
             "中断后的安全续跑",
             "验收看文件、调用次数、历史配对与控制状态。",
             "下一阶段 E05：AGENTS、Skills、MCP、Hooks。",
-            "工程回归、真实子进程、PTY 与真实服务分层留证；结果见验收清单。课程待 PR 审阅，站点未部署。"
+            "工程回归、真实子进程、PTY 与真实服务分层留证；结果见验收清单。源码与课程通过 PR #26 交付，站点未部署。"
           ]
         }
       ]

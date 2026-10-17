@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-16T15:30:51.618Z",
+  "capturedAt": "2026-10-17T01:11:20.174Z",
   "browser": "155.0.8059.82",
   "pages": [
     {
@@ -103,7 +103,7 @@
   ],
   "errors": [],
   "sourceHashes": {
-    ".authoring/site/chapters/epic04-story004/author.cjs": "aad3c3520ddcc11d4e83f5ba8ffcf35c9e7ac9809f96427d0c32d4c93bead4b0",
+    ".authoring/site/chapters/epic04-story004/author.cjs": "8a037fa366e072079cee080f23f7102d95798e6857281da590543c8abdf67da2",
     "site/chapters/epic04-story004/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
     "site/chapters/epic04-story004/pages.json": "6908ed033b195ca3cd75143380f0c7aed3f5512d9a28d8e0f44f91e110a69a07"
   }

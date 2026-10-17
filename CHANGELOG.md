@@ -6,13 +6,13 @@
 
 本项目使用**两层版本结构**：`E01-S001`（Epic 阶段 + Story 迭代）。
 
-## E04-S004：中断后的安全续跑（待 PR 审阅）
+## E04-S004：中断后的安全续跑
 
 - 逐工具发布完整执行快照，保留本轮输入、完整响应、工具回执及来源；区分未执行、已结算与效果未知。
 - `/recovery` 查看进度，`/recovery continue 指令` 或 `--resume-task` 明确开启新预算；旧工具不重放，新操作按当前权限执行。
 - 保留 S003 原产物契约、未解决读取及已用修复机会；存储失败停止后续工作，增加单会话容量门槛。
 - 新增真实进程故障回归、实际 CLI/PTY 验证、离线跟练与固定真实服务集成，交付 18 页课程。原始证据外部归档，Git 只保存复现与精简结果。
-- [课程与使用](./specs/E04-reliability-and-context/S004-safe-resume/README.md) · [验收](./specs/E04-reliability-and-context/S004-safe-resume/details/03-verification-checklist.md) · [复盘](./retros/E04-S004-safe-resume.md)。尚未合并或部署。
+- [课程与使用](./specs/E04-reliability-and-context/S004-safe-resume/README.md) · [验收](./specs/E04-reliability-and-context/S004-safe-resume/details/03-verification-checklist.md) · [复盘](./retros/E04-S004-safe-resume.md)。最终复核后按用户授权通过 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付，固定跟练 Tag `E04-S004-safe-resume`；网站未部署。
 
 ---
 

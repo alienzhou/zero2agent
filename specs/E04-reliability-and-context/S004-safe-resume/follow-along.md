@@ -1,12 +1,12 @@
 # 跟练：进程退出以后，把剩余文件做完
 
-本课处于 PR 审阅，使用 `codex/e04-s004-safe-resume` 分支。建议在独立目录克隆，避免覆盖自己的未提交改动。最终复核版本和归档校验信息见[验收资料](../../../researches/safe-resume/README.md)。
+本课使用固定跟练 Tag `E04-S004-safe-resume`；[PR #26](https://github.com/alienzhou/zero2agent/pull/26) 记录最终复核与交付。建议在独立目录克隆，避免覆盖自己的未提交改动。最终复核版本和归档校验信息见[验收资料](../../../researches/safe-resume/README.md)。
 
 ```sh
 git clone https://github.com/alienzhou/zero2agent.git zero2agent-safe-resume
 cd zero2agent-safe-resume
-git fetch origin codex/e04-s004-safe-resume
-git switch --detach FETCH_HEAD
+git fetch origin tag E04-S004-safe-resume
+git switch --detach E04-S004-safe-resume
 pnpm install --frozen-lockfile
 pnpm build
 node researches/safe-resume/demo.mjs

@@ -86,7 +86,7 @@ consoleBox(0,0,952,219,'仓库根目录',['pnpm install && pnpm build','node res
 page('finish','17 · E04 收束','能解释停在哪里，\n才能安全地继续','把四课串成一个可观察、可验证的执行过程。',svg('E04四课串联以及验收标准',
 [['S001','失败恢复与预算'],['S002','大结果按需读取'],['S003','摘要质量与事实保留'],['S004','中断后的安全续跑']].map(([a,b],i)=>rect(0,i*117,952,94,i===3?C.greenBg:C.white)+t(24,60+i*117,a,34,C.red,700)+t(205,60+i*117,b,35,C.ink,650)).join('')+
 rule(520)+t(0,578,'验收看文件、调用次数、历史配对与控制状态。',30,C.green,700)+t(0,640,'下一阶段 E05：AGENTS、Skills、MCP、Hooks。',29,C.muted)),
-'工程回归、真实子进程、PTY 与真实服务分层留证；结果见验收清单。课程待 PR 审阅，站点未部署。',['D01','T01','T02']);
+'工程回归、真实子进程、PTY 与真实服务分层留证；结果见验收清单。源码与课程通过 PR #26 交付，站点未部署。',['D01','T01','T02']);
 if(pages.length!==18) throw new Error('E04-S004 must contain exactly 18 pages including its cover');
 for(const [i,p] of pages.entries()) {
  const number=String(i+1).padStart(2,'0');

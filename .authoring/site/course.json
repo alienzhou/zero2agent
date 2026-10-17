@@ -151,7 +151,7 @@
       "epic": "epic04",
       "title": "中断后的安全续跑",
       "description": "逐工具保存执行进度，核对未知效果，在当前权限下明确继续。",
-      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/codex/e04-s004-safe-resume/specs/E04-reliability-and-context/S004-safe-resume"
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S004-safe-resume/specs/E04-reliability-and-context/S004-safe-resume"
     }
   ]
 }

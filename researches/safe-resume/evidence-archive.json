@@ -8,5 +8,13 @@
   "bytes": 4045691,
   "payloadFiles": 237,
   "implementationCommit": "ae6f6facb7ca042f9b133881c40b8886dd6b4606",
-  "access": "Draft release; repository reviewer access required. Not a public course release."
+  "access": "Draft release; repository reviewer access required. Not a public course release.",
+  "finalReview": {
+    "file": "e04-s004-final-review-20261017.tar.gz",
+    "sha256": "77d108a3e44cb582d178c9b81932d3eba11c12a435bc74b21e1f96a81fcb3126",
+    "bytes": 4129767,
+    "payloadFiles": 125,
+    "codeCommit": "238834422afb3835249cf90d3678abc233916168",
+    "releaseTag": "E04-S004-safe-resume-review"
+  }
 }
