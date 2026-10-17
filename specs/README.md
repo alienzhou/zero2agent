@@ -89,6 +89,12 @@ specs/
 
 ---
 
+## Epic 5：扩展能力
+
+[四课入口](./E05-extensibility/README.md)与[具体范围、跟练和验收](./E05-extensibility/course-plan.md)：项目指令与 AGENTS.md → Skills 发现与按需加载 → MCP 工具接入 → Hooks 与组合验收。2026-10-17 已完成规划，尚未开始实现；每节开工时再创建 Story Spec。
+
+---
+
 ## 历史迭代
 
 | 迭代 | 名称 | 状态 | 说明 |

@@ -109,7 +109,7 @@ The course content is organized into four layers:
 | Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
 | Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S001–S006 merged into main |
 | [Epic 4: Robustness and Context Management](./specs/E04-reliability-and-context/README.md) | Handle failures, long context, and complex runtime situations | S001–S004 complete; S004 delivery tracked in PR #26 |
-| Epic 5: Extensibility | Add AGENTS, Skills, MCP, Hooks, and other extension capabilities | Planned |
+| [Epic 5: Extensibility](./specs/E05-extensibility/README.md) | Project instructions → Skills → MCP → Hooks and integrated acceptance | Four lessons scoped with acceptance criteria; implementation not started |
 
 ### How to Enter
 

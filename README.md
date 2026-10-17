@@ -113,7 +113,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
 | [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S004 已完成；[S004 交付](./specs/E04-reliability-and-context/S004-safe-resume/README.md) |
-| Epic 5：扩展能力 | 引入 AGENTS、Skills、MCP、Hooks 等扩展能力 | Planned |
+| [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | 四课范围与验收已规划，尚未实现 |
 
 最新课程：[E04-S002：大工具结果按需读取](./specs/E04-reliability-and-context/S002-result-references/README.md)，从[重启回读实验](./specs/E04-reliability-and-context/S002-result-references/follow-along.md)开始。
 
