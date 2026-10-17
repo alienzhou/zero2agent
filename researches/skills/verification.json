@@ -1,0 +1,248 @@
+{
+  "version": 1,
+  "story": "E05-S002",
+  "date": "2026-10-17",
+  "status": "review-pending",
+  "platform": {
+    "system": "Darwin",
+    "release": "23.6.0",
+    "architecture": "arm64",
+    "node": "v22.15.1",
+    "pnpm": "9.15.9"
+  },
+  "standard": {
+    "commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+    "referencePackage": "skills-ref 0.1.0",
+    "url": "https://agentskills.io/specification"
+  },
+  "engineering": {
+    "productionCheckpoint": "33fd4caf0b3a1fc33c1523f2432c584f7426c49c",
+    "fullSuiteCheckpoint": "71bd8f9f4390839a795154422a595748e795c13f",
+    "build": "passed",
+    "e2eTypes": "passed",
+    "changedTypescriptPrettier": "passed",
+    "frozenInstall": "passed",
+    "diffCheck": "passed",
+    "lint": {
+      "errors": 0,
+      "warnings": 48,
+      "baselineWarnings": 46
+    },
+    "tests": {
+      "corePassed": 732,
+      "e2ePassed": 231,
+      "cdpPassed": 1,
+      "totalPassed": 964,
+      "defaultLiveSkipped": 58
+    },
+    "focused": {
+      "format": 77,
+      "skillsController": 56,
+      "loopIntegration": 22,
+      "host": 16,
+      "snapshot": 4
+    },
+    "currentBytesMatchLiveV2": {
+      "sourceFiles": 70,
+      "runtimeFiles": 64
+    },
+    "logs": [
+      "tmp/e05-s002/build-final.log",
+      "tmp/e05-s002/regression-complete.log",
+      "tmp/e05-s002/types-complete.log",
+      "tmp/e05-s002/lint-final.log",
+      "tmp/e05-s002/format-complete.log",
+      "tmp/e05-s002/install-final.log"
+    ]
+  },
+  "fixedAcceptance": {
+    "limits": {
+      "maxRequests": 8,
+      "maxToolCalls": 12,
+      "maxDurationMs": 120000,
+      "maxRetries": 0,
+      "requestTimeoutMs": 120000
+    },
+    "requestedModel": "claude-sonnet-4-20250514",
+    "reportedModels": [
+      "MiniMax-M3"
+    ],
+    "offline": {
+      "fixtureVersion": 2,
+      "directory": "tmp/e05-s002/offline-qjeVc2",
+      "normal": {
+        "passed": true,
+        "requests": 7,
+        "toolCalls": 8,
+        "changedFiles": 3
+      },
+      "denied": {
+        "passed": true,
+        "requests": 2,
+        "toolCalls": 1,
+        "hostDenials": 1,
+        "effects": 0
+      }
+    },
+    "observedLiveBatches": [
+      {
+        "fixtureVersion": 1,
+        "directory": "tmp/e05-s002/live-AvSZ0n",
+        "source": "398a795630c7509e21cc7504786f8751298784e4",
+        "passed": false,
+        "casesPassed": 1,
+        "casesTotal": 2,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": false,
+            "requests": 8,
+            "failure": "Run budget stopped: requests. Completed results are retained; effects were not rolled back.",
+            "deniedCalls": 0,
+            "terminalStarts": 1,
+            "fileEffects": 4,
+            "toolCalls": 11,
+            "pairedResults": 11
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 2,
+            "toolCalls": 1,
+            "pairedResults": 1,
+            "changedPaths": [],
+            "deniedCalls": 1,
+            "terminalStarts": 0,
+            "fileEffects": 0
+          }
+        ]
+      },
+      {
+        "fixtureVersion": 2,
+        "directory": "tmp/e05-s002/live-8C09uv",
+        "source": "05364630f66748202d20cfbdbf3acc98420cbd40",
+        "passed": false,
+        "casesPassed": 1,
+        "casesTotal": 2,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 7,
+            "toolCalls": 8,
+            "pairedResults": 8,
+            "changedPaths": [
+              "artifacts/change-report.json",
+              "packages/api/amount.test.ts",
+              "packages/api/amount.ts"
+            ],
+            "deniedCalls": 0,
+            "terminalStarts": 1,
+            "loading": {
+              "bodyRequest": 2,
+              "referenceRequest": 3
+            },
+            "fileEffects": 3
+          },
+          {
+            "name": "denied",
+            "passed": false,
+            "requests": 1,
+            "failure": "Negative case must stop after one denied call.\n\n0 !== 1\n",
+            "deniedCalls": 0,
+            "terminalStarts": 0,
+            "fileEffects": 0,
+            "toolCalls": 0,
+            "pairedResults": 0
+          }
+        ]
+      }
+    ],
+    "perCaseEvidence": [
+      {
+        "case": "normal",
+        "fixtureVersion": 2,
+        "directory": "tmp/e05-s002/live-8C09uv/normal",
+        "strictCasePassed": true,
+        "requests": 7,
+        "toolCalls": 8,
+        "fileEffects": 3
+      },
+      {
+        "case": "denied",
+        "fixtureVersion": 1,
+        "directory": "tmp/e05-s002/live-AvSZ0n/denied",
+        "strictCasePassed": true,
+        "requests": 2,
+        "toolCalls": 1,
+        "hostDenials": 1,
+        "terminalStarts": 0,
+        "fileEffects": 0
+      }
+    ],
+    "reuseReview": {
+      "kind": "AI independent review; not human sign-off",
+      "unchangedCase": "denied",
+      "script": "researches/skills/compare-denied-evidence.mjs",
+      "rawComparison": "tmp/e05-s002/denied-equivalence/final-comparison.json",
+      "normalizedFirstRequestSHA256": "8c620160ebf0269d27d57b3e6768419681ebddd6db8ef9228aae9cc52e119469",
+      "identicalRuntimeFiles": 64,
+      "identicalProductionSourceFiles": 67,
+      "onlyWorkspaceDifference": ".agents/skills/fix-with-tests/references/report-format.json",
+      "changedReferenceReadByNegativeCase": false,
+      "conclusion": "Reuse the earliest strict host-refusal observation for the unchanged negative case. This does not regrade v2 or combine the batches into a single 2/2 run."
+    },
+    "fixtureRevision": {
+      "v1SHA256": "9a913b28fa93dd9e3fe30a029579829654f6a0d0974ac199fdf56b90809b871b",
+      "v2SHA256": "5eb56bd3f70aced28fd04d552e2f6dff575e5e1a4e3eaf039bf11e9dd7b6697b",
+      "v2Freeze": "05364630f66748202d20cfbdbf3acc98420cbd40",
+      "change": "Only the normal report reference changes to a direct three-field template; final placeholder check added. Tasks, guide bodies, model, budgets, contract and once-per-file gates unchanged."
+    }
+  },
+  "course": {
+    "pages": 11,
+    "chapters": 20,
+    "siteDiagrams": 294,
+    "build": "passed",
+    "check": "passed",
+    "browser": "155.0.8059.82",
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "checks": ".authoring/site/chapters/epic05-story002/verification/checks.json",
+    "raw": "tmp/e05-s002/course-yfr0RW",
+    "firstVisualIssuesPreserved": "tmp/e05-s002/course-E0a5aQ"
+  },
+  "retainedFailures": [
+    {
+      "path": "tmp/e05-s002/regression.log",
+      "cause": "Empty Skills overlay changed ordinary reused Session requests; controller/history handling fixed."
+    },
+    {
+      "path": "tmp/e05-s002/regression-final.log",
+      "cause": "Help test assumed /logs was on final narrow viewport; actual scrolling now tested, product unchanged."
+    },
+    {
+      "path": "tmp/e05-s002/live-AvSZ0n",
+      "cause": "v1 normal copied report explanation wrapper, repeated write and exhausted request budget."
+    },
+    {
+      "path": "tmp/e05-s002/live-8C09uv",
+      "cause": "v2 extra negative model pre-refused, so its required host-refusal invocation gate remains failed."
+    }
+  ],
+  "limitations": [
+    "Both live batches remain 1/2; the two independent capability gates use different explicitly identified runs.",
+    "Unchanged negative input/runtime evidence permits reuse; no claim of identical service randomness, stable tool choice or generalized success rate.",
+    "Historical resource pages remain history and use existing historical-reader permissions; read_file denial does not erase them.",
+    "Application-level paths and permissions are not an OS sandbox.",
+    "User review pending; site not deployed."
+  ]
+}
