@@ -1,3 +1,5 @@
+import * as native from '../hook-process.js'
+import { randomUUID } from 'node:crypto'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -268,4 +270,143 @@ describe('Hook config bounds', () => {
         validateHookConfig({ version: 1, hooks: [{ ...base().hooks[0], ...extra }] })
       ).toThrow()
   })
+})
+
+describe('native capacity boundaries and durable limits', () => {
+  it.each([-1, 0, 1])('enforces 32 KiB config bytes (%i)', delta => {
+    const config = {
+      version: 1,
+      hooks: [
+        {
+          id: 'x',
+          stage: 'beforeTool',
+          command: process.execPath,
+          sources: ['a'],
+          env: { PAD: '' },
+        },
+      ],
+    }
+    config.hooks[0].env.PAD = 'x'.repeat(32768 - Buffer.byteLength(JSON.stringify(config)) + delta)
+    if (delta <= 0) expect(validateHookConfig(config)).toBeTruthy()
+    else expect(() => validateHookConfig(config)).toThrow()
+  })
+  it.each([-1, 0, 1])('bounds script bytes before trusting (%i)', async delta => {
+    const f = path.join(root, 's.mjs')
+    await fs.writeFile(f, 'x'.repeat(65536 + delta))
+    const config: HookConfig = {
+      version: 1,
+      hooks: [{ id: 'x', stage: 'beforeTool', command: process.execPath, sources: [f] }],
+    }
+    if (delta <= 0) expect(await new Hooks(root, { config }).inspect()).toHaveLength(1)
+    else await expect(new Hooks(root, { config }).inspect()).rejects.toThrow('capacity')
+  })
+  it.each([-1, 0, 1])('bounds total script bytes (%i)', async delta => {
+    const sources = []
+    for (let i = 0; i < 5; i++) {
+      const f = path.join(root, 's' + i)
+      await fs.writeFile(f, 'x'.repeat(i < 4 ? 65535 : 4 + delta))
+      sources.push(f)
+    }
+    const config: HookConfig = {
+      version: 1,
+      hooks: [{ id: 'x', stage: 'beforeTool', command: process.execPath, sources }],
+    }
+    if (delta <= 0) expect(await new Hooks(root, { config }).inspect()).toHaveLength(1)
+    else await expect(new Hooks(root, { config }).inspect()).rejects.toThrow('total capacity')
+  })
+  it.each([-1, 0, 1])('bounds stdout and stderr around native limits (%i)', async delta => {
+    for (const stream of ['stdout', 'stderr']) {
+      const f = path.join(root, stream + '.mjs')
+      const control = JSON.stringify({ version: 1, decision: 'pass' })
+      const code =
+        stream === 'stdout'
+          ? `process.stdout.write(${JSON.stringify(control)}+' '.repeat(${4096 + delta - control.length}))`
+          : `process.stderr.write('x'.repeat(${16384 + delta}));process.stdout.write(${JSON.stringify(control)})`
+      await fs.writeFile(f, code)
+      const config: HookConfig = {
+        version: 1,
+        hooks: [
+          { id: 'x', stage: 'beforeTool', command: process.execPath, args: [f], sources: [f] },
+        ],
+      }
+      const views = await new Hooks(root, { config }).inspect()
+      const h = new Hooks(root, { config, trust: views.map(v => v.id + ':' + v.identity) })
+      await h.begin()
+      const run = h.run(
+        'beforeTool',
+        { tool: { id: 'x', name: 'write_file', paths: [] } },
+        async () => {}
+      )
+      if (delta <= 0) await expect(run).resolves.toBeUndefined()
+      else await expect(run).rejects.toThrow('Hook')
+    }
+  })
+  it('stops aggregate calls at 64 and recovery records at 512 before another command', async () => {
+    const command = vi.spyOn(native, 'runHookProcess').mockResolvedValue('pass')
+    const { hooks, run, options } = await setup()
+    for (let i = 0; i < 64; i++) await run()
+    await expect(run()).rejects.toThrow('capacity')
+    expect(command).toHaveBeenCalledTimes(64)
+    const saved = hooks.snapshot()!
+    const check = saved.checks[0]
+    for (const n of [511, 512, 513]) {
+      const s = {
+        ...saved,
+        checks: Array.from({ length: n }, () => ({ ...check, checkId: randomUUID() })),
+      }
+      if (n <= 512) expect(validateHookSnapshot(s).checks).toHaveLength(n)
+      else expect(() => validateHookSnapshot(s)).toThrow()
+    }
+    saved.checks = Array.from({ length: 511 }, () => ({ ...check, checkId: randomUUID() }))
+    await hooks.begin(saved)
+    await run()
+    await expect(run()).rejects.toThrow('capacity')
+    expect(hooks.snapshot()?.checks).toHaveLength(512)
+    const other = await fs.mkdtemp(path.join(tmpdir(), 'hook-other-'))
+    try {
+      const views = await new Hooks(other, { config: options.config }).inspect()
+      expect(views[0].identity).not.toBe(saved.bindings[0].identity)
+    } finally {
+      await fs.rm(other, { recursive: true, force: true })
+    }
+  })
+  it('checks audit path counts without corrupting the retained snapshot', async () => {
+    const { hooks } = await setup()
+    hooks.watch(Array.from({ length: 63 }, (_, i) => 'p' + i))
+    hooks.watch(['p63'])
+    expect(hooks.snapshot()?.writes).toHaveLength(64)
+    expect(() => hooks.watch(['extra'])).toThrow('capacity')
+    expect(validateHookSnapshot(hooks.snapshot()).writes).toHaveLength(64)
+  })
+})
+
+it('requires new explicit trust and recheck before adopting replacement checker versions', async () => {
+  const f = path.join(root, 'check.mjs')
+  await fs.writeFile(f, "process.stdout.write(JSON.stringify({version:1,decision:'block'}))")
+  const config: HookConfig = {
+    version: 1,
+    hooks: [
+      { id: 'gate', stage: 'beforeTool', command: process.execPath, args: [f], sources: [f] },
+    ],
+  }
+  const first = await new Hooks(root, { config }).inspect()
+  const old = new Hooks(root, { config, trust: first.map(v => `${v.id}:${v.identity}`) })
+  await old.begin()
+  await expect(
+    old.run('beforeTool', { tool: { id: 'w', name: 'write_file', paths: [] } }, async () => {})
+  ).rejects.toThrow()
+  const saved = old.snapshot()!
+  await fs.writeFile(f, "process.stdout.write(JSON.stringify({version:1,decision:'pass'}))")
+  const current = await new Hooks(root, { config }).inspect()
+  const replacement = new Hooks(root, { config, trust: current.map(v => `${v.id}:${v.identity}`) })
+  await expect(replacement.begin(saved)).rejects.toThrow('current-trust-required')
+  await replacement.begin(saved, true)
+  await replacement.recheck(
+    async () => {},
+    'Reviewed replacement script and effects; run a new check'
+  )
+  expect(replacement.pending()).toEqual([])
+  expect(replacement.snapshot()?.checks[0]).toEqual(saved.checks[0])
+  expect(replacement.snapshot()?.checks[1].identity).not.toBe(saved.checks[0].identity)
+  expect(validateHookSnapshot(replacement.snapshot())).toBeTruthy()
 })

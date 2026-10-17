@@ -350,7 +350,7 @@ export class Agent {
     const controller = this.beginOperation()
     const budget = new RunBudget(this.options.limits, controller.signal)
     try {
-      await this.hooks.begin(recovery.hooks)
+      await this.hooks.begin(recovery.hooks, true)
       const persist = async (
         boundary: import('./execution-recovery.js').ExecutionBoundary
       ): Promise<void> => {

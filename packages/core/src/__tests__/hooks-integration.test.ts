@@ -177,6 +177,7 @@ describe('Hooks in the actual loop and recovery control', () => {
     expect(await fs.readFile(path.join(root, 'out'), 'utf8')).toBe('actual content')
     await expect(fs.stat(path.join(root, 'audit'))).rejects.toThrow()
     expect(receipts(a)[0].is_error).toBeUndefined()
+    expect(a.snapshot().recovery?.hooks?.checks[0].state).toBe('not-started')
   })
   it('retains pending Hook intent when saving it fails, with zero command and tool effects', async () => {
     const o = await options('beforeTool')

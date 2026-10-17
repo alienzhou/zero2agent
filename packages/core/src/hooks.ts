@@ -177,7 +177,8 @@ export function validateHookSnapshot(value: unknown): HookSnapshot {
       !uuid.test(c.checkId) ||
       checks.has(c.checkId) ||
       !b ||
-      b.identity !== c.identity ||
+      typeof c.identity !== 'string' ||
+      !identityPattern.test(c.identity) ||
       b.stage !== c.stage ||
       !['not-started', 'unknown', 'passed', 'blocked'].includes(c.state) ||
       (c.cause !== undefined && (typeof c.cause !== 'string' || !/^[a-z-]{1,40}$/.test(c.cause)))
@@ -306,7 +307,18 @@ export class Hooks {
         if (total > 262144) throw new Error('Hook source total capacity exceeded')
         sources.push([name, file.identity, hash(file.bytes)])
       }
-      const identity = hash(JSON.stringify([version, await physical(definition.command), sources]))
+      const identity = hash(
+        JSON.stringify([
+          version,
+          [
+            await fs.realpath(this.cwd),
+            (await fs.stat(this.cwd)).dev,
+            (await fs.stat(this.cwd)).ino,
+          ],
+          await physical(definition.command),
+          sources,
+        ])
+      )
       entries.push({
         definition,
         view: {
@@ -321,7 +333,7 @@ export class Hooks {
       throw new Error('Hook trust is stale or unknown; inspect current versions again')
     return { config, entries }
   }
-  async begin(saved?: HookSnapshot): Promise<void> {
+  async begin(saved?: HookSnapshot, rebind = false): Promise<void> {
     const current = await this.discover()
     this.config = current.config
     this.entries = current.entries
@@ -331,8 +343,16 @@ export class Hooks {
     this.state = saved
       ? validateHookSnapshot(saved)
       : { version: 1, bindings, checks: [], writes: [] }
-    if (saved && JSON.stringify(saved.bindings) !== JSON.stringify(bindings))
-      throw new HookError('beforeComplete', 'recovery', 'current-trust-required')
+    if (saved && JSON.stringify(saved.bindings) !== JSON.stringify(bindings)) {
+      if (
+        !rebind ||
+        JSON.stringify(saved.bindings.map(b => [b.id, b.stage])) !==
+          JSON.stringify(bindings.map(b => [b.id, b.stage]))
+      )
+        throw new HookError('beforeComplete', 'recovery', 'current-trust-required')
+      // Only the explicit user recheck control may adopt freshly trusted replacement versions.
+      this.state.bindings = bindings
+    }
     this.uses = 0
     this.watched = new Set(this.state.writes)
   }
@@ -386,13 +406,45 @@ export class Hooks {
     }
     return hash(JSON.stringify(values))
   }
+  reserveAfter(toolName: string): void {
+    const count = this.entries.filter(
+      e =>
+        e.view.trusted &&
+        e.view.stage === 'afterTool' &&
+        (!e.definition.tool || e.definition.tool === toolName)
+    ).length
+    if (this.state.checks.length + count > 512 || this.uses + count > 64)
+      throw new HookError('beforeTool', 'capacity', 'capacity')
+  }
+  planAfter(data: { tool: HookTool; receipt: NonNullable<HookCheck['receipt']> }): HookCheck[] {
+    this.reserveAfter(data.tool.name)
+    const planned = this.entries
+      .filter(
+        e =>
+          e.view.trusted &&
+          e.view.stage === 'afterTool' &&
+          (!e.definition.tool || e.definition.tool === data.tool.name)
+      )
+      .map(e => ({
+        checkId: randomUUID(),
+        hookId: e.view.id,
+        identity: e.view.identity,
+        stage: e.view.stage,
+        state: 'not-started' as const,
+        ...structuredClone(data),
+      }))
+    validateHookSnapshot({ ...this.state, checks: [...this.state.checks, ...planned] })
+    this.state.checks.push(...planned)
+    return planned
+  }
   async run(
     stage: HookStage,
     data: { tool?: HookTool; receipt?: HookCheck['receipt'] },
     persist: (b: ExecutionBoundary) => Promise<void>,
     signal?: AbortSignal,
     notify?: (check: HookCheck, status: 'started' | 'passed' | 'blocked' | 'unknown') => void,
-    extra: string[] = []
+    extra: string[] = [],
+    planned: HookCheck[] = []
   ): Promise<void> {
     for (const entry of this.entries.filter(
       e =>
@@ -408,7 +460,8 @@ export class Hooks {
         signal,
         notify,
         undefined,
-        extra
+        extra,
+        planned.find(c => c.hookId === entry.view.id)
       )
   }
   private async check(
@@ -419,14 +472,15 @@ export class Hooks {
     signal?: AbortSignal,
     notify?: (check: HookCheck, status: 'started' | 'passed' | 'blocked' | 'unknown') => void,
     resolves?: string,
-    extra: string[] = []
+    extra: string[] = [],
+    existing?: HookCheck
   ): Promise<void> {
     signal?.throwIfAborted()
     await this.assertCurrent()
-    if (++this.uses > 64 || this.state.checks.length >= 512)
+    if (++this.uses > 64 || (!existing && this.state.checks.length >= 512))
       throw new HookError(binding.stage, binding.id, 'capacity')
     const before = binding.stage === 'beforeComplete' ? await this.fileState(extra) : undefined
-    const check: HookCheck = {
+    const check: HookCheck = existing ?? {
       checkId: randomUUID(),
       hookId: binding.id,
       identity: binding.identity,
@@ -445,11 +499,15 @@ export class Hooks {
     if (Buffer.byteLength(input) > 32768)
       throw new HookError(binding.stage, binding.id, 'input-capacity')
     try {
-      validateHookSnapshot({ ...this.state, checks: [...this.state.checks, check] })
+      validateHookSnapshot({
+        ...this.state,
+        checks: existing ? this.state.checks : [...this.state.checks, check],
+      })
     } catch {
       throw new HookError(binding.stage, binding.id, 'invalid-input')
     }
-    this.state.checks.push(check)
+    if (!existing) this.state.checks.push(check)
+    check.state = 'unknown'
     try {
       await persist('hook-start')
     } catch (e) {
@@ -497,7 +555,7 @@ export class Hooks {
     const pending = this.pending()
     for (const old of pending) {
       const e = this.entries.find(
-        e => e.view.id === old.hookId && e.view.identity === old.identity && e.view.trusted
+        e => e.view.id === old.hookId && e.view.stage === old.stage && e.view.trusted
       )
       if (!e) throw new HookError(old.stage, old.hookId, 'current-trust-required')
       await this.check(

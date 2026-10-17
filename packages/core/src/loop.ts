@@ -347,6 +347,7 @@ export async function executeToolCalls(
       state('running')
       notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
       assertNotCancelled(ctx.signal)
+      hooks?.controller.reserveAfter(block.name)
       await execution?.start(block.id)
       assertNotCancelled(ctx.signal)
       start = Date.now()
@@ -505,21 +506,26 @@ export async function executeToolCalls(
     }
     if (execution && !execution.failure) {
       try {
-        await execution.settled(results[results.length - 1])
+        const receipt = results[results.length - 1]
+        const afterData = {
+          tool: { id: block.id, name: block.name, paths: hookPaths },
+          receipt: {
+            isError: !!receipt.is_error,
+            sha256: createHash('sha256').update(JSON.stringify(receipt)).digest('hex'),
+          },
+        }
+        const planned =
+          invoked && !execution.unknown && hooks ? hooks.controller.planAfter(afterData) : []
+        await execution.settled(receipt)
         if (invoked && !execution.unknown && hooks) {
-          const receipt = results[results.length - 1]
           await hooks.controller.run(
             'afterTool',
-            {
-              tool: { id: block.id, name: block.name, paths: hookPaths },
-              receipt: {
-                isError: !!receipt.is_error,
-                sha256: createHash('sha256').update(JSON.stringify(receipt)).digest('hex'),
-              },
-            },
+            afterData,
             hooks.persist,
             ctx.signal,
-            hooks.notify
+            hooks.notify,
+            [],
+            planned
           )
         }
       } catch (error) {
