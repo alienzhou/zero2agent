@@ -163,7 +163,7 @@ export class SessionStore {
           title: item.title,
           updatedAt: item.updatedAt,
           revision: item.revision,
-          pending: !!item.pending,
+          pending: !!item.pending || !!item.state.recovery,
         })
       } catch (error) {
         result.push({

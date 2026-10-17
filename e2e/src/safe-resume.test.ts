@@ -96,6 +96,7 @@ describe.skipIf(process.platform === 'win32')('E04-S004 real process interruptio
     expect(inspected.output).toContain('RecoveryRequiredError')
     expect(p.requests).toHaveLength(1)
     expect((await p.store.load(item.id)).state.messages).toEqual(before.state.messages)
+    expect((await p.store.list()).find(session => session.id === item.id)?.pending).toBe(true)
     const continued = await p.launch('', 'continue')
     expect(continued.code, continued.output).toBe(0)
     expect(p.requests).toHaveLength(2)
@@ -107,6 +108,7 @@ describe.skipIf(process.platform === 'win32')('E04-S004 real process interruptio
     expect(saved.version).toBe(2) // The session never downgrades after settlement.
     expect(saved.state.recovery).toBeUndefined()
     expect(saved.pending).toBeUndefined()
+    expect((await p.store.list()).find(session => session.id === item.id)?.pending).toBe(false)
     expect(JSON.stringify(p.requests[1].messages)).toContain('Create first.txt')
     if (stop === 'tool-settled')
       expect(JSON.stringify(p.requests[1].messages)).toContain(
