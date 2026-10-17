@@ -1,0 +1,33 @@
+packages/core/src/__tests__/mcp-integration.test.ts
+  s_58249cd92a0ae1::t_583e715d2007aa 1,91-104
+packages/core/src/prompt/system.ts
+  s_58249cd92a0ae1::t_b0cca31dde8494 10,25-27,76,79
+packages/core/src/prompt/types.ts
+  s_58249cd92a0ae1::t_3b53f53ecf7558 13-14
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_7bb928b96d0e8d 521
+researches/mcp/demo.mjs
+  s_58249cd92a0ae1::t_4361a9f92dfc67 279
+researches/mcp/probe-stdio.mjs
+  s_58249cd92a0ae1::t_5a55ce7193ce5f 1-82
+researches/mcp/verify-evidence.mjs
+  s_58249cd92a0ae1::t_3b7a4650a5dd9b 1-69
+specs/E05-extensibility/S003-mcp/follow-along.md
+  s_58249cd92a0ae1::t_0c737c0334c65b 88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78d0ce0601bc211c363079239f77113e2f273a5b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
