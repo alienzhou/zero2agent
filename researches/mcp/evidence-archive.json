@@ -14,5 +14,9 @@
   "delivery": "Independent draft GitHub Release; raw records are excluded from Git",
   "downloadCommand": "gh release download E05-S003-mcp-review --repo alienzhou/zero2agent --pattern e05-s003-mcp-evidence.tar.gz",
   "verifyCommand": "node researches/mcp/verify-evidence.mjs /path/to/extracted",
-  "extractedArchiveVerified": true
+  "extractedArchiveVerified": true,
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-52293f885ddc3ed56757",
+  "assetUrl": "https://github.com/alienzhou/zero2agent/releases/download/untagged-52293f885ddc3ed56757/e05-s003-mcp-evidence.tar.gz",
+  "draft": true,
+  "remoteDownloadVerified": true
 }
