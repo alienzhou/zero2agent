@@ -167,7 +167,7 @@ describe('in-memory sessions', () => {
     expect(client.messages.stream).toHaveBeenLastCalledWith(
       expect.objectContaining({
         model: 'custom-model',
-        system: 'Keep this instruction',
+        system: expect.stringContaining('Keep this instruction'),
       }),
       { signal: expect.any(AbortSignal), maxRetries: 0, timeout: 120000 }
     )

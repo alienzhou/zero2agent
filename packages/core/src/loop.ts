@@ -1,4 +1,10 @@
 import {
+  ProjectInstructions,
+  ProjectInstructionError,
+  PROJECT_INSTRUCTION_LIMITS,
+  type ProjectInstructionOptions,
+} from './project-instructions.js'
+import {
   ExecutionPersistenceError,
   RecoveryRequiredError,
   interruptedResult,
@@ -127,7 +133,8 @@ export async function executeToolCalls(
     start(id: string): Promise<void>
     settled(result: Anthropic.ToolResultBlockParam): Promise<void>
     failure?: ExecutionPersistenceError
-  }
+  },
+  instructionGuard?: { check(): Promise<void>; failure?: Error }
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -174,6 +181,7 @@ export async function executeToolCalls(
       budget?.consumeTool(block.name, block.input)
       consumed = true
       assertNotCancelled(ctx.signal)
+      if (instructionGuard?.failure) throw instructionGuard.failure
       if (!tool) throw new Error(`Unknown tool: ${block.name}`)
       const input = structuredClone(block.input) as Record<string, unknown>
       const originatingRequestId = diagnostics?.latestModelRequestId
@@ -261,6 +269,7 @@ export async function executeToolCalls(
         denied = true
         throw new Error(`Permission denied: ${boundary.reason}`)
       }
+      if (instructionGuard?.failure) throw instructionGuard.failure
       state('running')
       notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
       assertNotCancelled(ctx.signal)
@@ -268,7 +277,19 @@ export async function executeToolCalls(
       assertNotCancelled(ctx.signal)
       start = Date.now()
       // Never race a tool against cancellation: it may finish a write despite ignoring signal.
-      const execute = (): Promise<string> => {
+      const execute = async (): Promise<string> => {
+        assertNotCancelled(ctx.signal)
+        if (instructionGuard) {
+          try {
+            if (instructionGuard.failure) throw instructionGuard.failure
+            await instructionGuard.check()
+          } catch (error) {
+            instructionGuard.failure = new ProjectInstructionError(
+              `This tool was not executed: ${describeToolError(error)}`
+            )
+            throw instructionGuard.failure
+          }
+        }
         assertNotCancelled(ctx.signal)
         return tool.execute(input, callCtx)
       }
@@ -411,6 +432,9 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  projectInstructions?: ProjectInstructionOptions | false
+  /** @internal Shared volatile state owned by Agent. */
+  instructionController?: ProjectInstructions
   executionPersistence?: ExecutionPersistence
   recovery?: ExecutionRecovery
   artifactContract?: ArtifactContract
@@ -447,7 +471,14 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     userMessage = formatArtifactTask(userMessage, artifactContract)
   }
   const budget = new RunBudget(options.limits, options.signal)
-  options = { ...options, signal: budget.signal }
+  options = {
+    ...options,
+    signal: budget.signal,
+    instructionController:
+      options.instructionController ??
+      new ProjectInstructions(options.cwd ?? process.cwd(), options.projectInstructions),
+  }
+  options.instructionController!.reset()
   const session = options.session ?? new Session(options.results)
   const diagnostics = new DiagnosticEmitter(options.diagnostics, options.diagnosticContext)
   const emitter = new RuntimeEmitter(diagnostics.operationId, event => {
@@ -535,14 +566,16 @@ export function createCompactionRuntime(
     budget,
     diagnostics,
     executor,
-    request: messages =>
-      structuredClone({
+    request: messages => {
+      const request = structuredClone({
         model,
         max_tokens: budget.outputTokens,
         messages,
         tools: resultAwareTools(options.tools).map(toAnthropicTool),
         ...(options.systemPrompt && { system: options.systemPrompt }),
-      }),
+      })
+      return options.instructionController?.overlay(request) ?? request
+    },
     summarize: createContextSummarizer(client, model, budget, diagnostics, executor),
     onCompaction: options.events?.onCompaction,
   }
@@ -613,6 +646,9 @@ async function runTurnLoop(
     return request
   }
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
+  const instructions = options.instructionController!
+  let replans = 0
+  let sentInstructions = ''
   const ctx: ToolContext = {
     history: session.historyReader(() => messages, cwd ?? process.cwd()),
     recordHistoryPaths: paths => {
@@ -710,7 +746,9 @@ async function runTurnLoop(
       for (let recovery = 0; ; recovery++) {
         emitter.emit({ type: 'phase', phase: 'preparing' })
         assertNotCancelled(options.signal)
+        await instructions.refresh(permissions, options.signal)
         const request = await session.prepareRequest(messages, runtime)
+        sentInstructions = instructions.fingerprint
         assertNotCancelled(options.signal)
         try {
           emitter.emit({ type: 'phase', phase: 'requesting' })
@@ -789,21 +827,84 @@ async function runTurnLoop(
         )
         await persist('response')
         emitter.emit({ type: 'phase', phase: 'tools' })
-        const toolResults = await executeToolCalls(
-          response.content,
-          tools,
-          ctx,
-          events,
-          permissions,
-          emitter,
-          diagnostics,
-          options.fileMutations,
-          options.diagnosticContext?.sessionId,
-          budget,
-          completionSafety,
-          readRecovery,
-          enabled ? execution : undefined
-        )
+        let instructionFailure: Error | undefined
+        let replan = false
+        try {
+          await instructions.prepareBatch(response.content, tools, permissions, options.signal)
+          replan = sentInstructions !== instructions.fingerprint
+          if (replan && replans++ >= PROJECT_INSTRUCTION_LIMITS.replans)
+            throw new ProjectInstructionError(
+              'replanning limit reached (3); this batch was not executed'
+            )
+        } catch (error) {
+          instructionFailure =
+            error instanceof Error ? error : new ProjectInstructionError('batch preflight failed')
+        }
+        const guard = {
+          failure: undefined as Error | undefined,
+          check: async (): Promise<void> => {
+            await instructions.refresh(permissions, options.signal)
+            if (sentInstructions !== instructions.fingerprint)
+              throw new ProjectInstructionError(
+                'rules changed before execution; remaining tools were not executed. Review completed effects before continuing.'
+              )
+          },
+        }
+        let toolResults: Anthropic.ToolResultBlockParam[]
+        if (replan || instructionFailure) {
+          const reason = instructionFailure
+            ? `Error: ${instructionFailure.message}. This batch was not executed.`
+            : 'Project instructions changed or a new scope was discovered. This entire batch was not executed. Re-plan using the current project context before submitting new calls.'
+          toolResults = []
+          for (const call of response.content.filter(b => b.type === 'tool_use')) {
+            try {
+              budget.consumeTool(call.name, call.input)
+            } catch (error) {
+              instructionFailure ??= error as Error
+            }
+            const result: Anthropic.ToolResultBlockParam = {
+              type: 'tool_result',
+              tool_use_id: call.id,
+              is_error: true,
+              content: reason,
+            }
+            toolResults.push(result)
+            emitter.emit({
+              type: 'tool-state',
+              toolCallId: call.id,
+              toolName: call.name,
+              status: 'error',
+              reason,
+              output: reason,
+            })
+            notifyObserver(() => events?.onToolError?.(call.name, reason))
+            if (enabled && !execution.failure) {
+              try {
+                await execution.settled(result)
+              } catch {
+                execution.failure = new ExecutionPersistenceError()
+              }
+            }
+          }
+        } else {
+          toolResults = await executeToolCalls(
+            response.content,
+            tools,
+            ctx,
+            events,
+            permissions,
+            emitter,
+            diagnostics,
+            options.fileMutations,
+            options.diagnosticContext?.sessionId,
+            budget,
+            completionSafety,
+            readRecovery,
+            enabled ? execution : undefined,
+            guard
+          )
+          instructionFailure = guard.failure
+        }
         if (execution.failure) {
           for (const result of toolResults) {
             const item = tracked.find(
@@ -815,6 +916,7 @@ async function runTurnLoop(
         messages.push({ role: 'user', content: toolResults })
         session.recordHistorySource(messages, messages.length - 1, [...batchHistoryPaths])
         if (execution.failure) throw execution.failure
+        if (instructionFailure) throw instructionFailure
         budget.check()
         assertNotCancelled(options.signal)
         continue

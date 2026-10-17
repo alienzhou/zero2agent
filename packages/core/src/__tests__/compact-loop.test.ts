@@ -158,7 +158,7 @@ describe('compaction across the real loop and session', () => {
     // Leave distinct completed prefixes so both recoveries can genuinely reduce context.
     const recover = vi.spyOn(Session.prototype, 'recoverContext')
     const tighten = vi.spyOn(ContextBudget.prototype, 'tighten')
-    const agent = new Agent({ tools: [tool], context })
+    const agent = new Agent({ tools: [tool], context, projectInstructions: false })
     await agent.run('first constraint')
     await agent.run('second constraint')
     await expect(agent.run('write exactly once')).rejects.toBe(overflow)
