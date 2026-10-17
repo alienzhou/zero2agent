@@ -3,6 +3,7 @@ import {
   type ProjectInstructionOptions,
   type ProjectInstructionView,
 } from './project-instructions.js'
+import { Skills, hasSkillHistory, type SkillsOptions, type SkillView } from './skills.js'
 import {
   RecoveryRequiredError,
   type ExecutionPersistence,
@@ -31,9 +32,10 @@ import type Anthropic from '@anthropic-ai/sdk'
 import { TurnCancelledError, RunBudgetError } from './runtime.js'
 import { RunBudget, validateRunLimits, type RunLimits } from './run-budget.js'
 import { RequestExecutor } from './request-executor.js'
-import type { SessionSnapshot } from './session-snapshot.js'
+import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  skills?: SkillsOptions | false
   projectInstructions?: ProjectInstructionOptions | false
   executionPersistence?: ExecutionPersistence
   results?: ResultStoreOptions
@@ -59,6 +61,7 @@ export class Agent {
   private permissions: PermissionController
   private active?: AbortController
   private instructions: ProjectInstructions
+  private skills: Skills
 
   constructor(options: AgentOptions = {}) {
     this.session = new Session(options.results)
@@ -67,6 +70,7 @@ export class Agent {
       options.cwd ?? process.cwd(),
       options.projectInstructions
     )
+    this.skills = new Skills(options.cwd ?? process.cwd(), options.skills)
     this.options = {
       ...options,
       limits: validateRunLimits(options.limits),
@@ -116,6 +120,7 @@ export class Agent {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
+        skillController: this.skills,
         instructionController: this.instructions,
         artifactContract,
         recovery,
@@ -153,11 +158,14 @@ export class Agent {
     diagnostics.start('compact')
     try {
       await this.instructions.refresh(this.permissions, budget.signal)
+      await this.skills.refresh(this.permissions, budget.signal)
       const result = await this.session.compact(() =>
         createCompactionRuntime(
           {
             ...this.options,
             instructionController: this.instructions,
+            skillController: this.skills,
+            permissionController: this.permissions,
             events: {
               ...this.options.events,
               onCompaction: event => {
@@ -229,6 +237,7 @@ export class Agent {
       throw new Error('Session is already running. Wait before running or resetting.')
     this.session.reset()
     this.instructions.reset('empty')
+    this.skills.reset('empty')
   }
 
   /** Inspect a detached snapshot, never the writable session history. */
@@ -238,13 +247,16 @@ export class Agent {
 
   snapshot(): SessionSnapshot {
     if (this.active) throw new Error('Wait for the running operation before saving.')
+    this.session.skills = this.skills.snapshotSelection()
     return this.session.snapshot()
   }
 
   restore(snapshot: unknown): void {
     if (this.active) throw new Error('Wait for the running operation before restoring.')
-    this.session.restore(snapshot)
+    const candidate = validateSessionSnapshot(snapshot)
+    this.session.restore(candidate)
     this.instructions.reset('restored')
+    this.skills.restoreSelection(candidate.skills, hasSkillHistory(candidate.messages))
     // Approval state is process-local and never inherited from a saved conversation.
     this.permissions.cancelPending()
     this.permissions = new PermissionController(this.options.permissions)
@@ -268,6 +280,46 @@ export class Agent {
   setProjectInstructionsEnabled(enabled: boolean): void {
     if (this.active) throw new Error('Cannot change project instructions while running.')
     this.instructions.setEnabled(enabled)
+  }
+
+  /** Detached current catalogue and activation metadata; no disk or model work. */
+  getSkills(): SkillView {
+    return this.skills.view()
+  }
+
+  async refreshSkills(): Promise<SkillView> {
+    const controller = this.beginOperation()
+    try {
+      await this.skills.refresh(this.permissions, controller.signal)
+      return this.skills.view()
+    } finally {
+      this.session.skills = this.skills.snapshotSelection()
+      this.active = undefined
+    }
+  }
+
+  async activateSkill(selector: string): Promise<SkillView> {
+    const controller = this.beginOperation()
+    try {
+      await this.skills.activate(selector, this.permissions, controller.signal)
+      return this.skills.view()
+    } finally {
+      this.session.skills = this.skills.snapshotSelection()
+      this.active = undefined
+    }
+  }
+
+  deactivateSkill(selector: string): SkillView {
+    if (this.active) throw new Error('Cannot change skills while running.')
+    this.skills.deactivate(selector)
+    this.session.skills = this.skills.snapshotSelection()
+    return this.skills.view()
+  }
+
+  setSkillsEnabled(enabled: boolean): void {
+    if (this.active) throw new Error('Cannot change skills while running.')
+    this.skills.setEnabled(enabled)
+    this.session.skills = this.skills.snapshotSelection()
   }
 
   /**

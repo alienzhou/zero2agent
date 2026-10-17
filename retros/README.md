@@ -70,3 +70,5 @@ Brief description of the iteration.
 - [E04-S004：恢复以前，先说明哪些事实已知](./E04-S004-safe-resume.md)
 
 - [E05-S001：规则更新不应消耗无谓的重规划](./E05-S001-project-instructions.md)
+
+- [E05-S002：按需加载要覆盖整条执行链](./E05-S002-skills.md)

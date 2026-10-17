@@ -10,7 +10,7 @@ const REVISION = /^([1-9][0-9]{0,8})\.json$/
 const MAX_BYTES = 32 * 1024 * 1024
 
 export interface StoredSession {
-  version: 1 | 2
+  version: 1 | 2 | 3
   id: string
   cwd: string
   title: string
@@ -106,10 +106,12 @@ export class SessionStore {
       if (!stat.isFile() || stat.size > MAX_BYTES)
         throw new Error('Session snapshot is not a regular file or exceeds 32 MiB.')
       const data = JSON.parse(await handle.readFile('utf8')) as StoredSession
-      if (!data || ![1, 2].includes(data.version))
+      if (!data || ![1, 2, 3].includes(data.version))
         throw new Error('Unsupported session format version.')
       if (data.version === 1 && data.state?.recovery !== undefined)
         throw new Error('Execution recovery requires session format version 2.')
+      if (data.version < 3 && data.state?.skills !== undefined)
+        throw new Error('Skill selection requires session format version 3.')
       if (data.id !== id || data.cwd !== this.cwd || data.revision !== revision)
         throw new Error('Session identity, workspace or revision does not match.')
       if (
@@ -197,7 +199,12 @@ export class SessionStore {
       message => message.role === 'user' && typeof message.content === 'string'
     )
     const next: StoredSession = {
-      version: current.version === 2 || snapshot.recovery ? 2 : 1,
+      version:
+        current.version === 3 || snapshot.skills
+          ? 3
+          : current.version === 2 || snapshot.recovery
+            ? 2
+            : 1,
       id: current.id,
       cwd: this.cwd,
       createdAt: current.createdAt,

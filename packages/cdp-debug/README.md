@@ -16,7 +16,7 @@ pnpm exec cdp-debug --help
 
 ## Skill
 
-Static Cursor skill: [skills/SKILL.md](./skills/SKILL.md) — copy or symlink into `.cursor/skills/cdp-debug/`.
+Agent Skills example: [cdp-debug-node/SKILL.md](./skills/cdp-debug-node/SKILL.md). Copy or symlink the `cdp-debug-node` directory into `.agents/skills/cdp-debug-node/` (or a client's supported skill root), keeping the directory name equal to the frontmatter `name`. Discovery and loading provide instructions; debugger commands still require the current tool permissions.
 
 ## API
 

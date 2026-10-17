@@ -130,6 +130,23 @@ plain/TUI 的 `/instructions` 查看最近读取版本与上次模型请求实�
 
 遵循普通 Markdown 的 [AGENTS.md 开放格式](https://agents.md/)，无必填字段。嵌套约定仅作用于相应目录，明确用户要求优先；项目文件无法批准工具。完整容量、恢复语义及无需密钥的双包跟练见 [E05-S001](../specs/E05-extensibility/S001-project-instructions/README.md)。
 
+## Skills 按需加载
+
+在项目的 `.agents/skills/fix-with-tests/SKILL.md` 放入带 `name`、`description` YAML 头部的 Markdown。名称须与技能目录相同；默认只发现启动 cwd 的这一个集合，不自动查找 home 或父目录。
+
+```bash
+# 查看摘要，无需模型密钥
+node packages/tui/dist/cli.js --skills
+# 明确选择后执行任务
+node packages/tui/dist/cli.js --skill fix-with-tests "修复金额计算并补测试"
+# 显式追加集合目录或单个技能目录
+node packages/tui/dist/cli.js --skill-root /path/to/skills --skills
+```
+
+plain/TUI 中用 `/skills` 查看来源、状态、当前版本与有限资源读取记录；`/skills load <名称或来源ID>` 选择，`/skills unload <名称或来源ID>` 卸载，`/skills refresh` 重读，`/skills off` 和 `/skills on` 控制开关。单次关闭使用 `--no-skills` 或 `ZERO2AGENT_NO_SKILLS=1`。
+
+模型先看到名称/描述目录，可调用 `load_skill`；下一次请求才包含选中正文，参考文件由 `read_skill_resource` 按相对技能根分页读取。外部显式目录仍须经过读取许可；加载不启动脚本，`allowed-tools` 只显示未实现权限语义的警告。恢复只恢复选择，按当前文件和权限重新加载。无需密钥的真实文件跟练、格式说明与完整上限见 [E05-S002](../specs/E05-extensibility/S002-skills/README.md)。
+
 ## 运行日志与故障追查
 
 S005 默认把请求、工具、权限与保存元信息写入本地日志。构建后用 `/logs` 选择运行，Enter 进入独立查看器，方向键、Page、Home/End 滚动，Esc 返回并保留草稿。

@@ -1,12 +1,11 @@
 ---
-
-## name: cdp-debug-node
-
+name: cdp-debug-node
 description: >
   Programmatic Node.js debugging via CDP using the cdp-debug HTTP server and CLI.
   Use when debugging a Node project with breakpoints, call stacks, and scope variables;
   when the user mentions CDP, Chrome DevTools Protocol, --inspect, breakpoints, or
   wants an AI agent to drive a debugger like VS Code.
+---
 
 # CDP Debug（Node.js）— AI Agent 使用说明
 
@@ -186,9 +185,10 @@ CLI 走 `http://127.0.0.1:<serverPort>`：
 
 ## 安装 Skill
 
-将本目录拷贝或符号链接到项目：
+将 `cdp-debug-node` 目录拷贝或符号链接到项目技能目录，保留与 frontmatter `name` 一致的目录名：
 
 ```bash
-ln -sf /path/to/packages/cdp-debug/skills /path/to/project/.cursor/skills/cdp-debug
+mkdir -p /path/to/project/.agents/skills
+ln -s /path/to/packages/cdp-debug/skills/cdp-debug-node /path/to/project/.agents/skills/cdp-debug-node
 ```
 

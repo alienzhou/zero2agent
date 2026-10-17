@@ -1,0 +1,123 @@
+{
+  "title": "Zero2Agent · E05-S002 Skills 的发现与按需加载",
+  "date": "2026-10-17",
+  "draft": true,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "skills-on-demand",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "先看到技能目录，需要时再读完整步骤",
+      "number": 1,
+      "sources": [
+        "O01",
+        "S01"
+      ]
+    },
+    {
+      "file": "02-layers.html",
+      "title": "先知道能做什么，再取这次需要的细节",
+      "number": 2,
+      "sources": [
+        "O01",
+        "S01",
+        "T01"
+      ]
+    },
+    {
+      "file": "03-package.html",
+      "title": "目录名、元数据，先让加载器读得懂",
+      "number": 3,
+      "sources": [
+        "O01",
+        "S02",
+        "D01"
+      ]
+    },
+    {
+      "file": "04-selection.html",
+      "title": "用户明确选，模型也能从目录里选",
+      "number": 4,
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-before-work.html",
+      "title": "同一批“加载 + 写文件”，不能抢先把文件写了",
+      "number": 5,
+      "sources": [
+        "S03",
+        "D01",
+        "T01"
+      ]
+    },
+    {
+      "file": "06-resources.html",
+      "title": "相对技能根定位，读取仍要经过当前许可",
+      "number": 6,
+      "sources": [
+        "S01",
+        "S04",
+        "T01"
+      ]
+    },
+    {
+      "file": "07-scripts.html",
+      "title": "看到“自动运行”，也不能跳过工具授权",
+      "number": 7,
+      "sources": [
+        "O01",
+        "S01",
+        "S04",
+        "T02"
+      ]
+    },
+    {
+      "file": "08-current.html",
+      "title": "恢复时重新读取，停用后只保留历史事实",
+      "number": 8,
+      "sources": [
+        "S01",
+        "S03",
+        "S05",
+        "T01"
+      ]
+    },
+    {
+      "file": "09-controls.html",
+      "title": "先核对来源，再选择、刷新或停用",
+      "number": 9,
+      "sources": [
+        "S06",
+        "T03",
+        "D02"
+      ]
+    },
+    {
+      "file": "10-practice.html",
+      "title": "用同一个金额错误，观察三层内容依次出现",
+      "number": 10,
+      "sources": [
+        "T02",
+        "D02"
+      ]
+    },
+    {
+      "file": "11-verify.html",
+      "title": "核对请求、文件、进程，才能证明“按需”和“受控”",
+      "number": 11,
+      "sources": [
+        "T01",
+        "T02",
+        "T03",
+        "D01"
+      ]
+    }
+  ]
+}

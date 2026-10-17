@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "story": "E05-S002",
+  "fixtureVersion": 1,
+  "status": "normal-failed-denied-passed",
+  "source": "398a795630c7509e21cc7504786f8751298784e4",
+  "startedAt": "2026-10-17T09:58:47.588Z",
+  "finishedAt": "2026-10-17T09:59:06.416Z",
+  "requestedModel": "claude-sonnet-4-20250514",
+  "reportedModels": [
+    "MiniMax-M3"
+  ],
+  "limits": {
+    "maxRequests": 8,
+    "maxToolCalls": 12,
+    "maxDurationMs": 120000,
+    "maxRetries": 0,
+    "requestTimeoutMs": 120000
+  },
+  "frozenCasesSha256": "9a913b28fa93dd9e3fe30a029579829654f6a0d0974ac199fdf56b90809b871b",
+  "evidenceDirectory": "tmp/e05-s002/live-AvSZ0n",
+  "log": "tmp/e05-s002/live-fixed-50ahCr",
+  "cases": [
+    {
+      "name": "normal",
+      "passed": false,
+      "requests": 8,
+      "toolCalls": 11,
+      "pairedResults": 11,
+      "deniedCalls": 0,
+      "terminalStarts": 1,
+      "nativeTerminal": [
+        {
+          "terminalOutcome": "completed",
+          "exitCode": 0,
+          "pid": 48658,
+          "request": 4,
+          "input": {
+            "command": "node --experimental-strip-types --test amount.test.ts",
+            "workdir": "packages/api"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "tool": "replace_in_file",
+          "request": 3,
+          "path": "packages/api/amount.ts",
+          "changedPaths": [
+            "packages/api/amount.ts"
+          ],
+          "testsPassedBefore": false
+        },
+        {
+          "tool": "replace_in_file",
+          "request": 3,
+          "path": "packages/api/amount.test.ts",
+          "changedPaths": [
+            "packages/api/amount.test.ts"
+          ],
+          "testsPassedBefore": false
+        },
+        {
+          "tool": "write_file",
+          "request": 5,
+          "path": "artifacts/change-report.json",
+          "changedPaths": [
+            "artifacts/change-report.json"
+          ],
+          "testsPassedBefore": true
+        },
+        {
+          "tool": "write_file",
+          "request": 8,
+          "path": "artifacts/change-report.json",
+          "changedPaths": [
+            "artifacts/change-report.json"
+          ],
+          "testsPassedBefore": true
+        }
+      ],
+      "reportWrites": [
+        {
+          "id": "call_function_znekf871x1is_1",
+          "rootFields": [
+            "evidence",
+            "report",
+            "rules"
+          ]
+        },
+        {
+          "id": "call_function_qxbqlbcqtfj7_1",
+          "rootFields": [
+            "evidence",
+            "package",
+            "testsPassed",
+            "summary",
+            "rules"
+          ]
+        }
+      ],
+      "failure": "Run budget stopped: requests. Completed results are retained; effects were not rolled back.",
+      "independentChecks": "Not run: the Agent threw before the independent post-run evaluator."
+    },
+    {
+      "name": "denied",
+      "passed": true,
+      "requests": 2,
+      "toolCalls": 1,
+      "pairedResults": 1,
+      "deniedCalls": 1,
+      "terminalStarts": 0,
+      "nativeTerminal": [],
+      "effects": [],
+      "changedPaths": []
+    }
+  ],
+  "diagnosis": "The reference JSON wrapped the intended report in evidence/report/rules. The model copied the wrapper, then retained extra fields during repair. The artifact contract rejected completion, and the frozen request budget stopped the turn. The report was written twice, also violating the unchanged once-per-file criterion.",
+  "nextFixture": "Version 2 changes only the report-format resource to a three-field fill-in template and rejects an unreplaced summary placeholder. Tasks, skill bodies, model, budgets and other effect checks remain unchanged; version 2 is a distinct input evaluation.",
+  "privacy": "Known credential values absent; request headers never recorded."
+}

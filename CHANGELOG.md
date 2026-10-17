@@ -10,6 +10,14 @@
 
 本项目使用**两层版本结构**：`E01-S001`（Epic 阶段 + Story 迭代）。
 
+## E05-S002：Skills 的发现与按需加载
+
+- 按 Agent Skills 开放格式校验 SKILL.md，修正 CDP 示例；默认项目目录与显式根发现，名称/来源身份消歧。
+- 名称/描述摘要 → 选中正文 → 有版本的相对资源页分层进入请求；当前读取权限、具体容量、输入与运行预算共同约束。
+- 用户与模型选择、整批加载隔离、版本变化重规划和审批后再验；加载不会执行脚本，allowed-tools 不扩权。
+- CLI/plain/TUI 查看、加载、卸载、刷新与开关；会话仅保存选择元信息，恢复重读当前文件与权限。
+- 11 页图解、[跟练](./specs/E05-extensibility/S002-skills/follow-along.md)、[验收](./specs/E05-extensibility/S002-skills/details/03-verification-checklist.md)和[复盘](./retros/E05-S002-skills.md)。原始实验附件独立归档。最终复核修复整父目录替换的读取身份问题并补回归，按用户授权由 [PR #29](https://github.com/alienzhou/zero2agent/pull/29) 交付；站点未部署。
+
 ## E05-S001：项目指令与 AGENTS.md
 
 - 支持开放 Markdown 格式、根/cwd/目标祖先链发现、目录作用域及 SHA-256 内容版本；明确用户要求优先于项目约定。

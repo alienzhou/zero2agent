@@ -6,12 +6,14 @@ import { ContextBudget, type ContextOptions, type ContextRequest } from './conte
 import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
 import { RunBudgetError } from './runtime.js'
 import { HistoryEvidence, type HistoryReader } from './history-evidence.js'
+import type { SkillSelectionSnapshot } from './skills.js'
 
 const INTERRUPTED =
   '[Harness] This turn was interrupted. Completed tool results are retained; no file changes were rolled back. Re-check the workspace before continuing.'
 
 /** One in-memory conversation. Resetting history never undoes tool side effects. */
 export class Session {
+  skills?: SkillSelectionSnapshot
   recovery?: ExecutionRecovery
   private messages: Anthropic.MessageParam[] = []
   private running = false
@@ -93,6 +95,7 @@ export class Session {
   /** Internal execution boundary: caller supplies paired history, never an in-flight SDK object. */
   executionSnapshot(messages: Anthropic.MessageParam[]): SessionSnapshot {
     return {
+      ...(this.skills && { skills: structuredClone(this.skills) }),
       ...(this.recovery && { recovery: structuredClone(this.recovery) }),
       messages: structuredClone(messages),
       context: this.context.snapshot(),
@@ -108,6 +111,7 @@ export class Session {
     this.evidence.restore(snapshot.history)
     this.context.restore(snapshot.context)
     this.recovery = snapshot.recovery
+    this.skills = snapshot.skills
     this.messages = snapshot.messages
     this.budget = undefined
     this.budgetKey = ''
@@ -121,6 +125,7 @@ export class Session {
     this.context.reset()
     this.budget = undefined
     this.recovery = undefined
+    this.skills = undefined
     this.messages = []
   }
 

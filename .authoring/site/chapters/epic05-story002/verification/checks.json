@@ -1,0 +1,154 @@
+{
+  "capturedAt": "2026-10-17T09:48:10.894Z",
+  "chapter": "epic05-story002",
+  "browser": "155.0.8059.82",
+  "manifestPages": 11,
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "sources": [
+        "O01",
+        "S01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "02-layers.html",
+      "sources": [
+        "O01",
+        "S01",
+        "T01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "03-package.html",
+      "sources": [
+        "O01",
+        "S02",
+        "D01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "04-selection.html",
+      "sources": [
+        "S01",
+        "S03",
+        "T01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "05-before-work.html",
+      "sources": [
+        "S03",
+        "D01",
+        "T01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "06-resources.html",
+      "sources": [
+        "S01",
+        "S04",
+        "T01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "07-scripts.html",
+      "sources": [
+        "O01",
+        "S01",
+        "S04",
+        "T02"
+      ],
+      "issues": []
+    },
+    {
+      "file": "08-current.html",
+      "sources": [
+        "S01",
+        "S03",
+        "S05",
+        "T01"
+      ],
+      "issues": []
+    },
+    {
+      "file": "09-controls.html",
+      "sources": [
+        "S06",
+        "T03",
+        "D02"
+      ],
+      "issues": []
+    },
+    {
+      "file": "10-practice.html",
+      "sources": [
+        "T02",
+        "D02"
+      ],
+      "issues": []
+    },
+    {
+      "file": "11-verify.html",
+      "sources": [
+        "T01",
+        "T02",
+        "T03",
+        "D01"
+      ],
+      "issues": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "count": 11,
+      "textExpanded": true,
+      "zoom": true,
+      "navigation": true,
+      "selected": "07-scripts",
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "count": 11,
+      "textExpanded": true,
+      "zoom": true,
+      "navigation": true,
+      "selected": "07-scripts",
+      "horizontalOverflow": false
+    }
+  ],
+  "errors": [],
+  "requestFailures": [],
+  "resourceErrors": [],
+  "sourceHashes": {
+    ".authoring/site/chapters/epic05-story002/author.cjs": "e6dba63fa937e1d7e17e5e48651d76655f1dba879b713f9d15e3e5d14e6130df",
+    "site/chapters/epic05-story002/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
+    "site/chapters/epic05-story002/pages.json": "852cfd721b1e2735e607443f1ef6d52825ddedd0ba824daf2d022c9619ef0279",
+    "scripts/e05-s002-course-check.mjs": "8406a933d5c3967f5bdc230ccf0f838f6dec60f665a469f36db3cff404b36be9",
+    "site/chapters/epic05-story002/01-cover.html": "8986502579050186ef7b90603ed0aefd7b884d76628b07ae8712d21c9ab56a1b",
+    "site/chapters/epic05-story002/02-layers.html": "970550cc0bf4e70bbee4f0a937fed8a6bf70b2c35e86c02d851b4e12fad802e0",
+    "site/chapters/epic05-story002/03-package.html": "deffed431d20584c7fba7491e901baaca2d5b626a25452d1a245abea25d58da3",
+    "site/chapters/epic05-story002/04-selection.html": "6fa42d2f28b57be97b763164ca666b1d7db1a978bb55fe363efb07c399665b08",
+    "site/chapters/epic05-story002/05-before-work.html": "82db51f71d9da1c8eb2158b520ea900b13882ccbe33ca2612d81ab080a156f37",
+    "site/chapters/epic05-story002/06-resources.html": "5845a544f4416b323418789ecef1ae01c1686604c1bbab2c57c1655deecacaf1",
+    "site/chapters/epic05-story002/07-scripts.html": "1da2e2a7da6b62fcb87a979126a2c5693979c1c7bcf1cb55dc56c59f7615a7e5",
+    "site/chapters/epic05-story002/08-current.html": "c1caff3a89fc992d54f1d8ad7b36e7961d5b468731f48c4c145b28d24b61bfd3",
+    "site/chapters/epic05-story002/09-controls.html": "f10f39cd9ef8a710d94a9894aac342a74cc58cd2cc86d9f1fa58a10158606bbc",
+    "site/chapters/epic05-story002/10-practice.html": "cad08b495817f2f564ec0e7c8b7a485340664d4d254d9de5cec1e225a440b32f",
+    "site/chapters/epic05-story002/11-verify.html": "86cd18828b6c3d3e12035c1a06d9be82eae363e7b2eb78b6f50842c776cdaa2e"
+  }
+}

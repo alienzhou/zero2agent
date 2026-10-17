@@ -20,7 +20,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
     "@vscode/ripgrep": "^1.17.1",
-    "@zero2agent/shared": "workspace:*"
+    "@zero2agent/shared": "workspace:*",
+    "yaml": "2.8.3"
   },
   "devDependencies": {
     "@types/node": "^25.4.0",

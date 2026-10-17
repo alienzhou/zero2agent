@@ -1,4 +1,5 @@
 import { formatProjectInstructions } from './instruction-view.js'
+import { formatSkills } from './skill-view.js'
 import { CheckpointStore, type RestorePlan, type Checkpoint } from './checkpoint-store.js'
 import { formatCheckpointDiff, formatCheckpointUsage } from './checkpoint-view.js'
 import { RecoveryRequiredError, listBackgroundProcesses } from '@zero2agent/core'
@@ -306,6 +307,37 @@ export class Conversations {
     const work = (async () => {
       try {
         return formatProjectInstructions(await this.agent.refreshProjectInstructions())
+      } finally {
+        this.busy = false
+      }
+    })()
+    this.operation = work
+    return work
+  }
+
+  skills(action = 'show'): Promise<string> {
+    this.assertIdle()
+    const [command, ...arguments_] = action.trim().split(/\s+/)
+    const selector = arguments_.join(' ')
+    if (
+      !['show', 'refresh', 'off', 'on', 'load', 'unload'].includes(command) ||
+      (['load', 'unload'].includes(command) ? !selector || arguments_.length !== 1 : !!selector)
+    )
+      return Promise.reject(
+        new Error('用法：/skills [refresh|off|on|load 名称或ID|unload 名称或ID]')
+      )
+    if (command === 'show') return Promise.resolve(formatSkills(this.agent.getSkills()))
+    this.busy = true
+    this.cancelled = false
+    const work = (async () => {
+      try {
+        if (command === 'off' || command === 'on') this.agent.setSkillsEnabled(command === 'on')
+        if (command === 'refresh' || command === 'on') await this.agent.refreshSkills()
+        if (command === 'load') await this.agent.activateSkill(selector)
+        if (command === 'unload') this.agent.deactivateSkill(selector)
+        this.dirty = !!this.store
+        await this.flush()
+        return formatSkills(this.agent.getSkills())
       } finally {
         this.busy = false
       }

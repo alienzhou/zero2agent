@@ -2,9 +2,11 @@ import { validateExecutionRecovery, type ExecutionRecovery } from './execution-r
 import { validateResultSnapshot, type ResultSnapshot } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { validateHistorySnapshot, type HistorySnapshot } from './history-evidence.js'
+import { validateSkillSelectionSnapshot, type SkillSelectionSnapshot } from './skills.js'
 
 /** Durable data only. Pending jobs, budgets and temporary pruning artifacts are rebuilt. */
 export interface SessionSnapshot {
+  skills?: SkillSelectionSnapshot
   recovery?: ExecutionRecovery
   results?: ResultSnapshot
   history?: HistorySnapshot
@@ -104,6 +106,7 @@ export function validateSessionSnapshot(value: unknown): SessionSnapshot {
   }
   if (pending.size) fail()
   return structuredClone({
+    ...(value.skills === undefined ? {} : { skills: validateSkillSelectionSnapshot(value.skills) }),
     ...(value.recovery === undefined
       ? {}
       : {

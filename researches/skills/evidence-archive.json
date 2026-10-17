@@ -1,0 +1,35 @@
+{
+  "source": "6600f325ae5cbe75f5bd7e8508c0a50df95beda6",
+  "asset": "e05-s002-skills-evidence.tar.gz",
+  "bytes": 8409931,
+  "sha256": "c596971c646709f2a5da3425b108552a3ba05217226aab70b57cdcb214f31313",
+  "manifestSha256": "ce1727339900886a79230b4de1cdde44596117f44a6dce1f59d31cc1d965ec9d",
+  "fileCount": 1122,
+  "uncompressedBytes": 26681430,
+  "version": 1,
+  "story": "E05-S002",
+  "releaseTag": "E05-S002-skills-evidence",
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-ff2259a6dde03d9c0b7f",
+  "releaseStatus": "draft-review-evidence",
+  "downloadVerified": true,
+  "manifestVerified": true,
+  "comparisonReplayedAfterDownload": true,
+  "privateDataCheck": "Known local credential values absent; authentication headers never captured. Synthetic fixtures only.",
+  "notes": [
+    "Raw requests, responses, terminal bytes, browser PNGs and failed cases remain outside Git history.",
+    "Original v1/v2 live batches both remain 1/2; per-case evidence reuse and limitations are explicit in verification.json.",
+    "Draft assets require repository access. No site/course publication."
+  ],
+  "finalReview": {
+    "source": "25db158868495ed77832105863c196212b611758",
+    "asset": "e05-s002-final-review-evidence.tar.gz",
+    "bytes": 3770974,
+    "sha256": "429df92ee3a9a46ac715053043168c05dbbd0c061508c1041ab1ab0cb4ce0eed",
+    "manifestSha256": "5cb5bdd74cb1842bd87695c6ee85ed4f98dfece192a6716fb8907f4364e57cee",
+    "fileCount": 314,
+    "downloadVerified": true,
+    "manifestVerified": true,
+    "currentSkillSourceVerified": true,
+    "scope": "Final review logs, original race failure and fixed regression, current full965/offline evidence, fresh PC/H5 captures and source. Original service records and first archive remain unchanged."
+  }
+}
