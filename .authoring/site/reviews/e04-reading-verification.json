@@ -165,5 +165,7 @@
   "runtimeChanged": false,
   "runtimeTestsRerun": false,
   "deployed": false,
-  "note": "Historical engineering and live-service evidence retains its original source revision; current source hashes are in chapter reports."
+  "note": "Historical engineering and live-service evidence retains its original source revision; current source hashes are in chapter reports.",
+  "verifiedSourceCommit": "387f9fd444983606e43f3f5c988c1c3687c41670",
+  "externalEvidence": "e04-reading-evidence.json"
 }

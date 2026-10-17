@@ -30,6 +30,6 @@ P02/P03 分别提供具体故障现场和恢复边界；P04–P08 依次解释�
 
 ## 验证范围
 
-本轮只修改课程编辑源、生成产物、检查脚本和配套文档；运行时实现、工程测试及原真实服务验收保持原版本。重新验证实际 HTML、目录/搜索一致性、PC/H5 导航、文字展开、图解放大和逐页可读性。当前摘要见 [课程检查索引](../.authoring/site/reviews/e04-reading-verification.json)，原始截图通过独立外部归档提供，不提交 Git。原交付文档中的 18 页描述是当时的验收历史。
+本轮只修改课程编辑源、生成产物、检查脚本和配套文档；运行时实现、工程测试及原真实服务验收保持原版本。重新验证实际 HTML、目录/搜索一致性、PC/H5 导航、文字展开、图解放大和逐页可读性。当前摘要见 [课程检查索引](../.authoring/site/reviews/e04-reading-verification.json)，原始截图保存在[独立外部归档草稿](https://github.com/alienzhou/zero2agent/releases/tag/untagged-aa5fec976a9b5bbe43aa)（访问需相应仓库权限），不提交 Git；[下载与校验索引](../.authoring/site/reviews/e04-reading-evidence.json)记录源码版本、附件哈希和回下载验证。原交付文档中的 18 页描述是当时的验收历史。
 
 本轮提供 PR review，未合并，也未部署课程。
