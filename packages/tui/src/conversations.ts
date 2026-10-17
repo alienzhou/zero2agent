@@ -1,3 +1,4 @@
+import { formatProjectInstructions } from './instruction-view.js'
 import { CheckpointStore, type RestorePlan, type Checkpoint } from './checkpoint-store.js'
 import { formatCheckpointDiff, formatCheckpointUsage } from './checkpoint-view.js'
 import { RecoveryRequiredError, listBackgroundProcesses } from '@zero2agent/core'
@@ -292,6 +293,27 @@ export class Conversations {
     this.operation = work
     return work
   }
+  instructions(action = 'show'): Promise<string> {
+    this.assertIdle()
+    if (!['show', 'refresh', 'off', 'on'].includes(action))
+      return Promise.reject(new Error('用法：/instructions [refresh|off|on]'))
+    if (action === 'off') this.agent.setProjectInstructionsEnabled(false)
+    if (action === 'on') this.agent.setProjectInstructionsEnabled(true)
+    if (action === 'show' || action === 'off')
+      return Promise.resolve(formatProjectInstructions(this.agent.getProjectInstructions()))
+    this.busy = true
+    this.cancelled = false
+    const work = (async () => {
+      try {
+        return formatProjectInstructions(await this.agent.refreshProjectInstructions())
+      } finally {
+        this.busy = false
+      }
+    })()
+    this.operation = work
+    return work
+  }
+
   compact(): Promise<boolean> {
     const work = this.perform('compact', () => this.agent.compact({ sessionId: this.id }))
     this.operation = work

@@ -36,6 +36,8 @@ export interface ProjectInstructionView {
   root: string
   cwd: string
   entries: ProjectInstructionEntry[]
+  /** Metadata captured at the actual model transport boundary, not at refresh/count time. */
+  lastRequest?: Array<Pick<ProjectInstructionEntry, 'path' | 'scope' | 'version'>>
 }
 export class ProjectInstructionError extends Error {
   constructor(message: string) {
@@ -60,6 +62,7 @@ export class ProjectInstructions {
   private enabled: boolean
   private directories: string[]
   private entries: ProjectInstructionEntry[] = []
+  private lastRequest?: ProjectInstructionView['lastRequest']
 
   constructor(cwd: string, options: ProjectInstructionOptions | false = {}) {
     this.cwd = resolvePhysicalPath(cwd)
@@ -73,6 +76,7 @@ export class ProjectInstructions {
   reset(): void {
     this.directories = [this.cwd]
     this.entries = []
+    this.lastRequest = undefined
   }
   setEnabled(enabled: boolean): void {
     this.enabled = enabled
@@ -84,7 +88,15 @@ export class ProjectInstructions {
       root: this.root,
       cwd: this.cwd,
       entries: this.entries,
+      ...(this.lastRequest && { lastRequest: this.lastRequest }),
     })
+  }
+  markRequested(): void {
+    this.lastRequest = this.enabled
+      ? this.entries
+          .filter(e => e.status === 'loaded')
+          .map(({ path, scope, version }) => ({ path, scope, version }))
+      : []
   }
   get fingerprint(): string {
     return JSON.stringify(

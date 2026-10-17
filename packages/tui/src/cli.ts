@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { formatProjectInstructions } from './instruction-view.js'
 /**
  * zero2agent CLI 入口
  */
@@ -217,6 +218,9 @@ async function main() {
   let readLog: string | undefined
   let logOperation: string | undefined
   let plain = false
+  let inspectInstructions = false
+  let noInstructions = process.env.ZERO2AGENT_NO_INSTRUCTIONS === '1'
+  let instructionsRoot: string | undefined
   let noSave = process.env.ZERO2AGENT_NO_SAVE === '1'
   let list = false
   let resume: string | undefined
@@ -261,6 +265,12 @@ async function main() {
         if (!checkpointId || checkpointId.startsWith('--'))
           throw new Error(`${flag} requires a UUID`)
       }
+    } else if (flag === '--instructions') inspectInstructions = true
+    else if (flag === '--no-instructions') noInstructions = true
+    else if (flag === '--instructions-root') {
+      instructionsRoot = args.shift()
+      if (!instructionsRoot || instructionsRoot.startsWith('--'))
+        throw new Error('--instructions-root requires a project directory')
     } else if (flag === '--plain') plain = true
     else if (flag === '--no-log') noLog = true
     else if (flag === '--logs') listLogs = true
@@ -292,6 +302,33 @@ async function main() {
     )
   if (confirmCheckpoint && !['undo', 'recover'].includes(checkpointAction ?? ''))
     throw new Error('--confirm requires --undo or --recover')
+  const projectInstructions = noInstructions ? false : { root: instructionsRoot }
+  if (inspectInstructions) {
+    if (
+      args.length ||
+      list ||
+      resume ||
+      latest ||
+      resumeTask ||
+      listLogs ||
+      readLog ||
+      logOperation ||
+      checkpointAction ||
+      confirmCheckpoint
+    )
+      throw new Error('--instructions cannot combine with a task or another action')
+    const inspector = new Agent({
+      cwd: process.cwd(),
+      projectInstructions,
+      permissions: permissionOptionsFromEnv(undefined),
+    })
+    try {
+      await inspector.refreshProjectInstructions()
+    } finally {
+      console.log(safeText(formatProjectInstructions(inspector.getProjectInstructions())))
+    }
+    return
+  }
   const checkpoints = await CheckpointStore.open(process.cwd(), {
     onStatus: message => {
       if (tui) tui.checkpointNotice(message)
@@ -376,6 +413,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    projectInstructions,
     results: { directory: process.env.ZERO2AGENT_RESULT_DIR },
     limits,
     fileMutations: noCheckpoints ? undefined : checkpoints.capture,
@@ -439,7 +477,7 @@ async function main() {
   console.log(CHECKPOINT_SCOPE)
   if (resumed) console.log(resumed)
   console.log(
-    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/recovery 中断任务；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
+    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/recovery 中断任务；/instructions 项目指令；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
   )
 
   const rl = readline.createInterface({
@@ -544,6 +582,14 @@ async function main() {
         } else if (trimmed === '/log' || trimmed.startsWith('/log ')) {
           const [, id, operationId] = trimmed.split(/\s+/)
           console.log(safeText(await conversations.readLog(id, operationId)))
+        } else if (trimmed === '/instructions' || trimmed.startsWith('/instructions ')) {
+          console.log(
+            safeText(
+              await conversations.instructions(
+                trimmed.slice('/instructions'.length).trim() || 'show'
+              )
+            )
+          )
         } else if (trimmed === '/compact') {
           const changed = await conversations.compact()
           process.stdout.write(

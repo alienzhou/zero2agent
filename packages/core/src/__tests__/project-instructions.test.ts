@@ -287,6 +287,11 @@ describe('project instructions in actual loop requests and tool effects', () => 
     ).toHaveLength(1)
     for (const p of ['root.txt', 'api/out.txt', 'web/out.txt'])
       expect(await readFile(join(root, p), 'utf8')).toBe('new')
+    expect(runner.getProjectInstructions().lastRequest?.map(e => e.scope)).toEqual([
+      root,
+      join(root, 'api'),
+      join(root, 'web'),
+    ])
     expect(JSON.stringify(runner.getHistory())).not.toContain('"markdown"')
     paired(runner)
   })

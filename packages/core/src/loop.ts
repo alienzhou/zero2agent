@@ -760,6 +760,7 @@ async function runTurnLoop(
               let acceptingText = true
               let stopped = false
               let streaming = false
+              instructions.markRequested()
               const stream = runtime.client.messages.stream(request, {
                 signal: attempt.signal,
                 timeout: attempt.timeoutMs,
