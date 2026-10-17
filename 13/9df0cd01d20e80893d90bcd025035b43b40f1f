@@ -1,0 +1,14 @@
+researches/mcp/evidence-archive.json
+  h_afc6b161d429e0 17-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "139df0cd01d20e80893d90bcd025035b43b40f1f",
+  "prompts": {},
+  "humans": {
+    "h_afc6b161d429e0": {
+      "author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
