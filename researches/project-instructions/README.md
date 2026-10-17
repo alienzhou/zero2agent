@@ -23,7 +23,7 @@ E05_INSTRUCTION_EVIDENCE_DIR="$PWD/tmp/e05-s001/host-$(date +%s)" \
 
 ## 原始归档在 Git 之外
 
-434 个原始证据与对应源码文件打包成约 8.1 MiB 的单个附件，保存于 draft GitHub Release，供有仓库权限的 reviewer 下载。Git 只收录脚本、精简结果与 [evidence-archive.json](./evidence-archive.json) 索引。归档已经下载回本地，核对整体 SHA-256 和 434 个文件的 manifest；课程与真实服务源码也与当前生产实现核对一致。
+初版的 434 个原始证据与对应源码文件打包成约 8.1 MiB 的单个附件，保存于 draft GitHub Release，供有仓库权限的 reviewer 下载。Git 只收录脚本、精简结果与 [evidence-archive.json](./evidence-archive.json) 索引。归档已经下载回本地，核对整体 SHA-256 和 434 个文件的 manifest；该包中的 18 页课程是初版；后续 10 页修订的课程截图/源码以索引中的 courseRevision 单独归档，保留旧包不覆盖。真实服务验证的生产实现未变。
 
 ```sh
 gh release download E05-S001-project-instructions-evidence \

@@ -12,7 +12,7 @@
 - 项目正文进入计量的用户级请求覆盖层；整批工具预检、有限重规划、审批后再验，调用与未执行结果完整配对。
 - CLI/plain/TUI 查看、刷新和关闭入口；恢复重建当前规则，不继承旧审批，历史与摘要保留事实。
 - 修复 find_files 相对目录 glob 使用宿主 cwd 的问题，补真实临时目录回归。离线与固定真实服务案例分别留证，包含失败记录。
-- 配套 18 页图解与 [跟练](./specs/E05-extensibility/S001-project-instructions/follow-along.md)、[验收](./specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md)、[复盘](./retros/E05-S001-project-instructions.md)。人工 review 与部署待进行。
+- 配套 10 页图解与 [跟练](./specs/E05-extensibility/S001-project-instructions/follow-along.md)、[验收](./specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md)、[复盘](./retros/E05-S001-project-instructions.md)。人工 review 与部署待进行。
 
 ## E04-S004：中断后的安全续跑
 

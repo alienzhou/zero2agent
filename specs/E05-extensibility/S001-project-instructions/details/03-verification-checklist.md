@@ -16,7 +16,7 @@
 | 离线跟练 | 通过。`offline-zR7BiE` 正常 6 次请求、拒绝 2 次；实际 Node 测试、三处文件效果及独立金额断言通过。 |
 | 固定真实模型两例 | 通过。`live-Lv1vUL` 正常 7 次请求、三处文件修改与测试/JSON 报告均通过；拒绝 2 次请求、1 次拒绝、0 效果。两轮先前失败保留，修复后同模型、输入、预算重验。 |
 | 工程 | 通过。`pnpm build`、E2E `tsc --noEmit`、变更 TS Prettier、`git diff --check`。完整回归 789 passed（Core 577 / E2E 211 / CDP 1），另有默认 live 58 skipped，不能计入通过。lint 0 errors / 46 warnings（基线 44，新 CLI 输出 2）。 |
-| 课程 | 通过。18 页（含封面），编辑源、pages.json、HTML 一致；site build/check 19 章 301 张图；PC 1440×1000 / H5 390×844、逐页文字、目录、展开与放大检查无错误。源截图见 `course-Ex89tI`。 |
+| 课程 | 通过。10 页（含封面），编辑源、pages.json、HTML 一致；site build/check 19 章 293 张图；PC 1440×1000 / H5 390×844、逐页文字、目录、展开与放大检查无错误。当前截图见 `course-JggNEW`；初版 18 页证据另存，未覆盖。 |
 | 最终审查 | AI 自查实现、权限与生命周期、工具配对、CLI 兼容、测试断言、文档和课程一致性，无待修阻塞项；人工 review 待用户完成。 |
 
 ## 失败与证据边界

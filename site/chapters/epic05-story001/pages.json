@@ -6,7 +6,7 @@
   "width": 1080,
   "height": 1440,
   "maxImages": 18,
-  "edition": "project-instructions-review",
+  "edition": "project-instructions-concise-review",
   "pages": [
     {
       "file": "01-cover.html",
@@ -18,8 +18,8 @@
       ]
     },
     {
-      "file": "02-problem.html",
-      "title": "每次修 Bug，都要重复同一段要求",
+      "file": "02-standard.html",
+      "title": "稳定约定写进文件，本次任务留在对话里",
       "number": 2,
       "sources": [
         "O01",
@@ -27,36 +27,18 @@
       ]
     },
     {
-      "file": "03-standard.html",
-      "title": "AGENTS.md 是 Markdown，无需自创一套配置格式",
-      "number": 3,
-      "sources": [
-        "O01",
-        "D01"
-      ]
-    },
-    {
-      "file": "04-scope.html",
+      "file": "03-scope.html",
       "title": "api 的规则，不能用到旁边的 web",
-      "number": 4,
+      "number": 3,
       "sources": [
         "O01",
         "S01"
       ]
     },
     {
-      "file": "05-discovery.html",
-      "title": "先确定发现根，再沿目标路径逐层查找",
-      "number": 5,
-      "sources": [
-        "S01",
-        "S03"
-      ]
-    },
-    {
-      "file": "06-priority.html",
+      "file": "04-priority.html",
       "title": "用户明确要求优先，项目文本不能授予权限",
-      "number": 6,
+      "number": 4,
       "sources": [
         "O01",
         "S01",
@@ -64,66 +46,27 @@
       ]
     },
     {
-      "file": "07-request.html",
+      "file": "05-request.html",
       "title": "规则进入当前请求，不反复追加进对话历史",
-      "number": 7,
+      "number": 5,
       "sources": [
         "S01",
         "S02"
       ]
     },
     {
-      "file": "08-replan.html",
+      "file": "06-replan.html",
       "title": "模型第一次写 api，可能还没见过 api 的约定",
-      "number": 8,
+      "number": 6,
       "sources": [
         "S02",
         "T01"
       ]
     },
     {
-      "file": "09-batch.html",
-      "title": "别让第一项先写了，第二项才发现新约定",
-      "number": 9,
-      "sources": [
-        "S01",
-        "S02",
-        "T01"
-      ]
-    },
-    {
-      "file": "10-reading.html",
-      "title": "发现了文件，不代表可以读取正文",
-      "number": 10,
-      "sources": [
-        "S01",
-        "T01"
-      ]
-    },
-    {
-      "file": "11-versions.html",
-      "title": "刷新了规则，模型要到下次请求才看见",
-      "number": 11,
-      "sources": [
-        "S01",
-        "S03",
-        "T02"
-      ]
-    },
-    {
-      "file": "12-limits.html",
-      "title": "完整加载，或者明确说明为什么停下",
-      "number": 12,
-      "sources": [
-        "S01",
-        "D01",
-        "T01"
-      ]
-    },
-    {
-      "file": "13-changed.html",
+      "file": "07-changed.html",
       "title": "批准以后，还要再确认规则版本",
-      "number": 13,
+      "number": 7,
       "sources": [
         "S02",
         "T01",
@@ -131,51 +74,31 @@
       ]
     },
     {
-      "file": "14-restore.html",
-      "title": "摘要记得旧约定，并不让旧约定永久生效",
-      "number": 14,
-      "sources": [
-        "S01",
-        "S02",
-        "T01"
-      ]
-    },
-    {
-      "file": "15-controls.html",
+      "file": "08-controls.html",
       "title": "看规则、刷新、关闭，都不需要问模型",
-      "number": 15,
+      "number": 8,
       "sources": [
         "S03",
         "T02"
       ]
     },
     {
-      "file": "16-practice.html",
+      "file": "09-practice.html",
       "title": "金额函数、回归测试，再加一份可校验报告",
-      "number": 16,
+      "number": 9,
       "sources": [
         "T03",
         "D01"
       ]
     },
     {
-      "file": "17-verify.html",
-      "title": "模型说“遵守了”，不等于实现已经通过",
-      "number": 17,
+      "file": "10-verify.html",
+      "title": "检查真实请求和文件，确认规则先于修改",
+      "number": 10,
       "sources": [
         "T01",
         "T02",
         "T03"
-      ]
-    },
-    {
-      "file": "18-finish.html",
-      "title": "这一节建立了可查来源的项目上下文",
-      "number": 18,
-      "sources": [
-        "D01",
-        "S01",
-        "S02"
       ]
     }
   ]

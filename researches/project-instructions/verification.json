@@ -196,15 +196,16 @@
     ]
   },
   "course": {
-    "pages": 18,
-    "source": "f6c5a91",
+    "pages": 10,
+    "source": "E05-S001-project-instructions-concise-review",
     "siteChapters": 19,
-    "siteDiagrams": 301,
+    "siteDiagrams": 293,
     "browserReport": ".authoring/site/chapters/epic05-story001/verification/checks.json",
-    "rawEvidence": "tmp/e05-s001/course-Ex89tI",
+    "rawEvidence": "tmp/e05-s001/course-JggNEW",
     "passed": true,
     "humanReview": "pending",
-    "published": false
+    "published": false,
+    "notes": "Reader requested less repetition. Runtime unchanged; site build/check and browser interaction rerun. Prior 18-page evidence preserved separately."
   },
   "evidenceArchive": "evidence-archive.json",
   "limitations": [
@@ -214,5 +215,16 @@
     "This is application-level authorization, not an OS shell sandbox.",
     "An already blocked kernel filesystem call cannot be forcibly interrupted by the refresh deadline.",
     "Initial uncommitted demo prototype source was not retained verbatim; its failure/hash remains. Later live revisions have committed source copies."
-  ]
+  ],
+  "previousCourse": {
+    "pages": 18,
+    "source": "f6c5a91",
+    "siteChapters": 19,
+    "siteDiagrams": 301,
+    "browserReport": "source/d2d1b99bfc6d6701c09f6581e809ccedf4d4d6f0/.authoring/site/chapters/epic05-story001/verification/checks.json",
+    "rawEvidence": "tmp/e05-s001/course-Ex89tI",
+    "passed": true,
+    "humanReview": "pending",
+    "published": false
+  }
 }

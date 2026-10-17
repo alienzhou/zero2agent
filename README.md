@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E05-S001：项目指令与 AGENTS.md](./specs/E05-extensibility/S001-project-instructions/README.md)已接通目录规则、执行前预检、有限重规划及 CLI/TUI 查看控制。18 页课程和固定离线/真实服务案例已验证，工程验收与最终自查完成，等待 PR 人工 review；人工 review 和站点发布待进行。
+**最新更新**：[E05-S001：项目指令与 AGENTS.md](./specs/E05-extensibility/S001-project-instructions/README.md)已接通目录规则、执行前预检、有限重规划及 CLI/TUI 查看控制。10 页课程和固定离线/真实服务案例已验证，工程验收与最终自查完成，等待 PR 人工 review；人工 review 和站点发布待进行。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |

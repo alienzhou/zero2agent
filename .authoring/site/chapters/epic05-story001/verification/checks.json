@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-17T02:39:11.347Z",
+  "capturedAt": "2026-10-17T03:24:52.694Z",
   "browser": "155.0.8059.82",
   "pages": [
     {
@@ -7,71 +7,39 @@
       "issues": []
     },
     {
-      "file": "02-problem.html",
+      "file": "02-standard.html",
       "issues": []
     },
     {
-      "file": "03-standard.html",
+      "file": "03-scope.html",
       "issues": []
     },
     {
-      "file": "04-scope.html",
+      "file": "04-priority.html",
       "issues": []
     },
     {
-      "file": "05-discovery.html",
+      "file": "05-request.html",
       "issues": []
     },
     {
-      "file": "06-priority.html",
+      "file": "06-replan.html",
       "issues": []
     },
     {
-      "file": "07-request.html",
+      "file": "07-changed.html",
       "issues": []
     },
     {
-      "file": "08-replan.html",
+      "file": "08-controls.html",
       "issues": []
     },
     {
-      "file": "09-batch.html",
+      "file": "09-practice.html",
       "issues": []
     },
     {
-      "file": "10-reading.html",
-      "issues": []
-    },
-    {
-      "file": "11-versions.html",
-      "issues": []
-    },
-    {
-      "file": "12-limits.html",
-      "issues": []
-    },
-    {
-      "file": "13-changed.html",
-      "issues": []
-    },
-    {
-      "file": "14-restore.html",
-      "issues": []
-    },
-    {
-      "file": "15-controls.html",
-      "issues": []
-    },
-    {
-      "file": "16-practice.html",
-      "issues": []
-    },
-    {
-      "file": "17-verify.html",
-      "issues": []
-    },
-    {
-      "file": "18-finish.html",
+      "file": "10-verify.html",
       "issues": []
     }
   ],
@@ -81,11 +49,11 @@
         "width": 1440,
         "height": 1000
       },
-      "count": 18,
+      "count": 10,
       "textExpanded": true,
       "zoom": true,
       "navigation": true,
-      "selected": "07-request",
+      "selected": "07-changed",
       "horizontalOverflow": false
     },
     {
@@ -93,19 +61,19 @@
         "width": 390,
         "height": 844
       },
-      "count": 18,
+      "count": 10,
       "textExpanded": true,
       "zoom": true,
       "navigation": true,
-      "selected": "07-request",
+      "selected": "07-changed",
       "horizontalOverflow": false
     }
   ],
   "errors": [],
   "sourceHashes": {
-    ".authoring/site/chapters/epic05-story001/author.cjs": "a49f7475f6b93fcbf17cec4dba3d4b6f257580385064fc9530c1aed0432e4b16",
+    ".authoring/site/chapters/epic05-story001/author.cjs": "94ffa61a0bbc4584b8323df2dc03cb03afd6d7d62adfb7906f81fb334fd67617",
     "site/chapters/epic05-story001/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
-    "site/chapters/epic05-story001/pages.json": "4d25bc3959902fb219ca770d459cd07278834f0f2023713c568b183176736b09"
+    "site/chapters/epic05-story001/pages.json": "511954968dd2be623f009a878921023b85a9b97229015850c774cf557a06f4f0"
   },
-  "evidenceDirectory": "tmp/e05-s001/course-Ex89tI"
+  "evidenceDirectory": "tmp/e05-s001/course-JggNEW"
 }

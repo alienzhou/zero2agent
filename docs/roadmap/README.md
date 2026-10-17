@@ -22,7 +22,7 @@
 
 ---
 
-下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已实现并配套 18 页课程，待人工 review；S002–S004 仍为规划。
+下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已实现并配套 10 页课程，待人工 review；S002–S004 仍为规划。
 
 ## 学习地图
 

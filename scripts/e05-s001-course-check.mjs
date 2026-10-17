@@ -37,7 +37,7 @@ try {
   await page.screenshot({path:path.join(out,entry.file.replace('.html','.png'))});
   report.pages.push({file:entry.file,issues});
  }
- for(let group=0;group<3;group++){
+ for(let group=0;group<Math.ceil(manifest.pages.length/6);group++){
   // Render the actual HTML pages through scaled iframes, rather than redrawing the figures.
   await page.setViewportSize({width:1080,height:960});
   await page.setContent(`<style>body{margin:0;display:grid;grid-template-columns:repeat(3,360px)}.cell{width:360px;height:480px;overflow:hidden}iframe{width:1080px;height:1440px;border:0;transform:scale(.333333);transform-origin:top left}</style>${manifest.pages.slice(group*6,group*6+6).map(p=>`<div class="cell"><iframe src="${base}/chapters/${chapter}/${p.file}"></iframe></div>`).join('')}`);
@@ -49,7 +49,7 @@ try {
   await page.goto(`${base}/#/chapter/${chapter}`);
   await page.locator('.lesson-section').first().waitFor();
   const count=await page.locator('.lesson-section').count();
-  if(count!==18)throw Error('Reader chapter must have 18 sections');
+  if(count!==manifest.pages.length)throw Error('Reader chapter differs from the authored manifest');
   await page.locator('.text-content summary').first().click();
   if(!await page.locator('.text-content').first().getAttribute('open') && !await page.locator('.text-content').first().evaluate(el=>el.open)) throw Error('Text cannot expand');
   await page.locator('.zoom-button').first().click();

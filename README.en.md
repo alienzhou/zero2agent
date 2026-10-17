@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: [E05-S001: Project instructions and AGENTS.md](./specs/E05-extensibility/S001-project-instructions/README.md) adds scoped Markdown instructions, bounded preflight/replanning and CLI/TUI inspection controls. The 18-page lesson and fixed offline/live cases are ready; engineering acceptance and final self-review have passed. Human review and site deployment are pending.
+**Latest update**: [E05-S001: Project instructions and AGENTS.md](./specs/E05-extensibility/S001-project-instructions/README.md) adds scoped Markdown instructions, bounded preflight/replanning and CLI/TUI inspection controls. The 10-page lesson and fixed offline/live cases are ready; engineering acceptance and final self-review have passed. Human review and site deployment are pending.
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
