@@ -1,0 +1,63 @@
+.authoring/site/chapters/epic05-story004/author.cjs
+  s_58249cd92a0ae1::t_92cd938b3d8345 1-108
+.authoring/site/chapters/epic05-story004/content-plan.md
+  s_58249cd92a0ae1::t_598ca46f09c76b 1-18
+.authoring/site/chapters/epic05-story004/review.md
+  s_58249cd92a0ae1::t_b0c6189d3c065a 1-3
+.authoring/site/chapters/epic05-story004/sources.md
+  s_58249cd92a0ae1::t_4b42cd1d77bc21 1-17
+.authoring/site/chapters/epic05-story004/style.css
+  s_58249cd92a0ae1::t_9d8cb065149522 1-22
+.authoring/site/chapters/epic05-story004/verification/checks.json
+  s_58249cd92a0ae1::t_e13d65c3ecf21f 1-71
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_f32295469d97d2 184-191
+site/chapters/epic05-story004/01-cover.html
+  s_58249cd92a0ae1::t_234b9174fca454 1
+site/chapters/epic05-story004/02-purpose.html
+  s_58249cd92a0ae1::t_5767d3c8e21a83 1
+site/chapters/epic05-story004/03-stages.html
+  s_58249cd92a0ae1::t_109e9365682628 1
+site/chapters/epic05-story004/04-trust.html
+  s_58249cd92a0ae1::t_6fe503d26ec3cf 1
+site/chapters/epic05-story004/05-before.html
+  s_58249cd92a0ae1::t_8fd7ff06d0682c 1
+site/chapters/epic05-story004/06-after.html
+  s_58249cd92a0ae1::t_caac203a873131 1
+site/chapters/epic05-story004/07-completion.html
+  s_58249cd92a0ae1::t_0a4e3de454ab67 1
+site/chapters/epic05-story004/08-protocol.html
+  s_58249cd92a0ae1::t_00e25990a27898 1
+site/chapters/epic05-story004/09-guardian.html
+  s_58249cd92a0ae1::t_089d78d816b7f5 1
+site/chapters/epic05-story004/10-recovery.html
+  s_58249cd92a0ae1::t_74aa9d2acb9d15 1
+site/chapters/epic05-story004/11-combined.html
+  s_58249cd92a0ae1::t_b7c18daec6e043 1
+site/chapters/epic05-story004/12-practice.html
+  s_58249cd92a0ae1::t_0cc4f48d76865e 1
+site/chapters/epic05-story004/course.css
+  s_58249cd92a0ae1::t_f28bc670f12256 1-22
+site/chapters/epic05-story004/pages.json
+  s_58249cd92a0ae1::t_66af81da5c2ff4 1-133
+site/course.json
+  s_58249cd92a0ae1::t_9777ef5400bffd 7691-7976,7979
+specs/E05-extensibility/S004-hooks/follow-along.md
+  s_58249cd92a0ae1::t_8b015d53e785fb 1-136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d18151b6fc3f02a13424225f60c5aa7d4e8c8e8",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
