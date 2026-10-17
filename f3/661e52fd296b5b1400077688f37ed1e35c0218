@@ -1,0 +1,57 @@
+.vibecoding/2026-10-17/e05-s004-hooks/dialogue.md
+  s_58249cd92a0ae1::t_7a8afe470fc6f0 2-3
+packages/core/src/__tests__/hooks-integration.test.ts
+  s_58249cd92a0ae1::t_a7e24948b49986 1-243
+packages/core/src/__tests__/hooks.test.ts
+  s_58249cd92a0ae1::t_cf4189251f713f 1-271
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_b2e48fd776b14e 1,40,70,73,131,335-370
+packages/core/src/diagnostics.ts
+  s_58249cd92a0ae1::t_31e41f958ef9cd 42,93-95,264-270
+packages/core/src/execution-recovery.ts
+  s_58249cd92a0ae1::t_af9f6dac786af4 1,14-15,23-24,74-76,150-151
+packages/core/src/hook-process.ts
+  s_58249cd92a0ae1::t_16f12180069f87 1-114
+packages/core/src/hook-runner.ts
+  s_58249cd92a0ae1::t_95093863016acc 1-83
+packages/core/src/hooks.ts
+  s_58249cd92a0ae1::t_47c699579ca42a 1-518
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_11292d149696d8 132-142
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_626b70ddd5ada3 1-3,164,167-172,186,214-215,333-346,368,441,464-474,509-527,535-536,586-587,630,655,818,824-827,864,866-867,895,913-924,928,1054,1122-1123,1144,1220-1228
+packages/core/src/runtime.ts
+  s_58249cd92a0ae1::t_8368c6dd98590d 25-31
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_ab9232f8a7c372 91-96
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_d8a287b9469c32 106-107,230-233,283-291,344-385,550,558,569,600-609,733-735
+packages/tui/src/conversations.ts
+  s_58249cd92a0ae1::t_ffde6af5bf2997 276-284,289-297
+packages/tui/src/run-log.ts
+  s_58249cd92a0ae1::t_5ad484cf0521bc 61-63,87
+packages/tui/src/runtime-state.ts
+  s_58249cd92a0ae1::t_600712cbd32810 131-136
+packages/tui/src/runtime-tui.ts
+  s_58249cd92a0ae1::t_091f0ca0d3820e 678-680
+packages/tui/src/session-store.ts
+  s_58249cd92a0ae1::t_1a33984706131f 13,109,111-112,210-220
+researches/hooks/check.mjs
+  s_58249cd92a0ae1::t_9dff355820c846 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3661e52fd296b5b1400077688f37ed1e35c0218",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
