@@ -90,5 +90,6 @@
     "scope": "Original service observations remain historical. The final identity check changes runtime bytes and is tested by the current real rename regression, offline tools, CLI/PTY and full engineering suite; old hashes are not presented as latest code."
   },
   "mergeAuthorization": "User requested final review and merge when no blocking issues remain.",
-  "deployment": "Site not deployed."
+  "deployment": "Site not deployed.",
+  "archive": "evidence-archive.json#finalReview"
 }

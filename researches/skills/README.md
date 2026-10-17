@@ -139,3 +139,5 @@ node researches/skills/compare-denied-evidence.mjs \
 ## 合并前最终复核
 
 本轮额外发现整父目录原子替换能使旧句柄内容冒充当前来源，已通过 `1dc2216` 增加当前路径文件身份检查，并先验证旧实现回归失败。当前运行代码与原 live 的字节不再完全相同；上文 67/64 哈希一致仅指两个历史 live 版本之间。原服务成绩与归档不改，最新 race、离线、宿主和工程结果见 [final-review.json](final-review.json)。本轮没有追加真实模型调用，也不宣称验证了新的模型稳定性。
+
+最终复核另追加 314 份日志、截图、当前跟练及源码为单个约 3.6 MiB 补充附件，已下载并核对整包、manifest 和当前 Skills 源码。索引见 evidence-archive.json 的 finalReview；原 1,122 份归档及历史成绩保留不覆盖。

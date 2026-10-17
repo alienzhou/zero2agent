@@ -19,5 +19,17 @@
     "Raw requests, responses, terminal bytes, browser PNGs and failed cases remain outside Git history.",
     "Original v1/v2 live batches both remain 1/2; per-case evidence reuse and limitations are explicit in verification.json.",
     "Draft assets require repository access. No site/course publication."
-  ]
+  ],
+  "finalReview": {
+    "source": "25db158868495ed77832105863c196212b611758",
+    "asset": "e05-s002-final-review-evidence.tar.gz",
+    "bytes": 3770974,
+    "sha256": "429df92ee3a9a46ac715053043168c05dbbd0c061508c1041ab1ab0cb4ce0eed",
+    "manifestSha256": "5cb5bdd74cb1842bd87695c6ee85ed4f98dfece192a6716fb8907f4364e57cee",
+    "fileCount": 314,
+    "downloadVerified": true,
+    "manifestVerified": true,
+    "currentSkillSourceVerified": true,
+    "scope": "Final review logs, original race failure and fixed regression, current full965/offline evidence, fresh PC/H5 captures and source. Original service records and first archive remain unchanged."
+  }
 }
