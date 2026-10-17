@@ -1,0 +1,29 @@
+scripts/site-navigation-check.mjs
+  s_58249cd92a0ae1::t_8ee8a8e8686544 1-94
+site/assets/book.js
+  s_58249cd92a0ae1::t_ea807dd1e6e876 118,121-124
+.vibecoding/2026-10-17/pr27-pr28-final-review/dialogue.md
+  s_58249cd92a0ae1::t_8e54a4abbd8082 1-9
+.vibecoding/2026-10-17/pr27-pr28-final-review/learnings.md
+  s_58249cd92a0ae1::t_7d19546de7169c 1-5
+.vibecoding/2026-10-17/pr27-pr28-final-review/prompt.md
+  s_58249cd92a0ae1::t_7d441591a551b3 1-3
+docs/e04-course-reading-review.md
+  s_58249cd92a0ae1::t_feac00ec82deaf 36-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "73d2b88c8ac63fbf5be899ea7419013eb86c24e4",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
