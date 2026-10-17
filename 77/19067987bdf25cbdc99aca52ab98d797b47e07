@@ -1,0 +1,53 @@
+specs/E05-extensibility/S003-mcp/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_503ef321305e66 24-26
+researches/mcp/README.md
+  s_58249cd92a0ae1::t_503ef321305e66 37-38
+specs/E05-extensibility/README.md
+  s_58249cd92a0ae1::t_105bbe70b9b2bb 7,13
+specs/E05-extensibility/S003-mcp/README.md
+  s_58249cd92a0ae1::t_105bbe70b9b2bb 3
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_105bbe70b9b2bb 183
+.vibecoding/2026-10-17/e05-s003-mcp/review.md
+  s_58249cd92a0ae1::t_5536bed6500798 1-12
+README.md
+  s_58249cd92a0ae1::t_105bbe70b9b2bb 116,166,190
+CHANGELOG.md
+  s_58249cd92a0ae1::t_105bbe70b9b2bb 18
+researches/mcp/verify-evidence.mjs
+  s_58249cd92a0ae1::t_503ef321305e66 12-15
+.authoring/site/chapters/epic05-story003/review.md
+  s_58249cd92a0ae1::t_503ef321305e66 3
+.authoring/site/chapters/epic05-story003/verification/checks.json
+  s_58249cd92a0ae1::t_43c5ef7f4be98e 2
+.vibecoding/2026-10-17/e05-s003-mcp/dialogue.md
+  s_58249cd92a0ae1::t_b4910ebbf27f39 10-11
+.vibecoding/2026-10-17/e05-s003-mcp/prompt.md
+  s_58249cd92a0ae1::t_2e0b97e2339ff4 2-3
+researches/mcp/evidence-archive.json
+  s_58249cd92a0ae1::t_19a4dc1ba99f4c 21-42
+researches/mcp/verification.json
+  s_58249cd92a0ae1::t_3d5dd615efdeae 4,15,18,20,55,76,94,99,118,134,160-162,165-178
+retros/E05-S003-mcp.md
+  s_58249cd92a0ae1::t_0d5d1fa7248d26 15
+site/course.json
+  s_58249cd92a0ae1::t_5aea7b3ba32e80 7428
+specs/E05-extensibility/course-plan.md
+  s_58249cd92a0ae1::t_a9d93d0d3449ca 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7719067987bdf25cbdc99aca52ab98d797b47e07",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
