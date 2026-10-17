@@ -1,3 +1,4 @@
+import { McpController, type McpOptions, type McpServerView } from './mcp/client.js'
 import {
   ProjectInstructions,
   type ProjectInstructionOptions,
@@ -35,6 +36,7 @@ import { RequestExecutor } from './request-executor.js'
 import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
 
 export interface AgentOptions {
+  mcp?: McpOptions | false
   skills?: SkillsOptions | false
   projectInstructions?: ProjectInstructionOptions | false
   executionPersistence?: ExecutionPersistence
@@ -62,8 +64,10 @@ export class Agent {
   private active?: AbortController
   private instructions: ProjectInstructions
   private skills: Skills
+  private mcp: McpController
 
   constructor(options: AgentOptions = {}) {
+    this.mcp = new McpController(options.cwd ?? process.cwd(), options.mcp)
     this.session = new Session(options.results)
     this.permissions = new PermissionController(options.permissions)
     this.instructions = new ProjectInstructions(
@@ -120,6 +124,7 @@ export class Agent {
     const controller = this.beginOperation()
     try {
       return await runLoop(message, {
+        mcpController: this.mcp,
         skillController: this.skills,
         instructionController: this.instructions,
         artifactContract,
@@ -322,6 +327,27 @@ export class Agent {
     this.session.skills = this.skills.snapshotSelection()
   }
 
+  async inspectMcp(): Promise<McpServerView[]> {
+    const controller = this.beginOperation()
+    try {
+      await this.mcp.open(controller.signal)
+      return this.mcp.view()
+    } finally {
+      await this.mcp.close()
+      this.active = undefined
+    }
+  }
+
+  getMcpServers(): McpServerView[] {
+    return this.mcp.view()
+  }
+
+  /** Wait for native process cleanup; no serialized process or reconnect on restore. */
+  async close(): Promise<void> {
+    if (this.active) throw new Error('Wait for the running operation before closing.')
+    await this.mcp.close()
+  }
+
   /**
    * 静态方法：每次创建独立 Session，快速运行一次。
    */
@@ -331,6 +357,7 @@ export class Agent {
       return await agent.run(message)
     } finally {
       agent.cancelCompaction()
+      await agent.close()
     }
   }
 }

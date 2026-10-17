@@ -1,3 +1,4 @@
+import { validateExternalSources, type ExternalSource } from './external-source.js'
 import { constants } from 'node:fs'
 import fs from 'node:fs/promises'
 import { createHash, randomUUID } from 'node:crypto'
@@ -10,6 +11,7 @@ export interface ResultSource {
   toolCallId: string
   /** Resolved paths read by the original tool, plus its workspace. Never model supplied on recall. */
   paths: string[]
+  external?: ExternalSource[]
 }
 export interface ResultEntry {
   reference: string
@@ -20,7 +22,7 @@ export interface ResultEntry {
   source: ResultSource
 }
 export interface ResultSnapshot {
-  version: 1
+  version: 1 | 2
   scope: string
   workspace: string
   entries: ResultEntry[]
@@ -62,7 +64,7 @@ export function validateResultSnapshot(value: unknown): ResultSnapshot {
   const invalid = (): never => fail('INVALID_RESULT_SNAPSHOT', 'Invalid result reference catalog.')
   if (
     !object(value) ||
-    value.version !== 1 ||
+    ![1, 2].includes(value.version as number) ||
     typeof value.scope !== 'string' ||
     !UUID.test(value.scope) ||
     typeof value.workspace !== 'string' ||
@@ -97,11 +99,15 @@ export function validateResultSnapshot(value: unknown): ResultSnapshot {
       entry.source.paths.some(p => typeof p !== 'string' || !path.isAbsolute(p) || p.length > 4096)
     )
       invalid()
+    if (entry.source.external !== undefined) {
+      if (snapshot.version !== 2) invalid()
+      validateExternalSources(entry.source.external)
+    }
     ids.add(entry.reference)
   }
   // Whitelist fields rather than copying caller-supplied paths or credentials.
   return {
-    version: 1,
+    version: snapshot.version,
     scope: snapshot.scope,
     workspace: snapshot.workspace,
     entries: snapshot.entries.map(e => ({
@@ -114,6 +120,7 @@ export function validateResultSnapshot(value: unknown): ResultSnapshot {
         toolName: e.source.toolName,
         toolCallId: e.source.toolCallId,
         paths: [...e.source.paths],
+        ...(e.source.external && { external: validateExternalSources(e.source.external) }),
       },
     })),
   }
@@ -207,6 +214,9 @@ export class ResultStore {
       )
     return entry
   }
+  readSources(reference: unknown): ExternalSource[] {
+    return structuredClone(this.entry(reference).source.external ?? [])
+  }
   async readPaths(reference: unknown): Promise<string[]> {
     const entry = this.entry(reference)
     const canonical = await fs.realpath(this.cwd)
@@ -254,6 +264,7 @@ export class ResultStore {
       expiresAt: now + this.options.ttlMs,
       source: structuredClone(source),
     }
+    if (source.external?.length) this.catalog!.version = 2
     // Validate before publishing a reference. Bodies without a reference are never advertised.
     validateResultSnapshot({ ...this.catalog!, entries: [...this.catalog!.entries, entry] })
     return this.withWriteLock(location, async () => {

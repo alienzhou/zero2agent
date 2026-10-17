@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { formatProjectInstructions } from './instruction-view.js'
+import { readMcpConfig } from './mcp-config.js'
 import { formatSkills } from './skill-view.js'
 /**
  * zero2agent CLI 入口
@@ -222,6 +223,9 @@ async function main() {
   let inspectInstructions = false
   let inspectSkills = false
   let noSkills = process.env.ZERO2AGENT_NO_SKILLS === '1'
+  let mcpConfigFile: string | undefined
+  let inspectMcp = false
+  const enabledMcpServers: string[] = []
   const skillRoots: string[] = []
   const selectedSkills: string[] = []
   let noInstructions = process.env.ZERO2AGENT_NO_INSTRUCTIONS === '1'
@@ -270,6 +274,14 @@ async function main() {
         if (!checkpointId || checkpointId.startsWith('--'))
           throw new Error(`${flag} requires a UUID`)
       }
+    } else if (flag === '--mcp') inspectMcp = true
+    else if (flag === '--mcp-config' || flag === '--mcp-enable') {
+      const value = args.shift()
+      if (!value || value.startsWith('--')) throw new Error(`${flag} requires a value`)
+      if (flag === '--mcp-config') {
+        if (mcpConfigFile) throw new Error('Use one --mcp-config file')
+        mcpConfigFile = value
+      } else enabledMcpServers.push(value)
     } else if (flag === '--instructions') inspectInstructions = true
     else if (flag === '--skills') inspectSkills = true
     else if (flag === '--no-skills') noSkills = true
@@ -314,6 +326,38 @@ async function main() {
     )
   if (confirmCheckpoint && !['undo', 'recover'].includes(checkpointAction ?? ''))
     throw new Error('--confirm requires --undo or --recover')
+  const mcp = await readMcpConfig(mcpConfigFile, enabledMcpServers)
+  if (inspectMcp) {
+    if (
+      args.length ||
+      inspectSkills ||
+      inspectInstructions ||
+      list ||
+      resume ||
+      latest ||
+      resumeTask ||
+      listLogs ||
+      readLog ||
+      logOperation ||
+      checkpointAction ||
+      confirmCheckpoint
+    )
+      throw new Error('--mcp cannot combine with a task or another action')
+    const inspector = new Agent({
+      mcp,
+      cwd: process.cwd(),
+      skills: false,
+      projectInstructions: false,
+    })
+    try {
+      const states = await inspector.inspectMcp()
+      console.log(safeText(JSON.stringify(states, null, 2)))
+      if (states.some(s => s.state === 'failed')) process.exitCode = 1
+    } finally {
+      await inspector.close()
+    }
+    return
+  }
   const projectInstructions = noInstructions ? false : { root: instructionsRoot }
   const skills = noSkills ? false : { roots: skillRoots, selected: selectedSkills }
   if (noSkills && selectedSkills.length) throw new Error('--skill cannot combine with --no-skills')
@@ -464,6 +508,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    mcp,
     skills,
     projectInstructions,
     results: { directory: process.env.ZERO2AGENT_RESULT_DIR },
@@ -497,6 +542,7 @@ async function main() {
     try {
       await tui.run(agent, conversations, resumed)
     } finally {
+      await agent.close()
       await conversations.closeLogs(Number(process.exitCode ?? 0))
     }
     return
@@ -516,6 +562,7 @@ async function main() {
       process.exitCode = 1
     } finally {
       agent.cancelCompaction()
+      await agent.close()
       await conversations.closeLogs(Number(process.exitCode ?? 0))
     }
     return

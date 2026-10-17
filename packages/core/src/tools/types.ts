@@ -1,3 +1,4 @@
+import type { ExternalSource } from '../external-source.js'
 import type { ResultStore, ResultSource } from '../result-store.js'
 import type { HistoryReader } from '../history-evidence.js'
 import type Anthropic from '@anthropic-ai/sdk'
@@ -20,6 +21,7 @@ export interface ToolExecutionMetadata {
 }
 export interface ToolContext {
   history?: HistoryReader
+  recordHistoryExternal?: (sources: ExternalSource[]) => void
   recordHistoryPaths?: (paths: string[]) => void
   results?: ResultStore
   resultSource?: ResultSource
@@ -35,6 +37,8 @@ export interface ToolContext {
  * 工具接口定义
  */
 export interface Tool {
+  externalSource?: ExternalSource
+  readSources?: (input: Record<string, unknown>, ctx: ToolContext) => Promise<ExternalSource[]>
   /** Trusted directory inputs for AGENTS.md discovery; does not describe arbitrary shell effects. */
   instructionDirectories?: string[]
   /** Host-owned paths for stored-result reads; resolved before permission evaluation. */

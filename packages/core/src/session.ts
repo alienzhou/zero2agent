@@ -1,3 +1,4 @@
+import type { ExternalSource } from './external-source.js'
 import type { ExecutionRecovery } from './execution-recovery.js'
 import { ResultStore, type ResultStoreOptions } from './result-store.js'
 import type Anthropic from '@anthropic-ai/sdk'
@@ -29,8 +30,13 @@ export class Session {
   assertHistoryCapacity(): void {
     this.evidence.assertCapacity()
   }
-  recordHistorySource(messages: Anthropic.MessageParam[], index: number, paths: string[]): void {
-    this.evidence.record(messages, index, paths)
+  recordHistorySource(
+    messages: Anthropic.MessageParam[],
+    index: number,
+    paths: string[],
+    external: ExternalSource[] = []
+  ): void {
+    this.evidence.record(messages, index, paths, external)
   }
 
   constructor(resultOptions?: ResultStoreOptions) {

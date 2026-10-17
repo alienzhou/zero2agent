@@ -13,6 +13,7 @@ export class ResultReadInputError extends Error {
 
 export const readToolResultTool: Tool = {
   name: 'read_tool_result',
+  readSources: async (input, ctx) => ctx.results?.readSources(input.reference) ?? [],
   permission: { effect: 'read' },
   // The host resolves saved source paths before authorization; model input cannot replace them.
   readPaths: async (input, ctx) => {
