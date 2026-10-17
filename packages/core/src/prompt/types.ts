@@ -10,6 +10,8 @@
  * 用于配置 buildSystemPrompt 函数的行为
  */
 export interface SystemPromptOptions {
+  /** Host-selected capability statement only; never grants external tool permission. */
+  mcp?: boolean
   /**
    * 额外的指令列表
    * 来自项目、组织、用户偏好的外部规则

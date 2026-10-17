@@ -1,3 +1,4 @@
+import { buildSystemPrompt } from '../prompt/system.js'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mkdtemp, readFile, realpath, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -87,6 +88,20 @@ function receipts(a: Agent) {
 }
 
 describe('MCP through loop, paired recovery and provenance', () => {
+  it('keeps the default scope unchanged and adjusts it only for enabled MCP', () => {
+    const original = buildSystemPrompt()
+    expect(original).toContain('- 访问网络')
+    expect(original).not.toContain('MCP')
+    expect(buildSystemPrompt({ mcp: false })).toBe(original)
+    const enabled = buildSystemPrompt({ mcp: true })
+    expect(enabled).toContain('MCP 工具仍须逐次遵守宿主授权')
+    expect(
+      enabled.replace(
+        '- 通过未获授权的外部工具访问数据；已启用的 MCP 工具仍须逐次遵守宿主授权',
+        '- 访问网络'
+      )
+    ).toBe(original)
+  })
   it.each([false, undefined])('preserves no-MCP request compatibility (%s)', async value => {
     const { requests } = provider(answer())
     const a = new Agent({ ...options(), mcp: value, systemPrompt: 'original' })

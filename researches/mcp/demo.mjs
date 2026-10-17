@@ -276,7 +276,7 @@ for (const name of ['normal', 'denied']) {
           }
         : t
     ),
-    systemPrompt: buildSystemPrompt(),
+    systemPrompt: buildSystemPrompt({ mcp: true }),
     limits: cases.limits,
     config: {
       apiKey: live ? process.env.ANTHROPIC_API_KEY : 'offline',

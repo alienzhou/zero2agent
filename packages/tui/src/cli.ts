@@ -518,7 +518,7 @@ async function main() {
     permissions: permissionOptionsFromEnv(
       tui?.requestApproval ?? createApprovalHandler(() => approvalReadline.current)
     ),
-    systemPrompt: buildSystemPrompt(),
+    systemPrompt: buildSystemPrompt({ mcp: !!mcp && mcp.servers.some(s => s.enabled) }),
     events: tui?.events ?? events,
     cwd: process.cwd(),
     context: {

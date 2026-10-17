@@ -7,7 +7,7 @@ export function buildRoleSection(): string {
   ].join('\n')
 }
 
-export function buildScopeSection(): string {
+export function buildScopeSection(options: SystemPromptOptions = {}): string {
   return [
     '你可以：',
     '- 读取文件内容',
@@ -22,7 +22,9 @@ export function buildScopeSection(): string {
     '你不能：',
     '- 写入或删除工作区目录之外的路径',
     '- 递归删除目录',
-    '- 通过未获授权的外部工具访问数据；已启用的 MCP 工具仍须逐次遵守宿主授权',
+    options.mcp
+      ? '- 通过未获授权的外部工具访问数据；已启用的 MCP 工具仍须逐次遵守宿主授权'
+      : '- 访问网络',
   ].join('\n')
 }
 
@@ -71,10 +73,10 @@ export function buildOutputSection(): string {
   ].join('\n')
 }
 
-export function buildSystemPrompt(_options?: SystemPromptOptions): string {
+export function buildSystemPrompt(options?: SystemPromptOptions): string {
   const sections = [
     buildRoleSection(),
-    buildScopeSection(),
+    buildScopeSection(options),
     buildToolPolicySection(),
     buildWorkflowSection(),
     buildOutputSection(),
