@@ -91,7 +91,7 @@ specs/
 
 ## Epic 5：扩展能力
 
-[四课入口](./E05-extensibility/README.md)与[具体范围、跟练和验收](./E05-extensibility/course-plan.md)：项目指令与 AGENTS.md → Skills 发现与按需加载 → MCP 工具接入 → Hooks 与组合验收。2026-10-17，[S001](./E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入；其余三课开工时再创建对应 Story Spec。
+[四课入口](./E05-extensibility/README.md)与[具体范围、跟练和验收](./E05-extensibility/course-plan.md)：项目指令与 AGENTS.md → Skills 发现与按需加载 → MCP 工具接入 → Hooks 与组合验收。2026-10-17，[S001](./E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入；[S002](./E05-extensibility/S002-skills/README.md)已推进实现、分层验收与 11 页课程，待 PR review；S003/S004 仍为规划。
 
 ---
 

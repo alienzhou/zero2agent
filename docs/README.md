@@ -40,3 +40,5 @@
 1. 先看 [快速上手](./getting-started.md) 的常见问题
 2. 搜索 [GitHub Issues](https://github.com/alienzhou/zero2agent/issues)
 3. 提一个新 Issue
+
+最新实践：[E05-S002 Skills 按需加载](../specs/E05-extensibility/S002-skills/README.md)，包含无需密钥的跟练、11 页图解和分层验收。

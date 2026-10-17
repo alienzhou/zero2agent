@@ -109,7 +109,7 @@ The course content is organized into four layers:
 | Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
 | Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S001–S006 merged into main |
 | [Epic 4: Robustness and Context Management](./specs/E04-reliability-and-context/README.md) | Handle failures, long context, and complex runtime situations | S001–S004 complete; S004 delivery tracked in PR #26 |
-| [Epic 5: Extensibility](./specs/E05-extensibility/README.md) | Project instructions → Skills → MCP → Hooks and integrated acceptance | S001 merged in PR #27; S002–S004 planned |
+| [Epic 5: Extensibility](./specs/E05-extensibility/README.md) | Project instructions → Skills → MCP → Hooks and integrated acceptance | S001 merged; [S002 implementation and lesson](./specs/E05-extensibility/S002-skills/README.md) awaiting review; S003/S004 planned |
 
 ### How to Enter
 
@@ -157,7 +157,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: [E05-S001: Project instructions and AGENTS.md](./specs/E05-extensibility/S001-project-instructions/README.md) adds scoped Markdown instructions, bounded preflight/replanning and CLI/TUI inspection controls. The 10-page lesson and fixed offline/live cases are verified. Final AI review passed, and [PR #27](https://github.com/alienzhou/zero2agent/pull/27) was merged with user authorization. The site has not been deployed.
+**Latest update**: [E05-S002: Skill discovery and progressive loading](./specs/E05-extensibility/S002-skills/README.md) adds a metadata catalog, selected guides, paged resources and CLI/TUI controls under current read permissions and budgets. The lesson uses 11 pages based on its learning steps. Implementation and layered evidence are documented in the Story; awaiting PR review, not merged or deployed.
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -180,6 +180,7 @@ zero2agent/
 | [E04-S003](./specs/E04-reliability-and-context/S003-summary-quality/README.md) | Summary quality and fact retention | Implementation, lesson, strict acceptance and final review complete; delivery in PR #25 |
 | [E04-S004](./specs/E04-reliability-and-context/S004-safe-resume/README.md) | Safe continuation after process interruption | Complete; delivery through [PR #26](https://github.com/alienzhou/zero2agent/pull/26) |
 | [E05-S001](./specs/E05-extensibility/S001-project-instructions/README.md) | Scoped AGENTS.md instructions and execution preflight | Merged in PR #27 |
+| [E05-S002](./specs/E05-extensibility/S002-skills/README.md) | Skill discovery, progressive loading and resource boundaries | Awaiting PR review |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

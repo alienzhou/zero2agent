@@ -205,3 +205,12 @@ Agent 持有易失的 ProjectInstructions。沿显式根、cwd 和可信工具�
 runTurnLoop 对模型整批调用先 prepareBatch。若发现尚未见过或已经变更的适用规则，批次全部配对为未执行，并有限重规划。卸载不相关目录不额外重规划。每个 execute 前再次解析目标路径，规则在审批或批中发生变化则停止剩余调用，保留已完成效果。
 
 规则正文和读取批准不进入会话快照；恢复/压缩使用当前文件与当前权限。Conversations 向 CLI/plain/TUI 提供统一的查看、刷新、开关，元信息明确区分已读取与已发送。协议和容量见 [S001 技术设计](../specs/E05-extensibility/S001-project-instructions/details/01-technical-design.md)。
+
+
+## Skills 覆盖层（E05-S002）
+
+Skills 控制器将发现摘要、激活正文和资源页分开。扫描默认或显式根时只建立有限目录；用户选择或模型的 load_skill 通过当前读取权限加载正文，回执仅包含元信息。正文由独立 user 覆盖层进入下一次请求，预算计数和压缩走同一个发送视图。read_skill_resource 返回带 SHA-256 与范围的有限资源页，不执行其中代码。
+
+加载与业务调用混批时整批未执行并重新规划。模型响应期间当前技能版本改变时，也在副作用前重新规划；审批或批中变化停止剩余调用，保留已发生效果。工具配对、原工具/请求预算和有限重规划继续生效；技能声明不能改变 PermissionController。
+
+SessionSnapshot.skills 字段只存来源身份、路径与旧内容版本；原消息与资源结果仍按历史保存。磁盘格式含技能选择时升为 version=3；普通历史仍兼容原格式。恢复使用当前根、读取权限与文件版本，不恢复正文缓存、授权或进程。无技能的普通会话保持原请求；停用保留历史事实，当前覆盖层不再激活该技能。历史 read_history/read_tool_result 仍使用各自原有的权限语义，收紧 read_file 不会删除历史文本。边界和失败行为见 [S002 设计](../specs/E05-extensibility/S002-skills/details/01-technical-design.md)。

@@ -165,6 +165,14 @@
       "title": "项目指令与 AGENTS.md",
       "description": "沿目录加载开放格式的项目约定，在副作用前补齐规则，核对来源、版本与当前权限。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E05-S001-project-instructions-concise-review/specs/E05-extensibility/S001-project-instructions"
+    },
+    {
+      "id": "epic05-story002",
+      "epic": "epic05",
+      "code": "E05-S002",
+      "title": "Skills 的发现与按需加载",
+      "description": "先看技能摘要，选中后读步骤，需要时再取参考文件。沿用当前权限，观察目录、正文、资源的分层加载与真实文件效果。",
+      "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E05-S002-skills-review/specs/E05-extensibility/S002-skills"
     }
   ]
 }
