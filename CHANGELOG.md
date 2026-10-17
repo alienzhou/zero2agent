@@ -2,7 +2,7 @@
 
 ## 2026-10-17：E04 课程阅读审阅
 
-按每页独立教学价值检查四课，S001 保留 18 页，S002/S003 各调为 15 页，S004 为 14 页。重复衔接、完整存储/快照细目和历史实验成绩移到已有文档；进程实验与跟练合并。保留字号、图形和页面 URL，生成器取消固定 18 页要求。仅修改课程和文档，原实现与工程证据不变；[取舍说明](./docs/e04-course-reading-review.md)。
+按每页独立教学价值检查四课，S001 保留 18 页，S002/S003 各调为 15 页，S004 为 14 页。重复衔接、完整存储/快照细目和历史实验成绩移到已有文档；进程实验与跟练合并。保留字号、图形和页面 URL，生成器取消固定 18 页要求。同时修复旧滚动回调覆盖新章节导航的问题，补充 PC/H5 竞态回归；Agent 实现与原工程证据不变；[取舍说明](./docs/e04-course-reading-review.md)。
 
 > 跟着迭代走，逐步理解 **Agent Harness** 是如何从一个简单循环演化成完整工具体系的。
 
@@ -16,7 +16,7 @@
 - 项目正文进入计量的用户级请求覆盖层；整批工具预检、有限重规划、审批后再验，调用与未执行结果完整配对。
 - CLI/plain/TUI 查看、刷新和关闭入口；恢复重建当前规则，不继承旧审批，历史与摘要保留事实。
 - 修复 find_files 相对目录 glob 使用宿主 cwd 的问题，补真实临时目录回归。离线与固定真实服务案例分别留证，包含失败记录。
-- 配套 10 页图解与 [跟练](./specs/E05-extensibility/S001-project-instructions/follow-along.md)、[验收](./specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md)、[复盘](./retros/E05-S001-project-instructions.md)。人工 review 与部署待进行。
+- 配套 10 页图解与 [跟练](./specs/E05-extensibility/S001-project-instructions/follow-along.md)、[验收](./specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md)、[复盘](./retros/E05-S001-project-instructions.md)。最终 AI 复核通过，按用户授权由 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入 main（`df7ef00`），网站未部署。
 
 ## E04-S004：中断后的安全续跑
 

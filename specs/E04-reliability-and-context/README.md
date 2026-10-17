@@ -13,4 +13,4 @@
 
 从 S001 的[离线跟练](./S001-failure-recovery/follow-along.md)开始。S002/S003 在已有压缩之上改善供给和质量；S004 增加逐工具持久执行事实与明确续跑入口。AGENTS、Skills、MCP、Hooks 留在 Epic 5。
 
-2026-10-17 按必要性审阅课程：S001 保留 18 页，S002/S003 各 15 页，S004 为 14 页。此轮仅课程修订，待独立 PR review；[取舍及延伸入口](../../docs/e04-course-reading-review.md)。原工程验收和发布状态不变。
+2026-10-17 按必要性审阅课程：S001 保留 18 页，S002/S003 各 15 页，S004 为 14 页。此轮课程修订与阅读器导航修复通过最终 AI 复核，按用户授权由 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 交付；[取舍及延伸入口](../../docs/e04-course-reading-review.md)。原工程验收和发布状态不变。
