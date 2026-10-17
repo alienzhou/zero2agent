@@ -1,6 +1,6 @@
 # E05 四课实施与验收计划
 
-状态：规划建议，2026-10-17；基线为 E04 合并提交 `0bfb9c9`。本页定义拟交付行为和验收目标，不代表功能已经实现。正式 API 名、配置路径和容量数值在每节开工时写入 Spec 后冻结。
+状态：2026-10-17；规划基线为 E04 合并提交 `0bfb9c9`。S001 的实现与验收进度见 [Story](./S001-project-instructions/README.md)，其余三课仍为拟交付目标。各节正式 API、配置路径和容量数值以对应 Spec 为准。
 
 ## 共用案例与现有基础
 
@@ -12,7 +12,7 @@
 | E03 审批、TUI、日志、Checkpoint | 扩展来源可见；新操作使用当前权限；诊断仍只记录元信息；只对明确受控文件承诺回退 |
 | E04 请求预算、结果引用、完成校验、恢复 | 扩展消耗同一轮预算；长结果按需读取；未完成检查不能被清除；未知效果不自动重放 |
 
-当前 `AgentOptions.tools` 可以注入工具，`Tool.execute` 返回字符串；`SystemPromptOptions.instructions` 仍是未接通的预留位。`LoopEventHandlers` 是展示观察者，不能当作阻断执行的 Hook。E05 分别补齐这些连接，不另造一套权限、结果仓库或运行循环。
+规划时的基线：`AgentOptions.tools` 可以注入工具，`Tool.execute` 返回字符串；`SystemPromptOptions.instructions` 仍是未接通的预留位。`LoopEventHandlers` 是展示观察者，不能当作阻断执行的 Hook。E05 分别补齐这些连接，不另造一套权限、结果仓库或运行循环。
 
 ## E05-S001：项目指令与 AGENTS.md
 

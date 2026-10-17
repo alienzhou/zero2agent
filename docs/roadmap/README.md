@@ -22,7 +22,7 @@
 
 ---
 
-下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。当前是规划，尚未开始实现。
+下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已实现并配套 18 页课程，待人工 review；S002–S004 仍为规划。
 
 ## 学习地图
 
@@ -32,7 +32,7 @@
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S006 已合入 main | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理失败恢复与上下文质量 | 理解有限恢复、按需读取、事实保留与安全续跑 | S001–S004 已完成；S004 由 PR #26 交付 | [进入 Epic 4](../../specs/E04-reliability-and-context/README.md) |
-| Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解项目指令、按需技能、外部工具和程序检查 | 四课范围与验收已规划，尚未实现 | [进入 Epic 5](../../specs/E05-extensibility/README.md) |
+| Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解项目指令、按需技能、外部工具和程序检查 | S001 已实现、待 PR 人工 review；其余三课已规划 | [进入 Epic 5](../../specs/E05-extensibility/README.md) |
 
 ---
 

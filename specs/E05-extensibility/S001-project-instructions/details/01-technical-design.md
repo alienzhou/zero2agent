@@ -34,3 +34,34 @@ Agent 持有易失的 ProjectInstructions；每轮重建初始作用域，每次
 固定输入与期望文件在 [cases.mjs](../../../../researches/project-instructions/cases.mjs)。正常例只预先允许 AGENTS.md 所列的精确 terminal command/workdir；其他命令仍按默认审批。拒绝例使用 read-only，要求一次明确的 write_file 拒绝、无文件效果且无重试。原始模型请求只存忽略目录；代理不记录认证请求头。
 
 没有规则的新会话不注入额外说明，不改变既有压缩触发点；曾加载规则后删除、停用，或装载历史会话时才补充失效提示。查看入口区分最近读取版本与上次实际发给模型的版本，刷新并不等于模型已经见过。
+
+## 调用接口
+
+```ts
+const agent = new Agent({
+  cwd: '/project/packages/api',
+  projectInstructions: { root: '/project' }, // 默认 root = cwd；false 关闭
+  permissions: { mode: 'accept-edits' },
+})
+await agent.refreshProjectInstructions() // 只读取当前来源，不请求模型
+const view = agent.getProjectInstructions() // 脱离内部状态的副本，无 I/O
+agent.setProjectInstructionsEnabled(false) // 只允许空闲时改变
+```
+
+`view.entries` 包含 `path/scope/status`，成功时包含 `physicalPath/version/bytes/text`，失败时有 error；status 为 loaded、missing、denied 或 error。TUI 只渲染元信息，不把正文写入运行日志。`lastRequest` 在真正开始模型传输时记录路径、作用域、哈希；不是 countTokens 或刷新时的候选状态。
+
+`prepareBatch` 使用可信工具的 permission.paths、checkpointPaths、instructionDirectories 获取目标；不把模型参数当作可信元数据。候选按祖先到后代排序并去重，兄弟目录保留独立标签。`requiresReplan` 只对当前候选中新增/变更的正文，以及实际消失的已知规则返回 true；不把不再相关的目录移出列表当成新规则。
+
+`overlay` 将 JSON 包装的来源、scope、版本和 Markdown 放在独立 user 消息里；system 只追加固定优先说明。`createCompactionRuntime().request` 在预算估算之前构造该覆盖层。旧 buildSystemPrompt({instructions}) 仍是弃用占位参数，不读取文件也不注入规则；加载应由 AgentOptions.projectInstructions 配置。
+
+整批跳过仍消耗工具调用额度，并逐个配对、持久化明确未执行结果。批中规则变动不会重新执行已结算工具；每次真正 execute 前重新解析整批物理路径和规则，能发现审批期间目标符号链接被替换。项目正文不会进入 SessionSnapshot，因此恢复用当前读取策略重建；摘要仅作为历史。
+
+## 验收中顺带修复的搜索问题
+
+真实案例发现 find_files 的 ripgrep 继承宿主进程目录。Agent cwd 与宿主 cwd 不同时，`packages/api/*.ts` 等带前缀 glob 错误返回空；这不是模型缺少搜索能力。现在明确传入规范化的 Agent cwd，兼容 macOS /var 别名，并把 spawn 错误变成普通工具错误。真实临时目录回归覆盖相对 glob 前缀和无效 cwd。
+
+## 权限和隔离范围
+
+指令读取使用绝对规范化路径匹配 read_file 规则；例如拒绝所有自动读取可用 `{tool:'read_file',action:'deny'}`。按 input.path 精确拒绝时应使用界面列出的完整路径；内部文件链接同时检查目标路径。明确选择的 instructions-root 仅作为指令读取边界；文件工具仍以 Agent cwd 限制写入。
+
+这是应用层检查，不是 OS 沙箱。普通 shell 可能访问 workdir 以外的路径，文件系统并发替换仍有系统级窗口；不得把目录指令描述成强制执行的通用策略语言。5 秒刷新截止覆盖审批和各 I/O 结算后的检查，不承诺能强行中断一个内核中阻塞的文件系统调用。
