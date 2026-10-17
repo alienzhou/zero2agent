@@ -1,0 +1,33 @@
+e2e/src/project-instructions.test.ts
+  s_58249cd92a0ae1::t_45050c52ab0951 1-268
+packages/core/src/__tests__/project-instructions.test.ts
+  s_58249cd92a0ae1::t_9656c27a97b34d 290-294
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_5de880763d2388 763
+packages/core/src/project-instructions.ts
+  s_58249cd92a0ae1::t_e075be55b5782a 39-40,65,79,91,94-100
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_17d2ad56b81be4 2,221-223,268-273,305-331,416,480,585-592
+packages/tui/src/conversations.ts
+  s_58249cd92a0ae1::t_19e7a8129258cd 1,296-316
+packages/tui/src/instruction-view.ts
+  s_58249cd92a0ae1::t_e69b6c6994a1a3 1-33
+packages/tui/src/runtime-tui.ts
+  s_58249cd92a0ae1::t_d4a1ba419ee75b 50-53,73,753-759
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f058a7b2e733becd2ff6a525ddeeeedfb4f9374b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
