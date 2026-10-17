@@ -9,4 +9,4 @@
 - [x] 文档、复盘、协作记录与按需篇幅课程。
 - [x] PC/H5 实际阅读、导航与内容核对。
 - [x] 外部原始归档、精简索引与最终 AI 审查。
-- [ ] 提交 PR 供用户 review。
+- [x] 提交 [PR #29](https://github.com/alienzhou/zero2agent/pull/29) 供用户 review。
