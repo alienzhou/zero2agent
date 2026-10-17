@@ -1,0 +1,36 @@
+packages/core/src/hooks.ts
+  s_58249cd92a0ae1::t_ab14d0c6836d35 115,583-584,601-602
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_ab14d0c6836d35 377-388
+  s_58249cd92a0ae1::t_97beada4951f6c 389
+.vibecoding/2026-10-18/pr31-final-review/dialogue.md
+  s_58249cd92a0ae1::t_681ce5419ce247 1-5
+.vibecoding/2026-10-18/pr31-final-review/learnings.md
+  s_58249cd92a0ae1::t_3bcd88711d810d 1
+.vibecoding/2026-10-18/pr31-final-review/prompt.md
+  s_58249cd92a0ae1::t_63203294820aa4 1
+packages/core/src/__tests__/hooks-integration.test.ts
+  s_58249cd92a0ae1::t_481a92f35f26f0 414-492
+packages/core/src/__tests__/hooks.test.ts
+  s_58249cd92a0ae1::t_645a117f03da27 63-68
+specs/E05-extensibility/S004-hooks/details/01-technical-design.md
+  s_58249cd92a0ae1::t_19537f73b6f15a 5,9
+specs/E05-extensibility/S004-hooks/follow-along.md
+  s_58249cd92a0ae1::t_da3ccf0f6e8950 62,95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
