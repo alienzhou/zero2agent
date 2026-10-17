@@ -1,0 +1,23 @@
+e2e/src/project-instructions.test.ts
+  s_58249cd92a0ae1::t_d683218257012f 2,15-21,47,196,216-219,259-262
+researches/project-instructions/verification.json
+  s_58249cd92a0ae1::t_26cde81c9719b7 46-53
+specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_80bb95e341dc09 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d2d1b99bfc6d6701c09f6581e809ccedf4d4d6f0",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
