@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-17T10:04:56.210Z",
+  "reviewedAt": "2026-10-17T10:31:38.987567+00:00",
   "kind": "AI source-to-course review; not runtime acceptance or independent human sign-off",
   "standardCommit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
   "claims": [
@@ -14,7 +14,7 @@
     "fixture v2 report reference is a direct package/testsPassed/summary template; the output summary must replace the reference marker"
   ],
   "sourceHashes": {
-    "packages/core/src/skills.ts": "e37ab27b722f403d03078011e71294f89a9e44d0dfce46244694b175a17eee4a",
+    "packages/core/src/skills.ts": "fec51ad549982c0fc0af0d8873ffc89526ad13b75f0ea355963b4c742bd05588",
     "packages/core/src/skill-format.ts": "2126838fff37795d1f9cc4a88d977aa53530339a6af56b38e7dbf507d574c623",
     "packages/core/src/agent.ts": "e28581861fa10c046c0c1e2db6f7e0fa015af297667978640ee53cd9f28299a0",
     "packages/core/src/loop.ts": "9b8a077b6619e24b8b220a9bbd3e229d706d24d8f2a8e2d5baa054955fe41916",
@@ -34,7 +34,7 @@
     "packages/core/src/tools/read-tool-result.ts": "e761fa709211e4d10cd408f54a4d74d2c09699b30004afb16dd4bde885d79c75",
     "packages/core/src/result-store.ts": "db9473ae443bbee4ab617537fb2f89d3504bad8d1c70c4d58da82af0b7e47532"
   },
-  "productionCheckpoint": "33fd4caf0b3a1fc33c1523f2432c584f7426c49c",
+  "productionCheckpoint": "1dc221699a80b71a6fe3e2b22310f1e7d3fe3140",
   "loaderCheckpoint": "7e6c3fe8ea47e7a5dc24d2eebdf6d12b3d07c908",
   "acceptanceCheckpoint": "398a795630c7509e21cc7504786f8751298784e4",
   "fixtureFreeze": {
@@ -45,5 +45,12 @@
     "previousCaseHash": "9a913b28fa93dd9e3fe30a029579829654f6a0d0974ac199fdf56b90809b871b",
     "scope": "Only the referenced report JSON becomes a direct three-field template with a replaceable summary marker; task, skill body, model and budgets stay fixed. Changed input, not a same-input improvement comparison."
   },
-  "reviewedCheckpoint": "71bd8f9f4390839a795154422a595748e795c13f"
+  "reviewedCheckpoint": "1dc221699a80b71a6fe3e2b22310f1e7d3fe3140",
+  "previousProductionCheckpoint": "33fd4caf0b3a1fc33c1523f2432c584f7426c49c",
+  "finalReview": {
+    "fix": "1dc221699a80b71a6fe3e2b22310f1e7d3fe3140",
+    "issue": "Current path identity must match the opened file even when the whole parent directory is replaced.",
+    "courseImpact": "No figure or command changes; prior visual source hashes remain unchanged.",
+    "liveScope": "Original v1/v2 service observations remain at their recorded source; final race hardening is checked by this review regression, current offline and engineering tests."
+  }
 }

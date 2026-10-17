@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "story": "E05-S002",
+  "date": "2026-10-17",
+  "status": "passed",
+  "reviewedHead": "2f0bc42b7d9e646dd45a489592ae8b4a06165f80",
+  "fix": "1dc221699a80b71a6fe3e2b22310f1e7d3fe3140",
+  "finding": {
+    "priority": "P2",
+    "problem": "Atomic parent directory replacement could activate old opened-file bytes as the current skill.",
+    "fix": "Compare current-path lstat identity with the opened handle before returning bytes.",
+    "regressionBeforeFix": "failed as expected",
+    "regressionAfterFix": "passed",
+    "raw": "tmp/pr29-final-review/core-race"
+  },
+  "engineering": {
+    "source": "1dc221699a80b71a6fe3e2b22310f1e7d3fe3140",
+    "build": "passed",
+    "e2eTypes": "passed",
+    "changedTypescriptFormat": "passed",
+    "diffCheck": "passed",
+    "lint": {
+      "errors": 0,
+      "warnings": 48
+    },
+    "tests": {
+      "corePassed": 733,
+      "e2ePassed": 231,
+      "cdpPassed": 1,
+      "totalPassed": 965,
+      "defaultLiveSkipped": 58
+    },
+    "focusedSkills": 156,
+    "offline": {
+      "directory": "tmp/e05-s002/offline-IM0uO3",
+      "passed": true,
+      "normalRequests": 7,
+      "normalToolCalls": 8,
+      "deniedRequests": 2,
+      "deniedHostCalls": 1
+    },
+    "logs": [
+      "tmp/pr29-final-review/build-after-fix.log",
+      "tmp/pr29-final-review/tests-after-fix.log",
+      "tmp/pr29-final-review/types-after-fix.log",
+      "tmp/pr29-final-review/lint-after-fix.log",
+      "tmp/pr29-final-review/format-after-fix.log",
+      "tmp/pr29-final-review/offline-after-fix.log"
+    ]
+  },
+  "course": {
+    "pages": 11,
+    "chapters": 20,
+    "siteDiagrams": 294,
+    "siteBuild": "passed",
+    "siteCheck": "passed",
+    "browserChecks": "passed",
+    "raw": "tmp/e05-s002/course-7dDI55",
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "navigation": true,
+    "textExpansion": true,
+    "zoom": true,
+    "pageIssues": 0,
+    "resourceErrors": 0
+  },
+  "independentAIReviews": [
+    "Core and race fix",
+    "Host, snapshot and evidence reuse; separate reviewer checked race fix",
+    "Documentation, standard and course reading experience"
+  ],
+  "liveEvidence": {
+    "additionalRealServiceCalls": 0,
+    "historicalSources": [
+      "398a795630c7509e21cc7504786f8751298784e4",
+      "05364630f66748202d20cfbdbf3acc98420cbd40"
+    ],
+    "originalBatchVerdicts": [
+      "1/2",
+      "1/2"
+    ],
+    "scope": "Original service observations remain historical. The final identity check changes runtime bytes and is tested by the current real rename regression, offline tools, CLI/PTY and full engineering suite; old hashes are not presented as latest code."
+  },
+  "mergeAuthorization": "User requested final review and merge when no blocking issues remain.",
+  "deployment": "Site not deployed."
+}

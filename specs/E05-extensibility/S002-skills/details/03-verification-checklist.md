@@ -1,6 +1,6 @@
 # 逐项验收
 
-2026-10-17 完成实现与工程回归。生产代码固定在 `33fd4ca`，后续只修正测试的小屏滚动与跟练参考模板，未改变 Core/TUI 运行代码。逐例机器结果见 [verification.json](../../../../researches/skills/verification.json)，原始附件和下载校验见 [evidence-archive.json](../../../../researches/skills/evidence-archive.json)。AI 交叉审阅不等于用户 review；未合并、未部署。
+2026-10-17 完成实现与工程回归。初次真实服务的生产基线为 `33fd4ca`，原始 v1/v2 的源码版本与成绩保留。最终复核修复目录原子替换的文件身份检查（`1dc2216`）；最新 race、离线及工程结果见 [最终复核](../../../../researches/skills/final-review.json)，不把旧服务观察冒称为新程序实测。逐例机器结果见 [verification.json](../../../../researches/skills/verification.json)，原始附件和下载校验见 [evidence-archive.json](../../../../researches/skills/evidence-archive.json)。AI 交叉审阅不等于人工签署；本次按用户授权由 PR #29 交付，站点未部署。
 
 | 门槛 | 状态与证据 |
 | --- | --- |
@@ -11,11 +11,11 @@
 | 单纯加载零脚本执行、显式命令审批 | 通过。确定性/真实 CLI/PTY 验证；严格真实服务拒绝例一次终端调用被宿主拒绝，零启动、计数与写入。 |
 | 缺失依赖、资源与错误不冒充成功 | 通过。未知 dependencies 字段明确拒绝；compatibility 不安装依赖，资源按实际读取失败，脚本依赖由原终端真实退出报告。 |
 | 具体容量、时间和预算 | 通过。根/扫描/目录/头部/正文/激活总量/资源/分页及 4999/5000/5001 ms 阈值；ContextBudget 与原请求/工具预算继续有效。 |
-| 配对、隔离、版本检查、压缩与恢复 | 通过。22 项 Core 集成测试含加载混批、有限重规划、审批/批中变化、历史来源 spool、压缩和当前权限；56 项控制器测试含恢复队列与缓存清理。 |
+| 配对、隔离、版本检查、压缩与恢复 | 通过。22 项 Core 集成测试含加载混批、有限重规划、审批/批中变化、历史来源 spool、压缩和当前权限；57 项控制器测试含恢复队列与缓存清理。 |
 | 宿主、管道、plain、取消/退出与保存 | 通过。16 项实际 CLI/plain/PTY 与 4 项磁盘快照测试；恢复/current --skill 组合覆盖 v1/v3、--resume/--continue。两组真实 PTY 验审批取消后继续与信号退出恢复；小屏帮助另以 PgUp 实测。 |
-| 离线跟练 | 通过。v2 `offline-qjeVc2` 正常 7 请求/8 配对工具、三文件各改一次、真实退出 0、报告写前测试通过、独立金额检查；拒绝 2 请求/1 宿主拒绝/0 效果。 |
+| 离线跟练 | 通过。最终修复后的 v2 `offline-IM0uO3` 正常 7 请求/8 配对工具、三文件各改一次、真实退出 0、报告写前测试通过、独立金额检查；拒绝 2 请求/1 宿主拒绝/0 效果。 |
 | 固定真实服务逐例证据 | 正常 v2 严格通过，未变化的拒绝案例复用 v1 严格通过。两次批次仍各为 1/2，额外提前拒绝不改判；依据见下节。 |
-| 工程完整回归 | 通过。build、E2E 类型、变更 TS 格式、git diff --check、冻结锁文件安装；全仓 964 passed（Core 732 / E2E 231 / CDP 1），58 live 默认 skipped。lint 0 errors / 48 warnings（基线 46，加 2 处 CLI 输出）。 |
+| 工程完整回归 | 通过。build、E2E 类型、变更 TS 格式、git diff --check、冻结锁文件安装；全仓 965 passed（Core 733 / E2E 231 / CDP 1），58 live 默认 skipped。lint 0 errors / 48 warnings（基线 46，加 2 处 CLI 输出）。 |
 | 课程与阅读 | 通过。11 页含封面，源/pages.json/HTML 一致；site build/check 20 章 294 张图，PC 1440×1000/H5 390×844 的逐页边界、导航、文字、放大及请求/资源错误检查通过。 |
 | 最终审查与归档 | 通过。工程/课文及逐例复用由独立 AI 审阅，无待修阻塞项；1,122 份源与原始记录在 Git 外归档，整包、manifest 和比较脚本已回下载验证。PR 供用户 review。 |
 

@@ -2,7 +2,7 @@
   "version": 1,
   "story": "E05-S002",
   "date": "2026-10-17",
-  "status": "review-pending",
+  "status": "delivered-in-pr29",
   "platform": {
     "system": "Darwin",
     "release": "23.6.0",
@@ -42,10 +42,6 @@
       "host": 16,
       "snapshot": 4
     },
-    "currentBytesMatchLiveV2": {
-      "sourceFiles": 70,
-      "runtimeFiles": 64
-    },
     "logs": [
       "tmp/e05-s002/build-final.log",
       "tmp/e05-s002/regression-complete.log",
@@ -53,7 +49,13 @@
       "tmp/e05-s002/lint-final.log",
       "tmp/e05-s002/format-complete.log",
       "tmp/e05-s002/install-final.log"
-    ]
+    ],
+    "reviewSnapshotBytesMatchLiveV2": {
+      "snapshot": "2f0bc42b7d9e646dd45a489592ae8b4a06165f80",
+      "sourceFiles": 70,
+      "runtimeFiles": 64
+    },
+    "evidenceStage": "Initial review snapshot before final parent-directory identity hardening; latest checks are in final-review.json."
   },
   "fixedAcceptance": {
     "limits": {
@@ -243,6 +245,12 @@
     "Unchanged negative input/runtime evidence permits reuse; no claim of identical service randomness, stable tool choice or generalized success rate.",
     "Historical resource pages remain history and use existing historical-reader permissions; read_file denial does not erase them.",
     "Application-level paths and permissions are not an OS sandbox.",
-    "User review pending; site not deployed."
-  ]
+    "Final review and merge authorized by user; site not deployed."
+  ],
+  "finalReview": {
+    "record": "final-review.json",
+    "fix": "1dc221699a80b71a6fe3e2b22310f1e7d3fe3140",
+    "liveScope": "Original real-service runs and their 1/2 verdicts are historical observations. The final path-identity hardening changes skills.ts/dist bytes; current race, offline and engineering checks are recorded separately.",
+    "independentReview": "Final fix reviewed by a second agent; no remaining actionable P1/P2 in reviewed scope. User authorized merge after successful checks."
+  }
 }

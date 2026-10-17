@@ -2,7 +2,7 @@
 
 [首页](../../../README.md) · [E05 四课](../README.md) · [跟练](follow-along.md) · [验收](details/03-verification-checklist.md)
 
-状态：调研、实现、工程回归、文档与 11 页课程已完成，已提交 [PR #29](https://github.com/alienzhou/zero2agent/pull/29) 待用户 review；未合并、未部署。真实服务保留两版完整成绩，逐例证据复用范围见验收页。
+状态：调研、实现、工程回归、文档与 11 页课程已完成，最终复核修复 1 项 P2 后，按用户授权由 [PR #29](https://github.com/alienzhou/zero2agent/pull/29) 交付；站点未部署。真实服务保留两版完整成绩，逐例证据复用范围见验收页。
 
 同一金额修复任务，Agent 先看到技能名称与描述，选中 `fix-with-tests` 才读取步骤，需要报告结构时再读取参考文件。单纯发现、加载和查看技能不运行脚本；后续命令仍经过当前宿主授权。
 
