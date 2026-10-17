@@ -1,0 +1,30 @@
+packages/core/src/skill-format.ts
+  s_58249cd92a0ae1::t_7b692c92c48959 1-166
+  s_58249cd92a0ae1::t_2165c12f2216cd 167-181
+packages/cdp-debug/skills/cdp-debug-node/SKILL.md
+  s_58249cd92a0ae1::t_71e916d5e2dc43 2,8,188,191-192
+packages/core/src/__tests__/skill-format.test.ts
+  s_58249cd92a0ae1::t_663a88f65607f9 1-175
+  s_58249cd92a0ae1::t_23bdfd96784a49 176-265
+researches/skills/README.md
+  s_58249cd92a0ae1::t_84d30fee2ce820 47-48
+  s_58249cd92a0ae1::t_a59bb2393013fe 1-46
+packages/cdp-debug/README.md
+  s_58249cd92a0ae1::t_71e916d5e2dc43 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26113b2484231af8f9a74a4b67a6f867230d12a6",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
