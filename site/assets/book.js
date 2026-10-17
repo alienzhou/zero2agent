@@ -115,8 +115,13 @@ function trackScroll() {
   lastScrollY = window.scrollY;
   if (!currentChapter || restoring || scrollPending) return;
   scrollPending = true;
+  const revision = routeRevision;
   requestAnimationFrame(() => {
     scrollPending = false;
+    // A queued scroll frame must not overwrite a route the reader just selected.
+    const route = parseRoute();
+    if (restoring || revision !== routeRevision || route.chapter !== currentChapter ||
+        (route.page || route.chapter?.pages[0]) !== activePage) return;
     let page = currentChapter?.pages[0];
     for (const candidate of currentChapter?.pages || []) {
       if (document.getElementById(candidate.id).getBoundingClientRect().top <= 160) page = candidate;

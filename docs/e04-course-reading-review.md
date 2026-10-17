@@ -33,3 +33,7 @@ P02/P03 分别提供具体故障现场和恢复边界；P04–P08 依次解释�
 本轮只修改课程编辑源、生成产物、检查脚本和配套文档；运行时实现、工程测试及原真实服务验收保持原版本。重新验证实际 HTML、目录/搜索一致性、PC/H5 导航、文字展开、图解放大和逐页可读性。当前摘要见 [课程检查索引](../.authoring/site/reviews/e04-reading-verification.json)，原始截图保存在[独立外部归档草稿](https://github.com/alienzhou/zero2agent/releases/tag/untagged-aa5fec976a9b5bbe43aa)（访问需相应仓库权限），不提交 Git；[下载与校验索引](../.authoring/site/reviews/e04-reading-evidence.json)记录源码版本、附件哈希和回下载验证。原交付文档中的 18 页描述是当时的验收历史。
 
 本轮提供 PR review，未合并，也未部署课程。
+
+## 最终阅读体验复核
+
+与 E05-S001 联检时，实际“下一章”操作发现旧阅读器的滚动回调会抢回路由。现已在执行回调时核对路由版本、目标章节/小节与恢复状态，防止旧进度覆盖新选择。`scripts/site-navigation-check.mjs` 先在旧版稳定复现失败，修复后验证 PC/H5 的排队滚动、真实翻页、浏览器后退、搜索、深链与刷新。
