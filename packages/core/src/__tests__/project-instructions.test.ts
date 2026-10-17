@@ -26,6 +26,7 @@ beforeEach(async () => {
   root = await realpath(await mkdtemp(join(tmpdir(), 'z2a-instructions-')))
 })
 afterEach(async () => {
+  vi.useRealTimers()
   vi.restoreAllMocks()
   await rm(root, { recursive: true, force: true })
 })
@@ -235,6 +236,48 @@ describe('AGENTS.md open format and bounded discovery', () => {
     expect(approval).toHaveBeenCalledOnce()
     expect(JSON.stringify(loader.view())).not.toContain('CANCEL_SECRET')
   })
+
+  it.each([4999, 5000, 5001])(
+    'rejects approvals at/after the refresh deadline (%i ms)',
+    async elapsed => {
+      await file('AGENTS.md', 'DEADLINE_BODY')
+      vi.useFakeTimers()
+      // Node's native AbortSignal.timeout uses an internal clock; substitute the same signal
+      // boundary so the exact race is deterministic rather than depending on CI scheduling.
+      vi.spyOn(AbortSignal, 'timeout').mockImplementation(delay => {
+        expect(delay).toBe(LIMITS.refreshMs)
+        const controller = new AbortController()
+        setTimeout(() => controller.abort(new DOMException('Timed out', 'TimeoutError')), delay)
+        return controller.signal
+      })
+      let announce!: () => void
+      const started = new Promise<void>(resolve => {
+        announce = resolve
+      })
+      let approve!: () => void
+      const controller = new PermissionController({
+        rules: [{ tool: 'read_file', action: 'ask' }],
+        requestApproval: request =>
+          new Promise(resolve => {
+            approve = () => resolve({ requestId: request.id, decision: 'allow' })
+            announce()
+          }),
+      })
+      const loader = new ProjectInstructions(root)
+      const work = loader.refresh(controller)
+      const outcome =
+        elapsed < LIMITS.refreshMs
+          ? expect(work).resolves.toBeUndefined()
+          : expect(work).rejects.toThrow('5000 ms')
+      await started
+      await vi.advanceTimersByTimeAsync(elapsed)
+      approve()
+      await outcome
+      expect(JSON.stringify(loader.view()).includes('DEADLINE_BODY')).toBe(
+        elapsed < LIMITS.refreshMs
+      )
+    }
+  )
 
   it('bounds a stalled approval to the refresh deadline', async () => {
     await file('AGENTS.md', 'TIMEOUT_SECRET')

@@ -13,16 +13,18 @@ export interface SystemPromptOptions {
   /**
    * 额外的指令列表
    * 来自项目、组织、用户偏好的外部规则
-   * S004 暂不使用，预留扩展位
+   * 旧占位参数仍不生效；AGENTS.md 使用 AgentOptions.projectInstructions，
+   * 由宿主加载到用户级请求覆盖层，不提升为 System Prompt。
+   * @deprecated 使用 AgentOptions.projectInstructions
    */
-  instructions?: string[];
+  instructions?: string[]
 
   /**
    * 任务模式
    * 如 plan/debug/review 等
    * S004 暂不使用，预留扩展位
    */
-  mode?: string;
+  mode?: string
 }
 
 /**
@@ -34,27 +36,27 @@ export interface UserTaskOptions {
   /**
    * 用户原始输入消息
    */
-  rawUserMessage: string;
+  rawUserMessage: string
 
   /**
    * 当前工作目录
    */
-  cwd?: string;
+  cwd?: string
 
   /**
    * 当前日期（格式：YYYY-MM-DD）
    */
-  date?: string;
+  date?: string
 
   /**
    * 运行平台
    * S004 预留扩展位
    */
-  platform?: string;
+  platform?: string
 
   /**
    * 仓库根目录
    * S004 预留扩展位
    */
-  repoRoot?: string;
+  repoRoot?: string
 }

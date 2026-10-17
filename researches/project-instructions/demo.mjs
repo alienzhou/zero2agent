@@ -60,9 +60,16 @@ report.runtimeHashes = Object.fromEntries(
       'packages/core/dist/project-instructions.js',
       'packages/core/dist/loop.js',
       'packages/core/dist/agent.js',
+      'packages/core/dist/tools/find-files.js',
     ].map(async name => [name, sha(await fs.readFile(path.join(root, name)))])
   )
 )
+// Keep exact source/runtime bytes beside every future run, including failed runs.
+for (const name of [...Object.keys(report.sourceHashes), ...Object.keys(report.runtimeHashes)]) {
+  const target = path.join(output, 'source', name)
+  await fs.mkdir(path.dirname(target), { recursive: true })
+  await fs.copyFile(path.join(root, name), target)
+}
 const write = (file, text) => fs.writeFile(file, text, { mode: 0o600 })
 const tool = (name, input, id) => ({ type: 'tool_use', name, input, id })
 function sse(res, blocks, model = 'deterministic-fixture') {
