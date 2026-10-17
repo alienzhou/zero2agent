@@ -1,0 +1,41 @@
+.discuss/2026-10-17/e05-s004-hooks/decisions/D01-hook-facts.md
+  s_58249cd92a0ae1::t_7e87b34a00f4f7 1
+.discuss/2026-10-17/e05-s004-hooks/outline.md
+  s_58249cd92a0ae1::t_f17c37df11ff19 1
+.vibecoding/2026-10-17/e05-s004-hooks/dialogue.md
+  s_58249cd92a0ae1::t_f5616640d09ee4 1
+.vibecoding/2026-10-17/e05-s004-hooks/learnings.md
+  s_58249cd92a0ae1::t_e5c8e3d1836228 1
+.vibecoding/2026-10-17/e05-s004-hooks/prompt.md
+  s_58249cd92a0ae1::t_5a1f3fcff700b5 1
+researches/hooks/README.md
+  s_58249cd92a0ae1::t_43c716f0d9d630 1-8
+specs/E05-extensibility/S004-hooks/README.md
+  s_58249cd92a0ae1::t_652257af77d2b2 1-8
+specs/E05-extensibility/S004-hooks/details/00-overview.md
+  s_58249cd92a0ae1::t_134fa64538da65 1-3
+specs/E05-extensibility/S004-hooks/details/01-technical-design.md
+  s_58249cd92a0ae1::t_f0acfbee5a24b5 1-13
+specs/E05-extensibility/S004-hooks/details/02-task-list.md
+  s_58249cd92a0ae1::t_1d39004075f18c 1-8
+specs/E05-extensibility/S004-hooks/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_890136cd3d85d3 1-13
+specs/E05-extensibility/S004-hooks/details/04-backlog.md
+  s_58249cd92a0ae1::t_13c9449394156e 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d9092487e60dffd432c30d08b4ca1b2c235e6d9b",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
