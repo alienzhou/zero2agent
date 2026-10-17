@@ -1,0 +1,51 @@
+.authoring/site/chapters/epic05-story002/verification/source-audit.json
+  s_58249cd92a0ae1::t_6a7798a3c67ac8 2,17,37,48-55
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_4377a81dbc5ce7 175
+.vibecoding/2026-10-17/e05-s002-skills/dialogue.md
+  s_58249cd92a0ae1::t_65244a6f430396 18-21
+CHANGELOG.md
+  s_58249cd92a0ae1::t_3f40f0a6134258 19
+README.en.md
+  s_58249cd92a0ae1::t_e5f0e845a0aa33 112,160,183
+README.md
+  s_58249cd92a0ae1::t_1882fefb245359 116,118,166,189
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_75377117468a24 25,35
+researches/skills/README.md
+  s_58249cd92a0ae1::t_86aed448888752 126,138-141
+researches/skills/final-review.json
+  s_58249cd92a0ae1::t_8126c2819a603c 1-94
+researches/skills/verification.json
+  s_58249cd92a0ae1::t_b477ea5d4d9833 5,52-58,248-255
+retros/E05-S002-skills.md
+  s_58249cd92a0ae1::t_79ba56dccae1d3 22-23
+site/course.json
+  s_58249cd92a0ae1::t_7bbf33c3a44894 7156
+specs/E05-extensibility/README.md
+  s_58249cd92a0ae1::t_1828898feb8d8d 7,12
+specs/E05-extensibility/S002-skills/README.md
+  s_58249cd92a0ae1::t_ac453c2c3cfce9 5
+specs/E05-extensibility/S002-skills/details/01-technical-design.md
+  s_58249cd92a0ae1::t_7c3efb2362c9c0 19
+specs/E05-extensibility/S002-skills/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_40542d809e97c9 3,14,16,18
+specs/README.md
+  s_58249cd92a0ae1::t_3990f164918a16 94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25db158868495ed77832105863c196212b611758",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
