@@ -166,7 +166,13 @@ describe('E05-S002 actual CLI and host surfaces', () => {
     const allowed = await runCli({
       cwd: p.dir,
       args: ['--skill-root', external.dir, '--skill', 'external-guide', 'use external guide'],
-      env: { ...p.env, PERMISSION_RULES: JSON.stringify([{ tool: 'read_file', action: 'allow' }]) },
+      env: {
+        ...p.env,
+        PERMISSION_RULES: JSON.stringify([
+          { tool: 'list_directory', action: 'allow' },
+          { tool: 'read_file', action: 'allow' },
+        ]),
+      },
     })
     expect(allowed.code, allowed.output).toBe(0)
     expect(JSON.stringify(p.requests[0])).toContain('HOST_EXTERNAL_BODY')

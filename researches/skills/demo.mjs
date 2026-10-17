@@ -490,7 +490,9 @@ for (const name of ['normal', 'denied']) {
       const view = JSON.stringify(agent.getSkills())
       assert(
         view.includes('allowed-tools') &&
-          /grant|权限|unsupported|advisory|未实现|不支持/i.test(view),
+          /grant|permissions remain|informational only|权限|unsupported|advisory|未实现|不支持/i.test(
+            view
+          ),
         'Unsupported permission declaration warning missing.'
       )
       assert.equal(pairing.results.get(pairing.calls[0].id)?.is_error, true)
