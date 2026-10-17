@@ -1,0 +1,43 @@
+.authoring/site/chapters/epic05-story004/review.md
+  s_58249cd92a0ae1::t_cc670897816f3b 4-5
+.authoring/site/chapters/epic05-story004/verification/checks.json
+  s_58249cd92a0ae1::t_6d892b71a68cc6 2
+CHANGELOG.md
+  s_58249cd92a0ae1::t_a4a4f1883b9c65 5-6,11
+README.md
+  s_58249cd92a0ae1::t_121ca01c273829 116,166,191
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_75bb2a92bb6d47 25,35
+researches/hooks/evidence-archive.json
+  s_58249cd92a0ae1::t_e65817faf9c24e 21-42
+researches/hooks/verification.json
+  s_58249cd92a0ae1::t_5a9d1e1f67fc31 3-4,14,17,19,59-60,90,108,113-114,144,162,212-213,217-218,400-445,449,471-523
+retros/E05-S004-hooks.md
+  s_58249cd92a0ae1::t_519954202eb1d3 19-21
+specs/E05-extensibility/README.md
+  s_58249cd92a0ae1::t_3b9ceca7ab204c 7,14,22
+specs/E05-extensibility/S004-hooks/README.md
+  s_58249cd92a0ae1::t_51b2d3ef0bc1d8 3
+specs/E05-extensibility/S004-hooks/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_f12cc1970addf0 15
+specs/E05-extensibility/acceptance.md
+  s_58249cd92a0ae1::t_fe210984562218 5,20,38-39
+specs/E05-extensibility/course-plan.md
+  s_58249cd92a0ae1::t_0590b7ffc37e9b 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a1f0456da22b6385eae63cffe87abafbe54202fb",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
