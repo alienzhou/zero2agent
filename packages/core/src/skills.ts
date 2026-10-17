@@ -3,6 +3,7 @@ import { constants } from 'node:fs'
 import { lstat, open, opendir } from 'node:fs/promises'
 import type { FileHandle } from 'node:fs/promises'
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path'
+import type Anthropic from '@anthropic-ai/sdk'
 import type { ContextRequest } from './context-budget.js'
 import { PermissionController } from './permissions.js'
 import {
@@ -183,6 +184,20 @@ export function validateSkillSelectionSnapshot(value: unknown): SkillSelectionSn
   return { version: 1, selected }
 }
 
+/** Raw structured history only; quoted text and summaries cannot claim a skill was used. */
+export function hasSkillHistory(messages: readonly Anthropic.MessageParam[]): boolean {
+  return messages.some(
+    message =>
+      message.role === 'assistant' &&
+      Array.isArray(message.content) &&
+      message.content.some(
+        block =>
+          block.type === 'tool_use' &&
+          (block.name === 'load_skill' || block.name === 'read_skill_resource')
+      )
+  )
+}
+
 /** Return only complete delimiter lines; bytes following the closing line are never parsed. */
 function headerEnd(bytes: Buffer, eof: boolean): number | undefined {
   let start = bytes.subarray(0, 3).equals(Buffer.from([0xef, 0xbb, 0xbf])) ? 3 : 0
@@ -269,20 +284,21 @@ export class Skills {
   requiresReplan(previousFingerprint: string): boolean {
     return this.fingerprint !== previousFingerprint
   }
-  reset(history: 'empty' | 'current' | 'restored' = 'current'): void {
+  reset(history: 'empty' | 'current' | 'restored' = 'current', historical = false): void {
     if (history === 'empty') {
       this.selected.clear()
       this.pendingSelections = []
       this.disabled.clear()
       this.contextSeen = false
     }
-    if (history === 'restored') this.contextSeen = true
+    if (history === 'restored') this.contextSeen = historical || this.selected.size > 0
     if (history !== 'current') {
       this.entries = []
       this.roots = []
       this.errors = []
       this.ready = false
       this.lastRequest = undefined
+      this.anchors.clear()
     }
   }
   setEnabled(enabled: boolean): void {
@@ -299,12 +315,13 @@ export class Skills {
     const selected = [...this.selected.values()].filter(item => item.version !== '0'.repeat(64))
     return selected.length ? { version: 1, selected: structuredClone(selected) } : undefined
   }
-  restoreSelection(value?: SkillSelectionSnapshot): void {
+  restoreSelection(value?: SkillSelectionSnapshot, historical = false): void {
     const snapshot = value === undefined ? undefined : validateSkillSelectionSnapshot(value)
     this.selected = new Map(snapshot?.selected.map(item => [item.id, item]) ?? [])
-    this.pendingSelections = []
+    // A newly supplied CLI selection still applies after --resume. Never reconstruct the
+    // queue from constructor options: consumed choices may have been explicitly unloaded.
     this.disabled.clear()
-    this.reset('restored')
+    this.reset('restored', historical)
   }
 
   private async operation<T>(
@@ -567,15 +584,21 @@ export class Skills {
         }
       }
       this.assertCatalog()
-      for (const selector of this.pendingSelections) {
+      const pendingSelections = this.pendingSelections
+      this.pendingSelections = []
+      for (const selector of pendingSelections) {
         const entry = this.lookup(selector)
+        if (!this.selected.has(entry.id) && this.selected.size >= SKILL_LIMITS.active)
+          fail('SKILL_ACTIVE_LIMIT', 'At most 4 skills may be active.')
         this.selected.set(entry.id, {
           id: entry.id,
           source: entry.source,
-          version: previous.get(entry.id)?.version ?? '0'.repeat(64),
+          version:
+            this.selected.get(entry.id)?.version ??
+            previous.get(entry.id)?.version ??
+            '0'.repeat(64),
         })
       }
-      this.pendingSelections = []
       if (this.selected.size > SKILL_LIMITS.active)
         fail('SKILL_ACTIVE_LIMIT', 'At most 4 skills may be active.')
       for (const selected of this.selected.values()) {
@@ -689,6 +712,11 @@ export class Skills {
         signal,
         SKILL_LIMITS.fileBytes
       )
+      // Discovery and this authorized read are separate filesystem observations. A
+      // changed license/metadata field must not bypass the header-only read limit.
+      const end = headerEnd(read.bytes, true)
+      if (end !== undefined && end > SKILL_LIMITS.frontmatterBytes)
+        fail('SKILL_HEADER_LIMIT', `Frontmatter exceeds ${SKILL_LIMITS.frontmatterBytes} bytes.`)
       const parsed = parseSkillFile(this.text(read.bytes), basename(entry.root))
       if (entry.name !== parsed.metadata.name || entry.description !== parsed.metadata.description)
         fail(

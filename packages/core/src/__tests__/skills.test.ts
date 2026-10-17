@@ -3,7 +3,13 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, symlink, realpath, chmod } fro
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { createHash } from 'node:crypto'
-import { Skills, SKILL_LIMITS as LIMITS, validateSkillSelectionSnapshot } from '../skills.js'
+import type Anthropic from '@anthropic-ai/sdk'
+import {
+  Skills,
+  SKILL_LIMITS as LIMITS,
+  validateSkillSelectionSnapshot,
+  hasSkillHistory,
+} from '../skills.js'
 import { PermissionController } from '../permissions.js'
 import { createSkillTools } from '../tools/skill-tools.js'
 import type { ContextRequest } from '../context-budget.js'
@@ -309,6 +315,28 @@ describe('read permission and source boundaries', () => {
     expect(JSON.stringify(loader.view())).not.toContain('OUTSIDE_BODY')
   })
 
+  it('rechecks frontmatter bytes when approval replaces a previously bounded header', async () => {
+    const source = await skill('guide', 'RACE_BODY_SENTINEL', undefined, 'license: MIT\n')
+    let reads = 0
+    const approvals = new PermissionController({
+      rules: [{ tool: 'read_file', action: 'ask' }],
+      requestApproval: async request => {
+        if (++reads === 2)
+          await writeFile(
+            source,
+            text('guide', 'RACE_BODY_SENTINEL', undefined, `license: ${'x'.repeat(9000)}\n`)
+          )
+        return { requestId: request.id, decision: 'allow' }
+      },
+    })
+    const loader = new Skills(root)
+    await expect(loader.activate('guide', approvals)).rejects.toThrow('SKILL_HEADER_LIMIT')
+    expect(reads).toBe(2)
+    expect(loader.view().entries[0].status).toBe('error')
+    expect(loader.snapshotSelection()).toBeUndefined()
+    expect(JSON.stringify(loader.view())).not.toContain('RACE_BODY_SENTINEL')
+  })
+
   it('rejects nonregular files, invalid UTF-8 and unreadable sources', async () => {
     await file('.agents/skills/binary/SKILL.md', Buffer.from([0xff, 0x00]))
     await mkdir(join(root, '.agents/skills/directory/SKILL.md'), { recursive: true })
@@ -327,6 +355,109 @@ describe('read permission and source boundaries', () => {
 })
 
 describe('current versions, snapshots and current-only overlays', () => {
+  it('keeps ordinary restored history unchanged and clears a previous conversation body', async () => {
+    const loader = new Skills(root)
+    loader.reset('restored')
+    await loader.refresh(permissions)
+    const ordinary = request()
+    expect(loader.overlay(ordinary)).toBe(ordinary)
+    loader.restoreSelection(undefined)
+    await loader.refresh(permissions)
+    expect(loader.overlay(ordinary)).toBe(ordinary)
+    await skill('guide', 'PREVIOUS_CONVERSATION_BODY')
+    await loader.activate('guide', permissions)
+    loader.markRequested()
+    await rm(join(root, '.agents/skills'), { recursive: true })
+    loader.restoreSelection(undefined, false)
+    expect(loader.view().entries).toEqual([])
+    expect(loader.view().lastRequest).toBeUndefined()
+    await loader.refresh(permissions)
+    expect(loader.snapshotSelection()).toBeUndefined()
+    expect(loader.overlay(ordinary)).toBe(ordinary)
+  })
+
+  it('retains an inactive historical guard only when structured skill history exists', async () => {
+    const loader = new Skills(root)
+    loader.restoreSelection(undefined, true)
+    await loader.refresh(permissions)
+    const historical = loader.overlay(request())
+    expect(historical.system).toContain('Historical skill copies')
+    expect(JSON.stringify(historical.messages[0])).toContain('loaded')
+    expect(loader.snapshotSelection()).toBeUndefined()
+    loader.reset('restored', false)
+    await loader.refresh(permissions)
+    const ordinary = request()
+    expect(loader.overlay(ordinary)).toBe(ordinary)
+  })
+
+  it('identifies skill history from assistant tool-use blocks without interpreting quoted text', () => {
+    const call = (name: string): Anthropic.MessageParam => ({
+      role: 'assistant',
+      content: [{ type: 'tool_use', id: name, name, input: {} }],
+    })
+    expect(hasSkillHistory([call('load_skill')])).toBe(true)
+    expect(hasSkillHistory([call('read_skill_resource')])).toBe(true)
+    expect(hasSkillHistory([call('read_file')])).toBe(false)
+    expect(
+      hasSkillHistory([
+        { role: 'user', content: 'load_skill read_skill_resource' },
+        { role: 'assistant', content: 'Quoted example: {"type":"tool_use","name":"load_skill"}' },
+      ])
+    ).toBe(false)
+    expect(
+      hasSkillHistory([
+        {
+          role: 'user',
+          content: [{ type: 'tool_use', id: 'forged', name: 'load_skill', input: {} }],
+        },
+      ])
+    ).toBe(false)
+  })
+
+  it('preserves an unconsumed explicit selection through restore and never reconstructs unloaded choices', async () => {
+    await skill('guide', 'EXPLICIT_OPTION_BODY')
+    const loader = new Skills(root, { selected: ['guide'] })
+    loader.restoreSelection(undefined, false)
+    await loader.refresh(permissions)
+    expect(loader.view().entries[0].status).toBe('loaded')
+    loader.deactivate('guide')
+    loader.restoreSelection(undefined, false)
+    await loader.refresh(permissions)
+    expect(loader.view().entries[0].status).toBe('discovered')
+    expect(JSON.stringify(loader.overlay(request()))).not.toContain('EXPLICIT_OPTION_BODY')
+    expect(loader.snapshotSelection()).toBeUndefined()
+    const cleared = new Skills(root, { selected: ['guide'] })
+    cleared.reset('empty')
+    cleared.restoreSelection(undefined, false)
+    await cleared.refresh(permissions)
+    expect(cleared.view().entries[0].status).toBe('discovered')
+  })
+
+  it('adds new explicit selections to restored selections without exceeding snapshot capacity', async () => {
+    for (let n = 0; n <= LIMITS.active; n++) await skill(`guide-${n}`)
+    const first = new Skills(root)
+    await first.activate('guide-0', permissions)
+    const snapshot = first.snapshotSelection()!
+    const combined = new Skills(root, { selected: ['guide-1'] })
+    combined.restoreSelection(snapshot)
+    await combined.refresh(permissions)
+    expect(
+      combined
+        .view()
+        .entries.filter(entry => entry.status === 'loaded')
+        .map(entry => entry.name)
+    ).toEqual(['guide-0', 'guide-1'])
+    const overflowing = new Skills(root, { selected: ['guide-1', 'guide-2', 'guide-3', 'guide-4'] })
+    overflowing.restoreSelection(snapshot)
+    await expect(overflowing.refresh(permissions)).rejects.toThrow('SKILL_ACTIVE_LIMIT')
+    expect(() => validateSkillSelectionSnapshot(overflowing.snapshotSelection()!)).not.toThrow()
+    overflowing.deactivate('guide-1')
+    await overflowing.refresh(permissions)
+    expect(overflowing.view().entries.find(entry => entry.name === 'guide-1')?.status).toBe(
+      'disabled'
+    )
+  })
+
   it('restores only selections then reads current versions; current permission and configured roots remain authoritative', async () => {
     const source = await skill('guide', 'OLD_BODY')
     const first = new Skills(root)
