@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "scope": "E04 course browser evidence only",
+  "sourceCommit": "387f9fd444983606e43f3f5c988c1c3687c41670",
+  "release": {
+    "tag": "E04-course-reading-evidence",
+    "url": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-aa5fec976a9b5bbe43aa",
+    "draft": true
+  },
+  "asset": {
+    "name": "e04-course-reading-evidence.tar.gz",
+    "url": "https://github.com/alienzhou/zero2agent/releases/download/untagged-aa5fec976a9b5bbe43aa/e04-course-reading-evidence.tar.gz",
+    "apiUrl": "https://api.github.com/repos/alienzhou/zero2agent/releases/assets/649520504",
+    "bytes": 14620183,
+    "sha256": "deaadde939f980abf9c391ea87df82c4c49af58c86d6b808527209a2e778d2f2"
+  },
+  "manifestFiles": 203,
+  "roundTripVerification": {
+    "downloadCompleted": true,
+    "archiveSha256": "passed",
+    "manifest": "203/203 files passed"
+  },
+  "verifyCommand": "node researches/safe-resume/verify-evidence.mjs <extracted e04-course-reading-evidence directory>",
+  "humanReview": "pending",
+  "note": "Raw screenshots and source bundle are outside Git. Draft release may require repository permissions."
+}

@@ -163,7 +163,7 @@ consoleBox(0,0,952,184,'在工程根目录',['pnpm build','node scripts/e04-s001
 t(0,755,'对照：01 为 4 次 HTTP / 1 次写入；02 为 1 次请求。',29,C.green,650)),
 '脚本退出自动清理临时目录。下一课 E04-S002 解决大工具结果按需读取：本课限制恢复与运行消耗，下一课减少每次请求带入的正文。',['D01','T01','T02']);
 
-if(pages.length!==18) throw new Error('E04-S001 must contain exactly 18 pages including its cover');
+if(pages.length<2 || pages.length>18) throw new Error('Course needs a cover and content, at most 18 pages');
 for (const [i,p] of pages.entries()) {
  const number=String(i+1).padStart(2,'0');
  const header=`<header class="page-header"><span>Zero2Agent · ${esc(p.section)}</span><span class="page-number">${number}</span></header>`;

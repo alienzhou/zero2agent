@@ -18,11 +18,11 @@
 
 当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
 
-最新课程：[E04-S004：中断后的安全续跑](../../specs/E04-reliability-and-context/S004-safe-resume/README.md)。逐工具保存执行事实，核对未知效果后明确开启新一轮，保留 S003 的完成检查。实现、测试、文档、跟练及 18 页课程完成最终复核，按用户授权通过 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付；固定版本 `E04-S004-safe-resume`，网站未部署。S001–S003 已分别由 PR #23/#24/#25 合入 main，Epic 4 的四课实现链条完整。
+E04 收束课：[E04-S004：中断后的安全续跑](../../specs/E04-reliability-and-context/S004-safe-resume/README.md)。逐工具保存执行事实，核对未知效果后明确开启新一轮，保留 S003 的完成检查。工程实现与验收由 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付，固定工程版本 `E04-S004-safe-resume`；当前课程经 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 修订为 14 页，四课取舍见[审阅说明](../e04-course-reading-review.md)，网站未部署。S001–S003 已分别由 PR #23/#24/#25 合入 main，Epic 4 的四课实现链条完整。
 
 ---
 
-下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已实现并配套 10 页课程，待人工 review；S002–S004 仍为规划。
+下一阶段 [E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入并配套 10 页课程；S002–S004 仍为规划。
 
 ## 学习地图
 
@@ -32,7 +32,7 @@
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S006 已合入 main | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理失败恢复与上下文质量 | 理解有限恢复、按需读取、事实保留与安全续跑 | S001–S004 已完成；S004 由 PR #26 交付 | [进入 Epic 4](../../specs/E04-reliability-and-context/README.md) |
-| Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解项目指令、按需技能、外部工具和程序检查 | S001 已实现、待 PR 人工 review；其余三课已规划 | [进入 Epic 5](../../specs/E05-extensibility/README.md) |
+| Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解项目指令、按需技能、外部工具和程序检查 | S001 已由 PR #27 合入；其余三课已规划 | [进入 Epic 5](../../specs/E05-extensibility/README.md) |
 
 ---
 

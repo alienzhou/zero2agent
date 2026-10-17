@@ -1,6 +1,6 @@
 # 逐项验收
 
-2026-10-17 完成工程与课程验收，等待 PR 人工 review。生产代码以 `def0cd467faf3e0844e3a01e1be2541af92e18c1` 为真实服务验证版本；最终完整回归含后续截止时间测试（`5e21bf1`），生产源码哈希一致。精简机器结果见 [verification.json](../../../../researches/project-instructions/verification.json)，原始附件与下载校验见 [验收目录](../../../../researches/project-instructions/README.md)。
+2026-10-17 完成工程与课程验收，最终 AI 复核通过，按用户授权由 PR #27 合入 main（`df7ef00`）。生产代码以 `def0cd467faf3e0844e3a01e1be2541af92e18c1` 为真实服务验证版本；最终完整回归含后续截止时间测试（`5e21bf1`），生产源码哈希一致。精简机器结果见 [verification.json](../../../../researches/project-instructions/verification.json)，原始附件与下载校验见 [验收目录](../../../../researches/project-instructions/README.md)。
 
 | 场景 | 结果与证据 |
 | --- | --- |
@@ -17,10 +17,10 @@
 | 固定真实模型两例 | 通过。`live-Lv1vUL` 正常 7 次请求、三处文件修改与测试/JSON 报告均通过；拒绝 2 次请求、1 次拒绝、0 效果。两轮先前失败保留，修复后同模型、输入、预算重验。 |
 | 工程 | 通过。`pnpm build`、E2E `tsc --noEmit`、变更 TS Prettier、`git diff --check`。完整回归 789 passed（Core 577 / E2E 211 / CDP 1），另有默认 live 58 skipped，不能计入通过。lint 0 errors / 46 warnings（基线 44，新 CLI 输出 2）。 |
 | 课程 | 通过。10 页（含封面），编辑源、pages.json、HTML 一致；site build/check 19 章 293 张图；PC 1440×1000 / H5 390×844、逐页文字、目录、展开与放大检查无错误。当前截图见 `course-JggNEW`；初版 18 页证据另存，未覆盖。 |
-| 最终审查 | AI 自查实现、权限与生命周期、工具配对、CLI 兼容、测试断言、文档和课程一致性，无待修阻塞项；人工 review 待用户完成。 |
+| 最终审查 | AI 自查实现、权限与生命周期、工具配对、CLI 兼容、测试断言、文档和课程一致性，无待修阻塞项；按用户“确认没问题就合并”的授权交付；不将 AI 复核记为独立人工签署。 |
 
 ## 失败与证据边界
 
 `live-VAXKr4` 把移出无关目录误判为规则变化，耗尽重规划；`live-zz5I7N` 揭示 find_files 在宿主与 Agent cwd 不同的情况下错误处理带前缀 glob。分别修复作用域比较、ripgrep cwd，并添加回归。未改变固定任务、模型配置、预算，也未覆盖失败文件。
 
-当前服务配置别名为 `claude-sonnet-4-20250514`，实际响应报告 `MiniMax-M3`，不据别名声称验收来自其他模型。两个固定案例只证明本次观测，不推断成功率。权限与路径控制是应用层约束，shell 不是 OS 沙箱。课程未发布，PR 未合并。
+当前服务配置别名为 `claude-sonnet-4-20250514`，实际响应报告 `MiniMax-M3`，不据别名声称验收来自其他模型。两个固定案例只证明本次观测，不推断成功率。权限与路径控制是应用层约束，shell 不是 OS 沙箱。课程未发布，PR #27 已合入 main。与 PR #28 联检及阅读器修复见 [最终复核](../../../../docs/pr27-pr28-final-review.md)。

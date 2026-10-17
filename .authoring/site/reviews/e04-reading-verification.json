@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "scope": "E04 course editorial revision only",
+  "baseCommit": "0bfb9c92a095f32ee09578dc151b1403712809ed",
+  "chapters": [
+    {
+      "chapter": "epic04-story001",
+      "before": 18,
+      "after": 18,
+      "report": "../chapters/epic04-story001/verification-reading/checks.json",
+      "pageIssues": 0,
+      "browserErrors": 0,
+      "readerViewports": [
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "count": 18,
+          "navigation": true,
+          "selected": "10-stream-end",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "count": 18,
+          "navigation": true,
+          "selected": "10-stream-end",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        }
+      ]
+    },
+    {
+      "chapter": "epic04-story002",
+      "before": 18,
+      "after": 15,
+      "report": "../chapters/epic04-story002/verification-reading/checks.json",
+      "pageIssues": 0,
+      "browserErrors": 0,
+      "readerViewports": [
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "count": 15,
+          "navigation": true,
+          "selected": "08-tail",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "count": 15,
+          "navigation": true,
+          "selected": "08-tail",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        }
+      ]
+    },
+    {
+      "chapter": "epic04-story003",
+      "before": 18,
+      "after": 15,
+      "report": "../chapters/epic04-story003/verification-reading/checks.json",
+      "pageIssues": 0,
+      "browserErrors": 0,
+      "readerViewports": [
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "count": 15,
+          "navigation": true,
+          "selected": "09-capacity",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "count": 15,
+          "navigation": true,
+          "selected": "09-capacity",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        }
+      ]
+    },
+    {
+      "chapter": "epic04-story004",
+      "before": 18,
+      "after": 14,
+      "report": "../chapters/epic04-story004/verification-reading/checks.json",
+      "pageIssues": 0,
+      "browserErrors": 0,
+      "readerViewports": [
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "count": 14,
+          "navigation": true,
+          "selected": "10-files",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "count": 14,
+          "navigation": true,
+          "selected": "10-files",
+          "textExpanded": true,
+          "zoom": true,
+          "horizontalOverflow": false
+        }
+      ]
+    }
+  ],
+  "pagesBefore": 72,
+  "pagesAfter": 62,
+  "site": {
+    "chapters": 18,
+    "diagrams": 273
+  },
+  "checks": {
+    "siteBuild": "passed",
+    "siteCheck": "passed",
+    "pageLayout": "62/62 passed",
+    "reader": "4 chapters × PC/H5 passed",
+    "visualReview": "AI author inspected all contact sheets and PC/H5 renderings",
+    "humanReview": "pending"
+  },
+  "commands": [
+    "pnpm site:build",
+    "pnpm site:check",
+    "PLAYWRIGHT_MODULE=<absolute playwright module> node scripts/e04-course-review-check.mjs"
+  ],
+  "browser": "Chrome 155.0.8059.82",
+  "rawEvidenceDirectory": "tmp/e04-course-review/browser-UBkoJh",
+  "runtimeChanged": false,
+  "runtimeTestsRerun": false,
+  "deployed": false,
+  "note": "Historical engineering and live-service evidence retains its original source revision; current source hashes are in chapter reports.",
+  "verifiedSourceCommit": "387f9fd444983606e43f3f5c988c1c3687c41670",
+  "externalEvidence": "e04-reading-evidence.json"
+}

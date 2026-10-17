@@ -149,7 +149,7 @@
       "id": "epic04-story003",
       "epic": "epic04",
       "title": "摘要质量与事实保留",
-      "description": "原史来源、按需回查、显式产物校验与有界读取纠错。固定集任务和关键项 56/56，18 页图解与可运行跟练，保留全部失败和成本。",
+      "description": "原史来源、按需回查、显式产物校验与有界读取纠错。通过图解与可运行跟练理解机制，完整实验结果、失败和成本见验收文档。",
       "sourceURL": "https://github.com/alienzhou/zero2agent/tree/E04-S003-summary-quality/specs/E04-reliability-and-context/S003-summary-quality"
     },
     {

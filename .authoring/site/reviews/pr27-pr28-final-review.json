@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "decision": "passed; user authorized merge after final review",
+  "aiReview": true,
+  "independentHumanSignoffClaimed": false,
+  "pr27": {
+    "head": "e736fc028a17ff842195fac935d5b13e84d0d2d6",
+    "merge": "df7ef00eeca3a7922b18f9f7b9221980f0eb8aa4"
+  },
+  "pr28CodeCheckpoint": "766ffdda280a4119cfb4e85f44e99df828c26fe0",
+  "checks": {
+    "agentBuild": "passed",
+    "coreFocused": 50,
+    "hostFocused": 10,
+    "offlineCases": 2,
+    "liveRerun": false,
+    "siteChapters": 19,
+    "siteDiagrams": 283,
+    "reviewedLessonPages": [
+      18,
+      15,
+      15,
+      14,
+      10
+    ],
+    "pageLayout": "72/72 passed",
+    "readerViewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "navigation": "pending-scroll race, pointer pagination, browser back, search, deep link and reload passed",
+    "links": "changed Markdown local links verified"
+  },
+  "navigationRegression": {
+    "before": "failed as expected: old scroll frame restored E04 route",
+    "beforeReaderSha256": "b7d3ccc8e01a4fd44931976c39efd2d0c176ed2ee3f373e8d451034f495feee7",
+    "after": "passed in both viewports"
+  },
+  "verifiedSourceHashes": {
+    "site/course.json": "632a377c7de722f9bb617629f37e97b7e176943f3489a38af39fc812e1714128",
+    "site/assets/book.js": "a8b608f63a91af1fc092c8d840fd4ff913a64981d1715cd0b20cc0d6e079ac36",
+    "scripts/site-navigation-check.mjs": "f5f66bc1b397694c722f5edf8f082980b48670145a7e7dcb852d46848a712cda"
+  },
+  "integrationSourceComparison": "85 browser/site files identical between tested combined worktree and current branch",
+  "deployed": false,
+  "evidence": {
+    "releaseURL": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-aa5fec976a9b5bbe43aa",
+    "draft": true,
+    "asset": "pr27-pr28-final-review.tar.gz",
+    "assetURL": "https://github.com/alienzhou/zero2agent/releases/download/untagged-aa5fec976a9b5bbe43aa/pr27-pr28-final-review.tar.gz",
+    "bytes": 18179465,
+    "sha256": "7a8976e699101e9419be1d62e7f20fe5216b16468cdf15d8c9568c20552cd1ea",
+    "manifestFiles": 359,
+    "sourceCommit": "647d7f8b0e197dbb4c07a0d7b807fad9e83ab3d9",
+    "roundTripVerification": "downloaded archive SHA-256 and 359/359 manifest entries passed"
+  },
+  "deliveryTag": "E05-S001-project-instructions"
+}

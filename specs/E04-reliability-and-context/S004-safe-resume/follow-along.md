@@ -39,3 +39,7 @@ node researches/safe-resume/demo.mjs --live
 ```
 
 单次任务固定为两个 JSON 文件；失败保留原始目录，不自动重跑直到成功。离线回归用于判断机制，真实服务用于补充集成证据，两者分别记录。
+
+## 按需阅读的实现与验收细节
+
+完整 generation 的消息、摘要边界、来源及控制字段，以及临时写入、fsync、独占发布的顺序见 [技术设计](details/01-technical-design.md)。主课已把真实 SIGKILL 实验并入跟练；它证明进程退出后的行为，不宣称验证了断电或网络文件系统。

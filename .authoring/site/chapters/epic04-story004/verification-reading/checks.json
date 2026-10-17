@@ -1,0 +1,113 @@
+{
+  "chapter": "epic04-story004",
+  "capturedAt": "2026-10-17T04:21:01.799Z",
+  "browser": "155.0.8059.82",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "number": 1,
+      "issues": []
+    },
+    {
+      "file": "02-incident.html",
+      "number": 2,
+      "issues": []
+    },
+    {
+      "file": "04-timeline.html",
+      "number": 3,
+      "issues": []
+    },
+    {
+      "file": "05-states.html",
+      "number": 4,
+      "issues": []
+    },
+    {
+      "file": "06-before.html",
+      "number": 5,
+      "issues": []
+    },
+    {
+      "file": "07-receipt.html",
+      "number": 6,
+      "issues": []
+    },
+    {
+      "file": "09-batch.html",
+      "number": 7,
+      "issues": []
+    },
+    {
+      "file": "10-files.html",
+      "number": 8,
+      "issues": []
+    },
+    {
+      "file": "11-shell.html",
+      "number": 9,
+      "issues": []
+    },
+    {
+      "file": "12-permissions.html",
+      "number": 10,
+      "issues": []
+    },
+    {
+      "file": "13-guards.html",
+      "number": 11,
+      "issues": []
+    },
+    {
+      "file": "14-interface.html",
+      "number": 12,
+      "issues": []
+    },
+    {
+      "file": "16-storage.html",
+      "number": 13,
+      "issues": []
+    },
+    {
+      "file": "17-practice.html",
+      "number": 14,
+      "issues": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "count": 14,
+      "navigation": true,
+      "selected": "10-files",
+      "textExpanded": true,
+      "zoom": true,
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "count": 14,
+      "navigation": true,
+      "selected": "10-files",
+      "textExpanded": true,
+      "zoom": true,
+      "horizontalOverflow": false
+    }
+  ],
+  "errors": [],
+  "sourceHashes": {
+    ".authoring/site/course.json": "a8103fe1c9ebbab931fe4e21dbbd22b41954bba1a640275e34f71be86db8b787",
+    "site/course.json": "29336727216a91410363d37e9f6b2a8a61956d0fadb9f236def07b9aa03e251c",
+    "scripts/e04-course-review-check.mjs": "3306a47d6826f955efdc0c823824eca46c12e1e1d3372434cb0f3033b82bb31b",
+    ".authoring/site/chapters/epic04-story004/author.cjs": "b1142d7f272fc537abc1daa92a81aa64e5e93ceb66e24433c5737bc2077e9214",
+    "site/chapters/epic04-story004/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
+    "site/chapters/epic04-story004/pages.json": "57017f25c27eb82ff6bfce65c50ac89a3481b845e5d8fe66def3332e996f2797"
+  },
+  "evidenceDirectory": "tmp/e04-course-review/browser-UBkoJh/epic04-story004"
+}

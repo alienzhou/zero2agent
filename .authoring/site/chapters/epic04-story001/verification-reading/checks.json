@@ -1,0 +1,133 @@
+{
+  "chapter": "epic04-story001",
+  "capturedAt": "2026-10-17T04:20:48.523Z",
+  "browser": "155.0.8059.82",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "number": 1,
+      "issues": []
+    },
+    {
+      "file": "02-written-before-failure.html",
+      "number": 2,
+      "issues": []
+    },
+    {
+      "file": "03-three-failures.html",
+      "number": 3,
+      "issues": []
+    },
+    {
+      "file": "04-error-matrix.html",
+      "number": 4,
+      "issues": []
+    },
+    {
+      "file": "05-one-retry-owner.html",
+      "number": 5,
+      "issues": []
+    },
+    {
+      "file": "06-attempt-identity.html",
+      "number": 6,
+      "issues": []
+    },
+    {
+      "file": "07-backoff.html",
+      "number": 7,
+      "issues": []
+    },
+    {
+      "file": "08-timeouts.html",
+      "number": 8,
+      "issues": []
+    },
+    {
+      "file": "09-cancel-wait.html",
+      "number": 9,
+      "issues": []
+    },
+    {
+      "file": "10-stream-end.html",
+      "number": 10,
+      "issues": []
+    },
+    {
+      "file": "11-tool-correction.html",
+      "number": 11,
+      "issues": []
+    },
+    {
+      "file": "12-approval.html",
+      "number": 12,
+      "issues": []
+    },
+    {
+      "file": "13-budgets.html",
+      "number": 13,
+      "issues": []
+    },
+    {
+      "file": "14-batch-pairing.html",
+      "number": 14,
+      "issues": []
+    },
+    {
+      "file": "15-native-outcomes.html",
+      "number": 15,
+      "issues": []
+    },
+    {
+      "file": "16-settlement.html",
+      "number": 16,
+      "issues": []
+    },
+    {
+      "file": "17-configuration.html",
+      "number": 17,
+      "issues": []
+    },
+    {
+      "file": "18-practice.html",
+      "number": 18,
+      "issues": []
+    }
+  ],
+  "reader": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "count": 18,
+      "navigation": true,
+      "selected": "10-stream-end",
+      "textExpanded": true,
+      "zoom": true,
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "count": 18,
+      "navigation": true,
+      "selected": "10-stream-end",
+      "textExpanded": true,
+      "zoom": true,
+      "horizontalOverflow": false
+    }
+  ],
+  "errors": [],
+  "sourceHashes": {
+    ".authoring/site/course.json": "a8103fe1c9ebbab931fe4e21dbbd22b41954bba1a640275e34f71be86db8b787",
+    "site/course.json": "29336727216a91410363d37e9f6b2a8a61956d0fadb9f236def07b9aa03e251c",
+    "scripts/e04-course-review-check.mjs": "3306a47d6826f955efdc0c823824eca46c12e1e1d3372434cb0f3033b82bb31b",
+    ".authoring/site/chapters/epic04-story001/author.cjs": "bb78f2dd6db645b55e5f04bc4ebfd8b1ee6fddf8d3e3d73554b5661e58ad9381",
+    "site/chapters/epic04-story001/course.css": "95e49e1d2dfa61526d5498d8c396122e4fcab3ba486bd290ece02e2228a96395",
+    "site/chapters/epic04-story001/pages.json": "c489b52fd38648e3de3d9a19f584922a4ad6d09480ff982b70be7d9758a63ad8"
+  },
+  "evidenceDirectory": "tmp/e04-course-review/browser-UBkoJh/epic04-story001"
+}

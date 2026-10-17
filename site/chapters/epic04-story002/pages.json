@@ -6,7 +6,7 @@
   "width": 1080,
   "height": 1440,
   "maxImages": 18,
-  "edition": "v1-result-reference",
+  "edition": "reading-review-2026-10-17",
   "pages": [
     {
       "file": "01-cover.html",
@@ -103,19 +103,9 @@
       ]
     },
     {
-      "file": "11-dedup.html",
-      "title": "同样的字节，不必保存两份",
-      "number": 11,
-      "sources": [
-        "S01",
-        "S02",
-        "T03"
-      ]
-    },
-    {
       "file": "12-lifecycle.html",
       "title": "过期、丢失、改变，是三个不同的事实",
-      "number": 12,
+      "number": 11,
       "sources": [
         "S01"
       ]
@@ -123,7 +113,7 @@
     {
       "file": "13-restart.html",
       "title": "恢复会话，需要两部分数据",
-      "number": 13,
+      "number": 12,
       "sources": [
         "S01",
         "S04",
@@ -133,7 +123,7 @@
     {
       "file": "14-failure.html",
       "title": "工具执行成功了，磁盘却存不下输出",
-      "number": 14,
+      "number": 13,
       "sources": [
         "S01",
         "S02",
@@ -143,35 +133,16 @@
     {
       "file": "15-terminal.html",
       "title": "文件还在增长，不能说它已经完整封存",
-      "number": 15,
+      "number": 14,
       "sources": [
         "S02",
         "S05"
       ]
     },
     {
-      "file": "16-capacity.html",
-      "title": "保存大结果，也要有容量上限",
-      "number": 16,
-      "sources": [
-        "S01",
-        "S02",
-        "T03"
-      ]
-    },
-    {
-      "file": "17-evidence.html",
-      "title": "正文真的省下了，证据也真的读到了",
-      "number": 17,
-      "sources": [
-        "T01",
-        "T02"
-      ]
-    },
-    {
       "file": "18-practice.html",
       "title": "先预测，再运行这三个实验",
-      "number": 18,
+      "number": 15,
       "sources": [
         "T01",
         "T02",

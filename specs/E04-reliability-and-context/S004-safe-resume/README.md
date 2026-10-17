@@ -1,5 +1,7 @@
 # E04-S004：中断后的安全续跑
 
+课程阅读稿经 2026-10-17 审阅，当前含封面 14 页；[查看保留/合并依据](../../../docs/e04-course-reading-review.md)。本轮课程修订通过最终 AI 复核，按用户授权由 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 交付；下文原交付证据保留其验证版本。
+
 [Epic 4](../README.md) · [离线跟练](./follow-along.md) · [验收](./details/03-verification-checklist.md)
 
 Agent 已经写好第一个文件，宿主却在保存整轮会话前崩溃。重启后，它应该知道第一项已经完成、第二项尚未执行。如果只恢复上一轮对话，就会丢失这段执行事实；如果重新执行整批工具，又可能重复产生副作用。

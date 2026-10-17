@@ -14,7 +14,9 @@ const consoleBox = (x,y,w,h,title,rows,size=29) => rect(x,y,w,h,C.ink,'none',10)
 const file = (x,y,w,h,title,rows,tone='green') => `<path d="M${x} ${y}h${w-44}l44 44v${h-44}h-${w}Z" fill="${C.white}" stroke="${C[tone]}" stroke-width="3"/><path d="M${x+w-44} ${y}v44h44" fill="none" stroke="${C[tone]}" stroke-width="2"/>`+t(x+22,y+87,title,30,C[tone],700)+ls(x+22,y+149,rows,29,C.ink,45);
 const svg = (label,body,h=680) => `<svg class="diagram" viewBox="0 0 952 ${h}" width="952" height="${h}" role="img" aria-label="${esc(label)}"><title>${esc(label)}</title><defs>${['ink','green','red','amber'].map(k=>`<marker id="${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="${C[k]}"/></marker>`).join('')}</defs>${body}</svg>`;
 const pages=[];
-const page=(slug,section,title,deck,body,note,sources,layout='')=>pages.push({file:`${String(pages.length+1).padStart(2,'0')}-${slug}.html`,section,title,deck,body,note,sources,layout});
+// Keep existing URLs stable; visible page numbers follow the current reading order.
+const pageFiles={"cover":"01-cover.html","needle":"02-needle.html","reuse":"03-reuse.html","receipt":"04-receipt.html","flow":"05-flow.html","sizes":"06-sizes.html","utf8":"07-utf8.html","tail":"08-tail.html","long-line":"09-long-line.html","permission":"10-permission.html","lifecycle":"12-lifecycle.html","restart":"13-restart.html","failure":"14-failure.html","terminal":"15-terminal.html","practice":"18-practice.html"};
+const page=(slug,section,title,deck,body,note,sources,layout='')=>pages.push({file:pageFiles[slug],section,title,deck,body,note,sources,layout});
 
 page('cover','大工具结果按需读取','保存大结果，按需取证','E04-S002 · 几十万字日志，只取需要的那一段。',svg('教学示意：大日志存一份，模型只收引用，按范围取回末尾证据',
 file(0,15,380,320,'完整日志',['synthetic-log-entry …','… 约 300 KB …','EVIDENCE=RESULT-…'])+
@@ -47,7 +49,7 @@ path('M786 131V227','green',true)+file(612,252,340,238,'正文 × 1',['私有目
 path('M585 297H302','red',true)+rect(0,242,282,118,C.redBg)+t(24,290,'短回执',36,C.red,700)+t(24,336,'同一 tool_use_id',25,C.muted)+
 path('M140 388V466','ink',true)+t(0,522,'模型下一轮',34,C.ink,700)+path('M245 509H570','green',true)+t(600,522,'read_tool_result',28,C.green,650,'start',true)+
 t(0,635,'每次回读是新工具调用，仍计入本轮运行预算。',30,C.ink,650)),
-'保存失败时返回明确错误，说明原工具已经结算。不会把“存储失败”解释为“工具没执行过”。',['S01','S02']);
+'同一会话的相同正文可按哈希去重，引用仍保留各自调用来源。保存失败要说明原工具已结算；正文去重与完整配额见技术设计。',['S01','S02']);
 
 page('sizes','05 · 限制每次带入的正文','300 KB 的输出，\n不用每轮都重新发送','存储阈值、读取上限、上下文预算是三道检查。',svg('不同数量级的大小条，标注不按比例；完整正文大于20KiB转引用，回读4096字节，再过模型输入预算',
 t(0,42,'原始正文 · 示例 300 KB',32,C.ink,700)+rect(0,76,952,94,C.ink)+t(24,137,'保存在本机结果存储',31,C.paper)+
@@ -85,19 +87,12 @@ const y=i*184;return t(0,y+44,a,34,C.ink,700)+t(0,y+99,b,28,C.muted,400,'start',
 }).join('')+t(0,632,'快照保存事实与引用，不保存旧审批。',32,C.ink,650)),
 '来源按当时的真实路径记录；删除工作区内的软链接，也不能把外部数据变成内部来源。终端结果的读取不授权执行命令。',['S02','S04','T03']);
 
-page('dedup','10 · 一份正文，多次引用','同样的字节，\n不必保存两份','正文按内容哈希存放，调用身份仍分别记录。',svg('两条不同工具调用结果指向一个SHA256正文，引用与内容不是同一个身份',
-rect(0,0,380,162,C.soft)+t(22,53,'调用 A',38,C.ink,700)+t(22,116,'reference = UUID-A',26,C.muted,400,'start',true)+
-rect(0,302,380,162,C.soft)+t(22,355,'调用 B',38,C.ink,700)+t(22,418,'reference = UUID-B',26,C.muted,400,'start',true)+
-path('M405 83H535V220H585','green',true)+path('M405 383H535V270H585','green',true)+file(615,148,337,285,'正文 × 1',['SHA-256 相同','字节数相同','每次回读都校验'])+
-rule(530)+ls(0,595,['去重的是同一会话中的正文；','来源、创建时间和失效时间属于各自引用。'],30,C.ink,52)),
-'终端已结束的流式文件通过本地硬链接封存，再删除 pending 名称，不把整份日志读入字符串后重写。',['S01','S02','T03']);
-
-page('lifecycle','11 · 引用的生命周期','过期、丢失、改变，\n是三个不同的事实','明确原因，才能避免错误地重跑原工具。',svg('结果的七天有效窗口时间线，下方给出三种不可读状态的不同解释',
+page('lifecycle','10 · 引用的生命周期','过期、丢失、改变，\n是三个不同的事实','明确原因，才能避免错误地重跑原工具。',svg('结果的七天有效窗口时间线，下方给出三种不可读状态的不同解释',
 path('M42 96H906','ink',true)+dot(55,96,11,'green')+dot(676,96,11,'red')+rect(66,61,588,69,C.greenBg)+t(86,107,'创建后，默认可读 7 天',34,C.green,700)+t(52,168,'创建',28,C.muted)+t(649,168,'到期',28,C.red,650)+
 [['RESULT_EXPIRED','引用超过失效时间'],['RESULT_MISSING','文件被清理或移动'],['RESULT_CHANGED','大小或校验与原记录不同']].map(([a,b],i)=>t(0,283+i*112,a,31,C.red,650,'start',true)+t(0,330+i*112,b,31)+rule(363+i*112)).join('')),
 '过期正文在该会话下次保存结果或显式 cleanupExpired 时回收。未再打开的会话目录需手工清理；TTL 不代表后台定时清理。',['S01']);
 
-page('restart','12 · 关掉程序之后','恢复会话，\n需要两部分数据','本机快照中的引用，还要找到对应正文。',svg('会话JSON只存配对历史与引用元信息，正文在结果目录；新进程联接二者但不重放工具',
+page('restart','11 · 关掉程序之后','恢复会话，\n需要两部分数据','本机快照中的引用，还要找到对应正文。',svg('会话JSON只存配对历史与引用元信息，正文在结果目录；新进程联接二者但不重放工具',
 file(0,0,429,290,'会话 JSON',['调用与结果配对','结果目录身份','引用、来源、SHA-256'])+
 file(523,0,429,290,'本机结果目录',['私有正文文件','按工作区与会话隔离','不含旧审批或旧进程'])+
 path('M214 321V380H476V432','green',true)+path('M737 321V380H476','green')+
@@ -105,14 +100,14 @@ t(251,497,'新 CLI 进程',44,C.green,700)+t(88,559,'校验快照 → 当前权�
 rule(605)+t(0,654,'只复制 JSON 到另一台电脑，不等于迁移了正文。',29,C.red,650)),
 '不同工作区恢复会明确拒绝原引用。恢复失败保留当前会话；原工具不因读取需要而自动执行。',['S01','S04','T01']);
 
-page('failure','13 · 保存失败的事实','工具执行成功了，\n磁盘却存不下输出','失败发生在保存结果时，原副作用仍可能已经发生。',svg('工具执行到保存失败的时间线，文件已经改变保留效果，不自动重做',
+page('failure','12 · 保存失败的事实','工具执行成功了，\n磁盘却存不下输出','失败发生在保存结果时，原副作用仍可能已经发生。',svg('工具执行到保存失败的时间线，文件已经改变保留效果，不自动重做',
 path('M57 112H910','ink',true)+[[80,'执行工具','green'],[453,'副作用完成','green'],[862,'保存失败','red']].map(([x,a,c])=>dot(x,112,12,c)+t(x,62,a,29,C[c],700,'middle')).join('')+
 file(0,234,372,248,'effect.txt',['已修改的内容','仍然保留'])+
 consoleBox(438,228,514,248,'Harness 明确报告',['execution settled','RESULT_CAPACITY','do not re-run'],27)+
 rule(535)+t(0,597,'下一步核对实际效果，再决定如何继续。',33,C.ink,700)+t(0,650,'“结果无法保存”不能证明“操作从未发生”。',29,C.muted)),
-'错误回执仍配对原调用。容量、写入和封存错误都可见；任意 shell 的恢复执行属于后续课程范围。',['S01','S02','T03']);
+'容量、写入和封存错误都要配对原调用，不能静默丢弃活跃结果。各项存储上限、输出预留与背压见跟练的延伸入口。',['S01','S02','T03']);
 
-page('terminal','14 · 终端仍在运行时','文件还在增长，\n不能说它已经完整封存','后台日志与已结算结果有不同的读取语义。',svg('前台结束的输出进入封存引用，后台跳过输出仍为未封存路径，没有固定哈希',
+page('terminal','13 · 终端仍在运行时','文件还在增长，\n不能说它已经完整封存','后台日志与已结算结果有不同的读取语义。',svg('前台结束的输出进入封存引用，后台跳过输出仍为未封存路径，没有固定哈希',
 t(0,54,'进程已结算',38,C.green,700)+path('M274 41H425','green',true)+t(469,54,'关闭流 → 封存 → 引用',34,C.green,700)+
 rect(0,101,952,141,C.greenBg)+ls(24,153,['有固定字节数和 SHA-256。','取消或 drain 超时的回执仍说明输出可能不完整。'],30,C.ink,53)+
 rule(302)+t(0,369,'Ctrl-S 转后台',38,C.amber,700)+path('M335 356H489','amber',true)+t(532,369,'仍在写入',34,C.amber,700)+
@@ -120,26 +115,20 @@ rect(0,416,952,143,C.amberBg)+ls(24,468,['回执明确标记 unsealed，保留�
 t(0,642,'人工终端的私密字节，继续不记录、不发给模型。',29,C.ink,650)),
 '后台完成通知沿用既有机制。本课没有把活跃进程变成可恢复任务，也没有将人工输入纳入结果存储。',['S02','S05']);
 
-page('capacity','15 · 给存储设边界','保存大结果，\n也要有容量上限','不能为了节省上下文，把风险转移给磁盘与队列。',svg('单份16MiB、会话64MiB、128引用三项额度，数据流背压与过限排空机制',
-[[0,'16','MiB','单份正文'],[332,'64','MiB','会话正文'],[666,'128','条','会话引用']].map(([x,a,b,d])=>t(x,126,a,95,C.red,700)+t(x,207,b,29,C.muted)+t(x,270,d,33,C.ink,650)).join('')+
-rule(302)+t(0,364,'终端流：写盘跟不上 → 暂停读取管道',32,C.ink,650)+path('M92 421H861','ink',true)+tag(0,453,245,'stdout / stderr','ink')+tag(356,453,245,'有界写入队列','amber')+tag(708,453,244,'私有正文文件','green')+
-ls(0,581,['超过单份容量：继续排空进程，明确输出不完整。','活跃结果不会为了腾空间被静默删除。'],30,C.muted,53)),
-'容量也包括执行前的输出预留；短命令结束释放，后台关闭后按实际大小计入。全机所有会话没有总配额。',['S01','S02','T03']);
-
-page('evidence','16 · 用效果验收','正文真的省下了，\n证据也真的读到了','固定响应验证流程；真实模型验证它能使用这套工具。',svg('两类验收表：确定性本地服务与真实模型，分别证明9次请求4进程无重放及模型取得随机证据',
-rect(0,0,952,60,C.ink)+t(22,41,'验收层级',29,C.paper,650)+t(340,41,'核对什么',29,C.paper,650)+
-t(0,131,'真实 CLI / 本地 SSE',32,C.ink,700)+ls(340,127,['读文件、终端各一套流程。','4 次启动：创建 / 恢复 / 拒绝 / 丢失。','每套 9 次请求，原工具执行 1 次。'],28,C.ink,51)+rule(280)+
-t(0,357,'真实模型服务',32,C.green,700)+ls(340,353,['约 300 KB 合成日志，随机答案。','模型先收引用，再回读末尾。','配对结果和最终答案都含证据。'],28,C.ink,51)+rule(512)+
-t(0,580,'不能只检查最终一句“我找到了”。',35,C.red,700)+t(0,643,'还要核对调用、结果、文件哈希和发送请求。',29,C.muted)),
-'数据来自本课实际验收。确定性服务不冒充真实模型；真实模型测试仅代表当前配置服务与平台。完整原始证据见跟练。',['T01','T02']);
-
-page('practice','17 · 亲手验证','先预测，\n再运行这三个实验','跟练使用生产 CLI 和本地服务，不需要模型密钥。',svg('三道练习：重启回读、权限拒绝、删除正文；命令和预期行为',
+page('practice','14 · 亲手验证','先预测，\n再运行这三个实验','跟练使用生产 CLI 和本地服务，不需要模型密钥。',svg('三道练习：重启回读、权限拒绝、删除正文；命令和预期行为',
 consoleBox(0,0,952,230,'在仓库根目录',['pnpm build','pnpm --filter @zero2agent/e2e exec vitest run', '  src/result-references.test.ts'],24)+
 [['01','重启后回读','证据仍在，原工具没有再执行。'],['02','增加读取 deny 规则','结果被拒绝，旧审批不继承。'],['03','删除正文文件','明确 RESULT_MISSING，不重跑命令。']].map(([n,a,b],i)=>t(0,278+i*122,n,46,C.red,700)+t(92,275+i*122,a,33,C.ink,650)+t(92,327+i*122,b,28,C.muted)+rule(358+i*122)).join('')+
 t(0,654,'下一课：压缩摘要后，还能保住哪些事实？',30,C.green,650)),
-'上方后两行是一条命令，完整可复制版本见跟练。先运行离线验收，再选择开启真实模型测试。',['T01','T02','D01']);
+'上方后两行是一条命令，完整版本见跟练。核对请求是否只带引用、正文哈希与原工具调用次数；实际验收成绩和真实模型记录另见验收清单。',['T01','T02','D01']);
 
-if(pages.length!==18) throw new Error('E04-S002 must contain exactly 18 pages including its cover');
+if(pages.length<2 || pages.length>18) throw new Error('Course needs a cover and content, at most 18 pages');
+const activeFiles=new Set(pages.map(p=>p.file));
+if(activeFiles.size!==pages.length || pages.some(p=>!/^\d{2}-[a-z0-9-]+\.html$/.test(p.file))) throw new Error('Invalid or duplicate stable page filename');
+if(fs.existsSync('pages.json')) {
+ for(const entry of JSON.parse(fs.readFileSync('pages.json','utf8')).pages ?? []) {
+  if(/^\d{2}-[a-z0-9-]+\.html$/.test(entry.file) && !activeFiles.has(entry.file)) fs.rmSync(entry.file,{force:true});
+ }
+}
 for(const [i,p] of pages.entries()) {
  const number=String(i+1).padStart(2,'0');
  const header=`<header class="page-header"><span>Zero2Agent · ${esc(p.section)}</span><span class="page-number">${number}</span></header>`;
@@ -148,4 +137,4 @@ for(const [i,p] of pages.entries()) {
  const cover=`<div class="cover-frame"><header class="page-header"><span>Zero2Agent · 健壮性与上下文</span><span class="page-number">E04-S002</span></header><div class="series-masthead" data-block><h1 class="series-title">从零到一做 <span>Agent</span></h1><p class="series-description" data-prose>亲手实现 Coding Agent · 开源实战课程</p><h2 class="lesson-title">大工具结果按需读取</h2><p class="lesson-promise" data-prose>几十万字日志，只取需要的那一段。</p></div><div class="series-body">${p.body}<p class="explain" data-block data-prose>${esc(p.note)}</p></div><div class="cover-tags"><span>结果引用</span><span>按需读取</span><span>开源课程</span></div></div>`;
  fs.writeFileSync(p.file,`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${esc(p.title.replaceAll('\n',''))}</title><link rel="stylesheet" href="course.css"></head><body><main class="sheet ${i===0?'cover series-cover':''}" data-page="${number}">${i===0?cover:header+heading+content}</main></body></html>\n`);
 }
-fs.writeFileSync('pages.json',JSON.stringify({title:'Zero2Agent · E04-S002 大工具结果按需读取',date:'2026-10-11',draft:false,publicationStatus:'unpublished',width:1080,height:1440,maxImages:18,edition:'v1-result-reference',pages:pages.map((p,i)=>({file:p.file,title:p.title.replaceAll('\n',''),number:i+1,sources:p.sources}))},null,2)+'\n');
+fs.writeFileSync('pages.json',JSON.stringify({title:'Zero2Agent · E04-S002 大工具结果按需读取',date:'2026-10-11',draft:false,publicationStatus:'unpublished',width:1080,height:1440,maxImages:18,edition:'reading-review-2026-10-17',pages:pages.map((p,i)=>({file:p.file,title:p.title.replaceAll('\n',''),number:i+1,sources:p.sources}))},null,2)+'\n');
