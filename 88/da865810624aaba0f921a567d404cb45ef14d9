@@ -1,0 +1,65 @@
+README.md
+  s_58249cd92a0ae1::t_e3d2886f1e113c 115,166,187
+README.en.md
+  s_58249cd92a0ae1::t_e3d2886f1e113c 111,160,181
+.authoring/site/chapters/epic04-story004/author.cjs
+  s_58249cd92a0ae1::t_d183349e7d59b4 89
+.authoring/site/chapters/epic04-story004/review.md
+  s_58249cd92a0ae1::t_3e8ef8f0c08ce3 3
+.authoring/site/chapters/epic04-story004/verification/checks.json
+  s_58249cd92a0ae1::t_7f653fada26aa2 2,106
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_a1025739f1b202 154
+.vibecoding/2026-10-16/e04-s004-delivery/dialogue.md
+  s_58249cd92a0ae1::t_94a16039e81424 16-19
+.vibecoding/2026-10-16/e04-s004-delivery/learnings.md
+  s_58249cd92a0ae1::t_af7bdeced127be 8-9
+.vibecoding/2026-10-16/e04-s004-delivery/prompt.md
+  s_58249cd92a0ae1::t_11a7284a24c4aa 6-11
+CHANGELOG.md
+  s_58249cd92a0ae1::t_8c3c16f8eb2fa7 9,15
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_7be1428ea67b4e 21,32
+researches/safe-resume/README.md
+  s_58249cd92a0ae1::t_f74bb406e8cfc1 24
+researches/safe-resume/evidence-archive.json
+  s_58249cd92a0ae1::t_92de7ffcb4e083 11-19
+researches/safe-resume/verification.json
+  s_58249cd92a0ae1::t_edc88084672e8a 152,154-155,158-277
+retros/E04-S004-safe-resume.md
+  s_58249cd92a0ae1::t_f57daab783e27c 12-13
+site/chapters/epic04-story004/18-finish.html
+  s_58249cd92a0ae1::t_5230f9f6496976 1
+site/course.json
+  s_58249cd92a0ae1::t_d420da1cab2259 6761,7166
+specs/E04-reliability-and-context/README.md
+  s_58249cd92a0ae1::t_8b3ab29dee3b15 12
+specs/E04-reliability-and-context/S004-safe-resume/README.md
+  s_58249cd92a0ae1::t_f349879815450d 7
+specs/E04-reliability-and-context/S004-safe-resume/details/01-technical-design.md
+  s_58249cd92a0ae1::t_d736f4ae7b9d69 3
+specs/E04-reliability-and-context/S004-safe-resume/details/02-task-list.md
+  s_58249cd92a0ae1::t_38f7896c8caeda 13
+specs/E04-reliability-and-context/S004-safe-resume/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_f70913169a5383 19
+specs/E04-reliability-and-context/S004-safe-resume/follow-along.md
+  s_58249cd92a0ae1::t_e7054fc9d05433 3,8-9
+specs/README.md
+  s_58249cd92a0ae1::t_4895323ffb04bd 88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "88da865810624aaba0f921a567d404cb45ef14d9",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
