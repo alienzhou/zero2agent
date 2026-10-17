@@ -1,0 +1,167 @@
+.authoring/site/README.md
+  s_58249cd92a0ae1::t_bfdbcce56d1ad5 42
+.authoring/site/chapters/epic05-story001/author.cjs
+  s_58249cd92a0ae1::t_86932c231f42c6 1-83
+.authoring/site/chapters/epic05-story001/content-plan.md
+  s_58249cd92a0ae1::t_22f660c565f526 1-20
+.authoring/site/chapters/epic05-story001/review.md
+  s_58249cd92a0ae1::t_c884c2a9d1b0ce 1-7
+.authoring/site/chapters/epic05-story001/sources.md
+  s_58249cd92a0ae1::t_50153702cab9e8 1-14
+.authoring/site/chapters/epic05-story001/verification/checks.json
+  s_58249cd92a0ae1::t_da3a107b682851 1-79
+.authoring/site/course.json
+  s_58249cd92a0ae1::t_fcd7a72e538b80 27-32,161-167
+.discuss/2026-10-17/e05-course-plan/outline.md
+  s_58249cd92a0ae1::t_3e9a7998dce188 1-54
+.discuss/2026-10-17/e05-course-reading-cost/outline.md
+  s_58249cd92a0ae1::t_4e7bba41d7edad 1-7
+.discuss/2026-10-17/e05-s001-project-instructions/outline.md
+  s_58249cd92a0ae1::t_d205000bf1fb6d 1-17
+.vibecoding/2026-10-17/e05-course-plan/dialogue.md
+  s_58249cd92a0ae1::t_ffafcc52a701ac 1-13
+.vibecoding/2026-10-17/e05-course-plan/learnings.md
+  s_58249cd92a0ae1::t_1fe0902a53d2b9 1-7
+.vibecoding/2026-10-17/e05-course-plan/prompt.md
+  s_58249cd92a0ae1::t_0b0a62689e3198 1-9
+.vibecoding/2026-10-17/e05-course-reading-cost/dialogue.md
+  s_58249cd92a0ae1::t_3d37a110f294c0 1-7
+.vibecoding/2026-10-17/e05-course-reading-cost/learnings.md
+  s_58249cd92a0ae1::t_eb37d25f457df7 1-6
+.vibecoding/2026-10-17/e05-course-reading-cost/prompt.md
+  s_58249cd92a0ae1::t_fa5d0bd4f5e672 1-5
+.vibecoding/2026-10-17/e05-s001-project-instructions/dialogue.md
+  s_58249cd92a0ae1::t_575594960ed376 1-14
+.vibecoding/2026-10-17/e05-s001-project-instructions/learnings.md
+  s_58249cd92a0ae1::t_a3ce6e979ed09e 1-10
+.vibecoding/2026-10-17/e05-s001-project-instructions/prompt.md
+  s_58249cd92a0ae1::t_3f4d90a2beb7b9 1-3
+AGENTS.md
+  s_58249cd92a0ae1::t_852af92b19bb85 156
+CHANGELOG.md
+  s_58249cd92a0ae1::t_d7d571a53e9cae 13-20
+README.en.md
+  s_58249cd92a0ae1::t_20a53d592d3367 112,160,182
+README.md
+  s_58249cd92a0ae1::t_472c24de5d5ec0 116,166,188
+docs/architecture.md
+  s_58249cd92a0ae1::t_095835bd237f3e 200-207
+docs/getting-started.md
+  s_58249cd92a0ae1::t_985ba055464221 125-132
+docs/roadmap/README.md
+  s_58249cd92a0ae1::t_8b140c440d0f4d 25-26,35
+e2e/src/project-instructions.test.ts
+  s_58249cd92a0ae1::t_5f4bc1947efab7 1-283
+packages/core/src/__tests__/compact-loop.test.ts
+  s_58249cd92a0ae1::t_5f333e8c8498e8 161
+packages/core/src/__tests__/project-instructions.test.ts
+  s_58249cd92a0ae1::t_61622481f97225 1-572
+packages/core/src/__tests__/session.test.ts
+  s_58249cd92a0ae1::t_3b32bb02b0f7b0 170
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_3c6176febc4286 1-5,37,61,66-69,119,155,160,231,247,253-272
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_8a41d60fb34662 109-119
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_ed252f6cc70744 1-7,137-138,185,273,281-293,436-438,475-483,571-572,578-580,651-653,751,753,765,833-911,923
+packages/core/src/project-instructions.ts
+  s_58249cd92a0ae1::t_2c15d0e9fca557 1-356
+packages/core/src/prompt/types.ts
+  s_58249cd92a0ae1::t_05811757c393e4 16-18,20,27,39,44,49,55,61
+packages/core/src/tools/__tests__/find-files.test.ts
+  s_58249cd92a0ae1::t_a3d08fdb600d36 42-56,76-93
+packages/core/src/tools/find-files.ts
+  s_58249cd92a0ae1::t_276e1bef4cdbc1 36-39,41,48,140-142,153,188
+packages/core/src/tools/terminal.ts
+  s_58249cd92a0ae1::t_a5d2757e1e3ac5 598
+packages/core/src/tools/types.ts
+  s_58249cd92a0ae1::t_9cddd73851dc58 38-39
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_e64961b35070e0 2,221-223,268-273,305-331,416,480,585-592
+packages/tui/src/conversations.ts
+  s_58249cd92a0ae1::t_b671c821227841 1,296-316
+packages/tui/src/instruction-view.ts
+  s_58249cd92a0ae1::t_a8714c1354b7e8 1-33
+packages/tui/src/runtime-tui.ts
+  s_58249cd92a0ae1::t_4dc293754796a8 50-53,73,753-759
+researches/project-instructions/README.md
+  s_58249cd92a0ae1::t_0555a12c24d1e9 1-42
+researches/project-instructions/cases.mjs
+  s_58249cd92a0ae1::t_e82ef4aaa96141 1-49
+researches/project-instructions/demo.mjs
+  s_58249cd92a0ae1::t_f4ae4b50d58cd3 1-375
+researches/project-instructions/evidence-archive.json
+  s_58249cd92a0ae1::t_125366d94cc866 1-34
+researches/project-instructions/verification.json
+  s_58249cd92a0ae1::t_a60de8cdc06800 1-230
+researches/project-instructions/verify-evidence.mjs
+  s_58249cd92a0ae1::t_4cf0814227d8b7 1-32
+retros/E05-S001-project-instructions.md
+  s_58249cd92a0ae1::t_ec844e78fe0394 1-17
+retros/README.md
+  s_58249cd92a0ae1::t_1fe4ebd0f7bad3 71-72
+scripts/e05-s001-course-check.mjs
+  s_58249cd92a0ae1::t_1de9851c5b59ff 1-79
+site/chapters/epic05-story001/01-cover.html
+  s_58249cd92a0ae1::t_f699aad69399b1 1
+site/chapters/epic05-story001/02-standard.html
+  s_58249cd92a0ae1::t_6ea78b3ae2e00a 1
+site/chapters/epic05-story001/03-scope.html
+  s_58249cd92a0ae1::t_90e9ffc012024c 1
+site/chapters/epic05-story001/04-priority.html
+  s_58249cd92a0ae1::t_6a39b6cd89b1de 1
+site/chapters/epic05-story001/05-request.html
+  s_58249cd92a0ae1::t_b6c1e811e3ba58 1
+site/chapters/epic05-story001/06-replan.html
+  s_58249cd92a0ae1::t_b31d2edc3828f6 1
+site/chapters/epic05-story001/07-changed.html
+  s_58249cd92a0ae1::t_712761fcd83411 1
+site/chapters/epic05-story001/08-controls.html
+  s_58249cd92a0ae1::t_9f21fb799b41df 1
+site/chapters/epic05-story001/09-practice.html
+  s_58249cd92a0ae1::t_29113627d23988 1
+site/chapters/epic05-story001/10-verify.html
+  s_58249cd92a0ae1::t_199921ca77fe7b 1
+site/chapters/epic05-story001/course.css
+  s_58249cd92a0ae1::t_a6e145fd9e7db4 1-22
+site/chapters/epic05-story001/pages.json
+  s_58249cd92a0ae1::t_538502254847ab 1-105
+site/course.json
+  s_58249cd92a0ae1::t_c350b67fe58789 27-32,6923-7147,7150
+specs/E05-extensibility/README.md
+  s_58249cd92a0ae1::t_57f17d4eef0259 1-20
+specs/E05-extensibility/S001-project-instructions/README.md
+  s_58249cd92a0ae1::t_90863c5a9dcaf9 1-26
+specs/E05-extensibility/S001-project-instructions/details/00-overview.md
+  s_58249cd92a0ae1::t_f78aad35ebf3f3 1-14
+specs/E05-extensibility/S001-project-instructions/details/01-technical-design.md
+  s_58249cd92a0ae1::t_9554d8f1dbd5ef 1-67
+specs/E05-extensibility/S001-project-instructions/details/02-task-list.md
+  s_58249cd92a0ae1::t_0e2338c6f4f82f 1-13
+specs/E05-extensibility/S001-project-instructions/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_d58cb1101910d8 1-26
+specs/E05-extensibility/S001-project-instructions/details/04-backlog.md
+  s_58249cd92a0ae1::t_8cc92ae4d4c1bd 1-5
+specs/E05-extensibility/S001-project-instructions/follow-along.md
+  s_58249cd92a0ae1::t_e8cb890fc3072f 1-41
+specs/E05-extensibility/course-plan.md
+  s_58249cd92a0ae1::t_766cd5a745cd01 1-161
+specs/README.md
+  s_58249cd92a0ae1::t_4c9ea267cf31cb 92-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "766ffdda280a4119cfb4e85f44e99df828c26fe0",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
