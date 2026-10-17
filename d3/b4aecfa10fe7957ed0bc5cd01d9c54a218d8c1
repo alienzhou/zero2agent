@@ -1,0 +1,37 @@
+.discuss/2026-10-17/e05-s004-hooks/decisions/D01-hook-facts.md
+  s_58249cd92a0ae1::t_e71da28acba440 2-5
+.vibecoding/2026-10-17/e05-s004-hooks/dialogue.md
+  s_58249cd92a0ae1::t_d196e2d3790fee 10-11
+.vibecoding/2026-10-17/e05-s004-hooks/learnings.md
+  s_58249cd92a0ae1::t_80544617644414 2-3
+e2e/src/project-instructions.test.ts
+  s_58249cd92a0ae1::t_855799b3361a06 62-89
+packages/core/src/__tests__/hooks.test.ts
+  s_58249cd92a0ae1::t_931404e08004c9 63-82
+packages/core/src/__tests__/project-instructions.test.ts
+  s_58249cd92a0ae1::t_9cc95b0860350b 84-138
+packages/core/src/hooks.ts
+  s_58249cd92a0ae1::t_f2ed16f8f05191 297-302
+packages/core/src/project-instructions.ts
+  s_58249cd92a0ae1::t_be2098e489c7bd 2,17,24-25,68,78-86,139-152,155,297,335-336
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_610d9a319ce19c 239,310-314,420-424
+researches/hooks/demo.mjs
+  s_58249cd92a0ae1::t_e139bdc3a2ef08 19-22,37,327
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
