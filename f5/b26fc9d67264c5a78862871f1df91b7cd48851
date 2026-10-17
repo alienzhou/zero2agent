@@ -1,0 +1,30 @@
+.vibecoding/2026-10-17/e05-course-plan/dialogue.md
+  s_58249cd92a0ae1::t_450c5a8de1dca0 1-13
+.vibecoding/2026-10-17/e05-course-plan/prompt.md
+  s_58249cd92a0ae1::t_450c5a8de1dca0 1-9
+.discuss/2026-10-17/e05-course-plan/outline.md
+  s_58249cd92a0ae1::t_450c5a8de1dca0 1-54
+specs/E05-extensibility/README.md
+  s_58249cd92a0ae1::t_0dcf576a300d73 1-20
+specs/E05-extensibility/course-plan.md
+  s_58249cd92a0ae1::t_36b3bc34837897 83
+  s_58249cd92a0ae1::t_0dcf576a300d73 1-82,84-161
+.vibecoding/2026-10-17/e05-course-plan/learnings.md
+  s_58249cd92a0ae1::t_450c5a8de1dca0 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f5b26fc9d67264c5a78862871f1df91b7cd48851",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
