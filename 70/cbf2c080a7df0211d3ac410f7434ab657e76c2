@@ -1,0 +1,35 @@
+.vibecoding/2026-10-17/e05-s004-hooks/dialogue.md
+  s_58249cd92a0ae1::t_244ead40f7301e 6-7
+e2e/src/fixtures/hooks-child.mjs
+  s_58249cd92a0ae1::t_0c9dcddf931f78 1-55
+e2e/src/hooks.test.ts
+  s_58249cd92a0ae1::t_78aa0039b2c2b6 1-357
+packages/core/src/__tests__/hooks-integration.test.ts
+  s_58249cd92a0ae1::t_d916085b255b3d 180
+packages/core/src/__tests__/hooks.test.ts
+  s_58249cd92a0ae1::t_329c7df08992c4 1-2,274-412
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_2ecc7a33f32bd9 353
+packages/core/src/hooks.ts
+  s_58249cd92a0ae1::t_7eccd677a25741 180-181,310-321,336,346-355,409-439,446-447,463-464,475-476,480,483,502-505,509-510,558
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_da039f8dcc4359 350,509-519,523,526-528
+researches/hooks/README.md
+  s_58249cd92a0ae1::t_5baa0640cebe08 9-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70cbf2c080a7df0211d3ac410f7434ab657e76c2",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
