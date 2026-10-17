@@ -1,4 +1,4 @@
-// pnpm build && node researches/mcp/demo.mjs [--live]
+// pnpm build && node researches/hooks/demo.mjs [--live]
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -269,6 +269,8 @@ for (const name of ['normal', 'denied']) {
                     ? 5
                     : 6
         // Replanned calls use distinct tool IDs, while settled effects are never repeated.
+        if (phase === 2 && !JSON.stringify(request).includes('API_RULES_E05_FINAL'))
+          sequence[2] = sequence[2].slice(0, 1)
         const next = sequence[phase]?.map(block =>
           block.type === 'tool_use' && results.some(r => r.tool_use_id === block.id)
             ? { ...block, id: block.id + '-current' }

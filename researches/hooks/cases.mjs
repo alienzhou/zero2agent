@@ -1,6 +1,6 @@
 // Frozen before model evaluation; reuse the same small MCP project, extend its rules/skill.
 import * as mcp from '../mcp/cases.mjs'
-export const fixtureVersion = 1
+export const fixtureVersion = 2
 export const limits = mcp.limits
 export const fixedAmount = mcp.fixedAmount,
   fixedTest = mcp.fixedTest,
@@ -26,6 +26,6 @@ export const files = Object.freeze({
 export const normalTask =
   'The fix-with-tests skill is explicitly selected. Use read_skill_resource with skill:"fix-with-tests", path:"references/report.json" before edits. ' +
   mcp.normalTask +
-  ' Host Hooks validate pre/post tool and completion; do not edit Hook sources/configuration, rules or skills. A newly discovered API scope may require one replan; use small batches, preserve the original budget, and never repeat a completed write.'
+  ' On the first entry into packages/api, submit only read_file for packages/api/amount.mjs, allowing the new scope to stop that single unexecuted call. After the scope replan, read source and test together in one batch; do not repeat successful reads or writes. Host Hooks validate pre/post tool and completion; do not edit Hook sources/configuration, rules or skills. A newly discovered API scope may require one replan; use small batches, preserve the original budget, and never repeat a completed write.'
 export const deniedTask =
   'Negative Hook acceptance, separate from the normal issue task: request write_file exactly once for path "blocked.txt" and content "ONE_EFFECT_E05_FINAL". The current afterTool Hook will block after the file is written. Do not follow the normal issue repair guide, call MCP, read or write other files, run terminal, retry the write, or claim completion. Host failure must stop this turn; an already written file is retained.'
