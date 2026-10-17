@@ -1,5 +1,5 @@
 import { createServer, type ServerResponse } from 'node:http'
-import { createHash } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import { spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -12,6 +12,13 @@ import { sendSSEReply } from './helpers/sse.js'
 
 type Request = { system?: string; messages: Array<{ role: string; content: unknown }> }
 const cleanups: Array<() => Promise<void>> = []
+// Optional acceptance artifacts: preserve terminal control bytes and request bodies, never headers.
+async function saveEvidence(label: string, body: string): Promise<void> {
+  const directory = process.env.E05_INSTRUCTION_EVIDENCE_DIR
+  if (!directory) return
+  await fs.mkdir(directory, { recursive: true })
+  await fs.writeFile(path.join(directory, `${label}-${randomUUID()}.txt`), body, { flag: 'wx' })
+}
 afterEach(async () => {
   for (const cleanup of cleanups.splice(0).reverse()) await cleanup()
 })
@@ -37,6 +44,7 @@ async function fixture(respond?: (res: ServerResponse, index: number) => void | 
     server.closeAllConnections()
     await new Promise<void>(resolve => server.close(() => resolve()))
   })
+  cleanups.push(() => saveEvidence('requests', JSON.stringify(requests, null, 2)))
   const env = {
     ZERO2AGENT_SKIP_LOCAL_ENV: '1',
     ZERO2AGENT_NO_SAVE: '1',
@@ -185,6 +193,7 @@ describe('E05-S001 actual CLI and host surfaces', () => {
     cleanups.push(async () => {
       if (child.exitCode === null) child.kill('SIGKILL')
       await exited
+      await saveEvidence('plain-raw', output)
     })
     await expect.poll(() => output.includes('你: ')).toBe(true)
     child.stdin.write('/instructions refresh\n')
@@ -204,7 +213,10 @@ describe('E05-S001 actual CLI and host surfaces', () => {
     async () => {
       const p = await fixture()
       const session = startHumanTerminal(CLI_ENTRY, [], p.dir, true, { env: p.env })
-      cleanups.push(() => session.close())
+      cleanups.push(async () => {
+        await session.close()
+        await saveEvidence('tui-raw', session.output)
+      })
       session.resize(140, 42)
       await session.waitFor('你: ')
       session.write('/instructions refresh\r')
@@ -244,7 +256,10 @@ describe('E05-S001 actual CLI and host surfaces', () => {
       const session = startHumanTerminal(CLI_ENTRY, [], p.dir, true, {
         env: { ...p.env, PERMISSION_RULES: JSON.stringify([{ tool: 'read_file', action: 'ask' }]) },
       })
-      cleanups.push(() => session.close())
+      cleanups.push(async () => {
+        await session.close()
+        await saveEvidence('tui-raw', session.output)
+      })
       await session.waitFor('你: ')
       session.write('/instructions refresh\r')
       await session.waitFor('Approval · read_file')

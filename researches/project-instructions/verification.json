@@ -43,7 +43,14 @@
       "tmp/e05-s001-final-types.log",
       "tmp/e05-s001-final-format.log",
       "tmp/e05-s001-final-lint.log"
-    ]
+    ],
+    "hostEvidence": {
+      "command": "E05_INSTRUCTION_EVIDENCE_DIR=\"$PWD/tmp/e05-s001/host-final\" pnpm --filter @zero2agent/e2e exec vitest run src/project-instructions.test.ts",
+      "passed": 10,
+      "directory": "tmp/e05-s001/host-final",
+      "log": "tmp/e05-s001-host-evidence.log",
+      "note": "Opt-in evidence capture added after the full suite; focused tests and E2E types rerun. Production code unchanged."
+    }
   },
   "fixedAcceptance": {
     "limits": {
