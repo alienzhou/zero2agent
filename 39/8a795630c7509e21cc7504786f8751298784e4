@@ -1,0 +1,29 @@
+researches/skills/README.md
+  s_58249cd92a0ae1::t_678d3bed795158 1,3-41,43-64,66-67
+  s_58249cd92a0ae1::t_4ae94efa9b6de3 65
+  s_58249cd92a0ae1::t_34a554a60f4352 42
+researches/skills/demo.mjs
+  s_58249cd92a0ae1::t_34a554a60f4352 236-237,317-331,339,465-473,510,543,554
+e2e/src/skills.test.ts
+  s_58249cd92a0ae1::t_dbb25f3a61aba0 9,189-193
+  s_58249cd92a0ae1::t_be1d9cdfab9dcf 194-237
+specs/E05-extensibility/S002-skills/follow-along.md
+  s_58249cd92a0ae1::t_678d3bed795158 1-33,35-79
+  s_58249cd92a0ae1::t_34a554a60f4352 34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "398a795630c7509e21cc7504786f8751298784e4",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
