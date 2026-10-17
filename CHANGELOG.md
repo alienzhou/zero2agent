@@ -2,11 +2,13 @@
 
 ## E05-S004：Hooks 与扩展验收
 
+- PR #31 最终复核补上完成前新检查的原产物契约审计范围，并拒绝该阶段无效的 tool 筛选；保留三条旧代码失败回归与修复后证据。
+
 - beforeTool、afterTool、beforeComplete 三处等待式检查；配置/脚本身份的明确版本信任，最小 JSON、容量/时限与父管道守护。
 - 真实回执与后置义务一起保存，Hook 开始/结算独立；恢复控制 v2、磁盘 v5，用户核对后运行独立新检查，旧工具/Hook 不自动重放。
 - 原权限、Checkpoint、未解决读取与产物契约继续有效；数组型受控路径、内部审计许可和容量在副作用前检查。
 - 已知任务目录可用 `--instructions-scope` / SDK scopes 在首请求前加载规则；保留当前权限和目录边界，避免依赖模型准确分批发现作用域。
-- [12 页课程与跟练](./specs/E05-extensibility/S004-hooks/README.md)、真实 CLI/PTY/SIGKILL 与 [四种扩展组合验收](./specs/E05-extensibility/acceptance.md)齐备，待用户 PR review，站点未部署；原始实验附件在 Git 外。
+- [12 页课程与跟练](./specs/E05-extensibility/S004-hooks/README.md)、真实 CLI/PTY/SIGKILL 与 [四种扩展组合验收](./specs/E05-extensibility/acceptance.md)齐备，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付，站点未部署；原始实验附件在 Git 外。
 
 ## 2026-10-17：E04 课程阅读审阅
 

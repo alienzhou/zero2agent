@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "date": "2026-10-17",
-  "productionSource": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+  "date": "2026-10-18",
+  "productionSource": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
   "platform": {
     "os": "macOS 14.7.8 (23H730)",
     "system": "darwin",
@@ -11,12 +11,12 @@
   },
   "engineering": {
     "build": "passed",
-    "core": 878,
+    "core": 881,
     "e2e": 263,
     "cdp": 1,
-    "total": 1142,
+    "total": 1145,
     "liveSkipped": 58,
-    "focusedHookCore": 69,
+    "focusedHookCore": 72,
     "focusedHooksHost": 16,
     "focusedScopesCore": 3,
     "focusedScopesHost": 1,
@@ -56,8 +56,8 @@
     },
     "requestedModel": "claude-sonnet-4-20250514",
     "live": {
-      "path": "records/live-zYkCwa",
-      "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+      "path": "records/live-Rig4fE",
+      "source": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
       "fixtureVersion": 2,
       "mode": "real-service",
       "initialScopes": ["packages/api"],
@@ -87,7 +87,7 @@
             "hookRanActualTests": true,
             "hookCleanup": true
           },
-          "durationMs": 15960
+          "durationMs": 16049
         },
         {
           "name": "denied",
@@ -105,13 +105,13 @@
             "noExtraWork": true,
             "hookCleanup": true
           },
-          "durationMs": 1657
+          "durationMs": 2063
         }
       ]
     },
     "offline": {
-      "path": "records/offline-HVncqG",
-      "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+      "path": "records/offline-HeeOrT",
+      "source": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
       "fixtureVersion": 2,
       "mode": "deterministic-http",
       "initialScopes": ["packages/api"],
@@ -141,7 +141,7 @@
             "hookRanActualTests": true,
             "hookCleanup": true
           },
-          "durationMs": 5469
+          "durationMs": 6981
         },
         {
           "name": "denied",
@@ -159,7 +159,7 @@
             "noExtraWork": true,
             "hookCleanup": true
           },
-          "durationMs": 292
+          "durationMs": 286
         }
       ]
     },
@@ -209,12 +209,13 @@
       "sameFrozenCasesModelBudgetsAndProductionBytes": true,
       "variable": "Explicit initial projectInstructions.scopes: [] versus [packages/api]",
       "requestByteEquality": false,
-      "interpretation": "Known directory rules are prepared before the first request; one fixed pair is not a success-rate estimate. Baseline normal failed budget; candidate normal/denied passed."
+      "interpretation": "Known directory rules are prepared before the first request; one fixed pair is not a success-rate estimate. Baseline normal failed budget; candidate normal/denied passed.",
+      "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1"
     }
   },
   "host": {
-    "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
-    "path": "records/host-accepted",
+    "source": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
+    "path": "review/host",
     "checks": [
       "single",
       "pipe",
@@ -396,10 +397,56 @@
             "tools": 1
           }
         ]
+      },
+      {
+        "path": "records/live-zYkCwa",
+        "sourceAtRunStart": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+        "fixtureVersion": 2,
+        "mode": "real-service",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "reason": "Passed original PR delivery, retained under original source; final review repairs independently revalidated.",
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 7,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/offline-HVncqG",
+        "sourceAtRunStart": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+        "fixtureVersion": 2,
+        "mode": "deterministic-http",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "reason": "Passed original PR delivery, retained under original source; final review repairs independently revalidated.",
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 7,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
       }
     ],
     "preserved": true,
-    "qualification": "Only the final selected configuration live-zYkCwa and offline-HVncqG certify current acceptance. Development runs include uncommitted changes; sourceAtRunStart alone does not identify their bytes, captured source/runtime hashes do. offline-j6abzH is a working-tree development run, not accepted release evidence.",
+    "qualification": "Only final review configuration live-Rig4fE and offline-HeeOrT certify current acceptance. The d3b4aec same-source scope pair remains a historical controlled comparison; later recheck/selector repairs have separate final evidence. Development runs include uncommitted changes; sourceAtRunStart alone does not identify their bytes, captured source/runtime hashes do.",
     "firstFailure": "Offline v1 exceeded the original tool budget on scope batch replanning; v2 froze a single scope probe before the first model run.",
     "laterFailure": "Real model at ee371e1 ignored the requested single probe; tail and two reads were skipped together, tool budget stopped before report. Earlier 70cbf2c 2/2 is historical only.",
     "fix": "Explicit initial task scopes; same-source paired experiment retains fixed v2 tasks, files, effects, model and 8/12/120s budgets. Actual request overlays intentionally differ.",
@@ -421,5 +468,57 @@
     "No uniform E05 8/8 claim: earlier lessons retain their own versions; S002 history remains two 1/2 runs with documented unchanged-case reuse.",
     "AI review does not replace human PR review."
   ],
-  "evidence": "evidence-archive.json"
+  "evidence": "evidence-archive.json",
+  "finalReview": {
+    "startingHead": "800b0d0deebd7e48e2df02e2bafdd2e947f0c0d2",
+    "productionSource": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
+    "date": "2026-10-18",
+    "findingsFixed": [
+      {
+        "priority": "P2",
+        "problem": "Completion recheck omitted original artifact contract audit paths",
+        "fix": "Carry saved artifact paths into the new completion audit using current permission; mutation and denied-read regressions verify bytes, launch counts, preserved blocked facts and no new model requests."
+      },
+      {
+        "priority": "P2",
+        "problem": "Tool selector on beforeComplete could silently skip the required check",
+        "fix": "Reject an inapplicable selector during configuration validation before execution."
+      }
+    ],
+    "regressionReproduction": {
+      "failed": 3,
+      "passed": 69,
+      "log": "logs/e05-s004-pr31-repro.txt"
+    },
+    "focusedAfterFix": {
+      "passed": 72,
+      "log": "logs/e05-s004-pr31-fixed-focused.txt"
+    },
+    "browser": {
+      "pages": 12,
+      "pcAndH5": "passed",
+      "allPageVisualInspection": "passed",
+      "navigationZoomText": "passed",
+      "raw": "review/site-check"
+    },
+    "supplement": "evidence-archive.json supplements",
+    "humanLineReview": "not represented by AI checks",
+    "mergeAuthorization": "Explicit user request to merge after final review",
+    "fullRegression": {
+      "passed": 1145,
+      "liveSkipped": 58,
+      "log": "logs/e05-s004-pr31-final-tests.txt"
+    },
+    "host": {
+      "passed": 16,
+      "log": "logs/e05-s004-pr31-final-host.txt",
+      "raw": "review/host"
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 49
+    },
+    "e2eTypecheck": "passed",
+    "changedSourceFormatting": "passed"
+  }
 }

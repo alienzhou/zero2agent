@@ -1,6 +1,6 @@
 # E05 四课实施与验收计划
 
-状态：2026-10-17；规划基线为 E04 合并提交 `0bfb9c9`。S001 的实现与验收进度见 [Story](./S001-project-instructions/README.md)，[S002](./S002-skills/README.md)已合入 PR #29，课程为 11 页；[S003](./S003-mcp/README.md)完成实现与 11 页课程，最终复核后由 PR #30 交付；[S004](./S004-hooks/README.md)完成实现、12 页课程与组合验收，待 PR review。各节正式 API、配置路径和容量数值以对应 Spec 为准。
+状态：2026-10-18；规划基线为 E04 合并提交 `0bfb9c9`。S001 的实现与验收进度见 [Story](./S001-project-instructions/README.md)，[S002](./S002-skills/README.md)已合入 PR #29，课程为 11 页；[S003](./S003-mcp/README.md)完成实现与 11 页课程，最终复核后由 PR #30 交付；[S004](./S004-hooks/README.md)完成实现、12 页课程与组合验收，由 PR #31 交付。各节正式 API、配置路径和容量数值以对应 Spec 为准。
 
 ## 共用案例与现有基础
 
