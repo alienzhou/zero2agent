@@ -1,0 +1,27 @@
+researches/mcp/README.md
+  s_58249cd92a0ae1::t_36cc85e192d835 32-33,35-36
+researches/mcp/verification.json
+  s_58249cd92a0ae1::t_d9982784c8373b 1-164
+retros/E05-S003-mcp.md
+  s_58249cd92a0ae1::t_ea2587dc242265 5
+specs/E05-extensibility/S003-mcp/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_bf2917d301bb64 19-26
+specs/E05-extensibility/S003-mcp/details/04-backlog.md
+  s_58249cd92a0ae1::t_843871a1feb3de 4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c399210ee17332538cb132594350eab709ce493a",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
