@@ -294,7 +294,12 @@ export class Hooks {
       configIdentity: unknown
     if (this.options.file) {
       const file = await bounded(path.resolve(this.cwd, this.options.file), 32768)
-      raw = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(file.bytes))
+      try {
+        raw = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(file.bytes))
+      } catch {
+        // Native JSON errors may contain configuration fragments, including env credentials.
+        throw new Error('Invalid Hook config JSON')
+      }
       configIdentity = file.identity
     }
     const config = validateHookConfig(raw)

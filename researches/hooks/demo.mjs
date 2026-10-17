@@ -16,8 +16,10 @@ import {
 } from '../../packages/core/dist/index.js'
 import * as cases from './cases.mjs'
 const root = fileURLToPath(new URL('../..', import.meta.url)),
-  live = process.argv.includes('--live')
-if (process.argv.slice(2).some(a => a !== '--live')) throw Error('Only --live is supported')
+  live = process.argv.includes('--live'),
+  scopeBaseline = process.argv.includes('--scope-baseline')
+if (process.argv.slice(2).some(a => !['--live', '--scope-baseline'].includes(a)))
+  throw Error('Supported: --live, --scope-baseline')
 if (live) {
   try {
     process.loadEnvFile(path.join(root, '.env.local'))
@@ -32,6 +34,7 @@ const report = {
   version: 1,
   fixtureVersion: cases.fixtureVersion,
   mode: live ? 'real-service' : 'deterministic-http',
+  initialScopes: scopeBaseline ? [] : ['packages/api'],
   startedAt: new Date().toISOString(),
   source: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
   platform: { system: process.platform, architecture: process.arch, node: process.version },
@@ -321,7 +324,7 @@ for (const name of ['normal', 'denied']) {
     cwd,
     hooks: { config: hookConfig, trust: views.map(v => `${v.id}:${v.identity}`) },
     skills: { selected: ['fix-with-tests'] },
-    projectInstructions: { root: cwd },
+    projectInstructions: { root: cwd, scopes: scopeBaseline ? [] : ['packages/api'] },
     tools: allTools.map(t =>
       t.name === 'terminal'
         ? {

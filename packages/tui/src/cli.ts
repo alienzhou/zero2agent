@@ -236,6 +236,7 @@ async function main() {
   const selectedSkills: string[] = []
   let noInstructions = process.env.ZERO2AGENT_NO_INSTRUCTIONS === '1'
   let instructionsRoot: string | undefined
+  const instructionsScopes: string[] = []
   let noSave = process.env.ZERO2AGENT_NO_SAVE === '1'
   let list = false
   let resume: string | undefined
@@ -306,10 +307,11 @@ async function main() {
       if (flag === '--skill') selectedSkills.push(value)
       else skillRoots.push(value)
     } else if (flag === '--no-instructions') noInstructions = true
-    else if (flag === '--instructions-root') {
-      instructionsRoot = args.shift()
-      if (!instructionsRoot || instructionsRoot.startsWith('--'))
-        throw new Error('--instructions-root requires a project directory')
+    else if (flag === '--instructions-root' || flag === '--instructions-scope') {
+      const value = args.shift()
+      if (!value || value.startsWith('--')) throw new Error(`${flag} requires a project directory`)
+      if (flag === '--instructions-root') instructionsRoot = value
+      else instructionsScopes.push(value)
     } else if (flag === '--plain') plain = true
     else if (flag === '--no-log') noLog = true
     else if (flag === '--logs') listLogs = true
@@ -415,7 +417,11 @@ async function main() {
     }
     return
   }
-  const projectInstructions = noInstructions ? false : { root: instructionsRoot }
+  if (noInstructions && instructionsScopes.length)
+    throw new Error('--instructions-scope cannot combine with --no-instructions')
+  const projectInstructions = noInstructions
+    ? false
+    : { root: instructionsRoot, scopes: instructionsScopes }
   const skills = noSkills ? false : { roots: skillRoots, selected: selectedSkills }
   if (noSkills && selectedSkills.length) throw new Error('--skill cannot combine with --no-skills')
   if (inspectSkills) {

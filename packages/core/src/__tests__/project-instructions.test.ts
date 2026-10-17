@@ -81,6 +81,61 @@ function agent(extra: ConstructorParameters<typeof Agent>[0] = {}) {
 }
 
 describe('AGENTS.md open format and bounded discovery', () => {
+  it('preloads only declared task scopes and retains them across batches and resets', async () => {
+    await file('AGENTS.md', 'ROOT')
+    await file('packages/api/AGENTS.md', 'API')
+    await file('packages/web/AGENTS.md', 'UNSELECTED')
+    const loader = new ProjectInstructions(root, { scopes: ['packages/api'] })
+    const loaded = () =>
+      loader
+        .view()
+        .entries.filter(e => e.status === 'loaded')
+        .map(e => e.text)
+    await loader.refresh(permissions)
+    expect(loaded()).toEqual(['ROOT', 'API'])
+    await loader.prepareBatch([], [], permissions)
+    expect(loaded()).toEqual(['ROOT', 'API'])
+    loader.reset('restored')
+    await file('packages/api/AGENTS.md', 'CURRENT_API')
+    await loader.refresh(permissions)
+    expect(loaded()).toEqual(['ROOT', 'CURRENT_API'])
+    const a = agent({ projectInstructions: { scopes: ['packages/api'] } })
+    const p = provider(answer())
+    await a.run('task')
+    expect(JSON.stringify(p.requests[0])).toContain('CURRENT_API')
+    expect(JSON.stringify(p.requests[0])).not.toContain('UNSELECTED')
+    expect(p.requests).toHaveLength(1)
+  })
+  it('uses current read authorization for declared scopes without granting tool authority', async () => {
+    await file('packages/api/AGENTS.md', 'PRIVATE_SCOPE_BODY')
+    const loader = new ProjectInstructions(root, { scopes: ['packages/api'] })
+    await expect(
+      loader.refresh(
+        new PermissionController({
+          mode: 'accept-edits',
+          rules: [{ tool: 'read_file', action: 'deny' }],
+        })
+      )
+    ).rejects.toThrow('read denied')
+    expect(JSON.stringify(loader.view())).not.toContain('PRIVATE_SCOPE_BODY')
+  })
+  it('bounds scope declarations and rejects lexical, physical and retargeted escapes', async () => {
+    await file('api/AGENTS.md', 'API')
+    const scopes = Array(8).fill('api')
+    expect(() => new ProjectInstructions(root, { scopes })).not.toThrow()
+    expect(() => new ProjectInstructions(root, { scopes: [...scopes, 'api'] })).toThrow('at most 8')
+    for (const scope of ['', 'x\0y', 'a'.repeat(4097), '..', 'api/AGENTS.md'])
+      expect(() => new ProjectInstructions(root, { scopes: [scope] })).toThrow()
+    await symlink(root + '/..', join(root, 'outside'))
+    expect(() => new ProjectInstructions(root, { scopes: ['outside'] })).toThrow('leaves')
+    await symlink(join(root, 'api'), join(root, 'target'))
+    const loader = new ProjectInstructions(root, { scopes: ['target'] })
+    await loader.refresh(permissions)
+    await rm(join(root, 'target'))
+    await symlink(root + '/..', join(root, 'target'))
+    await expect(loader.refresh(permissions)).rejects.toThrow('leaves')
+  })
+
   it('loads arbitrary Markdown unchanged, root to cwd, with provenance; never scans siblings or outside parents', async () => {
     await file('AGENTS.md', 'root\n[reference](private.md)')
     await file('packages/api/AGENTS.md', 'No required heading or frontmatter.\n中文 😀')

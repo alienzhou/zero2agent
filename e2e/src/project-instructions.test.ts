@@ -59,6 +59,34 @@ async function fixture(respond?: (res: ServerResponse, index: number) => void | 
 const hash = (text: string) => createHash('sha256').update(text).digest('hex')
 
 describe('E05-S001 actual CLI and host surfaces', () => {
+  it('preloads an explicit CLI task scope in the first request and inspects without a model', async () => {
+    const p = await fixture()
+    const result = await runCli({
+      cwd: p.dir,
+      args: ['--instructions-scope', 'packages/api', 'task'],
+      env: p.env,
+    })
+    expect(result.code, result.output).toBe(0)
+    expect(p.requests).toHaveLength(1)
+    expect(JSON.stringify(p.requests[0])).toContain('API_CONVENTION')
+    expect(JSON.stringify(p.requests[0])).not.toContain('WEB_CONVENTION')
+    const inspected = await runCli({
+      cwd: p.dir,
+      args: ['--instructions-scope', 'packages/api', '--instructions'],
+      env: { ...p.env, ANTHROPIC_API_KEY: undefined },
+    })
+    expect(inspected.code, inspected.output).toBe(0)
+    expect(inspected.output).toContain(hash('API_CONVENTION'))
+    expect(p.requests).toHaveLength(1)
+    for (const args of [
+      ['--instructions-scope'],
+      ['--no-instructions', '--instructions-scope', 'packages/api', 'task'],
+    ]) {
+      expect((await runCli({ cwd: p.dir, args, env: p.env })).code).toBe(1)
+    }
+    expect(p.requests).toHaveLength(1)
+  })
+
   it('inspects source, scope and full content version without an API key or model call', async () => {
     const p = await fixture()
     const result = await runCli({

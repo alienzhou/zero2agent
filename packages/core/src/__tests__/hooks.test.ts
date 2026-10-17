@@ -60,6 +60,26 @@ async function audit() {
     .map(l => JSON.parse(l))
 }
 describe('native command Hooks and version trust', () => {
+  it('redacts malformed config snippets including env credentials from discovery and guards', async () => {
+    const { config } = await setup()
+    const file = path.join(root, 'hooks.json')
+    await fs.writeFile(file, JSON.stringify(config))
+    const views = await new Hooks(root, { file }).inspect()
+    const hooks = new Hooks(root, { file, trust: views.map(v => `${v.id}:${v.identity}`) })
+    await hooks.begin()
+    await fs.writeFile(file, '{"PRIVATE_CONFIG_SENTINEL":"secret", invalid}')
+    for (const operation of [() => hooks.inspect(), () => hooks.assertCurrent()]) {
+      const error = await operation().then(
+        () => '',
+        e => String(e.message)
+      )
+      expect(error).toBe('Invalid Hook config JSON')
+      expect(String(error)).not.toContain('PRIVATE_CONFIG_SENTINEL')
+    }
+    expect(JSON.stringify(hooks.snapshot())).not.toContain('PRIVATE_CONFIG_SENTINEL')
+    await expect(fs.stat(path.join(root, 'audit'))).rejects.toThrow()
+  })
+
   it('constructs/discovers without running; untrusted hooks remain inert', async () => {
     const { options } = await setup()
     await expect(fs.stat(path.join(root, 'audit'))).rejects.toThrow()
