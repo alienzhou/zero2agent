@@ -1,0 +1,58 @@
+packages/tui/src/conversations.ts
+  s_58249cd92a0ae1::t_dd0bf4fad9b39b 2,318-336
+  s_58249cd92a0ae1::t_d959bf2c28339c 337-348
+packages/core/src/__tests__/skills-integration.test.ts
+  s_58249cd92a0ae1::t_c2a012c3edf871 1-135,137-168,172-268,320
+  s_58249cd92a0ae1::t_0069497c8d5a55 136,169-171
+  s_58249cd92a0ae1::t_b0d953cb0f9181 269-319
+  s_58249cd92a0ae1::t_5e18ad44ab56ee 321-483
+packages/tui/src/skill-view.ts
+  s_58249cd92a0ae1::t_f8b4d1b8fd92a4 18-22
+  s_58249cd92a0ae1::t_dd0bf4fad9b39b 1-17,23-31
+  s_58249cd92a0ae1::t_0114abd49d2971 32-33
+e2e/src/skills-snapshot.test.ts
+  s_58249cd92a0ae1::t_b0d953cb0f9181 1-76
+  s_58249cd92a0ae1::t_25b0ffac65411c 77-88
+packages/core/src/session.ts
+  s_58249cd92a0ae1::t_ff36e9afb7f30b 9,16,98,114,128
+packages/core/src/loop.ts
+  s_58249cd92a0ae1::t_f8b4d1b8fd92a4 83-84
+  s_58249cd92a0ae1::t_b1feb357a901fc 8-9,79-82,85-93,262-272,464-466,507,511-514,521-523,587,605,616,619-620,650,693,696,742,796-798,801,814,884-886,889,891-899,909,914-917
+  s_58249cd92a0ae1::t_39cc7d8a690e8d 918,929-931
+packages/tui/src/cli.ts
+  s_58249cd92a0ae1::t_dd0bf4fad9b39b 3,223-226,274-281,318-329,333-338
+  s_58249cd92a0ae1::t_a267be0e08e880 330-332
+  s_58249cd92a0ae1::t_6fc1eb25293179 339-355,359,467,532,645-648
+packages/core/src/agent.ts
+  s_58249cd92a0ae1::t_ff36e9afb7f30b 6,35,38,64,73,123,161,167-168,240,250,256-257,259,285-324
+packages/tui/src/runtime-tui.ts
+  s_58249cd92a0ae1::t_dd0bf4fad9b39b 54-59,79,759-761
+  s_58249cd92a0ae1::t_a34b6e930d7041 762-764
+packages/core/src/index.ts
+  s_58249cd92a0ae1::t_dd0bf4fad9b39b 120-122
+packages/core/src/session-snapshot.ts
+  s_58249cd92a0ae1::t_ff36e9afb7f30b 5,9,109
+packages/tui/src/session-store.ts
+  s_58249cd92a0ae1::t_ff36e9afb7f30b 13,109,113-114,202
+  s_58249cd92a0ae1::t_6e9f3efc153a59 203-207
+packages/core/package.json
+  s_58249cd92a0ae1::t_aff87b1d735b11 23-24
+pnpm-lock.yaml
+  s_58249cd92a0ae1::t_76035f31b2151f 78-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "33fd4caf0b3a1fc33c1523f2432c584f7426c49c",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
