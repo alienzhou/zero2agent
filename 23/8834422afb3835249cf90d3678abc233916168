@@ -1,0 +1,21 @@
+e2e/src/safe-resume.test.ts
+  s_58249cd92a0ae1::t_92877406d8810b 99,111
+packages/tui/src/session-store.ts
+  s_58249cd92a0ae1::t_d9299c15f56007 166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "238834422afb3835249cf90d3678abc233916168",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
