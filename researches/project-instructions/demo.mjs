@@ -202,20 +202,6 @@ for (const name of ['normal', 'denied']) {
                   summary: 'Converted prices to cents and added decimal/zero regressions.',
                 }),
               },
-              'report-before-scope'
-            ),
-          ],
-          [
-            tool(
-              'write_file',
-              {
-                path: 'artifacts/change-report.json',
-                content: JSON.stringify({
-                  package: 'api',
-                  testsPassed: true,
-                  summary: 'Converted prices to cents and added decimal/zero regressions.',
-                }),
-              },
               'report'
             ),
           ],
@@ -316,6 +302,8 @@ for (const name of ['normal', 'denied']) {
       ])
         if ((await fs.readFile(path.join(cwd, file), 'utf8')) !== files[file])
           throw new Error(`Unexpected change: ${file}`)
+      if (effects.length !== 3 || new Set(effects.map(effect => effect.path)).size !== 3)
+        throw new Error('Expected exactly three distinct writes.')
       const check =
         "import assert from 'node:assert/strict'; import {totalCents} from './packages/api/amount.ts'; assert.equal(totalCents(2.75,3),825); assert.equal(totalCents(1.25,3),375); assert.equal(totalCents(2.75,0),0);"
       const actual = execFileSync(

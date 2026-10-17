@@ -101,6 +101,20 @@ export class ProjectInstructions {
           .map(({ path, scope, version }) => ({ path, scope, version }))
       : []
   }
+  requiresReplan(previous: ProjectInstructionEntry[]): boolean {
+    const prior = new Map(
+      previous.filter(entry => entry.status === 'loaded').map(entry => [entry.path, entry])
+    )
+    return this.entries.some(entry => {
+      const old = prior.get(entry.path)
+      if (entry.status === 'missing') return !!old // An applicable file was actually removed.
+      return (
+        entry.status === 'loaded' &&
+        (!old || old.version !== entry.version || old.physicalPath !== entry.physicalPath)
+      )
+    })
+  }
+
   get fingerprint(): string {
     return JSON.stringify(
       this.entries

@@ -3,6 +3,7 @@ import {
   ProjectInstructionError,
   PROJECT_INSTRUCTION_LIMITS,
   type ProjectInstructionOptions,
+  type ProjectInstructionEntry,
 } from './project-instructions.js'
 import {
   ExecutionPersistenceError,
@@ -649,7 +650,7 @@ async function runTurnLoop(
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const instructions = options.instructionController!
   let replans = 0
-  let sentInstructions = ''
+  let sentSources: ProjectInstructionEntry[] = []
   const ctx: ToolContext = {
     history: session.historyReader(() => messages, cwd ?? process.cwd()),
     recordHistoryPaths: paths => {
@@ -749,7 +750,7 @@ async function runTurnLoop(
         assertNotCancelled(options.signal)
         await instructions.refresh(permissions, options.signal)
         const request = await session.prepareRequest(messages, runtime)
-        sentInstructions = instructions.fingerprint
+        sentSources = instructions.view().entries
         assertNotCancelled(options.signal)
         try {
           emitter.emit({ type: 'phase', phase: 'requesting' })
@@ -833,7 +834,7 @@ async function runTurnLoop(
         let replan = false
         try {
           await instructions.prepareBatch(response.content, tools, permissions, options.signal)
-          replan = sentInstructions !== instructions.fingerprint
+          replan = instructions.requiresReplan(sentSources)
           if (replan && replans++ >= PROJECT_INSTRUCTION_LIMITS.replans)
             throw new ProjectInstructionError(
               'replanning limit reached (3); this batch was not executed'
@@ -842,11 +843,12 @@ async function runTurnLoop(
           instructionFailure =
             error instanceof Error ? error : new ProjectInstructionError('batch preflight failed')
         }
+        const checkedInstructions = instructions.fingerprint
         const guard = {
           failure: undefined as Error | undefined,
           check: async (): Promise<void> => {
-            await instructions.refresh(permissions, options.signal)
-            if (sentInstructions !== instructions.fingerprint)
+            await instructions.prepareBatch(response.content, tools, permissions, options.signal)
+            if (checkedInstructions !== instructions.fingerprint)
               throw new ProjectInstructionError(
                 'rules changed before execution; remaining tools were not executed. Review completed effects before continuing.'
               )

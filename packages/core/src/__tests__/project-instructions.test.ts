@@ -296,6 +296,68 @@ describe('project instructions in actual loop requests and tool effects', () => 
     paired(runner)
   })
 
+  it('does not replan when only an irrelevant directory scope is removed', async () => {
+    await file('api/AGENTS.md', 'API_RULE')
+    await file('api/source.txt', 'source')
+    const read = call('api/source.txt', 'read-api', 'read_file')
+    const { requests } = provider(
+      reply([read]),
+      reply([{ ...read, id: 'read-again' }]),
+      reply([call('report.txt')]),
+      answer()
+    )
+    const runner = agent()
+    await runner.run('read api then write root report')
+    expect(requests).toHaveLength(4)
+    expect(await readFile(join(root, 'report.txt'), 'utf8')).toBe('new')
+    expect(JSON.stringify(requests[3])).not.toContain('API_RULE')
+    expect(
+      JSON.stringify(runner.getHistory()).match(/entire batch was not executed/g)
+    ).toHaveLength(1)
+    paired(runner)
+  })
+
+  it('does replan if an applicable rule is removed while the model responds', async () => {
+    await file('AGENTS.md', 'OLD_RULE')
+    const { requests } = provider(
+      async () => {
+        await rm(join(root, 'AGENTS.md'))
+        return reply([call('out.txt', 'before-removal')])
+      },
+      async () => {
+        await expect(readFile(join(root, 'out.txt'))).rejects.toThrow()
+        return reply([call('out.txt', 'after-removal')])
+      },
+      answer()
+    )
+    const runner = agent()
+    await runner.run('write')
+    expect(requests).toHaveLength(3)
+    expect(requests[1].system).toContain('No current AGENTS.md')
+    expect(await readFile(join(root, 'out.txt'), 'utf8')).toBe('new')
+    paired(runner)
+  })
+
+  it('re-resolves target symlinks after approval and refuses a newly substituted scope', async () => {
+    await file('one/AGENTS.md', 'SCOPE_ONE')
+    await file('two/AGENTS.md', 'SCOPE_TWO')
+    await symlink(join(root, 'one'), join(root, 'alias'))
+    provider(reply([call('alias/out.txt', 'first')]), reply([call('alias/out.txt', 'second')]))
+    const runner = agent({
+      permissions: {
+        requestApproval: async request => {
+          await rm(join(root, 'alias'))
+          await symlink(join(root, 'two'), join(root, 'alias'))
+          return { requestId: request.id, decision: 'allow' }
+        },
+      },
+    })
+    await expect(runner.run('write')).rejects.toThrow('rules changed before execution')
+    await expect(readFile(join(root, 'one/out.txt'))).rejects.toThrow()
+    await expect(readFile(join(root, 'two/out.txt'))).rejects.toThrow()
+    paired(runner)
+  })
+
   it('pairs every call and stops without effects if a nested rule is denied', async () => {
     await file('api/AGENTS.md', 'NEVER_READ')
     const { requests } = provider(reply([call('first.txt'), call('api/out.txt')]))
