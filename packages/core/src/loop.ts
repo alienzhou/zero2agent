@@ -618,11 +618,17 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     }
     throw error
   } finally {
-    await options.mcpController?.close()
-    session.skills = options.skillController!.snapshotSelection()
-    budget.close()
-    options.signal?.removeEventListener('abort', cancel)
-    if (!options.session) session.cancelCompaction()
+    try {
+      await options.mcpController?.close()
+    } catch (error) {
+      if (options.mcpController?.hasUnknownOutcome) throw new McpUnknownOutcomeError(true)
+      throw error
+    } finally {
+      session.skills = options.skillController!.snapshotSelection()
+      budget.close()
+      options.signal?.removeEventListener('abort', cancel)
+      if (!options.session) session.cancelCompaction()
+    }
   }
 }
 
@@ -1049,7 +1055,8 @@ async function runTurnLoop(
             const item = tracked.find(
               t => t.messageIndex === batchIndex && t.toolCallId === result.tool_use_id
             )!
-            if (result.content !== interruptedResult('not-started')) item.state = 'settled'
+            if (result.content !== interruptedResult('not-started'))
+              item.state = result.content === interruptedResult('unknown') ? 'unknown' : 'settled'
           }
         }
         messages.push({ role: 'user', content: toolResults })

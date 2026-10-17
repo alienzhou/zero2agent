@@ -333,8 +333,11 @@ export class Agent {
       await this.mcp.open(controller.signal)
       return this.mcp.view()
     } finally {
-      await this.mcp.close()
-      this.active = undefined
+      try {
+        await this.mcp.close()
+      } finally {
+        this.active = undefined
+      }
     }
   }
 

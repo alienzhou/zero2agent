@@ -9,7 +9,8 @@ import { createAnthropicClient } from '../llm/index.js'
 import { messageStream } from './helpers/message-stream.js'
 import { writeFileTool } from '../tools/write-file.js'
 import { readFileTool } from '../tools/read-file.js'
-import { mcpToolName } from '../mcp/client.js'
+import { McpController, McpUnknownOutcomeError, mcpToolName } from '../mcp/client.js'
+import { RunBudget } from '../run-budget.js'
 import { historyReference } from '../history-evidence.js'
 import { validateSessionSnapshot } from '../session-snapshot.js'
 import type { ContextRequest } from '../context-budget.js'
@@ -184,6 +185,53 @@ describe('MCP through loop, paired recovery and provenance', () => {
     expect(a.snapshot().recovery?.tools.map(t => t.state)).toEqual(['unknown', 'not-started'])
     expect(stream).toHaveBeenCalledTimes(1)
     expect(await effects()).toBe(1)
+  })
+  it('keeps unknown effects when publishing the interrupted receipt also fails', async () => {
+    const { stream } = provider(reply(mcp('effect', 'record_action'), mcp('skip', 'record_action')))
+    const a = new Agent({
+      ...options('effect-disconnect'),
+      executionPersistence: async (_snapshot, boundary) => {
+        if (boundary === 'tool-settled') throw new Error('fixed storage failure')
+      },
+    })
+    await expect(a.run('record once')).rejects.toThrow('unknown')
+    const snapshot = a.snapshot()
+    expect(snapshot.recovery?.reason).toBe('storage-error')
+    expect(snapshot.recovery?.tools.map(t => t.state)).toEqual(['unknown', 'not-started'])
+    expect(validateSessionSnapshot(snapshot).recovery).toEqual(snapshot.recovery)
+    expect(await effects()).toBe(1)
+    expect(stream).toHaveBeenCalledTimes(1)
+    await expect(a.run('retry')).rejects.toThrow('requires review')
+  })
+  it('preserves unknown errors and releases the turn budget when final cleanup reports failure', async () => {
+    const close = McpController.prototype.close
+    let closes = 0
+    vi.spyOn(McpController.prototype, 'close').mockImplementation(async function () {
+      await close.call(this)
+      if (++closes > 1) throw new Error('fixed cleanup failure')
+    })
+    const budgetClose = vi.spyOn(RunBudget.prototype, 'close')
+    provider(reply(mcp('effect', 'record_action')))
+    const a = new Agent(options('effect-disconnect'))
+    await expect(a.run('record once')).rejects.toBeInstanceOf(McpUnknownOutcomeError)
+    expect(budgetClose).toHaveBeenCalledTimes(1)
+    expect(a.snapshot().recovery?.tools[0].state).toBe('unknown')
+    expect(await effects()).toBe(1)
+  })
+  it('releases inspection ownership even when cleanup reports failure', async () => {
+    const close = McpController.prototype.close
+    let closes = 0
+    const cleanup = vi
+      .spyOn(McpController.prototype, 'close')
+      .mockImplementation(async function () {
+        await close.call(this)
+        if (++closes > 1) throw new Error('fixed cleanup failure')
+      })
+    const a = new Agent(options())
+    await expect(a.inspectMcp()).rejects.toThrow('fixed cleanup failure')
+    cleanup.mockRestore()
+    await expect(a.close()).resolves.toBeUndefined()
+    await expect(a.inspectMcp()).resolves.toMatchObject([{ state: 'ready' }])
   })
   it('keeps built-ins usable when server discovery fails and reports that limit in model context', async () => {
     const { requests } = provider(
