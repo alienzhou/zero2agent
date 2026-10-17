@@ -411,7 +411,14 @@ describe('project instructions in actual loop requests and tool effects', () => 
     runner.setProjectInstructionsEnabled(false)
     await runner.run('hello')
     expect(JSON.stringify(requests)).not.toContain('DO_NOT_INJECT')
-    expect(requests[0].system).toBeUndefined()
+    expect(requests[0].system).toContain('Project instructions are disabled')
+  })
+
+  it('adds no context overhead when a new workspace has no rules', async () => {
+    const { requests } = provider(answer())
+    await agent({ systemPrompt: 'original system' }).run('task')
+    expect(requests[0].system).toBe('original system')
+    expect(requests[0].messages).toHaveLength(1)
   })
 
   it('counts rule bodies in the existing budget and does not send an oversized request', async () => {

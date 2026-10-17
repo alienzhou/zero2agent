@@ -471,6 +471,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     userMessage = formatArtifactTask(userMessage, artifactContract)
   }
   const budget = new RunBudget(options.limits, options.signal)
+  const detachedHistory = !options.instructionController && !!options.session?.getHistory().length
   options = {
     ...options,
     signal: budget.signal,
@@ -478,7 +479,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       options.instructionController ??
       new ProjectInstructions(options.cwd ?? process.cwd(), options.projectInstructions),
   }
-  options.instructionController!.reset()
+  options.instructionController!.reset(detachedHistory ? 'restored' : 'current')
   const session = options.session ?? new Session(options.results)
   const diagnostics = new DiagnosticEmitter(options.diagnostics, options.diagnosticContext)
   const emitter = new RuntimeEmitter(diagnostics.operationId, event => {

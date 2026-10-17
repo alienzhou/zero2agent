@@ -228,7 +228,7 @@ export class Agent {
     if (this.active)
       throw new Error('Session is already running. Wait before running or resetting.')
     this.session.reset()
-    this.instructions.reset()
+    this.instructions.reset('empty')
   }
 
   /** Inspect a detached snapshot, never the writable session history. */
@@ -244,7 +244,7 @@ export class Agent {
   restore(snapshot: unknown): void {
     if (this.active) throw new Error('Wait for the running operation before restoring.')
     this.session.restore(snapshot)
-    this.instructions.reset()
+    this.instructions.reset('restored')
     // Approval state is process-local and never inherited from a saved conversation.
     this.permissions.cancelPending()
     this.permissions = new PermissionController(this.options.permissions)

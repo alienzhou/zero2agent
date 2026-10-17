@@ -60,6 +60,7 @@ export class ProjectInstructions {
   readonly root: string
   readonly cwd: string
   private enabled: boolean
+  private contextSeen = false
   private directories: string[]
   private entries: ProjectInstructionEntry[] = []
   private lastRequest?: ProjectInstructionView['lastRequest']
@@ -73,7 +74,9 @@ export class ProjectInstructions {
     this.directories = [this.cwd]
   }
 
-  reset(): void {
+  reset(history: 'current' | 'empty' | 'restored' = 'current'): void {
+    if (history === 'empty') this.contextSeen = false
+    if (history === 'restored') this.contextSeen = true
     this.directories = [this.cwd]
     this.entries = []
     this.lastRequest = undefined
@@ -227,6 +230,7 @@ export class ProjectInstructions {
       }
       combined.throwIfAborted()
       this.entries = entries
+      this.contextSeen ||= entries.some(entry => entry.status === 'loaded')
     } catch (error) {
       // Failed refresh clears the old body too; callers must never fall back to stale authority.
       this.entries = entries.map(({ text: _text, ...entry }) => ({
@@ -293,7 +297,19 @@ export class ProjectInstructions {
 
   overlay(request: ContextRequest): ContextRequest {
     const entries = this.entries.filter(e => e.status === 'loaded')
-    if (!this.enabled) return request
+    if (!this.enabled)
+      return this.contextSeen
+        ? {
+            ...request,
+            system: [
+              request.system,
+              'Project instructions are disabled. Historical AGENTS.md copies or summaries are not current instructions; follow explicit user requests and host permissions.',
+            ]
+              .filter(Boolean)
+              .join('\n\n'),
+          }
+        : request
+    if (!entries.length && !this.contextSeen) return request
     if (!entries.length)
       return {
         ...request,
