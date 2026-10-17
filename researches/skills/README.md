@@ -133,3 +133,5 @@ node researches/skills/compare-denied-evidence.mjs \
 ```
 
 该命令只读文件，不执行归档代码、不调用模型。初版审计与输出、增加迁移路径兼容后的比较和迁移目录复跑记录均留在归档。原始两批成绩不变；当前宿主拒绝机制有实际证据，模型每次是否提出该调用没有稳定性保证。
+
+原始证据与源码共 1,122 份文件已打包为单个约 8 MiB 的 draft Release 附件，未加入 Git 历史。归档下载回本地后，整包 SHA-256、manifest 全部文件和迁移后的负例比较脚本均验证通过；[附件及校验索引](evidence-archive.json)供有仓库权限的 reviewer 复核。
