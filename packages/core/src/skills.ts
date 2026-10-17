@@ -401,12 +401,20 @@ export class Skills {
         fail('SKILL_BYTE_LIMIT', `File exceeds ${maximum} bytes.`)
       const bytes = await this.readBytes(handle, maximum, headerOnly, signal)
       const after = await handle.stat()
+      // Replacing a whole parent directory leaves the opened file's inode/time
+      // untouched and resolves to the same path string. Bind the bytes to the
+      // file currently at that path as well as to the opened handle.
+      const current = await lstat(physical)
       if (
-        before.size !== after.size ||
-        before.mtimeMs !== after.mtimeMs ||
-        before.ctimeMs !== after.ctimeMs ||
-        before.ino !== after.ino ||
-        before.dev !== after.dev ||
+        [after, current].some(
+          observed =>
+            !observed.isFile() ||
+            before.size !== observed.size ||
+            before.mtimeMs !== observed.mtimeMs ||
+            before.ctimeMs !== observed.ctimeMs ||
+            before.ino !== observed.ino ||
+            before.dev !== observed.dev
+        ) ||
         this.verify(location) !== physical
       )
         fail('SKILL_CHANGED', 'Skill source changed while reading; refresh required.')

@@ -1,5 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { mkdtemp, mkdir, writeFile, readFile, rm, symlink, realpath, chmod } from 'node:fs/promises'
+import {
+  mkdtemp,
+  mkdir,
+  writeFile,
+  readFile,
+  rm,
+  symlink,
+  realpath,
+  chmod,
+  open,
+  rename,
+} from 'node:fs/promises'
+import type { FileHandle } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { createHash } from 'node:crypto'
@@ -335,6 +347,42 @@ describe('read permission and source boundaries', () => {
     expect(loader.view().entries[0].status).toBe('error')
     expect(loader.snapshotSelection()).toBeUndefined()
     expect(JSON.stringify(loader.view())).not.toContain('RACE_BODY_SENTINEL')
+  })
+
+  it('rejects an opened guide when its whole parent directory is replaced during reading', async () => {
+    const source = await skill('guide', 'OLD_DIRECTORY_BODY')
+    const replacement = await file('replacement/SKILL.md', text('guide', 'CURRENT_DIRECTORY_BODY'))
+    const probe = await open(source, 'r')
+    type Read = (
+      buffer: Buffer,
+      offset: number,
+      length: number,
+      position: number
+    ) => Promise<{ bytesRead: number; buffer: Buffer }>
+    const prototype = Object.getPrototypeOf(probe) as { read: Read }
+    const originalRead = prototype.read
+    await probe.close()
+    let replaced = false
+    vi.spyOn(prototype, 'read').mockImplementation(async function (this: FileHandle, ...args) {
+      const result = await originalRead.apply(this, args)
+      // Header discovery has already completed. Swap the complete directory after
+      // the body bytes come from the old handle; that file's own inode/time stay stable.
+      if (!replaced && args[0].length === LIMITS.fileBytes + 1 && result.bytesRead > 0) {
+        replaced = true
+        await rename(dirname(source), join(root, 'previous-guide'))
+        await rename(dirname(replacement), dirname(source))
+      }
+      return result
+    })
+    const loader = new Skills(root)
+    await expect(loader.activate('guide', permissions)).rejects.toThrow('SKILL_CHANGED')
+    expect(replaced).toBe(true)
+    expect(await readFile(source, 'utf8')).toContain('CURRENT_DIRECTORY_BODY')
+    expect(loader.snapshotSelection()).toBeUndefined()
+    expect(JSON.stringify(loader.view())).not.toContain('OLD_DIRECTORY_BODY')
+    const current = await loader.activate('guide', permissions)
+    expect(current.status).toBe('loaded')
+    expect(current.text).toBe('CURRENT_DIRECTORY_BODY')
   })
 
   it('rejects nonregular files, invalid UTF-8 and unreadable sources', async () => {
