@@ -117,3 +117,6 @@ export type {
   ProjectInstructionView,
   ProjectInstructionEntry,
 } from './project-instructions.js'
+export { Skills, SkillError, SKILL_LIMITS } from './skills.js'
+export type { SkillsOptions, SkillView, SkillEntry, SkillSelectionSnapshot } from './skills.js'
+export { SkillFormatError, parseSkillFile, parseSkillHeader } from './skill-format.js'

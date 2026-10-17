@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { formatProjectInstructions } from './instruction-view.js'
+import { formatSkills } from './skill-view.js'
 /**
  * zero2agent CLI 入口
  */
@@ -219,6 +220,10 @@ async function main() {
   let logOperation: string | undefined
   let plain = false
   let inspectInstructions = false
+  let inspectSkills = false
+  let noSkills = process.env.ZERO2AGENT_NO_SKILLS === '1'
+  const skillRoots: string[] = []
+  const selectedSkills: string[] = []
   let noInstructions = process.env.ZERO2AGENT_NO_INSTRUCTIONS === '1'
   let instructionsRoot: string | undefined
   let noSave = process.env.ZERO2AGENT_NO_SAVE === '1'
@@ -266,7 +271,14 @@ async function main() {
           throw new Error(`${flag} requires a UUID`)
       }
     } else if (flag === '--instructions') inspectInstructions = true
-    else if (flag === '--no-instructions') noInstructions = true
+    else if (flag === '--skills') inspectSkills = true
+    else if (flag === '--no-skills') noSkills = true
+    else if (flag === '--skill' || flag === '--skill-root') {
+      const value = args.shift()
+      if (!value || value.startsWith('--')) throw new Error(`${flag} requires a value`)
+      if (flag === '--skill') selectedSkills.push(value)
+      else skillRoots.push(value)
+    } else if (flag === '--no-instructions') noInstructions = true
     else if (flag === '--instructions-root') {
       instructionsRoot = args.shift()
       if (!instructionsRoot || instructionsRoot.startsWith('--'))
@@ -303,9 +315,48 @@ async function main() {
   if (confirmCheckpoint && !['undo', 'recover'].includes(checkpointAction ?? ''))
     throw new Error('--confirm requires --undo or --recover')
   const projectInstructions = noInstructions ? false : { root: instructionsRoot }
+  const skills = noSkills ? false : { roots: skillRoots, selected: selectedSkills }
+  if (noSkills && selectedSkills.length) throw new Error('--skill cannot combine with --no-skills')
+  if (inspectSkills) {
+    if (
+      args.length ||
+      inspectInstructions ||
+      list ||
+      resume ||
+      latest ||
+      resumeTask ||
+      listLogs ||
+      readLog ||
+      logOperation ||
+      checkpointAction ||
+      confirmCheckpoint
+    )
+      throw new Error('--skills cannot combine with a task or another action')
+    const inspector = new Agent({
+      cwd: process.cwd(),
+      skills,
+      permissions: permissionOptionsFromEnv(undefined),
+    })
+    try {
+      await inspector.refreshSkills()
+    } finally {
+      console.log(safeText(formatSkills(inspector.getSkills())))
+    }
+    const view = inspector.getSkills()
+    if (
+      view.errors.length ||
+      view.entries.some(entry =>
+        ['denied', 'invalid', 'error', 'missing'].includes(entry.status)
+      ) ||
+      view.roots.some(root => root.status === 'denied' || root.status === 'error')
+    )
+      process.exitCode = 1
+    return
+  }
   if (inspectInstructions) {
     if (
       args.length ||
+      selectedSkills.length ||
       list ||
       resume ||
       latest ||
@@ -413,6 +464,7 @@ async function main() {
 
   const approvalReadline: { current?: readline.Interface } = {}
   const agent = new Agent({
+    skills,
     projectInstructions,
     results: { directory: process.env.ZERO2AGENT_RESULT_DIR },
     limits,
@@ -477,7 +529,7 @@ async function main() {
   console.log(CHECKPOINT_SCOPE)
   if (resumed) console.log(resumed)
   console.log(
-    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/recovery 中断任务；/instructions 项目指令；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
+    '输入你的问题；/new 新建对话；/sessions 列表；/resume UUID 恢复；/session 当前；/save 重试保存；/recovery 中断任务；/instructions 项目指令；/skills 技能目录与选择；/compact 压缩上下文；/terminal [bash命令] 交给人操作；/logs 日志列表；/log 当前日志；/checkpoints 文件改动；/diff UUID；/undo UUID 回退预览；exit 退出\n'
   )
 
   const rl = readline.createInterface({
@@ -589,6 +641,10 @@ async function main() {
                 trimmed.slice('/instructions'.length).trim() || 'show'
               )
             )
+          )
+        } else if (trimmed === '/skills' || trimmed.startsWith('/skills ')) {
+          console.log(
+            safeText(await conversations.skills(trimmed.slice('/skills'.length).trim() || 'show'))
           )
         } else if (trimmed === '/compact') {
           const changed = await conversations.compact()

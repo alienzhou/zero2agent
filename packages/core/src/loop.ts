@@ -5,6 +5,8 @@ import {
   type ProjectInstructionOptions,
   type ProjectInstructionEntry,
 } from './project-instructions.js'
+import { Skills, hasSkillHistory, type SkillsOptions } from './skills.js'
+import { createSkillTools } from './tools/skill-tools.js'
 import {
   ExecutionPersistenceError,
   RecoveryRequiredError,
@@ -72,6 +74,21 @@ function resultAwareTools(tools: Tool[] = allTools): Tool[] {
     if (!existing) result.push(builtin)
   }
   return result
+}
+
+function contextTools(options: RunLoopOptions): Tool[] {
+  const tools = resultAwareTools(options.tools)
+  const skills = options.skillController
+  if (skills?.view().enabled && skills.view().entries.some(entry => entry.metadata)) {
+    const permissions =
+      options.permissionController ?? new PermissionController(options.permissions)
+    for (const tool of createSkillTools(skills, permissions)) {
+      if (tools.some(existing => existing.name === tool.name))
+        throw new Error(`${tool.name} is a reserved host tool`)
+      tools.push(tool)
+    }
+  }
+  return tools
 }
 
 function describeToolError(error: unknown): string {
@@ -242,6 +259,17 @@ export async function executeToolCalls(
       const permissionTool = tool.readPaths
         ? { ...tool, permission: { effect: 'read' as const, paths: ['__result_paths'] } }
         : tool
+      // Stored results must retain the same trusted sources as the original read.
+      // Otherwise a large, escaped resource could lose its external path when spooled.
+      if (tool.readPaths)
+        resultSource.paths = [
+          ...new Set([
+            ...resultSource.paths,
+            ...(permissionInput.__result_paths as string[]).map(p =>
+              resolvePhysicalPath(p, ctx.cwd)
+            ),
+          ]),
+        ]
       ctx.recordHistoryPaths?.([
         ...resultSource.paths,
         ...(tool.readPaths ? (permissionInput.__result_paths as string[]) : []),
@@ -433,6 +461,9 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  skills?: SkillsOptions | false
+  /** @internal Volatile catalogue/activation state owned by Agent. */
+  skillController?: Skills
   projectInstructions?: ProjectInstructionOptions | false
   /** @internal Shared volatile state owned by Agent. */
   instructionController?: ProjectInstructions
@@ -473,15 +504,23 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   }
   const budget = new RunBudget(options.limits, options.signal)
   const detachedHistory = !options.instructionController && !!options.session?.getHistory().length
+  const detachedSkills = !options.skillController
   options = {
     ...options,
     signal: budget.signal,
+    permissionController:
+      options.permissionController ?? new PermissionController(options.permissions),
+    skillController:
+      options.skillController ?? new Skills(options.cwd ?? process.cwd(), options.skills),
     instructionController:
       options.instructionController ??
       new ProjectInstructions(options.cwd ?? process.cwd(), options.projectInstructions),
   }
   options.instructionController!.reset(detachedHistory ? 'restored' : 'current')
   const session = options.session ?? new Session(options.results)
+  if (detachedSkills)
+    options.skillController!.restoreSelection(session.skills, hasSkillHistory(session.getHistory()))
+  else options.skillController!.reset('current')
   const diagnostics = new DiagnosticEmitter(options.diagnostics, options.diagnosticContext)
   const emitter = new RuntimeEmitter(diagnostics.operationId, event => {
     diagnostics.runtime(event)
@@ -545,6 +584,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     }
     throw error
   } finally {
+    session.skills = options.skillController!.snapshotSelection()
     budget.close()
     options.signal?.removeEventListener('abort', cancel)
     if (!options.session) session.cancelCompaction()
@@ -562,7 +602,7 @@ export function createCompactionRuntime(
   const budget = session.getContextBudget(model, options.context)
   return {
     results: session.getResultStore(options.cwd ?? process.cwd()),
-    tools: resultAwareTools(options.tools),
+    tools: contextTools(options),
     cwd: options.cwd ?? process.cwd(),
     client,
     budget,
@@ -573,10 +613,11 @@ export function createCompactionRuntime(
         model,
         max_tokens: budget.outputTokens,
         messages,
-        tools: resultAwareTools(options.tools).map(toAnthropicTool),
+        tools: contextTools(options).map(toAnthropicTool),
         ...(options.systemPrompt && { system: options.systemPrompt }),
       })
-      return options.instructionController?.overlay(request) ?? request
+      const projectRequest = options.instructionController?.overlay(request) ?? request
+      return options.skillController?.overlay(projectRequest) ?? projectRequest
     },
     summarize: createContextSummarizer(client, model, budget, diagnostics, executor),
     onCompaction: options.events?.onCompaction,
@@ -606,7 +647,7 @@ async function runTurnLoop(
   executor: RequestExecutor
 ): Promise<string> {
   const { events, cwd } = options
-  const tools = resultAwareTools(options.tools)
+  let tools = contextTools(options)
   const session = options.session!
   const runtime = createCompactionRuntime(
     {
@@ -649,8 +690,10 @@ async function runTurnLoop(
   }
   const permissions = options.permissionController ?? new PermissionController(options.permissions)
   const instructions = options.instructionController!
+  const skills = options.skillController!
   let replans = 0
   let sentSources: ProjectInstructionEntry[] = []
+  let sentSkills = skills.fingerprint
   const ctx: ToolContext = {
     history: session.historyReader(() => messages, cwd ?? process.cwd()),
     recordHistoryPaths: paths => {
@@ -696,6 +739,7 @@ async function runTurnLoop(
     return copy
   }
   const capture = (reason: ExecutionRecovery['reason'] = 'interrupted'): SessionSnapshot => {
+    session.skills = skills.snapshotSelection()
     const copy = paired()
     if (batchIndex >= 0 && copy[batchIndex + 1])
       session.recordHistorySource(copy, batchIndex + 1, [...batchHistoryPaths])
@@ -749,8 +793,12 @@ async function runTurnLoop(
         emitter.emit({ type: 'phase', phase: 'preparing' })
         assertNotCancelled(options.signal)
         await instructions.refresh(permissions, options.signal)
+        await skills.refresh(permissions, options.signal)
+        tools = contextTools(options)
+        runtime.tools = tools
         const request = await session.prepareRequest(messages, runtime)
         sentSources = instructions.view().entries
+        sentSkills = skills.fingerprint
         assertNotCancelled(options.signal)
         try {
           emitter.emit({ type: 'phase', phase: 'requesting' })
@@ -763,6 +811,7 @@ async function runTurnLoop(
               let stopped = false
               let streaming = false
               instructions.markRequested()
+              skills.markRequested()
               const stream = runtime.client.messages.stream(request, {
                 signal: attempt.signal,
                 timeout: attempt.timeoutMs,
@@ -832,9 +881,22 @@ async function runTurnLoop(
         emitter.emit({ type: 'phase', phase: 'tools' })
         let instructionFailure: Error | undefined
         let replan = false
+        let skillReplanReason: string | undefined
+        const calls = response.content.filter(block => block.type === 'tool_use')
+        const loadOnly = calls.every(call => call.name === 'load_skill')
         try {
           await instructions.prepareBatch(response.content, tools, permissions, options.signal)
+          await skills.refresh(permissions, options.signal)
           replan = instructions.requiresReplan(sentSources)
+          if (skills.requiresReplan(sentSkills)) {
+            replan = true
+            skillReplanReason = 'Selected skill content changed. Re-plan using the current version.'
+          }
+          if (!loadOnly && calls.some(call => call.name === 'load_skill')) {
+            replan = true
+            skillReplanReason =
+              'load_skill must be submitted separately from other tools. Load first, then read the current instructions before submitting business operations.'
+          }
           if (replan && replans++ >= PROJECT_INSTRUCTION_LIMITS.replans)
             throw new ProjectInstructionError(
               'replanning limit reached (3); this batch was not executed'
@@ -844,10 +906,16 @@ async function runTurnLoop(
             error instanceof Error ? error : new ProjectInstructionError('batch preflight failed')
         }
         const checkedInstructions = instructions.fingerprint
+        const checkedSkills = skills.fingerprint
         const guard = {
           failure: undefined as Error | undefined,
           check: async (): Promise<void> => {
             await instructions.prepareBatch(response.content, tools, permissions, options.signal)
+            await skills.refresh(permissions, options.signal)
+            if (!loadOnly && checkedSkills !== skills.fingerprint)
+              throw new Error(
+                'Skills changed before execution; remaining tools were not executed. Review completed effects before continuing.'
+              )
             if (checkedInstructions !== instructions.fingerprint)
               throw new ProjectInstructionError(
                 'rules changed before execution; remaining tools were not executed. Review completed effects before continuing.'
@@ -858,7 +926,9 @@ async function runTurnLoop(
         if (replan || instructionFailure) {
           const reason = instructionFailure
             ? `Error: ${instructionFailure.message}. This batch was not executed.`
-            : 'Project instructions changed or a new scope was discovered. This entire batch was not executed. Re-plan using the current project context before submitting new calls.'
+            : skillReplanReason
+              ? `${skillReplanReason} This entire batch was not executed.`
+              : 'Project instructions changed or a new scope was discovered. This entire batch was not executed. Re-plan using the current project context before submitting new calls.'
           toolResults = []
           for (const call of response.content.filter(b => b.type === 'tool_use')) {
             try {
