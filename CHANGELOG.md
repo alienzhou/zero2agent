@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-17：E04 课程阅读审阅
+
+按每页独立教学价值检查四课，S001 保留 18 页，S002/S003 各调为 15 页，S004 为 14 页。重复衔接、完整存储/快照细目和历史实验成绩移到已有文档；进程实验与跟练合并。保留字号、图形和页面 URL，生成器取消固定 18 页要求。仅修改课程和文档，原实现与工程证据不变；[取舍说明](./docs/e04-course-reading-review.md)。
+
 > 跟着迭代走，逐步理解 **Agent Harness** 是如何从一个简单循环演化成完整工具体系的。
 
 [首页](./README.md) | [Roadmap](./docs/roadmap/README.md) | [Epic 1](./specs/E01-read-and-search/README.md)

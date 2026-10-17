@@ -142,3 +142,7 @@ node researches/summary-quality/read-recovery-demo.mjs
 ```
 
 脚本先创建结构合法但值未知的报告，模拟一次非法读取和一句“任务完成”。真实 Core 必须拒绝提前完成，第三个 SDK 请求收到纠错提示，随后正确读取并更新报告。输出 5 个请求、invalid-input → correcting → resolved 及最终实际文件；自动清理临时文件，不调用外部模型。同一脚本在旧 51edb15 运行时仅请求两次就结束，保留错误文件并触发断言失败；前后日志见 acceptance/read-recovery-demo-*。这是确定性机制验证，不充当真实模型评分。
+
+## 按需阅读的实现与验收细节
+
+课程中移出的快照恢复细目见 [技术设计](details/01-technical-design.md)；历史基线、候选与读取纠错版的完整分母、失败和成本见 [验收清单](details/03-verification-checklist.md) 及 [研究资料](../../../researches/summary-quality/README.md)。课程保留“先冻结答案、再公平比较”的方法，不要求记忆每轮实验成绩。
