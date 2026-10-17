@@ -258,6 +258,30 @@ describe('MCP through loop, paired recovery and provenance', () => {
     await b.run('read')
     expect(receipts(b).at(-1)?.content).toContain('source is disabled or has changed')
   })
+  it('checks combined external provenance capacity before a new effect', async () => {
+    provider(reply(mcp('logs', 'get_logs')), answer())
+    const a = new Agent(options())
+    await a.run('logs')
+    const saved = a.snapshot()
+    const source = saved.history!.sources[0].external![0]
+    saved.history!.sources[0].external = Array.from({ length: 128 }, (_, i) => ({
+      ...source,
+      tool: 'historical_' + i,
+    }))
+    const index = saved.history!.sources[0].message
+    const reference = historyReference(saved.messages[index], index)
+    provider(
+      reply(call('history', 'read_history', { reference }), mcp('effect', 'record_action')),
+      answer()
+    )
+    const restored = new Agent(options())
+    restored.restore(saved)
+    await restored.run('read historical source then record')
+    expect(await effects()).toBe(0)
+    expect(receipts(restored).at(-1)?.is_error).toBe(true)
+    expect(receipts(restored).at(-1)?.content).toContain('external source catalog')
+    expect(validateSessionSnapshot(restored.snapshot())).toBeTruthy()
+  })
   it('rejects malformed or downgraded external provenance before replacing session state', async () => {
     provider(reply(mcp('logs', 'get_logs')), answer())
     const a = new Agent(options())

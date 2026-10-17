@@ -101,6 +101,19 @@ input.on('line', line => {
       tools = []
       nextCursor = String(Number(message.params?.cursor ?? 0) + 1)
     }
+    if (mode.startsWith('name-')) nextCursor = undefined
+    if (mode.startsWith('metadata-')) nextCursor = undefined
+    if (mode.startsWith('name-'))
+      tools = [{ ...definitions[0], name: 'n'.repeat(Number(mode.slice(5))) }]
+    if (mode.startsWith('metadata-')) {
+      const entry = { name: 'get_issue', description: '', inputSchema: schema }
+      entry.description = 'x'.repeat(
+        Number(mode.slice(9)) - Buffer.byteLength(JSON.stringify(entry))
+      )
+      tools = [entry]
+    }
+    if (mode.startsWith('cursor-') && !message.params?.cursor)
+      nextCursor = 'x'.repeat(Number(mode.slice(7)))
     if (mode === 'input-cap')
       tools = tools.map(t => ({
         ...t,

@@ -153,6 +153,18 @@ describe('MCP native stdio, discovery and current permissions', () => {
     await c.open()
     expect((await audit()).some(e => e.method === 'notifications/cancelled')).toBe(false)
   })
+  it.each([
+    ['name', 127, 128, 129],
+    ['metadata', 32767, 32768, 32769],
+    ['cursor', 2047, 2048, 2049],
+  ] as const)('bounds native %s metadata before exposing tools', async (mode, below, at, above) => {
+    for (const size of [below, at, above]) {
+      const c = client(mode + '-' + size)
+      await c.open()
+      expect(c.view()[0].state).toBe(size === above ? 'failed' : 'ready')
+      await c.close()
+    }
+  })
   it('accepts the tool count at the bound', async () => {
     const c = client('tools-at-limit')
     await c.open()
@@ -333,6 +345,58 @@ describe('MCP configuration, schema and names are bounded', () => {
     expect(() =>
       validateMcpOptions({ servers: [{ id: 7, command: process.execPath }] } as never)
     ).toThrow()
+  })
+  it('checks argv, startup and configuration byte limits at their boundaries', () => {
+    for (const count of [63, 64, 65]) {
+      const config = {
+        servers: [{ id: 'issues', command: process.execPath, args: Array(count).fill('x') }],
+      }
+      if (count <= 64) expect(validateMcpOptions(config).servers[0].args).toHaveLength(count)
+      else expect(() => validateMcpOptions(config)).toThrow()
+    }
+    for (const duration of [9999, 10000, 10001]) {
+      const config = { servers: [], startupTimeoutMs: duration }
+      if (duration <= 10000) expect(validateMcpOptions(config).startupTimeoutMs).toBe(duration)
+      else expect(() => validateMcpOptions(config)).toThrow()
+    }
+    for (const delta of [-1, 0, 1]) {
+      const config = { servers: [{ id: 'issues', command: process.execPath, env: { PAD: '' } }] }
+      config.servers[0].env.PAD = 'x'.repeat(
+        32768 - Buffer.byteLength(JSON.stringify(config)) + delta
+      )
+      if (delta <= 0) expect(validateMcpOptions(config).servers).toHaveLength(1)
+      else expect(() => validateMcpOptions(config)).toThrow()
+    }
+    for (const count of [31, 32, 33]) {
+      const config = { servers: [{ id: 's'.repeat(count), command: process.execPath }] }
+      if (count <= 32) expect(validateMcpOptions(config).servers).toHaveLength(1)
+      else expect(() => validateMcpOptions(config)).toThrow()
+    }
+  })
+  it('checks schema byte, node and depth limits below, at and above bounds', () => {
+    for (const delta of [-1, 0, 1]) {
+      const schema = { type: 'object', description: '' }
+      schema.description = 'x'.repeat(16384 - Buffer.byteLength(JSON.stringify(schema)) + delta)
+      if (delta <= 0) expect(compileMcpSchema(schema)({})).toBe(true)
+      else expect(() => compileMcpSchema(schema)).toThrow()
+    }
+    for (const count of [254, 255, 256]) {
+      const schema = {
+        type: 'object',
+        properties: Object.fromEntries(
+          Array.from({ length: count }, (_, i) => ['x' + i, { type: 'string' }])
+        ),
+      }
+      if (count <= 255) expect(compileMcpSchema(schema)({})).toBe(true)
+      else expect(() => compileMcpSchema(schema)).toThrow('complexity')
+    }
+    for (const count of [10, 11, 12]) {
+      let value: Record<string, unknown> = { type: 'string' }
+      for (let i = 0; i < count; i++) value = { type: 'array', items: value }
+      const schema = { type: 'object', properties: { x: value } }
+      if (count <= 11) expect(compileMcpSchema(schema)({})).toBe(true)
+      else expect(() => compileMcpSchema(schema)).toThrow('complexity')
+    }
   })
   it('keeps name length under model bounds and distinguishes raw names', () => {
     expect(mcpToolName('x'.repeat(32), 'a'.repeat(128)).length).toBeLessThanOrEqual(64)

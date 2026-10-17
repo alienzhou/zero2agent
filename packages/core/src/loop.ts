@@ -1,5 +1,5 @@
 import { McpController, McpUnknownOutcomeError, type McpOptions } from './mcp/client.js'
-import type { ExternalSource } from './external-source.js'
+import { validateExternalSources, type ExternalSource } from './external-source.js'
 import {
   ProjectInstructions,
   ProjectInstructionError,
@@ -739,7 +739,11 @@ async function runTurnLoop(
   const ctx: ToolContext = {
     history: session.historyReader(() => messages, cwd ?? process.cwd()),
     recordHistoryExternal: sources => {
-      for (const source of sources) batchExternal.set(JSON.stringify(source), source)
+      const next = new Map(batchExternal)
+      for (const source of sources) next.set(JSON.stringify(source), source)
+      // Fail before a call, never while publishing its already-completed effects.
+      validateExternalSources([...next.values()])
+      for (const [key, source] of next) batchExternal.set(key, source)
     },
     recordHistoryPaths: paths => {
       session.assertHistoryCapacity()
