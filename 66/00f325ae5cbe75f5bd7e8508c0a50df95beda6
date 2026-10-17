@@ -1,0 +1,35 @@
+.vibecoding/2026-10-17/e05-s002-skills/dialogue.md
+  s_58249cd92a0ae1::t_9357f15529efe6 6-15
+.vibecoding/2026-10-17/e05-s002-skills/learnings.md
+  s_58249cd92a0ae1::t_22e2642a2ced26 6-10
+researches/skills/README.md
+  s_58249cd92a0ae1::t_5ab84c4ddf9222 123-135
+researches/skills/compare-denied-evidence.mjs
+  s_58249cd92a0ae1::t_dc9bd3316b65f9 1-206
+researches/skills/verification.json
+  s_58249cd92a0ae1::t_425fb81d1915b8 1-248
+retros/E05-S002-skills.md
+  s_58249cd92a0ae1::t_db9334582aa991 13-18,20-21
+specs/E05-extensibility/S002-skills/README.md
+  s_58249cd92a0ae1::t_e824e1d614cfdf 5
+specs/E05-extensibility/S002-skills/details/02-task-list.md
+  s_58249cd92a0ae1::t_4375b93c36e22d 4-7,9-10
+specs/E05-extensibility/S002-skills/details/03-verification-checklist.md
+  s_58249cd92a0ae1::t_f68bb8086bd100 1,3,7-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6600f325ae5cbe75f5bd7e8508c0a50df95beda6",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
