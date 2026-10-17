@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "tag": "E05-S004-hooks-review",
+  "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+  "asset": "e05-s004-hooks-evidence.tar.gz",
+  "sha256": "98726d278167f66ac8ca4864ae93f8e98d255dfdaf7574812b1bdd61cf2671c2",
+  "bytes": 7212627,
+  "manifestSha256": "038b48aba94c21e89a0758fb694577536f636fe925108092e384d28b7f598243",
+  "files": 2137,
+  "credentialScan": {
+    "passed": true,
+    "files": 2137
+  },
+  "delivery": "Independent draft GitHub Release; raw records excluded from Git",
+  "downloadCommand": "gh release download E05-S004-hooks-review --repo alienzhou/zero2agent --pattern e05-s004-hooks-evidence.tar.gz",
+  "verifyCommand": "node researches/hooks/verify-evidence.mjs /path/to/extracted",
+  "draft": true,
+  "extractedArchiveVerified": true,
+  "remoteDownloadVerified": true,
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-391d57029dded798c84d",
+  "assetUrl": "https://github.com/alienzhou/zero2agent/releases/download/untagged-391d57029dded798c84d/e05-s004-hooks-evidence.tar.gz",
+  "supplements": [
+    {
+      "source": "964d679ee13b7cbffbb8ba270a6d5894bbc62031",
+      "asset": "e05-s004-final-review-evidence.tar.gz",
+      "bytes": 3232239,
+      "sha256": "4bd28a8c582f44f7714e7132f131e72336c9e1dc21b43c20e89ab058f1df2f4b",
+      "manifestSha256": "b7f91cef274755e2d55b774ff9150f7add0010f68c3cb6538ae0dfe86783e31b",
+      "files": 430,
+      "credentialScan": {
+        "passed": true,
+        "files": 430
+      },
+      "scope": "PR #31 final review repairs, retained failing regressions, current production model/host/default tests and course checks; original archive unchanged.",
+      "remoteDownloadVerified": true,
+      "extractedArchiveVerified": true,
+      "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-391d57029dded798c84d",
+      "downloadCommand": "gh release download E05-S004-hooks-review --repo alienzhou/zero2agent --pattern e05-s004-final-review-evidence.tar.gz",
+      "verifyCommand": "node researches/hooks/verify-evidence.mjs /path/to/extracted",
+      "assetUrl": "https://github.com/alienzhou/zero2agent/releases/download/untagged-391d57029dded798c84d/e05-s004-final-review-evidence.tar.gz"
+    }
+  ]
+}

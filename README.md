@@ -113,9 +113,9 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
 | [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S004 已完成；[S004 交付](./specs/E04-reliability-and-context/S004-safe-resume/README.md) |
-| [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001、S002 已合入；[S003 实现与课程](./specs/E05-extensibility/S003-mcp/README.md)由 PR #30 交付，S004 已规划 |
+| [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001、S002 已合入；[S003 实现与课程](./specs/E05-extensibility/S003-mcp/README.md)由 PR #30 交付，[S004](./specs/E05-extensibility/S004-hooks/README.md)实现、12 页课程与组合验收完成，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付 |
 
-最新课程：[E05-S003：MCP 工具接入](./specs/E05-extensibility/S003-mcp/README.md)，从[离线跟练](./specs/E05-extensibility/S003-mcp/follow-along.md)开始。
+最新课程：[E05-S004：Hooks 与扩展验收](./specs/E05-extensibility/S004-hooks/README.md)，从[离线跟练](./specs/E05-extensibility/S004-hooks/follow-along.md)开始。
 
 ### 你可以这样进入
 
@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E05-S003：MCP 工具接入](./specs/E05-extensibility/S003-mcp/README.md)接通显式启用的本地 stdio 服务，校验并授权工具，保留长结果外部来源，在未知效果后停止并核对。11 页课程与实现、测试、跟练由 [PR #30](https://github.com/alienzhou/zero2agent/pull/30) 交付，固定版本 `E05-S003-mcp-tools`；站点未部署。
+**最新更新**：[E05-S004：Hooks 与扩展验收](./specs/E05-extensibility/S004-hooks/README.md)将必要检查接入执行链，分别保存工具与检查事实，补齐四种扩展的正常、断线和 SIGKILL 组合验收。12 页课程、跟练和实现由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付；站点未部署。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -188,6 +188,7 @@ zero2agent/
 | [E05-S001](./specs/E05-extensibility/S001-project-instructions/README.md) | 项目指令、目录作用域与执行前检查 | 已合入 PR #27 |
 | [E05-S002](./specs/E05-extensibility/S002-skills/README.md) | Skills 发现、按需加载与资源边界 | 已合入 PR #29 |
 | [E05-S003](./specs/E05-extensibility/S003-mcp/README.md) | MCP 工具接入、当前权限与未知效果恢复 | Done，交付见 PR #30 |
+| [E05-S004](./specs/E05-extensibility/S004-hooks/README.md) | Hooks、检查恢复与四种扩展组合验收 | Done，PR #31 |
 
 查看完整迭代记录和学习指南：[CHANGELOG.md](./CHANGELOG.md) | [课程 Roadmap](./docs/roadmap/README.md)
 

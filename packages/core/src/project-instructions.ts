@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto'
-import { constants } from 'node:fs'
+import { constants, statSync } from 'node:fs'
 import { lstat, open, stat } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import type Anthropic from '@anthropic-ai/sdk'
@@ -14,12 +14,15 @@ export const PROJECT_INSTRUCTION_LIMITS = Object.freeze({
   totalBytes: 128 * 1024,
   depth: 32,
   candidates: 64,
+  scopes: 8,
   replans: 3,
   refreshMs: 5000,
 })
 export interface ProjectInstructionOptions {
   /** Explicit discovery boundary, containing cwd. Defaults to cwd; no repository walk upwards. */
   root?: string
+  /** Explicit task directories, relative to cwd; read current rules before the first request. */
+  scopes?: string[]
 }
 export interface ProjectInstructionEntry {
   path: string
@@ -62,6 +65,7 @@ export class ProjectInstructions {
   private enabled: boolean
   private contextSeen = false
   private directories: string[]
+  private readonly scopes: string[]
   private entries: ProjectInstructionEntry[] = []
   private lastRequest?: ProjectInstructionView['lastRequest']
 
@@ -71,6 +75,15 @@ export class ProjectInstructions {
     if (!isInsidePath(this.root, this.cwd, true))
       throw new ProjectInstructionError('root must contain cwd')
     this.enabled = options !== false
+    const scopes = options === false ? [] : (options.scopes ?? [])
+    if (
+      !Array.isArray(scopes) ||
+      scopes.length > PROJECT_INSTRUCTION_LIMITS.scopes ||
+      scopes.some(s => typeof s !== 'string' || !s || s.length > 4096 || s.includes('\0'))
+    )
+      throw new ProjectInstructionError('scopes must contain at most 8 directory paths')
+    this.scopes = scopes.map(s => resolve(this.cwd, s))
+    this.baseDirectories()
     this.directories = [this.cwd]
   }
 
@@ -123,9 +136,23 @@ export class ProjectInstructions {
     )
   }
 
+  private baseDirectories(): string[] {
+    return [
+      this.cwd,
+      ...this.scopes.map(directory => {
+        const physical = resolvePhysicalPath(directory)
+        if (!isInsidePath(this.root, directory, true) || !isInsidePath(this.root, physical, true))
+          throw new ProjectInstructionError('scope leaves the discovery root')
+        if (!statSync(physical).isDirectory())
+          throw new ProjectInstructionError('scope must be a directory')
+        return physical
+      }),
+    ]
+  }
+
   private candidates(): string[] {
     const paths = new Set<string>()
-    for (const directory of this.directories) {
+    for (const directory of new Set([...this.baseDirectories(), ...this.directories])) {
       const chain: string[] = []
       let current = directory
       if (!isInsidePath(this.root, current, true)) continue
@@ -267,7 +294,7 @@ export class ProjectInstructions {
     signal?: AbortSignal
   ): Promise<void> {
     if (!this.enabled) return
-    const directories = new Set([this.cwd])
+    const directories = new Set(this.baseDirectories())
     for (const call of content) {
       if (call.type !== 'tool_use') continue
       const tool = tools.find(t => t.name === call.name)
@@ -305,7 +332,8 @@ export class ProjectInstructions {
         }
       }
     }
-    this.directories = [...directories]
+    const base = new Set(this.baseDirectories())
+    this.directories = [...directories].filter(d => !base.has(d))
     await this.refresh(permissions, signal)
   }
 

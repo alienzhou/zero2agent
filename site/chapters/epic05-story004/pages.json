@@ -1,0 +1,133 @@
+{
+  "title": "Zero2Agent · E05-S004 Hooks 与扩展验收",
+  "date": "2026-10-17",
+  "draft": true,
+  "publicationStatus": "unpublished",
+  "width": 1080,
+  "height": 1440,
+  "maxImages": 18,
+  "edition": "hooks-extension-acceptance",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "title": "检查进入执行链，事实和结论分别保存",
+      "number": 1,
+      "sources": [
+        "S01",
+        "S03",
+        "T02"
+      ]
+    },
+    {
+      "file": "02-purpose.html",
+      "title": "把要求写进文档，还要把检查接进程序",
+      "number": 2,
+      "sources": [
+        "O01",
+        "S01",
+        "S03"
+      ]
+    },
+    {
+      "file": "03-stages.html",
+      "title": "前置可以阻止，后置保留已经发生的事实",
+      "number": 3,
+      "sources": [
+        "S03",
+        "S04",
+        "T02"
+      ]
+    },
+    {
+      "file": "04-trust.html",
+      "title": "发现配置不会执行，信任要指向当前代码",
+      "number": 4,
+      "sources": [
+        "S01",
+        "S05",
+        "T01"
+      ]
+    },
+    {
+      "file": "05-before.html",
+      "title": "检查通过也不能扩权，先批准再检查再写入",
+      "number": 5,
+      "sources": [
+        "S03",
+        "T02",
+        "T03"
+      ]
+    },
+    {
+      "file": "06-after.html",
+      "title": "后置检查失败，文件和真实回执仍然存在",
+      "number": 6,
+      "sources": [
+        "S03",
+        "S04",
+        "T02",
+        "T03"
+      ]
+    },
+    {
+      "file": "07-completion.html",
+      "title": "Hook 通过，原来的完成门槛仍然有效",
+      "number": 7,
+      "sources": [
+        "S01",
+        "S03",
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "file": "08-protocol.html",
+      "title": "控制 JSON 和诊断分开，正文与凭据不默认传入",
+      "number": 8,
+      "sources": [
+        "S01",
+        "S02",
+        "T01"
+      ]
+    },
+    {
+      "file": "09-guardian.html",
+      "title": "不能只恢复账本，还要终止留下的检查进程",
+      "number": 9,
+      "sources": [
+        "S02",
+        "T03"
+      ]
+    },
+    {
+      "file": "10-recovery.html",
+      "title": "恢复事实，不恢复进程或旧信任",
+      "number": 10,
+      "sources": [
+        "S01",
+        "S04",
+        "S05",
+        "T03"
+      ]
+    },
+    {
+      "file": "11-combined.html",
+      "title": "从项目约定到完成校验，逐项核对实际证据",
+      "number": 11,
+      "sources": [
+        "D01",
+        "T04"
+      ]
+    },
+    {
+      "file": "12-practice.html",
+      "title": "正常完成要有证据，断线与崩溃也要能收束",
+      "number": 12,
+      "sources": [
+        "T03",
+        "T04",
+        "D01"
+      ]
+    }
+  ]
+}

@@ -88,6 +88,12 @@ export class Session {
     this.context.cancel()
   }
 
+  /** Explicit host control facts, supplied by the user outside a model/tool turn. */
+  recordControlNote(text: string): void {
+    this.assertIdle()
+    this.messages.push({ role: 'user', content: text })
+  }
+
   /** Last committed snapshot; the running turn is not visible until it finishes. */
   getHistory(): Anthropic.MessageParam[] {
     return structuredClone(this.messages)

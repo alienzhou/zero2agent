@@ -1,3 +1,4 @@
+import { validateHookSnapshot, type HookSnapshot } from './hooks.js'
 import type Anthropic from '@anthropic-ai/sdk'
 import { validateArtifactContract, type ArtifactContract } from './artifact-contract.js'
 import { validateReadRecovery, type ReadRecoveryState } from './result-read-recovery.js'
@@ -10,6 +11,8 @@ export type ExecutionBoundary =
   | 'tool-start'
   | 'tool-settled'
   | 'turn-stopped'
+  | 'hook-start'
+  | 'hook-settled'
 export interface RecoveryTool {
   messageIndex: number
   toolCallId: string
@@ -17,7 +20,8 @@ export interface RecoveryTool {
   state: 'not-started' | 'unknown' | 'settled'
 }
 export interface ExecutionRecovery {
-  version: 1
+  version: 1 | 2
+  hooks?: HookSnapshot
   operationId: string
   reason: 'interrupted' | 'storage-error' | 'stopped'
   tools: RecoveryTool[]
@@ -67,7 +71,9 @@ export function validateExecutionRecovery(
   }
   if (
     !r ||
-    r.version !== 1 ||
+    ![1, 2].includes(r.version) ||
+    (r.hooks !== undefined && r.version !== 2) ||
+    (r.version === 2 && r.hooks === undefined) ||
     typeof r.operationId !== 'string' ||
     !/^[0-9a-f-]{36}$/.test(r.operationId) ||
     !['interrupted', 'storage-error', 'stopped'].includes(r.reason) ||
@@ -141,7 +147,8 @@ export function validateExecutionRecovery(
   )
     fail()
   return {
-    version: 1,
+    version: r.version,
+    ...(r.hooks === undefined ? {} : { hooks: validateHookSnapshot(r.hooks) }),
     operationId: r.operationId,
     reason: r.reason,
     tools,

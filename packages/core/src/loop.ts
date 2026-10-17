@@ -1,3 +1,7 @@
+import path from 'node:path'
+import { readFileTool } from './tools/read-file.js'
+import { Hooks, HookError, type HookOptions, type HookCheck } from './hooks.js'
+import { createHash } from 'node:crypto'
 import { McpController, McpUnknownOutcomeError, type McpOptions } from './mcp/client.js'
 import { validateExternalSources, type ExternalSource } from './external-source.js'
 import {
@@ -158,9 +162,15 @@ export async function executeToolCalls(
     settled(result: Anthropic.ToolResultBlockParam): Promise<void>
     failure?: ExecutionPersistenceError
     unknown?: McpUnknownOutcomeError
+    hookFailure?: HookError
   },
   instructionGuard?: { check(): Promise<void>; failure?: Error },
-  mcp?: McpController
+  mcp?: McpController,
+  hooks?: {
+    controller: Hooks
+    persist(b: import('./execution-recovery.js').ExecutionBoundary): Promise<void>
+    notify(c: HookCheck, status: 'started' | 'passed' | 'blocked' | 'unknown'): void
+  }
 ): Promise<Anthropic.ToolResultBlockParam[]> {
   const results: Anthropic.ToolResultBlockParam[] = []
   const calls = structuredClone(content).filter(block => block.type === 'tool_use')
@@ -174,7 +184,15 @@ export async function executeToolCalls(
     })
   }
   for (const block of calls) {
-    if (execution?.failure || execution?.unknown) {
+    if (execution?.failure || execution?.unknown || execution?.hookFailure) {
+      emitter?.emit({
+        type: 'tool-state',
+        toolCallId: block.id,
+        toolName: block.name,
+        status: 'error',
+        output: interruptedResult('not-started'),
+        reason: interruptedResult('not-started'),
+      })
       results.push({
         type: 'tool_result',
         tool_use_id: block.id,
@@ -202,6 +220,8 @@ export async function executeToolCalls(
     let nativeStopped = false
     let metadataSettled = false
     let resultSource: ResultSource | undefined
+    let invoked = false
+    let hookPaths: string[] = []
     const tool = tools.find(t => t.name === block.name)
     try {
       budget?.consumeTool(block.name, block.input)
@@ -319,9 +339,34 @@ export async function executeToolCalls(
         throw new Error(`Permission denied: ${boundary.reason}`)
       }
       if (instructionGuard?.failure) throw instructionGuard.failure
+      hookPaths = (tool.checkpointPaths ?? [])
+        .flatMap(key =>
+          typeof input[key] === 'string'
+            ? [input[key] as string]
+            : Array.isArray(input[key])
+              ? (input[key] as unknown[]).filter((p): p is string => typeof p === 'string')
+              : []
+        )
+        .map(p => path.resolve(ctx.cwd, p))
+      hooks?.controller.watch(hookPaths)
+      await hooks?.controller.run(
+        'beforeTool',
+        { tool: { id: block.id, name: block.name, paths: hookPaths } },
+        hooks.persist,
+        ctx.signal,
+        hooks.notify
+      )
+      const afterHookBoundary = permissions.checkWorkspace(permissionTool, permissionInput, callCtx)
+      if (afterHookBoundary?.action === 'deny')
+        throw new HookError('beforeTool', 'workspace', 'changed')
       state('running')
       notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
       assertNotCancelled(ctx.signal)
+      hooks?.controller.reserveAfter(block.name, {
+        id: block.id,
+        name: block.name,
+        paths: hookPaths,
+      })
       await execution?.start(block.id)
       assertNotCancelled(ctx.signal)
       start = Date.now()
@@ -340,6 +385,7 @@ export async function executeToolCalls(
           }
         }
         assertNotCancelled(ctx.signal)
+        invoked = true
         return tool.execute(input, callCtx)
       }
       let output =
@@ -412,6 +458,7 @@ export async function executeToolCalls(
         completionSafety.safe = false
       budget?.settleTool(block.name, block.input, failed, nativeDenied)
     } catch (error) {
+      if (error instanceof HookError && execution) execution.hookFailure = error
       if (error instanceof McpUnknownOutcomeError && execution) {
         execution.unknown = error
       }
@@ -434,15 +481,17 @@ export async function executeToolCalls(
         error instanceof RunBudgetError || ctx.signal?.reason instanceof RunBudgetError
       const cancelled = !limited && (ctx.signal?.aborted || error instanceof TurnCancelledError)
       let errorMessage =
-        error instanceof McpUnknownOutcomeError
-          ? interruptedResult('unknown')
-          : limited && start === undefined
-            ? `Error: Run stopped before this tool started; it was not executed (${(ctx.signal?.reason as RunBudgetError | undefined)?.limitReason ?? (error as RunBudgetError).limitReason}).`
-            : cancelled
-              ? start === undefined
-                ? 'Error: Turn cancelled before this tool started; it was not executed.'
-                : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
-              : `Error: ${describeToolError(error)}`
+        error instanceof HookError && error.stage === 'beforeTool'
+          ? interruptedResult('not-started')
+          : error instanceof McpUnknownOutcomeError
+            ? interruptedResult('unknown')
+            : limited && start === undefined
+              ? `Error: Run stopped before this tool started; it was not executed (${(ctx.signal?.reason as RunBudgetError | undefined)?.limitReason ?? (error as RunBudgetError).limitReason}).`
+              : cancelled
+                ? start === undefined
+                  ? 'Error: Turn cancelled before this tool started; it was not executed.'
+                  : 'Error: Turn cancelled. This tool did not complete; any side effects were not rolled back.'
+                : `Error: ${describeToolError(error)}`
       if (ctx.results && Buffer.byteLength(errorMessage) > INLINE_RESULT_BYTES) {
         try {
           errorMessage = ctx.results.receipt(
@@ -476,9 +525,31 @@ export async function executeToolCalls(
     }
     if (execution && !execution.failure) {
       try {
-        await execution.settled(results[results.length - 1])
-      } catch {
-        execution.failure = new ExecutionPersistenceError()
+        const receipt = results[results.length - 1]
+        const afterData = {
+          tool: { id: block.id, name: block.name, paths: hookPaths },
+          receipt: {
+            isError: !!receipt.is_error,
+            sha256: createHash('sha256').update(JSON.stringify(receipt)).digest('hex'),
+          },
+        }
+        const planned =
+          invoked && !execution.unknown && hooks ? hooks.controller.planAfter(afterData) : []
+        await execution.settled(receipt)
+        if (invoked && !execution.unknown && hooks) {
+          await hooks.controller.run(
+            'afterTool',
+            afterData,
+            hooks.persist,
+            ctx.signal,
+            hooks.notify,
+            [],
+            planned
+          )
+        }
+      } catch (error) {
+        if (error instanceof HookError) execution.hookFailure = error
+        else execution.failure = new ExecutionPersistenceError()
       }
     }
   }
@@ -486,6 +557,8 @@ export async function executeToolCalls(
 }
 
 export interface RunLoopOptions {
+  hooks?: HookOptions | false
+  hookController?: Hooks
   mcp?: McpOptions | false
   mcpController?: McpController
   skills?: SkillsOptions | false
@@ -535,6 +608,8 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
   options = {
     ...options,
     signal: budget.signal,
+    hookController:
+      options.hookController ?? new Hooks(options.cwd ?? process.cwd(), options.hooks),
     mcpController:
       options.mcpController ?? new McpController(options.cwd ?? process.cwd(), options.mcp),
     permissionController:
@@ -577,6 +652,16 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       emitter.emit({ type: 'turn-start' })
       if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
+      await options.hookController!.begin(options.recovery?.hooks, false, file => {
+        if (
+          options.permissionController!.evaluate(
+            readFileTool,
+            { path: file },
+            { cwd: options.cwd ?? process.cwd() }
+          ).action !== 'allow'
+        )
+          throw new HookError('beforeComplete', 'watch', 'permission')
+      })
       await options.mcpController!.open(options.signal)
       try {
         return await runTurnLoop(
@@ -601,6 +686,7 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
     if (
       !options.recovery &&
       !options.mcpController?.hasUnknownOutcome &&
+      !options.hookController?.enabled &&
       !(error instanceof ExecutionPersistenceError)
     )
       session.recovery = undefined
@@ -763,12 +849,16 @@ async function runTurnLoop(
   }
   const batchExternal = new Map<string, ExternalSource>()
   const batchHistoryPaths = new Set<string>()
+  const hooks = options.hookController!
   const tracked: ExecutionRecovery['tools'] = []
   const settled = new Map<string, Anthropic.ToolResultBlockParam>()
   let batchIndex = -1
   let persistenceBroken = false
   const enabled =
-    !!options.executionPersistence || !!options.recovery || !!options.mcpController?.tools().length
+    !!options.executionPersistence ||
+    !!options.recovery ||
+    !!options.mcpController?.tools().length ||
+    hooks.enabled
   const paired = (): Anthropic.MessageParam[] => {
     const copy = structuredClone(messages)
     const last = copy.at(-1)
@@ -805,8 +895,10 @@ async function runTurnLoop(
         [...batchHistoryPaths],
         [...batchExternal.values()]
       )
+    const hookState = hooks.snapshot()
     const recovery: ExecutionRecovery = {
-      version: 1,
+      version: hookState ? 2 : 1,
+      ...(hookState && { hooks: hookState }),
       operationId: diagnostics.operationId,
       reason,
       tools: structuredClone(tracked),
@@ -834,6 +926,7 @@ async function runTurnLoop(
   const execution = {
     failure: undefined as ExecutionPersistenceError | undefined,
     unknown: undefined as McpUnknownOutcomeError | undefined,
+    hookFailure: undefined as HookError | undefined,
     start: async (id: string): Promise<void> => {
       tracked.find(t => t.messageIndex === batchIndex && t.toolCallId === id)!.state = 'unknown'
       await persist('tool-start')
@@ -851,9 +944,22 @@ async function runTurnLoop(
       await persist('tool-settled')
     },
   }
+  const hookNotify = (
+    check: HookCheck,
+    status: 'started' | 'passed' | 'blocked' | 'unknown'
+  ): void => {
+    emitter.emit({
+      type: 'hook-check',
+      hookId: check.hookId,
+      stage: check.stage,
+      status,
+      checkId: check.checkId,
+    })
+  }
   try {
     await persist('turn-start')
     while (true) {
+      await hooks.assertCurrent()
       assertNotCancelled(options.signal)
       budget.consumeIteration()
       let response: Anthropic.Message
@@ -979,6 +1085,7 @@ async function runTurnLoop(
         const guard = {
           failure: undefined as Error | undefined,
           check: async (): Promise<void> => {
+            await hooks.assertCurrent()
             options.mcpController?.assertCurrent()
             await instructions.prepareBatch(response.content, tools, permissions, options.signal)
             await skills.refresh(permissions, options.signal)
@@ -1046,7 +1153,8 @@ async function runTurnLoop(
             readRecovery,
             enabled ? execution : undefined,
             guard,
-            options.mcpController
+            options.mcpController,
+            hooks.enabled ? { controller: hooks, persist, notify: hookNotify } : undefined
           )
           instructionFailure = guard.failure
         }
@@ -1067,6 +1175,7 @@ async function runTurnLoop(
           [...batchExternal.values()]
         )
         if (execution.unknown) throw execution.unknown
+        if (execution.hookFailure) throw execution.hookFailure
         if (execution.failure) throw execution.failure
         if (instructionFailure) throw instructionFailure
         budget.check()
@@ -1142,6 +1251,15 @@ async function runTurnLoop(
         })
         continue
       }
+      hooks.assertComplete()
+      await hooks.run(
+        'beforeComplete',
+        {},
+        persist,
+        options.signal,
+        hookNotify,
+        options.artifactContract?.artifacts.map(a => a.path) ?? []
+      )
       if (options.artifactContract) {
         const contract = options.artifactContract
         const attempt = ++completionAttempt

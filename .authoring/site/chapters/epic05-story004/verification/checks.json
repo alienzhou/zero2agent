@@ -1,0 +1,71 @@
+{
+  "capturedAt": "2026-10-17T16:30:39.602Z",
+  "browser": "155.0.8059.82",
+  "pages": [
+    {
+      "file": "01-cover.html",
+      "issues": []
+    },
+    {
+      "file": "02-purpose.html",
+      "issues": []
+    },
+    {
+      "file": "03-stages.html",
+      "issues": []
+    },
+    {
+      "file": "04-trust.html",
+      "issues": []
+    },
+    {
+      "file": "05-before.html",
+      "issues": []
+    },
+    {
+      "file": "06-after.html",
+      "issues": []
+    },
+    {
+      "file": "07-completion.html",
+      "issues": []
+    },
+    {
+      "file": "08-protocol.html",
+      "issues": []
+    },
+    {
+      "file": "09-guardian.html",
+      "issues": []
+    },
+    {
+      "file": "10-recovery.html",
+      "issues": []
+    },
+    {
+      "file": "11-combined.html",
+      "issues": []
+    },
+    {
+      "file": "12-practice.html",
+      "issues": []
+    }
+  ],
+  "surfaces": [
+    {
+      "mode": "pc",
+      "width": 1440,
+      "height": 1000,
+      "sections": 12,
+      "errors": []
+    },
+    {
+      "mode": "h5",
+      "width": 390,
+      "height": 844,
+      "sections": 12,
+      "errors": []
+    }
+  ],
+  "manifestPages": 12
+}

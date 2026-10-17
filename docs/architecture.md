@@ -222,3 +222,13 @@ E05-S003 的 `mcp/client.ts` 将显式启用的本地 stdio 服务映射到 Tool
 结果与历史来源目录携带不含配置凭据的 ExternalSource，正文回读检查当前服务身份与原工具权限。发出调用后的断线/取消/超时或无法解释的结果停止本轮，沿用配对的 unknown/not-started 恢复记录，必须显式核对后继续；业务调用不会自动重试。磁盘会话 v4 保存外部来源，兼容普通 v1/v2/v3。
 
 配置和限制、SDK/CLI 入口见 [MCP 跟练](../specs/E05-extensibility/S003-mcp/follow-along.md)。
+
+## Hooks 与必要检查
+
+E05-S004 的 hooks.ts 管理配置/代码身份、检查义务和独立结论，hook-process.ts / hook-runner.ts 管理私有管道、输出容量及宿主死亡后的终止。loop.ts 在权限允许后、真实回执保存后及最终完成前等待控制，展示事件只报告元信息。回执与后置未开始义务共同发布，检查意图保存成功后才启动程序。
+
+恢复控制 v2、磁盘会话 v5 分开记录工具与 Hook；原格式继续支持。restore/continue 不启动旧检查，用户 recheck 才创建新 ID；必要检查、当前信任、读取与原产物门槛一起决定完成。stdout 控制字段不能批准、改参数或改写真实回执，stderr/程序 reason 不进入模型或诊断。
+
+已知任务目标可通过 `projectInstructions.scopes` / `--instructions-scope` 在首次请求前按当前权限加载指定目录规则（最多 8 个）；默认仍按工具目标补载，未选兄弟目录不扫描。目录选择为当前宿主配置，不从旧会话恢复。
+
+具体命令、受信任代码的宿主权限与文件审计范围见 [Hooks 跟练](../specs/E05-extensibility/S004-hooks/follow-along.md)，四种扩展的证据链见 [E05 验收](../specs/E05-extensibility/acceptance.md)。
