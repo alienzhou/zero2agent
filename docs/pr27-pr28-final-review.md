@@ -18,3 +18,5 @@
 两个 PR 的生成目录存在冲突；合并编辑源后重建，保留了 E05 新课与 E04 精简。#27 已合入 main（`df7ef00`），#28 在该基线上交付课程调整、导航修复与状态文档。原始失败及通过截图留在外部附件，Git 仅保留脚本与[精简校验索引](../.authoring/site/reviews/pr27-pr28-final-review.json)。
 
 本轮是 AI 最终复核及用户授权交付，不冒充独立人工签署。未重跑真实模型服务，原完整回归及真实服务记录保持原版本；课程网站和图文未发布。
+
+[外部原始证据草稿](https://github.com/alienzhou/zero2agent/releases/tag/untagged-aa5fec976a9b5bbe43aa)新增单个 `pr27-pr28-final-review.tar.gz`，含修复前失败、修复后通过、五课浏览器截图、离线跟练及对应源码。已回下载校验压缩包 SHA-256 和全部 359 份文件；未将附件放入 Git。固定交付 Tag `E05-S001-project-instructions` 指向验收源码 `647d7f8b0e197dbb4c07a0d7b807fad9e83ab3d9`。
