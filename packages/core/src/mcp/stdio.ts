@@ -8,6 +8,8 @@ export const MCP_IO_LIMITS = {
   requestBytes: 256 * 1024,
 }
 
+export class McpRequestNotSentError extends Error {}
+
 /** Standard newline-delimited stdio, with bounds enforced BEFORE JSON parsing. No shell/env inheritance. */
 export class BoundedStdioTransport implements Transport {
   onclose?: Transport['onclose']
@@ -55,7 +57,9 @@ export class BoundedStdioTransport implements Transport {
         const line = this.buffer.subarray(0, end)
         this.buffer = this.buffer.subarray(end + 1)
         try {
-          const message = JSONRPCMessageSchema.parse(JSON.parse(line.toString('utf8')))
+          const message = JSONRPCMessageSchema.parse(
+            JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(line))
+          )
           if ('id' in message && !('method' in message) && message.id === this.initializingId)
             this.initializingId = undefined
           this.onmessage?.(message)
@@ -68,7 +72,7 @@ export class BoundedStdioTransport implements Transport {
     child.on('error', error => this.fail(error))
     child.on('exit', () => {
       this.finish()
-      void this.close()
+      void this.close().catch(error => this.onerror?.(error as Error))
     })
     await new Promise<void>((resolve, reject) => {
       child.once('spawn', resolve)
@@ -93,7 +97,8 @@ export class BoundedStdioTransport implements Transport {
     if ('method' in message && message.method === 'initialize' && 'id' in message)
       this.initializingId = message.id
     const bytes = Buffer.from(JSON.stringify(message) + '\n')
-    if (bytes.length > MCP_IO_LIMITS.requestBytes) throw new Error('MCP request exceeds 256 KiB')
+    if (bytes.length > MCP_IO_LIMITS.requestBytes)
+      throw new McpRequestNotSentError('MCP request exceeds 256 KiB; call was not sent')
     await new Promise<void>((resolve, reject) =>
       this.child!.stdin.write(bytes, error => (error ? reject(error) : resolve()))
     )
@@ -101,7 +106,7 @@ export class BoundedStdioTransport implements Transport {
   private fail(error: Error): void {
     this.onerror?.(error)
     this.finish()
-    void this.close()
+    void this.close().catch(error => this.onerror?.(error as Error))
   }
   private finish(): void {
     if (this.ended) return

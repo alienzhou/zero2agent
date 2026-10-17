@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mkdtemp, readFile, realpath, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
@@ -111,6 +111,7 @@ describe('MCP native stdio, discovery and current permissions', () => {
     'too-many-tools',
     'oversize-frame',
     'invalid-frame',
+    'invalid-utf8',
     'hang-init',
     'hang-list',
   ])('rejects %s visibly and closes the process', async mode => {
@@ -130,6 +131,18 @@ describe('MCP native stdio, discovery and current permissions', () => {
       expect(c.view()[0].state).toBe('ready')
     }
   )
+  it.each(['total-below', 'total-at'])('accepts cumulative byte capacity %s', async mode => {
+    const c = client(mode, { startupTimeoutMs: 2000 })
+    await c.open()
+    expect(c.view()[0].state).toBe('ready')
+  })
+  it('stops cumulative input above 16 MiB', async () => {
+    const c = client('total-above', { startupTimeoutMs: 2000 })
+    await c.open()
+    expect(c.view()[0].state).toBe('failed')
+    const pid = (await audit())[0].pid
+    expect(() => process.kill(pid, 0)).toThrow()
+  })
   it('rejects the message byte above its bound before JSON parsing', async () => {
     const c = client('frame-above')
     await c.open()
@@ -195,6 +208,26 @@ describe('MCP native stdio, discovery and current permissions', () => {
     expect(result[0].is_error).toBeUndefined()
     expect(await effectCount()).toBe(1)
   })
+  it.each([-1, 0, 1])('enforces actual outbound request bytes around 256 KiB (%s)', async delta => {
+    const c = client('input-cap')
+    await c.open()
+    const input = { pad: '' }
+    const base = Buffer.byteLength(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        id: 3,
+        method: 'tools/call',
+        params: { name: 'get_issue', arguments: input },
+      }) + '\n'
+    )
+    input.pad = 'x'.repeat(256 * 1024 - base + delta)
+    if (delta <= 0) expect(await c.tools()[0].execute(input, ctx())).toContain('ISSUE-42')
+    else {
+      await expect(c.tools()[0].execute(input, ctx())).rejects.toThrow('not sent')
+      expect(c.hasUnknownOutcome).toBe(false)
+      expect((await audit()).filter(e => e.method === 'tools/call')).toHaveLength(0)
+    }
+  })
   it('validates input before any business request', async () => {
     const c = client()
     await c.open()
@@ -221,6 +254,18 @@ describe('MCP native stdio, discovery and current permissions', () => {
     ).rejects.toBeInstanceOf(McpUnknownOutcomeError)
     expect(await effectCount()).toBe(1)
     expect(c.hasUnknownOutcome).toBe(true)
+  })
+  it('keeps unknown semantics if cleanup itself reports failure', async () => {
+    const c = client('effect-disconnect')
+    await c.open()
+    const spy = vi.spyOn(c, 'close').mockRejectedValueOnce(new Error('fixed cleanup failure'))
+    try {
+      await expect(c.tools()[2].execute({}, ctx())).rejects.toThrow('cleanup failed')
+      expect(c.hasUnknownOutcome).toBe(true)
+      expect(await effectCount()).toBe(1)
+    } finally {
+      spy.mockRestore()
+    }
   })
   it('awaits native cleanup when cancelled after the effect', async () => {
     const c = client('effect-hang', { callTimeoutMs: 1000 })
@@ -300,6 +345,20 @@ describe('MCP configuration, schema and names are bounded', () => {
     { unknown: true },
   ])('rejects unsupported schema %j', extra => {
     expect(() => compileMcpSchema({ type: 'object', ...extra })).toThrow()
+  })
+  it('rejects schema complexity and byte capacity before compilation', () => {
+    let nested: Record<string, unknown> = { type: 'string' }
+    for (let i = 0; i < 13; i++) nested = { type: 'array', items: nested }
+    expect(() => compileMcpSchema({ type: 'object', properties: { x: nested } })).toThrow(
+      'complexity'
+    )
+    expect(() => compileMcpSchema({ type: 'object', description: 'x'.repeat(16384) })).toThrow(
+      '16 KiB'
+    )
+    const properties = Object.fromEntries(
+      Array.from({ length: 257 }, (_, i) => ['p' + i, { type: 'string' }])
+    )
+    expect(() => compileMcpSchema({ type: 'object', properties })).toThrow('complexity')
   })
   it('validates object schema values, rejects invalid schemas without weakening them', () => {
     const validate = compileMcpSchema({

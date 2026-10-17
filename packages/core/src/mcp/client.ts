@@ -10,7 +10,7 @@ import { PermissionController } from '../permissions.js'
 import { validateExternalSources, type ExternalSource } from '../external-source.js'
 import type { Tool, ToolContext } from '../tools/types.js'
 import { compileMcpSchema } from './schema.js'
-import { BoundedStdioTransport, MCP_IO_LIMITS } from './stdio.js'
+import { BoundedStdioTransport, McpRequestNotSentError } from './stdio.js'
 
 export interface McpServerConfig {
   id: string
@@ -33,9 +33,10 @@ export interface McpServerView {
   error?: string
 }
 export class McpUnknownOutcomeError extends Error {
-  constructor() {
+  constructor(cleanupFailed = false) {
     super(
-      'MCP call outcome is unknown. External effects may exist. This turn stopped; inspect effects, then explicitly continue recovery. Do not replay the call.'
+      (cleanupFailed ? 'MCP cleanup failed; inspect server processes. ' : '') +
+        'MCP call outcome is unknown. External effects may exist. This turn stopped; inspect effects, then explicitly continue recovery. Do not replay the call.'
     )
     this.name = 'McpUnknownOutcomeError'
   }
@@ -255,19 +256,6 @@ export class McpController {
                 if (!validate(input))
                   throw new Error('MCP input violates schema; call was not sent')
                 ctx.signal?.throwIfAborted()
-                if (
-                  Buffer.byteLength(
-                    JSON.stringify({
-                      jsonrpc: '2.0',
-                      id: 0,
-                      method: 'tools/call',
-                      params: { name: entry.name, arguments: input },
-                    })
-                  ) +
-                    1 >
-                  MCP_IO_LIMITS.requestBytes
-                )
-                  throw new Error('MCP input exceeds request capacity; call was not sent')
                 try {
                   // Do not use SDK task helpers or reconnect/retry around this boundary.
                   const result = await client.request(
@@ -294,14 +282,20 @@ export class McpController {
                     structured
                   )
                 } catch (error) {
+                  if (error instanceof McpRequestNotSentError) throw error
                   if (
                     error instanceof McpError &&
                     [-32700, -32600, -32601, -32602, -32603].includes(error.code)
                   )
                     return `Error: MCP protocol rejection (${error.code})`
                   this.hasUnknownOutcome = true
-                  await this.close()
-                  throw new McpUnknownOutcomeError()
+                  let cleanupFailed = false
+                  try {
+                    await this.close()
+                  } catch {
+                    cleanupFailed = true
+                  }
+                  throw new McpUnknownOutcomeError(cleanupFailed)
                 }
               },
             })
@@ -327,10 +321,18 @@ export class McpController {
     }
   }
   async close(): Promise<void> {
-    const connections = [...this.connections.values()]
-    this.connections.clear()
-    for (const c of connections) await c.transport.close()
+    let failure: unknown
+    for (const [id, c] of [...this.connections]) {
+      try {
+        await c.transport.close()
+        this.connections.delete(id)
+      } catch (error) {
+        failure ??= error
+      }
+    }
     for (const s of this.statuses)
-      if (s.state === 'ready' || s.state === 'stale') s.state = 'closed'
+      if (s.state === 'ready' || s.state === 'stale')
+        s.state = this.connections.has(s.id) ? 'failed' : 'closed'
+    if (failure) throw failure
   }
 }

@@ -7,7 +7,8 @@ const label = process.argv[4] ?? 'issues'
 const event = value => { if (audit) fs.appendFileSync(audit, JSON.stringify({pid:process.pid,...value})+'\n') }
 event({event:'start', envKeys:Object.keys(process.env).sort()})
 if (mode === 'hang-close' || mode === 'effect-hang') process.on('SIGTERM',()=>{})
-const send = value => process.stdout.write(JSON.stringify(value)+'\n')
+let bytesSent = 0
+const send = value => { const line=JSON.stringify(value)+'\n'; bytesSent+=Buffer.byteLength(line); return process.stdout.write(line) }
 const reply = (id,result) => send({jsonrpc:'2.0',id,result})
 const schema = {type:'object',properties:{},additionalProperties:false}
 const issue = { id:'ISSUE-42', title:'金额使用浮点累加', file:'packages/api/amount.mjs', expected:'Use integer cents; 0.1 + 0.2 must equal 0.3.', label }
@@ -25,11 +26,20 @@ input.on('line', line => {
     reply(message.id,{protocolVersion:mode === 'bad-version'?'2024-11-05':'2025-11-25',capabilities:mode === 'bad-capability'?{}:{tools:{listChanged:true}},serverInfo:{name:'zero2agent-local-issues',version:'1.0.0'}})
   } else if (message.method === 'tools/list') {
     if (mode === 'hang-list') return
+    if (mode.startsWith('total-')) {
+      const response={jsonrpc:'2.0',id:message.id,result:{tools:[]}}
+      const target=16*1024*1024+(mode==='total-above'?1:mode==='total-below'?-1:0)
+      let remaining=target-bytesSent-Buffer.byteLength(JSON.stringify(response)+'\n')
+      while(remaining>0){let count=Math.min(1024*1024,remaining);if(remaining>count && remaining-count<100)count-=100;const notice={jsonrpc:'2.0',method:'fixture/notice',params:{pad:''}};notice.params.pad='x'.repeat(count-Buffer.byteLength(JSON.stringify(notice)+'\n'));send(notice);remaining-=count}
+      send(response);return
+    }
+
     let tools = message.params?.cursor ? definitions.slice(1) : definitions.slice(0,1)
     let nextCursor = message.params?.cursor ? undefined : 'page-2'
     if (mode === 'cycle') nextCursor = 'page-2'
     if (mode === 'pages-at-limit' || mode === 'pages-below-limit') { tools=[]; const n=Number(message.params?.cursor??0); nextCursor=n < (mode==='pages-at-limit'?7:6)?String(n+1):undefined }
     if (mode === 'too-many-pages') { tools=[]; nextCursor=String(Number(message.params?.cursor??0)+1) }
+    if (mode === 'input-cap') tools=tools.map(t=>({...t,inputSchema:{type:'object',properties:{pad:{type:'string'}}}}))
     if (mode === 'bad-schema') tools=[{...definitions[0],inputSchema:{...schema,unrecognizedKeyword:true}}]
     if (mode === 'bad-name') tools=[{...definitions[0],name:'bad name'}]
     if (mode === 'duplicate') tools=[definitions[0],definitions[0]]
@@ -37,6 +47,7 @@ input.on('line', line => {
     if (mode === 'tools-at-limit') {tools=Array.from({length:32},(_,i)=>({...definitions[0],name:'t'+i}));nextCursor=undefined}
     if (mode === 'oversize-frame') {process.stdout.write('x'.repeat(1024*1024+1)); return}
     if (mode.startsWith('frame-')) { const size=1024*1024+(mode==='frame-above'?1:mode==='frame-below'?-1:0); const frame={jsonrpc:'2.0',id:message.id,result:{tools:[],pad:''}}; frame.result.pad='x'.repeat(size-Buffer.byteLength(JSON.stringify(frame))); process.stdout.write(JSON.stringify(frame)+'\n'); return }
+    if (mode === 'invalid-utf8') {process.stdout.write(Buffer.concat([Buffer.from('{"jsonrpc":"2.0","method":"notice","params":{"pad":"'),Buffer.from([0xc0,0x80]),Buffer.from('"}}\n')]));return}
     if (mode === 'invalid-frame') {process.stdout.write('not-json\n'); return}
     reply(message.id,{tools,...(nextCursor !== undefined && {nextCursor})})
   } else if (message.method === 'tools/call') {
