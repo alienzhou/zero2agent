@@ -1,3 +1,4 @@
+import { readFileTool } from './tools/read-file.js'
 import { Hooks, type HookOptions, type HookView } from './hooks.js'
 import { McpController, type McpOptions, type McpServerView } from './mcp/client.js'
 import {
@@ -31,7 +32,7 @@ import { resolve } from 'node:path'
 import { PermissionController, type PermissionOptions } from './permissions.js'
 import { Session } from './session.js'
 import type Anthropic from '@anthropic-ai/sdk'
-import { TurnCancelledError, RunBudgetError } from './runtime.js'
+import { TurnCancelledError, RunBudgetError, RuntimeEmitter, notifyObserver } from './runtime.js'
 import { RunBudget, validateRunLimits, type RunLimits } from './run-budget.js'
 import { RequestExecutor } from './request-executor.js'
 import { validateSessionSnapshot, type SessionSnapshot } from './session-snapshot.js'
@@ -342,15 +343,28 @@ export class Agent {
     }
   }
   /** Explicit user review authorizes new checks; restoration/continuation never replays them. */
-  async recheckHooks(note: string): Promise<void> {
+  async recheckHooks(note: string, diagnosticContext?: DiagnosticContext): Promise<void> {
     if (!note.trim() || note.length > 4096)
       throw new Error('Recheck requires an explicit review note of 1..4096 characters')
     const recovery = this.session.recovery
     if (!recovery?.hooks) throw new Error('No Hook recovery is pending')
     const controller = this.beginOperation()
     const budget = new RunBudget(this.options.limits, controller.signal)
+    const diagnostics = new DiagnosticEmitter(this.options.diagnostics, diagnosticContext)
+    const emitter = new RuntimeEmitter(diagnostics.operationId, event => {
+      diagnostics.runtime(event)
+      notifyObserver(() => this.options.events?.onEvent?.(event))
+    })
+    diagnostics.start('turn')
+    emitter.emit({ type: 'turn-start' })
     try {
-      await this.hooks.begin(recovery.hooks, true)
+      await this.hooks.begin(recovery.hooks, true, file => {
+        if (
+          this.permissions.evaluate(readFileTool, { path: file }, { cwd: this.options.cwd! })
+            .action !== 'allow'
+        )
+          throw new Error('Hook audit read not allowed')
+      })
       const persist = async (
         boundary: import('./execution-recovery.js').ExecutionBoundary
       ): Promise<void> => {
@@ -360,7 +374,25 @@ export class Agent {
       this.session.recordControlNote(
         `User explicitly reviewed Hook effects and requested new checks: ${note}`
       )
-      await this.hooks.recheck(persist, note, budget.signal)
+      await this.hooks.recheck(persist, note, budget.signal, (check, status) =>
+        emitter.emit({
+          type: 'hook-check',
+          hookId: check.hookId,
+          checkId: check.checkId,
+          stage: check.stage,
+          status,
+        })
+      )
+      emitter.emit({ type: 'turn-end', status: 'completed' })
+      diagnostics.end('completed', 'turn')
+    } catch (error) {
+      emitter.emit({
+        type: 'turn-end',
+        status: 'error',
+        error: error instanceof Error ? error.message : 'Hook recheck failed',
+      })
+      diagnostics.end('error', 'turn', error, budget.signal)
+      throw error
     } finally {
       recovery.hooks = this.hooks.snapshot() ?? recovery.hooks
       budget.close()

@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { readFileTool } from './tools/read-file.js'
 import { Hooks, HookError, type HookOptions, type HookCheck } from './hooks.js'
 import { createHash } from 'node:crypto'
 import { McpController, McpUnknownOutcomeError, type McpOptions } from './mcp/client.js'
@@ -184,6 +185,14 @@ export async function executeToolCalls(
   }
   for (const block of calls) {
     if (execution?.failure || execution?.unknown || execution?.hookFailure) {
+      emitter?.emit({
+        type: 'tool-state',
+        toolCallId: block.id,
+        toolName: block.name,
+        status: 'error',
+        output: interruptedResult('not-started'),
+        reason: interruptedResult('not-started'),
+      })
       results.push({
         type: 'tool_result',
         tool_use_id: block.id,
@@ -331,7 +340,13 @@ export async function executeToolCalls(
       }
       if (instructionGuard?.failure) throw instructionGuard.failure
       hookPaths = (tool.checkpointPaths ?? [])
-        .flatMap(key => (typeof input[key] === 'string' ? [input[key] as string] : []))
+        .flatMap(key =>
+          typeof input[key] === 'string'
+            ? [input[key] as string]
+            : Array.isArray(input[key])
+              ? (input[key] as unknown[]).filter((p): p is string => typeof p === 'string')
+              : []
+        )
         .map(p => path.resolve(ctx.cwd, p))
       hooks?.controller.watch(hookPaths)
       await hooks?.controller.run(
@@ -347,7 +362,11 @@ export async function executeToolCalls(
       state('running')
       notifyObserver(() => events?.onToolStart?.(block.name, structuredClone(input)))
       assertNotCancelled(ctx.signal)
-      hooks?.controller.reserveAfter(block.name)
+      hooks?.controller.reserveAfter(block.name, {
+        id: block.id,
+        name: block.name,
+        paths: hookPaths,
+      })
       await execution?.start(block.id)
       assertNotCancelled(ctx.signal)
       start = Date.now()
@@ -633,7 +652,16 @@ export async function runLoop(userMessage: string, options: RunLoopOptions = {})
       emitter.emit({ type: 'turn-start' })
       if (options.signal?.aborted) cancel()
       assertNotCancelled(options.signal)
-      await options.hookController!.begin(options.recovery?.hooks)
+      await options.hookController!.begin(options.recovery?.hooks, false, file => {
+        if (
+          options.permissionController!.evaluate(
+            readFileTool,
+            { path: file },
+            { cwd: options.cwd ?? process.cwd() }
+          ).action !== 'allow'
+        )
+          throw new HookError('beforeComplete', 'watch', 'permission')
+      })
       await options.mcpController!.open(options.signal)
       try {
         return await runTurnLoop(

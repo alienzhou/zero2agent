@@ -410,3 +410,63 @@ it('requires new explicit trust and recheck before adopting replacement checker 
   expect(replacement.snapshot()?.checks[1].identity).not.toBe(saved.checks[0].identity)
   expect(validateHookSnapshot(replacement.snapshot())).toBeTruthy()
 })
+
+it.each([-1, 0, 1])('enforces native input bytes around 32 KiB (%i)', async delta => {
+  const file = path.join(root, 'input.mjs')
+  await fs.writeFile(
+    file,
+    "import fs from 'node:fs';fs.appendFileSync('input-starts','one\\n');process.stdin.resume();process.stdin.on('end',()=>process.stdout.write(JSON.stringify({version:1,decision:'pass'})))"
+  )
+  const config = { command: process.execPath, args: [file], env: {}, cwd: root, timeoutMs: 1000 }
+  const result = native.runHookProcess(config, ' '.repeat(32768 + delta))
+  if (delta <= 0) {
+    await expect(result).resolves.toBe('pass')
+    expect(await fs.readFile(path.join(root, 'input-starts'), 'utf8')).toBe('one\n')
+  } else {
+    await expect(result).rejects.toThrow('input-capacity')
+    await expect(fs.stat(path.join(root, 'input-starts'))).rejects.toThrow()
+  }
+})
+it.each([-1, 0, 1])('enforces completion audit file/total byte limits (%i)', async delta => {
+  vi.spyOn(native, 'runHookProcess').mockResolvedValue('pass')
+  for (const total of [false, true]) {
+    const watch = []
+    const sizes = total
+      ? [...Array(7).fill(1048576), 1048576 + Math.min(delta, 0), ...(delta > 0 ? [1] : [])]
+      : [1048576 + delta]
+    for (let i = 0; i < sizes.length; i++) {
+      const f = `watch-${total}-${i}`
+      await fs.writeFile(path.join(root, f), Buffer.alloc(sizes[i], 120))
+      watch.push(f)
+    }
+    const config: HookConfig = {
+      version: 1,
+      watch,
+      hooks: [
+        {
+          id: 'gate',
+          stage: 'beforeComplete',
+          command: process.execPath,
+          args: [fixture, 'pass'],
+          sources: [fixture],
+        },
+      ],
+    }
+    const view = await new Hooks(root, { config }).inspect()
+    const h = new Hooks(root, { config, trust: view.map(v => `${v.id}:${v.identity}`) })
+    await h.begin()
+    const result = h.run('beforeComplete', {}, async () => {})
+    if (delta <= 0) await expect(result).resolves.toBeUndefined()
+    else await expect(result).rejects.toThrow('unverifiable')
+  }
+})
+it.each([7, 8, 9])('checks source count %i', n => {
+  const c = {
+    version: 1,
+    hooks: [
+      { id: 'x', stage: 'beforeTool', command: process.execPath, sources: Array(n).fill('script') },
+    ],
+  }
+  if (n <= 8) expect(validateHookConfig(c)).toBeTruthy()
+  else expect(() => validateHookConfig(c)).toThrow()
+})

@@ -289,7 +289,7 @@ export class Conversations {
   async recheckHooks(note: string): Promise<void> {
     this.assertIdle()
     const work = this.perform('turn', async () => {
-      await this.agent.recheckHooks(note)
+      await this.agent.recheckHooks(note, { sessionId: this.id })
       return 'Hook checks reviewed.'
     })
     this.operation = work

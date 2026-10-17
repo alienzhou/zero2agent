@@ -33,7 +33,10 @@ if (mode === 'utf8') {
   process.stdout.write(Buffer.from([0xc0, 0x80]))
   process.exit(0)
 }
-if (mode === 'hang' || (mode === 'hang-after' && input.stage === 'afterTool')) {
+if (
+  mode === 'hang' ||
+  (mode === 'hang-after' && input.stage === 'afterTool' && !fs.existsSync('allow-check'))
+) {
   process.on('SIGTERM', () => {})
   setInterval(() => {}, 1000)
 } else {

@@ -240,9 +240,26 @@ describe.skipIf(process.platform === 'win32')('real SIGKILL around Hook boundari
       const before = await fs.readFile(p.audit, 'utf8').catch(() => '')
       const a = new Agent({
         cwd: p.dir,
+        config: { apiKey: 'fixture', baseURL: p.baseURL },
         hooks: { file: p.file, trust: p.trust },
-        skills: false,
-        projectInstructions: false,
+        skills: stop === 'combined' ? { selected: ['fix-with-tests'] } : false,
+        projectInstructions: stop === 'combined' ? { root: p.dir } : false,
+        ...(stop === 'combined' && {
+          mcp: {
+            servers: [
+              {
+                id: 'issues',
+                enabled: true,
+                command: process.execPath,
+                args: [
+                  path.join(REPO_ROOT, 'researches/mcp/issue-server.mjs'),
+                  'normal',
+                  path.join(p.dir, 'mcp-audit'),
+                ],
+              },
+            ],
+          },
+        }),
       })
       a.restore(saved.state)
       expect(await fs.readFile(p.audit, 'utf8').catch(() => '')).toBe(before)
@@ -266,6 +283,30 @@ describe.skipIf(process.platform === 'win32')('real SIGKILL around Hook boundari
           JSON.stringify({ ...saved, version })
         )
         await expect(store.load(saved.id)).rejects.toThrow('version 5')
+      }
+      if (stop === 'combined') {
+        await fs.writeFile(
+          path.join(p.dir, 'allow-check'),
+          'User reviewed the once-written file and authorizes a new check.'
+        )
+        await a.recheckHooks(
+          'Inspected the existing effect; run a new check without repeating the old write.'
+        )
+        expect(a.snapshot().recovery?.hooks?.checks.map(c => c.state)).toEqual([
+          'unknown',
+          'passed',
+        ])
+        await a.continueInterrupted('Finish using the existing checked file; do not write again.')
+        expect(a.needsRecovery).toBe(false)
+        expect(p.requests).toHaveLength(2)
+        expect(await fs.readFile(path.join(p.dir, 'effects'), 'utf8')).toBe('write\n')
+        expect(await fs.readFile(path.join(p.dir, 'first.txt'), 'utf8')).toBe('once')
+        const records = (await fs.readFile(path.join(p.dir, 'mcp-audit'), 'utf8'))
+          .trim()
+          .split('\n')
+          .map(l => JSON.parse(l))
+        for (const e of records.filter(e => e.event === 'start'))
+          expect(() => process.kill(e.pid, 0)).toThrow()
       }
       if (stop === 'combined') {
         const text = JSON.stringify(p.requests)
@@ -354,4 +395,68 @@ describe('four-extension MCP unknown-outcome recovery', () => {
       JSON.stringify({ snapshot, requests: p.requests, audit: await raw() }, null, 2)
     )
   })
+})
+
+it('rechecks a recovered session with fresh explicit trust, no model credential and no old tool replay', async () => {
+  const p = await setup('afterTool', 'block')
+  const a = new Agent({
+    cwd: p.dir,
+    skills: false,
+    projectInstructions: false,
+    hooks: { file: p.file, trust: p.trust },
+    permissions: { mode: 'accept-edits' },
+    config: { apiKey: 'fixture', baseURL: p.baseURL },
+  })
+  await expect(a.run('write once')).rejects.toThrow('already executed')
+  const root = path.join(p.dir, 'sessions')
+  const store = await SessionStore.open(p.dir, root)
+  const saved = await store.save(store.fresh(), a.snapshot())
+  p.config.hooks[0].args[1] = 'pass'
+  await fs.writeFile(p.file, JSON.stringify(p.config))
+  const views = await new Hooks(p.dir, { file: p.file }).inspect()
+  const args = [
+    '--hooks-config',
+    p.file,
+    ...views.flatMap(v => ['--hook-trust', `${v.id}:${v.identity}`]),
+  ]
+  const env = {
+    ...p.env,
+    ZERO2AGENT_NO_SAVE: '0',
+    ZERO2AGENT_SESSION_DIR: root,
+    ANTHROPIC_API_KEY: undefined,
+  }
+  const result = await runCli({
+    cwd: p.dir,
+    args: [
+      ...args,
+      '--resume',
+      saved.id,
+      '--recheck-hooks',
+      'I reviewed the existing file and replacement checker. Run a new check.',
+    ],
+    env,
+  })
+  expect(result.code, result.output).toBe(0)
+  expect(result.output).toContain('Hook afterTool/gate: passed')
+  expect(p.requests).toHaveLength(1)
+  const state = (await store.load(saved.id)).state
+  expect(state.recovery?.hooks?.checks.map(c => c.state)).toEqual(['blocked', 'passed'])
+  expect(state.recovery?.hooks?.checks[1].resolves).toBe(state.recovery?.hooks?.checks[0].checkId)
+  expect(await fs.readFile(path.join(p.dir, 'first.txt'), 'utf8')).toBe('once')
+  const finish = await runCli({
+    cwd: p.dir,
+    args: [
+      ...args,
+      '--resume',
+      saved.id,
+      '--resume-task',
+      'Finish using the existing checked file; no old writes.',
+    ],
+    env: { ...env, ANTHROPIC_API_KEY: 'fixture' },
+  })
+  expect(finish.code, finish.output).toBe(0)
+  expect(p.requests).toHaveLength(2)
+  expect((await store.load(saved.id)).state.recovery).toBeUndefined()
+  expect(await fs.readFile(path.join(p.dir, 'first.txt'), 'utf8')).toBe('once')
+  await save('host-explicit-recheck.txt', result.output + '\n' + finish.output)
 })

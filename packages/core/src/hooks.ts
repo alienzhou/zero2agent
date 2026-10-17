@@ -1,3 +1,4 @@
+import { resolvePhysicalPath, isInsidePath } from './tools/path-guard.js'
 import fs from 'node:fs/promises'
 import { constants } from 'node:fs'
 import path from 'node:path'
@@ -264,6 +265,7 @@ export class Hooks {
   private state: HookSnapshot = { version: 1, bindings: [], checks: [], writes: [] }
   private entries: HookEntry[] = []
   private config?: HookConfig
+  private auditRead?: (file: string) => void
   private uses = 0
   private watched = new Set<string>()
   constructor(
@@ -333,7 +335,12 @@ export class Hooks {
       throw new Error('Hook trust is stale or unknown; inspect current versions again')
     return { config, entries }
   }
-  async begin(saved?: HookSnapshot, rebind = false): Promise<void> {
+  async begin(
+    saved?: HookSnapshot,
+    rebind = false,
+    auditRead?: (file: string) => void
+  ): Promise<void> {
+    this.auditRead = auditRead
     const current = await this.discover()
     this.config = current.config
     this.entries = current.entries
@@ -395,6 +402,9 @@ export class Hooks {
     const values = []
     for (const p of files) {
       try {
+        if (!isInsidePath(resolvePhysicalPath(this.cwd), resolvePhysicalPath(p), true))
+          throw new HookError('beforeComplete', 'watch', 'outside-workspace')
+        this.auditRead?.(p)
         const f = await bounded(p, 1048576)
         total += f.bytes.length
         if (total > 8388608) throw new Error('capacity')
@@ -406,13 +416,28 @@ export class Hooks {
     }
     return hash(JSON.stringify(values))
   }
-  reserveAfter(toolName: string): void {
+  reserveAfter(toolName: string, tool?: HookTool): void {
     const count = this.entries.filter(
       e =>
         e.view.trusted &&
         e.view.stage === 'afterTool' &&
         (!e.definition.tool || e.definition.tool === toolName)
     ).length
+    if (
+      count &&
+      tool &&
+      Buffer.byteLength(
+        JSON.stringify({
+          version: 1,
+          stage: 'afterTool',
+          cwd: this.cwd,
+          checkId: '0'.repeat(36),
+          tool,
+          receipt: { isError: false, sha256: '0'.repeat(64) },
+        })
+      ) > 32768
+    )
+      throw new HookError('beforeTool', 'after-check', 'input-capacity')
     if (this.state.checks.length + count > 512 || this.uses + count > 64)
       throw new HookError('beforeTool', 'capacity', 'capacity')
   }
@@ -548,7 +573,8 @@ export class Hooks {
   async recheck(
     persist: (b: ExecutionBoundary) => Promise<void>,
     note: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    notify?: (check: HookCheck, status: 'started' | 'passed' | 'blocked' | 'unknown') => void
   ): Promise<void> {
     if (!note.trim() || note.length > 4096)
       throw new Error('Recheck requires an explicit review note of 1..4096 characters')
@@ -564,7 +590,7 @@ export class Hooks {
         { ...(old.tool && { tool: old.tool }), ...(old.receipt && { receipt: old.receipt }) },
         persist,
         signal,
-        undefined,
+        notify,
         old.checkId
       )
     }

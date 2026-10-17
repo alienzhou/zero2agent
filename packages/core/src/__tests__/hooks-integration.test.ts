@@ -68,6 +68,7 @@ async function options(stage: HookStage, mode = 'pass') {
     skills: false as const,
     projectInstructions: false as const,
     tools: [writeFileTool],
+    results: { directory: path.join(root, 'results') },
     permissions: { mode: 'accept-edits' as const },
     hooks: { config, trust: view.map(v => `${v.id}:${v.identity}`) },
   }
@@ -126,13 +127,23 @@ describe('Hooks in the actual loop and recovery control', () => {
   })
   it('blocks before execution and pairs every unstarted call', async () => {
     const o = await options('beforeTool', 'block')
+    const events: unknown[] = []
     const p = provider(reply(write('w', 'out'), write('skip', 'never')))
-    const a = new Agent(o)
+    const a = new Agent({ ...o, events: { onEvent: e => events.push(e) } })
     await expect(a.run('write')).rejects.toThrow('not executed')
     expect(p.requests).toHaveLength(1)
     await expect(fs.stat(path.join(root, 'out'))).rejects.toThrow()
     expect(a.snapshot().recovery?.tools.map(t => t.state)).toEqual(['not-started', 'not-started'])
     expect(receipts(a)).toHaveLength(2)
+    expect(
+      events.some(
+        (e: any) =>
+          e.type === 'tool-state' &&
+          e.toolCallId === 'skip' &&
+          e.status === 'error' &&
+          e.output.includes('not executed')
+      )
+    ).toBe(true)
   })
   it('keeps settled tool facts after a post-check failure; restore and continuation never replay pending checks', async () => {
     const o = await options('afterTool', 'toggle')
@@ -241,4 +252,162 @@ describe('Hooks in the actual loop and recovery control', () => {
     await expect(disabled.continueInterrupted('continue')).rejects.toThrow('current-trust-required')
     expect(disabled.snapshot().recovery?.hooks).toEqual(saved.recovery?.hooks)
   })
+})
+
+it('preserves array-valued trusted write paths at the pre-tool boundary', async () => {
+  const o = await options('beforeTool')
+  const file = path.join(root, 'readonly.json')
+  const p = provider(
+    reply({
+      type: 'tool_use',
+      id: 'many',
+      name: 'write_many',
+      input: { paths: ['readonly.json', 'ok.json'] },
+    })
+  )
+  let effects = 0
+  const a = new Agent({
+    ...o,
+    tools: [
+      {
+        name: 'write_many',
+        description: 'trusted fixture',
+        input_schema: {
+          type: 'object',
+          properties: { paths: { type: 'array', items: { type: 'string' } } },
+        },
+        permission: { effect: 'write', paths: ['paths'] },
+        checkpointPaths: ['paths'],
+        execute: async () => {
+          effects++
+          await fs.writeFile(file, 'must never write')
+          return 'ok'
+        },
+      },
+    ],
+  })
+  await expect(a.run('write declared paths')).rejects.toThrow('not executed')
+  expect(effects).toBe(0)
+  expect(p.requests).toHaveLength(1)
+  await expect(fs.stat(file)).rejects.toThrow()
+  expect((await audit())[0].input.tool.paths).toContain(file)
+})
+it('does not let the internal completion audit read a host-denied source', async () => {
+  const o = await options('beforeComplete')
+  o.hooks.config.watch = ['private.txt']
+  await fs.writeFile(path.join(root, 'private.txt'), 'PRIVATE_BODY_SENTINEL')
+  const views = await new Hooks(root, { config: o.hooks.config }).inspect()
+  o.hooks.trust = views.map(v => `${v.id}:${v.identity}`)
+  provider(answer())
+  const a = new Agent({
+    ...o,
+    permissions: { mode: 'accept-edits', rules: [{ tool: 'read_file', action: 'deny' }] },
+  })
+  await expect(a.run('finish')).rejects.toThrow('unverifiable')
+  await expect(fs.stat(path.join(root, 'audit'))).rejects.toThrow()
+  expect(JSON.stringify(a.snapshot())).not.toContain('PRIVATE_BODY_SENTINEL')
+})
+it('keeps passing Hook output and private stderr out of model history and diagnostics', async () => {
+  const script = path.join(root, 'private-check.mjs')
+  await fs.writeFile(
+    script,
+    "process.stderr.write('PRIVATE_HOOK_SENTINEL');process.stdout.write(JSON.stringify({version:1,decision:'pass',reason:'PRIVATE_HOOK_SENTINEL'}))"
+  )
+  const config: HookConfig = {
+    version: 1,
+    hooks: [
+      {
+        id: 'private',
+        stage: 'beforeComplete',
+        command: process.execPath,
+        args: [script],
+        sources: [script],
+      },
+    ],
+  }
+  const views = await new Hooks(root, { config }).inspect()
+  const p = provider(answer())
+  const events: unknown[] = []
+  const diagnostics: unknown[] = []
+  const a = new Agent({
+    cwd: root,
+    skills: false,
+    projectInstructions: false,
+    hooks: { config, trust: views.map(v => `${v.id}:${v.identity}`) },
+    events: { onEvent: e => events.push(e) },
+    diagnostics: e => diagnostics.push(e),
+  })
+  await a.run('finish')
+  expect(events.some((e: any) => e.type === 'hook-check' && e.status === 'passed')).toBe(true)
+  expect(diagnostics.some((e: any) => e.kind === 'hook-check')).toBe(true)
+  expect(JSON.stringify([p.requests, a.snapshot(), events, diagnostics])).not.toContain(
+    'PRIVATE_HOOK_SENTINEL'
+  )
+})
+
+it('does not execute completion Hooks while an evidence read is unresolved', async () => {
+  provider(reply({ type: 'tool_use', id: 'large', name: 'large_read', input: {} }), answer())
+  const seed = new Agent({
+    cwd: root,
+    results: { directory: path.join(root, 'results') },
+    skills: false,
+    projectInstructions: false,
+    tools: [
+      {
+        name: 'large_read',
+        description: 'fixture',
+        permission: { effect: 'read' },
+        input_schema: { type: 'object', properties: {} },
+        execute: async () => 'x'.repeat(30000),
+      },
+    ],
+  })
+  await seed.run('read large body')
+  const saved = seed.snapshot(),
+    reference = saved.results!.entries[0].reference
+  const o = await options('beforeComplete')
+  const p = provider(
+    reply({
+      type: 'tool_use',
+      id: 'bad',
+      name: 'read_tool_result',
+      input: { reference, offset: 0, tail: true },
+    }),
+    answer(),
+    answer()
+  )
+  const a = new Agent(o)
+  a.restore(saved)
+  await expect(a.run('read evidence before finishing')).rejects.toThrow()
+  expect(a.snapshot().recovery?.read.pending).toHaveLength(1)
+  await expect(fs.stat(path.join(root, 'audit'))).rejects.toThrow()
+  expect(p.requests).toHaveLength(3)
+})
+
+it('rejects an oversized planned after-check before the declared tool effect', async () => {
+  const o = await options('afterTool')
+  const paths = Array.from({ length: 10 }, (_, i) => 'x'.repeat(3500) + i)
+  const p = provider(reply({ type: 'tool_use', id: 'big', name: 'write_many', input: { paths } }))
+  let effects = 0
+  const a = new Agent({
+    ...o,
+    tools: [
+      {
+        name: 'write_many',
+        description: 'trusted fixture',
+        input_schema: { type: 'object', properties: {} },
+        permission: { effect: 'execute' },
+        checkpointPaths: ['paths'],
+        execute: async () => {
+          effects++
+          return 'done'
+        },
+      },
+    ],
+    permissions: { mode: 'bypass' },
+  })
+  await expect(a.run('write')).rejects.toThrow('input-capacity')
+  expect(effects).toBe(0)
+  expect(p.requests).toHaveLength(1)
+  expect(validateSessionSnapshot(a.snapshot())).toBeTruthy()
 })
