@@ -10,7 +10,7 @@ node researches/hooks/demo.mjs
 
 脚本创建全新的 `tmp/e05-s004/offline-*`，不覆盖旧记录。
 
-- normal：根规则与 API 目录规则 → 已明确选择的 fix-with-tests → 按需读取报告资源 → MCP issue/长日志及尾页 → 修改金额函数与测试 → 真实测试 → 三处 Hook → JSON 产物契约。首次单调用进入 API 目录触发补载，再按当前规则成对读取；整轮仍限 8 请求、12 工具、120 秒。
+- normal：根规则与 API 目录规则 → 已明确选择的 fix-with-tests → 按需读取报告资源 → MCP issue/长日志及尾页 → 修改金额函数与测试 → 真实测试 → 三处 Hook → JSON 产物契约。调用方用 `projectInstructions.scopes` 明确已知的 API 目录，在首请求前按当前权限加载规则；整轮仍限 8 请求、12 工具、120 秒。
 - denied：一次写入 blocked.txt 后，afterTool 返回 block。本轮失败、原回执仍成功、文件内容保留、后续没有工作。这个结果是负例的正确停止，不能称为正常完成。
 
 查看输出目录的 `verification.json`、每例 `workspace/`、`requests.jsonl`、`responses.raw`（真实模型时）、`protocol.jsonl`、`hooks.jsonl`、`snapshot.json`、`events.json` 和 `terminal-metadata.json`。原始文件只用于本地验收，不提交 Git。
@@ -56,6 +56,8 @@ node packages/tui/dist/cli.js --hooks-config /absolute/hooks.json --hooks
 ```bash
 node packages/tui/dist/cli.js --hooks-config /absolute/hooks.json --hook-trust gate:<identity> --plain
 ```
+
+已知任务目录时可添加 `--instructions-scope packages/api`（可重复，最多 8 个目录），SDK 对应 `projectInstructions: {scopes: ['packages/api']}`。这只提前加载指定目录的当前 AGENTS.md；规则仍带作用域、受读取权限与 root 物理边界约束，不扫描兄弟目录、不授予写入权限。未声明时沿用按工具目标补载的行为；恢复时必须由当前宿主重新提供目录选择，旧快照不恢复它。
 
 普通任务需要当前模型配置；同样参数支持单次任务、管道、plain 与 TUI。只提供配置不等于信任，未信任项不执行。配置不接受 enabled、shell、自动批准或参数改写字段；没有隐式仓库脚本执行。
 
@@ -131,6 +133,8 @@ pnpm --filter @zero2agent/e2e test src/hooks.test.ts
 
 ## 真实模型与证据
 
-配置当前服务后可显式运行 `node researches/hooks/demo.mjs --live`。模型别名与服务回包名分别记录；每例仍是 8 请求/12 工具/120 秒、maxRetries=0。失败保留，不能改成无限重跑取成功。早期离线 v1 因重复 scope 批次撞预算，保留为历史；v2 在真实服务评测前固定了单项目录探测，门槛未提高。
+配置当前服务后可显式运行 `node researches/hooks/demo.mjs --live`。模型别名与服务回包名分别记录；每例仍是 8 请求/12 工具/120 秒、maxRetries=0。失败保留，不能改成无限重跑取成功。早期离线 v1 因重复 scope 批次撞预算，真实服务前的 v2 试图用单项探测减少消耗；后续真实模型仍把多个调用打成批次，最终 ee371e1 正例撞预算、负例通过。保留失败，增加宿主显式初始目录，冻结 cases v2 不再修改任务、文件或断言。
+
+同源码对照 `node researches/hooks/demo.mjs --live --scope-baseline` 与默认候选只改变是否声明 API 初始目录；任务、文件、模型和预算相同，实际请求覆盖层有意不同，不宣称模型输入字节相同。成对结果和局限见索引，不将一次固定能力验收解释为成功率。
 
 紧凑结果见 [验收索引](../../../researches/hooks/verification.json)，原始请求、协议、PTY、截图与失败在 Git 外独立校验归档；下载后按 [归档索引](../../../researches/hooks/evidence-archive.json) 验证。E05 各课历史模型观察的版本和局限见 [组合验收说明](../acceptance.md)，不把不同版本记录合成同一次“8/8”。站点部署与图文发布单列。

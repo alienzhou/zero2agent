@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "tag": "E05-S004-hooks-review",
+  "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+  "asset": "e05-s004-hooks-evidence.tar.gz",
+  "sha256": "98726d278167f66ac8ca4864ae93f8e98d255dfdaf7574812b1bdd61cf2671c2",
+  "bytes": 7212627,
+  "manifestSha256": "038b48aba94c21e89a0758fb694577536f636fe925108092e384d28b7f598243",
+  "files": 2137,
+  "credentialScan": {
+    "passed": true,
+    "files": 2137
+  },
+  "delivery": "Independent draft GitHub Release; raw records excluded from Git",
+  "downloadCommand": "gh release download E05-S004-hooks-review --repo alienzhou/zero2agent --pattern e05-s004-hooks-evidence.tar.gz",
+  "verifyCommand": "node researches/hooks/verify-evidence.mjs /path/to/extracted",
+  "draft": true,
+  "extractedArchiveVerified": true,
+  "remoteDownloadVerified": true,
+  "releaseUrl": "https://github.com/alienzhou/zero2agent/releases/tag/untagged-391d57029dded798c84d",
+  "assetUrl": "https://github.com/alienzhou/zero2agent/releases/download/untagged-391d57029dded798c84d/e05-s004-hooks-evidence.tar.gz"
+}

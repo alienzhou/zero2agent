@@ -1,0 +1,443 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "productionSource": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+  "platform": {
+    "os": "macOS 14.7.8 (23H730)",
+    "system": "darwin",
+    "architecture": "arm64",
+    "node": "v22.15.1",
+    "pnpm": "9.15.9"
+  },
+  "engineering": {
+    "build": "passed",
+    "core": 878,
+    "e2e": 263,
+    "cdp": 1,
+    "total": 1142,
+    "liveSkipped": 58,
+    "focusedHookCore": 69,
+    "focusedHooksHost": 16,
+    "focusedScopesCore": 3,
+    "focusedScopesHost": 1,
+    "e2eTypecheck": "passed",
+    "lint": {
+      "errors": 0,
+      "warnings": 49
+    },
+    "format": {
+      "changed": "passed",
+      "wholeRepository": "11 existing files fail current Prettier, all byte-identical to origin/main",
+      "preExistingFiles": [
+        "packages/cdp-debug/src/cli/index.ts",
+        "packages/cdp-debug/src/server/cdp-client.ts",
+        "packages/cdp-debug/src/server/index.ts",
+        "packages/cdp-debug/src/server/routes.ts",
+        "packages/core/src/llm/index.ts",
+        "packages/core/src/prompt/index.ts",
+        "packages/core/src/tools/__tests__/grep-search.test.ts",
+        "packages/core/src/tools/__tests__/read-file.test.ts",
+        "packages/core/src/tools/__tests__/write-file.test.ts",
+        "packages/core/vitest.config.ts",
+        "packages/shared/src/index.ts"
+      ]
+    }
+  },
+  "acceptance": {
+    "fixtureVersion": 2,
+    "frozenInputsSha256": "4112fa176b4296217d5fa0e995ac153b77585909c83b00f0a9562093579905e9",
+    "frozenCasesSha256": "37d39c4ae6165a9b1743e954892c6ecf537bf879ffa26be9bd99c90fc8ff33ed",
+    "limits": {
+      "maxRequests": 8,
+      "maxToolCalls": 12,
+      "maxDurationMs": 120000,
+      "maxRetries": 0,
+      "requestTimeoutMs": 120000
+    },
+    "requestedModel": "claude-sonnet-4-20250514",
+    "live": {
+      "path": "records/live-zYkCwa",
+      "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+      "fixtureVersion": 2,
+      "mode": "real-service",
+      "initialScopes": [
+        "packages/api"
+      ],
+      "passed": true,
+      "hashesStillCurrent": true,
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "requests": 7,
+          "tools": 10,
+          "reportedModels": [
+            "MiniMax-M3"
+          ],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "externalReads": true,
+            "tailRecall": true,
+            "actualTests": true,
+            "independentAmounts": true,
+            "jsonReport": true,
+            "webUnchanged": true,
+            "scopedRules": true,
+            "selectedSkill": true,
+            "resourceRead": true,
+            "allHookStages": true,
+            "hookRanActualTests": true,
+            "hookCleanup": true
+          },
+          "durationMs": 15960
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 1,
+          "tools": 1,
+          "reportedModels": [
+            "MiniMax-M3"
+          ],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "oneRealWrite": true,
+            "originalReceipt": true,
+            "pendingHook": true,
+            "noExtraWork": true,
+            "hookCleanup": true
+          },
+          "durationMs": 1657
+        }
+      ]
+    },
+    "offline": {
+      "path": "records/offline-HVncqG",
+      "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+      "fixtureVersion": 2,
+      "mode": "deterministic-http",
+      "initialScopes": [
+        "packages/api"
+      ],
+      "passed": true,
+      "hashesStillCurrent": true,
+      "cases": [
+        {
+          "name": "normal",
+          "passed": true,
+          "requests": 7,
+          "tools": 10,
+          "reportedModels": [],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "externalReads": true,
+            "tailRecall": true,
+            "actualTests": true,
+            "independentAmounts": true,
+            "jsonReport": true,
+            "webUnchanged": true,
+            "scopedRules": true,
+            "selectedSkill": true,
+            "resourceRead": true,
+            "allHookStages": true,
+            "hookRanActualTests": true,
+            "hookCleanup": true
+          },
+          "durationMs": 5469
+        },
+        {
+          "name": "denied",
+          "passed": true,
+          "requests": 1,
+          "tools": 1,
+          "reportedModels": [],
+          "checks": {
+            "paired": true,
+            "noRecordEffects": true,
+            "nativeCleanup": true,
+            "oneRealWrite": true,
+            "originalReceipt": true,
+            "pendingHook": true,
+            "noExtraWork": true,
+            "hookCleanup": true
+          },
+          "durationMs": 292
+        }
+      ]
+    },
+    "currentRuntimeAndSourceBytesVerified": true,
+    "trackedSourceMatchesProductionCommit": true,
+    "pairedScopeExperiment": {
+      "baseline": {
+        "path": "records/live-ddlDFH",
+        "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+        "fixtureVersion": 2,
+        "mode": "real-service",
+        "initialScopes": [],
+        "passed": false,
+        "hashesStillCurrent": true,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": false,
+            "requests": 8,
+            "tools": 9,
+            "reportedModels": [
+              "MiniMax-M3"
+            ],
+            "checks": {},
+            "error": "Run budget stopped: tools. Completed results are retained; effects were not rolled back.",
+            "durationMs": 19599
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1,
+            "reportedModels": [
+              "MiniMax-M3"
+            ],
+            "checks": {
+              "paired": true,
+              "noRecordEffects": true,
+              "nativeCleanup": true,
+              "oneRealWrite": true,
+              "originalReceipt": true,
+              "pendingHook": true,
+              "noExtraWork": true,
+              "hookCleanup": true
+            },
+            "durationMs": 1328
+          }
+        ]
+      },
+      "candidate": "records/live-zYkCwa",
+      "sameFrozenCasesModelBudgetsAndProductionBytes": true,
+      "variable": "Explicit initial projectInstructions.scopes: [] versus [packages/api]",
+      "requestByteEquality": false,
+      "interpretation": "Known directory rules are prepared before the first request; one fixed pair is not a success-rate estimate. Baseline normal failed budget; candidate normal/denied passed."
+    }
+  },
+  "host": {
+    "source": "d3b4aecfa10fe7957ed0bc5cd01d9c54a218d8c1",
+    "path": "records/host-accepted",
+    "checks": [
+      "single",
+      "pipe",
+      "plain",
+      "real PTY exit/SIGINT/active SIGTERM",
+      "actual SIGKILL hook-start/tool-settled/running/hook-settled",
+      "combined MCP effect-disconnect",
+      "combined hooks-in-flight SIGKILL",
+      "zero old effect replay and explicit fresh recheck",
+      "disk v5 downgrade rejection",
+      "current replacement trust via explicit recheck without API key"
+    ]
+  },
+  "course": {
+    "pages": 12,
+    "pc": [
+      1440,
+      1000
+    ],
+    "h5": [
+      390,
+      844
+    ],
+    "pageGeometry": "passed",
+    "navigation": "passed",
+    "zoom": "passed",
+    "text": "passed",
+    "humanReview": "pending",
+    "deployed": false
+  },
+  "historicalObservations": {
+    "runs": [
+      {
+        "path": "records/live-59WWPB",
+        "sourceAtRunStart": "ee371e1fa3c420b7e0fc4b387ebef63646f3143d",
+        "fixtureVersion": 2,
+        "mode": "real-service",
+        "passed": false,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": false,
+            "requests": 7,
+            "tools": 10,
+            "error": "Run budget stopped: tools. Completed results are retained; effects were not rolled back."
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/live-RLyhvZ",
+        "sourceAtRunStart": "70cbf2c080a7df0211d3ac410f7434ab657e76c2",
+        "fixtureVersion": 2,
+        "mode": "real-service",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 8,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/offline-0Mg8sy",
+        "sourceAtRunStart": "bb66f347ff0c7a132478644ccfda92034db80bad",
+        "fixtureVersion": 1,
+        "mode": "deterministic-http",
+        "passed": false,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": false,
+            "requests": 8,
+            "tools": 10,
+            "error": "Run budget stopped: tools. Completed results are retained; effects were not rolled back."
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/offline-5p1bg0",
+        "sourceAtRunStart": "70cbf2c080a7df0211d3ac410f7434ab657e76c2",
+        "fixtureVersion": 2,
+        "mode": "deterministic-http",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 8,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/offline-Lw42rU",
+        "sourceAtRunStart": "67385bfd955d2d7727558a0bb2355d9de1098fa7",
+        "fixtureVersion": 2,
+        "mode": "deterministic-http",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 8,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/offline-j6abzH",
+        "sourceAtRunStart": "ee371e1fa3c420b7e0fc4b387ebef63646f3143d",
+        "fixtureVersion": 2,
+        "mode": "deterministic-http",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 7,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      },
+      {
+        "path": "records/offline-ncB5G8",
+        "sourceAtRunStart": "ee371e1fa3c420b7e0fc4b387ebef63646f3143d",
+        "fixtureVersion": 2,
+        "mode": "deterministic-http",
+        "passed": true,
+        "qualifiesCurrent": false,
+        "cases": [
+          {
+            "name": "normal",
+            "passed": true,
+            "requests": 8,
+            "tools": 10
+          },
+          {
+            "name": "denied",
+            "passed": true,
+            "requests": 1,
+            "tools": 1
+          }
+        ]
+      }
+    ],
+    "preserved": true,
+    "qualification": "Only the final selected configuration live-zYkCwa and offline-HVncqG certify current acceptance. Development runs include uncommitted changes; sourceAtRunStart alone does not identify their bytes, captured source/runtime hashes do. offline-j6abzH is a working-tree development run, not accepted release evidence.",
+    "firstFailure": "Offline v1 exceeded the original tool budget on scope batch replanning; v2 froze a single scope probe before the first model run.",
+    "laterFailure": "Real model at ee371e1 ignored the requested single probe; tail and two reads were skipped together, tool budget stopped before report. Earlier 70cbf2c 2/2 is historical only.",
+    "fix": "Explicit initial task scopes; same-source paired experiment retains fixed v2 tasks, files, effects, model and 8/12/120s budgets. Actual request overlays intentionally differ.",
+    "developmentFailures": [
+      "await syntax in initial test",
+      "macOS automatic encoding env assertion",
+      "unsafe-finally lint",
+      "fixture omitted combined flag",
+      "20K below 20KiB read threshold",
+      "wrong permission mode spelling in new test",
+      "course epic id metadata"
+    ]
+  },
+  "limitations": [
+    "Trusted Hook/MCP/terminal programs have host privileges; no OS sandbox.",
+    "Only declared in-workspace audit paths allowed by current read_file policy, not arbitrary shell/external effects.",
+    "Ordinary POSIX group cleanup verified; escaped groups and Windows descendants unverified.",
+    "Filesystem syscalls cannot be force-cancelled under kernel-level stalls.",
+    "No uniform E05 8/8 claim: earlier lessons retain their own versions; S002 history remains two 1/2 runs with documented unchanged-case reuse.",
+    "AI review does not replace human PR review."
+  ],
+  "evidence": "evidence-archive.json"
+}

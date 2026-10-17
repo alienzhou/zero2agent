@@ -1,5 +1,13 @@
 # Changelog
 
+## E05-S004：Hooks 与扩展验收
+
+- beforeTool、afterTool、beforeComplete 三处等待式检查；配置/脚本身份的明确版本信任，最小 JSON、容量/时限与父管道守护。
+- 真实回执与后置义务一起保存，Hook 开始/结算独立；恢复控制 v2、磁盘 v5，用户核对后运行独立新检查，旧工具/Hook 不自动重放。
+- 原权限、Checkpoint、未解决读取与产物契约继续有效；数组型受控路径、内部审计许可和容量在副作用前检查。
+- 已知任务目录可用 `--instructions-scope` / SDK scopes 在首请求前加载规则；保留当前权限和目录边界，避免依赖模型准确分批发现作用域。
+- [12 页课程与跟练](./specs/E05-extensibility/S004-hooks/README.md)、真实 CLI/PTY/SIGKILL 与 [四种扩展组合验收](./specs/E05-extensibility/acceptance.md)齐备，待用户 PR review，站点未部署；原始实验附件在 Git 外。
+
 ## 2026-10-17：E04 课程阅读审阅
 
 按每页独立教学价值检查四课，S001 保留 18 页，S002/S003 各调为 15 页，S004 为 14 页。重复衔接、完整存储/快照细目和历史实验成绩移到已有文档；进程实验与跟练合并。保留字号、图形和页面 URL，生成器取消固定 18 页要求。同时修复旧滚动回调覆盖新章节导航的问题，补充 PC/H5 竞态回归；Agent 实现与原工程证据不变；[取舍说明](./docs/e04-course-reading-review.md)。
