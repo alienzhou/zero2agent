@@ -1,0 +1,26 @@
+researches/skills/verify-evidence.mjs
+  s_58249cd92a0ae1::t_e4a3aa86e08f3d 1-33
+  s_58249cd92a0ae1::t_b8614ca19c30cf 34-45
+researches/skills/demo.mjs
+  s_58249cd92a0ae1::t_e4a3aa86e08f3d 1-322
+  s_58249cd92a0ae1::t_e1beb2172ec8df 323-544
+e2e/src/skills.test.ts
+  s_58249cd92a0ae1::t_e16d670e0fb420 1-86,88-96,98-103,120-122,129-136,142-161,164-185,192-200,252,258-265,270-276,281-282,285-288,290-299,304,311-335,376,410
+  s_58249cd92a0ae1::t_1c0efa78197b1a 87,97,104-119,123-128,137-141,162-163,186-191,201-251,253-257,266-269,277-280,283-284,289,300-303,305-310,336-375,377-409
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b29f7ce407b3fa7f94fb4c1b119823d877551f30",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
