@@ -1,0 +1,28 @@
+.vibecoding/2026-10-18/course-site-deployment/dialogue.md
+  s_58249cd92a0ae1::t_4c981becf807d3 1-15
+.vibecoding/2026-10-18/course-site-deployment/learnings.md
+  s_58249cd92a0ae1::t_4c981becf807d3 1-7
+README.md
+  s_58249cd92a0ae1::t_a2b83e18c40ce7 166,220-222
+  s_58249cd92a0ae1::t_e441f8acb86e99 116
+docs/site.md
+  s_58249cd92a0ae1::t_a2b83e18c40ce7 3-4,47-48
+.vibecoding/2026-10-18/course-site-deployment/prompt.md
+  s_58249cd92a0ae1::t_4c981becf807d3 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc8a7d6c193c1fb16a782972a7e6ea0534b4de11",
+  "prompts": {},
+  "sessions": {
+    "s_58249cd92a0ae1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1198d-b190-7831-9f03-1ebf6c0f5117",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "周鸿轩 <zhouhongxuan@BakMacBook-Pro.local>"
+    }
+  }
+}
