@@ -1,5 +1,7 @@
 # 在线图解教程
 
+访问[在线课程](https://vibe-x.fun/zero2agent/)。E05 四节课已上线：[项目指令与 AGENTS.md](https://vibe-x.fun/zero2agent/#/chapter/epic05-story001)、[Skills](https://vibe-x.fun/zero2agent/#/chapter/epic05-story002)、[MCP](https://vibe-x.fun/zero2agent/#/chapter/epic05-story003)、[Hooks 与扩展验收](https://vibe-x.fun/zero2agent/#/chapter/epic05-story004)。
+
 在线课程的全部运行文件位于 site/，与 Agent 代码一起维护。站点有课程总览、按阶段分组的章节目录、本章目录、全文搜索、连续阅读、图解放大、文字内容和阅读进度。每个章节及小节都有可分享的地址，浏览器前进和后退可以切换阅读位置。
 
 阅读进度和主题保存在当前浏览器，首次访问从课程总览进入；再次访问可选择“继续阅读”。“标记本章已读完”记录完成状态。课程文件通过 iframe 保留原图解排版，文字内容适合窄屏阅读。
@@ -42,3 +44,5 @@ PC 宽屏使用课程目录、正文、本章目录三栏布局；1100px 及以�
 之后仅更新站点文件时，重新同步即可。域名的 HTTPS 使用现有 Nginx 证书配置。
 
 站点内的文件引用都是相对路径，章节导航使用 URL hash。它也可以放在已有站点的子目录中；Nginx 只要按目录提供静态文件即可，不需要 SPA 回退到首页。
+
+当前线上站点使用已有静态站点中的 `/zero2agent/` 子目录，沿用原有 Nginx 路由。对这类部署，只更新课程目录即可，不必套用上面的独立 server 配置或重载 Nginx。同步、清理和回滚都应限定在课程目录内，避免影响同一站点的其他内容。如果父站点发布时会清空或替换整个静态目录，需要在发布流程中保留或重新建立课程入口。

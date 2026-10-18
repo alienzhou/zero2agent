@@ -113,7 +113,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
 | [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S004 已完成；[S004 交付](./specs/E04-reliability-and-context/S004-safe-resume/README.md) |
-| [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001、S002 已合入；[S003 实现与课程](./specs/E05-extensibility/S003-mcp/README.md)由 PR #30 交付，[S004](./specs/E05-extensibility/S004-hooks/README.md)实现、12 页课程与组合验收完成，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付 |
+| [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001–S004 均已合入，四节课程已[上线](https://vibe-x.fun/zero2agent/) |
 
 最新课程：[E05-S004：Hooks 与扩展验收](./specs/E05-extensibility/S004-hooks/README.md)，从[离线跟练](./specs/E05-extensibility/S004-hooks/follow-along.md)开始。
 
@@ -163,7 +163,7 @@ zero2agent/
 
 ## 迭代进度
 
-**最新更新**：[E05-S004：Hooks 与扩展验收](./specs/E05-extensibility/S004-hooks/README.md)将必要检查接入执行链，分别保存工具与检查事实，补齐四种扩展的正常、断线和 SIGKILL 组合验收。12 页课程、跟练和实现由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付；站点未部署。
+**最新更新**：[E05-S004：Hooks 与扩展验收](./specs/E05-extensibility/S004-hooks/README.md)将必要检查接入执行链，分别保存工具与检查事实，补齐四种扩展的正常、断线和 SIGKILL 组合验收。12 页课程、跟练和实现由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付；E05 四节课程均已[上线](https://vibe-x.fun/zero2agent/)。
 
 | 迭代 | 内容            | 状态      |
 | ---- | --------------- | --------- |
@@ -217,7 +217,9 @@ node packages/tui/dist/cli.js "你的提示词"
 
 ## 在线图解教程
 
-课程 HTML 与阅读站点在本仓库的 site/ 中维护。包含章节目录、全文搜索、连续阅读和 PC／手机布局。
+直接访问[在线课程](https://vibe-x.fun/zero2agent/)，E05 的项目指令、Skills、MCP、Hooks 四节课均已上线。包含章节目录、全文搜索、连续阅读和 PC／手机布局。
+
+课程 HTML 与阅读站点在本仓库的 site/ 中维护，也可以本地预览：
 
     pnpm site:build
     pnpm site:preview
