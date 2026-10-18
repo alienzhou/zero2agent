@@ -16,4 +16,4 @@
 
 最终自查又发现恢复意图交接的窗口：新意图已持久化、旧 pending 尚未移除。仅“先写意图”还不足够，必须定义两个状态同时存在时如何推进。新增故障注入先复现双 pending 阻塞，再以 sourceId、完整路径和版本校验来安全移交证据，保留对无关 pending 的拒绝。
 
-2026-10-08 按用户授权通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入 main（`8a0d0e8`）。课程已收敛为含封面的 18 页，初版与 18 页修订 Tag 均保留；网站尚未部署。
+2026-10-08 按用户授权通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入 main（`8a0d0e8`）。课程已收敛为含封面的 18 页，初版与 18 页修订 Tag 均保留；课程网站已于 2026-10-18 上线。

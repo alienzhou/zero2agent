@@ -1,6 +1,6 @@
 # E05-S003：把外部工具接入 Harness
 
-状态：实现与课程完成，最终 AI 复核修复后按用户授权由 [PR #30](https://github.com/alienzhou/zero2agent/pull/30) 交付；站点未部署。基础提交 `67b01a2`，固定版本 `E05-S003-mcp-tools`；本节使用 MCP 2025-11-25 的本地 stdio 工具子集。
+状态：实现与课程完成，最终 AI 复核修复后按用户授权由 [PR #30](https://github.com/alienzhou/zero2agent/pull/30) 交付；课程网站已于 2026-10-18 上线。基础提交 `67b01a2`，固定版本 `E05-S003-mcp-tools`；本节使用 MCP 2025-11-25 的本地 stdio 工具子集。
 
 完成后可以显式启用本地 issue 服务，用同一权限、预算、结果引用与恢复机制调用外部工具。
 

@@ -12,8 +12,8 @@
 
 | Story | 主题 | 核心交付 | 状态 |
 |---|---|---|---|
-| [E03-S001](./S001-multi-turn/README.md) | 让 Agent 接着聊，也能控制上下文长度 | Session / Turn / Loop、原始历史与工作上下文、请求预算、自动后台／前台压缩、手动 /compact 与 /new | Done，已合入 main、已打 Tag，未对外发布 |
-| [E03-S002](./S002-permissions/README.md) | 执行前，先判断是否允许 | 三态规则、宿主模式、一次 Approval、TTY 与路径重查 | Done，已合入 main、已打 Tag，未对外发布 |
+| [E03-S001](./S001-multi-turn/README.md) | 让 Agent 接着聊，也能控制上下文长度 | Session / Turn / Loop、原始历史与工作上下文、请求预算、自动后台／前台压缩、手动 /compact 与 /new | Done，已合入 main、已打 Tag，课程网站已于 2026-10-18 上线；社交平台发布另行记录 |
+| [E03-S002](./S002-permissions/README.md) | 执行前，先判断是否允许 | 三态规则、宿主模式、一次 Approval、TTY 与路径重查 | Done，已合入 main、已打 Tag，课程网站已于 2026-10-18 上线；社交平台发布另行记录 |
 | [E03-S003](./S003-runtime-tui/README.md) | 让运行过程看得见、控得住 | 结构化事件、完整 Turn 取消、草稿/审批/工具详情与人工 PTY 交接 | Done，已合入 main |
 | [E03-S004](./S004-session-persistence/README.md) | 关掉程序，下次还能接着聊 | 会话落盘、列表与恢复；恢复对话，不恢复旧进程 | Done，已合入 main |
 | [E03-S005](./S005-runtime-logging/README.md) | 出问题时，能还原发生了什么 | 关联请求、工具与后台原生结果；只读日志列表/查看器，明确失败和隐私边界 | Done，已合入 main |

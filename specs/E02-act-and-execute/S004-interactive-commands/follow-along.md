@@ -1,6 +1,6 @@
 # S004 跟练与人工验收
 
-> 当前跟练实现：`b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770`，已随 PR #13 合入 main。保留逐提交脱敏历史，未打课程 Tag。
+> 固定课程 Tag：`E02-S004-human-terminal`，指向已随 PR #13 合入的最终脱敏交付提交 `68e2c876be83f857cfc4696078be61f48d65b33a`。原工程验收基线为 `b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770`，两者代码、测试、脚本和依赖文件一致；标签版本补齐后续跟练说明。
 
 [Story](./README.md) | [验收证据](./details/03-verification-checklist.md) | [本轮复核记录](../../../.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md)
 
@@ -11,14 +11,14 @@
 在已克隆的 Zero2Agent 仓库获取 main，再创建独立跟练目录，避免影响原有未提交改动：
 
 ```sh
-git fetch origin main
-git worktree add --detach ../zero2agent-s004-practice b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770
+git fetch origin tag E02-S004-human-terminal
+git worktree add --detach ../zero2agent-s004-practice E02-S004-human-terminal
 cd ../zero2agent-s004-practice
 pnpm install --frozen-lockfile
 pnpm build
 ```
 
-远端 main 已包含本课实现；这里仍固定 b200c9f，以免后续迭代改变跟练行为。环境要求为 Node.js ≥22、pnpm ≥9、POSIX 真实终端；本次实测是 macOS arm64，不代表 Linux 已验收，Windows 不支持。
+远端 main 已包含本课实现；这里固定 E02-S004 的交付版本，以免 E03–E05 改变跟练行为。环境要求为 Node.js ≥22、pnpm ≥9、POSIX 真实终端；原工程实测是 macOS arm64，不代表 Linux 已验收，Windows 不支持。
 
 ## 练习一：让程序读取你的输入
 
@@ -87,6 +87,10 @@ PTY 自动测试还依赖 Python 3、bash、ps、stty、less。根目录的 `pnp
 - [x] 用户授权验收后提交并推送脱敏发布分支。
 - [x] 用户明确授权后通过 PR #13 合入 main。
 
-课程 Tag 未发布；这不阻止从 main 获取或按上述固定提交跟练。
+- [x] 2026-10-18 补发固定课程 Tag `E02-S004-human-terminal`；课程网站已上线。
 
 反馈原文与范围见[用户试用记录](../../../.vibecoding/2026-09-30/e02-s004-acceptance/user-feedback.md)。没有将「正常」扩展为所有终端属性、输入法、异常组合或代码审查逐项通过；用户也未要求调整重复确认，现有交互保持不变。
+
+## 跟练目录收尾
+
+练习结束后，先提交或私有备份需要保留的练习改动与本地材料，停止该目录中的进程，再回到原始仓库执行 `git worktree remove ../zero2agent-s004-practice`。若提示未保存内容，先核对和保全，不直接强制删除；完整约定见 [AGENTS.md](../../../AGENTS.md)。

@@ -1,5 +1,7 @@
 # E02-S004 事实与来源
 
+> 当前发布状态（2026-10-18）：本章已在[课程网站](https://vibe-x.fun/zero2agent/)上线，E01–E05 主线正式完结；[收官与版本说明](../../../../docs/course-completion.md)。以下为原制作、来源或审阅记录，其中的未发布、未合并、页数与成绩描述保留当时语境，不作为当前发布状态。E02-S004 的课程 Tag 已补齐为 `E02-S004-human-terminal`（`68e2c87`）；社交平台发布另行记录。
+
 核验时间：2026-09-30。当前实现固定为 `b200c9fc9390be59ec52f2e48fa8e8bf9fa7c770`，发布分支 `release/e02-s004-human-terminal`。用户明确授权后，两个仓库的主 PR 均已合入 main；未打 Tag 或发布社交平台内容。此前 19:36 的功能反馈仍只代表两项试用。
 
 最新[工程复验记录](https://github.com/alienzhou/zero2agent/blob/bd05019edefbbab454d05f5a65a7684aa9efac98/.vibecoding/2026-09-30/e02-s004-acceptance/acceptance.md)：core 199、E2E 49、cdp-debug 1，共 249 通过、25 项 E2E 跳过；人工终端含 31 项，新增 TERM trap 返回 0 时 CLI 仍报告取消的契约。早期候选两轮 248 通过和工具驱动操作保留为历史证据，不混为本次全量。没有付费模型或 Linux 实测。

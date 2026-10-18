@@ -4,7 +4,7 @@
 
 [Epic 3](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
-固定跟练版本：`E03-S003-runtime-tui`。[PR #19](https://github.com/alienzhou/zero2agent/pull/19) 已合入 main；在线站点尚未部署本章。
+固定跟练版本：`E03-S003-runtime-tui`。[PR #19](https://github.com/alienzhou/zero2agent/pull/19) 已合入 main；本章已于 2026-10-18 在课程网站上线。
 
 ## 终端停住了，它是在思考还是等你回答
 

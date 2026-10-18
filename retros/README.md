@@ -1,30 +1,29 @@
-# Retrospectives
+# 复盘目录
 
-This directory contains retrospective notes and lessons learned.
+2026-10-18，E01–E05 主线正式完结，22 节课程已全部上线；[完结范围与固定版本](../docs/course-completion.md)。下表列出本仓库已有复盘，原失败、源码版本、成绩和限制保留；带日期的过程描述不代表当前仍待合并或部署。E02-S004 的课程 Tag 已补齐为 `E02-S004-human-terminal`。
 
-## Completed
+| 复盘 | 主题 |
+| --- | --- |
+| [E02-S001-write-file](./E02-S001-write-file.md) | E02-S001-write-file Retrospective |
+| [E02-S002-replace-in-file](./E02-S002-replace-in-file.md) | E02-S002-replace-in-file Retrospective |
+| [E02-S003-terminal](./E02-S003-terminal.md) | E02-S003-terminal Retrospective |
+| [E02-S004-human-terminal](./E02-S004-human-terminal.md) | E02-S004-human-terminal Retrospective |
+| [E03-S001-multi-turn](./E03-S001-multi-turn.md) | E03-S001-multi-turn 复盘 |
+| [E03-S002-permissions-approval](./E03-S002-permissions-approval.md) | E03-S002：权限与一次审批的复盘 |
+| [E03-S003-runtime-tui](./E03-S003-runtime-tui.md) | E03-S003：运行状态与 TUI 复盘 |
+| [E03-S004-session-persistence](./E03-S004-session-persistence.md) | E03-S004 复盘：让恢复遵守真实发生过的事 |
+| [E03-S005-runtime-logging](./E03-S005-runtime-logging.md) | E03-S005：运行日志与问题追查复盘 |
+| [E03-S006-file-checkpoints](./E03-S006-file-checkpoints.md) | E03-S006 复盘：成本和恢复保证一起设计 |
+| [E04-S001-failure-recovery](./E04-S001-failure-recovery.md) | E04-S001：失败恢复与运行预算复盘 |
+| [E04-S002-result-references](./E04-S002-result-references.md) | E04-S002 复盘：已有落盘，还缺少可读取的契约 |
+| [E04-S003-summary-quality](./E04-S003-summary-quality.md) | E04-S003：有原始来源，摘要仍可能做错任务 |
+| [E04-S004-safe-resume](./E04-S004-safe-resume.md) | E04-S004：恢复以前，先说明哪些事实已知 |
+| [E05-S001-project-instructions](./E05-S001-project-instructions.md) | E05-S001：规则更新不应消耗无谓的重规划 |
+| [E05-S002-skills](./E05-S002-skills.md) | E05-S002：按需加载要覆盖整条执行链 |
+| [E05-S003-mcp](./E05-S003-mcp.md) | E05-S003：外部工具要进入同一条执行链 |
+| [E05-S004-hooks](./E05-S004-hooks.md) | E05-S004：检查结论不能覆盖工具事实 |
 
-| Retro | Iteration | Notes |
-|-------|-----------|-------|
-| [E02-S001-write-file.md](./E02-S001-write-file.md) | E02-S001 写文件 + 删文件 | 第一个写工具迭代的复盘（回执语言 doc/code 漂移的教训） |
-| [E02-S002-replace-in-file.md](./E02-S002-replace-in-file.md) | E02-S002 局部修改 | 唯一性约束 + replace_all，教训落地到下一个迭代 |
-| [E02-S003-terminal.md](./E02-S003-terminal.md) | E02-S003 驱动执行环境 | 不截断 / 不杀死 / 三道防线；代码合并不等于 Story 收口 |
-
-## Latest merged Story
-
-| Retro | Iteration | Notes |
-|-------|-----------|-------|
-| [E03-S001-multi-turn.md](./E03-S001-multi-turn.md) | E03-S001 进程内多轮会话与上下文压缩 | 历史所有权、工具副作用证据、预算闸门与分级压缩；已合入 main、已打 Tag，未对外发布 |
-| [E02-S004-human-terminal.md](./E02-S004-human-terminal.md) | E02-S004 人工交互终端 | 输入所有权、PTY 恢复、进程组清理和真实断连；两项试用通过，脱敏历史已合入 main，未打 Tag |
-| [E03-S002-permissions-approval.md](./E03-S002-permissions-approval.md) | E03-S002 权限与一次审批 | 整批快照、有限等待、路径变化、SSE/PTY 与真实模型验收；已通过 PR #17 合入 main，课程未发布 |
-| [E03-S003-runtime-tui.md](./E03-S003-runtime-tui.md) | E03-S003 运行状态与 TUI | 事件与控制、取消证据、连续输入体验与跨模式验收；已通过 PR #19 合入 main，原验收证据保留 |
-| [E03-S004-session-persistence.md](./E03-S004-session-persistence.md) | E03-S004 会话落盘与恢复 | 快照边界、冲突与失败反馈、跨进程验收；已通过 PR #20 合入 main |
-| [E03-S005-runtime-logging.md](./E03-S005-runtime-logging.md) | E03-S005 运行日志与问题追查 | 元信息归属、只读查看器、持久边界；已通过 PR #21 合入 main |
-| [E03-S006-file-checkpoints.md](./E03-S006-file-checkpoints.md) | E03-S006 文件 Checkpoint 与回退 | 受控写入、分块复用、空间与恢复保证、故障和分层验收；已通过 PR #22 合入 main |
-
-## Latest review candidate
-
-[E04-S001 失败恢复与运行预算](./E04-S001-failure-recovery.md)：请求与副作用分界、真实SDK/PTY/模型验收，以及18页课程重写。尚未合入main。
+复盘记录具体问题、改进和可复用经验；当前交付状态以各课入口和[主线完结说明](../docs/course-completion.md)为准。AI 作者复核、用户授权合并与独立人工逐行审阅分别记录。
 
 ## Directory structure
 
@@ -64,11 +63,3 @@ Brief description of the iteration.
 - Common errors and fixes
 - ...
 ```
-
-- [E04-S002：已有落盘，还缺少可读取的契约](./E04-S002-result-references.md)
-
-- [E04-S004：恢复以前，先说明哪些事实已知](./E04-S004-safe-resume.md)
-
-- [E05-S001：规则更新不应消耗无谓的重规划](./E05-S001-project-instructions.md)
-
-- [E05-S002：按需加载要覆盖整条执行链](./E05-S002-skills.md)

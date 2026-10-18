@@ -1,6 +1,6 @@
 # E02-S004-human-terminal Retrospective
 
-> 2026-09-30 更新｜两项用户试用与源码专项复核完成，脱敏分支已合入 main，未打 Tag，不代表全部平台或社交内容已发布。
+> 2026-09-30 的两项用户试用与源码专项复核已完成，脱敏分支已合入 main；2026-10-18 补齐课程 Tag `E02-S004-human-terminal`（`68e2c87`），课程网站已上线。原试用范围和社交平台发布状态不扩张。
 
 [Story](../specs/E02-act-and-execute/S004-interactive-commands/README.md) | [实施决策](../.discuss/2026-09-29/e02-s004-interactive-commands/decisions/D02-human-terminal-implementation.md) | [验收证据](../specs/E02-act-and-execute/S004-interactive-commands/details/03-verification-checklist.md)
 

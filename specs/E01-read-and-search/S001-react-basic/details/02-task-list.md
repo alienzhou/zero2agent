@@ -47,10 +47,10 @@
 
 ---
 
-## 临时待办
+## 后续已落实的事项
 
-- [ ] 确认 MiniMax 等兼容 API 的 baseURL 配置方式
-- [ ] 决定是否需要简单的 CLI 入口用于测试
+- [x] 兼容 API 可用 `config.baseURL` 或 `ANTHROPIC_BASE_URL` 配置，见[当前适配器](../../../../packages/core/src/llm/anthropic.ts)。
+- [x] 当前 `packages/tui` 已提供 CLI 与 plain 入口，见[快速上手](../../../../docs/getting-started.md)。
 
 ---
 

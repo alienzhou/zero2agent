@@ -1,5 +1,7 @@
 # E04-S003：有原始来源，摘要仍可能做错任务
 
+> 当前状态（2026-10-18）：已通过 PR #25 合入 main，课程网站已上线，当前图解为 PR #28 修订后的 15 页。以下保留各轮当时的成绩、待审状态和失败记录，不表示当前 Story 未交付；[主线完结说明](../docs/course-completion.md)。
+
 2026-10-13 完结补充：完整任务及关键项 56/56、普通事实 63/63，课程与工程验收完成，待人工审阅和合入。下面的阶段复盘保留了当时未达标的事实。
 
 [课程开发稿](../specs/E04-reliability-and-context/S003-summary-quality/README.md) | [真实对照（归档）](https://github.com/alienzhou/zero2agent/releases/tag/E04-S003-summary-quality) | [验收](../specs/E04-reliability-and-context/S003-summary-quality/details/03-verification-checklist.md)

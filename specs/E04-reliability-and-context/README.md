@@ -11,6 +11,6 @@
 | [E04-S003](./S003-summary-quality/README.md) | 摘要质量与事实保留 | 实现、课程、严格验收及最终复核完成；任务/关键项 56/56，交付见 PR #25 |
 | [E04-S004](./S004-safe-resume/README.md) | 中断后的安全续跑 | 实现、测试、文档已交付；当前课程稿 14 页；[PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付 |
 
-从 S001 的[离线跟练](./S001-failure-recovery/follow-along.md)开始。S002/S003 在已有压缩之上改善供给和质量；S004 增加逐工具持久执行事实与明确续跑入口。AGENTS、Skills、MCP、Hooks 留在 Epic 5。
+从 S001 的[离线跟练](./S001-failure-recovery/follow-along.md)开始。S002/S003 在已有压缩之上改善供给和质量；S004 增加逐工具持久执行事实与明确续跑入口。继续学习 [Epic 5](../E05-extensibility/README.md) 的 AGENTS、Skills、MCP、Hooks；四课现已完成并上线。
 
-2026-10-17 按必要性审阅课程：S001 保留 18 页，S002/S003 各 15 页，S004 为 14 页。此轮课程修订与阅读器导航修复通过最终 AI 复核，按用户授权由 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 交付；[取舍及延伸入口](../../docs/e04-course-reading-review.md)。原工程验收和发布状态不变。
+2026-10-17 按必要性审阅课程：S001 保留 18 页，S002/S003 各 15 页，S004 为 14 页。此轮课程修订与阅读器导航修复通过最终 AI 复核，按用户授权由 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 交付；[取舍及延伸入口](../../docs/e04-course-reading-review.md)。原工程验收证据不变；当前课程网站已于 2026-10-18 上线。

@@ -1,6 +1,6 @@
 # 逐项验收
 
-2026-10-17 完成实现与工程回归。初次真实服务的生产基线为 `33fd4ca`，原始 v1/v2 的源码版本与成绩保留。最终复核修复目录原子替换的文件身份检查（`1dc2216`）；最新 race、离线及工程结果见 [最终复核](../../../../researches/skills/final-review.json)，不把旧服务观察冒称为新程序实测。逐例机器结果见 [verification.json](../../../../researches/skills/verification.json)，原始附件和下载校验见 [evidence-archive.json](../../../../researches/skills/evidence-archive.json)。AI 交叉审阅不等于人工签署；本次按用户授权由 PR #29 交付，站点未部署。
+2026-10-17 完成实现与工程回归。初次真实服务的生产基线为 `33fd4ca`，原始 v1/v2 的源码版本与成绩保留。最终复核修复目录原子替换的文件身份检查（`1dc2216`）；最新 race、离线及工程结果见 [最终复核](../../../../researches/skills/final-review.json)，不把旧服务观察冒称为新程序实测。逐例机器结果见 [verification.json](../../../../researches/skills/verification.json)，原始附件和下载校验见 [evidence-archive.json](../../../../researches/skills/evidence-archive.json)。AI 交叉审阅不等于人工签署；本次按用户授权由 PR #29 交付，课程网站已于 2026-10-18 上线。
 
 | 门槛 | 状态与证据 |
 | --- | --- |
@@ -17,7 +17,7 @@
 | 固定真实服务逐例证据 | 正常 v2 严格通过，未变化的拒绝案例复用 v1 严格通过。两次批次仍各为 1/2，额外提前拒绝不改判；依据见下节。 |
 | 工程完整回归 | 通过。build、E2E 类型、变更 TS 格式、git diff --check、冻结锁文件安装；全仓 965 passed（Core 733 / E2E 231 / CDP 1），58 live 默认 skipped。lint 0 errors / 48 warnings（基线 46，加 2 处 CLI 输出）。 |
 | 课程与阅读 | 通过。11 页含封面，源/pages.json/HTML 一致；site build/check 20 章 294 张图，PC 1440×1000/H5 390×844 的逐页边界、导航、文字、放大及请求/资源错误检查通过。 |
-| 最终审查与归档 | 通过。工程/课文及逐例复用由独立 AI 审阅，无待修阻塞项；1,122 份源与原始记录在 Git 外归档，整包、manifest 和比较脚本已回下载验证。PR 供用户 review。 |
+| 最终审查与归档 | 通过。工程/课文及逐例复用由独立 AI 审阅，无待修阻塞项；1,122 份源与原始记录在 Git 外归档，整包、manifest 和比较脚本已回下载验证。已按用户授权通过 PR #29 合入 main；AI 复核不等同于独立人工逐行签署。 |
 
 ## 真实服务、失败与证据范围
 

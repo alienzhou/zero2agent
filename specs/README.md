@@ -2,6 +2,8 @@
 
 > 设计文档目录，记录每个 Epic / Story 的课程入口与技术规格。
 
+2026-10-18，E01–E05 主线正式完结，22 节、317 页图解已全部上线；[完结范围与固定版本](../docs/course-completion.md)。
+
 ---
 
 ## 文档结构
@@ -66,7 +68,7 @@ specs/
 
 ## Epic 2：能动 / 能改 / 能执行
 
-[进入 Epic 2](./E02-act-and-execute/README.md)。S001–S004 均已合入 main；S004 保留脱敏逐提交历史，尚未打课程 Tag。
+[进入 Epic 2](./E02-act-and-execute/README.md)。S001–S004 均已合入 main；S004 保留脱敏逐提交历史，固定课程 Tag 为 `E02-S004-human-terminal`（`68e2c87`）。
 
 | Story | 内容 | 入口 |
 |---|---|---|
@@ -79,7 +81,7 @@ specs/
 
 ## Epic 3：基础能力与产品化
 
-[进入 Epic 3](./E03-product-foundations/README.md)。六节课的顺序与边界：多轮会话 → 权限与 Approval → TUI → 会话恢复 → 运行日志 → 文件 Checkpoint。S001–S006 已合入 main；最新课 [S006：文件 Checkpoint 与回退](./E03-product-foundations/S006-file-checkpoints/README.md)包含实现、空间实验、图解、跟练及分层验收。S006 已通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入，课程网站尚未部署，验收与审阅范围见该课验收页。
+[进入 Epic 3](./E03-product-foundations/README.md)。六节课的顺序与边界：多轮会话 → 权限与 Approval → TUI → 会话恢复 → 运行日志 → 文件 Checkpoint。S001–S006 已合入 main；最新课 [S006：文件 Checkpoint 与回退](./E03-product-foundations/S006-file-checkpoints/README.md)包含实现、空间实验、图解、跟练及分层验收。S006 已通过 [PR #22](https://github.com/alienzhou/zero2agent/pull/22) 合入，课程网站已于 2026-10-18 上线，验收与审阅范围见该课验收页。
 
 ---
 
@@ -91,7 +93,7 @@ specs/
 
 ## Epic 5：扩展能力
 
-[四课入口](./E05-extensibility/README.md)与[具体范围、跟练和验收](./E05-extensibility/course-plan.md)：项目指令与 AGENTS.md → Skills 发现与按需加载 → MCP 工具接入 → Hooks 与组合验收。2026-10-17，[S001](./E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入；[S002](./E05-extensibility/S002-skills/README.md)实现、分层验收与 11 页课程由 PR #29 交付；S003/S004 仍为规划。
+[四课入口](./E05-extensibility/README.md)与[具体范围、跟练和验收](./E05-extensibility/course-plan.md)：项目指令与 AGENTS.md → Skills 发现与按需加载 → MCP 工具接入 → Hooks 与组合验收。2026-10-18，[S001](./E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入；[S002](./E05-extensibility/S002-skills/README.md)实现、分层验收与 11 页课程由 PR #29 交付；[S003](./E05-extensibility/S003-mcp/README.md)与[S004](./E05-extensibility/S004-hooks/README.md)分别由 PR #30/#31 合入，四课及组合验收完成，全部课程已上线。
 
 ---
 

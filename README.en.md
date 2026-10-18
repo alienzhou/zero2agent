@@ -24,6 +24,8 @@
 
 ## 🎯 About
 
+**The main curriculum is complete (2026-10-18):** all 22 lessons across E01–E05, with 317 illustrated pages, are [online](https://vibe-x.fun/zero2agent/). Implementations, follow-along guides, and E05 integrated acceptance are delivered. See the [completion scope and fixed versions](./docs/course-completion.md).
+
 > There's plenty of Agent-related content out there—papers, tutorials, products, open-source projects—but few teach you how to "implement a production-grade Agent Harness from scratch." This repository is such a **teaching case project**.
 
 - **Starting from the first line of code**, step by step implementing the **Agent Harness** behind a Coding Agent like Claude Code / Codex (loop orchestration, tool use, context, and host integration)
@@ -105,11 +107,11 @@ The course content is organized into four layers:
 
 | Epic | Goal | Status |
 | ---- | ---- | ---- |
-| [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | In Progress |
-| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [In progress](./specs/E02-act-and-execute/README.md) |
+| [Epic 1: Read / Search](./specs/E01-read-and-search/README.md) | Bootstraps a safe, explainable minimal read-only loop for the Agent Harness | Complete and online |
+| Epic 2: Act / Modify / Execute | Move the Agent Harness from "can inspect" to "can take action" | [Complete and online; S004 course tag added](./specs/E02-act-and-execute/README.md) |
 | Epic 3: Core Capabilities and Productization | Move the Agent Harness from a demo toward a usable product shape | S001–S006 merged into main |
 | [Epic 4: Robustness and Context Management](./specs/E04-reliability-and-context/README.md) | Handle failures, long context, and complex runtime situations | S001–S004 complete; S004 delivery tracked in PR #26 |
-| [Epic 5: Extensibility](./specs/E05-extensibility/README.md) | Project instructions → Skills → MCP → Hooks and integrated acceptance | S001 merged; [S002 implementation and lesson](./specs/E05-extensibility/S002-skills/README.md) delivered in PR #29; S003/S004 planned |
+| [Epic 5: Extensibility](./specs/E05-extensibility/README.md) | Project instructions → Skills → MCP → Hooks and integrated acceptance | S001–S004 merged; all four lessons online; main curriculum complete |
 
 ### How to Enter
 
@@ -157,7 +159,7 @@ zero2agent/
 
 ## Iteration Progress
 
-**Latest update**: [E05-S002: Skill discovery and progressive loading](./specs/E05-extensibility/S002-skills/README.md) adds a metadata catalog, selected guides, paged resources and CLI/TUI controls under current read permissions and budgets. The lesson uses 11 pages based on its learning steps. Implementation and layered evidence are documented in the Story; final review completed and delivery authorized in [PR #29](https://github.com/alienzhou/zero2agent/pull/29). The site has not been deployed.
+**Latest update**: [E05-S004: Hooks and integrated acceptance](./specs/E05-extensibility/S004-hooks/README.md) completes the four-extension workflow, including disconnect and process-interruption recovery. All 22 lessons across E01–E05 are online, and the main curriculum is complete. The fixed E02-S004 course tag is `E02-S004-human-terminal`; see the [completion scope and versions](./docs/course-completion.md).
 
 | Iteration | Content           | Status    |
 | --------- | ----------------- | --------- |
@@ -181,6 +183,8 @@ zero2agent/
 | [E04-S004](./specs/E04-reliability-and-context/S004-safe-resume/README.md) | Safe continuation after process interruption | Complete; delivery through [PR #26](https://github.com/alienzhou/zero2agent/pull/26) |
 | [E05-S001](./specs/E05-extensibility/S001-project-instructions/README.md) | Scoped AGENTS.md instructions and execution preflight | Merged in PR #27 |
 | [E05-S002](./specs/E05-extensibility/S002-skills/README.md) | Skill discovery, progressive loading and resource boundaries | Delivered in PR #29 |
+| [E05-S003](./specs/E05-extensibility/S003-mcp/README.md) | MCP tools, current permissions and unknown-effect recovery | Merged in PR #30; lesson online |
+| [E05-S004](./specs/E05-extensibility/S004-hooks/README.md) | Hooks and integrated extension acceptance | Merged in PR #31; lesson online |
 
 See full iteration records and learning guides: [CHANGELOG.md](./CHANGELOG.md) | [Course Roadmap](./docs/roadmap/README.md)
 

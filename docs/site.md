@@ -1,5 +1,7 @@
 # 在线图解教程
 
+2026-10-18，E01–E05 主线已完结，22 节、317 页图解全部上线；[完结范围与固定版本](./course-completion.md)。
+
 访问[在线课程](https://vibe-x.fun/zero2agent/)。E05 四节课已上线：[项目指令与 AGENTS.md](https://vibe-x.fun/zero2agent/#/chapter/epic05-story001)、[Skills](https://vibe-x.fun/zero2agent/#/chapter/epic05-story002)、[MCP](https://vibe-x.fun/zero2agent/#/chapter/epic05-story003)、[Hooks 与扩展验收](https://vibe-x.fun/zero2agent/#/chapter/epic05-story004)。
 
 在线课程的全部运行文件位于 site/，与 Agent 代码一起维护。站点有课程总览、按阶段分组的章节目录、本章目录、全文搜索、连续阅读、图解放大、文字内容和阅读进度。每个章节及小节都有可分享的地址，浏览器前进和后退可以切换阅读位置。

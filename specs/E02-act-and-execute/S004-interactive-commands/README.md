@@ -1,6 +1,6 @@
 # E02-S004：让人接管交互式终端
 
-> 实现、工程复验、Node/less 用户试用与源码专项复核已完成。脱敏分支已通过 PR #13 合入 main（060c644），尚未打课程 Tag。让人操作 bash 命令，结束后回到 Agent；证据与边界见验收清单。
+> 实现、工程复验、Node/less 用户试用与源码专项复核已完成。脱敏分支已通过 PR #13 合入 main（060c644）；2026-10-18 补齐固定课程 Tag `E02-S004-human-terminal`（`68e2c87`），课程网站已上线。让人操作 bash 命令，结束后回到 Agent；证据与边界见验收清单。
 
 [Epic 2：行动与执行](../README.md) | [首页](../../../README.md) | [迭代日志](../../../CHANGELOG.md)
 
@@ -60,7 +60,7 @@ node packages/tui/dist/cli.js --terminal 'read -r -p "Name: " name; printf "Hell
 
 直接进入 bash：`node packages/tui/dist/cli.js --terminal`。已有 Agent REPL 中用 `/terminal [command]`；Agent REPL 本身仍沿用模型配置要求。真实 PTY 测试覆盖对应路径，但不代替你在常用终端和实际程序里的人工验收。
 
-需要固定版本和分步练习时，使用[跟练与人工验收](./follow-along.md)。它区分自动验证、工具驱动操作、已收到的用户试用反馈与后续发布流程；尚未提供公开发布版本。
+需要固定版本和分步练习时，使用[跟练与人工验收](./follow-along.md)。课程 Tag 固定到原 E02-S004 交付版本，原工程验收基线和已收到的两项试用反馈范围保持不变；[主线完结与版本说明](../../../docs/course-completion.md)。
 
 想先体验功能，可以只试[Node REPL 与 less](./try-two-features.md)。关于其他产品是否同样交互，见[人工交互对标](../../../researches/interactive-commands/notes/human-ux-verification-2026-09-30.md)：交接有成熟先例，重复确认、输出分享和焦点切换各有取舍，并非行业统一界面。
 

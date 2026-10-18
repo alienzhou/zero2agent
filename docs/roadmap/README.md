@@ -16,23 +16,25 @@
 
 **回来看最新进展？** 去 [CHANGELOG](../../CHANGELOG.md) 找到最新迭代，顺着链接进入对应 Story。
 
-当前可体验：[E02-S004：让人接管交互式终端](../../specs/E02-act-and-execute/S004-interactive-commands/README.md)。实现、工程验证、两项用户试用及源码专项复核已完成，脱敏发布分支已合入 main，尚未打课程 Tag；未扩张已声明的兼容性范围。版本获取见[固定版本跟练](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。
+**主线已完结（2026-10-18）**：E01–E05 共 22 节、317 页图解全部[上线](https://vibe-x.fun/zero2agent/)。最新课程是 [E05-S004：Hooks 与扩展验收](../../specs/E05-extensibility/S004-hooks/README.md)，四种扩展的组合验收已完成；[完结范围与固定版本](../course-completion.md)。
 
-E04 收束课：[E04-S004：中断后的安全续跑](../../specs/E04-reliability-and-context/S004-safe-resume/README.md)。逐工具保存执行事实，核对未知效果后明确开启新一轮，保留 S003 的完成检查。工程实现与验收由 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付，固定工程版本 `E04-S004-safe-resume`；当前课程经 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 修订为 14 页，四课取舍见[审阅说明](../e04-course-reading-review.md)，网站未部署。S001–S003 已分别由 PR #23/#24/#25 合入 main，Epic 4 的四课实现链条完整。
+E02-S004 的固定课程 Tag 已补齐为 `E02-S004-human-terminal`（`68e2c87`）；[跟练入口](../../specs/E02-act-and-execute/S004-interactive-commands/follow-along.md)。原工程证据及平台范围保持不变。
+
+E04 收束课：[E04-S004：中断后的安全续跑](../../specs/E04-reliability-and-context/S004-safe-resume/README.md)。逐工具保存执行事实，核对未知效果后明确开启新一轮，保留 S003 的完成检查。工程实现与验收由 [PR #26](https://github.com/alienzhou/zero2agent/pull/26) 交付，固定工程版本 `E04-S004-safe-resume`；当前课程经 [PR #28](https://github.com/alienzhou/zero2agent/pull/28) 修订为 14 页，四课取舍见[审阅说明](../e04-course-reading-review.md)，课程网站已于 2026-10-18 上线。S001–S003 已分别由 PR #23/#24/#25 合入 main，Epic 4 的四课实现链条完整。
 
 ---
 
-[E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入并配套 10 页课程；[S002](../../specs/E05-extensibility/S002-skills/README.md)已完成按需加载与 11 页课程，由 PR #29 交付；[S003](../../specs/E05-extensibility/S003-mcp/README.md)由 PR #30 合入；[S004](../../specs/E05-extensibility/S004-hooks/README.md)实现、12 页课程与组合验收完成，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付。
+[E05 的四课计划](../../specs/E05-extensibility/course-plan.md)已补齐具体范围、跟练和验收：项目指令 → Skills 按需加载 → MCP 工具接入 → Hooks 与组合验收。[S001](../../specs/E05-extensibility/S001-project-instructions/README.md)已通过 [PR #27](https://github.com/alienzhou/zero2agent/pull/27) 合入并配套 10 页课程；[S002](../../specs/E05-extensibility/S002-skills/README.md)已完成按需加载与 11 页课程，由 PR #29 交付；[S003](../../specs/E05-extensibility/S003-mcp/README.md)由 PR #30 合入；[S004](../../specs/E05-extensibility/S004-hooks/README.md)实现、12 页课程与组合验收完成，由 [PR #31](https://github.com/alienzhou/zero2agent/pull/31) 交付。四课均已上线，五阶段主线正式完结。
 
 ## 学习地图
 
 | Epic | 阶段目标 | 完成后你会得到什么 | 状态 | 入口 |
 |------|----------|--------------------|------|------|
 | Epic 1：能看 / 能查 | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | 理解 ReAct 循环、只读工具和基础 Prompt 结构 | ✅ Done | [进入 Epic 1](../../specs/E01-read-and-search/README.md) |
-| Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 内容已完成，S004 待 Tag | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
+| Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从"会看"升级为"能动手做事" | 理解文件修改、终端执行与执行边界 | 已完成、已上线；S004 Tag 已补齐 | [进入 Epic 2](../../specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | 理解多轮、基础分级压缩、Approval、TUI、会话恢复、日志与 Checkpoint | S001–S006 已合入 main | [进入 Epic 3](../../specs/E03-product-foundations/README.md) |
 | Epic 4：健壮性与上下文管理 | 处理失败恢复与上下文质量 | 理解有限恢复、按需读取、事实保留与安全续跑 | S001–S004 已完成；S004 由 PR #26 交付 | [进入 Epic 4](../../specs/E04-reliability-and-context/README.md) |
-| Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解项目指令、按需技能、外部工具和程序检查 | S001–S003 已合入；S004 实现、课程与组合验收由 PR #31 交付 | [进入 Epic 5](../../specs/E05-extensibility/README.md) |
+| Epic 5：扩展能力 | 在核心能力稳定后继续扩展 | 理解项目指令、按需技能、外部工具和程序检查 | S001–S004 已合入；课程已上线，组合验收完成 | [进入 Epic 5](../../specs/E05-extensibility/README.md) |
 
 ---
 

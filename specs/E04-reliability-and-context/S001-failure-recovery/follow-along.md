@@ -2,7 +2,7 @@
 
 [课程](./README.md) | [验收范围](./details/03-verification-checklist.md)
 
-需要 Node >=22、pnpm >=9。固定课程版本：`E04-S001-failure-recovery`。实现尚未合入main，课程网站未部署；版本状态与验收范围独立记录。
+需要 Node >=22、pnpm >=9。固定课程版本：`E04-S001-failure-recovery`。实现已通过 PR #23 合入 main，课程已于 2026-10-18 上线；版本状态与验收范围独立记录。
 
 ```bash
 git fetch origin tag E04-S001-failure-recovery

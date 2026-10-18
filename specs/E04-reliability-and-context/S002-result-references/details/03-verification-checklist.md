@@ -50,4 +50,4 @@ Spec 五篇、跟练、复盘、讨论、协作记录、四课状态及上下游
 
 回读校验 I/O 与正文大小相关；全机无总磁盘配额；过期正文按会话懒回收，未再打开的目录、后台日志、遗留 pending/reserve/写锁需人工处理。只支持本机同工作区正文恢复，跨机器迁移和崩溃中的工具效果恢复不在本课。
 
-固定 Tag 与交付核对见[交付审计](../../../../.vibecoding/2026-10-11/e04-s002-result-references/completion-audit.md)，合并状态见 [PR #24](https://github.com/alienzhou/zero2agent/pull/24)。用户已授权完成核对后合并；作者检查和自动测试不等同人工代码审查，课程网站未部署。
+固定 Tag 与交付核对见[交付审计](../../../../.vibecoding/2026-10-11/e04-s002-result-references/completion-audit.md)，合并状态见 [PR #24](https://github.com/alienzhou/zero2agent/pull/24)。已按用户授权通过 PR #24 合入 main；作者检查和自动测试不等同人工代码审查，课程网站已于 2026-10-18 上线。

@@ -24,6 +24,8 @@
 
 ## 🎯 项目介绍
 
+**主线课程已完结（2026-10-18）**：E01–E05 共 22 节、317 页图解，已全部[上线](https://vibe-x.fun/zero2agent/)。实现、跟练与 E05 组合验收齐备；[完结范围与固定版本](./docs/course-completion.md)。
+
 > 市面上有很多 Agent 相关的内容——有论文、有教学、有产品、有开源项目——但很少有人教大家"从零开始实现一个产品级 Agent Harness"。这个仓库就是这么一个**教学案例项目**。
 
 - **从第一行代码开始**，一步步实现类似 Claude Code / Codex 的 Coding Agent 所需的 **Agent Harness**（循环调度、工具调用、上下文与宿主能力）
@@ -110,7 +112,7 @@ Fork 后自己动手，是最好的学习方式。别担心，你可以在**任�
 | Epic | 目标 | 状态 |
 | ---- | ---- | ---- |
 | [Epic 1：能看 / 能查](./specs/E01-read-and-search/README.md) | 为 Agent Harness 跑通安全、可解释的最小只读闭环 | ✅ Done |
-| Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [内容已完成，S004 待 Tag](./specs/E02-act-and-execute/README.md) |
+| Epic 2：能动 / 能改 / 能执行 | 让 Agent Harness 从“会看”走向“能动手做事” | [已完成、已上线；S004 课程 Tag 已补齐](./specs/E02-act-and-execute/README.md) |
 | Epic 3：基础能力与产品化 | 让 Agent Harness 从 demo 走向可使用的产品形态 | [S001–S006 已合入 main](./specs/E03-product-foundations/README.md) |
 | [Epic 4：健壮性与上下文管理](./specs/E04-reliability-and-context/README.md) | 处理失败恢复、上下文质量和安全续跑 | S001–S004 已完成；[S004 交付](./specs/E04-reliability-and-context/S004-safe-resume/README.md) |
 | [Epic 5：扩展能力](./specs/E05-extensibility/README.md) | 项目指令 → Skills → MCP → Hooks 与组合验收 | S001–S004 均已合入，四节课程已[上线](https://vibe-x.fun/zero2agent/) |
@@ -175,7 +177,7 @@ zero2agent/
 | [E02-S002](./specs/E02-act-and-execute/S002-replace-in-file/README.md) | 局部修改 (replace_in_file) | Done |
 | [E02-S003](./specs/E02-act-and-execute/S003-terminal/README.md) | 驱动执行环境 (terminal) | Done |
 | [E02-S004](./specs/E02-act-and-execute/S004-interactive-commands/README.md) | 人工接管 bash / PTY | Done，已合入 main |
-| [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | Done，已合入 main、已打 Tag，未对外发布 |
+| [E03-S001](./specs/E03-product-foundations/S001-multi-turn/README.md) | 多轮会话、自动分级压缩与 /compact | Done，已合入 main、已打 Tag，课程已上线 |
 | [E03-S002](./specs/E03-product-foundations/S002-permissions/README.md) | 权限与一次 Approval | Done，已合入 main，已打 Tag |
 | [E03-S003](./specs/E03-product-foundations/S003-runtime-tui/README.md) | 运行事件、Turn 取消与交互 TUI | Done，已合入 main |
 | [E03-S004](./specs/E03-product-foundations/S004-session-persistence/README.md) | 自动保存、会话浏览与恢复 | Done，已合入 main |

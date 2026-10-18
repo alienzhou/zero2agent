@@ -2,7 +2,7 @@
 
 ## 结果
 
-本期已完成多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。生产代码 `ea498a3` 与最终验收测试 `3829868` 已合入 `main`（`f883252`）并打 Tag，全量 379 通过、25 项真实模型测试缺 API 配置跳过。两项强化用例及 compact-loop 12/12 strict 类型检查通过；真实模型试用未执行，尚未对外发布。版本化证据见[验收记录](../specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。
+本期已完成多轮会话、完整请求预算、自动后台／前台压缩与手动 `/compact`。生产代码 `ea498a3` 与最终验收测试 `3829868` 已合入 `main`（`f883252`）并打 Tag，全量 379 通过、25 项真实模型测试缺 API 配置跳过。两项强化用例及 compact-loop 12/12 strict 类型检查通过；原 379 项验收阶段未执行真实模型试用，后续补验见验收记录；课程网站已于 2026-10-18 上线；社交平台发布另行记录。版本化证据见[验收记录](../specs/E03-product-foundations/S001-multi-turn/details/03-verification-checklist.md)。
 
 以下早期复盘保留旧多轮范围的经过，不作为压缩增量的验收证据。
 
